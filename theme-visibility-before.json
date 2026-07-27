@@ -1,0 +1,96 @@
+[
+  {
+    "label": "top",
+    "y": 0,
+    "bodyClass": "has-marquee",
+    "bg": "rgb(0, 0, 0)",
+    "themeManagerTheme": "dark",
+    "sectionClass": "hero",
+    "sectionId": "",
+    "visibleProducts": []
+  },
+  {
+    "label": "layton",
+    "y": 1282,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden",
+    "bg": "rgb(0, 0, 0)",
+    "themeManagerTheme": "dark",
+    "sectionClass": "content",
+    "sectionId": "layton",
+    "visibleProducts": [
+      "Layton"
+    ]
+  },
+  {
+    "label": "haltane",
+    "y": 5470,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden",
+    "bg": "rgb(0, 0, 0)",
+    "themeManagerTheme": "dark",
+    "sectionClass": "haltane-section-container",
+    "sectionId": "haltane",
+    "visibleProducts": [
+      "HALTANE"
+    ]
+  },
+  {
+    "label": "pegasus",
+    "y": 9408,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden",
+    "bg": "rgb(0, 0, 0)",
+    "themeManagerTheme": "dark",
+    "sectionClass": "content pegasus-section",
+    "sectionId": "pegasus",
+    "visibleProducts": [
+      "Pegasus"
+    ]
+  },
+  {
+    "label": "greenly",
+    "y": 14931,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden",
+    "bg": "rgb(0, 0, 0)",
+    "themeManagerTheme": "dark",
+    "sectionClass": "greenly-main-container greenly-theme",
+    "sectionId": "",
+    "visibleProducts": [
+      "Greenly"
+    ]
+  },
+  {
+    "label": "baccarat",
+    "y": 19726,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden",
+    "bg": "rgb(0, 0, 0)",
+    "themeManagerTheme": "dark",
+    "sectionClass": "content baccaratrouge-section",
+    "sectionId": "baccaratrouge",
+    "visibleProducts": [
+      "Baccarat Rouge 540"
+    ]
+  },
+  {
+    "label": "sauvage",
+    "y": 31558,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden",
+    "bg": "rgb(0, 0, 0)",
+    "themeManagerTheme": "dark",
+    "sectionClass": "content sauvage-section",
+    "sectionId": "sauvage",
+    "visibleProducts": [
+      "Sauvage"
+    ]
+  },
+  {
+    "label": "grandSoir",
+    "y": 161614,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden",
+    "bg": "rgb(0, 0, 0)",
+    "themeManagerTheme": "dark",
+    "sectionClass": "content grandSoir-section",
+    "sectionId": "grandSoir",
+    "visibleProducts": [
+      "Grand Soir"
+    ]
+  }
+]

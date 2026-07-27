@@ -10,14 +10,16 @@ import '../providers/favorites_provider.dart';
 import 'fragrance_detail_screen.dart';
 
 class FavoritesScreen extends StatelessWidget {
-  const FavoritesScreen({super.key});
+  final VoidCallback? onDiscover;
+
+  const FavoritesScreen({super.key, this.onDiscover});
 
   @override
   Widget build(BuildContext context) {
     final favorites = context.watch<FavoritesProvider>();
     final db = FragranceDatabase();
     final favoriteFragrances = db.all
-        .where((f) => favorites.isFavorite(f.name))
+        .where(favorites.isFavorite)
         .toList();
 
     return Scaffold(
@@ -129,7 +131,11 @@ class FavoritesScreen extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: () => Navigator.of(context).pop(),
+                onTap: onDiscover ?? () {
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.of(context).pop();
+                  }
+                },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                   child: Text(
@@ -401,7 +407,7 @@ class FavoritesScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                favorites.remove(fragrance.name);
+                favorites.remove(fragrance);
                 Navigator.pop(ctx);
               },
               child: Text(

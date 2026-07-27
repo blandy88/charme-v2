@@ -1,8 +1,9 @@
 
 // Caches element zero-state to prevent layout thrashing
 const _parallaxZeroState = new WeakSet();
-function resetParallaxElement(element, transformString) {
-  if (!element || _parallaxZeroState.has(element)) return;
+  function resetParallaxElement(element, transformString) {
+  if (!element || element.closest?.(".perfume-top-row")) return;
+  if (_parallaxZeroState.has(element)) return;
   element.classList.remove("parallax-active");
   element.style.transform = transformString;
   element.style.opacity = "0";
@@ -10,6 +11,7 @@ function resetParallaxElement(element, transformString) {
 }
 // Removes from zero-state set when made active
 function activateParallaxElement(element) {
+  if (element?.closest?.(".perfume-top-row")) return;
   if (element && _parallaxZeroState.has(element)) {
     _parallaxZeroState.delete(element);
   }
@@ -53,6 +55,21 @@ function activateParallaxElement(element) {
 })();
 
 // Simple avatar creation helper
+window.escapeHTML = function (value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+};
+
+window.safeAttribute = window.escapeHTML;
+
+window.getAuthToken = function () {
+  return localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+};
+
 window.normalizeAvatarSrc = function (src) {
   if (!src) return "default.jpg";
   if (src === "custom_uploaded" || src === "custom_avatar_uploaded") {
@@ -89,51 +106,202 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.add("has-marquee");
     // navbarEl.style.top = "34px"; // Handled by CSS variable
   }
+  let topChromeController;
   if (closeTopMarquee) {
     closeTopMarquee.addEventListener("click", () => {
       const bar = document.getElementById("topMarquee");
       if (bar) {
         bar.style.display = "none";
         document.body.classList.remove("has-marquee");
+        topChromeController?.reveal();
         // const nav = document.querySelector(".navbar");
         // if (nav) nav.style.top = "0px"; // Handled by CSS
       }
     });
   }
 
-  // Marquee height animation on scroll
-  let lastScrollTop = 0;
-  let marqueeHeightState = "normal"; // normal, compact, minimal
-
-    let marqueeTick = false;
-  window.addEventListener("scroll", function () {
-    if (!marqueeTick) {
-      window.requestAnimationFrame(function() {
-        const scrollTop = (window._globalScrollTop !== undefined ? window._globalScrollTop : (window.pageYOffset || document.documentElement.scrollTop));
-        if (scrollTop > 100) {
-          if (scrollTop > 300) {
-            if (marqueeHeightState !== "minimal") {
-              marqueeHeightState = "minimal";
-              document.body.classList.remove("marquee-compact");
-              document.body.classList.add("marquee-minimal");
-            }
-          } else if (marqueeHeightState !== "compact") {
-            marqueeHeightState = "compact";
-            document.body.classList.remove("marquee-minimal");
-            document.body.classList.add("marquee-compact");
-          }
-        } else if (marqueeHeightState !== "normal") {
-          marqueeHeightState = "normal";
-          document.body.classList.remove("marquee-compact", "marquee-minimal");
-        }
-        marqueeTick = false;
-      });
-      marqueeTick = true;
-    }
-  }, { passive: true });
+  body.classList.remove("marquee-compact", "marquee-minimal");
+  topChromeController = initTopChromeScrollBehavior();
   const video = document.getElementById("background-video");
   const navbar = document.querySelector(".navbar");
   let ticking = false;
+
+  function initTopChromeScrollBehavior() {
+    if (!navbarEl) return null;
+
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    const chromeElements = [navbarEl, marqueeBar].filter(Boolean);
+    let isHidden = false;
+    let downIntent = 0;
+    let upIntent = 0;
+    let lastY = Math.max(0, window.pageYOffset || document.documentElement.scrollTop || 0);
+    let lastTs = performance.now();
+    let rafPending = false;
+
+    function readScrollY() {
+      return Math.max(0, window.pageYOffset || document.documentElement.scrollTop || 0);
+    }
+
+    function marqueeIsVisible() {
+      return Boolean(
+        marqueeBar &&
+          document.body.classList.contains("has-marquee") &&
+          getComputedStyle(marqueeBar).display !== "none",
+      );
+    }
+
+    function chromeHeight() {
+      return navbarEl.offsetHeight + (marqueeIsVisible() ? marqueeBar.offsetHeight : 0);
+    }
+
+    function setHidden(nextHidden) {
+      if (reduceMotion?.matches) nextHidden = false;
+      if (nextHidden === isHidden) return;
+      isHidden = nextHidden;
+      document.body.classList.toggle("top-shell-hidden", isHidden);
+      applyChromeState();
+    }
+
+    function applyChromeState() {
+      const hidden = isHidden && !reduceMotion?.matches;
+      const visibleMarquee = marqueeIsVisible();
+      const navShift = visibleMarquee
+        ? navbarEl.offsetHeight + marqueeBar.offsetHeight + 8
+        : navbarEl.offsetHeight + 8;
+      const marqueeShift = visibleMarquee ? marqueeBar.offsetHeight + 2 : 0;
+
+      if (hidden) {
+        if (visibleMarquee) {
+          marqueeBar.style.setProperty("transform", `translate3d(0, -${marqueeShift}px, 0)`, "important");
+          marqueeBar.style.setProperty("opacity", "0", "important");
+          marqueeBar.style.setProperty("filter", "blur(3px) saturate(80%)", "important");
+          marqueeBar.style.pointerEvents = "none";
+        }
+        navbarEl.style.setProperty("transform", `translate3d(0, -${navShift}px, 0)`, "important");
+        navbarEl.style.setProperty("opacity", "0.08", "important");
+        navbarEl.style.setProperty("filter", "blur(5px) saturate(70%)", "important");
+        navbarEl.style.pointerEvents = "none";
+      } else {
+        if (marqueeBar) {
+          marqueeBar.style.removeProperty("transform");
+          marqueeBar.style.removeProperty("opacity");
+          marqueeBar.style.removeProperty("filter");
+          marqueeBar.style.pointerEvents = "";
+        }
+        navbarEl.style.removeProperty("transform");
+        navbarEl.style.removeProperty("opacity");
+        navbarEl.style.removeProperty("filter");
+        navbarEl.style.pointerEvents = "";
+      }
+    }
+
+    function reveal() {
+      downIntent = 0;
+      upIntent = 0;
+      setHidden(false);
+      applyChromeState();
+    }
+
+    function hasChromeFocus() {
+      const active = document.activeElement;
+      return chromeElements.some((element) => element?.contains(active));
+    }
+
+    function hasOpenChromeSurface() {
+      return Boolean(
+        document.querySelector(
+          [
+            "#quickSearchDropdown.show",
+            ".language-dropdown.active",
+            ".notification-dropdown.show",
+            ".ai-finder-dropdown.show",
+            ".ingredient-modal.show",
+            ".auth-modal.show",
+            ".modal.show",
+          ].join(","),
+        ),
+      );
+    }
+
+    function chromeLockedOpen() {
+      return (
+        document.body.classList.contains("top-shell-interacting") ||
+        hasChromeFocus() ||
+        hasOpenChromeSurface()
+      );
+    }
+
+    function updateInteractionState() {
+      const active = chromeElements.some(
+        (element) => element?.matches?.(":hover") || element?.contains(document.activeElement),
+      );
+      document.body.classList.toggle("top-shell-interacting", active);
+      if (active) reveal();
+    }
+
+    chromeElements.forEach((element) => {
+      element.addEventListener("pointerenter", updateInteractionState);
+      element.addEventListener("pointerleave", () => setTimeout(updateInteractionState, 0));
+      element.addEventListener("focusin", updateInteractionState);
+      element.addEventListener("focusout", () => setTimeout(updateInteractionState, 0));
+    });
+
+    function updateTopChrome() {
+      rafPending = false;
+
+      const y = readScrollY();
+      const now = performance.now();
+      const dy = y - lastY;
+      const dt = Math.max(16, now - lastTs);
+      const velocity = Math.abs(dy) / dt;
+
+      document.body.classList.toggle("top-shell-scrolled", y > 12);
+
+      if (reduceMotion?.matches || y <= 8 || chromeLockedOpen()) {
+        reveal();
+        lastY = y;
+        lastTs = now;
+        return;
+      }
+
+      if (Math.abs(dy) < 1) return;
+
+      if (dy > 0) {
+        downIntent += dy;
+        upIntent = 0;
+        const downThreshold = velocity > 1 ? 8 : 28;
+        if (y > chromeHeight() + 36 && downIntent > downThreshold) {
+          setHidden(true);
+        }
+      } else {
+        upIntent += -dy;
+        downIntent = 0;
+        const upThreshold = velocity > 0.7 ? 4 : 12;
+        if (upIntent > upThreshold) {
+          setHidden(false);
+        }
+      }
+
+      lastY = y;
+      lastTs = now;
+    }
+
+    function requestTopChromeUpdate() {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(updateTopChrome);
+    }
+
+    window.addEventListener("scroll", requestTopChromeUpdate, { passive: true });
+    window.addEventListener("resize", () => {
+      reveal();
+      requestTopChromeUpdate();
+    });
+    reduceMotion?.addEventListener?.("change", requestTopChromeUpdate);
+    requestTopChromeUpdate();
+
+    return { reveal, requestUpdate: requestTopChromeUpdate, updateNow: updateTopChrome };
+  }
 
   // Search Modal Functionality
   const quickSearchInput = document.getElementById("quickSearchInput");
@@ -149,35 +317,105 @@ document.addEventListener("DOMContentLoaded", function () {
   // Build lazily to avoid blocking initial page load
   let fragranceService = null;
   let searchFragrances = null;
+  let searchSectionIndex = null;
 
   function getSearchFragrances() {
     if (searchFragrances) return searchFragrances;
+
+    const sectionIndex = buildSearchSectionIndex();
+    const byKey = new Map();
+
+    function addSearchFragrance(fragrance) {
+      const sectionMatch = findFragranceSectionMatch(fragrance, sectionIndex);
+      const merged = {
+        ...fragrance,
+        notes: Array.isArray(fragrance.notes) ? fragrance.notes : [],
+        sectionId: fragrance.sectionId || sectionMatch?.sectionId || "",
+        productId: fragrance.productId || sectionMatch?.productId || "",
+        searchAliases: Array.from(
+          new Set([
+            ...(fragrance.searchAliases || []),
+            ...(sectionMatch?.aliases || []),
+          ].filter(Boolean)),
+        ),
+        available: sectionMatch?.isDatabaseCard
+          ? false
+          : sectionMatch
+            ? true
+            : fragrance.available !== false,
+      };
+      const key = merged.sectionId || normalizeFragranceName(merged.name);
+      const existing = byKey.get(key);
+      if (!existing) {
+        byKey.set(key, merged);
+        return;
+      }
+
+      byKey.set(key, {
+        ...existing,
+        ...merged,
+        audience: existing.audience && existing.audience !== "unisex" ? existing.audience : merged.audience,
+        description: existing.description || merged.description,
+        image: existing.image || merged.image,
+        type: existing.type === "Database" ? merged.type : existing.type || merged.type,
+        notes: Array.from(new Set([...(existing.notes || []), ...(merged.notes || [])])),
+        searchAliases: Array.from(
+          new Set([...(existing.searchAliases || []), ...(merged.searchAliases || [])]),
+        ),
+        available: existing.available || merged.available,
+      });
+    }
+
     try {
       fragranceService = fragranceService || new FragranceAPIService();
       const db = fragranceService.comprehensiveDatabase || {};
-      const results = [];
       for (const name in db) {
         if (!Object.prototype.hasOwnProperty.call(db, name)) continue;
         const profile = db[name] || {};
-        results.push({
+        addSearchFragrance({
           name,
           brand: profile.brand || "Unknown Brand",
           notes: profile.ingredients || [],
           type: profile.family || "Unknown",
+          audience: profile.audience || "unisex",
+          description: profile.description || "",
+          image: profile.image || "",
           available: profile.available !== false,
         });
       }
-      searchFragrances = results;
     } catch (e) {
       console.error("Failed to build search fragrance list", e);
-      searchFragrances = [];
     }
+
+    sectionIndex.entries.forEach((entry) => {
+      addSearchFragrance({
+        name: entry.name,
+        brand: entry.brand || "Charme Collection",
+        notes: [],
+        type: entry.isDatabaseCard ? "Database" : "Available in shop",
+        audience: "unisex",
+        description: "",
+        image: "",
+        available: !entry.isDatabaseCard,
+        sectionId: entry.sectionId,
+        productId: entry.productId,
+        searchAliases: entry.aliases,
+      });
+    });
+
+    searchFragrances = Array.from(byKey.values()).sort(
+      (a, b) => Number(Boolean(b.sectionId)) - Number(Boolean(a.sectionId)) ||
+        a.brand.localeCompare(b.brand) ||
+        a.name.localeCompare(b.name),
+    );
     return searchFragrances;
   }
 
   function normalizeFragranceName(value) {
     return (value || "")
       .toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
       .replace(/[^a-z0-9]/g, "");
   }
@@ -191,6 +429,582 @@ document.addEventListener("DOMContentLoaded", function () {
       .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#39;");
   }
+
+  function normalizedSearchVariants(value) {
+    const base = normalizeFragranceName(value);
+    const variants = new Set([base]);
+    if (base.includes("eaudeparfum")) {
+      variants.add(base.replace(/eaudeparfum/g, "edp"));
+    }
+    if (base.includes("edp")) {
+      variants.add(base.replace(/edp/g, "eaudeparfum"));
+    }
+    if (base.includes("eaudetoilette")) {
+      variants.add(base.replace(/eaudetoilette/g, "edt"));
+    }
+    if (base.includes("edt")) {
+      variants.add(base.replace(/edt/g, "eaudetoilette"));
+    }
+    return Array.from(variants).filter(Boolean);
+  }
+
+  function addAlias(aliases, value) {
+    normalizedSearchVariants(value).forEach((alias) => aliases.add(alias));
+  }
+
+  function getTextContent(root, selector) {
+    return (root?.querySelector(selector)?.textContent || "").trim();
+  }
+
+  function findProductSection(element) {
+    return (
+      element.closest(".haltane-section-container") ||
+      element.closest("section.content") ||
+      element.closest(".content")
+    );
+  }
+
+  function ensureSearchTargetId(element, fallback) {
+    if (!element) return "";
+    if (element.id) return element.id;
+
+    const base = normalizeFragranceName(fallback) || "fragrance";
+    let candidate = base;
+    let suffix = 2;
+    while (document.getElementById(candidate)) {
+      candidate = `${base}-${suffix}`;
+      suffix += 1;
+    }
+    element.id = candidate;
+    return candidate;
+  }
+
+  function getSectionEntryFromProductName(productNameEl) {
+    const target = findProductSection(productNameEl);
+    if (!target) return null;
+
+    const name = (productNameEl.textContent || "").trim();
+    if (!name) return null;
+
+    const productButton = target.querySelector(
+      ".favorite-btn[data-product], .add-to-cart-btn[data-product]",
+    );
+    const productId = productButton?.dataset.product || "";
+    const brand = getTextContent(target, ".brand-name");
+    const sectionId = ensureSearchTargetId(target, productId || name);
+    const aliases = new Set();
+
+    addAlias(aliases, name);
+    addAlias(aliases, productId);
+    addAlias(aliases, sectionId);
+    addAlias(aliases, `${brand} ${name}`);
+    addAlias(aliases, `${name} ${brand}`);
+    if (/^the\s+/i.test(name)) addAlias(aliases, name.replace(/^the\s+/i, ""));
+
+    return {
+      name,
+      brand,
+      productId,
+      sectionId,
+      aliases: Array.from(aliases),
+      target,
+      isDatabaseCard: false,
+    };
+  }
+
+  function getSectionEntryFromDatabaseCard(card) {
+    const name = getTextContent(card, ".database-fragrance-name");
+    if (!name) return null;
+    const brand = getTextContent(card, ".database-fragrance-brand");
+    const sectionId = ensureSearchTargetId(card, name);
+    const aliases = new Set();
+
+    addAlias(aliases, name);
+    addAlias(aliases, `${brand} ${name}`);
+
+    return {
+      name,
+      brand,
+      productId: "",
+      sectionId,
+      aliases: Array.from(aliases),
+      target: card,
+      isDatabaseCard: true,
+    };
+  }
+
+  function buildSearchSectionIndex() {
+    if (searchSectionIndex) return searchSectionIndex;
+
+    const entries = [];
+    const byAlias = new Map();
+
+    function register(entry) {
+      if (!entry || !entry.sectionId) return;
+      entries.push(entry);
+      entry.aliases.forEach((alias) => {
+        if (!byAlias.has(alias)) byAlias.set(alias, entry);
+      });
+    }
+
+    document
+      .querySelectorAll(".product-name")
+      .forEach((productNameEl) => register(getSectionEntryFromProductName(productNameEl)));
+
+    document
+      .querySelectorAll(".database-fragrance-card")
+      .forEach((card) => register(getSectionEntryFromDatabaseCard(card)));
+
+    searchSectionIndex = { entries, byAlias };
+    return searchSectionIndex;
+  }
+
+  function findFragranceSectionMatch(fragrance, index = buildSearchSectionIndex()) {
+    const aliases = new Set();
+    addAlias(aliases, fragrance.sectionId || "");
+    addAlias(aliases, fragrance.productId || "");
+    addAlias(aliases, fragrance.name || "");
+    addAlias(aliases, `${fragrance.brand || ""} ${fragrance.name || ""}`);
+    (fragrance.searchAliases || []).forEach((alias) => addAlias(aliases, alias));
+
+    for (const alias of aliases) {
+      const exact = index.byAlias.get(alias);
+      if (exact) return exact;
+    }
+
+    const queryAliases = Array.from(aliases).filter((alias) => alias.length > 3);
+    let bestMatch = null;
+    let bestScore = 0;
+
+    index.entries.forEach((entry) => {
+      const entryAliases = entry.aliases.filter((alias) => alias.length > 3);
+      queryAliases.forEach((queryAlias) => {
+        entryAliases.forEach((entryAlias) => {
+          let score = 0;
+          if (queryAlias === entryAlias) score = 100;
+          else if (queryAlias.includes(entryAlias)) score = entryAlias.length;
+          else if (entryAlias.includes(queryAlias)) score = queryAlias.length - 1;
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = entry;
+          }
+        });
+      });
+    });
+
+    return bestMatch;
+  }
+
+  function getFragranceSearchScore(fragrance, query) {
+    const normalizedQuery = normalizeFragranceName(query);
+    if (!normalizedQuery) return Number.POSITIVE_INFINITY;
+
+    const audienceVariants = audienceSearchTerms(fragrance.audience).flatMap((value) => normalizedSearchVariants(value));
+    if (audienceVariants.includes(normalizedQuery)) return 3;
+
+    const searchable = [
+      fragrance.name,
+      fragrance.brand,
+      fragrance.type,
+      fragrance.audience,
+      formatAudienceLabel(fragrance.audience).toLowerCase(),
+      fragrance.description,
+      ...audienceSearchTerms(fragrance.audience),
+      ...(fragrance.notes || []),
+      ...(fragrance.searchAliases || []),
+    ].map((value) => value?.toString() || "");
+
+    const variants = searchable.flatMap((value) => normalizedSearchVariants(value));
+    const nameVariants = normalizedSearchVariants(fragrance.name || "");
+    const brandNameVariants = normalizedSearchVariants(
+      `${fragrance.brand || ""} ${fragrance.name || ""}`,
+    );
+
+    if (nameVariants.some((value) => value === normalizedQuery)) return 0;
+    if (brandNameVariants.some((value) => value === normalizedQuery)) return 1;
+    if (nameVariants.some((value) => value.startsWith(normalizedQuery))) return 2;
+    if (brandNameVariants.some((value) => value.startsWith(normalizedQuery))) return 3;
+    if (variants.some((value) => value === normalizedQuery || value.startsWith(normalizedQuery))) return 4;
+    if (normalizedQuery.length >= 4 && variants.some((value) => value.includes(normalizedQuery))) return 5;
+    return Number.POSITIVE_INFINITY;
+  }
+
+  function searchFragranceList(query) {
+    const normalizedQuery = normalizeFragranceName(query);
+    if (!normalizedQuery) return [];
+
+    return getSearchFragrances()
+      .map((fragrance) => ({
+        fragrance,
+        score: getFragranceSearchScore(fragrance, normalizedQuery),
+      }))
+      .filter((result) => Number.isFinite(result.score))
+      .sort(
+        (a, b) =>
+          a.score - b.score ||
+          Number(Boolean(b.fragrance.sectionId)) - Number(Boolean(a.fragrance.sectionId)) ||
+          a.fragrance.name.localeCompare(b.fragrance.name),
+      )
+      .map((result) => result.fragrance);
+  }
+
+  function slugifyFragrance(value) {
+    return normalizeFragranceName(value)
+      .replace(/eaudeparfum/g, "edp")
+      .replace(/eaudetoilette/g, "edt");
+  }
+
+  function productImageForFragrance(fragrance) {
+    const provided = fragrance.image || "";
+    if (provided && /\.png$/i.test(provided) && !provided.includes("/")) return provided;
+    const brand = escapeHtml(fragrance.brand || "Charme");
+    const name = escapeHtml(fragrance.name || "Fragrance");
+    const audience = escapeHtml(formatAudienceLabel(fragrance.audience));
+    const accent = fragrance.audience === "women" ? "#d9a3b8" : fragrance.audience === "men" ? "#91a8c8" : "#c9a94e";
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#090909"/><stop offset="1" stop-color="#211a10"/></linearGradient><linearGradient id="b" x1="0" x2="1" y1="0" y2="1"><stop stop-color="${accent}" stop-opacity=".95"/><stop offset="1" stop-color="#fff4cf" stop-opacity=".55"/></linearGradient></defs><rect width="420" height="560" rx="34" fill="url(#g)"/><circle cx="210" cy="178" r="132" fill="${accent}" opacity=".10"/><rect x="158" y="96" width="104" height="40" rx="12" fill="${accent}" opacity=".82"/><rect x="126" y="132" width="168" height="268" rx="34" fill="#111" stroke="${accent}" stroke-width="4"/><rect x="146" y="158" width="128" height="196" rx="22" fill="url(#b)" opacity=".88"/><text x="210" y="426" text-anchor="middle" font-family="Georgia,serif" font-size="26" fill="#f7f0df">${brand}</text><text x="210" y="462" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" fill="#c9a94e">${name}</text><text x="210" y="497" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" letter-spacing="3" fill="#8c8062">${audience.toUpperCase()}</text></svg>`;
+    return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  }
+
+  function formatAudienceLabel(value) {
+    if (value === "men") return "Men";
+    if (value === "women") return "Women";
+    return "Unisex";
+  }
+
+  function audienceSearchTerms(value) {
+    if (value === "women") return ["women", "woman", "female", "feminine", "for women"];
+    if (value === "men") return ["men", "man", "male", "masculine", "for men"];
+    return ["unisex", "shared", "genderless", "for everyone"];
+  }
+
+  function noteImageMarkup(note) {
+    const src = window.NoteImageResolver?.imageFor?.(note) || "";
+    if (!src) return "";
+    return `<span class="database-note-chip"><img class="note-real-image" src="${window.safeAttribute(src)}" alt="${escapeHtml(note)}" loading="lazy" decoding="async"><span>${escapeHtml(note)}</span></span>`;
+  }
+
+  const DATABASE_FRAGRANCES_PER_PAGE = 8;
+  let databaseFragrancePage = 1;
+  let databaseFragranceItems = [];
+
+  function catalogSectionId(fragranceOrName) {
+    const name = typeof fragranceOrName === "string" ? fragranceOrName : fragranceOrName?.name;
+    return `catalog-${normalizeFragranceName(name)}`;
+  }
+
+  function categoryScoreMarkup(label, value) {
+    return `
+      <div class="database-profile-row">
+        <span>${escapeHtml(label)}</span>
+        <div class="database-profile-bar"><i style="width: ${Math.max(12, Math.min(100, value))}%"></i></div>
+        <strong>${Math.round(value)}%</strong>
+      </div>
+    `;
+  }
+
+  function scoreFromText(text, salt = 0) {
+    const chars = String(text || "").split("");
+    const total = chars.reduce((sum, char) => sum + char.charCodeAt(0), salt * 17);
+    return 58 + (total % 38);
+  }
+
+  function renderDatabaseFragranceSection(fragrance, index) {
+    const sectionId = catalogSectionId(fragrance);
+    const slug = sectionId;
+    const safeName = escapeHtml(fragrance.name);
+    const safeBrand = escapeHtml(fragrance.brand || "Unknown Brand");
+    const safeType = escapeHtml(fragrance.type || "Unknown Family");
+    const safeAudience = escapeHtml(formatAudienceLabel(fragrance.audience));
+    const safeImage = window.safeAttribute(productImageForFragrance(fragrance));
+    const safeDescription = escapeHtml(fragrance.description || "A catalog fragrance profile with curated notes and style details.");
+    const notes = fragrance.notes || [];
+    const primaryNotes = notes.slice(0, 7).map(noteImageMarkup).join("");
+    const topNotes = notes.slice(0, 2).map(noteImageMarkup).join("");
+    const heartNotes = notes.slice(2, 4).map(noteImageMarkup).join("");
+    const baseNotes = notes.slice(4, 7).map(noteImageMarkup).join("");
+    const productId = `catalog-${databaseFragrancePage}-${index}`;
+    const longevity = scoreFromText(fragrance.name, 2);
+    const projection = scoreFromText(fragrance.brand, 4);
+    const versatility = scoreFromText(fragrance.type, 6);
+
+    return `
+      <section class="content database-full-section catalog-fragrance-section ${slug}-section" id="${window.safeAttribute(sectionId)}" data-fragrance="${window.safeAttribute(fragrance.name)}" data-audience="${window.safeAttribute(fragrance.audience || "unisex")}">
+        <div class="${slug}-main-container ${slug}-theme catalog-main-container">
+        <div class="perfume-top-row database-full-row">
+          <div class="${slug}-product-section database-product-section">
+            <img class="${slug}-image database-product-image" src="${safeImage}" alt="${safeName} bottle" loading="lazy" decoding="async">
+            <div class="product-info-section database-product-info">
+              <div class="product-header-row">
+                <div class="product-info">
+                  <h1 class="brand-name">${safeBrand}</h1>
+                  <h2 class="brand-location">${safeAudience} • ${safeType}</h2>
+                  <h3 class="product-name">${safeName}</h3>
+                </div>
+              </div>
+              <div class="product-price-container">
+                <div class="price-badge database-price-badge">
+                  <div class="product-price"><span class="price-currency">${escapeHtml(fragrance.concentration || "EDP")}</span></div>
+                </div>
+                <div class="price-subtitle">${fragrance.year ? escapeHtml(fragrance.year) : "Catalog Collection"}</div>
+              </div>
+              <div class="product-actions-buttons database-actions">
+                <button class="favorite-btn" type="button" data-product="${window.safeAttribute(productId)}"><span class="favorite-text">Catalog Favorite</span></button>
+                <button class="add-to-cart-btn" type="button" data-product="${window.safeAttribute(productId)}"><span class="cart-text">Request Scent</span></button>
+              </div>
+              <p class="database-full-description">${safeDescription}</p>
+            </div>
+          </div>
+          <div class="${slug}-profiles-container database-profiles-container">
+            <article class="profile-container ${slug}-profile-card ${slug}-scent-profile database-profile-card database-scent-profile">
+              <div class="profile-header">
+                <h3 class="profile-title">Scent Profile</h3>
+                <div class="profile-subtitle">Performance estimate</div>
+              </div>
+              <div class="database-profile-bars">
+                ${categoryScoreMarkup("Longevity", longevity)}
+                ${categoryScoreMarkup("Projection", projection)}
+                ${categoryScoreMarkup("Versatility", versatility)}
+              </div>
+              <div class="database-featured-notes">${primaryNotes}</div>
+            </article>
+            <article class="profile-container ${slug}-profile-card ${slug}-ingredients database-profile-card database-ingredients">
+              <div class="profile-header">
+                <h3 class="profile-title">Ingredients</h3>
+                <div class="profile-subtitle">Top • Heart • Base</div>
+              </div>
+              <div class="database-note-tier"><span>Top</span><div>${topNotes}</div></div>
+              <div class="database-note-tier"><span>Heart</span><div>${heartNotes}</div></div>
+              <div class="database-note-tier"><span>Base</span><div>${baseNotes || primaryNotes}</div></div>
+            </article>
+          </div>
+        </div>
+        <article class="database-full-description-card ${slug}-fragrance-description">
+          <div class="profile-header">
+            <h3 class="profile-title">Fragrance Story</h3>
+            <div class="profile-subtitle">${safeBrand} • ${safeType}</div>
+          </div>
+          <p>${safeDescription}</p>
+        </article>
+        <div class="reviews-section database-reviews-section" id="${window.safeAttribute(sectionId)}-reviews">
+          <div class="reviews-header">
+            <h3>User Reviews & Comments</h3>
+            <div class="reviews-stats"><span class="reviews-count">Catalog fragrance</span></div>
+          </div>
+          <div class="reviews-empty"><div class="reviews-empty-icon">💬</div><h4>Reviews available by request</h4><p>This catalog fragrance can be promoted to a shop product page when needed.</p></div>
+        </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function showDatabaseFragranceSection(name) {
+    if (!databaseFragranceItems.length) renderRemainingDatabaseFragrances();
+    const key = normalizeFragranceName(name);
+    const index = databaseFragranceItems.findIndex((fragrance) => normalizeFragranceName(fragrance.name) === key);
+    if (index === -1) return null;
+    const page = Math.floor(index / DATABASE_FRAGRANCES_PER_PAGE) + 1;
+    renderDatabaseFragrancePage(page);
+    return document.getElementById(catalogSectionId(databaseFragranceItems[index]));
+  }
+
+  function renderDatabasePagination(totalPages) {
+    const containers = [
+      document.getElementById("databaseFragrancePaginationTop"),
+      document.getElementById("databaseFragrancePaginationBottom"),
+    ].filter(Boolean);
+    const windowSize = 7;
+    const start = Math.max(1, Math.min(databaseFragrancePage - 3, totalPages - windowSize + 1));
+    const end = Math.min(totalPages, start + windowSize - 1);
+    const pageButtons = [];
+    for (let page = start; page <= end; page++) {
+      pageButtons.push(`<button type="button" class="database-page-btn ${page === databaseFragrancePage ? "active" : ""}" data-page="${page}">${page}</button>`);
+    }
+    const markup = `
+      <button type="button" class="database-page-btn" data-page="${Math.max(1, databaseFragrancePage - 1)}" ${databaseFragrancePage === 1 ? "disabled" : ""}>Prev</button>
+      ${start > 1 ? `<button type="button" class="database-page-btn" data-page="1">1</button><span>…</span>` : ""}
+      ${pageButtons.join("")}
+      ${end < totalPages ? `<span>…</span><button type="button" class="database-page-btn" data-page="${totalPages}">${totalPages}</button>` : ""}
+      <button type="button" class="database-page-btn" data-page="${Math.min(totalPages, databaseFragrancePage + 1)}" ${databaseFragrancePage === totalPages ? "disabled" : ""}>Next</button>
+    `;
+    containers.forEach((container) => {
+      container.innerHTML = markup;
+      container.querySelectorAll("button[data-page]").forEach((button) => {
+        button.addEventListener("click", () => {
+          renderDatabaseFragrancePage(Number(button.dataset.page));
+          document.getElementById("databaseFragrancesSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    });
+  }
+
+  function renderDatabaseFragrancePage(page = 1) {
+    const grid = document.getElementById("databaseFragranceGrid");
+    const countEl = document.getElementById("databaseFragranceCount");
+    if (!grid || !countEl || !databaseFragranceItems.length) return;
+    const totalPages = Math.max(1, Math.ceil(databaseFragranceItems.length / DATABASE_FRAGRANCES_PER_PAGE));
+    databaseFragrancePage = Math.max(1, Math.min(totalPages, page));
+    const start = (databaseFragrancePage - 1) * DATABASE_FRAGRANCES_PER_PAGE;
+    const pageItems = databaseFragranceItems.slice(start, start + DATABASE_FRAGRANCES_PER_PAGE);
+    const audienceCounts = databaseFragranceItems.reduce((counts, fragrance) => {
+      const key = fragrance.audience || "unisex";
+      counts[key] = (counts[key] || 0) + 1;
+      return counts;
+    }, {});
+    countEl.textContent = `${databaseFragranceItems.length} additional perfumes • page ${databaseFragrancePage}/${totalPages} • ${audienceCounts.men || 0} men • ${audienceCounts.women || 0} women • ${audienceCounts.unisex || 0} unisex`;
+    grid.innerHTML = pageItems.map(renderDatabaseFragranceSection).join("");
+    window.NoteImageResolver?.scheduleHydration?.(grid);
+    renderDatabasePagination(totalPages);
+  }
+
+  function getFragranceByName(name) {
+    const key = normalizeFragranceName(name);
+    return getSearchFragrances().find((fragrance) => normalizeFragranceName(fragrance.name) === key);
+  }
+
+  function buildFragranceDetailModal() {
+    let modal = document.getElementById("fragranceDetailModal");
+    if (modal) return modal;
+
+    modal = document.createElement("div");
+    modal.id = "fragranceDetailModal";
+    modal.className = "fragrance-detail-modal";
+    modal.innerHTML = `
+      <div class="fragrance-detail-backdrop" data-close-fragrance-detail></div>
+      <article class="fragrance-detail-panel" role="dialog" aria-modal="true" aria-labelledby="fragranceDetailTitle">
+        <button class="fragrance-detail-close" type="button" aria-label="Close fragrance details" data-close-fragrance-detail>×</button>
+        <div class="fragrance-detail-content" id="fragranceDetailContent"></div>
+      </article>
+    `;
+    modal.addEventListener("click", (event) => {
+      if (event.target.closest("[data-close-fragrance-detail]")) closeFragranceDetailModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modal.classList.contains("show")) closeFragranceDetailModal();
+    });
+    document.body.appendChild(modal);
+    return modal;
+  }
+
+  function closeFragranceDetailModal() {
+    const modal = document.getElementById("fragranceDetailModal");
+    if (!modal) return;
+    modal.classList.remove("show");
+    document.body.classList.remove("fragrance-detail-open");
+  }
+
+  function openFragranceDetail(fragranceOrName) {
+    const fragrance = typeof fragranceOrName === "string" ? getFragranceByName(fragranceOrName) : fragranceOrName;
+    if (!fragrance) return false;
+
+    const modal = buildFragranceDetailModal();
+    const content = modal.querySelector("#fragranceDetailContent");
+    const notes = (fragrance.notes || []).map(noteImageMarkup).join("");
+    const safeName = escapeHtml(fragrance.name);
+    const safeBrand = escapeHtml(fragrance.brand || "Unknown Brand");
+    const safeType = escapeHtml(fragrance.type || "Unknown Family");
+    const safeAudience = escapeHtml(formatAudienceLabel(fragrance.audience));
+    const safeDescription = escapeHtml(fragrance.description || "A catalog fragrance profile with curated notes and style details.");
+    const safeImage = window.safeAttribute(productImageForFragrance(fragrance));
+
+    content.innerHTML = `
+      <div class="fragrance-detail-hero">
+        <div class="fragrance-detail-image-shell">
+          <img class="fragrance-detail-image" src="${safeImage}" alt="${safeName} bottle" loading="lazy" decoding="async">
+        </div>
+        <div class="fragrance-detail-copy">
+          <div class="fragrance-detail-kicker">${safeAudience} • ${safeType}</div>
+          <h2 class="fragrance-detail-title" id="fragranceDetailTitle">${safeName}</h2>
+          <p class="fragrance-detail-brand">${safeBrand}</p>
+          <p class="fragrance-detail-description">${safeDescription}</p>
+          <div class="fragrance-detail-meta">
+            ${fragrance.concentration ? `<span>${escapeHtml(fragrance.concentration)}</span>` : ""}
+            ${fragrance.year ? `<span>${escapeHtml(fragrance.year)}</span>` : ""}
+            ${fragrance.sizes?.length ? `<span>${escapeHtml(fragrance.sizes.join(" / "))}</span>` : ""}
+          </div>
+        </div>
+      </div>
+      <section class="fragrance-detail-notes-section">
+        <h3>Ingredients & Notes</h3>
+        <div class="fragrance-detail-notes">${notes}</div>
+      </section>
+      <section class="fragrance-detail-extra">
+        <div><strong>Availability</strong><span>${fragrance.available ? "Available in shop" : "Catalog reference"}</span></div>
+        <div><strong>Perfumer</strong><span>${escapeHtml(fragrance.perfumer || fragrance.brand || "Unknown")}</span></div>
+      </section>
+    `;
+
+    modal.classList.add("show");
+    document.body.classList.add("fragrance-detail-open");
+    modal.querySelector(".fragrance-detail-close")?.focus({ preventScroll: true });
+    return true;
+  }
+
+  window.openFragranceDetail = openFragranceDetail;
+  window.closeFragranceDetailModal = closeFragranceDetailModal;
+
+  function notifySearchNavigation(message, type = "info") {
+    if (window.favoritesManager?.showNotification) {
+      window.favoritesManager.showNotification(message, type);
+    } else {
+      console.log(message);
+    }
+  }
+
+  function highlightSearchTarget(element) {
+    const previousTransition = element.style.transition;
+    const previousBoxShadow = element.style.boxShadow;
+    const previousFilter = element.style.filter;
+
+    element.style.transition = "box-shadow 0.35s ease, filter 0.35s ease";
+    element.style.boxShadow = "0 0 0 2px rgba(201, 169, 78, 0.5), 0 18px 60px rgba(201, 169, 78, 0.18)";
+    element.style.filter = "brightness(1.06)";
+
+    setTimeout(() => {
+      element.style.transition = previousTransition;
+      element.style.boxShadow = previousBoxShadow;
+      element.style.filter = previousFilter;
+    }, 1800);
+  }
+
+  function scrollToSearchTarget(element) {
+    const navbar = document.querySelector(".navbar");
+    const marquee = document.getElementById("topMarquee");
+    const navbarHeight = navbar?.getBoundingClientRect().height || 0;
+    const marqueeHeight = marquee && getComputedStyle(marquee).display !== "none"
+      ? marquee.getBoundingClientRect().height
+      : 0;
+    const offset = navbarHeight + marqueeHeight + 14;
+    const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    setTimeout(() => highlightSearchTarget(element), 450);
+  }
+
+  function navigateToFragranceSearchResult(fragrance, sourceElement = null) {
+    const match = findFragranceSectionMatch(fragrance);
+    const target =
+      (sourceElement?.dataset.sectionId ? document.getElementById(sourceElement.dataset.sectionId) : null) ||
+      match?.target;
+
+    if (!target || match?.isDatabaseCard) {
+      target = showDatabaseFragranceSection(fragrance.name);
+      if (!target) return openFragranceDetail(fragrance);
+    }
+
+    if (quickSearchInput) quickSearchInput.value = fragrance.name;
+    hideDropdown();
+    searchModal?.classList.remove("active");
+    scrollToSearchTarget(target);
+    return true;
+  }
+
+  window.findSearchFragranceByName = function (name) {
+    const key = normalizeFragranceName(name);
+    return getSearchFragrances().find(
+      (fragrance) => normalizeFragranceName(fragrance.name) === key,
+    );
+  };
+
+  window.navigateToFragranceSearchResult = navigateToFragranceSearchResult;
 
   function renderRemainingDatabaseFragrances() {
     const section = document.getElementById("databaseFragrancesSection");
@@ -227,18 +1041,11 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    countEl.textContent = `${uniqueRemaining.length} additional perfumes from the database`;
-    grid.innerHTML = uniqueRemaining
-      .map(
-        (fragrance) => `
-          <article class="database-fragrance-card">
-            <h3 class="database-fragrance-name">${escapeHtml(fragrance.name)}</h3>
-            <p class="database-fragrance-brand">${escapeHtml(fragrance.brand || "Unknown Brand")}</p>
-            <p class="database-fragrance-family">${escapeHtml(fragrance.type || "Unknown Family")}</p>
-          </article>
-        `,
-      )
-      .join("");
+    databaseFragranceItems = uniqueRemaining;
+    renderDatabaseFragrancePage(1);
+
+    searchSectionIndex = null;
+    searchFragrances = null;
   }
 
   // Warm up search data after first paint
@@ -280,15 +1087,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function showQuickSearchSuggestions(query) {
     if (!quickSearchResults || !quickSearchDropdown) return;
 
-    const filteredFragrances = getSearchFragrances().filter(
-      (fragrance) =>
-        fragrance.name.toLowerCase().includes(query.toLowerCase()) ||
-        fragrance.brand.toLowerCase().includes(query.toLowerCase()) ||
-        fragrance.notes.some((note) =>
-          note.toLowerCase().includes(query.toLowerCase()),
-        ) ||
-        fragrance.type.toLowerCase().includes(query.toLowerCase()),
-    );
+    const filteredFragrances = searchFragranceList(query);
 
     if (filteredFragrances.length === 0 && query.length > 0) {
       quickSearchResults.innerHTML =
@@ -305,8 +1104,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const suggestionsHTML = filteredFragrances
       .slice(0, 5)
       .map(
-        (fragrance) => `
-            <div class="search-suggestion ${fragrance.available ? "available" : "unavailable"}" data-fragrance="${fragrance.name}">
+        (fragrance) => {
+          const safeName = escapeHtml(fragrance.name);
+          const safeBrand = escapeHtml(fragrance.brand);
+          const safeNotes = escapeHtml(fragrance.notes.slice(0, 3).join(", "));
+          const safeType = escapeHtml(fragrance.type);
+          const safeSectionId = window.safeAttribute(fragrance.sectionId || "");
+          return `
+            <div class="search-suggestion ${fragrance.available ? "available" : "unavailable"}" data-fragrance="${safeName}" data-section-id="${safeSectionId}">
                 <div class="suggestion-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -315,17 +1120,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     </svg>
                 </div>
                 <div class="suggestion-content">
-                    <div class="suggestion-title">${fragrance.name}</div>
-                    <div class="suggestion-subtitle">${fragrance.brand} • ${fragrance.notes.slice(0, 3).join(", ")}</div>
+                    <div class="suggestion-title">${safeName}</div>
+                    <div class="suggestion-subtitle">${safeBrand} • ${safeNotes}</div>
                 </div>
-                <div class="suggestion-type">${fragrance.type}</div>
+                <div class="suggestion-type">${safeType}</div>
                 <div class="suggestion-availability">
                     <span class="availability-badge ${fragrance.available ? "available" : "unavailable"}">
                         ${fragrance.available ? "✓ Available" : "✗ Not Available"}
                     </span>
                 </div>
             </div>
-        `,
+        `;
+        },
       )
       .join("");
 
@@ -337,12 +1143,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const suggestions =
       quickSearchResults.querySelectorAll(".search-suggestion");
     suggestions.forEach((suggestion) => {
-      suggestion.addEventListener("click", function () {
+      suggestion.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         const fragranceName = this.dataset.fragrance;
-        quickSearchInput.value = fragranceName;
-        hideDropdown();
-        // You can add navigation logic here
-        console.log("Selected fragrance:", fragranceName);
+        const fragrance = filteredFragrances.find(
+          (item) => item.name === fragranceName,
+        );
+        if (fragrance) {
+          navigateToFragranceSearchResult(fragrance, this);
+        }
       });
     });
   }
@@ -389,7 +1199,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Handle blur
     quickSearchInput.addEventListener("blur", function () {
-      hideQuickSearchSuggestions();
+      setTimeout(hideQuickSearchSuggestions, 120);
     });
 
     // Handle keyboard navigation
@@ -416,6 +1226,8 @@ document.addEventListener("DOMContentLoaded", function () {
           suggestions[selectedSuggestionIndex]
         ) {
           suggestions[selectedSuggestionIndex].click();
+        } else {
+          suggestions[0].click();
         }
       } else if (e.key === "Escape") {
         hideDropdown();
@@ -510,8 +1322,11 @@ document.addEventListener("DOMContentLoaded", function () {
   async function searchProfiles(query) {
     try {
       console.log("🔍 Searching profiles with query:", query);
+      const token = window.getAuthToken();
+      if (!token) return [];
       const response = await fetch(
         `/api/search/users?q=${encodeURIComponent(query)}`,
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       console.log("📡 API Response status:", response.status);
 
@@ -575,23 +1390,27 @@ document.addEventListener("DOMContentLoaded", function () {
           const displayName =
             profile.display_name ||
             `${profile.first_name || ""} ${profile.last_name || ""}`.trim() ||
-            profile.email;
-          const avatarUrl =
-            profile.avatar_url && profile.avatar_url !== "default.jpg"
-              ? profile.avatar_url
-              : "default.jpg";
+            "Member";
+          const safeDisplayName = window.escapeHTML(displayName);
+          const avatarUrl = window.safeAttribute(
+            window.normalizeAvatarSrc(profile.avatar_url),
+          );
+          const safeBadge = window.escapeHTML(
+            profile.badge || (profile.is_admin ? "Admin" : "Member"),
+          );
+          const safeId = window.safeAttribute(profile.id);
 
           const html = `
-        <div class="search-suggestion profile-suggestion" data-user-id="${profile.id}">
+        <div class="search-suggestion profile-suggestion" data-user-id="${safeId}">
           <div class="profile-suggestion-content">
             <div class="profile-avatar">
-              <img src="${avatarUrl}" alt="${displayName}" onerror="this.src='default.jpg'" loading="lazy">
+              <img src="${avatarUrl}" alt="${safeDisplayName}" onerror="this.src='default.jpg'" loading="lazy">
               ${profile.level && profile.level > 1 ? `<div class="level-badge">${profile.level}</div>` : ""}
             </div>
             <div class="profile-info">
-              <div class="profile-name">${displayName}</div>
+              <div class="profile-name">${safeDisplayName}</div>
               <div class="profile-meta">
-                <span class="profile-badge ${profile.is_admin ? "admin" : "member"}">${profile.badge || (profile.is_admin ? "Admin" : "Member")}</span>
+                <span class="profile-badge ${profile.is_admin ? "admin" : "member"}">${safeBadge}</span>
                 ${profile.member_since ? `<span class="member-since">Member since ${new Date(profile.member_since).getFullYear()}</span>` : ""}
               </div>
             </div>
@@ -658,61 +1477,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Immediate profile search test (runs without waiting for DOM)
-  console.log("🧪 Running immediate profile search test...");
-
-  // Test if basic elements exist
-  setTimeout(() => {
-    const testElements = {
-      searchTabs: document.querySelectorAll(".search-tab"),
-      quickSearchInput: document.getElementById("quickSearchInput"),
-      quickSearchResults: document.getElementById("quickSearchResults"),
-      quickSearchDropdown: document.getElementById("quickSearchDropdown"),
-    };
-
-    console.log("🔍 Element availability test:", {
-      searchTabs: testElements.searchTabs.length,
-      quickSearchInput: !!testElements.quickSearchInput,
-      quickSearchResults: !!testElements.quickSearchResults,
-      quickSearchDropdown: !!testElements.quickSearchDropdown,
-    });
-
-    // Test profile search API directly
-    if (typeof searchProfiles === "function") {
-      console.log("✅ searchProfiles function exists, testing API...");
-      searchProfiles("bil")
-        .then((profiles) => {
-          console.log(
-            "🎯 Immediate API test result:",
-            profiles.length,
-            "profiles",
-          );
-          if (profiles.length > 0) {
-            console.log("👤 Sample profile:", profiles[0]);
-            console.log("✅ Profile search API is working!");
-          }
-        })
-        .catch((err) => {
-          console.error("❌ Immediate API test failed:", err);
-        });
-    } else {
-      console.error("❌ searchProfiles function not found");
-    }
-
-    // Test tab switching if elements exist
-    if (testElements.searchTabs.length >= 2) {
-      const profileTab = testElements.searchTabs[1]; // Assuming profiles tab is second
-      if (profileTab && profileTab.dataset.searchType === "profiles") {
-        console.log("✅ Profile tab found, testing click...");
-        profileTab.click();
-        console.log(
-          "🔄 Profile tab clicked, current search type:",
-          currentSearchType,
-        );
-      }
-    }
-  }, 500);
-
   // Initialize search system on page load
   document.addEventListener("DOMContentLoaded", function () {
     console.log("📄 DOM loaded, initializing profile search...");
@@ -733,47 +1497,6 @@ document.addEventListener("DOMContentLoaded", function () {
       currentSearchType = activeTab.dataset.searchType || "fragrances";
       console.log("🎯 Initial search type from active tab:", currentSearchType);
     }
-
-    // Add simple test for profile search
-    setTimeout(() => {
-      console.log("🧪 Testing profile search initialization...");
-
-      // Test tab switching
-      const profileTab = document.querySelector(
-        '.search-tab[data-search-type="profiles"]',
-      );
-      if (profileTab) {
-        console.log("✅ Profile tab found, testing click...");
-        profileTab.click();
-
-        // Test search after switching to profiles
-        setTimeout(() => {
-          if (currentSearchType === "profiles") {
-            console.log("✅ Successfully switched to profiles search");
-
-            // Test API call
-            console.log("🔍 Testing API call with 'bil'...");
-            searchProfiles("bil")
-              .then((profiles) => {
-                console.log("📊 Test API result:", profiles.length, "profiles");
-                if (profiles.length > 0) {
-                  console.log("✅ Profile search API working correctly!");
-                  console.log("👤 First profile:", profiles[0]);
-                } else {
-                  console.log("⚠️ No profiles returned from API test");
-                }
-              })
-              .catch((error) => {
-                console.error("❌ Profile search API test failed:", error);
-              });
-          } else {
-            console.error("❌ Failed to switch to profiles search type");
-          }
-        }, 100);
-      } else {
-        console.error("❌ Profile tab not found!");
-      }
-    }, 1000);
   });
 
   // Open search modal from floating search icon
@@ -1018,25 +1741,26 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const results = getSearchFragrances().filter(
-      (fragrance) =>
-        fragrance.name.toLowerCase().includes(query) ||
-        fragrance.brand.toLowerCase().includes(query) ||
-        fragrance.type.toLowerCase().includes(query) ||
-        fragrance.notes.some((note) => note.toLowerCase().includes(query)),
-    );
+    const results = searchFragranceList(query);
 
     if (searchResults) {
       if (results.length > 0) {
         let resultsHTML =
           '<div class="search-results-list"><h3>Search Results</h3>';
         results.forEach((fragrance) => {
+          const safeName = escapeHtml(fragrance.name);
+          const safeBrand = escapeHtml(fragrance.brand);
+          const safeType = escapeHtml(fragrance.type);
+          const safeSectionId = window.safeAttribute(fragrance.sectionId || "");
+          const safeNotes = fragrance.notes
+            .map((note) => `<span class="note-tag">${escapeHtml(note)}</span>`)
+            .join("");
           resultsHTML += `
-                        <div class="search-result-item ${fragrance.available ? "available" : "unavailable"}">
+                        <div class="search-result-item ${fragrance.available ? "available" : "unavailable"}" data-fragrance="${safeName}" data-section-id="${safeSectionId}" role="button" tabindex="0">
                             <div class="result-main">
-                                <h4>${fragrance.name}</h4>
-                                <p class="result-brand">${fragrance.brand}</p>
-                                <p class="result-type">${fragrance.type}</p>
+                                <h4>${safeName}</h4>
+                                <p class="result-brand">${safeBrand}</p>
+                                <p class="result-type">${safeType}</p>
                                 <div class="result-availability">
                                     <span class="availability-badge ${fragrance.available ? "available" : "unavailable"}">
                                         ${fragrance.available ? "✓ Available" : "✗ Not Available"}
@@ -1045,13 +1769,29 @@ document.addEventListener("DOMContentLoaded", function () {
                             </div>
                             <div class="result-notes">
                                 <span class="notes-label">Notes:</span>
-                                ${fragrance.notes.map((note) => `<span class="note-tag">${note}</span>`).join("")}
+                                ${safeNotes}
                             </div>
                         </div>
                     `;
         });
         resultsHTML += "</div>";
         searchResults.innerHTML = resultsHTML;
+
+        searchResults.querySelectorAll(".search-result-item").forEach((item) => {
+          const activate = () => {
+            const fragrance = results.find(
+              (result) => result.name === item.dataset.fragrance,
+            );
+            if (fragrance) navigateToFragranceSearchResult(fragrance, item);
+          };
+          item.addEventListener("click", activate);
+          item.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              activate();
+            }
+          });
+        });
 
         // Trigger staggered animations for search results with delay for smooth transition
         setTimeout(() => {
@@ -1120,6 +1860,47 @@ document.addEventListener("DOMContentLoaded", function () {
     const b = Math.round(rgb1.b + factor * (rgb2.b - rgb1.b));
 
     return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function themeFromBackgroundColor(color) {
+    let r;
+    let g;
+    let b;
+    const rgbMatch = String(color || "").match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+    const hexMatch = String(color || "").match(/#([0-9a-f]{6})/i);
+
+    if (rgbMatch) {
+      r = Number(rgbMatch[1]);
+      g = Number(rgbMatch[2]);
+      b = Number(rgbMatch[3]);
+    } else if (hexMatch) {
+      const hex = hexMatch[1];
+      r = parseInt(hex.slice(0, 2), 16);
+      g = parseInt(hex.slice(2, 4), 16);
+      b = parseInt(hex.slice(4, 6), 16);
+    } else {
+      return null;
+    }
+
+    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    if (luminance < 115) return "dark";
+    if (r >= g && g >= b && r - b >= 8) return "cream";
+    return "light";
+  }
+
+  function forceBodyTheme(theme) {
+    if (!theme) return;
+    const alreadyApplied = document.body.classList.contains(`theme-${theme}`) &&
+      window.themeManager?.currentTheme === theme;
+    if (alreadyApplied) return;
+
+    document.body.classList.remove("theme-dark", "theme-cream", "theme-light");
+    document.body.classList.add(`theme-${theme}`);
+    if (window.themeManager) {
+      window.themeManager.currentTheme = theme;
+      window.themeManager.lastAppliedTheme = null;
+      window.themeManager.applyTheme?.(theme);
+    }
   }
 
   // Function to update colors and vignette based on scroll position
@@ -1302,6 +2083,64 @@ function _lookupSectionBgColor(scrollTop, breakpoints) {
   }
   return '#120e04';
 }
+
+function getScrollBackgroundColor(scrollTop, windowHeight) {
+  const contentHeight = _getOffsetHeight(_getEl("", ".content")) || windowHeight * 3;
+
+  const blackDuration = contentHeight * 0.92;
+  const transitionStart = windowHeight + blackDuration;
+  const transitionRange = contentHeight * 0.08;
+  const transitionEnd = transitionStart + transitionRange;
+
+  const haltaneSection = _getEl("", ".haltane-section-container");
+  const creamTransitionStart = haltaneSection ? _getOffsetTop(haltaneSection) + 500 : transitionEnd;
+  const creamTransitionRange = windowHeight * 0.3;
+  const creamTransitionEnd = creamTransitionStart + creamTransitionRange;
+
+  const pegasusSection = _getEl("", ".pegasus-image");
+  const greyTransitionStart = pegasusSection
+    ? _getOffsetTop(pegasusSection.closest(".content")) - 800
+    : creamTransitionEnd + windowHeight;
+  const greyTransitionRange = windowHeight * 0.5;
+  const greyTransitionEnd = greyTransitionStart + greyTransitionRange;
+
+  const whiteTransitionSection = _getEl("", ".white-transition-section");
+  const whiteTransitionTop = whiteTransitionSection ? _getOffsetTop(whiteTransitionSection) : 0;
+  const whiteTransitionHeight = whiteTransitionSection ? _getOffsetHeight(whiteTransitionSection) : 0;
+  const softGreenTransitionStart = whiteTransitionTop + whiteTransitionHeight - windowHeight * 0.7;
+  const softGreenTransitionRange = windowHeight * 0.5;
+  const softGreenTransitionEnd = softGreenTransitionStart + softGreenTransitionRange;
+
+  const pegasusTransitionColor = _pegasusTransitionColor;
+  if (scrollTop < creamTransitionStart) return "#000000";
+  if (scrollTop < creamTransitionEnd) {
+    const rawProgress = (scrollTop - creamTransitionStart) / creamTransitionRange;
+    return interpolateColor("#000000", "#f5f0e6", Math.pow(rawProgress, 0.7));
+  }
+  if (scrollTop < greyTransitionStart) return "#f5f0e6";
+  if (scrollTop < greyTransitionEnd) {
+    const rawProgress = (scrollTop - greyTransitionStart) / greyTransitionRange;
+    return interpolateColor("#f5f0e6", pegasusTransitionColor, Math.pow(rawProgress, 0.6));
+  }
+  if (scrollTop < softGreenTransitionStart) return pegasusTransitionColor;
+  if (scrollTop < softGreenTransitionEnd) {
+    const rawProgress = (scrollTop - softGreenTransitionStart) / softGreenTransitionRange;
+    return interpolateColor(pegasusTransitionColor, "#f0f8f0", Math.pow(rawProgress, 0.5));
+  }
+
+  if (!_bgBreakpoints) _bgBreakpoints = _buildBgBreakpoints(windowHeight);
+  return _bgBreakpoints.length > 0 ? _lookupSectionBgColor(scrollTop, _bgBreakpoints) : "#f0f8f0";
+}
+
+function updateScrollBackgroundAndTheme() {
+  const scrollTop = window._globalScrollTop !== undefined ? window._globalScrollTop : (window.pageYOffset || document.documentElement.scrollTop);
+  const backgroundColor = getScrollBackgroundColor(scrollTop, window.innerHeight);
+  if (_lastAppliedBackgroundColor !== backgroundColor) {
+    body.style.backgroundColor = backgroundColor;
+    _lastAppliedBackgroundColor = backgroundColor;
+  }
+  forceBodyTheme(themeFromBackgroundColor(backgroundColor));
+}
 // --------------------------------
 
 function updateColors() {
@@ -1411,61 +2250,21 @@ function updateColors() {
       _lastAppliedBackgroundColor = backgroundColor;
     }
 
-    // Haltane section fade-in effect aligned with cream transition
-    const haltaneImage = _getEl("", ".haltane-image");
-    const haltaneProductTitle = _getEl("", ".haltane-section-container .product-title",);
-    const haltaneNotes = _getEl("", ".haltane-notes");
-    const haltaneFragranceNotes = _getEl("", ".haltane-fragrance-notes",);
+    const calculatedTheme = themeFromBackgroundColor(backgroundColor);
+    forceBodyTheme(calculatedTheme);
 
-    if (
-      haltaneImage ||
-      haltaneProductTitle ||
-      haltaneNotes ||
-      haltaneFragranceNotes
-    ) {
-      // Only compute haltane fade when near the transition zone
-      if (scrollTop < creamTransitionEnd + 200) {
-        let haltaneOpacity = 0;
-
-        // Start fade-in very late in the cream transition (at 95% progress)
-        const fadeInStart = creamTransitionStart + creamTransitionRange * 0.95;
-        const fadeInRange = creamTransitionRange * 0.05; // Use only last 5% for fade-in
-
-        if (scrollTop < fadeInStart) {
-          haltaneOpacity = 0;
-        } else if (scrollTop < creamTransitionEnd) {
-          const progress = (scrollTop - fadeInStart) / fadeInRange;
-          const easedProgress = Math.pow(progress, 0.15);
-          haltaneOpacity = easedProgress;
-        } else {
-          haltaneOpacity = 1;
-        }
-
-        haltaneOpacity = Math.round(haltaneOpacity * 100) / 100;
-        
-        if (typeof window._lastHaltaneOpacity === 'undefined') window._lastHaltaneOpacity = -1;
-        
-        if (window._lastHaltaneOpacity !== haltaneOpacity) {
-          window._lastHaltaneOpacity = haltaneOpacity;
-          if (haltaneImage) {
-            haltaneImage.style.opacity = haltaneOpacity;
-            haltaneImage.style.transform = `translateY(${20 * (1 - haltaneOpacity)}px)`;
-          }
-          if (haltaneProductTitle) {
-            haltaneProductTitle.style.opacity = haltaneOpacity;
-            haltaneProductTitle.style.transform = `translateY(${15 * (1 - haltaneOpacity)}px)`;
-          }
-          if (haltaneNotes) {
-            haltaneNotes.style.opacity = haltaneOpacity;
-            haltaneNotes.style.transform = `translateY(${25 * (1 - haltaneOpacity)}px)`;
-          }
-          if (haltaneFragranceNotes) {
-            haltaneFragranceNotes.style.opacity = haltaneOpacity;
-            haltaneFragranceNotes.style.transform = `translateY(${30 * (1 - haltaneOpacity)}px)`;
-          }
-        }
-      }
-    }
+    // Keep Haltane content visible. Hiding it during background transitions made
+    // loaded product/note images appear missing when users landed mid-section.
+    const haltaneVisibleEls = [
+      _getEl("", ".haltane-image"),
+      _getEl("", ".haltane-section-container .product-title"),
+      _getEl("", ".haltane-notes"),
+      _getEl("", ".haltane-fragrance-notes"),
+    ].filter(Boolean);
+    haltaneVisibleEls.forEach((el) => {
+      if (el.style.opacity && el.style.opacity !== "1") el.style.opacity = "1";
+      if (el.style.transform && el.style.transform !== "none") el.style.transform = "none";
+    });
 
     // Progressive text color transition based on background
     let textColor;
@@ -1588,7 +2387,7 @@ function updateColors() {
       _lastScrollProgressRounded = _rounded;
 
     // One-time cleanup: remove any inline styles previously applied by older builds
-    if (navbar && !_navbarScrollFxDisabledApplied) {
+    if (navbar && !_navbarScrollFxDisabledApplied && !document.body.classList.contains("top-shell-hidden")) {
       navbar.style.opacity = "";
       navbar.style.transform = "";
       navbar.style.filter = "";
@@ -1674,18 +2473,48 @@ function updateColors() {
     ticking = false;
   }
 
+  let lastThemeScrollUpdate = 0;
+  let settledThemeSyncTimer = null;
+
+  function syncThemeAfterBackgroundSettles() {
+    clearTimeout(settledThemeSyncTimer);
+    settledThemeSyncTimer = setTimeout(() => {
+      window._globalScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      updateScrollBackgroundAndTheme();
+      requestAnimationFrame(() => {
+        forceBodyTheme(themeFromBackgroundColor(getComputedStyle(document.body).backgroundColor));
+      });
+    }, 90);
+  }
+
   // Optimized scroll handler using requestAnimationFrame
   function onScroll() {
     if (!ticking) {
-      requestAnimationFrame(updateColors);
+      topChromeController?.requestUpdate?.();
+      syncThemeAfterBackgroundSettles();
+      requestAnimationFrame(() => {
+        window._globalScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (backToTopBtn && progressRing) updateBackToTop();
+        if (floatingSearch || floatingMenu) updateFloatingElements();
+        updateSocialLinks();
+        const now = performance.now();
+        if (now - lastThemeScrollUpdate > 140) {
+          lastThemeScrollUpdate = now;
+          updateScrollBackgroundAndTheme();
+          requestAnimationFrame(() => {
+            forceBodyTheme(themeFromBackgroundColor(getComputedStyle(document.body).backgroundColor));
+          });
+        }
+        ticking = false;
+      });
       ticking = true;
     }
   }
 
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  // Initial color update
-  updateColors();
+  // Initial theme/color pass only; scroll keeps lightweight controls updated.
+  updateScrollBackgroundAndTheme();
 
   // Language changer functionality
   const languageSelector = document.querySelector(".language-selector");
@@ -1747,12 +2576,12 @@ function updateColors() {
     }
   });
 
-  // Multiple background videos cycling
+  // Multiple background videos cycling — filter out null entries for missing video elements
   const videos = [
     document.getElementById("background-video"),
     document.getElementById("background-video-2"),
     document.getElementById("background-video-3"),
-  ];
+  ].filter(Boolean);
 
   let currentVideoIndex = 0;
   let videoTransitionInterval;
@@ -2164,8 +2993,10 @@ function updateColors() {
   console.log("pegasusFragranceProfile:", pegasusFragranceProfile);
   console.log("pegasusFragranceNotes:", pegasusFragranceNotes);
 
+  const pegasusStaticLayout = true;
+
   // Set initial hidden states for Pegasus elements
-  if (pegasusImage) {
+  if (pegasusImage && !pegasusStaticLayout) {
     pegasusImage.style.setProperty("opacity", "0", "important");
     pegasusImage.style.setProperty(
       "transform",
@@ -2174,7 +3005,7 @@ function updateColors() {
     );
     pegasusImage.style.setProperty("transition", "none", "important");
   }
-  if (pegasusProductTitle) {
+  if (pegasusProductTitle && !pegasusStaticLayout) {
     pegasusProductTitle.style.setProperty("opacity", "0", "important");
     pegasusProductTitle.style.setProperty(
       "transform",
@@ -2183,7 +3014,7 @@ function updateColors() {
     );
     pegasusProductTitle.style.setProperty("transition", "none", "important");
   }
-  if (pegasusFragranceProfile) {
+  if (pegasusFragranceProfile && !pegasusStaticLayout) {
     pegasusFragranceProfile.style.setProperty("opacity", "0", "important");
     pegasusFragranceProfile.style.setProperty(
       "transform",
@@ -2196,7 +3027,7 @@ function updateColors() {
       "important",
     );
   }
-  if (pegasusFragranceNotes) {
+  if (pegasusFragranceNotes && !pegasusStaticLayout) {
     pegasusFragranceNotes.style.setProperty("opacity", "0", "important");
     pegasusFragranceNotes.style.setProperty(
       "transform",
@@ -2579,7 +3410,7 @@ function updateColors() {
   }
 
   // Pegasus Image Parallax Effect (matching Layton style)
-  if (pegasusImage) {
+  if (pegasusImage && !pegasusStaticLayout) {
     let pegasusImageLastProgress = -1;
 
     function updatePegasusImageParallax() {
@@ -2679,7 +3510,7 @@ function updateColors() {
   }
 
   // Pegasus Product Title Parallax Effect
-  if (pegasusProductTitle) {
+  if (pegasusProductTitle && !pegasusStaticLayout) {
     let pegasusProductTitleLastProgress = -1;
 
     function updatePegasusProductTitleParallax() {
@@ -2797,7 +3628,7 @@ function updateColors() {
   }
 
   // Pegasus Fragrance Profile Parallax Effect (matching Layton Notes style)
-  if (pegasusFragranceProfile) {
+  if (pegasusFragranceProfile && !pegasusStaticLayout) {
     let pegasusFragranceProfileLastProgress = -1;
 
     function updatePegasusFragranceProfileParallax() {
@@ -2915,7 +3746,7 @@ function updateColors() {
   }
 
   // Pegasus Fragrance Notes Parallax Effect (matching Layton Fragrance Notes style)
-  if (pegasusFragranceNotes) {
+  if (pegasusFragranceNotes && !pegasusStaticLayout) {
     let pegasusFragranceNotesLastProgress = -1;
 
     function updatePegasusFragranceNotesParallax() {
@@ -3929,6 +4760,13 @@ function updateColors() {
 
   // Generic parallax function factory
   function createParallaxUpdater(element, triggerOffset, range, transformFn) {
+    if (element.closest?.('.perfume-top-row') || /fragrance-description/.test(element.className || '')) {
+      element.classList.remove('parallax-active');
+      element.style.transform = '';
+      element.style.opacity = '';
+      return function() {};
+    }
+
     let _lastEased = -1; // skip redundant style writes
     let section = element.closest('.content') || element.parentElement;
 
@@ -4018,6 +4856,8 @@ function updateColors() {
     }
   });
 
+  newSectionParallaxUpdaters.length = 0;
+
   // Inject new section parallax into scroll handler
   if (newSectionParallaxUpdaters.length > 0) {
     const previousOnScroll = onScroll;
@@ -4027,58 +4867,11 @@ function updateColors() {
           try {
             // Global cache update
             window._globalScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            updateColors();
             if (backToTopBtn && progressRing) { updateBackToTop(); }
             if (floatingSearch) { updateFloatingElements(); }
             updateSocialLinks();
 
-            // Legacy hand-written parallax functions (Layton, Pegasus, Greenly, Baccarat Rouge, Black Orchid, Aventus)
-            // FIX: Parallax cull to prevent massive layout thrashing lag in hero section
-            const _st = (window._globalScrollTop !== undefined ? window._globalScrollTop : (window.pageYOffset || document.documentElement.scrollTop));
-            const _wh = window.innerHeight || 800;
-            const _shouldRunLegacy = (_st > _wh * 0.4);
-            
-            if (_shouldRunLegacy || !window._legacyParallaxResetDone) {
-              if (!_shouldRunLegacy) { window._legacyParallaxResetDone = true; }
-              else { window._legacyParallaxResetDone = false; }
-              
-              if (typeof updateBrandImageParallax === 'function') updateBrandImageParallax();
-              if (typeof updateLaytonParallax === 'function') updateLaytonParallax();
-              if (typeof updateLaytonNotesParallax === 'function') updateLaytonNotesParallax();
-              if (typeof updateProductTitleParallax === 'function') updateProductTitleParallax();
-              if (typeof updateFragranceNotesParallax === 'function') updateFragranceNotesParallax();
-              if (typeof updatePerfumeRatingParallax === 'function') updatePerfumeRatingParallax();
-              if (typeof updatePegasusImageParallax === 'function') updatePegasusImageParallax();
-              if (typeof updatePegasusProductTitleParallax === 'function') updatePegasusProductTitleParallax();
-              if (typeof updatePegasusFragranceProfileParallax === 'function') updatePegasusFragranceProfileParallax();
-              if (typeof updatePegasusFragranceNotesParallax === 'function') updatePegasusFragranceNotesParallax();
-              if (typeof updatePegasusPerfumeRatingParallax === 'function') updatePegasusPerfumeRatingParallax();
-              if (typeof updateGreenlyImageParallax === 'function') updateGreenlyImageParallax();
-              if (typeof updateGreenlyProductInfoParallax === 'function') updateGreenlyProductInfoParallax();
-              if (typeof updateGreenlyScentProfileParallax === 'function') updateGreenlyScentProfileParallax();
-              if (typeof updateGreenlyIngredientsParallax === 'function') updateGreenlyIngredientsParallax();
-              if (typeof updateGreenlyFragranceDescriptionParallax === 'function') updateGreenlyFragranceDescriptionParallax();
-              if (typeof updateBaccaratrougeImageParallax === 'function') updateBaccaratrougeImageParallax();
-              if (typeof updateBaccaratrougeProductInfoParallax === 'function') updateBaccaratrougeProductInfoParallax();
-              if (typeof updateBaccaratrougeScentProfileParallax === 'function') updateBaccaratrougeScentProfileParallax();
-              if (typeof updateBaccaratrougeIngredientsParallax === 'function') updateBaccaratrougeIngredientsParallax();
-              if (typeof updateBaccaratrougeFragranceDescriptionParallax === 'function') updateBaccaratrougeFragranceDescriptionParallax();
-              if (typeof updateBlackorchidImageParallax === 'function') updateBlackorchidImageParallax();
-              if (typeof updateBlackorchidProductInfoParallax === 'function') updateBlackorchidProductInfoParallax();
-              if (typeof updateBlackorchidScentProfileParallax === 'function') updateBlackorchidScentProfileParallax();
-              if (typeof updateBlackorchidIngredientsParallax === 'function') updateBlackorchidIngredientsParallax();
-              if (typeof updateBlackorchidFragranceDescriptionParallax === 'function') updateBlackorchidFragranceDescriptionParallax();
-              if (typeof updateAventusImageParallax === 'function') updateAventusImageParallax();
-              if (typeof updateAventusProductInfoParallax === 'function') updateAventusProductInfoParallax();
-              if (typeof updateAventusScentProfileParallax === 'function') updateAventusScentProfileParallax();
-              if (typeof updateAventusIngredientsParallax === 'function') updateAventusIngredientsParallax();
-              if (typeof updateAventusFragranceDescriptionParallax === 'function') updateAventusFragranceDescriptionParallax();
-            }
-
-            // New sections parallax (has viewport culling built in)
-            for (let i = 0; i < newSectionParallaxUpdaters.length; i++) {
-              newSectionParallaxUpdaters[i]();
-            }
+            // Heavy per-section parallax is intentionally disabled; layout is now static for scroll performance.
           } finally {
             ticking = false;
           }
@@ -4817,13 +5610,7 @@ function initializeAuth() {
     }
 
     // Set admin flag for specific email
-    if (email === "cherifmed1200@gmail.com") {
-      userData.isAdmin = true;
-      // Only set default name if no custom name exists
-      if (!existingUserData || userData.name === "cherifmed1200") {
-        userData.name = "MOH CHERIF";
-      }
-    }
+    userData.isAdmin = Boolean(userData.isAdmin);
 
     // Store user data safely (avoid QuotaExceededError)
     const storage = rememberMe ? localStorage : sessionStorage;
@@ -5154,6 +5941,18 @@ function initializeAuth() {
         return;
       }
 
+      const uploadAvatarDataUrl = async () => {
+        const formData = new FormData();
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        formData.append("avatar", blob, "avatar.jpg");
+        return fetch("/api/upload-avatar", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
+      };
+
       // ðŸ”’ COMPREHENSIVE AUTH PROTECTION: Multi-level authentication persistence
       const currentUser = getCurrentUser();
       if (currentUser) {
@@ -5199,16 +5998,7 @@ function initializeAuth() {
       showUploadProgress("Uploading to server...", 70);
 
       // Send to server
-      const response = await fetch("/api/user/upload-avatar", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          avatarData: imageUrl,
-        }),
-      });
+      const response = await uploadAvatarDataUrl();
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -5217,6 +6007,7 @@ function initializeAuth() {
       }
 
       const data = await response.json();
+      imageUrl = data.avatarUrl || imageUrl;
       console.log("âœ… Avatar uploaded to database successfully");
 
       // Update progress
@@ -5297,10 +6088,7 @@ function initializeAuth() {
             console.log(
               "ðŸ”„ Triggering real-time avatar update in reviews and replies...",
             );
-            await window.reviewsManager.updateUserProfileInDatabase(
-              updatedUserData.name,
-              updatedUserData.avatar,
-            );
+            await window.reviewsManager.updateUserProfileInDatabase();
             await window.reviewsManager.loadAllReviews();
             console.log("âœ… Reviews and replies updated with new avatar");
           }
@@ -5352,10 +6140,7 @@ function initializeAuth() {
       const userForReviews = getCurrentUser();
       if (window.reviewsManager && userForReviews) {
         console.log("ðŸ”„ Updating avatar in all reviews...");
-        const success = await window.reviewsManager.updateUserProfileInDatabase(
-          userForReviews.name,
-          imageUrl,
-        );
+        const success = await window.reviewsManager.updateUserProfileInDatabase();
         if (success) {
           console.log("âœ… Avatar updated in database - refreshing UI...");
           // Force refresh all reviews from database to show changes immediately
@@ -5660,18 +6445,6 @@ function initializeAuth() {
         sessionStorage.removeItem("uploadProtection");
       }
 
-      // Handle admin user special case
-      if (user.email === "cherifmed1200@gmail.com") {
-        console.log("Admin email detected, ensuring admin privileges...");
-
-        // Ensure admin flag is set
-        if (!user.isAdmin) {
-          user.isAdmin = true;
-          await window.authStateManager.updateUser(user);
-          console.log("âœ… Admin privileges ensured");
-        }
-      }
-
       // Update UI now that DOM is ready and function is available
       if (typeof window.updateUIForLoggedInUser === "function") {
         await window.updateUIForLoggedInUser(user);
@@ -5797,21 +6570,20 @@ function initializeAuth() {
     // Update any profile forms with current data
     updateProfileFormData(userData);
 
-    // Check if user is the specific admin and apply styling
-    const isSpecificAdmin = userData.email === "cherifmed1200@gmail.com";
-    checkAndApplyAdminStyling(userData.email);
+    // Check server-provided role and apply styling
+    checkAndApplyAdminStyling(Boolean(userData.isAdmin));
 
     // Show admin dashboard if user is admin
     const adminDashboard = document.getElementById("adminDashboard");
     console.log("User data:", userData); // Debug log
     console.log("Is admin:", userData.isAdmin); // Debug log
     console.log(
-      "Is specific admin (cherifmed1200@gmail.com):",
-      isSpecificAdmin,
+      "Server-provided admin:",
+      Boolean(userData.isAdmin),
     ); // Debug log
     console.log("Admin dashboard element:", adminDashboard); // Debug log
 
-    if ((userData.isAdmin || isSpecificAdmin) && adminDashboard) {
+    if (userData.isAdmin && adminDashboard) {
       adminDashboard.style.display = "block";
       console.log("ðŸ”‘ Admin dashboard access granted for:", userData.email);
     } else {
@@ -5821,12 +6593,7 @@ function initializeAuth() {
       console.log("ðŸš« Admin dashboard access denied for:", userData.email);
     }
 
-    // Log styling application
-    if (isSpecificAdmin) {
-      console.log("ðŸ‘‘ VIP admin styling applied for cherifmed1200@gmail.com");
-    } else {
-      console.log("ðŸ‘¤ Regular user styling applied for:", userData.email);
-    }
+    console.log("ðŸ‘¤ User styling applied for:", userData.email);
 
     // Avatar update handled by createSimpleAvatar
 
@@ -6996,6 +7763,18 @@ async function saveUploadedPhotoFallback(imageUrl) {
       return;
     }
 
+    const uploadAvatarDataUrl = async () => {
+      const formData = new FormData();
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      formData.append("avatar", blob, "avatar.jpg");
+      return fetch("/api/upload-avatar", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+    };
+
     // ðŸ”’ COMPREHENSIVE AUTH PROTECTION: Multi-level authentication persistence (fallback)
     const currentUser = getCurrentUser();
     if (currentUser) {
@@ -7044,16 +7823,7 @@ async function saveUploadedPhotoFallback(imageUrl) {
     showUploadProgress("Uploading to server...", 70);
 
     // Send to server
-    const response = await fetch("/api/user/upload-avatar", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        avatarData: imageUrl,
-      }),
-    });
+    const response = await uploadAvatarDataUrl();
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -7062,6 +7832,7 @@ async function saveUploadedPhotoFallback(imageUrl) {
     }
 
     const data = await response.json();
+    imageUrl = data.avatarUrl || imageUrl;
     console.log("âœ… Avatar uploaded to database successfully");
 
     // Update progress
@@ -7132,10 +7903,7 @@ async function saveUploadedPhotoFallback(imageUrl) {
               name: userName,
               avatarLength: userAvatar ? userAvatar.length : 0,
             });
-            await window.reviewsManager.updateUserProfileInDatabase(
-              userName,
-              userAvatar,
-            );
+            await window.reviewsManager.updateUserProfileInDatabase();
             await window.reviewsManager.loadAllReviews();
             console.log("âœ… Reviews updated with new avatar");
           } else {
@@ -7185,10 +7953,7 @@ async function saveUploadedPhotoFallback(imageUrl) {
     const userForReviewsFallback = getCurrentUser();
     if (window.reviewsManager && userForReviewsFallback) {
       console.log("ðŸ”„ Updating avatar in all reviews (fallback method)...");
-      const success = await window.reviewsManager.updateUserProfileInDatabase(
-        userForReviewsFallback.name,
-        imageUrl,
-      );
+      const success = await window.reviewsManager.updateUserProfileInDatabase();
       if (success) {
         console.log("âœ… Avatar updated in database - refreshing UI...");
         // Force refresh all reviews from database to show changes immediately
@@ -7943,11 +8708,7 @@ async function saveProfile() {
             });
 
             if (fullName && fullName !== "undefined") {
-              const success =
-                await window.reviewsManager.updateUserProfileInDatabase(
-                  fullName,
-                  avatarForReviews,
-                );
+              const success = await window.reviewsManager.updateUserProfileInDatabase();
               if (success) {
                 console.log(
                   "âœ… Database updated successfully - refreshing UI...",
@@ -8076,11 +8837,7 @@ async function saveProfile() {
         });
 
         if (fullName && fullName !== "undefined") {
-          const success =
-            await window.reviewsManager.updateUserProfileInDatabase(
-              fullName,
-              avatarForReviews,
-            );
+          const success = await window.reviewsManager.updateUserProfileInDatabase();
           if (success) {
             console.log("âœ… Database updated successfully - refreshing UI...");
             // Force refresh all reviews from database to show changes immediately
@@ -9211,7 +9968,7 @@ function updateUserUI(userData) {
   updateProfileFormData(userData);
 
   // Re-apply admin styling if needed
-  checkAndApplyAdminStyling(userData.email);
+  checkAndApplyAdminStyling(Boolean(userData.isAdmin));
 
   console.log("âœ… User UI updated:", userData);
 }
@@ -9538,28 +10295,43 @@ function renderUsersTable() {
       ? new Date(user.lastLogin).toLocaleDateString()
       : "Never";
 
-    const actionButton = !user.isAdmin
-      ? user.isBanned
-        ? `<button class="btn-small btn-unban" onclick="unbanUser(${user.id})">Unban</button>`
-        : `<button class="btn-small btn-ban" onclick="showBanModal(${user.id}, '${user.name.replace(/'/g, "\\'")}')">Ban</button>`
-      : '<span style="color: rgba(255,255,255,0.5);">Admin</span>';
+    const nameCell = document.createElement("td");
+    nameCell.textContent = user.name;
+    const emailCell = document.createElement("td");
+    emailCell.textContent = user.email;
+    const statusCell = document.createElement("td");
+    const status = document.createElement("span");
+    status.className = `user-status ${statusClass}`;
+    status.textContent = statusText;
+    statusCell.appendChild(status);
+    const joinedCell = document.createElement("td");
+    joinedCell.textContent = joinedDate;
+    const lastLoginCell = document.createElement("td");
+    lastLoginCell.textContent = lastLogin;
+    const actionsCell = document.createElement("td");
+    const actions = document.createElement("div");
+    actions.className = "user-actions";
 
-    console.log(
-      `ðŸ‘¤ User ${user.name}: Admin=${user.isAdmin}, Banned=${user.isBanned}, Action=${actionButton}`,
-    );
+    if (user.isAdmin) {
+      const adminLabel = document.createElement("span");
+      adminLabel.style.color = "rgba(255,255,255,0.5)";
+      adminLabel.textContent = "Admin";
+      actions.appendChild(adminLabel);
+    } else {
+      const actionButton = document.createElement("button");
+      actionButton.className = user.isBanned
+        ? "btn-small btn-unban"
+        : "btn-small btn-ban";
+      actionButton.textContent = user.isBanned ? "Unban" : "Ban";
+      actionButton.addEventListener("click", () => {
+        if (user.isBanned) unbanUser(user.id);
+        else showBanModal(user.id, user.name);
+      });
+      actions.appendChild(actionButton);
+    }
 
-    row.innerHTML = `
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td><span class="user-status ${statusClass}">${statusText}</span></td>
-            <td>${joinedDate}</td>
-            <td>${lastLogin}</td>
-            <td>
-                <div class="user-actions">
-                    ${actionButton}
-                </div>
-            </td>
-        `;
+    actionsCell.appendChild(actions);
+    row.append(nameCell, emailCell, statusCell, joinedCell, lastLoginCell, actionsCell);
 
     tbody.appendChild(row);
   });
@@ -11686,7 +12458,11 @@ document.addEventListener("DOMContentLoaded", () => {
   window.testPublicStats = async function () {
     console.log("ðŸ” === TESTING PUBLIC STATS ENDPOINT ===");
     try {
-      const response = await fetch("/api/stats/users");
+      const token = window.getAuthToken();
+      if (!token) throw new Error("Authentication required");
+      const response = await fetch("/api/stats/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await response.json();
       console.log("Response:", data);
 
@@ -12442,7 +13218,11 @@ class UserStatsManager {
   // Fetch user count from server database (public endpoint)
   async fetchServerUserCount() {
     try {
-      const response = await fetch("/api/stats/users");
+      const token = window.getAuthToken();
+      if (!token) return null;
+      const response = await fetch("/api/stats/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (!response.ok) {
         console.log("ðŸ“Š Server request failed:", response.status);
@@ -12767,7 +13547,7 @@ class UserStatsManager {
     // If still 0, show detailed debug info
     if (userCount === 0) {
       console.log("âš ï¸ No Gmail users found. Running detailed scan...");
-      this.showAllUsers();
+      await this.showAllUsers();
     }
   }
 }
@@ -12889,20 +13669,40 @@ class ThemeManager {
   }
 
   getCurrentBackgroundTheme() {
-    if (!this.transitionPoints) {
-      this.calculateTransitionPoints();
-    }
+    const bg = getComputedStyle(document.body).backgroundColor;
+    const directTheme = this.themeFromColor(bg);
+    if (directTheme) return directTheme;
 
-    const scrollTop = (window._globalScrollTop !== undefined ? window._globalScrollTop : (window.pageYOffset || document.documentElement.scrollTop));
+    if (!this.transitionPoints) this.calculateTransitionPoints();
+    const scrollTop = window._globalScrollTop !== undefined ? window._globalScrollTop : (window.pageYOffset || document.documentElement.scrollTop);
     const { creamStart, greyStart } = this.transitionPoints;
+    return scrollTop < creamStart ? "dark" : scrollTop < greyStart ? "cream" : "light";
+  }
 
-    if (scrollTop < creamStart) {
-      return "dark";
-    } else if (scrollTop < greyStart) {
-      return "cream";
+  themeFromColor(color) {
+    let r;
+    let g;
+    let b;
+    const rgbMatch = String(color || "").match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+    const hexMatch = String(color || "").match(/#([0-9a-f]{6})/i);
+
+    if (rgbMatch) {
+      r = Number(rgbMatch[1]);
+      g = Number(rgbMatch[2]);
+      b = Number(rgbMatch[3]);
+    } else if (hexMatch) {
+      const hex = hexMatch[1];
+      r = parseInt(hex.slice(0, 2), 16);
+      g = parseInt(hex.slice(2, 4), 16);
+      b = parseInt(hex.slice(4, 6), 16);
     } else {
-      return "light";
+      return null;
     }
+
+    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    if (luminance < 115) return "dark";
+    if (r >= g && g >= b && r - b >= 8) return "cream";
+    return "light";
   }
 
   updateTheme() {
@@ -12928,6 +13728,18 @@ class ThemeManager {
           detail: { theme: newTheme, previousTheme: oldTheme },
         }),
       );
+    }
+  }
+
+  syncWithBackground(color = getComputedStyle(document.body).backgroundColor) {
+    if (!this.isInitialized) return;
+    const theme = this.themeFromColor(color);
+    if (!theme) return;
+    this.currentTheme = theme;
+    const hasBodyTheme = document.body.classList.contains(`theme-${theme}`);
+    if (this.lastAppliedTheme !== theme || !hasBodyTheme) {
+      this.lastAppliedTheme = null;
+      this.applyTheme(theme);
     }
   }
 
@@ -13081,24 +13893,15 @@ class ThemeManager {
   }
 
   updateThemeOnScroll() {
-    // Debounce theme updates to prevent rapid changes
-    let themeUpdateTimeout;
-
-    const debouncedThemeUpdate = () => {
-      clearTimeout(themeUpdateTimeout);
-      themeUpdateTimeout = setTimeout(() => {
-        this.updateTheme();
-      }, 100); // 100ms debounce
-    };
-
-    // Add theme update to the existing scroll handler
-    const originalUpdateColors = window.updateColors;
-    if (originalUpdateColors) {
-      window.updateColors = () => {
-        originalUpdateColors();
-        debouncedThemeUpdate();
-      };
-    }
+    let pending = false;
+    window.addEventListener("scroll", () => {
+      if (pending) return;
+      pending = true;
+      setTimeout(() => {
+        pending = false;
+        this.syncWithBackground();
+      }, 220);
+    }, { passive: true });
   }
 
   // Public methods
@@ -13171,6 +13974,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // Make theme manager globally available
 window.themeManager = themeManager;
 
+let themeScrollSettleTimer = null;
+function syncThemeAfterScrollSettles() {
+  clearTimeout(themeScrollSettleTimer);
+  themeScrollSettleTimer = setTimeout(() => {
+    window.themeManager?.syncWithBackground?.();
+  }, 260);
+}
+window.addEventListener("scroll", syncThemeAfterScrollSettles, { passive: true });
+window.addEventListener?.("scrollend", () => window.themeManager?.syncWithBackground?.(), { passive: true });
+
 // Add global theme fix functions
 window.fixThemes = function () {
   if (window.themeManager) {
@@ -13185,23 +13998,6 @@ window.resetThemes = function () {
     themeManager.resetThemeSystem();
   } else {
     console.error("âŒ Theme manager not available");
-  }
-};
-
-// Force show admin styling for testing
-window.forceShowAdminStyling = function () {
-  console.log("ðŸ‘‘ Forcing admin styling to show...");
-
-  // Apply admin styling
-  const success = checkAndApplyAdminStyling("cherifmed1200@gmail.com");
-
-  if (success) {
-    console.log("âœ… Admin styling applied");
-    console.log("ðŸŽ¯ Admin effects should now be visible");
-
-    // Don't override the admin's custom name - let them keep their chosen name
-  } else {
-    console.error("âŒ Failed to apply admin styling");
   }
 };
 
@@ -13486,10 +14282,7 @@ window.testUpdateReviewProfile = async function () {
     const currentUser = getCurrentUser();
     if (currentUser) {
       console.log("ðŸ‘¤ Current user data:", currentUser);
-      await window.reviewsManager.updateUserProfileInDatabase(
-        currentUser.name,
-        currentUser.avatar,
-      );
+      await window.reviewsManager.updateUserProfileInDatabase();
       console.log("âœ… Test profile update completed");
     } else {
       console.error("âŒ No current user found");
@@ -13528,10 +14321,7 @@ window.testRealTimeUpdate = async function () {
     const testName = `RealTime Test ${new Date().getSeconds()}`;
     console.log(`ðŸ”„ Updating profile to: "${testName}"`);
 
-    const success = await window.reviewsManager.updateUserProfileInDatabase(
-      testName,
-      "default.jpg",
-    );
+    const success = await window.reviewsManager.updateUserProfileInDatabase();
 
     if (success) {
       console.log("âœ… Database updated successfully");
@@ -13559,10 +14349,7 @@ window.updateMyProfileName = async function (newName) {
   }
 
   try {
-    const success = await window.reviewsManager.updateUserProfileInDatabase(
-      newName,
-      "default.jpg",
-    );
+    const success = await window.reviewsManager.updateUserProfileInDatabase();
 
     if (success) {
       console.log("âœ… Profile name updated in database");
@@ -13593,10 +14380,7 @@ window.updateMyProfileAvatar = async function (avatarUrl) {
   }
 
   try {
-    const success = await window.reviewsManager.updateUserProfileInDatabase(
-      currentUser.name,
-      avatarUrl,
-    );
+    const success = await window.reviewsManager.updateUserProfileInDatabase();
 
     if (success) {
       console.log("âœ… Profile avatar updated in database");
@@ -13757,10 +14541,7 @@ window.refreshUserFromServer = async function () {
         // Trigger real-time update for reviews
         if (window.reviewsManager) {
           console.log("ðŸ”„ Triggering real-time update in reviews...");
-          await window.reviewsManager.updateUserProfileInDatabase(
-            freshUserData.name,
-            freshUserData.avatar,
-          );
+          await window.reviewsManager.updateUserProfileInDatabase();
           await window.reviewsManager.loadAllReviews();
           console.log("âœ… Reviews updated with fresh data");
         }
@@ -13849,66 +14630,26 @@ window.testProfileSave = async function (newName) {
 
 // Removed VIP badge and crown creation functions
 
-// Function to check if user is admin and apply admin styling
-function checkAndApplyAdminStyling(userEmail) {
+// Function to apply admin styling from server-provided role state.
+function checkAndApplyAdminStyling(isAdmin) {
   const userProfile = document.getElementById("userProfile");
 
   if (userProfile) {
     // Remove any existing admin class
     userProfile.classList.remove("admin-user");
 
-    // Only apply admin styling for cherifmed1200@gmail.com
-    if (userEmail === "cherifmed1200@gmail.com") {
+    if (isAdmin) {
       userProfile.classList.add("admin-user");
-      console.log("ðŸ‘‘ Admin styling applied for:", userEmail);
+      console.log("ðŸ‘‘ Admin styling applied");
       return true;
     } else {
-      console.log("ðŸ‘¤ Regular user styling applied for:", userEmail);
+      console.log("ðŸ‘¤ Regular user styling applied");
       return false;
     }
   }
+
   return false;
 }
-
-// Test enhanced admin profile display
-window.testAdminProfile = function () {
-  console.log("ðŸ‘‘ Testing enhanced admin profile...");
-
-  // Simulate admin login
-  const userProfile = document.getElementById("userProfile");
-  const userAvatar = document.getElementById("userAvatar");
-  const userName = document.getElementById("userName");
-  const userLoggedIn = document.getElementById("userLoggedIn");
-  const loginSection = document.querySelector(".user-account-section");
-
-  if (userProfile && userAvatar && userName && userLoggedIn && loginSection) {
-    // Show logged in state
-    loginSection.style.display = "none";
-    userLoggedIn.style.display = "block";
-
-    // Set admin avatar and name
-    userAvatar.src =
-      'data:image/svg+xml,%3Csvg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="22.5" cy="22.5" r="22.5" fill="%23d4af37"/%3E%3Ctext x="22.5" y="28" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold"%3EMC%3C/text%3E%3C/svg%3E';
-    userName.textContent = "MOH CHERIF";
-
-    // Apply admin styling for cherifmed1200@gmail.com
-    const isAdmin = checkAndApplyAdminStyling("cherifmed1200@gmail.com");
-
-    if (isAdmin) {
-      console.log("âœ… Enhanced ADMIN profile displayed with:");
-      console.log("   âœ¨ Golden gradient avatar border");
-      console.log("   ðŸ’Ž Golden gradient name");
-      console.log("   ðŸŽ¯ ADMINISTRATOR title badge");
-      console.log("   ðŸ’« Glowing animations");
-      console.log("");
-      console.log("ðŸ’¡ This styling ONLY appears for cherifmed1200@gmail.com");
-    } else {
-      console.log("âœ… Regular user profile displayed");
-    }
-  } else {
-    console.error("âŒ Could not find user profile elements");
-  }
-};
 
 // Test regular user profile
 window.testRegularProfile = function () {
@@ -13931,7 +14672,7 @@ window.testRegularProfile = function () {
     userName.textContent = "John Doe";
 
     // Apply regular user styling
-    const isAdmin = checkAndApplyAdminStyling("john.doe@example.com");
+    checkAndApplyAdminStyling(false);
 
     console.log("âœ… Regular user profile displayed - no special effects");
     console.log("   â€¢ Standard 32px avatar");
@@ -14624,11 +15365,14 @@ class ReviewsManager {
   async init() {
     console.log("ðŸ’¬ Initializing Reviews Manager...");
 
-    // Load existing reviews from database (fallback to localStorage)
-    await this.loadAllReviews();
+    this.lazyLoadedFragrances = new Set();
+    this.lazyLoadingFragrances = new Set();
+    this.loadReviews();
 
     // Set up event listeners for all fragrance sections
     this.setupEventListeners();
+
+    this.setupLazyReviewLoading();
 
     // Update UI based on login status
     this.updateUIForLoginStatus();
@@ -14636,34 +15380,124 @@ class ReviewsManager {
     console.log("ðŸ’¬ Reviews Manager initialized successfully");
   }
 
-  setupEventListeners() {
-    const fragrances = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir"];
+  getFragranceIds() {
+    return ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir"];
+  }
+
+  setupLazyReviewLoading() {
+    const fragrances = this.getFragranceIds();
+    const hasReviewApi = location.protocol !== "file:" && !["4177", "4178"].includes(location.port);
+
+    if (!hasReviewApi) {
+      fragrances.forEach((fragrance) => this.displayReviews(fragrance));
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      fragrances.slice(0, 4).forEach((fragrance) => this.ensureReviewsLoaded(fragrance));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const fragrance = entry.target.dataset.reviewFragrance;
+          if (!fragrance) return;
+          observer.unobserve(entry.target);
+          this.ensureReviewsLoaded(fragrance);
+        });
+      },
+      { rootMargin: "900px 0px 900px", threshold: 0.01 },
+    );
 
     fragrances.forEach((fragrance) => {
-      // Star rating interactions
-      this.setupStarRating(fragrance);
+      const section = document.getElementById(`${fragrance}-reviews`) ||
+        document.getElementById(fragrance) ||
+        document.querySelector(`.${fragrance}-section`) ||
+        document.querySelector(`.${fragrance}-section-container`);
+      if (!section) return;
+      section.dataset.reviewFragrance = fragrance;
+      observer.observe(section);
+    });
+  }
 
-      // Character count for textarea
-      this.setupCharacterCount(fragrance);
+  async ensureReviewsLoaded(fragrance) {
+    if (this.lazyLoadedFragrances?.has(fragrance) || this.lazyLoadingFragrances?.has(fragrance)) {
+      return;
+    }
 
-      // Submit review button
-      const submitBtn = document.getElementById(`${fragrance}-submit-review`);
-      if (submitBtn) {
-        submitBtn.addEventListener("click", () => this.submitReview(fragrance));
-      }
+    this.lazyLoadingFragrances.add(fragrance);
+    const success = await this.loadReviewsFromServer(fragrance);
+    if (!success && !this.reviews[fragrance]) {
+      this.reviews[fragrance] = [];
+      this.displayReviews(fragrance);
+    }
+    this.lazyLoadingFragrances.delete(fragrance);
+    this.lazyLoadedFragrances.add(fragrance);
+  }
 
-      // Cancel review button
-      const cancelBtn = document.getElementById(`${fragrance}-cancel-review`);
-      if (cancelBtn) {
-        cancelBtn.addEventListener("click", () => this.cancelReview(fragrance));
-      }
+  setupEventListeners() {
+    const fragrances = this.getFragranceIds();
 
-      // Load more reviews button
-      const loadMoreBtn = document.getElementById(`${fragrance}-load-more-btn`);
-      if (loadMoreBtn) {
-        loadMoreBtn.addEventListener("click", () =>
-          this.loadMoreReviews(fragrance),
-        );
+    fragrances.forEach((fragrance) => {
+      const reviewsSection = document.getElementById(`${fragrance}-reviews`);
+      if (!reviewsSection || reviewsSection.dataset.reviewListenersReady === "1") return;
+      reviewsSection.dataset.reviewListenersReady = "1";
+
+      reviewsSection.addEventListener("mouseover", (event) => {
+        const star = event.target.closest(".star");
+        const starRating = star?.closest(".star-rating");
+        if (!starRating || starRating.id !== `${fragrance}-star-rating`) return;
+        const stars = Array.from(starRating.querySelectorAll(".star"));
+        this.highlightStars(stars, stars.indexOf(star) + 1);
+      });
+
+      reviewsSection.addEventListener("mouseout", (event) => {
+        const starRating = event.target.closest(".star-rating");
+        if (!starRating || starRating.id !== `${fragrance}-star-rating`) return;
+        const stars = starRating.querySelectorAll(".star");
+        this.highlightStars(stars, parseInt(starRating.dataset.rating || "0", 10));
+      });
+
+      reviewsSection.addEventListener("click", (event) => {
+        const star = event.target.closest(".star");
+        if (star) {
+          const starRating = star.closest(".star-rating");
+          if (starRating && starRating.id === `${fragrance}-star-rating`) {
+            const stars = Array.from(starRating.querySelectorAll(".star"));
+            const rating = stars.indexOf(star) + 1;
+            starRating.dataset.rating = rating;
+            this.highlightStars(stars, rating);
+          }
+          return;
+        }
+
+        if (event.target.closest(`#${fragrance}-submit-review`)) {
+          this.submitReview(fragrance);
+          return;
+        }
+        if (event.target.closest(`#${fragrance}-cancel-review`)) {
+          this.cancelReview(fragrance);
+          return;
+        }
+        if (event.target.closest(`#${fragrance}-load-more-btn`)) {
+          this.loadMoreReviews(fragrance);
+        }
+      });
+
+      const textarea = document.getElementById(`${fragrance}-review-text`);
+      const charCount = document.getElementById(`${fragrance}-char-count`);
+      if (textarea && charCount) {
+        textarea.addEventListener("input", () => {
+          const count = textarea.value.length;
+          charCount.textContent = count;
+          charCount.style.color = count > 450
+            ? "#ff6b6b"
+            : count > 400
+              ? "#ffa726"
+              : "rgba(255, 255, 255, 0.6)";
+        });
       }
     });
   }
@@ -14735,7 +15569,7 @@ class ReviewsManager {
 
   updateUIForLoginStatus() {
     const user = this.getCurrentUser();
-    const fragrances = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir"];
+    const fragrances = this.getFragranceIds();
 
     fragrances.forEach((fragrance) => {
       const addReviewContainer = document.getElementById(
@@ -14758,7 +15592,7 @@ class ReviewsManager {
         if (signinPrompt) signinPrompt.style.display = "block";
       }
 
-      // Load and display reviews
+      // Display cached/local reviews immediately; network reviews load lazily near viewport.
       this.displayReviews(fragrance);
     });
   }
@@ -15075,34 +15909,9 @@ class ReviewsManager {
   }
 
   async loadAllReviews() {
-    console.log("ðŸ”„ Loading all reviews from database...");
-
-    // Try to load reviews for each fragrance from database
-    const fragrances = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir"];
-    let totalLoaded = 0;
-
-    for (const fragrance of fragrances) {
-      const success = await this.loadReviewsFromServer(fragrance);
-      if (success) {
-        totalLoaded += this.reviews[fragrance].length;
-      } else {
-        // Fallback to localStorage for this fragrance
-        console.log(`âš ï¸ Falling back to localStorage for ${fragrance}`);
-        if (!this.reviews[fragrance]) {
-          this.reviews[fragrance] = [];
-        }
-      }
-    }
-
-    // If no reviews loaded from database, try localStorage as complete fallback
-    if (totalLoaded === 0) {
-      console.log(
-        "âš ï¸ No reviews loaded from database, trying localStorage...",
-      );
-      this.loadReviews(); // Original localStorage method
-    }
-
-    console.log(`âœ… Loaded ${totalLoaded} total reviews from database`);
+    console.log("Reviews now load lazily as fragrance sections approach the viewport.");
+    const initialFragrances = this.getFragranceIds().slice(0, 3);
+    await Promise.all(initialFragrances.map((fragrance) => this.ensureReviewsLoaded(fragrance)));
   }
 
   resetReviewForm(fragrance) {
@@ -15160,7 +15969,7 @@ class ReviewsManager {
                 <div class="reviews-empty">
                     <div class="reviews-empty-icon">ðŸ’­</div>
                     <h4>No reviews yet</h4>
-                    <p>Be the first to share your experience with ${fragrance.charAt(0).toUpperCase() + fragrance.slice(1)}!</p>
+                    <p>Be the first to share your experience with ${window.escapeHTML(fragrance.charAt(0).toUpperCase() + fragrance.slice(1))}!</p>
                 </div>
             `;
       return;
@@ -15207,7 +16016,7 @@ class ReviewsManager {
 
     // ðŸ‘‘ ADMIN ENHANCEMENT: Check if this review is from an admin user
     const isAdminReview = this.isAdminUser(
-      review.userEmail || review.userName,
+      review.userEmail || review.user_email || review.userName || review.user_name,
       review,
     );
 
@@ -15252,9 +16061,9 @@ class ReviewsManager {
 
     // Create simple avatar for review
     const avatarImg = document.createElement("img");
-    avatarImg.src = avatarSrc;
+    avatarImg.src = window.normalizeAvatarSrc(avatarSrc);
     avatarImg.className = "review-avatar";
-    avatarImg.alt = `${review.user_name}'s Avatar`;
+    avatarImg.alt = `${review.user_name || review.userName || "Member"}'s Avatar`;
     avatarImg.loading = "lazy";
     const avatarContainer = document.createElement("div");
     avatarContainer.className = "review-avatar-container";
@@ -15272,12 +16081,17 @@ class ReviewsManager {
 
     const reviewUserDetails = document.createElement("div");
     reviewUserDetails.className = "review-user-details";
+    const safeReviewUserName = window.escapeHTML(review.userName || review.user_name || "Member");
+    const safeReviewDate = window.escapeHTML(formatDate(review.date));
+    const safeReviewText = this.sanitizeHTML(review.text || review.review_text || "");
+    const safeReplyUserName = window.escapeHTML(review.user_name || review.userName || "Member");
+
     reviewUserDetails.innerHTML = `
             <div class="review-username-container">
-                <div class="review-username ${isAdminReview ? "admin-username" : ""}">${review.userName}</div>
+                <div class="review-username ${isAdminReview ? "admin-username" : ""}">${safeReviewUserName}</div>
                 ${adminBadgeHtml}
             </div>
-            <div class="review-date">${formatDate(review.date)}</div>
+            <div class="review-date">${safeReviewDate}</div>
         `;
 
     reviewUserInfo.appendChild(avatarContainer);
@@ -15300,7 +16114,7 @@ class ReviewsManager {
     // Add the rest of the review content
     reviewDiv.innerHTML += `
             <div class="review-content">
-                <p class="review-text">${review.text}</p>
+                <p class="review-text">${safeReviewText}</p>
             </div>
             <div class="review-actions">
                 <button class="review-action-btn like-btn ${this.userLikes && this.userLikes[review.id] === "like" ? "liked" : ""}"
@@ -15340,7 +16154,7 @@ class ReviewsManager {
             <div class="reply-form-container" id="reply-form-${review.id}" style="display: none;">
                 <div class="reply-form">
                     <div class="reply-form-header">
-                        <h4 id="reply-form-title-${review.id}">💬 Reply to ${review.user_name}</h4>
+                        <h4 id="reply-form-title-${review.id}">💬 Reply to ${safeReplyUserName}</h4>
                     </div>
                     <div class="reply-form-body">
                         <textarea
@@ -15348,7 +16162,7 @@ class ReviewsManager {
                             placeholder="Share your thoughts..."
                             maxlength="1000"
                             rows="3"
-                            aria-label="Write your reply to ${review.user_name}"
+                            aria-label="Write your reply to ${safeReplyUserName}"
                             aria-describedby="reply-char-count-${review.id} reply-help-${review.id}"
                             class="reply-textarea"
                         ></textarea>
@@ -15382,14 +16196,6 @@ class ReviewsManager {
                     </div>
                 </div>
 
-                <!-- ðŸš€ ENHANCED: Replies Container -->
-                <div class="replies-container" id="replies-${review.id}">
-                    <div class="replies-loading" id="replies-loading-${review.id}" style="display: none;">
-                        <div class="loading-spinner"></div>
-                        <span>Loading replies...</span>
-                    </div>
-                    <div class="replies-list" id="replies-list-${review.id}"></div>
-                </div>
             </div>
 
             <!-- ðŸš€ ENHANCED: Replies Container -->
@@ -15401,9 +16207,6 @@ class ReviewsManager {
                 <div class="replies-list" id="replies-list-${review.id}"></div>
             </div>
         `;
-
-    // Load replies for this review
-    setTimeout(() => this.loadReplies(review.id), 100);
 
     return reviewDiv;
   }
@@ -15467,9 +16270,9 @@ class ReviewsManager {
                     </div>
                     <div class="review-edit-text">
                         <label>Review:</label>
-                        <textarea id="editReviewText" rows="4" maxlength="500">${review.text}</textarea>
+                        <textarea id="editReviewText" rows="4" maxlength="500">${window.escapeHTML(review.text || "")}</textarea>
                         <div class="review-edit-counter">
-                            <span id="editCharCount">${review.text.length}</span>/500
+                            <span id="editCharCount">${(review.text || "").length}</span>/500
                         </div>
                     </div>
                 </div>
@@ -15549,7 +16352,7 @@ class ReviewsManager {
       if (response.ok) {
         this.showNotification("Review updated successfully", "success");
         document.querySelector(".review-edit-modal").remove();
-        await this.loadAllReviews(); // Refresh reviews
+        await this.loadReviewsFromServer(fragrance);
       } else {
         const errorData = await response.json();
         this.showNotification(
@@ -15605,7 +16408,7 @@ class ReviewsManager {
 
       if (response.ok) {
         this.showNotification("Review deleted successfully", "success");
-        await this.loadAllReviews(); // Refresh reviews
+        await this.loadReviewsFromServer(fragrance);
       } else {
         const errorData = await response.json();
         this.showNotification(
@@ -15762,7 +16565,7 @@ class ReviewsManager {
                 <div class="reviews-empty">
                     <div class="reviews-empty-icon">ðŸ’­</div>
                     <h4>No reviews yet</h4>
-                    <p>Be the first to share your experience with ${fragrance.charAt(0).toUpperCase() + fragrance.slice(1)}!</p>
+                    <p>Be the first to share your experience with ${window.escapeHTML(fragrance.charAt(0).toUpperCase() + fragrance.slice(1))}!</p>
                 </div>
             `;
       return;
@@ -15917,10 +16720,10 @@ class ReviewsManager {
   }
 
   // Update user profile in database reviews and replies
-  async updateUserProfileInDatabase(name, avatar) {
+  async updateUserProfileInDatabase() {
     try {
       console.log(
-        `ðŸ”„ Updating user profile in database: name="${name}", avatar="${avatar}"`,
+        "ðŸ”„ Updating user profile in database from authenticated server user",
       );
 
       const token =
@@ -15931,19 +16734,11 @@ class ReviewsManager {
         return false;
       }
 
-      const requestBody = {
-        name: name,
-        avatar: avatar,
-      };
-      console.log("ðŸ“¤ Sending request body:", requestBody);
-
       const response = await fetch("/api/reviews/update-user-profile", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(requestBody),
       });
 
       if (response.ok) {
@@ -16138,22 +16933,9 @@ class ReviewsManager {
         );
         return true;
       }
-      // Check if review email matches admin email (handle both field variations)
-      const email = reviewData.userEmail || reviewData.user_email;
-      if (email && email.toLowerCase() === "cherifmed1200@gmail.com") {
-        console.log("âœ… Admin detected via email field:", email);
-        return true;
-      }
     }
 
-    // Method 2: Check by known admin emails (works when not logged in)
-    const adminEmails = ["cherifmed1200@gmail.com"];
-    if (adminEmails.includes(userEmailOrName.toLowerCase())) {
-      console.log("âœ… Admin detected via known email:", userEmailOrName);
-      return true;
-    }
-
-    // Method 3: Check current user's admin status if this matches current user (fallback)
+    // Method 2: Check current user's admin status if this matches current user (fallback)
     const currentUser = getCurrentUser();
     if (
       currentUser &&
@@ -16189,6 +16971,7 @@ class ReviewsManager {
       }
 
       replyForm.style.display = "block";
+      this.loadReplies(reviewId);
 
       // Setup user avatar and name
       const replyAvatar = document.getElementById(`reply-avatar-${reviewId}`);
@@ -16533,20 +17316,25 @@ class ReviewsManager {
       avatarSrc = "default.jpg"; // Use default for placeholders
     }
 
+    const safeReplyId = window.safeAttribute(reply.id);
+    const safeReplyEmail = window.safeAttribute(reply.user_email || "");
+    const safeReplyName = window.escapeHTML(reply.user_name || "Member");
+    const safeAvatarSrc = window.safeAttribute(window.normalizeAvatarSrc(avatarSrc));
+
     return `
-            <div class="reply-item" data-reply-id="${reply.id}" data-user-email="${reply.user_email || ""}">
+            <div class="reply-item" data-reply-id="${safeReplyId}" data-user-email="${safeReplyEmail}">
                 <div class="reply-header">
                     <div class="reply-user-info">
                         <div class="reply-avatar-container">
                                                         <div class="reply-avatar ${isAdminReply ? "admin-reply-avatar" : ""}">
-                                <img src="${avatarSrc}" alt="${reply.user_name}'s Avatar">
+                                <img src="${safeAvatarSrc}" alt="${safeReplyName}'s Avatar">
                                 ${isAdminReply ? '<div class="reply-avatar-crown">\uD83D\uDC51</div>' : ""}
                             </div>
                             <div class="level-badge">${reply.level || 1}</div>
                         </div>
                         <div class="reply-user-details">
                             <div class="reply-username-container">
-                                <div class="reply-username ${isAdminReply ? "admin-username" : ""}">${reply.user_name}</div>
+                                <div class="reply-username ${isAdminReply ? "admin-username" : ""}">${safeReplyName}</div>
                                 ${adminBadgeHtml}
                             </div>
                             <div class="reply-date">${this.formatDate(reply.created_at)}</div>
@@ -17378,7 +18166,8 @@ class ProfileModalManager {
   // Fetch profile data from API
   async fetchProfileData(userId, userEmail) {
     try {
-      const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    const token = window.getAuthToken();
+    if (!token) throw new Error('Please sign in to view profiles');
       
       const response = await fetch(`/api/user/profile-details`, {
         method: 'POST',
@@ -17386,10 +18175,7 @@ class ProfileModalManager {
           'Content-Type': 'application/json',
           ...(token && { 'Authorization': `Bearer ${token}` })
         },
-        body: JSON.stringify({
-          userId: userId,
-          userEmail: userEmail
-        })
+        body: JSON.stringify({ userId })
       });
 
       if (!response.ok) {
@@ -17408,8 +18194,7 @@ class ProfileModalManager {
     } catch (error) {
       console.error('❌ Error fetching profile data:', error);
       
-      // Return mock data for testing if API fails
-      return this.getMockProfileData(userEmail);
+      throw error;
     }
   }
 
@@ -17431,12 +18216,25 @@ class ProfileModalManager {
       followers: Math.floor(Math.random() * 200),
       following: Math.floor(Math.random() * 150),
       bio: 'Fragrance enthusiast and collector. Love exploring new scents!',
-      isAdmin: userEmail === 'cherifmed1200@gmail.com'
+      isAdmin: false
     };
   }
 
   // Create profile content HTML
   createProfileContent(profile) {
+    const safeProfile = {
+      ...profile,
+      id: window.safeAttribute(profile.id),
+      name: window.escapeHTML(profile.name || profile.displayName || 'Member'),
+      email: window.escapeHTML(profile.email || ''),
+      avatar: window.safeAttribute(window.normalizeAvatarSrc(profile.avatar || profile.avatar_url)),
+      bio: profile.bio ? window.escapeHTML(profile.bio) : '',
+      level: Number(profile.level) || 1,
+      totalReviews: Number(profile.totalReviews || profile.reviewCount) || 0,
+      totalReplies: Number(profile.totalReplies || profile.replyCount) || 0,
+      followers: Number(profile.followers) || 0,
+      following: Number(profile.following) || 0,
+    };
     const adminBadge = profile.isAdmin ? `
       <div class="profile-admin-badge">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -17462,38 +18260,38 @@ class ProfileModalManager {
         <div class="profile-header">
           <div class="profile-avatar-section">
             <div class="profile-avatar-container ${profile.isAdmin ? 'admin-avatar' : ''}">
-              <img src="${profile.avatar}" alt="${profile.name}'s Avatar" class="profile-avatar-img">
+              <img src="${safeProfile.avatar}" alt="${safeProfile.name}'s Avatar" class="profile-avatar-img">
               ${profile.isAdmin ? '<div class="profile-avatar-crown">👑</div>' : ''}
-              <div class="profile-level-badge">Lv.${profile.level}</div>
+              <div class="profile-level-badge">Lv.${safeProfile.level}</div>
             </div>
           </div>
           
           <div class="profile-info">
             <div class="profile-name-section">
-              <h2 class="profile-name ${profile.isAdmin ? 'admin-name' : ''}">${profile.name}</h2>
+              <h2 class="profile-name ${profile.isAdmin ? 'admin-name' : ''}">${safeProfile.name}</h2>
               ${adminBadge}
             </div>
-            <p class="profile-email">${profile.email}</p>
+            ${safeProfile.email ? `<p class="profile-email">${safeProfile.email}</p>` : ''}
             <p class="profile-join-date">Joined ${this.formatDate(profile.joinDate)}</p>
-            ${profile.bio ? `<p class="profile-bio">${profile.bio}</p>` : ''}
+            ${safeProfile.bio ? `<p class="profile-bio">${safeProfile.bio}</p>` : ''}
           </div>
         </div>
 
         <div class="profile-stats">
           <div class="profile-stat">
-            <div class="profile-stat-number">${profile.totalReviews}</div>
+            <div class="profile-stat-number">${safeProfile.totalReviews}</div>
             <div class="profile-stat-label">Reviews</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-number">${profile.totalReplies}</div>
+            <div class="profile-stat-number">${safeProfile.totalReplies}</div>
             <div class="profile-stat-label">Replies</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-number">${profile.followers}</div>
+            <div class="profile-stat-number">${safeProfile.followers}</div>
             <div class="profile-stat-label">Followers</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-number">${profile.following}</div>
+            <div class="profile-stat-number">${safeProfile.following}</div>
             <div class="profile-stat-label">Following</div>
           </div>
         </div>
@@ -17504,13 +18302,13 @@ class ProfileModalManager {
         </div>
 
         <div class="profile-actions">
-          <button class="profile-action-btn follow-btn" onclick="window.profileModal.toggleFollow('${profile.id}')">
+          <button class="profile-action-btn follow-btn" onclick="window.profileModal.toggleFollow('${safeProfile.id}')">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
             </svg>
             Follow
           </button>
-          <button class="profile-action-btn message-btn" onclick="window.profileModal.sendMessage('${profile.id}')">
+          <button class="profile-action-btn message-btn" onclick="window.profileModal.sendMessage('${safeProfile.id}')">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
             </svg>
@@ -17534,15 +18332,20 @@ class ProfileModalManager {
 
     const fragranceCards = fragrances.map(fragrance => {
       const fragranceData = this.getFragranceData(fragrance);
+      const safeFragrance = window.safeAttribute(fragrance);
+      const safeImage = window.safeAttribute(fragranceData.image);
+      const safeName = window.escapeHTML(fragranceData.name);
+      const safeBrand = window.escapeHTML(fragranceData.brand);
+      const safePrice = window.escapeHTML(fragranceData.price);
       return `
-        <div class="fragrance-card" onclick="window.profileModal.scrollToFragrance('${fragrance}')">
+        <div class="fragrance-card" onclick="window.profileModal.scrollToFragrance('${safeFragrance}')">
           <div class="fragrance-image">
-            <img src="${fragranceData.image}" alt="${fragranceData.name}">
+            <img src="${safeImage}" alt="${safeName}">
           </div>
           <div class="fragrance-info">
-            <h4 class="fragrance-name">${fragranceData.name}</h4>
-            <p class="fragrance-brand">${fragranceData.brand}</p>
-            <p class="fragrance-price">${fragranceData.price}</p>
+            <h4 class="fragrance-name">${safeName}</h4>
+            <p class="fragrance-brand">${safeBrand}</p>
+            <p class="fragrance-price">${safePrice}</p>
           </div>
         </div>
       `;
@@ -18239,12 +19042,43 @@ window.debugProfileHandlers = function() {
 
 // Function to add click handlers to profile search suggestions
 function addProfileClickHandlers() {
-  console.log('🔧 Setting up profile click handlers...');
-  
   // Wait for DOM to be ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', addProfileClickHandlers);
     return;
+  }
+
+  if (window.__profileClickHandlersInitialized) return;
+  window.__profileClickHandlersInitialized = true;
+
+  function attachProfileHandler(suggestion) {
+    if (!suggestion || suggestion.hasAttribute('data-profile-handler-added')) return;
+    suggestion.setAttribute('data-profile-handler-added', 'true');
+    suggestion.style.cursor = 'pointer';
+    suggestion.title = 'Click to view profile';
+
+    suggestion.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const userId = suggestion.getAttribute('data-user-id');
+      const emailElement = suggestion.querySelector('.profile-email');
+      const userEmail = emailElement ? emailElement.textContent.trim() : null;
+      const nameElement = suggestion.querySelector('.profile-name');
+      const userName = nameElement ? nameElement.textContent.trim() : null;
+      const fallbackEmail = suggestion.textContent.match(/[\w\.-]+@[\w\.-]+\.\w+/)?.[0];
+      window.profileModal?.showProfileModal?.(userId, userEmail || userName || fallbackEmail || `user_${userId || 'unknown'}`);
+    });
+
+    suggestion.addEventListener('mouseenter', () => {
+      suggestion.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+      suggestion.style.transform = 'translateX(2px)';
+    });
+
+    suggestion.addEventListener('mouseleave', () => {
+      suggestion.style.backgroundColor = '';
+      suggestion.style.transform = '';
+    });
   }
 
   // Find profile search suggestions and add click handlers
@@ -18253,71 +19087,7 @@ function addProfileClickHandlers() {
       if (mutation.type === 'childList') {
         // Look for profile suggestions in search results - using the correct selector from your code
         const profileSuggestions = document.querySelectorAll('.search-suggestion.profile-suggestion[data-user-id]');
-        
-        console.log(`🔍 Found ${profileSuggestions.length} profile suggestions to add handlers to`);
-        
-        profileSuggestions.forEach((suggestion) => {
-          if (!suggestion.hasAttribute('data-profile-handler-added')) {
-            suggestion.setAttribute('data-profile-handler-added', 'true');
-            
-            console.log('➕ Adding click handler to profile suggestion:', suggestion);
-            
-            suggestion.addEventListener('click', (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              
-              console.log('🖱️ Profile suggestion clicked!', suggestion);
-              
-              // Extract user information from the suggestion element
-              const userId = suggestion.getAttribute('data-user-id');
-              
-              // Get email from the profile info in the suggestion
-              const emailElement = suggestion.querySelector('.profile-email');
-              const userEmail = emailElement ? emailElement.textContent.trim() : null;
-              
-              // Get name from the profile info
-              const nameElement = suggestion.querySelector('.profile-name');
-              const userName = nameElement ? nameElement.textContent.trim() : null;
-              
-              console.log('📋 Extracted profile data:', {
-                userId,
-                userEmail,
-                userName
-              });
-              
-              if (userEmail || userName) {
-                console.log(`🔍 Opening profile modal for: ${userEmail || userName}`);
-                window.profileModal.showProfileModal(userId, userEmail || userName);
-              } else {
-                console.warn('⚠️ No user email or name found in profile suggestion');
-                // Fallback - try to extract from any text content
-                const fallbackEmail = suggestion.textContent.match(/[\w\.-]+@[\w\.-]+\.\w+/)?.[0];
-                if (fallbackEmail) {
-                  console.log(`🔄 Using fallback email: ${fallbackEmail}`);
-                  window.profileModal.showProfileModal(userId, fallbackEmail);
-                } else {
-                  // Use a generic identifier
-                  window.profileModal.showProfileModal(userId, `user_${userId || 'unknown'}`);
-                }
-              }
-            });
-            
-            // Add visual indicator that this is clickable
-            suggestion.style.cursor = 'pointer';
-            suggestion.title = 'Click to view profile';
-            
-            // Add hover effect
-            suggestion.addEventListener('mouseenter', () => {
-              suggestion.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
-              suggestion.style.transform = 'translateX(2px)';
-            });
-            
-            suggestion.addEventListener('mouseleave', () => {
-              suggestion.style.backgroundColor = '';
-              suggestion.style.transform = '';
-            });
-          }
-        });
+        profileSuggestions.forEach(attachProfileHandler);
       }
     });
   });
@@ -18330,19 +19100,8 @@ function addProfileClickHandlers() {
 
   // Also add handlers to existing elements
   setTimeout(() => {
-    console.log('🔄 Checking for existing profile suggestions...');
     const existingSuggestions = document.querySelectorAll('.search-suggestion.profile-suggestion[data-user-id]');
-    console.log(`📊 Found ${existingSuggestions.length} existing profile suggestions`);
-    
-    existingSuggestions.forEach((suggestion) => {
-      if (!suggestion.hasAttribute('data-profile-handler-added')) {
-        console.log('➕ Adding handler to existing suggestion');
-        // Trigger the mutation observer by adding a temporary element
-        const temp = document.createElement('div');
-        suggestion.appendChild(temp);
-        suggestion.removeChild(temp);
-      }
-    });
+    existingSuggestions.forEach(attachProfileHandler);
   }, 1000);
 }
 
@@ -18384,34 +19143,40 @@ window.triggerProfileSearch = function(query = 'bil') {
 
 // Emergency fix: Add click handler to ALL search suggestions
 function addEmergencyClickHandlers() {
-  console.log('🚨 EMERGENCY: Adding click handlers to ALL search suggestions...');
-  
   // Use event delegation on the search dropdown container
   const searchDropdown = document.querySelector('#quickSearchDropdown, .search-dropdown, .quick-search-dropdown');
   
   if (searchDropdown) {
-    console.log('✅ Found search dropdown, adding event delegation...');
-    
     // Remove any existing handlers
     searchDropdown.removeEventListener('click', handleSearchClick);
     searchDropdown.addEventListener('click', handleSearchClick);
-    
-    console.log('✅ Event delegation added to search dropdown');
   } else {
-    console.warn('⚠️ Search dropdown not found, trying document body...');
     document.body.addEventListener('click', handleSearchClick);
   }
 }
 
 function handleSearchClick(e) {
-  console.log('🖱️ Click detected:', e.target);
+  const fragranceSuggestion = e.target.closest('.search-suggestion[data-fragrance], .search-result-item[data-fragrance]');
+  if (fragranceSuggestion && !fragranceSuggestion.classList.contains('profile-suggestion')) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const fragranceName = fragranceSuggestion.getAttribute('data-fragrance');
+    const fragrance = (window.findSearchFragranceByName?.(fragranceName)) || {
+      name: fragranceName,
+      sectionId: fragranceSuggestion.getAttribute('data-section-id') || '',
+      notes: [],
+      searchAliases: [],
+    };
+
+    window.navigateToFragranceSearchResult?.(fragrance, fragranceSuggestion);
+    return;
+  }
   
   // Find the closest profile suggestion
-  const profileSuggestion = e.target.closest('.profile-suggestion, .search-suggestion, [data-user-id]');
+  const profileSuggestion = e.target.closest('.profile-suggestion, [data-user-id]');
   
   if (profileSuggestion) {
-    console.log('🎯 Profile suggestion clicked:', profileSuggestion);
-    
     e.preventDefault();
     e.stopPropagation();
     
@@ -18424,13 +19189,9 @@ function handleSearchClick(e) {
                     profileSuggestion.querySelector('.user-name')?.textContent ||
                     'Unknown User';
     
-    console.log('📋 Extracted data:', { userId, userEmail, userName });
-    
     // Open profile modal
     const identifier = userEmail || userName || `user_${userId || Date.now()}`;
-    console.log(`🔍 Opening profile modal for: ${identifier}`);
-    
-    window.profileModal.showProfileModal(userId, identifier);
+    window.profileModal?.showProfileModal?.(userId, identifier);
   }
 }
 
@@ -18466,13 +19227,4 @@ window.testClickOnElement = function() {
   return elements.length;
 };
 
-console.log('👤 Profile Modal System initialized!');
-console.log('🚨 EMERGENCY MODE: Added universal click handlers');
-console.log('📋 Available commands:');
-console.log('   • testProfileModal("email@example.com") - Test profile modal');
-console.log('   • testClickOnElement() - Add red borders and test clicks');
-console.log('   • debugProfileHandlers() - Debug existing handlers');
-console.log('   • triggerProfileSearch("query") - Search and add handlers');
-console.log('');
-console.log('🔧 Try: testClickOnElement() then click any red-bordered element');
 

@@ -1,0 +1,7653 @@
+[
+  {
+    "index": 0,
+    "name": "Layton",
+    "brand": "PARFUMS de MARLY",
+    "sectionId": "layton",
+    "sectionClass": "content",
+    "section": {
+      "x": 0,
+      "y": 1422,
+      "w": 1910,
+      "h": 8086,
+      "top": 1422,
+      "bottom": 9508
+    },
+    "topRow": null,
+    "topRowDisplay": "",
+    "productSection": null,
+    "productSectionDisplay": "",
+    "productSectionColumns": "",
+    "image": {
+      "x": 80,
+      "y": 1622,
+      "w": 340,
+      "h": 453,
+      "top": 1622,
+      "bottom": 2076
+    },
+    "info": {
+      "x": 425,
+      "y": 1642,
+      "w": 460,
+      "h": 657,
+      "top": 1642,
+      "bottom": 2300
+    },
+    "profiles": null,
+    "profilesDisplay": "",
+    "profilesColumns": "",
+    "cardCount": 0,
+    "cards": [],
+    "noteImageCount": 20,
+    "noteImgStats": {
+      "minW": 56,
+      "maxW": 72,
+      "minH": 56,
+      "maxH": 72
+    },
+    "noteSamples": [
+      {
+        "w": 72,
+        "h": 72,
+        "parentW": 72,
+        "parentH": 72,
+        "parentClass": "note-icon note-image-icon",
+        "grandClass": "note-item"
+      },
+      {
+        "w": 72,
+        "h": 72,
+        "parentW": 72,
+        "parentH": 72,
+        "parentClass": "note-icon note-image-icon",
+        "grandClass": "note-item"
+      },
+      {
+        "w": 72,
+        "h": 72,
+        "parentW": 72,
+        "parentH": 72,
+        "parentClass": "note-icon note-image-icon",
+        "grandClass": "note-item"
+      },
+      {
+        "w": 72,
+        "h": 72,
+        "parentW": 72,
+        "parentH": 72,
+        "parentClass": "note-icon note-image-icon",
+        "grandClass": "note-item"
+      },
+      {
+        "w": 72,
+        "h": 72,
+        "parentW": 72,
+        "parentH": 72,
+        "parentClass": "note-icon note-image-icon",
+        "grandClass": "note-item"
+      },
+      {
+        "w": 72,
+        "h": 72,
+        "parentW": 72,
+        "parentH": 72,
+        "parentClass": "note-icon note-image-icon",
+        "grandClass": "note-item"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 1,
+    "name": "HALTANE",
+    "brand": "PARFUMS de MARLY",
+    "sectionId": "haltane",
+    "sectionClass": "haltane-section-container",
+    "section": {
+      "x": 0,
+      "y": 5610,
+      "w": 1910,
+      "h": 1114,
+      "top": 5610,
+      "bottom": 6723
+    },
+    "topRow": null,
+    "topRowDisplay": "",
+    "productSection": null,
+    "productSectionDisplay": "",
+    "productSectionColumns": "",
+    "image": {
+      "x": 0,
+      "y": 5630,
+      "w": 340,
+      "h": 453,
+      "top": 5630,
+      "bottom": 6083
+    },
+    "info": {
+      "x": 380,
+      "y": 5625,
+      "w": 450,
+      "h": 1114,
+      "top": 5625,
+      "bottom": 6738
+    },
+    "profiles": null,
+    "profilesDisplay": "",
+    "profilesColumns": "",
+    "cardCount": 0,
+    "cards": [],
+    "noteImageCount": 7,
+    "noteImgStats": {
+      "minW": 56,
+      "maxW": 56,
+      "minH": 56,
+      "maxH": 56
+    },
+    "noteSamples": [
+      {
+        "w": 56,
+        "h": 56,
+        "parentW": 56,
+        "parentH": 56,
+        "parentClass": "haltane-note-icon note-image-icon",
+        "grandClass": "haltane-note-item"
+      },
+      {
+        "w": 56,
+        "h": 56,
+        "parentW": 56,
+        "parentH": 56,
+        "parentClass": "haltane-note-icon note-image-icon",
+        "grandClass": "haltane-note-item"
+      },
+      {
+        "w": 56,
+        "h": 56,
+        "parentW": 56,
+        "parentH": 56,
+        "parentClass": "haltane-note-icon note-image-icon",
+        "grandClass": "haltane-note-item"
+      },
+      {
+        "w": 56,
+        "h": 56,
+        "parentW": 56,
+        "parentH": 56,
+        "parentClass": "haltane-note-icon note-image-icon",
+        "grandClass": "haltane-note-item"
+      },
+      {
+        "w": 56,
+        "h": 56,
+        "parentW": 56,
+        "parentH": 56,
+        "parentClass": "haltane-note-icon note-image-icon",
+        "grandClass": "haltane-note-item"
+      },
+      {
+        "w": 56,
+        "h": 56,
+        "parentW": 56,
+        "parentH": 56,
+        "parentClass": "haltane-note-icon note-image-icon",
+        "grandClass": "haltane-note-item"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 2,
+    "name": "Pegasus",
+    "brand": "PARFUMS de MARLY",
+    "sectionId": "pegasus",
+    "sectionClass": "content pegasus-section",
+    "section": {
+      "x": 0,
+      "y": 9548,
+      "w": 1910,
+      "h": 5434,
+      "top": 9548,
+      "bottom": 14982
+    },
+    "topRow": null,
+    "topRowDisplay": "",
+    "productSection": null,
+    "productSectionDisplay": "",
+    "productSectionColumns": "",
+    "image": {
+      "x": -44,
+      "y": 9794,
+      "w": 288,
+      "h": 288,
+      "top": 9794,
+      "bottom": 10082
+    },
+    "info": {
+      "x": 391,
+      "y": 9798,
+      "w": 447,
+      "h": 638,
+      "top": 9798,
+      "bottom": 10436
+    },
+    "profiles": null,
+    "profilesDisplay": "",
+    "profilesColumns": "",
+    "cardCount": 0,
+    "cards": [],
+    "noteImageCount": 16,
+    "noteImgStats": {
+      "minW": 14.1,
+      "maxW": 20.5,
+      "minH": 14.1,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 14.1,
+        "h": 14.1,
+        "parentW": 14.1,
+        "parentH": 14.1,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chip"
+      },
+      {
+        "w": 14.1,
+        "h": 14.1,
+        "parentW": 14.1,
+        "parentH": 14.1,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chip"
+      },
+      {
+        "w": 14.1,
+        "h": 14.1,
+        "parentW": 14.1,
+        "parentH": 14.1,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chip"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 88,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "meter"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 88,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "meter"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 88,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "meter"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 3,
+    "name": "Greenly",
+    "brand": "PARFUMS de MARLY",
+    "sectionId": "greenly",
+    "sectionClass": "content",
+    "section": {
+      "x": 0,
+      "y": 15222,
+      "w": 1910,
+      "h": 4555,
+      "top": 15222,
+      "bottom": 19777
+    },
+    "topRow": {
+      "x": 185,
+      "y": 15282,
+      "w": 1540,
+      "h": 1706,
+      "top": 15282,
+      "bottom": 16988
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 15282,
+      "w": 1540,
+      "h": 709,
+      "top": 15282,
+      "bottom": 15991
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 185,
+      "y": 15282,
+      "w": 460,
+      "h": 460,
+      "top": 15282,
+      "bottom": 15742
+    },
+    "info": {
+      "x": 679,
+      "y": 15282,
+      "w": 1046,
+      "h": 709,
+      "top": 15282,
+      "bottom": 15991
+    },
+    "profiles": {
+      "x": 185,
+      "y": 16033,
+      "w": 1540,
+      "h": 955,
+      "top": 16033,
+      "bottom": 16988
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "greenly-scent-profile",
+        "rect": {
+          "x": 187,
+          "y": 16035,
+          "w": 753,
+          "h": 951,
+          "top": 16035,
+          "bottom": 16986
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "greenly-ingredients",
+        "rect": {
+          "x": 970,
+          "y": 16035,
+          "w": 753,
+          "h": 951,
+          "top": 16035,
+          "bottom": 16986
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 0,
+    "noteImgStats": {
+      "minW": null,
+      "maxW": 0,
+      "minH": null,
+      "maxH": 0
+    },
+    "noteSamples": [],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 4,
+    "name": "Baccarat Rouge 540",
+    "brand": "MAISON FRANCIS KURKDJIAN",
+    "sectionId": "baccaratrouge",
+    "sectionClass": "content baccaratrouge-section",
+    "section": {
+      "x": 0,
+      "y": 20017,
+      "w": 1910,
+      "h": 4439,
+      "top": 20017,
+      "bottom": 24456
+    },
+    "topRow": {
+      "x": 185,
+      "y": 20077,
+      "w": 1540,
+      "h": 1813,
+      "top": 20077,
+      "bottom": 21890
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 20077,
+      "w": 1540,
+      "h": 711,
+      "top": 20077,
+      "bottom": 20788
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 185,
+      "y": 20077,
+      "w": 460,
+      "h": 440,
+      "top": 20077,
+      "bottom": 20517
+    },
+    "info": {
+      "x": 679,
+      "y": 20077,
+      "w": 1046,
+      "h": 711,
+      "top": 20077,
+      "bottom": 20788
+    },
+    "profiles": {
+      "x": 185,
+      "y": 20830,
+      "w": 1540,
+      "h": 1060,
+      "top": 20830,
+      "bottom": 21890
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "baccaratrouge-scent-profile",
+        "rect": {
+          "x": 187,
+          "y": 20832,
+          "w": 753,
+          "h": 1056,
+          "top": 20832,
+          "bottom": 21888
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "baccaratrouge-ingredients",
+        "rect": {
+          "x": 970,
+          "y": 20832,
+          "w": 753,
+          "h": 1056,
+          "top": 20832,
+          "bottom": 21888
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 25.6,
+      "maxW": 25.6,
+      "minH": 25.6,
+      "maxH": 25.6
+    },
+    "noteSamples": [
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 25.6,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 25.6,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 25.6,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 25.6,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 25.6,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 25.6,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "baccaratrouge-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 5,
+    "name": "Black Orchid",
+    "brand": "TOM FORD",
+    "sectionId": "blackorchid",
+    "sectionClass": "content blackorchid-section",
+    "section": {
+      "x": 0,
+      "y": 24656,
+      "w": 1910,
+      "h": 4456,
+      "top": 24656,
+      "bottom": 29112
+    },
+    "topRow": {
+      "x": 185,
+      "y": 24716,
+      "w": 1540,
+      "h": 1830,
+      "top": 24716,
+      "bottom": 26546
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 24716,
+      "w": 1540,
+      "h": 711,
+      "top": 24716,
+      "bottom": 25427
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 185,
+      "y": 24716,
+      "w": 460,
+      "h": 440,
+      "top": 24716,
+      "bottom": 25156
+    },
+    "info": {
+      "x": 679,
+      "y": 24716,
+      "w": 1046,
+      "h": 711,
+      "top": 24716,
+      "bottom": 25427
+    },
+    "profiles": {
+      "x": 185,
+      "y": 25469,
+      "w": 1540,
+      "h": 1077,
+      "top": 25469,
+      "bottom": 26546
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "blackorchid-scent-profile",
+        "rect": {
+          "x": 187,
+          "y": 25471,
+          "w": 753,
+          "h": 1073,
+          "top": 25471,
+          "bottom": 26544
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "blackorchid-ingredients",
+        "rect": {
+          "x": 970,
+          "y": 25471,
+          "w": 753,
+          "h": 1073,
+          "top": 25471,
+          "bottom": 26544
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 25.6,
+      "maxW": 44.8,
+      "minH": 25.6,
+      "maxH": 44.8
+    },
+    "noteSamples": [
+      {
+        "w": 44.8,
+        "h": 44.8,
+        "parentW": 44.8,
+        "parentH": 44.8,
+        "parentClass": "blackorchid-noir-emoji note-image-icon",
+        "grandClass": "blackorchid-noir-card"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 88.7,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blackorchid-noir-info"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 69.5,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blackorchid-noir-info"
+      },
+      {
+        "w": 44.8,
+        "h": 44.8,
+        "parentW": 44.8,
+        "parentH": 44.8,
+        "parentClass": "blackorchid-noir-emoji note-image-icon",
+        "grandClass": "blackorchid-noir-card"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 82.1,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blackorchid-noir-info"
+      },
+      {
+        "w": 25.6,
+        "h": 25.6,
+        "parentW": 59.5,
+        "parentH": 25.6,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blackorchid-noir-info"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 6,
+    "name": "Aventus",
+    "brand": "CREED",
+    "sectionId": "aventus",
+    "sectionClass": "content aventus-section",
+    "section": {
+      "x": 0,
+      "y": 29312,
+      "w": 1910,
+      "h": 3928,
+      "top": 29312,
+      "bottom": 33240
+    },
+    "topRow": {
+      "x": 185,
+      "y": 29372,
+      "w": 1540,
+      "h": 1301,
+      "top": 29372,
+      "bottom": 30674
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 29372,
+      "w": 1540,
+      "h": 711,
+      "top": 29372,
+      "bottom": 30084
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "417px 1089px",
+    "image": {
+      "x": 185,
+      "y": 29372,
+      "w": 417,
+      "h": 440,
+      "top": 29372,
+      "bottom": 29812
+    },
+    "info": {
+      "x": 636,
+      "y": 29372,
+      "w": 1089,
+      "h": 711,
+      "top": 29372,
+      "bottom": 30084
+    },
+    "profiles": {
+      "x": 185,
+      "y": 30126,
+      "w": 1540,
+      "h": 548,
+      "top": 30126,
+      "bottom": 30674
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "aventus-scent-profile",
+        "rect": {
+          "x": 187,
+          "y": 30128,
+          "w": 753,
+          "h": 544,
+          "top": 30128,
+          "bottom": 30672
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "aventus-ingredients",
+        "rect": {
+          "x": 970,
+          "y": 30128,
+          "w": 753,
+          "h": 544,
+          "top": 30128,
+          "bottom": 30672
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 39.2,
+      "maxW": 39.2,
+      "minH": 39.2,
+      "maxH": 39.2
+    },
+    "noteSamples": [
+      {
+        "w": 39.2,
+        "h": 39.2,
+        "parentW": 39.2,
+        "parentH": 39.2,
+        "parentClass": "aventus-tag-emoji note-image-icon",
+        "grandClass": "aventus-heritage-tag"
+      },
+      {
+        "w": 39.2,
+        "h": 39.2,
+        "parentW": 39.2,
+        "parentH": 39.2,
+        "parentClass": "aventus-tag-emoji note-image-icon",
+        "grandClass": "aventus-heritage-tag"
+      },
+      {
+        "w": 39.2,
+        "h": 39.2,
+        "parentW": 39.2,
+        "parentH": 39.2,
+        "parentClass": "aventus-tag-emoji note-image-icon",
+        "grandClass": "aventus-heritage-tag"
+      },
+      {
+        "w": 39.2,
+        "h": 39.2,
+        "parentW": 39.2,
+        "parentH": 39.2,
+        "parentClass": "aventus-tag-emoji note-image-icon",
+        "grandClass": "aventus-heritage-tag"
+      },
+      {
+        "w": 39.2,
+        "h": 39.2,
+        "parentW": 39.2,
+        "parentH": 39.2,
+        "parentClass": "aventus-tag-emoji note-image-icon",
+        "grandClass": "aventus-heritage-tag"
+      },
+      {
+        "w": 39.2,
+        "h": 39.2,
+        "parentW": 39.2,
+        "parentH": 39.2,
+        "parentClass": "aventus-tag-emoji note-image-icon",
+        "grandClass": "aventus-heritage-tag"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 7,
+    "name": "Sauvage",
+    "brand": "DIOR",
+    "sectionId": "sauvage",
+    "sectionClass": "content sauvage-section",
+    "section": {
+      "x": 0,
+      "y": 33440,
+      "w": 1910,
+      "h": 3338,
+      "top": 33440,
+      "bottom": 36778
+    },
+    "topRow": {
+      "x": 185,
+      "y": 33500,
+      "w": 1540,
+      "h": 1313,
+      "top": 33500,
+      "bottom": 34813
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 33500,
+      "w": 1540,
+      "h": 707,
+      "top": 33500,
+      "bottom": 34207
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 33508,
+      "w": 442,
+      "h": 403,
+      "top": 33508,
+      "bottom": 33912
+    },
+    "info": {
+      "x": 731,
+      "y": 33565,
+      "w": 941,
+      "h": 637,
+      "top": 33565,
+      "bottom": 34202
+    },
+    "profiles": {
+      "x": 185,
+      "y": 34249,
+      "w": 1540,
+      "h": 563,
+      "top": 34249,
+      "bottom": 34813
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "profile-container sauvage-profile-card sauvage-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 34307,
+          "w": 602,
+          "h": 448,
+          "top": 34307,
+          "bottom": 34755
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "profile-container sauvage-profile-card sauvage-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 34307,
+          "w": 602,
+          "h": 448,
+          "top": 34307,
+          "bottom": 34755
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 29.1,
+      "maxW": 29.1,
+      "minH": 29.1,
+      "maxH": 29.1
+    },
+    "noteSamples": [
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "sauvage-chip-emoji note-image-icon",
+        "grandClass": "sauvage-chip"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "sauvage-chip-emoji note-image-icon",
+        "grandClass": "sauvage-chip"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "sauvage-chip-emoji note-image-icon",
+        "grandClass": "sauvage-chip"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "sauvage-chip-emoji note-image-icon",
+        "grandClass": "sauvage-chip"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "sauvage-chip-emoji note-image-icon",
+        "grandClass": "sauvage-chip"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "sauvage-chip-emoji note-image-icon",
+        "grandClass": "sauvage-chip"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 8,
+    "name": "Bleu de Chanel",
+    "brand": "CHANEL",
+    "sectionId": "bleudechanel",
+    "sectionClass": "content bleudechanel-section",
+    "section": {
+      "x": 0,
+      "y": 36978,
+      "w": 1910,
+      "h": 3231,
+      "top": 36978,
+      "bottom": 40209
+    },
+    "topRow": {
+      "x": 185,
+      "y": 37038,
+      "w": 1540,
+      "h": 1238,
+      "top": 37038,
+      "bottom": 38276
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 37038,
+      "w": 1540,
+      "h": 707,
+      "top": 37038,
+      "bottom": 37745
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 37046,
+      "w": 442,
+      "h": 384,
+      "top": 37046,
+      "bottom": 37430
+    },
+    "info": {
+      "x": 731,
+      "y": 37103,
+      "w": 941,
+      "h": 637,
+      "top": 37103,
+      "bottom": 37740
+    },
+    "profiles": {
+      "x": 185,
+      "y": 37787,
+      "w": 1540,
+      "h": 489,
+      "top": 37787,
+      "bottom": 38276
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "profile-container bleudechanel-profile-card bleudechanel-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 37838,
+          "w": 602,
+          "h": 388,
+          "top": 37838,
+          "bottom": 38225
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "profile-container bleudechanel-profile-card bleudechanel-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 37838,
+          "w": 602,
+          "h": 388,
+          "top": 37838,
+          "bottom": 38225
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 26.9,
+      "maxW": 26.9,
+      "minH": 26.9,
+      "maxH": 26.9
+    },
+    "noteSamples": [
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "bleudechanel-pill-emoji note-image-icon",
+        "grandClass": "bleudechanel-note-pill"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "bleudechanel-pill-emoji note-image-icon",
+        "grandClass": "bleudechanel-note-pill"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "bleudechanel-pill-emoji note-image-icon",
+        "grandClass": "bleudechanel-note-pill"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "bleudechanel-pill-emoji note-image-icon",
+        "grandClass": "bleudechanel-note-pill"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "bleudechanel-pill-emoji note-image-icon",
+        "grandClass": "bleudechanel-note-pill"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "bleudechanel-pill-emoji note-image-icon",
+        "grandClass": "bleudechanel-note-pill"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 9,
+    "name": "Tobacco Vanille",
+    "brand": "TOM FORD",
+    "sectionId": "tobaccovanille",
+    "sectionClass": "content tobaccovanille-section",
+    "section": {
+      "x": 0,
+      "y": 40409,
+      "w": 1910,
+      "h": 3271,
+      "top": 40409,
+      "bottom": 43680
+    },
+    "topRow": {
+      "x": 185,
+      "y": 40469,
+      "w": 1540,
+      "h": 1278,
+      "top": 40469,
+      "bottom": 41747
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 40469,
+      "w": 1540,
+      "h": 707,
+      "top": 40469,
+      "bottom": 41176
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 40477,
+      "w": 442,
+      "h": 384,
+      "top": 40477,
+      "bottom": 40861
+    },
+    "info": {
+      "x": 731,
+      "y": 40534,
+      "w": 941,
+      "h": 637,
+      "top": 40534,
+      "bottom": 41171
+    },
+    "profiles": {
+      "x": 185,
+      "y": 41218,
+      "w": 1540,
+      "h": 529,
+      "top": 41218,
+      "bottom": 41747
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "profile-container tobaccovanille-profile-card tobaccovanille-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 41273,
+          "w": 602,
+          "h": 420,
+          "top": 41273,
+          "bottom": 41693
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "profile-container tobaccovanille-profile-card tobaccovanille-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 41273,
+          "w": 602,
+          "h": 420,
+          "top": 41273,
+          "bottom": 41693
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 29.1,
+      "maxW": 29.1,
+      "minH": 29.1,
+      "maxH": 29.1
+    },
+    "noteSamples": [
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "tv-card-emoji note-image-icon",
+        "grandClass": "tv-note-card"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "tv-card-emoji note-image-icon",
+        "grandClass": "tv-note-card"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "tv-card-emoji note-image-icon",
+        "grandClass": "tv-note-card"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "tv-card-emoji note-image-icon",
+        "grandClass": "tv-note-card"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "tv-card-emoji note-image-icon",
+        "grandClass": "tv-note-card"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 29.1,
+        "parentH": 29.1,
+        "parentClass": "tv-card-emoji note-image-icon",
+        "grandClass": "tv-note-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 10,
+    "name": "Oud Wood",
+    "brand": "TOM FORD",
+    "sectionId": "oudwood",
+    "sectionClass": "content oudwood-section",
+    "section": {
+      "x": 0,
+      "y": 43880,
+      "w": 1910,
+      "h": 3698,
+      "top": 43880,
+      "bottom": 47579
+    },
+    "topRow": {
+      "x": 185,
+      "y": 43940,
+      "w": 1540,
+      "h": 1678,
+      "top": 43940,
+      "bottom": 45619
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 43940,
+      "w": 1540,
+      "h": 707,
+      "top": 43940,
+      "bottom": 44648
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 43948,
+      "w": 442,
+      "h": 384,
+      "top": 43948,
+      "bottom": 44332
+    },
+    "info": {
+      "x": 731,
+      "y": 44006,
+      "w": 941,
+      "h": 637,
+      "top": 44006,
+      "bottom": 44642
+    },
+    "profiles": {
+      "x": 185,
+      "y": 44690,
+      "w": 1540,
+      "h": 929,
+      "top": 44690,
+      "bottom": 45619
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "profile-container oudwood-profile-card oudwood-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 44784,
+          "w": 602,
+          "h": 740,
+          "top": 44784,
+          "bottom": 45524
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "profile-container oudwood-profile-card oudwood-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 44784,
+          "w": 602,
+          "h": 740,
+          "top": 44784,
+          "bottom": 45524
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 26.9,
+      "maxW": 26.9,
+      "minH": 26.9,
+      "maxH": 26.9
+    },
+    "noteSamples": [
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "ow-leaf-emoji note-image-icon",
+        "grandClass": "ow-leaf"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "ow-leaf-emoji note-image-icon",
+        "grandClass": "ow-leaf"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "ow-leaf-emoji note-image-icon",
+        "grandClass": "ow-leaf"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "ow-leaf-emoji note-image-icon",
+        "grandClass": "ow-leaf"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "ow-leaf-emoji note-image-icon",
+        "grandClass": "ow-leaf"
+      },
+      {
+        "w": 26.9,
+        "h": 26.9,
+        "parentW": 26.9,
+        "parentH": 26.9,
+        "parentClass": "ow-leaf-emoji note-image-icon",
+        "grandClass": "ow-leaf"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 11,
+    "name": "La Nuit de L'Homme",
+    "brand": "YVES SAINT LAURENT",
+    "sectionId": "lanuit",
+    "sectionClass": "content lanuit-section",
+    "section": {
+      "x": 0,
+      "y": 47779,
+      "w": 1910,
+      "h": 3581,
+      "top": 47779,
+      "bottom": 51359
+    },
+    "topRow": {
+      "x": 185,
+      "y": 47839,
+      "w": 1540,
+      "h": 1560,
+      "top": 47839,
+      "bottom": 49399
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 47839,
+      "w": 1540,
+      "h": 707,
+      "top": 47839,
+      "bottom": 48546
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 47847,
+      "w": 442,
+      "h": 384,
+      "top": 47847,
+      "bottom": 48231
+    },
+    "info": {
+      "x": 731,
+      "y": 47904,
+      "w": 941,
+      "h": 637,
+      "top": 47904,
+      "bottom": 48541
+    },
+    "profiles": {
+      "x": 185,
+      "y": 48588,
+      "w": 1540,
+      "h": 811,
+      "top": 48588,
+      "bottom": 49399
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "profile-container lanuit-profile-card lanuit-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 48671,
+          "w": 602,
+          "h": 646,
+          "top": 48671,
+          "bottom": 49316
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "profile-container lanuit-profile-card lanuit-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 48671,
+          "w": 602,
+          "h": 646,
+          "top": 48671,
+          "bottom": 49316
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 22.4,
+      "maxW": 22.4,
+      "minH": 22.4,
+      "maxH": 22.4
+    },
+    "noteSamples": [
+      {
+        "w": 22.4,
+        "h": 22.4,
+        "parentW": 22.4,
+        "parentH": 22.4,
+        "parentClass": "lanuit-star-emoji note-image-icon",
+        "grandClass": "lanuit-star-note"
+      },
+      {
+        "w": 22.4,
+        "h": 22.4,
+        "parentW": 22.4,
+        "parentH": 22.4,
+        "parentClass": "lanuit-star-emoji note-image-icon",
+        "grandClass": "lanuit-star-note"
+      },
+      {
+        "w": 22.4,
+        "h": 22.4,
+        "parentW": 22.4,
+        "parentH": 22.4,
+        "parentClass": "lanuit-star-emoji note-image-icon",
+        "grandClass": "lanuit-star-note"
+      },
+      {
+        "w": 22.4,
+        "h": 22.4,
+        "parentW": 22.4,
+        "parentH": 22.4,
+        "parentClass": "lanuit-star-emoji note-image-icon",
+        "grandClass": "lanuit-star-note"
+      },
+      {
+        "w": 22.4,
+        "h": 22.4,
+        "parentW": 22.4,
+        "parentH": 22.4,
+        "parentClass": "lanuit-star-emoji note-image-icon",
+        "grandClass": "lanuit-star-note"
+      },
+      {
+        "w": 22.4,
+        "h": 22.4,
+        "parentW": 22.4,
+        "parentH": 22.4,
+        "parentClass": "lanuit-star-emoji note-image-icon",
+        "grandClass": "lanuit-star-note"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 12,
+    "name": "Lost Cherry",
+    "brand": "TOM FORD",
+    "sectionId": "lostcherry",
+    "sectionClass": "content lostcherry-section",
+    "section": {
+      "x": 0,
+      "y": 51559,
+      "w": 1910,
+      "h": 3887,
+      "top": 51559,
+      "bottom": 55447
+    },
+    "topRow": {
+      "x": 185,
+      "y": 51619,
+      "w": 1540,
+      "h": 1894,
+      "top": 51619,
+      "bottom": 53514
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 51619,
+      "w": 1540,
+      "h": 707,
+      "top": 51619,
+      "bottom": 52327
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 51627,
+      "w": 442,
+      "h": 384,
+      "top": 51627,
+      "bottom": 52011
+    },
+    "info": {
+      "x": 731,
+      "y": 51685,
+      "w": 941,
+      "h": 637,
+      "top": 51685,
+      "bottom": 52321
+    },
+    "profiles": {
+      "x": 185,
+      "y": 52369,
+      "w": 1540,
+      "h": 1145,
+      "top": 52369,
+      "bottom": 53514
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "profile-container lostcherry-profile-card lostcherry-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 52485,
+          "w": 602,
+          "h": 913,
+          "top": 52485,
+          "bottom": 53397
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "profile-container lostcherry-profile-card lostcherry-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 52485,
+          "w": 602,
+          "h": 913,
+          "top": 52485,
+          "bottom": 53397
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 29.1,
+      "maxW": 29.1,
+      "minH": 29.1,
+      "maxH": 29.1
+    },
+    "noteSamples": [
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 69.4,
+        "parentH": 29.1,
+        "parentClass": "lc-petal-emoji note-image-icon",
+        "grandClass": "lc-petal-inner"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 81.2,
+        "parentH": 29.1,
+        "parentClass": "lc-petal-emoji note-image-icon",
+        "grandClass": "lc-petal-inner"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 75.3,
+        "parentH": 29.1,
+        "parentClass": "lc-petal-emoji note-image-icon",
+        "grandClass": "lc-petal-inner"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 68.1,
+        "parentH": 29.1,
+        "parentClass": "lc-petal-emoji note-image-icon",
+        "grandClass": "lc-petal-inner"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 91.6,
+        "parentH": 29.1,
+        "parentClass": "lc-petal-emoji note-image-icon",
+        "grandClass": "lc-petal-inner"
+      },
+      {
+        "w": 29.1,
+        "h": 29.1,
+        "parentW": 66,
+        "parentH": 29.1,
+        "parentClass": "lc-petal-emoji note-image-icon",
+        "grandClass": "lc-petal-inner"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 13,
+    "name": "Y Eau de Parfum",
+    "brand": "YVES SAINT LAURENT",
+    "sectionId": "yvsl",
+    "sectionClass": "content yvsl-section",
+    "section": {
+      "x": 0,
+      "y": 55647,
+      "w": 1910,
+      "h": 4361,
+      "top": 55647,
+      "bottom": 60008
+    },
+    "topRow": {
+      "x": 185,
+      "y": 55707,
+      "w": 1540,
+      "h": 1813,
+      "top": 55707,
+      "bottom": 57519
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 55707,
+      "w": 1540,
+      "h": 711,
+      "top": 55707,
+      "bottom": 56418
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 55715,
+      "w": 442,
+      "h": 422,
+      "top": 55715,
+      "bottom": 56138
+    },
+    "info": {
+      "x": 731,
+      "y": 55772,
+      "w": 941,
+      "h": 640,
+      "top": 55772,
+      "bottom": 56412
+    },
+    "profiles": {
+      "x": 185,
+      "y": 56460,
+      "w": 1540,
+      "h": 1060,
+      "top": 56460,
+      "bottom": 57519
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "yvsl-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 56567,
+          "w": 602,
+          "h": 844,
+          "top": 56567,
+          "bottom": 57412
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "yvsl-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 56567,
+          "w": 602,
+          "h": 844,
+          "top": 56567,
+          "bottom": 57412
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "yvsl-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "yvsl-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "yvsl-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "yvsl-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "yvsl-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "yvsl-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 14,
+    "name": "Acqua di Giò Profumo",
+    "brand": "GIORGIO ARMANI",
+    "sectionId": "aquadigio",
+    "sectionClass": "content aquadigio-section",
+    "section": {
+      "x": 0,
+      "y": 60208,
+      "w": 1910,
+      "h": 4332,
+      "top": 60208,
+      "bottom": 64540
+    },
+    "topRow": {
+      "x": 185,
+      "y": 60268,
+      "w": 1540,
+      "h": 1813,
+      "top": 60268,
+      "bottom": 62080
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 60268,
+      "w": 1540,
+      "h": 711,
+      "top": 60268,
+      "bottom": 60979
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 60276,
+      "w": 442,
+      "h": 422,
+      "top": 60276,
+      "bottom": 60699
+    },
+    "info": {
+      "x": 731,
+      "y": 60333,
+      "w": 941,
+      "h": 640,
+      "top": 60333,
+      "bottom": 60973
+    },
+    "profiles": {
+      "x": 185,
+      "y": 61021,
+      "w": 1540,
+      "h": 1060,
+      "top": 61021,
+      "bottom": 62080
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "aquadigio-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 61128,
+          "w": 602,
+          "h": 844,
+          "top": 61128,
+          "bottom": 61973
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "aquadigio-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 61128,
+          "w": 602,
+          "h": 844,
+          "top": 61128,
+          "bottom": 61973
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "aquadigio-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "aquadigio-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "aquadigio-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "aquadigio-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "aquadigio-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "aquadigio-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 15,
+    "name": "The One EDP",
+    "brand": "DOLCE & GABBANA",
+    "sectionId": "dy",
+    "sectionClass": "content dy-section",
+    "section": {
+      "x": 0,
+      "y": 64740,
+      "w": 1910,
+      "h": 4361,
+      "top": 64740,
+      "bottom": 69101
+    },
+    "topRow": {
+      "x": 185,
+      "y": 64800,
+      "w": 1540,
+      "h": 1813,
+      "top": 64800,
+      "bottom": 66613
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 64800,
+      "w": 1540,
+      "h": 711,
+      "top": 64800,
+      "bottom": 65511
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 64807,
+      "w": 442,
+      "h": 328,
+      "top": 64807,
+      "bottom": 65135
+    },
+    "info": {
+      "x": 731,
+      "y": 64865,
+      "w": 941,
+      "h": 640,
+      "top": 64865,
+      "bottom": 65505
+    },
+    "profiles": {
+      "x": 185,
+      "y": 65553,
+      "w": 1540,
+      "h": 1060,
+      "top": 65553,
+      "bottom": 66613
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "dy-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 65661,
+          "w": 602,
+          "h": 844,
+          "top": 65661,
+          "bottom": 66505
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "dy-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 65661,
+          "w": 602,
+          "h": 844,
+          "top": 65661,
+          "bottom": 66505
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "dy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "dy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "dy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "dy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "dy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "dy-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 16,
+    "name": "Eros",
+    "brand": "VERSACE",
+    "sectionId": "versaceeros",
+    "sectionClass": "content versaceeros-section",
+    "section": {
+      "x": 0,
+      "y": 69301,
+      "w": 1910,
+      "h": 4361,
+      "top": 69301,
+      "bottom": 73662
+    },
+    "topRow": {
+      "x": 185,
+      "y": 69361,
+      "w": 1540,
+      "h": 1813,
+      "top": 69361,
+      "bottom": 71174
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 69361,
+      "w": 1540,
+      "h": 711,
+      "top": 69361,
+      "bottom": 70072
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 69370,
+      "w": 442,
+      "h": 422,
+      "top": 69370,
+      "bottom": 69792
+    },
+    "info": {
+      "x": 731,
+      "y": 69426,
+      "w": 941,
+      "h": 640,
+      "top": 69426,
+      "bottom": 70066
+    },
+    "profiles": {
+      "x": 185,
+      "y": 70114,
+      "w": 1540,
+      "h": 1060,
+      "top": 70114,
+      "bottom": 71174
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "versaceeros-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 70222,
+          "w": 602,
+          "h": 844,
+          "top": 70222,
+          "bottom": 71066
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "versaceeros-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 70222,
+          "w": 602,
+          "h": 844,
+          "top": 70222,
+          "bottom": 71066
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "versaceeros-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "versaceeros-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "versaceeros-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "versaceeros-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "versaceeros-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "versaceeros-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 17,
+    "name": "Ultra Male",
+    "brand": "JEAN PAUL GAULTIER",
+    "sectionId": "jpgultramale",
+    "sectionClass": "content jpgultramale-section",
+    "section": {
+      "x": 0,
+      "y": 73862,
+      "w": 1910,
+      "h": 4390,
+      "top": 73862,
+      "bottom": 78252
+    },
+    "topRow": {
+      "x": 185,
+      "y": 73922,
+      "w": 1540,
+      "h": 1813,
+      "top": 73922,
+      "bottom": 75735
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 73922,
+      "w": 1540,
+      "h": 711,
+      "top": 73922,
+      "bottom": 74633
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 73931,
+      "w": 442,
+      "h": 422,
+      "top": 73931,
+      "bottom": 74353
+    },
+    "info": {
+      "x": 731,
+      "y": 73987,
+      "w": 941,
+      "h": 640,
+      "top": 73987,
+      "bottom": 74627
+    },
+    "profiles": {
+      "x": 185,
+      "y": 74675,
+      "w": 1540,
+      "h": 1060,
+      "top": 74675,
+      "bottom": 75735
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "jpgultramale-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 74783,
+          "w": 602,
+          "h": 844,
+          "top": 74783,
+          "bottom": 75627
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "jpgultramale-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 74783,
+          "w": 602,
+          "h": 844,
+          "top": 74783,
+          "bottom": 75627
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "jpgultramale-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "jpgultramale-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "jpgultramale-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "jpgultramale-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "jpgultramale-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "jpgultramale-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 18,
+    "name": "Invictus",
+    "brand": "PACO RABANNE",
+    "sectionId": "invictus",
+    "sectionClass": "content invictus-section",
+    "section": {
+      "x": 0,
+      "y": 78452,
+      "w": 1910,
+      "h": 4361,
+      "top": 78452,
+      "bottom": 82813
+    },
+    "topRow": {
+      "x": 185,
+      "y": 78512,
+      "w": 1540,
+      "h": 1813,
+      "top": 78512,
+      "bottom": 80324
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 78512,
+      "w": 1540,
+      "h": 711,
+      "top": 78512,
+      "bottom": 79223
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 78520,
+      "w": 442,
+      "h": 422,
+      "top": 78520,
+      "bottom": 78943
+    },
+    "info": {
+      "x": 731,
+      "y": 78577,
+      "w": 941,
+      "h": 640,
+      "top": 78577,
+      "bottom": 79217
+    },
+    "profiles": {
+      "x": 185,
+      "y": 79265,
+      "w": 1540,
+      "h": 1060,
+      "top": 79265,
+      "bottom": 80324
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "invictus-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 79372,
+          "w": 602,
+          "h": 844,
+          "top": 79372,
+          "bottom": 80217
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "invictus-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 79372,
+          "w": 602,
+          "h": 844,
+          "top": 79372,
+          "bottom": 80217
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "invictus-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "invictus-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "invictus-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "invictus-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "invictus-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "invictus-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 19,
+    "name": "Uomo Born in Roma",
+    "brand": "VALENTINO",
+    "sectionId": "valentinouomo",
+    "sectionClass": "content valentinouomo-section",
+    "section": {
+      "x": 0,
+      "y": 83013,
+      "w": 1910,
+      "h": 4361,
+      "top": 83013,
+      "bottom": 87374
+    },
+    "topRow": {
+      "x": 185,
+      "y": 83073,
+      "w": 1540,
+      "h": 1813,
+      "top": 83073,
+      "bottom": 84885
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 83073,
+      "w": 1540,
+      "h": 711,
+      "top": 83073,
+      "bottom": 83784
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 83081,
+      "w": 442,
+      "h": 422,
+      "top": 83081,
+      "bottom": 83504
+    },
+    "info": {
+      "x": 731,
+      "y": 83138,
+      "w": 941,
+      "h": 640,
+      "top": 83138,
+      "bottom": 83778
+    },
+    "profiles": {
+      "x": 185,
+      "y": 83826,
+      "w": 1540,
+      "h": 1060,
+      "top": 83826,
+      "bottom": 84885
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "valentinouomo-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 83933,
+          "w": 602,
+          "h": 844,
+          "top": 83933,
+          "bottom": 84778
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "valentinouomo-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 83933,
+          "w": 602,
+          "h": 844,
+          "top": 83933,
+          "bottom": 84778
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinouomo-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinouomo-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinouomo-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinouomo-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinouomo-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinouomo-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 20,
+    "name": "Spicebomb Extreme",
+    "brand": "VIKTOR & ROLF",
+    "sectionId": "spicebomb",
+    "sectionClass": "content spicebomb-section",
+    "section": {
+      "x": 0,
+      "y": 87574,
+      "w": 1910,
+      "h": 4390,
+      "top": 87574,
+      "bottom": 91963
+    },
+    "topRow": {
+      "x": 185,
+      "y": 87634,
+      "w": 1540,
+      "h": 1813,
+      "top": 87634,
+      "bottom": 89446
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 87634,
+      "w": 1540,
+      "h": 711,
+      "top": 87634,
+      "bottom": 88345
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 87642,
+      "w": 442,
+      "h": 422,
+      "top": 87642,
+      "bottom": 88065
+    },
+    "info": {
+      "x": 731,
+      "y": 87699,
+      "w": 941,
+      "h": 640,
+      "top": 87699,
+      "bottom": 88339
+    },
+    "profiles": {
+      "x": 185,
+      "y": 88387,
+      "w": 1540,
+      "h": 1060,
+      "top": 88387,
+      "bottom": 89446
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "spicebomb-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 88494,
+          "w": 602,
+          "h": 844,
+          "top": 88494,
+          "bottom": 89339
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "spicebomb-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 88494,
+          "w": 602,
+          "h": 844,
+          "top": 88494,
+          "bottom": 89339
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "spicebomb-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "spicebomb-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "spicebomb-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "spicebomb-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "spicebomb-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "spicebomb-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 21,
+    "name": "Explorer",
+    "brand": "MONTBLANC",
+    "sectionId": "explorer",
+    "sectionClass": "content explorer-section",
+    "section": {
+      "x": 0,
+      "y": 92163,
+      "w": 1910,
+      "h": 4390,
+      "top": 92163,
+      "bottom": 96553
+    },
+    "topRow": {
+      "x": 185,
+      "y": 92223,
+      "w": 1540,
+      "h": 1813,
+      "top": 92223,
+      "bottom": 94036
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 92223,
+      "w": 1540,
+      "h": 711,
+      "top": 92223,
+      "bottom": 92935
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 92232,
+      "w": 442,
+      "h": 422,
+      "top": 92232,
+      "bottom": 92655
+    },
+    "info": {
+      "x": 731,
+      "y": 92289,
+      "w": 941,
+      "h": 640,
+      "top": 92289,
+      "bottom": 92929
+    },
+    "profiles": {
+      "x": 185,
+      "y": 92977,
+      "w": 1540,
+      "h": 1060,
+      "top": 92977,
+      "bottom": 94036
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "explorer-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 93084,
+          "w": 602,
+          "h": 844,
+          "top": 93084,
+          "bottom": 93929
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "explorer-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 93084,
+          "w": 602,
+          "h": 844,
+          "top": 93084,
+          "bottom": 93929
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "explorer-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "explorer-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "explorer-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "explorer-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "explorer-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "explorer-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 22,
+    "name": "Man in Black",
+    "brand": "BVLGARI",
+    "sectionId": "blv",
+    "sectionClass": "content blv-section",
+    "section": {
+      "x": 0,
+      "y": 96753,
+      "w": 1910,
+      "h": 4361,
+      "top": 96753,
+      "bottom": 101114
+    },
+    "topRow": {
+      "x": 185,
+      "y": 96813,
+      "w": 1540,
+      "h": 1813,
+      "top": 96813,
+      "bottom": 98626
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 96813,
+      "w": 1540,
+      "h": 711,
+      "top": 96813,
+      "bottom": 97524
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 96820,
+      "w": 442,
+      "h": 345,
+      "top": 96820,
+      "bottom": 97165
+    },
+    "info": {
+      "x": 731,
+      "y": 96879,
+      "w": 941,
+      "h": 640,
+      "top": 96879,
+      "bottom": 97519
+    },
+    "profiles": {
+      "x": 185,
+      "y": 97566,
+      "w": 1540,
+      "h": 1060,
+      "top": 97566,
+      "bottom": 98626
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "blv-scent-profile",
+        "rect": {
+          "x": 412,
+          "y": 97674,
+          "w": 602,
+          "h": 844,
+          "top": 97674,
+          "bottom": 98518
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      },
+      {
+        "className": "blv-ingredients",
+        "rect": {
+          "x": 895,
+          "y": 97674,
+          "w": 602,
+          "h": 844,
+          "top": 97674,
+          "bottom": 98518
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 6,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blv-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blv-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blv-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blv-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blv-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "blv-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 23,
+    "name": "Homme Intense",
+    "brand": "DIOR",
+    "sectionId": "diorhomme",
+    "sectionClass": "content diorhomme-section",
+    "section": {
+      "x": 0,
+      "y": 101314,
+      "w": 1910,
+      "h": 3186,
+      "top": 101314,
+      "bottom": 104500
+    },
+    "topRow": {
+      "x": 185,
+      "y": 101374,
+      "w": 1540,
+      "h": 1527,
+      "top": 101374,
+      "bottom": 102901
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 101374,
+      "w": 1540,
+      "h": 686,
+      "top": 101374,
+      "bottom": 102060
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 101382,
+      "w": 442,
+      "h": 401,
+      "top": 101382,
+      "bottom": 101784
+    },
+    "info": {
+      "x": 731,
+      "y": 101438,
+      "w": 941,
+      "h": 618,
+      "top": 101438,
+      "bottom": 102056
+    },
+    "profiles": {
+      "x": 185,
+      "y": 102102,
+      "w": 1540,
+      "h": 798,
+      "top": 102102,
+      "bottom": 102901
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "diorhomme-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 102104,
+          "w": 753,
+          "h": 794,
+          "top": 102104,
+          "bottom": 102899
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "diorhomme-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 102104,
+          "w": 753,
+          "h": 794,
+          "top": 102104,
+          "bottom": 102899
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "diorhomme-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "diorhomme-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "diorhomme-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "diorhomme-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "diorhomme-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "diorhomme-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 24,
+    "name": "Allure Homme Sport",
+    "brand": "CHANEL",
+    "sectionId": "allure",
+    "sectionClass": "content allure-section",
+    "section": {
+      "x": 0,
+      "y": 104700,
+      "w": 1910,
+      "h": 3186,
+      "top": 104700,
+      "bottom": 107887
+    },
+    "topRow": {
+      "x": 185,
+      "y": 104760,
+      "w": 1540,
+      "h": 1527,
+      "top": 104760,
+      "bottom": 106287
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 104760,
+      "w": 1540,
+      "h": 686,
+      "top": 104760,
+      "bottom": 105447
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 104769,
+      "w": 442,
+      "h": 422,
+      "top": 104769,
+      "bottom": 105192
+    },
+    "info": {
+      "x": 731,
+      "y": 104825,
+      "w": 941,
+      "h": 618,
+      "top": 104825,
+      "bottom": 105442
+    },
+    "profiles": {
+      "x": 185,
+      "y": 105489,
+      "w": 1540,
+      "h": 798,
+      "top": 105489,
+      "bottom": 106287
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "allure-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 105491,
+          "w": 753,
+          "h": 794,
+          "top": 105491,
+          "bottom": 106285
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "allure-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 105491,
+          "w": 753,
+          "h": 794,
+          "top": 105491,
+          "bottom": 106285
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "allure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "allure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "allure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "allure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "allure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "allure-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 25,
+    "name": "Tuscan Leather",
+    "brand": "TOM FORD",
+    "sectionId": "tuscanleather",
+    "sectionClass": "content tuscanleather-section",
+    "section": {
+      "x": 0,
+      "y": 108087,
+      "w": 1910,
+      "h": 3214,
+      "top": 108087,
+      "bottom": 111300
+    },
+    "topRow": {
+      "x": 185,
+      "y": 108147,
+      "w": 1540,
+      "h": 1527,
+      "top": 108147,
+      "bottom": 109673
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 108147,
+      "w": 1540,
+      "h": 686,
+      "top": 108147,
+      "bottom": 108833
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 108156,
+      "w": 442,
+      "h": 422,
+      "top": 108156,
+      "bottom": 108578
+    },
+    "info": {
+      "x": 731,
+      "y": 108211,
+      "w": 941,
+      "h": 618,
+      "top": 108211,
+      "bottom": 108829
+    },
+    "profiles": {
+      "x": 185,
+      "y": 108875,
+      "w": 1540,
+      "h": 798,
+      "top": 108875,
+      "bottom": 109673
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "tuscanleather-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 108877,
+          "w": 753,
+          "h": 794,
+          "top": 108877,
+          "bottom": 109671
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "tuscanleather-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 108877,
+          "w": 753,
+          "h": 794,
+          "top": 108877,
+          "bottom": 109671
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "tuscanleather-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "tuscanleather-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "tuscanleather-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "tuscanleather-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "tuscanleather-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "tuscanleather-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 26,
+    "name": "Armani Code Absolu",
+    "brand": "GIORGIO ARMANI",
+    "sectionId": "armanicode",
+    "sectionClass": "content armanicode-section",
+    "section": {
+      "x": 0,
+      "y": 111500,
+      "w": 1910,
+      "h": 3186,
+      "top": 111500,
+      "bottom": 114687
+    },
+    "topRow": {
+      "x": 185,
+      "y": 111560,
+      "w": 1540,
+      "h": 1527,
+      "top": 111560,
+      "bottom": 113087
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 111560,
+      "w": 1540,
+      "h": 686,
+      "top": 111560,
+      "bottom": 112246
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 111569,
+      "w": 442,
+      "h": 422,
+      "top": 111569,
+      "bottom": 111991
+    },
+    "info": {
+      "x": 731,
+      "y": 111625,
+      "w": 941,
+      "h": 618,
+      "top": 111625,
+      "bottom": 112242
+    },
+    "profiles": {
+      "x": 185,
+      "y": 112288,
+      "w": 1540,
+      "h": 798,
+      "top": 112288,
+      "bottom": 113087
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "armanicode-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 112290,
+          "w": 753,
+          "h": 794,
+          "top": 112290,
+          "bottom": 113085
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "armanicode-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 112290,
+          "w": 753,
+          "h": 794,
+          "top": 112290,
+          "bottom": 113085
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "armanicode-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "armanicode-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "armanicode-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "armanicode-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "armanicode-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "armanicode-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 27,
+    "name": "L'Homme Idéal EDP",
+    "brand": "GUERLAIN",
+    "sectionId": "lhommeideal",
+    "sectionClass": "content lhommeideal-section",
+    "section": {
+      "x": 0,
+      "y": 114887,
+      "w": 1910,
+      "h": 3186,
+      "top": 114887,
+      "bottom": 118073
+    },
+    "topRow": {
+      "x": 185,
+      "y": 114947,
+      "w": 1540,
+      "h": 1527,
+      "top": 114947,
+      "bottom": 116473
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 114947,
+      "w": 1540,
+      "h": 686,
+      "top": 114947,
+      "bottom": 115633
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 114955,
+      "w": 442,
+      "h": 422,
+      "top": 114955,
+      "bottom": 115378
+    },
+    "info": {
+      "x": 731,
+      "y": 115011,
+      "w": 941,
+      "h": 618,
+      "top": 115011,
+      "bottom": 115629
+    },
+    "profiles": {
+      "x": 185,
+      "y": 115675,
+      "w": 1540,
+      "h": 798,
+      "top": 115675,
+      "bottom": 116473
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "lhommeideal-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 115677,
+          "w": 753,
+          "h": 794,
+          "top": 115677,
+          "bottom": 116471
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "lhommeideal-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 115677,
+          "w": 753,
+          "h": 794,
+          "top": 115677,
+          "bottom": 116471
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "lhommeideal-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "lhommeideal-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "lhommeideal-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "lhommeideal-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "lhommeideal-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "lhommeideal-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 28,
+    "name": "Terre d'Hermès",
+    "brand": "HERMÈS",
+    "sectionId": "terredhermes",
+    "sectionClass": "content terredhermes-section",
+    "section": {
+      "x": 0,
+      "y": 118273,
+      "w": 1910,
+      "h": 3186,
+      "top": 118273,
+      "bottom": 121459
+    },
+    "topRow": {
+      "x": 185,
+      "y": 118333,
+      "w": 1540,
+      "h": 1527,
+      "top": 118333,
+      "bottom": 119860
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 118333,
+      "w": 1540,
+      "h": 686,
+      "top": 118333,
+      "bottom": 119019
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 118342,
+      "w": 442,
+      "h": 422,
+      "top": 118342,
+      "bottom": 118764
+    },
+    "info": {
+      "x": 731,
+      "y": 118397,
+      "w": 941,
+      "h": 618,
+      "top": 118397,
+      "bottom": 119015
+    },
+    "profiles": {
+      "x": 185,
+      "y": 119061,
+      "w": 1540,
+      "h": 798,
+      "top": 119061,
+      "bottom": 119860
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "terredhermes-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 119063,
+          "w": 753,
+          "h": 794,
+          "top": 119063,
+          "bottom": 119858
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "terredhermes-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 119063,
+          "w": 753,
+          "h": 794,
+          "top": 119063,
+          "bottom": 119858
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "terredhermes-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "terredhermes-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "terredhermes-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "terredhermes-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "terredhermes-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "terredhermes-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 29,
+    "name": "Gentleman EDP",
+    "brand": "GIVENCHY",
+    "sectionId": "gentleman",
+    "sectionClass": "content gentleman-section",
+    "section": {
+      "x": 0,
+      "y": 121659,
+      "w": 1910,
+      "h": 3186,
+      "top": 121659,
+      "bottom": 124846
+    },
+    "topRow": {
+      "x": 185,
+      "y": 121719,
+      "w": 1540,
+      "h": 1527,
+      "top": 121719,
+      "bottom": 123246
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 121719,
+      "w": 1540,
+      "h": 686,
+      "top": 121719,
+      "bottom": 122405
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 121728,
+      "w": 442,
+      "h": 422,
+      "top": 121728,
+      "bottom": 122150
+    },
+    "info": {
+      "x": 731,
+      "y": 121784,
+      "w": 941,
+      "h": 618,
+      "top": 121784,
+      "bottom": 122401
+    },
+    "profiles": {
+      "x": 185,
+      "y": 122447,
+      "w": 1540,
+      "h": 798,
+      "top": 122447,
+      "bottom": 123246
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "gentleman-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 122449,
+          "w": 753,
+          "h": 794,
+          "top": 122449,
+          "bottom": 123244
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "gentleman-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 122449,
+          "w": 753,
+          "h": 794,
+          "top": 122449,
+          "bottom": 123244
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gentleman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gentleman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gentleman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gentleman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gentleman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gentleman-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 30,
+    "name": "The Most Wanted",
+    "brand": "AZZARO",
+    "sectionId": "wantedbynight",
+    "sectionClass": "content wantedbynight-section",
+    "section": {
+      "x": 0,
+      "y": 125046,
+      "w": 1910,
+      "h": 3186,
+      "top": 125046,
+      "bottom": 128232
+    },
+    "topRow": {
+      "x": 185,
+      "y": 125106,
+      "w": 1540,
+      "h": 1527,
+      "top": 125106,
+      "bottom": 126632
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 125106,
+      "w": 1540,
+      "h": 686,
+      "top": 125106,
+      "bottom": 125792
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 125114,
+      "w": 442,
+      "h": 422,
+      "top": 125114,
+      "bottom": 125537
+    },
+    "info": {
+      "x": 731,
+      "y": 125170,
+      "w": 941,
+      "h": 618,
+      "top": 125170,
+      "bottom": 125787
+    },
+    "profiles": {
+      "x": 185,
+      "y": 125834,
+      "w": 1540,
+      "h": 798,
+      "top": 125834,
+      "bottom": 126632
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "wantedbynight-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 125836,
+          "w": 753,
+          "h": 794,
+          "top": 125836,
+          "bottom": 126630
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "wantedbynight-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 125836,
+          "w": 753,
+          "h": 794,
+          "top": 125836,
+          "bottom": 126630
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "wantedbynight-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "wantedbynight-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "wantedbynight-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "wantedbynight-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "wantedbynight-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "wantedbynight-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 31,
+    "name": "K by Dolce & Gabbana",
+    "brand": "DOLCE & GABBANA",
+    "sectionId": "kbyDG",
+    "sectionClass": "content kbyDG-section",
+    "section": {
+      "x": 0,
+      "y": 128432,
+      "w": 1910,
+      "h": 3186,
+      "top": 128432,
+      "bottom": 131618
+    },
+    "topRow": {
+      "x": 185,
+      "y": 128492,
+      "w": 1540,
+      "h": 1527,
+      "top": 128492,
+      "bottom": 130019
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 128492,
+      "w": 1540,
+      "h": 686,
+      "top": 128492,
+      "bottom": 129178
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 128501,
+      "w": 442,
+      "h": 422,
+      "top": 128501,
+      "bottom": 128923
+    },
+    "info": {
+      "x": 731,
+      "y": 128556,
+      "w": 941,
+      "h": 618,
+      "top": 128556,
+      "bottom": 129174
+    },
+    "profiles": {
+      "x": 185,
+      "y": 129220,
+      "w": 1540,
+      "h": 798,
+      "top": 129220,
+      "bottom": 130019
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "kbyDG-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 129222,
+          "w": 753,
+          "h": 794,
+          "top": 129222,
+          "bottom": 130017
+        },
+        "overflowX": 55,
+        "overflowY": 0
+      },
+      {
+        "className": "kbyDG-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 129222,
+          "w": 753,
+          "h": 794,
+          "top": 129222,
+          "bottom": 130017
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "kbyDG-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "kbyDG-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "kbyDG-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "kbyDG-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "kbyDG-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "kbyDG-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 32,
+    "name": "L'Eau d'Issey Pour Homme",
+    "brand": "ISSEY MIYAKE",
+    "sectionId": "leaudissey",
+    "sectionClass": "content leaudissey-section",
+    "section": {
+      "x": 0,
+      "y": 131818,
+      "w": 1910,
+      "h": 3186,
+      "top": 131818,
+      "bottom": 135005
+    },
+    "topRow": {
+      "x": 185,
+      "y": 131878,
+      "w": 1540,
+      "h": 1527,
+      "top": 131878,
+      "bottom": 133405
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 131878,
+      "w": 1540,
+      "h": 686,
+      "top": 131878,
+      "bottom": 132564
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 131887,
+      "w": 442,
+      "h": 422,
+      "top": 131887,
+      "bottom": 132309
+    },
+    "info": {
+      "x": 731,
+      "y": 131943,
+      "w": 941,
+      "h": 618,
+      "top": 131943,
+      "bottom": 132560
+    },
+    "profiles": {
+      "x": 185,
+      "y": 132606,
+      "w": 1540,
+      "h": 798,
+      "top": 132606,
+      "bottom": 133405
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "leaudissey-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 132608,
+          "w": 753,
+          "h": 794,
+          "top": 132608,
+          "bottom": 133403
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "leaudissey-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 132608,
+          "w": 753,
+          "h": 794,
+          "top": 132608,
+          "bottom": 133403
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "leaudissey-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "leaudissey-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "leaudissey-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "leaudissey-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "leaudissey-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "leaudissey-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 33,
+    "name": "Bad Boy",
+    "brand": "CAROLINA HERRERA",
+    "sectionId": "chbadboy",
+    "sectionClass": "content chbadboy-section",
+    "section": {
+      "x": 0,
+      "y": 135205,
+      "w": 1910,
+      "h": 3186,
+      "top": 135205,
+      "bottom": 138391
+    },
+    "topRow": {
+      "x": 185,
+      "y": 135265,
+      "w": 1540,
+      "h": 1527,
+      "top": 135265,
+      "bottom": 136791
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 135265,
+      "w": 1540,
+      "h": 686,
+      "top": 135265,
+      "bottom": 135951
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 135273,
+      "w": 442,
+      "h": 422,
+      "top": 135273,
+      "bottom": 135696
+    },
+    "info": {
+      "x": 731,
+      "y": 135329,
+      "w": 941,
+      "h": 618,
+      "top": 135329,
+      "bottom": 135946
+    },
+    "profiles": {
+      "x": 185,
+      "y": 135993,
+      "w": 1540,
+      "h": 798,
+      "top": 135993,
+      "bottom": 136791
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "chbadboy-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 135995,
+          "w": 753,
+          "h": 794,
+          "top": 135995,
+          "bottom": 136789
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "chbadboy-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 135995,
+          "w": 753,
+          "h": 794,
+          "top": 135995,
+          "bottom": 136789
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chbadboy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chbadboy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chbadboy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chbadboy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chbadboy-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "chbadboy-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 34,
+    "name": "Libre EDP",
+    "brand": "YVES SAINT LAURENT",
+    "sectionId": "ysllibre",
+    "sectionClass": "content ysllibre-section",
+    "section": {
+      "x": 0,
+      "y": 138591,
+      "w": 1910,
+      "h": 3186,
+      "top": 138591,
+      "bottom": 141777
+    },
+    "topRow": {
+      "x": 185,
+      "y": 138651,
+      "w": 1540,
+      "h": 1527,
+      "top": 138651,
+      "bottom": 140178
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 138651,
+      "w": 1540,
+      "h": 686,
+      "top": 138651,
+      "bottom": 139337
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 138660,
+      "w": 442,
+      "h": 422,
+      "top": 138660,
+      "bottom": 139082
+    },
+    "info": {
+      "x": 731,
+      "y": 138715,
+      "w": 941,
+      "h": 618,
+      "top": 138715,
+      "bottom": 139333
+    },
+    "profiles": {
+      "x": 185,
+      "y": 139379,
+      "w": 1540,
+      "h": 798,
+      "top": 139379,
+      "bottom": 140178
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "ysllibre-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 139381,
+          "w": 753,
+          "h": 794,
+          "top": 139381,
+          "bottom": 140176
+        },
+        "overflowX": 55,
+        "overflowY": 0
+      },
+      {
+        "className": "ysllibre-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 139381,
+          "w": 753,
+          "h": 794,
+          "top": 139381,
+          "bottom": 140176
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "ysllibre-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "ysllibre-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "ysllibre-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "ysllibre-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "ysllibre-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "ysllibre-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 35,
+    "name": "By the Fireplace",
+    "brand": "MAISON MARGIELA",
+    "sectionId": "fireplace",
+    "sectionClass": "content fireplace-section",
+    "section": {
+      "x": 0,
+      "y": 141977,
+      "w": 1910,
+      "h": 3186,
+      "top": 141977,
+      "bottom": 145164
+    },
+    "topRow": {
+      "x": 185,
+      "y": 142037,
+      "w": 1540,
+      "h": 1527,
+      "top": 142037,
+      "bottom": 143564
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 142037,
+      "w": 1540,
+      "h": 686,
+      "top": 142037,
+      "bottom": 142723
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 142046,
+      "w": 442,
+      "h": 422,
+      "top": 142046,
+      "bottom": 142468
+    },
+    "info": {
+      "x": 731,
+      "y": 142102,
+      "w": 941,
+      "h": 618,
+      "top": 142102,
+      "bottom": 142719
+    },
+    "profiles": {
+      "x": 185,
+      "y": 142765,
+      "w": 1540,
+      "h": 798,
+      "top": 142765,
+      "bottom": 143564
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "fireplace-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 142767,
+          "w": 753,
+          "h": 794,
+          "top": 142767,
+          "bottom": 143562
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "fireplace-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 142767,
+          "w": 753,
+          "h": 794,
+          "top": 142767,
+          "bottom": 143562
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "fireplace-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "fireplace-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "fireplace-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "fireplace-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "fireplace-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "fireplace-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 36,
+    "name": "Luna Rossa Carbon",
+    "brand": "PRADA",
+    "sectionId": "pradacarbon",
+    "sectionClass": "content pradacarbon-section",
+    "section": {
+      "x": 0,
+      "y": 145364,
+      "w": 1910,
+      "h": 3186,
+      "top": 145364,
+      "bottom": 148550
+    },
+    "topRow": {
+      "x": 185,
+      "y": 145424,
+      "w": 1540,
+      "h": 1527,
+      "top": 145424,
+      "bottom": 146950
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 145424,
+      "w": 1540,
+      "h": 686,
+      "top": 145424,
+      "bottom": 146110
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 145432,
+      "w": 442,
+      "h": 422,
+      "top": 145432,
+      "bottom": 145855
+    },
+    "info": {
+      "x": 731,
+      "y": 145488,
+      "w": 941,
+      "h": 618,
+      "top": 145488,
+      "bottom": 146105
+    },
+    "profiles": {
+      "x": 185,
+      "y": 146152,
+      "w": 1540,
+      "h": 798,
+      "top": 146152,
+      "bottom": 146950
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "pradacarbon-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 146154,
+          "w": 753,
+          "h": 794,
+          "top": 146154,
+          "bottom": 146948
+        },
+        "overflowX": 53,
+        "overflowY": 0
+      },
+      {
+        "className": "pradacarbon-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 146154,
+          "w": 753,
+          "h": 794,
+          "top": 146154,
+          "bottom": 146948
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 7,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "pradacarbon-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "pradacarbon-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "pradacarbon-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "pradacarbon-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "pradacarbon-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "pradacarbon-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 37,
+    "name": "Hero EDP",
+    "brand": "BURBERRY",
+    "sectionId": "burberryhero",
+    "sectionClass": "content burberryhero-section",
+    "section": {
+      "x": 0,
+      "y": 148750,
+      "w": 1910,
+      "h": 3186,
+      "top": 148750,
+      "bottom": 151936
+    },
+    "topRow": {
+      "x": 185,
+      "y": 148810,
+      "w": 1540,
+      "h": 1527,
+      "top": 148810,
+      "bottom": 150336
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 148810,
+      "w": 1540,
+      "h": 686,
+      "top": 148810,
+      "bottom": 149496
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 148819,
+      "w": 442,
+      "h": 422,
+      "top": 148819,
+      "bottom": 149241
+    },
+    "info": {
+      "x": 731,
+      "y": 148874,
+      "w": 941,
+      "h": 618,
+      "top": 148874,
+      "bottom": 149492
+    },
+    "profiles": {
+      "x": 185,
+      "y": 149538,
+      "w": 1540,
+      "h": 798,
+      "top": 149538,
+      "bottom": 150336
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "burberryhero-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 149540,
+          "w": 753,
+          "h": 794,
+          "top": 149540,
+          "bottom": 150334
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "burberryhero-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 149540,
+          "w": 753,
+          "h": 794,
+          "top": 149540,
+          "bottom": 150334
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "burberryhero-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "burberryhero-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "burberryhero-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "burberryhero-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "burberryhero-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "burberryhero-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 38,
+    "name": "For Him Bleu Noir",
+    "brand": "NARCISO RODRIGUEZ",
+    "sectionId": "narcisoforhim",
+    "sectionClass": "content narcisoforhim-section",
+    "section": {
+      "x": 0,
+      "y": 152136,
+      "w": 1910,
+      "h": 3186,
+      "top": 152136,
+      "bottom": 155323
+    },
+    "topRow": {
+      "x": 185,
+      "y": 152196,
+      "w": 1540,
+      "h": 1527,
+      "top": 152196,
+      "bottom": 153723
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 152196,
+      "w": 1540,
+      "h": 686,
+      "top": 152196,
+      "bottom": 152882
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 152205,
+      "w": 442,
+      "h": 422,
+      "top": 152205,
+      "bottom": 152627
+    },
+    "info": {
+      "x": 731,
+      "y": 152260,
+      "w": 941,
+      "h": 618,
+      "top": 152260,
+      "bottom": 152878
+    },
+    "profiles": {
+      "x": 185,
+      "y": 152924,
+      "w": 1540,
+      "h": 798,
+      "top": 152924,
+      "bottom": 153723
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "narcisoforhim-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 152926,
+          "w": 753,
+          "h": 794,
+          "top": 152926,
+          "bottom": 153721
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "narcisoforhim-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 152926,
+          "w": 753,
+          "h": 794,
+          "top": 152926,
+          "bottom": 153721
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "narcisoforhim-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "narcisoforhim-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "narcisoforhim-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "narcisoforhim-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "narcisoforhim-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "narcisoforhim-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 39,
+    "name": "Eternity for Men",
+    "brand": "CALVIN KLEIN",
+    "sectionId": "cketernity",
+    "sectionClass": "content cketernity-section",
+    "section": {
+      "x": 0,
+      "y": 155523,
+      "w": 1910,
+      "h": 3186,
+      "top": 155523,
+      "bottom": 158709
+    },
+    "topRow": {
+      "x": 185,
+      "y": 155583,
+      "w": 1540,
+      "h": 1527,
+      "top": 155583,
+      "bottom": 157109
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 155583,
+      "w": 1540,
+      "h": 686,
+      "top": 155583,
+      "bottom": 156269
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 155591,
+      "w": 442,
+      "h": 422,
+      "top": 155591,
+      "bottom": 156014
+    },
+    "info": {
+      "x": 731,
+      "y": 155647,
+      "w": 941,
+      "h": 618,
+      "top": 155647,
+      "bottom": 156264
+    },
+    "profiles": {
+      "x": 185,
+      "y": 156311,
+      "w": 1540,
+      "h": 798,
+      "top": 156311,
+      "bottom": 157109
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "cketernity-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 156313,
+          "w": 753,
+          "h": 794,
+          "top": 156313,
+          "bottom": 157107
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "cketernity-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 156313,
+          "w": 753,
+          "h": 794,
+          "top": 156313,
+          "bottom": 157107
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cketernity-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cketernity-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cketernity-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cketernity-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cketernity-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cketernity-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 40,
+    "name": "Guilty Pour Homme",
+    "brand": "GUCCI",
+    "sectionId": "gucciguilty",
+    "sectionClass": "content gucciguilty-section",
+    "section": {
+      "x": 0,
+      "y": 158909,
+      "w": 1910,
+      "h": 3186,
+      "top": 158909,
+      "bottom": 162095
+    },
+    "topRow": {
+      "x": 185,
+      "y": 158969,
+      "w": 1540,
+      "h": 1527,
+      "top": 158969,
+      "bottom": 160495
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 158969,
+      "w": 1540,
+      "h": 686,
+      "top": 158969,
+      "bottom": 159655
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 158978,
+      "w": 442,
+      "h": 422,
+      "top": 158978,
+      "bottom": 159400
+    },
+    "info": {
+      "x": 731,
+      "y": 159033,
+      "w": 941,
+      "h": 618,
+      "top": 159033,
+      "bottom": 159651
+    },
+    "profiles": {
+      "x": 185,
+      "y": 159697,
+      "w": 1540,
+      "h": 798,
+      "top": 159697,
+      "bottom": 160495
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "gucciguilty-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 159699,
+          "w": 753,
+          "h": 794,
+          "top": 159699,
+          "bottom": 160493
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "gucciguilty-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 159699,
+          "w": 753,
+          "h": 794,
+          "top": 159699,
+          "bottom": 160493
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gucciguilty-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gucciguilty-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gucciguilty-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gucciguilty-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gucciguilty-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "gucciguilty-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 41,
+    "name": "Born in Roma Donna",
+    "brand": "VALENTINO",
+    "sectionId": "valentinodonna",
+    "sectionClass": "content valentinodonna-section",
+    "section": {
+      "x": 0,
+      "y": 162295,
+      "w": 1910,
+      "h": 3186,
+      "top": 162295,
+      "bottom": 165481
+    },
+    "topRow": {
+      "x": 185,
+      "y": 162355,
+      "w": 1540,
+      "h": 1527,
+      "top": 162355,
+      "bottom": 163882
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 162355,
+      "w": 1540,
+      "h": 686,
+      "top": 162355,
+      "bottom": 163041
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 162364,
+      "w": 442,
+      "h": 422,
+      "top": 162364,
+      "bottom": 162786
+    },
+    "info": {
+      "x": 731,
+      "y": 162419,
+      "w": 941,
+      "h": 618,
+      "top": 162419,
+      "bottom": 163037
+    },
+    "profiles": {
+      "x": 185,
+      "y": 163083,
+      "w": 1540,
+      "h": 798,
+      "top": 163083,
+      "bottom": 163882
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "valentinodonna-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 163085,
+          "w": 753,
+          "h": 794,
+          "top": 163085,
+          "bottom": 163880
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "valentinodonna-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 163085,
+          "w": 753,
+          "h": 794,
+          "top": 163085,
+          "bottom": 163880
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinodonna-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinodonna-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinodonna-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinodonna-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinodonna-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "valentinodonna-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 42,
+    "name": "Green Irish Tweed",
+    "brand": "CREED",
+    "sectionId": "greenirish",
+    "sectionClass": "content greenirish-section",
+    "section": {
+      "x": 0,
+      "y": 165681,
+      "w": 1910,
+      "h": 3186,
+      "top": 165681,
+      "bottom": 168868
+    },
+    "topRow": {
+      "x": 185,
+      "y": 165741,
+      "w": 1540,
+      "h": 1527,
+      "top": 165741,
+      "bottom": 167268
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 165741,
+      "w": 1540,
+      "h": 686,
+      "top": 165741,
+      "bottom": 166428
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 165750,
+      "w": 442,
+      "h": 422,
+      "top": 165750,
+      "bottom": 166173
+    },
+    "info": {
+      "x": 731,
+      "y": 165806,
+      "w": 941,
+      "h": 618,
+      "top": 165806,
+      "bottom": 166423
+    },
+    "profiles": {
+      "x": 185,
+      "y": 166470,
+      "w": 1540,
+      "h": 798,
+      "top": 166470,
+      "bottom": 167268
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "greenirish-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 166472,
+          "w": 753,
+          "h": 794,
+          "top": 166472,
+          "bottom": 167266
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "greenirish-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 166472,
+          "w": 753,
+          "h": 794,
+          "top": 166472,
+          "bottom": 167266
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "greenirish-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "greenirish-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "greenirish-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "greenirish-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "greenirish-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "greenirish-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 43,
+    "name": "Égoïste Platinum",
+    "brand": "CHANEL",
+    "sectionId": "egoiste",
+    "sectionClass": "content egoiste-section",
+    "section": {
+      "x": 0,
+      "y": 169068,
+      "w": 1910,
+      "h": 3186,
+      "top": 169068,
+      "bottom": 172254
+    },
+    "topRow": {
+      "x": 185,
+      "y": 169128,
+      "w": 1540,
+      "h": 1527,
+      "top": 169128,
+      "bottom": 170654
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 169128,
+      "w": 1540,
+      "h": 686,
+      "top": 169128,
+      "bottom": 169814
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 169137,
+      "w": 442,
+      "h": 422,
+      "top": 169137,
+      "bottom": 169559
+    },
+    "info": {
+      "x": 731,
+      "y": 169192,
+      "w": 941,
+      "h": 618,
+      "top": 169192,
+      "bottom": 169810
+    },
+    "profiles": {
+      "x": 185,
+      "y": 169856,
+      "w": 1540,
+      "h": 798,
+      "top": 169856,
+      "bottom": 170654
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "egoiste-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 169858,
+          "w": 753,
+          "h": 794,
+          "top": 169858,
+          "bottom": 170652
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "egoiste-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 169858,
+          "w": 753,
+          "h": 794,
+          "top": 169858,
+          "bottom": 170652
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "egoiste-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "egoiste-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "egoiste-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "egoiste-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "egoiste-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "egoiste-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 44,
+    "name": "A*Men Pure Havane",
+    "brand": "MUGLER",
+    "sectionId": "amenpure",
+    "sectionClass": "content amenpure-section",
+    "section": {
+      "x": 0,
+      "y": 172454,
+      "w": 1910,
+      "h": 3186,
+      "top": 172454,
+      "bottom": 175640
+    },
+    "topRow": {
+      "x": 185,
+      "y": 172514,
+      "w": 1540,
+      "h": 1527,
+      "top": 172514,
+      "bottom": 174041
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 172514,
+      "w": 1540,
+      "h": 686,
+      "top": 172514,
+      "bottom": 173200
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 172523,
+      "w": 442,
+      "h": 422,
+      "top": 172523,
+      "bottom": 172945
+    },
+    "info": {
+      "x": 731,
+      "y": 172578,
+      "w": 941,
+      "h": 618,
+      "top": 172578,
+      "bottom": 173196
+    },
+    "profiles": {
+      "x": 185,
+      "y": 173242,
+      "w": 1540,
+      "h": 798,
+      "top": 173242,
+      "bottom": 174041
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "amenpure-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 173244,
+          "w": 753,
+          "h": 794,
+          "top": 173244,
+          "bottom": 174039
+        },
+        "overflowX": 54,
+        "overflowY": 0
+      },
+      {
+        "className": "amenpure-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 173244,
+          "w": 753,
+          "h": 794,
+          "top": 173244,
+          "bottom": 174039
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "amenpure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "amenpure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "amenpure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "amenpure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "amenpure-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "amenpure-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 45,
+    "name": "Déclaration d'un Soir",
+    "brand": "CARTIER",
+    "sectionId": "declarationcartier",
+    "sectionClass": "content declarationcartier-section",
+    "section": {
+      "x": 0,
+      "y": 175840,
+      "w": 1910,
+      "h": 3186,
+      "top": 175840,
+      "bottom": 179027
+    },
+    "topRow": {
+      "x": 185,
+      "y": 175900,
+      "w": 1540,
+      "h": 1527,
+      "top": 175900,
+      "bottom": 177427
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 175900,
+      "w": 1540,
+      "h": 686,
+      "top": 175900,
+      "bottom": 176587
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 175909,
+      "w": 442,
+      "h": 422,
+      "top": 175909,
+      "bottom": 176332
+    },
+    "info": {
+      "x": 731,
+      "y": 175965,
+      "w": 941,
+      "h": 618,
+      "top": 175965,
+      "bottom": 176582
+    },
+    "profiles": {
+      "x": 185,
+      "y": 176629,
+      "w": 1540,
+      "h": 798,
+      "top": 176629,
+      "bottom": 177427
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "declarationcartier-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 176631,
+          "w": 753,
+          "h": 794,
+          "top": 176631,
+          "bottom": 177425
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "declarationcartier-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 176631,
+          "w": 753,
+          "h": 794,
+          "top": 176631,
+          "bottom": 177425
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "declarationcartier-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "declarationcartier-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "declarationcartier-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "declarationcartier-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "declarationcartier-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "declarationcartier-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 46,
+    "name": "La Yuqawam",
+    "brand": "RASASI",
+    "sectionId": "laween",
+    "sectionClass": "content laween-section",
+    "section": {
+      "x": 0,
+      "y": 179227,
+      "w": 1910,
+      "h": 3186,
+      "top": 179227,
+      "bottom": 182413
+    },
+    "topRow": {
+      "x": 185,
+      "y": 179287,
+      "w": 1540,
+      "h": 1527,
+      "top": 179287,
+      "bottom": 180813
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 179287,
+      "w": 1540,
+      "h": 686,
+      "top": 179287,
+      "bottom": 179973
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 179296,
+      "w": 442,
+      "h": 422,
+      "top": 179296,
+      "bottom": 179718
+    },
+    "info": {
+      "x": 731,
+      "y": 179351,
+      "w": 941,
+      "h": 618,
+      "top": 179351,
+      "bottom": 179969
+    },
+    "profiles": {
+      "x": 185,
+      "y": 180015,
+      "w": 1540,
+      "h": 798,
+      "top": 180015,
+      "bottom": 180813
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "laween-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 180017,
+          "w": 753,
+          "h": 794,
+          "top": 180017,
+          "bottom": 180811
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "laween-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 180017,
+          "w": 753,
+          "h": 794,
+          "top": 180017,
+          "bottom": 180811
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "laween-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "laween-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "laween-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "laween-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "laween-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "laween-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 47,
+    "name": "Cedrat Boisé",
+    "brand": "MANCERA",
+    "sectionId": "cedarsmancera",
+    "sectionClass": "content cedarsmancera-section",
+    "section": {
+      "x": 0,
+      "y": 182613,
+      "w": 1910,
+      "h": 3186,
+      "top": 182613,
+      "bottom": 185799
+    },
+    "topRow": {
+      "x": 185,
+      "y": 182673,
+      "w": 1540,
+      "h": 1527,
+      "top": 182673,
+      "bottom": 184200
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 182673,
+      "w": 1540,
+      "h": 686,
+      "top": 182673,
+      "bottom": 183359
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 182681,
+      "w": 442,
+      "h": 381,
+      "top": 182681,
+      "bottom": 183062
+    },
+    "info": {
+      "x": 731,
+      "y": 182737,
+      "w": 941,
+      "h": 618,
+      "top": 182737,
+      "bottom": 183355
+    },
+    "profiles": {
+      "x": 185,
+      "y": 183401,
+      "w": 1540,
+      "h": 798,
+      "top": 183401,
+      "bottom": 184200
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "cedarsmancera-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 183403,
+          "w": 753,
+          "h": 794,
+          "top": 183403,
+          "bottom": 184198
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "cedarsmancera-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 183403,
+          "w": 753,
+          "h": 794,
+          "top": 183403,
+          "bottom": 184198
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cedarsmancera-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cedarsmancera-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cedarsmancera-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cedarsmancera-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cedarsmancera-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "cedarsmancera-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 48,
+    "name": "Reflection Man",
+    "brand": "AMOUAGE",
+    "sectionId": "reflectionman",
+    "sectionClass": "content reflectionman-section",
+    "section": {
+      "x": 0,
+      "y": 185999,
+      "w": 1910,
+      "h": 3186,
+      "top": 185999,
+      "bottom": 189186
+    },
+    "topRow": {
+      "x": 185,
+      "y": 186059,
+      "w": 1540,
+      "h": 1527,
+      "top": 186059,
+      "bottom": 187586
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 186059,
+      "w": 1540,
+      "h": 686,
+      "top": 186059,
+      "bottom": 186746
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 186068,
+      "w": 442,
+      "h": 422,
+      "top": 186068,
+      "bottom": 186491
+    },
+    "info": {
+      "x": 731,
+      "y": 186124,
+      "w": 941,
+      "h": 618,
+      "top": 186124,
+      "bottom": 186741
+    },
+    "profiles": {
+      "x": 185,
+      "y": 186788,
+      "w": 1540,
+      "h": 798,
+      "top": 186788,
+      "bottom": 187586
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "reflectionman-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 186790,
+          "w": 753,
+          "h": 794,
+          "top": 186790,
+          "bottom": 187584
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "reflectionman-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 186790,
+          "w": 753,
+          "h": 794,
+          "top": 186790,
+          "bottom": 187584
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "reflectionman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "reflectionman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "reflectionman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "reflectionman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "reflectionman-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "reflectionman-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 49,
+    "name": "Sedley",
+    "brand": "PARFUMS DE MARLY",
+    "sectionId": "sedley",
+    "sectionClass": "content sedley-section",
+    "section": {
+      "x": 0,
+      "y": 189386,
+      "w": 1910,
+      "h": 3186,
+      "top": 189386,
+      "bottom": 192572
+    },
+    "topRow": {
+      "x": 185,
+      "y": 189446,
+      "w": 1540,
+      "h": 1527,
+      "top": 189446,
+      "bottom": 190972
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 189446,
+      "w": 1540,
+      "h": 686,
+      "top": 189446,
+      "bottom": 190132
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 189455,
+      "w": 442,
+      "h": 422,
+      "top": 189455,
+      "bottom": 189877
+    },
+    "info": {
+      "x": 731,
+      "y": 189510,
+      "w": 941,
+      "h": 618,
+      "top": 189510,
+      "bottom": 190128
+    },
+    "profiles": {
+      "x": 185,
+      "y": 190174,
+      "w": 1540,
+      "h": 798,
+      "top": 190174,
+      "bottom": 190972
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "sedley-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 190176,
+          "w": 753,
+          "h": 794,
+          "top": 190176,
+          "bottom": 190970
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "sedley-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 190176,
+          "w": 753,
+          "h": 794,
+          "top": 190176,
+          "bottom": 190970
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sedley-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sedley-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sedley-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sedley-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sedley-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sedley-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 50,
+    "name": "Side Effect",
+    "brand": "INITIO",
+    "sectionId": "sideeffect",
+    "sectionClass": "content sideeffect-section",
+    "section": {
+      "x": 0,
+      "y": 192772,
+      "w": 1910,
+      "h": 3186,
+      "top": 192772,
+      "bottom": 195958
+    },
+    "topRow": {
+      "x": 185,
+      "y": 192832,
+      "w": 1540,
+      "h": 1527,
+      "top": 192832,
+      "bottom": 194359
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 192832,
+      "w": 1540,
+      "h": 686,
+      "top": 192832,
+      "bottom": 193518
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 192841,
+      "w": 442,
+      "h": 422,
+      "top": 192841,
+      "bottom": 193263
+    },
+    "info": {
+      "x": 731,
+      "y": 192896,
+      "w": 941,
+      "h": 618,
+      "top": 192896,
+      "bottom": 193514
+    },
+    "profiles": {
+      "x": 185,
+      "y": 193560,
+      "w": 1540,
+      "h": 798,
+      "top": 193560,
+      "bottom": 194359
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "sideeffect-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 193562,
+          "w": 753,
+          "h": 794,
+          "top": 193562,
+          "bottom": 194357
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "sideeffect-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 193562,
+          "w": 753,
+          "h": 794,
+          "top": 193562,
+          "bottom": 194357
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sideeffect-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sideeffect-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sideeffect-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sideeffect-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sideeffect-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "sideeffect-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 51,
+    "name": "Naxos",
+    "brand": "XERJOFF",
+    "sectionId": "naxos",
+    "sectionClass": "content naxos-section",
+    "section": {
+      "x": 0,
+      "y": 196158,
+      "w": 1910,
+      "h": 3186,
+      "top": 196158,
+      "bottom": 199345
+    },
+    "topRow": {
+      "x": 185,
+      "y": 196218,
+      "w": 1540,
+      "h": 1527,
+      "top": 196218,
+      "bottom": 197745
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 196218,
+      "w": 1540,
+      "h": 686,
+      "top": 196218,
+      "bottom": 196905
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 196227,
+      "w": 442,
+      "h": 422,
+      "top": 196227,
+      "bottom": 196650
+    },
+    "info": {
+      "x": 731,
+      "y": 196283,
+      "w": 941,
+      "h": 618,
+      "top": 196283,
+      "bottom": 196900
+    },
+    "profiles": {
+      "x": 185,
+      "y": 196947,
+      "w": 1540,
+      "h": 798,
+      "top": 196947,
+      "bottom": 197745
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "naxos-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 196949,
+          "w": 753,
+          "h": 794,
+          "top": 196949,
+          "bottom": 197743
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "naxos-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 196949,
+          "w": 753,
+          "h": 794,
+          "top": 196949,
+          "bottom": 197743
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 9,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "naxos-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "naxos-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "naxos-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "naxos-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "naxos-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "naxos-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  },
+  {
+    "index": 52,
+    "name": "Grand Soir",
+    "brand": "MAISON FRANCIS KURKDJIAN",
+    "sectionId": "grandSoir",
+    "sectionClass": "content grandSoir-section",
+    "section": {
+      "x": 0,
+      "y": 199545,
+      "w": 1910,
+      "h": 3186,
+      "top": 199545,
+      "bottom": 202731
+    },
+    "topRow": {
+      "x": 185,
+      "y": 199605,
+      "w": 1540,
+      "h": 1527,
+      "top": 199605,
+      "bottom": 201131
+    },
+    "topRowDisplay": "grid",
+    "productSection": {
+      "x": 185,
+      "y": 199605,
+      "w": 1540,
+      "h": 686,
+      "top": 199605,
+      "bottom": 200291
+    },
+    "productSectionDisplay": "grid",
+    "productSectionColumns": "460px 1046px",
+    "image": {
+      "x": 159,
+      "y": 199614,
+      "w": 442,
+      "h": 422,
+      "top": 199614,
+      "bottom": 200036
+    },
+    "info": {
+      "x": 731,
+      "y": 199669,
+      "w": 941,
+      "h": 618,
+      "top": 199669,
+      "bottom": 200287
+    },
+    "profiles": {
+      "x": 185,
+      "y": 200333,
+      "w": 1540,
+      "h": 798,
+      "top": 200333,
+      "bottom": 201131
+    },
+    "profilesDisplay": "grid",
+    "profilesColumns": "753px 753px",
+    "cardCount": 2,
+    "cards": [
+      {
+        "className": "grandSoir-profile-card",
+        "rect": {
+          "x": 187,
+          "y": 200335,
+          "w": 753,
+          "h": 794,
+          "top": 200335,
+          "bottom": 201129
+        },
+        "overflowX": 51,
+        "overflowY": 0
+      },
+      {
+        "className": "grandSoir-profile-card",
+        "rect": {
+          "x": 970,
+          "y": 200335,
+          "w": 753,
+          "h": 794,
+          "top": 200335,
+          "bottom": 201129
+        },
+        "overflowX": 0,
+        "overflowY": 0
+      }
+    ],
+    "noteImageCount": 8,
+    "noteImgStats": {
+      "minW": 20.5,
+      "maxW": 20.5,
+      "minH": 20.5,
+      "maxH": 20.5
+    },
+    "noteSamples": [
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "grandSoir-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "grandSoir-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "grandSoir-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "grandSoir-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "grandSoir-crystal-card"
+      },
+      {
+        "w": 20.5,
+        "h": 20.5,
+        "parentW": 20.5,
+        "parentH": 20.5,
+        "parentClass": "ingredient-icon note-image-icon generated-note-image",
+        "grandClass": "grandSoir-crystal-card"
+      }
+    ],
+    "sectionOverflowX": 0,
+    "docOverflowX": 0
+  }
+]

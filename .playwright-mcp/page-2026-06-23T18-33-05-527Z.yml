@@ -1,0 +1,818 @@
+- generic [active] [ref=e1]:
+  - region "Announcement" [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: Parfumerie Charme collection continues • Page by page • Full fragrance sections
+      - generic [ref=e5]: Parfumerie Charme collection continues • Page by page • Full fragrance sections
+      - generic [ref=e6]: Parfumerie Charme collection continues • Page by page • Full fragrance sections
+      - generic [ref=e7]: Parfumerie Charme collection continues • Page by page • Full fragrance sections
+  - navigation [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - link "Home" [ref=e11] [cursor=pointer]:
+          - /url: index.html
+        - link "Page 2" [ref=e12] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=2
+        - link "Page 3" [ref=e13] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=3
+        - link "Page 4" [ref=e14] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=4
+      - generic [ref=e15]: Page 2 of 126 • 996 remaining fragrances
+      - link "Back to Grand Soir" [ref=e17] [cursor=pointer]:
+        - /url: index.html#grandSoir
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - paragraph [ref=e20]: Collection Continued
+      - heading "Parfumerie Charme" [level=1] [ref=e21]
+      - paragraph [ref=e22]: This page continues the home-page fragrance section layout. Use the page controls to move through the full catalog without loading every section at once.
+      - navigation [ref=e23]:
+        - generic [ref=e24]: Pages
+        - link "1" [ref=e25] [cursor=pointer]:
+          - /url: index.html
+        - link "Prev":
+          - /url: fragrance-pages.html?page=2
+        - link "2" [ref=e26] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=2
+        - link "3" [ref=e27] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=3
+        - link "4" [ref=e28] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=4
+        - link "5" [ref=e29] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=5
+        - link "6" [ref=e30] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=6
+        - link "7" [ref=e31] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=7
+        - link "8" [ref=e32] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=8
+        - link "Next" [ref=e33] [cursor=pointer]:
+          - /url: fragrance-pages.html?page=3
+    - generic [ref=e34]:
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - img "Acqua di Parma Blu Mediterraneo bottle" [ref=e39]
+            - generic [ref=e40]:
+              - generic [ref=e42]:
+                - heading "Acqua di Parma" [level=1] [ref=e43] [cursor=pointer]
+                - heading "Unisex • Citrus Aromatic" [level=2] [ref=e44]
+                - heading "Acqua di Parma Blu Mediterraneo" [level=3] [ref=e45]
+              - generic [ref=e46]:
+                - generic [ref=e49]: EDT
+                - generic [ref=e50]: "1999"
+              - generic [ref=e51]:
+                - button "Add to Favorites" [ref=e52] [cursor=pointer]:
+                  - generic [ref=e53]: Add to Favorites
+                - button "Request Scent" [ref=e54] [cursor=pointer]:
+                  - generic [ref=e55]: Request Scent
+              - paragraph [ref=e56]: A Mediterranean escape with bergamot, cedar, and mastic.
+          - generic [ref=e57]:
+            - article [ref=e58]:
+              - generic [ref=e59]:
+                - heading "Scent Profile" [level=3] [ref=e60]
+                - generic [ref=e61]: Performance estimate
+              - generic [ref=e62]:
+                - generic [ref=e63]:
+                  - generic [ref=e64]: Longevity
+                  - strong [ref=e67]: 86%
+                - generic [ref=e68]:
+                  - generic [ref=e69]: Projection
+                  - strong [ref=e72]: 61%
+                - generic [ref=e73]:
+                  - generic [ref=e74]: Versatility
+                  - strong [ref=e77]: 77%
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - img "bergamot"
+                  - generic [ref=e80]: bergamot
+                - generic [ref=e81]:
+                  - img "lemon"
+                  - generic [ref=e82]: lemon
+                - generic [ref=e83]:
+                  - img "cedar"
+                  - generic [ref=e84]: cedar
+                - generic [ref=e85]:
+                  - img "mastic"
+                  - generic [ref=e86]: mastic
+                - generic [ref=e87]:
+                  - img "myrtle"
+                  - generic [ref=e88]: myrtle
+            - article [ref=e89]:
+              - generic [ref=e90]:
+                - heading "Ingredients" [level=3] [ref=e91]
+                - generic [ref=e92]: Top • Heart • Base
+              - generic [ref=e93]:
+                - generic [ref=e94]: Top
+                - generic [ref=e95]:
+                  - generic [ref=e96]:
+                    - img "bergamot"
+                    - generic [ref=e97]: bergamot
+                  - generic [ref=e98]:
+                    - img "lemon"
+                    - generic [ref=e99]: lemon
+              - generic [ref=e100]:
+                - generic [ref=e101]: Heart
+                - generic [ref=e102]:
+                  - generic [ref=e103]:
+                    - img "cedar"
+                    - generic [ref=e104]: cedar
+                  - generic [ref=e105]:
+                    - img "mastic"
+                    - generic [ref=e106]: mastic
+              - generic [ref=e107]:
+                - generic [ref=e108]: Base
+                - generic [ref=e110]:
+                  - img "myrtle"
+                  - generic [ref=e111]: myrtle
+        - article [ref=e112]:
+          - generic [ref=e113]:
+            - heading "Fragrance Story" [level=3] [ref=e114]
+            - generic [ref=e115]: Acqua di Parma • Citrus Aromatic
+          - paragraph [ref=e116]: A Mediterranean escape with bergamot, cedar, and mastic.
+        - generic [ref=e117]:
+          - generic [ref=e118]:
+            - heading "User Reviews & Comments" [level=3] [ref=e119]
+            - generic [ref=e121]: Catalog fragrance
+          - generic [ref=e122]:
+            - generic [ref=e123]: 💬
+            - heading "No reviews yet" [level=4] [ref=e124]
+            - paragraph [ref=e125]: This fragrance can be promoted to a shop product page when needed.
+      - generic [ref=e127]:
+        - generic [ref=e128]:
+          - generic [ref=e129]:
+            - img "Acqua di Parma Colonia bottle"
+            - generic [ref=e130]:
+              - generic [ref=e132]:
+                - heading "Acqua di Parma" [level=1] [ref=e133] [cursor=pointer]
+                - heading "Unisex • Citrus Aromatic" [level=2] [ref=e134]
+                - heading "Acqua di Parma Colonia" [level=3] [ref=e135]
+              - generic [ref=e136]:
+                - generic [ref=e139]: EDT
+                - generic [ref=e140]: "1916"
+              - generic [ref=e141]:
+                - button "Add to Favorites" [ref=e142] [cursor=pointer]:
+                  - generic [ref=e143]: Add to Favorites
+                - button "Request Scent" [ref=e144] [cursor=pointer]:
+                  - generic [ref=e145]: Request Scent
+              - paragraph [ref=e146]: A classic Italian cologne with bergamot, lemon, and lavender.
+          - generic [ref=e147]:
+            - article [ref=e148]:
+              - generic [ref=e149]:
+                - heading "Scent Profile" [level=3] [ref=e150]
+                - generic [ref=e151]: Performance estimate
+              - generic [ref=e152]:
+                - generic [ref=e153]:
+                  - generic [ref=e154]: Longevity
+                  - strong [ref=e157]: 61%
+                - generic [ref=e158]:
+                  - generic [ref=e159]: Projection
+                  - strong [ref=e162]: 61%
+                - generic [ref=e163]:
+                  - generic [ref=e164]: Versatility
+                  - strong [ref=e167]: 77%
+              - generic [ref=e168]:
+                - generic [ref=e169]:
+                  - img "bergamot"
+                  - generic [ref=e170]: bergamot
+                - generic [ref=e171]:
+                  - img "lemon"
+                  - generic [ref=e172]: lemon
+                - generic [ref=e173]:
+                  - img "sweet orange"
+                  - generic [ref=e174]: sweet orange
+                - generic [ref=e175]:
+                  - img "lavender"
+                  - generic [ref=e176]: lavender
+                - generic [ref=e177]:
+                  - img "rose"
+                  - generic [ref=e178]: rose
+                - generic [ref=e179]:
+                  - img "sandalwood"
+                  - generic [ref=e180]: sandalwood
+            - article [ref=e181]:
+              - generic [ref=e182]:
+                - heading "Ingredients" [level=3] [ref=e183]
+                - generic [ref=e184]: Top • Heart • Base
+              - generic [ref=e185]:
+                - generic [ref=e186]: Top
+                - generic [ref=e187]:
+                  - generic [ref=e188]:
+                    - img "bergamot"
+                    - generic [ref=e189]: bergamot
+                  - generic [ref=e190]:
+                    - img "lemon"
+                    - generic [ref=e191]: lemon
+              - generic [ref=e192]:
+                - generic [ref=e193]: Heart
+                - generic [ref=e194]:
+                  - generic [ref=e195]:
+                    - img "sweet orange"
+                    - generic [ref=e196]: sweet orange
+                  - generic [ref=e197]:
+                    - img "lavender"
+                    - generic [ref=e198]: lavender
+              - generic [ref=e199]:
+                - generic [ref=e200]: Base
+                - generic [ref=e201]:
+                  - generic [ref=e202]:
+                    - img "rose"
+                    - generic [ref=e203]: rose
+                  - generic [ref=e204]:
+                    - img "sandalwood"
+                    - generic [ref=e205]: sandalwood
+        - article [ref=e206]:
+          - generic [ref=e207]:
+            - heading "Fragrance Story" [level=3] [ref=e208]
+            - generic [ref=e209]: Acqua di Parma • Citrus Aromatic
+          - paragraph [ref=e210]: A classic Italian cologne with bergamot, lemon, and lavender.
+        - generic [ref=e211]:
+          - generic [ref=e212]:
+            - heading "User Reviews & Comments" [level=3] [ref=e213]
+            - generic [ref=e215]: Catalog fragrance
+          - generic [ref=e216]:
+            - generic [ref=e217]: 💬
+            - heading "No reviews yet" [level=4] [ref=e218]
+            - paragraph [ref=e219]: This fragrance can be promoted to a shop product page when needed.
+      - generic [ref=e221]:
+        - generic [ref=e222]:
+          - generic [ref=e223]:
+            - img "Acqua di Parma Colonia Intensa bottle"
+            - generic [ref=e224]:
+              - generic [ref=e226]:
+                - heading "Acqua di Parma" [level=1] [ref=e227] [cursor=pointer]
+                - heading "Unisex • Citrus Aromatic" [level=2] [ref=e228]
+                - heading "Acqua di Parma Colonia Intensa" [level=3] [ref=e229]
+              - generic [ref=e230]:
+                - generic [ref=e233]: EDT
+                - generic [ref=e234]: "2007"
+              - generic [ref=e235]:
+                - button "Add to Favorites" [ref=e236] [cursor=pointer]:
+                  - generic [ref=e237]: Add to Favorites
+                - button "Request Scent" [ref=e238] [cursor=pointer]:
+                  - generic [ref=e239]: Request Scent
+              - paragraph [ref=e240]: An intense version of the classic cologne with bergamot, myrtle, and musk.
+          - generic [ref=e241]:
+            - article [ref=e242]:
+              - generic [ref=e243]:
+                - heading "Scent Profile" [level=3] [ref=e244]
+                - generic [ref=e245]: Performance estimate
+              - generic [ref=e246]:
+                - generic [ref=e247]:
+                  - generic [ref=e248]: Longevity
+                  - strong [ref=e251]: 93%
+                - generic [ref=e252]:
+                  - generic [ref=e253]: Projection
+                  - strong [ref=e256]: 61%
+                - generic [ref=e257]:
+                  - generic [ref=e258]: Versatility
+                  - strong [ref=e261]: 77%
+              - generic [ref=e262]:
+                - generic [ref=e263]:
+                  - img "bergamot"
+                  - generic [ref=e264]: bergamot
+                - generic [ref=e265]:
+                  - img "sicilian lemon"
+                  - generic [ref=e266]: sicilian lemon
+                - generic [ref=e267]:
+                  - img "myrtle"
+                  - generic [ref=e268]: myrtle
+                - generic [ref=e269]:
+                  - img "rose"
+                  - generic [ref=e270]: rose
+                - generic [ref=e271]:
+                  - img "sandalwood"
+                  - generic [ref=e272]: sandalwood
+                - generic [ref=e273]:
+                  - img "musk"
+                  - generic [ref=e274]: musk
+            - article [ref=e275]:
+              - generic [ref=e276]:
+                - heading "Ingredients" [level=3] [ref=e277]
+                - generic [ref=e278]: Top • Heart • Base
+              - generic [ref=e279]:
+                - generic [ref=e280]: Top
+                - generic [ref=e281]:
+                  - generic [ref=e282]:
+                    - img "bergamot"
+                    - generic [ref=e283]: bergamot
+                  - generic [ref=e284]:
+                    - img "sicilian lemon"
+                    - generic [ref=e285]: sicilian lemon
+              - generic [ref=e286]:
+                - generic [ref=e287]: Heart
+                - generic [ref=e288]:
+                  - generic [ref=e289]:
+                    - img "myrtle"
+                    - generic [ref=e290]: myrtle
+                  - generic [ref=e291]:
+                    - img "rose"
+                    - generic [ref=e292]: rose
+              - generic [ref=e293]:
+                - generic [ref=e294]: Base
+                - generic [ref=e295]:
+                  - generic [ref=e296]:
+                    - img "sandalwood"
+                    - generic [ref=e297]: sandalwood
+                  - generic [ref=e298]:
+                    - img "musk"
+                    - generic [ref=e299]: musk
+        - article [ref=e300]:
+          - generic [ref=e301]:
+            - heading "Fragrance Story" [level=3] [ref=e302]
+            - generic [ref=e303]: Acqua di Parma • Citrus Aromatic
+          - paragraph [ref=e304]: An intense version of the classic cologne with bergamot, myrtle, and musk.
+        - generic [ref=e305]:
+          - generic [ref=e306]:
+            - heading "User Reviews & Comments" [level=3] [ref=e307]
+            - generic [ref=e309]: Catalog fragrance
+          - generic [ref=e310]:
+            - generic [ref=e311]: 💬
+            - heading "No reviews yet" [level=4] [ref=e312]
+            - paragraph [ref=e313]: This fragrance can be promoted to a shop product page when needed.
+      - generic [ref=e315]:
+        - generic [ref=e316]:
+          - generic [ref=e317]:
+            - img "Adidas Team Force bottle"
+            - generic [ref=e318]:
+              - generic [ref=e320]:
+                - heading "Adidas" [level=1] [ref=e321] [cursor=pointer]
+                - heading "Unisex • Aromatic Spicy" [level=2] [ref=e322]
+                - heading "Adidas Team Force" [level=3] [ref=e323]
+              - generic [ref=e324]:
+                - generic [ref=e327]: EDT
+                - generic [ref=e328]: "2000"
+              - generic [ref=e329]:
+                - button "Add to Favorites" [ref=e330] [cursor=pointer]:
+                  - generic [ref=e331]: Add to Favorites
+                - button "Request Scent" [ref=e332] [cursor=pointer]:
+                  - generic [ref=e333]: Request Scent
+              - paragraph [ref=e334]: An energetic sport fragrance with citrus, spices, and woods.
+          - generic [ref=e335]:
+            - article [ref=e336]:
+              - generic [ref=e337]:
+                - heading "Scent Profile" [level=3] [ref=e338]
+                - generic [ref=e339]: Performance estimate
+              - generic [ref=e340]:
+                - generic [ref=e341]:
+                  - generic [ref=e342]: Longevity
+                  - strong [ref=e345]: 89%
+                - generic [ref=e346]:
+                  - generic [ref=e347]: Projection
+                  - strong [ref=e350]: 70%
+                - generic [ref=e351]:
+                  - generic [ref=e352]: Versatility
+                  - strong [ref=e355]: 77%
+              - generic [ref=e356]:
+                - generic [ref=e357]:
+                  - img "bergamot"
+                  - generic [ref=e358]: bergamot
+                - generic [ref=e359]:
+                  - img "juniper"
+                  - generic [ref=e360]: juniper
+                - generic [ref=e361]:
+                  - img "black pepper"
+                  - generic [ref=e362]: black pepper
+                - generic [ref=e363]:
+                  - img "cedar"
+                  - generic [ref=e364]: cedar
+                - generic [ref=e365]:
+                  - img "sandalwood"
+                  - generic [ref=e366]: sandalwood
+                - generic [ref=e367]:
+                  - img "musk"
+                  - generic [ref=e368]: musk
+            - article [ref=e369]:
+              - generic [ref=e370]:
+                - heading "Ingredients" [level=3] [ref=e371]
+                - generic [ref=e372]: Top • Heart • Base
+              - generic [ref=e373]:
+                - generic [ref=e374]: Top
+                - generic [ref=e375]:
+                  - generic [ref=e376]:
+                    - img "bergamot"
+                    - generic [ref=e377]: bergamot
+                  - generic [ref=e378]:
+                    - img "juniper"
+                    - generic [ref=e379]: juniper
+              - generic [ref=e380]:
+                - generic [ref=e381]: Heart
+                - generic [ref=e382]:
+                  - generic [ref=e383]:
+                    - img "black pepper"
+                    - generic [ref=e384]: black pepper
+                  - generic [ref=e385]:
+                    - img "cedar"
+                    - generic [ref=e386]: cedar
+              - generic [ref=e387]:
+                - generic [ref=e388]: Base
+                - generic [ref=e389]:
+                  - generic [ref=e390]:
+                    - img "sandalwood"
+                    - generic [ref=e391]: sandalwood
+                  - generic [ref=e392]:
+                    - img "musk"
+                    - generic [ref=e393]: musk
+        - article [ref=e394]:
+          - generic [ref=e395]:
+            - heading "Fragrance Story" [level=3] [ref=e396]
+            - generic [ref=e397]: Adidas • Aromatic Spicy
+          - paragraph [ref=e398]: An energetic sport fragrance with citrus, spices, and woods.
+        - generic [ref=e399]:
+          - generic [ref=e400]:
+            - heading "User Reviews & Comments" [level=3] [ref=e401]
+            - generic [ref=e403]: Catalog fragrance
+          - generic [ref=e404]:
+            - generic [ref=e405]: 💬
+            - heading "No reviews yet" [level=4] [ref=e406]
+            - paragraph [ref=e407]: This fragrance can be promoted to a shop product page when needed.
+      - generic [ref=e409]:
+        - generic [ref=e410]:
+          - generic [ref=e411]:
+            - img "Afnan 9pm bottle"
+            - generic [ref=e412]:
+              - generic [ref=e414]:
+                - heading "Afnan" [level=1] [ref=e415] [cursor=pointer]
+                - heading "Unisex • Oriental Spicy" [level=2] [ref=e416]
+                - heading "Afnan 9pm" [level=3] [ref=e417]
+              - generic [ref=e418]:
+                - generic [ref=e421]: EDP
+                - generic [ref=e422]: "2019"
+              - generic [ref=e423]:
+                - button "Add to Favorites" [ref=e424] [cursor=pointer]:
+                  - generic [ref=e425]: Add to Favorites
+                - button "Request Scent" [ref=e426] [cursor=pointer]:
+                  - generic [ref=e427]: Request Scent
+              - paragraph [ref=e428]: A rich and luxurious fragrance with oud, rose, and spices.
+          - generic [ref=e429]:
+            - article [ref=e430]:
+              - generic [ref=e431]:
+                - heading "Scent Profile" [level=3] [ref=e432]
+                - generic [ref=e433]: Performance estimate
+              - generic [ref=e434]:
+                - generic [ref=e435]:
+                  - generic [ref=e436]: Longevity
+                  - strong [ref=e439]: 73%
+                - generic [ref=e440]:
+                  - generic [ref=e441]: Projection
+                  - strong [ref=e444]: 86%
+                - generic [ref=e445]:
+                  - generic [ref=e446]: Versatility
+                  - strong [ref=e449]: 91%
+              - generic [ref=e450]:
+                - generic [ref=e451]:
+                  - img "bergamot"
+                  - generic [ref=e452]: bergamot
+                - generic [ref=e453]:
+                  - img "apple"
+                  - generic [ref=e454]: apple
+                - generic [ref=e455]:
+                  - img "rose"
+                  - generic [ref=e456]: rose
+                - generic [ref=e457]:
+                  - img "oud"
+                  - generic [ref=e458]: oud
+                - generic [ref=e459]:
+                  - img "vanilla"
+                  - generic [ref=e460]: vanilla
+                - generic [ref=e461]:
+                  - img "amber"
+                  - generic [ref=e462]: amber
+            - article [ref=e463]:
+              - generic [ref=e464]:
+                - heading "Ingredients" [level=3] [ref=e465]
+                - generic [ref=e466]: Top • Heart • Base
+              - generic [ref=e467]:
+                - generic [ref=e468]: Top
+                - generic [ref=e469]:
+                  - generic [ref=e470]:
+                    - img "bergamot"
+                    - generic [ref=e471]: bergamot
+                  - generic [ref=e472]:
+                    - img "apple"
+                    - generic [ref=e473]: apple
+              - generic [ref=e474]:
+                - generic [ref=e475]: Heart
+                - generic [ref=e476]:
+                  - generic [ref=e477]:
+                    - img "rose"
+                    - generic [ref=e478]: rose
+                  - generic [ref=e479]:
+                    - img "oud"
+                    - generic [ref=e480]: oud
+              - generic [ref=e481]:
+                - generic [ref=e482]: Base
+                - generic [ref=e483]:
+                  - generic [ref=e484]:
+                    - img "vanilla"
+                    - generic [ref=e485]: vanilla
+                  - generic [ref=e486]:
+                    - img "amber"
+                    - generic [ref=e487]: amber
+        - article [ref=e488]:
+          - generic [ref=e489]:
+            - heading "Fragrance Story" [level=3] [ref=e490]
+            - generic [ref=e491]: Afnan • Oriental Spicy
+          - paragraph [ref=e492]: A rich and luxurious fragrance with oud, rose, and spices.
+        - generic [ref=e493]:
+          - generic [ref=e494]:
+            - heading "User Reviews & Comments" [level=3] [ref=e495]
+            - generic [ref=e497]: Catalog fragrance
+          - generic [ref=e498]:
+            - generic [ref=e499]: 💬
+            - heading "No reviews yet" [level=4] [ref=e500]
+            - paragraph [ref=e501]: This fragrance can be promoted to a shop product page when needed.
+      - generic [ref=e503]:
+        - generic [ref=e504]:
+          - generic [ref=e505]:
+            - img "Afnan Supremacy Silver bottle"
+            - generic [ref=e506]:
+              - generic [ref=e508]:
+                - heading "Afnan" [level=1] [ref=e509] [cursor=pointer]
+                - heading "Unisex • Fresh Spicy" [level=2] [ref=e510]
+                - heading "Afnan Supremacy Silver" [level=3] [ref=e511]
+              - generic [ref=e512]:
+                - generic [ref=e515]: EDP
+                - generic [ref=e516]: "2020"
+              - generic [ref=e517]:
+                - button "Add to Favorites" [ref=e518] [cursor=pointer]:
+                  - generic [ref=e519]: Add to Favorites
+                - button "Request Scent" [ref=e520] [cursor=pointer]:
+                  - generic [ref=e521]: Request Scent
+              - paragraph [ref=e522]: A modern and elegant fragrance with citrus, lavender, and amber.
+          - generic [ref=e523]:
+            - article [ref=e524]:
+              - generic [ref=e525]:
+                - heading "Scent Profile" [level=3] [ref=e526]
+                - generic [ref=e527]: Performance estimate
+              - generic [ref=e528]:
+                - generic [ref=e529]:
+                  - generic [ref=e530]: Longevity
+                  - strong [ref=e533]: 79%
+                - generic [ref=e534]:
+                  - generic [ref=e535]: Projection
+                  - strong [ref=e538]: 86%
+                - generic [ref=e539]:
+                  - generic [ref=e540]: Versatility
+                  - strong [ref=e543]: 69%
+              - generic [ref=e544]:
+                - generic [ref=e545]:
+                  - img "lemon"
+                  - generic [ref=e546]: lemon
+                - generic [ref=e547]:
+                  - img "lavender"
+                  - generic [ref=e548]: lavender
+                - generic [ref=e549]:
+                  - img "apple"
+                  - generic [ref=e550]: apple
+                - generic [ref=e551]:
+                  - img "cedarwood"
+                  - generic [ref=e552]: cedarwood
+                - generic [ref=e553]:
+                  - img "amber"
+                  - generic [ref=e554]: amber
+                - generic [ref=e555]:
+                  - img "musk"
+                  - generic [ref=e556]: musk
+            - article [ref=e557]:
+              - generic [ref=e558]:
+                - heading "Ingredients" [level=3] [ref=e559]
+                - generic [ref=e560]: Top • Heart • Base
+              - generic [ref=e561]:
+                - generic [ref=e562]: Top
+                - generic [ref=e563]:
+                  - generic [ref=e564]:
+                    - img "lemon"
+                    - generic [ref=e565]: lemon
+                  - generic [ref=e566]:
+                    - img "lavender"
+                    - generic [ref=e567]: lavender
+              - generic [ref=e568]:
+                - generic [ref=e569]: Heart
+                - generic [ref=e570]:
+                  - generic [ref=e571]:
+                    - img "apple"
+                    - generic [ref=e572]: apple
+                  - generic [ref=e573]:
+                    - img "cedarwood"
+                    - generic [ref=e574]: cedarwood
+              - generic [ref=e575]:
+                - generic [ref=e576]: Base
+                - generic [ref=e577]:
+                  - generic [ref=e578]:
+                    - img "amber"
+                    - generic [ref=e579]: amber
+                  - generic [ref=e580]:
+                    - img "musk"
+                    - generic [ref=e581]: musk
+        - article [ref=e582]:
+          - generic [ref=e583]:
+            - heading "Fragrance Story" [level=3] [ref=e584]
+            - generic [ref=e585]: Afnan • Fresh Spicy
+          - paragraph [ref=e586]: A modern and elegant fragrance with citrus, lavender, and amber.
+        - generic [ref=e587]:
+          - generic [ref=e588]:
+            - heading "User Reviews & Comments" [level=3] [ref=e589]
+            - generic [ref=e591]: Catalog fragrance
+          - generic [ref=e592]:
+            - generic [ref=e593]: 💬
+            - heading "No reviews yet" [level=4] [ref=e594]
+            - paragraph [ref=e595]: This fragrance can be promoted to a shop product page when needed.
+      - generic [ref=e597]:
+        - generic [ref=e598]:
+          - generic [ref=e599]:
+            - img "Ajmal Dahn Al Oudh bottle"
+            - generic [ref=e600]:
+              - generic [ref=e602]:
+                - heading "Ajmal" [level=1] [ref=e603] [cursor=pointer]
+                - heading "Unisex • Oriental Woody" [level=2] [ref=e604]
+                - heading "Ajmal Dahn Al Oudh" [level=3] [ref=e605]
+              - generic [ref=e606]:
+                - generic [ref=e609]: EDT
+                - generic [ref=e610]: "1990"
+              - generic [ref=e611]:
+                - button "Add to Favorites" [ref=e612] [cursor=pointer]:
+                  - generic [ref=e613]: Add to Favorites
+                - button "Request Scent" [ref=e614] [cursor=pointer]:
+                  - generic [ref=e615]: Request Scent
+              - paragraph [ref=e616]: A traditional Middle Eastern oud with rose and saffron.
+          - generic [ref=e617]:
+            - article [ref=e618]:
+              - generic [ref=e619]:
+                - heading "Scent Profile" [level=3] [ref=e620]
+                - generic [ref=e621]: Performance estimate
+              - generic [ref=e622]:
+                - generic [ref=e623]:
+                  - generic [ref=e624]: Longevity
+                  - strong [ref=e627]: 90%
+                - generic [ref=e628]:
+                  - generic [ref=e629]: Projection
+                  - strong [ref=e632]: 87%
+                - generic [ref=e633]:
+                  - generic [ref=e634]: Versatility
+                  - strong [ref=e637]: 63%
+              - generic [ref=e638]:
+                - generic [ref=e639]:
+                  - img "oud"
+                  - generic [ref=e640]: oud
+                - generic [ref=e641]:
+                  - img "rose"
+                  - generic [ref=e642]: rose
+                - generic [ref=e643]:
+                  - img "saffron"
+                  - generic [ref=e644]: saffron
+                - generic [ref=e645]:
+                  - img "amber"
+                  - generic [ref=e646]: amber
+                - generic [ref=e647]:
+                  - img "sandalwood"
+                  - generic [ref=e648]: sandalwood
+            - article [ref=e649]:
+              - generic [ref=e650]:
+                - heading "Ingredients" [level=3] [ref=e651]
+                - generic [ref=e652]: Top • Heart • Base
+              - generic [ref=e653]:
+                - generic [ref=e654]: Top
+                - generic [ref=e655]:
+                  - generic [ref=e656]:
+                    - img "oud"
+                    - generic [ref=e657]: oud
+                  - generic [ref=e658]:
+                    - img "rose"
+                    - generic [ref=e659]: rose
+              - generic [ref=e660]:
+                - generic [ref=e661]: Heart
+                - generic [ref=e662]:
+                  - generic [ref=e663]:
+                    - img "saffron"
+                    - generic [ref=e664]: saffron
+                  - generic [ref=e665]:
+                    - img "amber"
+                    - generic [ref=e666]: amber
+              - generic [ref=e667]:
+                - generic [ref=e668]: Base
+                - generic [ref=e670]:
+                  - img "sandalwood"
+                  - generic [ref=e671]: sandalwood
+        - article [ref=e672]:
+          - generic [ref=e673]:
+            - heading "Fragrance Story" [level=3] [ref=e674]
+            - generic [ref=e675]: Ajmal • Oriental Woody
+          - paragraph [ref=e676]: A traditional Middle Eastern oud with rose and saffron.
+        - generic [ref=e677]:
+          - generic [ref=e678]:
+            - heading "User Reviews & Comments" [level=3] [ref=e679]
+            - generic [ref=e681]: Catalog fragrance
+          - generic [ref=e682]:
+            - generic [ref=e683]: 💬
+            - heading "No reviews yet" [level=4] [ref=e684]
+            - paragraph [ref=e685]: This fragrance can be promoted to a shop product page when needed.
+      - generic [ref=e687]:
+        - generic [ref=e688]:
+          - generic [ref=e689]:
+            - img "Al Haramain Hypno flower bottle"
+            - generic [ref=e690]:
+              - generic [ref=e692]:
+                - heading "Al Haramain" [level=1] [ref=e693] [cursor=pointer]
+                - heading "Women • Oriental Floral" [level=2] [ref=e694]
+                - heading "Al Haramain Hypno flower" [level=3] [ref=e695]
+              - generic [ref=e696]:
+                - generic [ref=e699]: EDT
+                - generic [ref=e700]: "2019"
+              - generic [ref=e701]:
+                - button "Add to Favorites" [ref=e702] [cursor=pointer]:
+                  - generic [ref=e703]: Add to Favorites
+                - button "Request Scent" [ref=e704] [cursor=pointer]:
+                  - generic [ref=e705]: Request Scent
+              - paragraph [ref=e706]: A hypnotic floral fragrance with jasmine, rose, and white flowers.
+          - generic [ref=e707]:
+            - article [ref=e708]:
+              - generic [ref=e709]:
+                - heading "Scent Profile" [level=3] [ref=e710]
+                - generic [ref=e711]: Performance estimate
+              - generic [ref=e712]:
+                - generic [ref=e713]:
+                  - generic [ref=e714]: Longevity
+                  - strong [ref=e717]: 86%
+                - generic [ref=e718]:
+                  - generic [ref=e719]: Projection
+                  - strong [ref=e722]: 76%
+                - generic [ref=e723]:
+                  - generic [ref=e724]: Versatility
+                  - strong [ref=e727]: 65%
+              - generic [ref=e728]:
+                - generic [ref=e729]:
+                  - img "jasmine"
+                  - generic [ref=e730]: jasmine
+                - generic [ref=e731]:
+                  - img "rose"
+                  - generic [ref=e732]: rose
+                - generic [ref=e733]:
+                  - img "white flowers"
+                  - generic [ref=e734]: white flowers
+                - generic [ref=e735]:
+                  - img "amber"
+                  - generic [ref=e736]: amber
+                - generic [ref=e737]:
+                  - img "musk"
+                  - generic [ref=e738]: musk
+            - article [ref=e739]:
+              - generic [ref=e740]:
+                - heading "Ingredients" [level=3] [ref=e741]
+                - generic [ref=e742]: Top • Heart • Base
+              - generic [ref=e743]:
+                - generic [ref=e744]: Top
+                - generic [ref=e745]:
+                  - generic [ref=e746]:
+                    - img "jasmine"
+                    - generic [ref=e747]: jasmine
+                  - generic [ref=e748]:
+                    - img "rose"
+                    - generic [ref=e749]: rose
+              - generic [ref=e750]:
+                - generic [ref=e751]: Heart
+                - generic [ref=e752]:
+                  - generic [ref=e753]:
+                    - img "white flowers"
+                    - generic [ref=e754]: white flowers
+                  - generic [ref=e755]:
+                    - img "amber"
+                    - generic [ref=e756]: amber
+              - generic [ref=e757]:
+                - generic [ref=e758]: Base
+                - generic [ref=e760]:
+                  - img "musk"
+                  - generic [ref=e761]: musk
+        - article [ref=e762]:
+          - generic [ref=e763]:
+            - heading "Fragrance Story" [level=3] [ref=e764]
+            - generic [ref=e765]: Al Haramain • Oriental Floral
+          - paragraph [ref=e766]: A hypnotic floral fragrance with jasmine, rose, and white flowers.
+        - generic [ref=e767]:
+          - generic [ref=e768]:
+            - heading "User Reviews & Comments" [level=3] [ref=e769]
+            - generic [ref=e771]: Catalog fragrance
+          - generic [ref=e772]:
+            - generic [ref=e773]: 💬
+            - heading "No reviews yet" [level=4] [ref=e774]
+            - paragraph [ref=e775]: This fragrance can be promoted to a shop product page when needed.
+    - navigation [ref=e776]:
+      - generic [ref=e777]: Pages
+      - link "1" [ref=e778] [cursor=pointer]:
+        - /url: index.html
+      - link "Prev":
+        - /url: fragrance-pages.html?page=2
+      - link "2" [ref=e779] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=2
+      - link "3" [ref=e780] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=3
+      - link "4" [ref=e781] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=4
+      - link "5" [ref=e782] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=5
+      - link "6" [ref=e783] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=6
+      - link "7" [ref=e784] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=7
+      - link "8" [ref=e785] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=8
+      - link "Next" [ref=e786] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=3

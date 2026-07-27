@@ -16,6 +16,8 @@ class SearchScreen extends StatefulWidget {
   final String? initialBrand;
   final String? initialFamily;
   final String? initialMood;
+  final bool showBackButton;
+  final VoidCallback? onBack;
 
   const SearchScreen({
     super.key,
@@ -23,6 +25,8 @@ class SearchScreen extends StatefulWidget {
     this.initialBrand,
     this.initialFamily,
     this.initialMood,
+    this.showBackButton = true,
+    this.onBack,
   });
 
   @override
@@ -290,14 +294,19 @@ class _SearchScreenState extends State<SearchScreen>
       padding: const EdgeInsets.fromLTRB(8, 8, 16, 4),
       child: Row(
         children: [
-          // Back button
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                size: 18, color: AppTheme.textSecondary),
-            onPressed: () => Navigator.pop(context),
-            splashRadius: 22,
-          ),
-          const SizedBox(width: 4),
+          if (widget.showBackButton) ...[
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                  size: 18, color: AppTheme.textSecondary),
+              onPressed: widget.onBack ?? () {
+                if (Navigator.of(context).canPop()) {
+                  Navigator.pop(context);
+                }
+              },
+              splashRadius: 22,
+            ),
+            const SizedBox(width: 4),
+          ],
           // Search bar
           Expanded(child: _buildSearchBar()),
         ],

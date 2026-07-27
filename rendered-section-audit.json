@@ -1,0 +1,502 @@
+[
+  {
+    "id": "pegasus",
+    "noteCards": 16,
+    "hydrated": 16,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 58,
+    "viewportOverflow": 0,
+    "height": 6322
+  },
+  {
+    "id": "baccaratrouge",
+    "noteCards": 6,
+    "hydrated": 6,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 0,
+    "viewportOverflow": 0,
+    "height": 4412
+  },
+  {
+    "id": "blackorchid",
+    "noteCards": 6,
+    "hydrated": 6,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 21,
+    "viewportOverflow": 0,
+    "height": 4546
+  },
+  {
+    "id": "aventus",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 0,
+    "viewportOverflow": 0,
+    "height": 4301
+  },
+  {
+    "id": "sauvage",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 108,
+    "viewportOverflow": 0,
+    "height": 3626
+  },
+  {
+    "id": "bleudechanel",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 196,
+    "viewportOverflow": 0,
+    "height": 3345
+  },
+  {
+    "id": "tobaccovanille",
+    "noteCards": 6,
+    "hydrated": 6,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 104,
+    "viewportOverflow": 0,
+    "height": 3559
+  },
+  {
+    "id": "oudwood",
+    "noteCards": 5,
+    "hydrated": 5,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 105,
+    "viewportOverflow": 0,
+    "height": 3459
+  },
+  {
+    "id": "lanuit",
+    "noteCards": 5,
+    "hydrated": 5,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 108,
+    "viewportOverflow": 0,
+    "height": 3307
+  },
+  {
+    "id": "lostcherry",
+    "noteCards": 14,
+    "hydrated": 14,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 105,
+    "viewportOverflow": 0,
+    "height": 3830
+  },
+  {
+    "id": "yvsl",
+    "noteCards": 3,
+    "hydrated": 3,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4285
+  },
+  {
+    "id": "aquadigio",
+    "noteCards": 2,
+    "hydrated": 2,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4352
+  },
+  {
+    "id": "dy",
+    "noteCards": 4,
+    "hydrated": 4,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4305
+  },
+  {
+    "id": "versaceeros",
+    "noteCards": 2,
+    "hydrated": 2,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4325
+  },
+  {
+    "id": "jpgultramale",
+    "noteCards": 4,
+    "hydrated": 4,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4305
+  },
+  {
+    "id": "invictus",
+    "noteCards": 2,
+    "hydrated": 2,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4332
+  },
+  {
+    "id": "valentinouomo",
+    "noteCards": 2,
+    "hydrated": 2,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4354
+  },
+  {
+    "id": "spicebomb",
+    "noteCards": 5,
+    "hydrated": 5,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4334
+  },
+  {
+    "id": "explorer",
+    "noteCards": 5,
+    "hydrated": 5,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4362
+  },
+  {
+    "id": "blv",
+    "noteCards": 3,
+    "hydrated": 3,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 96,
+    "viewportOverflow": 0,
+    "height": 4381
+  },
+  {
+    "id": "diorhomme",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 212,
+    "viewportOverflow": 0,
+    "height": 2733
+  },
+  {
+    "id": "allure",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 209,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "tuscanleather",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 212,
+    "viewportOverflow": 0,
+    "height": 2749
+  },
+  {
+    "id": "armanicode",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 207,
+    "viewportOverflow": 0,
+    "height": 2749
+  },
+  {
+    "id": "lhommeideal",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 210,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "terredhermes",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 212,
+    "viewportOverflow": 0,
+    "height": 2711
+  },
+  {
+    "id": "gentleman",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 212,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "wantedbynight",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 207,
+    "viewportOverflow": 0,
+    "height": 2684
+  },
+  {
+    "id": "kbyDG",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 219,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "leaudissey",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 211,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "chbadboy",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 212,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "ysllibre",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 219,
+    "viewportOverflow": 0,
+    "height": 2776
+  },
+  {
+    "id": "fireplace",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 210,
+    "viewportOverflow": 0,
+    "height": 2749
+  },
+  {
+    "id": "pradacarbon",
+    "noteCards": 7,
+    "hydrated": 7,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 217,
+    "viewportOverflow": 0,
+    "height": 2684
+  },
+  {
+    "id": "burberryhero",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 207,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "narcisoforhim",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 212,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "cketernity",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 209,
+    "viewportOverflow": 0,
+    "height": 2706
+  },
+  {
+    "id": "gucciguilty",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 212,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "valentinodonna",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 210,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "greenirish",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 209,
+    "viewportOverflow": 0,
+    "height": 2749
+  },
+  {
+    "id": "egoiste",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 209,
+    "viewportOverflow": 0,
+    "height": 2706
+  },
+  {
+    "id": "amenpure",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 218,
+    "viewportOverflow": 0,
+    "height": 2706
+  },
+  {
+    "id": "declarationcartier",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 207,
+    "viewportOverflow": 0,
+    "height": 2706
+  },
+  {
+    "id": "laween",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 204,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "cedarsmancera",
+    "noteCards": 7,
+    "hydrated": 7,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 209,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "reflectionman",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 209,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "sedley",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 211,
+    "viewportOverflow": 0,
+    "height": 2728
+  },
+  {
+    "id": "sideeffect",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 210,
+    "viewportOverflow": 0,
+    "height": 2684
+  },
+  {
+    "id": "naxos",
+    "noteCards": 9,
+    "hydrated": 9,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 210,
+    "viewportOverflow": 0,
+    "height": 2706
+  },
+  {
+    "id": "grandSoir",
+    "noteCards": 8,
+    "hydrated": 8,
+    "missing": 0,
+    "dup": 0,
+    "overflow": 210,
+    "viewportOverflow": 0,
+    "height": 2706
+  }
+]

@@ -8,31 +8,28 @@
     "dev": "nodemon server.js",
     "init-db": "node scripts/init-database.js",
     "update-avatars": "node scripts/update-avatars.js",
-    "gen-image-manifest": "node scripts/generate-fragrance-image-manifest.cjs",
-    "import-fragrance-images": "node scripts/import-fragrance-images.cjs",
-    "gen-fragrance-placeholders": "node scripts/generate-fragrance-placeholders.cjs",
-    "import-fragrance-images-derived": "node scripts/import-fragrance-images-derived.cjs"
+    "audit": "npm audit --omit=dev"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "debug": "^4.4.1",
-    "dompurify": "^3.2.6",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-rate-limit": "^7.1.5",
-    "helmet": "^7.1.0",
-    "jsdom": "^26.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^2.0.2",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "debug": "^4.4.3",
+    "dompurify": "^3.4.11",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.2",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
+    "jsdom": "^29.1.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0",
     "node-fetch": "^3.3.2",
-    "nodemailer": "^7.0.5",
-    "sharp": "^0.34.3",
-    "sqlite3": "^5.1.6",
-    "validator": "^13.11.0"
+    "nodemailer": "^9.0.1",
+    "sharp": "^0.35.2",
+    "sqlite3": "^6.0.1",
+    "validator": "^13.15.35"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.1.14"
   },
   "keywords": [
     "perfume",

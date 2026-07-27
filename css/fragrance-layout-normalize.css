@@ -1,0 +1,407 @@
+/* Final shared normalization for generated fragrance sections.
+   Loaded after perfume-specific profile files so structural rules win the cascade. */
+
+.perfume-top-row {
+    width: min(1540px, calc(100vw - 48px)) !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: clamp(28px, 3vw, 46px) !important;
+    align-items: start !important;
+    isolation: isolate !important;
+}
+
+.perfume-top-row > [class$="-product-section"] {
+    width: 100% !important;
+    max-width: 980px !important;
+    margin: 0 auto !important;
+    display: grid !important;
+    grid-template-columns: minmax(280px, 420px) minmax(340px, 520px) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: clamp(28px, 4vw, 56px) !important;
+    flex-wrap: nowrap !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.perfume-top-row > [class$="-product-section"] > img,
+.perfume-top-row > [class$="-product-section"] img[class$="-image"],
+.perfume-top-row > [class$="-product-section"] img[class*="-image"] {
+    width: min(100%, 420px) !important;
+    max-width: 420px !important;
+    max-height: 480px !important;
+    height: auto !important;
+    object-fit: contain !important;
+    justify-self: center !important;
+    align-self: center !important;
+    margin: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.perfume-top-row > [class$="-product-section"] .product-info-section {
+    width: 100% !important;
+    max-width: 520px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-self: center !important;
+    justify-self: center !important;
+    text-align: center !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.perfume-top-row > [class$="-profiles-container"] {
+    width: 100% !important;
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: clamp(22px, 2.4vw, 34px) !important;
+    align-items: stretch !important;
+    justify-items: stretch !important;
+    overflow: visible !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.perfume-top-row > [class$="-profiles-container"] > *,
+.perfume-top-row > [class$="-profiles-container"] > [class*="scent-profile"],
+.perfume-top-row > [class$="-profiles-container"] > [class*="ingredients"],
+.perfume-top-row > [class$="-profiles-container"] > [class*="profile-card"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    justify-self: stretch !important;
+    align-self: stretch !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.perfume-top-row .profile-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.perfume-top-row [class*="profile-card"],
+.perfume-top-row [class*="scent-profile"],
+.perfume-top-row [class*="ingredients"] {
+    overflow: hidden !important;
+}
+
+.perfume-top-row [class*="radar-container"],
+.perfume-top-row [class*="dial-container"],
+.perfume-top-row [class*="constellation"],
+.perfume-top-row [class*="rings-container"],
+.perfume-top-row [class*="equalizer"],
+.perfume-top-row [class*="timeline"],
+.perfume-top-row [class*="split-bars"],
+.perfume-top-row [class*="wave-grid"],
+.perfume-top-row [class*="crystal-grid"] {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.perfume-top-row svg[class*="radar"],
+.perfume-top-row svg[class*="dial"],
+.perfume-top-row svg[class*="constellation"],
+.perfume-top-row svg[class*="rings"] {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Real ingredient/note images should not inherit tiny font-size-based dimensions. */
+.perfume-top-row .note-image-icon {
+    --note-icon-size: 46px;
+    width: var(--note-icon-size) !important;
+    height: var(--note-icon-size) !important;
+    min-width: var(--note-icon-size) !important;
+    min-height: var(--note-icon-size) !important;
+    flex: 0 0 var(--note-icon-size) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    font-size: 0 !important;
+    overflow: visible !important;
+}
+
+.perfume-top-row .note-real-image {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+.perfume-top-row .chip .note-image-icon,
+.perfume-top-row [class$="-chip"] .note-image-icon,
+.perfume-top-row [class*="-note-pill"] .note-image-icon {
+    --note-icon-size: 38px;
+}
+
+.perfume-top-row [class$="-crystal-card"] .note-image-icon,
+.perfume-top-row .crystal-card .note-image-icon,
+.perfume-top-row [class*="-noir-card"] .note-image-icon,
+.perfume-top-row [class*="-heritage-tag"] .note-image-icon,
+.perfume-top-row [class*="-note-card"] .note-image-icon,
+.perfume-top-row [class*="-ingredient-card"] .note-image-icon,
+.perfume-top-row [class$="-leaf"] .note-image-icon,
+.perfume-top-row [class$="-star-note"] .note-image-icon,
+.perfume-top-row [class$="-petal"] .note-image-icon,
+.perfume-top-row [class$="-petal-inner"] .note-image-icon {
+    --note-icon-size: 46px;
+}
+
+.perfume-top-row .chip,
+.perfume-top-row [class$="-chip"],
+.perfume-top-row [class*="-note-pill"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-height: 50px !important;
+}
+
+.perfume-top-row [class$="-crystal-card"],
+.perfume-top-row .crystal-card,
+.perfume-top-row [class*="-noir-card"],
+.perfume-top-row [class*="-heritage-tag"],
+.perfume-top-row [class*="-note-card"],
+.perfume-top-row [class*="-ingredient-card"],
+.perfume-top-row [class$="-leaf"],
+.perfume-top-row [class$="-star-note"],
+.perfume-top-row [class$="-petal"],
+.perfume-top-row [class$="-petal-inner"] {
+    gap: 10px !important;
+    min-width: 110px !important;
+    min-height: 92px !important;
+    box-sizing: border-box !important;
+}
+
+.perfume-top-row [class$="-crystal-name"],
+.perfume-top-row [class$="-noir-name"],
+.perfume-top-row [class$="-tag-name"],
+.perfume-top-row [class$="-chip-name"],
+.perfume-top-row [class$="-pill-name"],
+.perfume-top-row [class$="-card-name"],
+.perfume-top-row [class$="-leaf-name"],
+.perfume-top-row [class$="-star-name"],
+.perfume-top-row [class$="-petal-name"],
+.perfume-top-row .note-name,
+.perfume-top-row .ingredient-name {
+    overflow-wrap: anywhere !important;
+    text-align: center !important;
+}
+
+@media (max-width: 1024px) {
+    .perfume-top-row {
+        width: min(100%, calc(100vw - 32px)) !important;
+    }
+
+    .perfume-top-row > [class$="-product-section"] {
+        max-width: 820px !important;
+        grid-template-columns: minmax(220px, 340px) minmax(280px, 1fr) !important;
+    }
+
+    .perfume-top-row > [class$="-product-section"] > img,
+    .perfume-top-row > [class$="-product-section"] img[class$="-image"],
+    .perfume-top-row > [class$="-product-section"] img[class*="-image"] {
+        max-width: 340px !important;
+        max-height: 400px !important;
+    }
+}
+
+@media (max-width: 760px) {
+    .perfume-top-row {
+        width: min(100%, calc(100vw - 24px)) !important;
+        gap: 24px !important;
+    }
+
+    .perfume-top-row > [class$="-product-section"],
+    .perfume-top-row > [class$="-profiles-container"] {
+        grid-template-columns: 1fr !important;
+        max-width: 640px !important;
+    }
+
+    .perfume-top-row > [class$="-product-section"] > img,
+    .perfume-top-row > [class$="-product-section"] img[class$="-image"],
+    .perfume-top-row > [class$="-product-section"] img[class*="-image"] {
+        max-width: min(300px, 86vw) !important;
+    }
+
+    .perfume-top-row .note-image-icon {
+        --note-icon-size: 40px;
+    }
+
+    .perfume-top-row .chip .note-image-icon,
+    .perfume-top-row [class$="-chip"] .note-image-icon,
+    .perfume-top-row [class*="-note-pill"] .note-image-icon {
+        --note-icon-size: 34px;
+    }
+}
+
+/* Pegasus predates the generated perfume-top-row structure; normalize it to the same rhythm. */
+.pegasus-section {
+    display: grid !important;
+    grid-template-columns: minmax(280px, 420px) minmax(340px, 520px) !important;
+    justify-content: center !important;
+    align-items: start !important;
+    column-gap: clamp(28px, 4vw, 56px) !important;
+    row-gap: clamp(28px, 3vw, 46px) !important;
+}
+
+.pegasus-section > :not(.pegasus-image):not(.product-title):not(.pegasus-scent-profile):not(.pegasus-ingredients) {
+    grid-column: 1 / -1 !important;
+    justify-self: stretch !important;
+}
+
+.pegasus-section .pegasus-additional-ratings,
+.pegasus-section .reviews-section,
+.pegasus-section .pegasus-reddit-review-section,
+.pegasus-section .pegasus-fragrance-description,
+.pegasus-section .pegasus-rating-score,
+.pegasus-section .pegasus-perfume-description {
+    width: min(100%, 1240px) !important;
+    max-width: calc(100vw - 48px) !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+}
+
+.pegasus-section > .pegasus-image {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: min(100%, 420px) !important;
+    max-width: 420px !important;
+    max-height: 460px !important;
+    height: auto !important;
+    justify-self: center !important;
+    align-self: center !important;
+    margin: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.pegasus-section > .product-title {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    max-width: 520px !important;
+    min-width: 0 !important;
+    justify-self: center !important;
+    align-self: center !important;
+    margin: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.pegasus-section > .pegasus-scent-profile,
+.pegasus-section > .pegasus-ingredients {
+    width: 100% !important;
+    max-width: 603px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    justify-self: stretch !important;
+    align-self: stretch !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.pegasus-section > .pegasus-scent-profile {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    justify-self: stretch !important;
+}
+
+.pegasus-section > .pegasus-ingredients {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    justify-self: stretch !important;
+}
+
+.pegasus-section .scent-profile-container,
+.pegasus-section .pegasus-ingredients {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.pegasus-section .note-image-icon {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    flex: 0 0 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    font-size: 0 !important;
+}
+
+.pegasus-section .note-real-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+.pegasus-section .chip {
+    min-height: 52px !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+@media (max-width: 760px) {
+    .pegasus-section {
+        grid-template-columns: 1fr !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    .pegasus-section > .pegasus-image,
+    .pegasus-section > .product-title,
+    .pegasus-section > .pegasus-scent-profile,
+    .pegasus-section > .pegasus-ingredients {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+        width: 100% !important;
+        max-width: min(640px, calc(100vw - 56px)) !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .pegasus-section > .pegasus-image {
+        max-width: min(300px, 86vw) !important;
+    }
+
+    .pegasus-section > .product-title {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .pegasus-section .pegasus-additional-ratings,
+    .pegasus-section .reviews-section,
+    .pegasus-section .pegasus-reddit-review-section,
+    .pegasus-section .pegasus-fragrance-description,
+    .pegasus-section .pegasus-rating-score,
+    .pegasus-section .pegasus-perfume-description {
+        max-width: calc(100vw - 32px) !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}

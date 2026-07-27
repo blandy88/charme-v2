@@ -1,0 +1,1911 @@
+- generic [active] [ref=e1]:
+  - region "Announcement" [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: Parfumerie Charme collection continues - full home-style fragrance sections
+      - generic [ref=e5]: Parfumerie Charme collection continues - full home-style fragrance sections
+      - generic [ref=e6]: Parfumerie Charme collection continues - full home-style fragrance sections
+      - generic [ref=e7]: Parfumerie Charme collection continues - full home-style fragrance sections
+  - navigation [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - link "Page 1" [ref=e11] [cursor=pointer]:
+          - /url: index.html
+        - link "Page 2" [ref=e12] [cursor=pointer]:
+          - /url: fragrance-page.html?page=2
+        - link "Page 3" [ref=e13] [cursor=pointer]:
+          - /url: fragrance-page.html?page=3
+        - link "Page 4" [ref=e14] [cursor=pointer]:
+          - /url: fragrance-page.html?page=4
+      - generic [ref=e15]: Page 3 of 122 - 962 remaining fragrances
+      - link "Back" [ref=e17] [cursor=pointer]:
+        - /url: index.html#catalogPageNav
+  - main [ref=e18]:
+    - navigation "Collection pages" [ref=e19]:
+      - generic [ref=e20]: Pages
+      - link "1" [ref=e21] [cursor=pointer]:
+        - /url: index.html#catalogPageNav
+      - link "Prev" [ref=e22] [cursor=pointer]:
+        - /url: fragrance-page.html?page=2
+      - link "2" [ref=e23] [cursor=pointer]:
+        - /url: fragrance-page.html?page=2
+      - link "3" [ref=e24] [cursor=pointer]:
+        - /url: fragrance-page.html?page=3
+      - link "4" [ref=e25] [cursor=pointer]:
+        - /url: fragrance-page.html?page=4
+      - link "5" [ref=e26] [cursor=pointer]:
+        - /url: fragrance-page.html?page=5
+      - link "6" [ref=e27] [cursor=pointer]:
+        - /url: fragrance-page.html?page=6
+      - link "7" [ref=e28] [cursor=pointer]:
+        - /url: fragrance-page.html?page=7
+      - link "8" [ref=e29] [cursor=pointer]:
+        - /url: fragrance-page.html?page=8
+      - link "Next" [ref=e30] [cursor=pointer]:
+        - /url: fragrance-page.html?page=4
+    - generic [ref=e31]:
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - img "Al Haramain Junoon Oud bottle"
+            - generic [ref=e36]:
+              - generic [ref=e38]:
+                - heading "AL HARAMAIN" [level=1] [ref=e39] [cursor=pointer]
+                - heading "Unisex - Amber Woody" [level=2] [ref=e40]
+                - heading "Junoon Oud" [level=3] [ref=e41]
+              - generic [ref=e42]:
+                - generic [ref=e49]: EDP
+                - generic [ref=e50]: 2021 - Amber Woody
+              - generic [ref=e51]:
+                - button "Add to Favorites" [ref=e53] [cursor=pointer]:
+                  - generic [ref=e54]:
+                    - img [ref=e55]
+                    - img [ref=e57]
+                  - generic [ref=e59]: Add to Favorites
+                - button "Request Scent" [ref=e61] [cursor=pointer]:
+                  - img [ref=e63]
+                  - generic [ref=e67]: Request Scent
+              - generic [ref=e68]:
+                - generic [ref=e69]:
+                  - heading "Select Quality" [level=4] [ref=e70]
+                  - generic [ref=e71]: Choose Your Preference
+                - generic [ref=e72]:
+                  - generic [ref=e80] [cursor=pointer]:
+                    - generic [ref=e81]: EDP
+                    - generic [ref=e82]: Premium oil formulation
+                  - generic [ref=e91] [cursor=pointer]:
+                    - generic [ref=e92]: Discovery Vial
+                    - generic [ref=e93]: High-quality sample format
+          - generic [ref=e95]:
+            - generic [ref=e97]:
+              - generic [ref=e98]:
+                - heading "Scent Profile" [level=3] [ref=e99]
+                - generic [ref=e100]: Amber Woody Analysis
+              - generic [ref=e101]:
+                - generic [ref=e102]:
+                  - img [ref=e103]
+                  - generic:
+                    - generic:
+                      - generic: Amber
+                      - generic: 95%
+                    - generic:
+                      - generic: Woody
+                      - generic: 85%
+                    - generic:
+                      - generic: Woody
+                      - generic: 72%
+                    - generic:
+                      - generic: Sweet
+                      - generic: 80%
+                    - generic:
+                      - generic: Warm Spicy
+                      - generic: 65%
+                - generic [ref=e117]:
+                  - generic [ref=e118]:
+                    - generic [ref=e119]: ⏱️
+                    - generic [ref=e120]:
+                      - generic [ref=e121]: Longevity
+                      - generic [ref=e122]: 10-12+ hours
+                  - generic [ref=e123]:
+                    - generic [ref=e124]: 🌊
+                    - generic [ref=e125]:
+                      - generic [ref=e126]: Projection
+                      - generic [ref=e127]: Beast Mode
+                  - generic [ref=e128]:
+                    - generic [ref=e129]: 🎯
+                    - generic [ref=e130]:
+                      - generic [ref=e131]: Versatility
+                      - generic [ref=e132]: Moderate
+            - generic [ref=e134]:
+              - generic [ref=e135]:
+                - heading "Ingredients" [level=3] [ref=e136]
+                - generic [ref=e137]: Top - Heart - Base
+              - generic [ref=e138]:
+                - generic [ref=e139]:
+                  - generic [ref=e140]:
+                    - generic [ref=e141]: ✨
+                    - text: Top Notes
+                    - generic [ref=e142]: 0-30 min
+                  - generic [ref=e143]:
+                    - generic [ref=e144]:
+                      - generic [ref=e145]: 🌸
+                      - generic [ref=e146]: rose
+                      - generic [ref=e147]: Radiant
+                    - generic [ref=e148]:
+                      - generic [ref=e149]: 🌺
+                      - generic [ref=e150]: saffron
+                      - generic [ref=e151]: Luminous
+                - generic [ref=e152]:
+                  - generic [ref=e153]:
+                    - generic [ref=e154]: 💖
+                    - text: Heart Notes
+                    - generic [ref=e155]: 30min-4hrs
+                  - generic [ref=e156]:
+                    - generic [ref=e157]:
+                      - generic [ref=e158]: 🪵
+                      - generic [ref=e159]: oud
+                      - generic [ref=e160]: Warm
+                    - generic [ref=e161]:
+                      - generic [ref=e162]: 🌲
+                      - generic [ref=e163]: amber
+                      - generic [ref=e164]: Smooth
+                - generic [ref=e165]:
+                  - generic [ref=e166]:
+                    - generic [ref=e167]: 💎
+                    - text: Base Notes
+                    - generic [ref=e168]: 4-12+ hrs
+                  - generic [ref=e169]:
+                    - generic [ref=e170]:
+                      - generic [ref=e171]: 💎
+                      - generic [ref=e172]: musk
+                      - generic [ref=e173]: Crystal
+                    - generic [ref=e174]:
+                      - generic [ref=e175]: 🐚
+                      - generic [ref=e176]: sandalwood
+                      - generic [ref=e177]: Deep
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - heading "Scent Profile" [level=4] [ref=e180]
+            - generic [ref=e181]: Amber Floral — 2015
+          - generic [ref=e182]:
+            - paragraph [ref=e183]:
+              - strong [ref=e184]: Junoon Oud
+              - text: by
+              - strong [ref=e185]: Al Haramain
+              - text: opens with rose, saffron, oud, setting a amber woody signature from the first spray.
+            - paragraph [ref=e186]: The drydown settles into amber, musk, sandalwood, giving the section the same full fragrance-story rhythm as the home collection.
+        - generic [ref=e187]:
+          - generic [ref=e188]:
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - generic [ref=e191]: ⏱️
+                - heading "LONGEVITY" [level=4] [ref=e192]
+                - generic [ref=e193]: no vote
+              - generic [ref=e194]:
+                - generic [ref=e195]:
+                  - generic [ref=e196]: very weak
+                  - generic [ref=e199]: "89"
+                - generic [ref=e200]:
+                  - generic [ref=e201]: weak
+                  - generic [ref=e204]: "156"
+                - generic [ref=e205]:
+                  - generic [ref=e206]: moderate
+                  - generic [ref=e209]: "389"
+                - generic [ref=e210]:
+                  - generic [ref=e211]: long lasting
+                  - generic [ref=e214]: "1120"
+                - generic [ref=e215]:
+                  - generic [ref=e216]: eternal
+                  - generic [ref=e219]: "1456"
+            - generic [ref=e220]:
+              - generic [ref=e221]:
+                - generic [ref=e222]: 💨
+                - heading "SILLAGE" [level=4] [ref=e223]
+                - generic [ref=e224]: no vote
+              - generic [ref=e225]:
+                - generic [ref=e226]:
+                  - generic [ref=e227]: intimate
+                  - generic [ref=e230]: "134"
+                - generic [ref=e231]:
+                  - generic [ref=e232]: moderate
+                  - generic [ref=e235]: "456"
+                - generic [ref=e236]:
+                  - generic [ref=e237]: strong
+                  - generic [ref=e240]: "1234"
+                - generic [ref=e241]:
+                  - generic [ref=e242]: enormous
+                  - generic [ref=e245]: "1189"
+          - generic [ref=e246]:
+            - generic [ref=e247]:
+              - generic [ref=e248]:
+                - generic [ref=e249]: 👤
+                - heading "GENDER" [level=4] [ref=e250]
+                - generic [ref=e251]: no vote
+              - generic [ref=e252]:
+                - generic [ref=e253]:
+                  - generic [ref=e254]: female
+                  - generic [ref=e257]: "1023"
+                - generic [ref=e258]:
+                  - generic [ref=e259]: more female
+                  - generic [ref=e262]: "589"
+                - generic [ref=e263]:
+                  - generic [ref=e264]: unisex
+                  - generic [ref=e267]: "890"
+                - generic [ref=e268]:
+                  - generic [ref=e269]: more male
+                  - generic [ref=e272]: "312"
+                - generic [ref=e273]:
+                  - generic [ref=e274]: male
+                  - generic [ref=e277]: "145"
+            - generic [ref=e278]:
+              - generic [ref=e279]:
+                - generic [ref=e280]: 💰
+                - heading "PRICE VALUE" [level=4] [ref=e281]
+                - generic [ref=e282]: no vote
+              - generic [ref=e283]:
+                - generic [ref=e284]:
+                  - generic [ref=e285]: way overpriced
+                  - generic [ref=e288]: "589"
+                - generic [ref=e289]:
+                  - generic [ref=e290]: overpriced
+                  - generic [ref=e293]: "745"
+                - generic [ref=e294]:
+                  - generic [ref=e295]: ok
+                  - generic [ref=e298]: "890"
+                - generic [ref=e299]:
+                  - generic [ref=e300]: good value
+                  - generic [ref=e303]: "534"
+                - generic [ref=e304]:
+                  - generic [ref=e305]: great value
+                  - generic [ref=e308]: "201"
+        - generic [ref=e310]:
+          - generic [ref=e311]:
+            - generic [ref=e312]:
+              - button "▲" [ref=e313] [cursor=pointer]
+              - generic [ref=e314]: 2.4k
+              - button "▼" [ref=e315] [cursor=pointer]
+            - generic [ref=e316]: r/fragrance • Posted by u/crystal_scent_addict 3 weeks ago
+          - generic [ref=e317]:
+            - generic [ref=e318]:
+              - img "User Avatar" [ref=e320]
+              - generic [ref=e321]:
+                - generic [ref=e322]: u/crystal_scent_addict
+                - generic [ref=e323]: 3 weeks ago
+            - paragraph [ref=e325]: A refined oud fragrance with rose, saffron, warm amber, musk, and polished woods.
+            - generic [ref=e326]:
+              - generic [ref=e327]:
+                - generic [ref=e328]: 💬
+                - generic [ref=e329]: 567 comments
+              - generic [ref=e330]:
+                - generic [ref=e331]: 🔗
+                - generic [ref=e332]: Share
+              - generic [ref=e333]:
+                - generic [ref=e334]: ⭐
+                - generic [ref=e335]: Save
+        - generic [ref=e336]:
+          - generic [ref=e337]:
+            - generic [ref=e338]:
+              - generic [ref=e339]:
+                - generic [ref=e340]: 😍
+                - generic [ref=e341]: love
+              - generic [ref=e343]:
+                - generic [ref=e344]: 😊
+                - generic [ref=e345]: like
+              - generic [ref=e347]:
+                - generic [ref=e348]: 😐
+                - generic [ref=e349]: ok
+              - generic [ref=e351]:
+                - generic [ref=e352]: 😞
+                - generic [ref=e353]: dislike
+              - generic [ref=e355]:
+                - generic [ref=e356]: 😤
+                - generic [ref=e357]: hate
+            - generic [ref=e359]:
+              - generic [ref=e360]:
+                - generic [ref=e361]: ❄️
+                - generic [ref=e362]: winter
+              - generic [ref=e364]:
+                - generic [ref=e365]: 🌸
+                - generic [ref=e366]: spring
+              - generic [ref=e368]:
+                - generic [ref=e369]: ☀️
+                - generic [ref=e370]: summer
+              - generic [ref=e372]:
+                - generic [ref=e373]: 🍂
+                - generic [ref=e374]: fall
+              - generic [ref=e376]:
+                - generic [ref=e377]: ☀️
+                - generic [ref=e378]: day
+              - generic [ref=e380]:
+                - generic [ref=e381]: 🌙
+                - generic [ref=e382]: night
+          - heading "Perfume rating 4.72 out of 5 with 12,300 votes" [level=3] [ref=e385]
+          - paragraph [ref=e387]:
+            - strong [ref=e388]: Junoon Oud
+            - text: by
+            - strong [ref=e389]: Al Haramain
+            - text: opens with rose, saffron, oud, setting a amber woody signature from the first spray.
+        - generic [ref=e390]:
+          - generic [ref=e391]:
+            - heading "💬 User Reviews & Comments" [level=3] [ref=e392]:
+              - generic [ref=e393]: 💬
+              - text: User Reviews & Comments
+            - generic [ref=e395]: 0 reviews
+          - generic [ref=e397]:
+            - generic [ref=e398]: 🔒
+            - heading "Share Your Experience" [level=4] [ref=e399]
+            - paragraph [ref=e400]: Sign in to write a review and share your thoughts about Baccarat Rouge 540 with the community.
+            - button "Sign In to Review" [ref=e401] [cursor=pointer]
+      - generic [ref=e403]:
+        - generic [ref=e404]:
+          - generic [ref=e405]:
+            - img "Al Haramain L'Aventure bottle"
+            - generic [ref=e406]:
+              - generic [ref=e408]:
+                - heading "AL HARAMAIN" [level=1] [ref=e409] [cursor=pointer]
+                - heading "Unisex - Oriental Spicy" [level=2] [ref=e410]
+                - heading "L'Aventure" [level=3] [ref=e411]
+              - generic [ref=e412]:
+                - generic [ref=e419]: EDT
+                - generic [ref=e420]: 2016 - Oriental Spicy
+              - generic [ref=e421]:
+                - button "Add to Favorites" [ref=e423] [cursor=pointer]:
+                  - generic [ref=e424]:
+                    - img [ref=e425]
+                    - img [ref=e427]
+                  - generic [ref=e429]: Add to Favorites
+                - button "Request Scent" [ref=e431] [cursor=pointer]:
+                  - img [ref=e433]
+                  - generic [ref=e437]: Request Scent
+              - generic [ref=e438]:
+                - generic [ref=e439]:
+                  - heading "Select Quality" [level=4] [ref=e440]
+                  - generic [ref=e441]: Choose Your Preference
+                - generic [ref=e442]:
+                  - generic [ref=e450] [cursor=pointer]:
+                    - generic [ref=e451]: EDT
+                    - generic [ref=e452]: Premium oil formulation
+                  - generic [ref=e461] [cursor=pointer]:
+                    - generic [ref=e462]: Discovery Vial
+                    - generic [ref=e463]: High-quality sample format
+          - generic [ref=e465]:
+            - generic [ref=e467]:
+              - generic [ref=e468]:
+                - heading "Scent Profile" [level=3] [ref=e469]
+                - generic [ref=e470]: Oriental Spicy Analysis
+              - generic [ref=e471]:
+                - generic [ref=e472]:
+                  - generic [ref=e473]:
+                    - generic [ref=e474]: 92%
+                    - generic [ref=e477]: Oriental
+                  - generic [ref=e478]:
+                    - generic [ref=e479]: 78%
+                    - generic [ref=e482]: Floral
+                  - generic [ref=e483]:
+                    - generic [ref=e484]: 85%
+                    - generic [ref=e487]: Gourmand
+                  - generic [ref=e488]:
+                    - generic [ref=e489]: 70%
+                    - generic [ref=e492]: Woody
+                  - generic [ref=e493]:
+                    - generic [ref=e494]: 65%
+                    - generic [ref=e497]: Earthy
+                - generic [ref=e498]:
+                  - generic [ref=e499]:
+                    - generic [ref=e500]: ⏱️
+                    - generic [ref=e501]:
+                      - generic [ref=e502]: Longevity
+                      - generic [ref=e503]: 8-10 hours
+                  - generic [ref=e504]:
+                    - generic [ref=e505]: 🌊
+                    - generic [ref=e506]:
+                      - generic [ref=e507]: Projection
+                      - generic [ref=e508]: Strong
+                  - generic [ref=e509]:
+                    - generic [ref=e510]: 🎯
+                    - generic [ref=e511]:
+                      - generic [ref=e512]: Versatility
+                      - generic [ref=e513]: Evening/Special
+            - generic [ref=e515]:
+              - generic [ref=e516]:
+                - heading "Ingredients" [level=3] [ref=e517]
+                - generic [ref=e518]: Top - Heart - Base
+              - generic [ref=e519]:
+                - generic [ref=e520]:
+                  - generic [ref=e521]: TOP
+                  - generic [ref=e522]:
+                    - generic [ref=e523]:
+                      - generic [ref=e524]: 🍫
+                      - generic [ref=e525]:
+                        - generic [ref=e526]: bergamot
+                        - generic [ref=e527]: Dark
+                    - generic [ref=e528]:
+                      - generic [ref=e529]: 🍄
+                      - generic [ref=e530]:
+                        - generic [ref=e531]: apple
+                        - generic [ref=e532]: Rich
+                    - generic [ref=e533]:
+                      - generic [ref=e534]: 🍊
+                      - generic [ref=e535]:
+                        - generic [ref=e536]: elemi
+                        - generic [ref=e537]: Citrus
+                - generic [ref=e538]:
+                  - generic [ref=e539]: HEART
+                  - generic [ref=e540]:
+                    - generic [ref=e541]:
+                      - generic [ref=e542]: 🌑
+                      - generic [ref=e543]:
+                        - generic [ref=e544]: oud
+                        - generic [ref=e545]: Exotic
+                    - generic [ref=e546]:
+                      - generic [ref=e547]: 🌼
+                      - generic [ref=e548]:
+                        - generic [ref=e549]: ambergris
+                        - generic [ref=e550]: Floral
+                    - generic [ref=e551]:
+                      - generic [ref=e552]: 🌺
+                      - generic [ref=e553]:
+                        - generic [ref=e554]: musk
+                        - generic [ref=e555]: Lush
+                - generic [ref=e556]:
+                  - generic [ref=e557]: BASE
+                  - generic [ref=e558]:
+                    - generic [ref=e559]:
+                      - generic [ref=e560]: 🪵
+                      - generic [ref=e561]:
+                        - generic [ref=e562]: bergamot
+                        - generic [ref=e563]: Earthy
+                    - generic [ref=e564]:
+                      - generic [ref=e565]: 🍦
+                      - generic [ref=e566]:
+                        - generic [ref=e567]: apple
+                        - generic [ref=e568]: Dark
+                    - generic [ref=e569]:
+                      - generic [ref=e570]: 🔥
+                      - generic [ref=e571]:
+                        - generic [ref=e572]: elemi
+                        - generic [ref=e573]: Smoky
+        - generic [ref=e574]:
+          - generic [ref=e575]:
+            - heading "Scent Profile" [level=4] [ref=e576]
+            - generic [ref=e577]: Oriental Floral — 2006
+          - generic [ref=e578]:
+            - paragraph [ref=e579]:
+              - strong [ref=e580]: L'Aventure
+              - text: by
+              - strong [ref=e581]: Al Haramain
+              - text: opens with bergamot, apple, elemi, setting a oriental spicy signature from the first spray.
+            - paragraph [ref=e582]: The drydown settles into oud, ambergris, musk, giving the section the same full fragrance-story rhythm as the home collection.
+        - generic [ref=e583]:
+          - generic [ref=e584]:
+            - generic [ref=e585]:
+              - generic [ref=e586]:
+                - generic [ref=e587]: ⏱️
+                - heading "LONGEVITY" [level=4] [ref=e588]
+                - generic [ref=e589]: no vote
+              - generic [ref=e590]:
+                - generic [ref=e591]:
+                  - generic [ref=e592]: very weak
+                  - generic [ref=e595]: "112"
+                - generic [ref=e596]:
+                  - generic [ref=e597]: weak
+                  - generic [ref=e600]: "234"
+                - generic [ref=e601]:
+                  - generic [ref=e602]: moderate
+                  - generic [ref=e605]: "578"
+                - generic [ref=e606]:
+                  - generic [ref=e607]: long lasting
+                  - generic [ref=e610]: "1089"
+                - generic [ref=e611]:
+                  - generic [ref=e612]: eternal
+                  - generic [ref=e615]: "867"
+            - generic [ref=e616]:
+              - generic [ref=e617]:
+                - generic [ref=e618]: 💨
+                - heading "SILLAGE" [level=4] [ref=e619]
+                - generic [ref=e620]: no vote
+              - generic [ref=e621]:
+                - generic [ref=e622]:
+                  - generic [ref=e623]: intimate
+                  - generic [ref=e626]: "201"
+                - generic [ref=e627]:
+                  - generic [ref=e628]: moderate
+                  - generic [ref=e631]: "623"
+                - generic [ref=e632]:
+                  - generic [ref=e633]: strong
+                  - generic [ref=e636]: "1178"
+                - generic [ref=e637]:
+                  - generic [ref=e638]: enormous
+                  - generic [ref=e641]: "789"
+          - generic [ref=e642]:
+            - generic [ref=e643]:
+              - generic [ref=e644]:
+                - generic [ref=e645]: 👤
+                - heading "GENDER" [level=4] [ref=e646]
+                - generic [ref=e647]: no vote
+              - generic [ref=e648]:
+                - generic [ref=e649]:
+                  - generic [ref=e650]: female
+                  - generic [ref=e653]: "845"
+                - generic [ref=e654]:
+                  - generic [ref=e655]: more female
+                  - generic [ref=e658]: "712"
+                - generic [ref=e659]:
+                  - generic [ref=e660]: unisex
+                  - generic [ref=e663]: "801"
+                - generic [ref=e664]:
+                  - generic [ref=e665]: more male
+                  - generic [ref=e668]: "334"
+                - generic [ref=e669]:
+                  - generic [ref=e670]: male
+                  - generic [ref=e673]: "145"
+            - generic [ref=e674]:
+              - generic [ref=e675]:
+                - generic [ref=e676]: 💰
+                - heading "PRICE VALUE" [level=4] [ref=e677]
+                - generic [ref=e678]: no vote
+              - generic [ref=e679]:
+                - generic [ref=e680]:
+                  - generic [ref=e681]: way overpriced
+                  - generic [ref=e684]: "289"
+                - generic [ref=e685]:
+                  - generic [ref=e686]: overpriced
+                  - generic [ref=e689]: "567"
+                - generic [ref=e690]:
+                  - generic [ref=e691]: ok
+                  - generic [ref=e694]: "989"
+                - generic [ref=e695]:
+                  - generic [ref=e696]: good value
+                  - generic [ref=e699]: "712"
+                - generic [ref=e700]:
+                  - generic [ref=e701]: great value
+                  - generic [ref=e704]: "289"
+        - generic [ref=e706]:
+          - generic [ref=e707]:
+            - generic [ref=e708]:
+              - button "▲" [ref=e709] [cursor=pointer]
+              - generic [ref=e710]: 2.4k
+              - button "▼" [ref=e711] [cursor=pointer]
+            - generic [ref=e712]: r/fragrance • Posted by u/dark_floral_enthusiast 2 weeks ago
+          - generic [ref=e713]:
+            - generic [ref=e714]:
+              - img "User Avatar" [ref=e716]
+              - generic [ref=e717]:
+                - generic [ref=e718]: u/dark_floral_enthusiast
+                - generic [ref=e719]: 2 weeks ago
+            - paragraph [ref=e721]: An affordable alternative with bergamot, apple, and oud.
+            - generic [ref=e722]:
+              - generic [ref=e723]:
+                - generic [ref=e724]: 💬
+                - generic [ref=e725]: 423 comments
+              - generic [ref=e726]:
+                - generic [ref=e727]: 🔗
+                - generic [ref=e728]: Share
+              - generic [ref=e729]:
+                - generic [ref=e730]: ⭐
+                - generic [ref=e731]: Save
+        - generic [ref=e732]:
+          - generic [ref=e733]:
+            - generic [ref=e734]:
+              - generic [ref=e735]:
+                - generic [ref=e736]: 😍
+                - generic [ref=e737]: love
+              - generic [ref=e739]:
+                - generic [ref=e740]: 😊
+                - generic [ref=e741]: like
+              - generic [ref=e743]:
+                - generic [ref=e744]: 😐
+                - generic [ref=e745]: ok
+              - generic [ref=e747]:
+                - generic [ref=e748]: 😞
+                - generic [ref=e749]: dislike
+              - generic [ref=e751]:
+                - generic [ref=e752]: 😤
+                - generic [ref=e753]: hate
+            - generic [ref=e755]:
+              - generic [ref=e756]:
+                - generic [ref=e757]: ❄️
+                - generic [ref=e758]: winter
+              - generic [ref=e760]:
+                - generic [ref=e761]: 🌸
+                - generic [ref=e762]: spring
+              - generic [ref=e764]:
+                - generic [ref=e765]: ☀️
+                - generic [ref=e766]: summer
+              - generic [ref=e768]:
+                - generic [ref=e769]: 🍂
+                - generic [ref=e770]: fall
+              - generic [ref=e772]:
+                - generic [ref=e773]: ☀️
+                - generic [ref=e774]: day
+              - generic [ref=e776]:
+                - generic [ref=e777]: 🌙
+                - generic [ref=e778]: night
+          - heading "Perfume rating 4.38 out of 5 with 9,800 votes" [level=3] [ref=e781]
+          - paragraph [ref=e783]:
+            - strong [ref=e784]: L'Aventure
+            - text: by
+            - strong [ref=e785]: Al Haramain
+            - text: opens with bergamot, apple, elemi, setting a oriental spicy signature from the first spray.
+        - generic [ref=e786]:
+          - generic [ref=e787]:
+            - heading "💬 User Reviews & Comments" [level=3] [ref=e788]:
+              - generic [ref=e789]: 💬
+              - text: User Reviews & Comments
+            - generic [ref=e791]: 0 reviews
+          - generic [ref=e793]:
+            - generic [ref=e794]: 🔒
+            - heading "Share Your Experience" [level=4] [ref=e795]
+            - paragraph [ref=e796]: Sign in to write a review and share your thoughts about Black Orchid with the community.
+            - button "Sign In to Review" [ref=e797] [cursor=pointer]
+      - generic [ref=e799]:
+        - generic [ref=e800]:
+          - generic [ref=e801]:
+            - img "Al Haramain Portfolio Floral Sculpture bottle" [ref=e802]
+            - generic [ref=e803]:
+              - generic [ref=e805]:
+                - heading "AL HARAMAIN" [level=1] [ref=e806] [cursor=pointer]
+                - heading "Women - Floral Amber" [level=2] [ref=e807]
+                - heading "Portfolio Floral Sculpture" [level=3] [ref=e808]
+              - generic [ref=e809]:
+                - generic [ref=e816]: EDP
+                - generic [ref=e817]: 2019 - Floral Amber
+              - generic [ref=e818]:
+                - button "Add to Favorites" [ref=e820] [cursor=pointer]:
+                  - generic [ref=e821]:
+                    - img [ref=e822]
+                    - img [ref=e824]
+                  - generic [ref=e826]: Add to Favorites
+                - button "Request Scent" [ref=e828] [cursor=pointer]:
+                  - img [ref=e830]
+                  - generic [ref=e834]: Request Scent
+              - generic [ref=e835]:
+                - generic [ref=e836]:
+                  - heading "Select Quality" [level=4] [ref=e837]
+                  - generic [ref=e838]: Choose Your Preference
+                - generic [ref=e839]:
+                  - generic [ref=e847] [cursor=pointer]:
+                    - generic [ref=e848]: EDP
+                    - generic [ref=e849]: Premium oil formulation
+                  - generic [ref=e858] [cursor=pointer]:
+                    - generic [ref=e859]: Discovery Vial
+                    - generic [ref=e860]: High-quality sample format
+          - generic [ref=e862]:
+            - generic [ref=e864]:
+              - generic [ref=e865]:
+                - heading "Scent Profile" [level=3] [ref=e866]
+                - generic [ref=e867]: Floral Amber Analysis
+              - generic [ref=e868]:
+                - generic [ref=e869]:
+                  - generic [ref=e870]:
+                    - generic [ref=e871]: Fruity
+                    - generic [ref=e874]: 90%
+                  - generic [ref=e875]:
+                    - generic [ref=e876]: Woody
+                    - generic [ref=e879]: 82%
+                  - generic [ref=e880]:
+                    - generic [ref=e881]: Smoky
+                    - generic [ref=e884]: 75%
+                  - generic [ref=e885]:
+                    - generic [ref=e886]: Fresh
+                    - generic [ref=e889]: 70%
+                  - generic [ref=e890]:
+                    - generic [ref=e891]: Musky
+                    - generic [ref=e894]: 68%
+                - generic [ref=e895]:
+                  - generic [ref=e896]:
+                    - generic [ref=e897]: ⏱️
+                    - generic [ref=e898]:
+                      - generic [ref=e899]: Longevity
+                      - generic [ref=e900]: 8-10 hours
+                  - generic [ref=e901]:
+                    - generic [ref=e902]: 🌊
+                    - generic [ref=e903]:
+                      - generic [ref=e904]: Projection
+                      - generic [ref=e905]: Strong
+                  - generic [ref=e906]:
+                    - generic [ref=e907]: 🎯
+                    - generic [ref=e908]:
+                      - generic [ref=e909]: Versatility
+                      - generic [ref=e910]: Very High
+            - generic [ref=e912]:
+              - generic [ref=e913]:
+                - heading "Ingredients" [level=3] [ref=e914]
+                - generic [ref=e915]: Top - Heart - Base
+              - generic [ref=e916]:
+                - generic [ref=e917]:
+                  - generic [ref=e918]:
+                    - generic [ref=e920]: Top Notes
+                    - generic [ref=e921]: 0-30 min
+                  - generic [ref=e923]:
+                    - generic [ref=e924]:
+                      - generic [ref=e925]: 🍍
+                      - generic [ref=e926]: jasmine
+                      - generic [ref=e927]: ·
+                      - generic [ref=e928]: Bold
+                    - generic [ref=e929]:
+                      - generic [ref=e930]: 🍎
+                      - generic [ref=e931]: rose
+                      - generic [ref=e932]: ·
+                      - generic [ref=e933]: Crisp
+                    - generic [ref=e934]:
+                      - generic [ref=e935]: 🫐
+                      - generic [ref=e936]: white flowers
+                      - generic [ref=e937]: ·
+                      - generic [ref=e938]: Tart
+                - generic [ref=e939]:
+                  - generic [ref=e940]:
+                    - generic [ref=e942]: Heart Notes
+                    - generic [ref=e943]: 30min-4hrs
+                  - generic [ref=e945]:
+                    - generic [ref=e946]:
+                      - generic [ref=e947]: 🔥
+                      - generic [ref=e948]: amber
+                      - generic [ref=e949]: ·
+                      - generic [ref=e950]: Smoky
+                    - generic [ref=e951]:
+                      - generic [ref=e952]: 🌹
+                      - generic [ref=e953]: musk
+                      - generic [ref=e954]: ·
+                      - generic [ref=e955]: Delicate
+                    - generic [ref=e956]:
+                      - generic [ref=e957]: 🌿
+                      - generic [ref=e958]: jasmine
+                      - generic [ref=e959]: ·
+                      - generic [ref=e960]: Floral
+                - generic [ref=e961]:
+                  - generic [ref=e962]:
+                    - generic [ref=e964]: Base Notes
+                    - generic [ref=e965]: 4-10+ hrs
+                  - generic [ref=e967]:
+                    - generic [ref=e968]:
+                      - generic [ref=e969]: 🤍
+                      - generic [ref=e970]: rose
+                      - generic [ref=e971]: ·
+                      - generic [ref=e972]: Clean
+                    - generic [ref=e973]:
+                      - generic [ref=e974]: 🍦
+                      - generic [ref=e975]: white flowers
+                      - generic [ref=e976]: ·
+                      - generic [ref=e977]: Creamy
+                    - generic [ref=e978]:
+                      - generic [ref=e979]: 🐚
+                      - generic [ref=e980]: amber
+                      - generic [ref=e981]: ·
+                      - generic [ref=e982]: Warm
+        - generic [ref=e983]:
+          - generic [ref=e984]:
+            - heading "Scent Profile" [level=4] [ref=e985]
+            - generic [ref=e986]: Woody Fruity — 2010
+          - generic [ref=e987]:
+            - paragraph [ref=e988]:
+              - strong [ref=e989]: Portfolio Floral Sculpture
+              - text: by
+              - strong [ref=e990]: Al Haramain
+              - text: opens with jasmine, rose, white flowers, setting a floral amber signature from the first spray.
+            - paragraph [ref=e991]: The drydown settles into amber, musk, giving the section the same full fragrance-story rhythm as the home collection.
+        - generic [ref=e992]:
+          - generic [ref=e993]:
+            - generic [ref=e994]:
+              - generic [ref=e995]:
+                - generic [ref=e996]: ⏱️
+                - heading "LONGEVITY" [level=4] [ref=e997]
+                - generic [ref=e998]: no vote
+              - generic [ref=e999]:
+                - generic [ref=e1000]:
+                  - generic [ref=e1001]: very weak
+                  - generic [ref=e1004]: "223"
+                - generic [ref=e1005]:
+                  - generic [ref=e1006]: weak
+                  - generic [ref=e1009]: "445"
+                - generic [ref=e1010]:
+                  - generic [ref=e1011]: moderate
+                  - generic [ref=e1014]: "978"
+                - generic [ref=e1015]:
+                  - generic [ref=e1016]: long lasting
+                  - generic [ref=e1019]: "1689"
+                - generic [ref=e1020]:
+                  - generic [ref=e1021]: eternal
+                  - generic [ref=e1024]: "1112"
+            - generic [ref=e1025]:
+              - generic [ref=e1026]:
+                - generic [ref=e1027]: 💨
+                - heading "SILLAGE" [level=4] [ref=e1028]
+                - generic [ref=e1029]: no vote
+              - generic [ref=e1030]:
+                - generic [ref=e1031]:
+                  - generic [ref=e1032]: intimate
+                  - generic [ref=e1035]: "178"
+                - generic [ref=e1036]:
+                  - generic [ref=e1037]: moderate
+                  - generic [ref=e1040]: "634"
+                - generic [ref=e1041]:
+                  - generic [ref=e1042]: strong
+                  - generic [ref=e1045]: "1589"
+                - generic [ref=e1046]:
+                  - generic [ref=e1047]: enormous
+                  - generic [ref=e1050]: "1123"
+          - generic [ref=e1051]:
+            - generic [ref=e1052]:
+              - generic [ref=e1053]:
+                - generic [ref=e1054]: 👤
+                - heading "GENDER" [level=4] [ref=e1055]
+                - generic [ref=e1056]: no vote
+              - generic [ref=e1057]:
+                - generic [ref=e1058]:
+                  - generic [ref=e1059]: female
+                  - generic [ref=e1062]: "178"
+                - generic [ref=e1063]:
+                  - generic [ref=e1064]: more female
+                  - generic [ref=e1067]: "289"
+                - generic [ref=e1068]:
+                  - generic [ref=e1069]: unisex
+                  - generic [ref=e1072]: "778"
+                - generic [ref=e1073]:
+                  - generic [ref=e1074]: more male
+                  - generic [ref=e1077]: "1234"
+                - generic [ref=e1078]:
+                  - generic [ref=e1079]: male
+                  - generic [ref=e1082]: "1067"
+            - generic [ref=e1083]:
+              - generic [ref=e1084]:
+                - generic [ref=e1085]: 💰
+                - heading "PRICE VALUE" [level=4] [ref=e1086]
+                - generic [ref=e1087]: no vote
+              - generic [ref=e1088]:
+                - generic [ref=e1089]:
+                  - generic [ref=e1090]: way overpriced
+                  - generic [ref=e1093]: "534"
+                - generic [ref=e1094]:
+                  - generic [ref=e1095]: overpriced
+                  - generic [ref=e1098]: "778"
+                - generic [ref=e1099]:
+                  - generic [ref=e1100]: ok
+                  - generic [ref=e1103]: "989"
+                - generic [ref=e1104]:
+                  - generic [ref=e1105]: good value
+                  - generic [ref=e1108]: "889"
+                - generic [ref=e1109]:
+                  - generic [ref=e1110]: great value
+                  - generic [ref=e1113]: "356"
+        - generic [ref=e1115]:
+          - generic [ref=e1116]:
+            - generic [ref=e1117]:
+              - button "▲" [ref=e1118] [cursor=pointer]
+              - generic [ref=e1119]: 2.4k
+              - button "▼" [ref=e1120] [cursor=pointer]
+            - generic [ref=e1121]: r/fragrance • Posted by u/king_of_compliments 1 week ago
+          - generic [ref=e1122]:
+            - generic [ref=e1123]:
+              - img "User Avatar" [ref=e1125]
+              - generic [ref=e1126]:
+                - generic [ref=e1127]: u/king_of_compliments
+                - generic [ref=e1128]: 1 week ago
+            - paragraph [ref=e1130]: A sculptural floral fragrance with jasmine, rose, white flowers, amber, and musk.
+            - generic [ref=e1131]:
+              - generic [ref=e1132]:
+                - generic [ref=e1133]: 💬
+                - generic [ref=e1134]: 892 comments
+              - generic [ref=e1135]:
+                - generic [ref=e1136]: 🔗
+                - generic [ref=e1137]: Share
+              - generic [ref=e1138]:
+                - generic [ref=e1139]: ⭐
+                - generic [ref=e1140]: Save
+        - generic [ref=e1141]:
+          - generic [ref=e1142]:
+            - generic [ref=e1143]:
+              - generic [ref=e1144]:
+                - generic [ref=e1145]: 😍
+                - generic [ref=e1146]: love
+              - generic [ref=e1148]:
+                - generic [ref=e1149]: 😊
+                - generic [ref=e1150]: like
+              - generic [ref=e1152]:
+                - generic [ref=e1153]: 😐
+                - generic [ref=e1154]: ok
+              - generic [ref=e1156]:
+                - generic [ref=e1157]: 😞
+                - generic [ref=e1158]: dislike
+              - generic [ref=e1160]:
+                - generic [ref=e1161]: 😤
+                - generic [ref=e1162]: hate
+            - generic [ref=e1164]:
+              - generic [ref=e1165]:
+                - generic [ref=e1166]: ❄️
+                - generic [ref=e1167]: winter
+              - generic [ref=e1169]:
+                - generic [ref=e1170]: 🌸
+                - generic [ref=e1171]: spring
+              - generic [ref=e1173]:
+                - generic [ref=e1174]: ☀️
+                - generic [ref=e1175]: summer
+              - generic [ref=e1177]:
+                - generic [ref=e1178]: 🍂
+                - generic [ref=e1179]: fall
+              - generic [ref=e1181]:
+                - generic [ref=e1182]: ☀️
+                - generic [ref=e1183]: day
+              - generic [ref=e1185]:
+                - generic [ref=e1186]: 🌙
+                - generic [ref=e1187]: night
+          - heading "Perfume rating 4.56 out of 5 with 15,600 votes" [level=3] [ref=e1190]
+          - paragraph [ref=e1192]:
+            - strong [ref=e1193]: Portfolio Floral Sculpture
+            - text: by
+            - strong [ref=e1194]: Al Haramain
+            - text: opens with jasmine, rose, white flowers, setting a floral amber signature from the first spray.
+        - generic [ref=e1195]:
+          - generic [ref=e1196]:
+            - heading "💬 User Reviews & Comments" [level=3] [ref=e1197]:
+              - generic [ref=e1198]: 💬
+              - text: User Reviews & Comments
+            - generic [ref=e1200]: 0 reviews
+          - generic [ref=e1202]:
+            - generic [ref=e1203]: 🔒
+            - heading "Share Your Experience" [level=4] [ref=e1204]
+            - paragraph [ref=e1205]: Sign in to write a review and share your thoughts about Aventus with the community.
+            - button "Sign In to Review" [ref=e1206] [cursor=pointer]
+      - generic [ref=e1208]:
+        - generic [ref=e1209]:
+          - generic [ref=e1210]:
+            - img "Alexandria Fragrances Zion bottle"
+            - generic [ref=e1211]:
+              - generic [ref=e1213]:
+                - heading "ALEXANDRIA FRAGRANCES" [level=1] [ref=e1214] [cursor=pointer]
+                - heading "Unisex - Oriental Woody" [level=2] [ref=e1215]
+                - heading "Zion" [level=3] [ref=e1216]
+              - generic [ref=e1217]:
+                - generic [ref=e1224]: EDT
+                - generic [ref=e1225]: 2018 - Oriental Woody
+              - generic [ref=e1226]:
+                - button "Add to Favorites" [ref=e1228] [cursor=pointer]:
+                  - generic [ref=e1229]:
+                    - img [ref=e1230]
+                    - img [ref=e1232]
+                  - generic [ref=e1234]: Add to Favorites
+                - button "Request Scent" [ref=e1236] [cursor=pointer]:
+                  - img [ref=e1238]
+                  - generic [ref=e1242]: Request Scent
+              - generic [ref=e1243]:
+                - generic [ref=e1244]:
+                  - heading "Select Concentration" [level=4] [ref=e1245]
+                  - generic [ref=e1246]: Choose Your Preference
+                - generic [ref=e1247]:
+                  - generic [ref=e1255] [cursor=pointer]:
+                    - generic [ref=e1256]: EDT
+                    - generic [ref=e1257]: Premium oil formulation
+                  - generic [ref=e1266] [cursor=pointer]:
+                    - generic [ref=e1267]: Discovery Vial
+                    - generic [ref=e1268]: High-quality sample format
+          - generic [ref=e1270]:
+            - generic [ref=e1271]:
+              - generic [ref=e1272]:
+                - heading "Scent DNA" [level=2] [ref=e1273]
+                - paragraph [ref=e1274]: Oriental Woody Analysis
+              - generic [ref=e1275]:
+                - img [ref=e1277]:
+                  - generic [ref=e1285]: "9.5"
+                  - generic [ref=e1286]: VERSATILITY
+                - generic [ref=e1287]:
+                  - generic [ref=e1288]:
+                    - generic [ref=e1289]: Fresh
+                    - generic [ref=e1292]: 85%
+                  - generic [ref=e1293]:
+                    - generic [ref=e1294]: Woody
+                    - generic [ref=e1297]: 70%
+                  - generic [ref=e1298]:
+                    - generic [ref=e1299]: Spicy
+                    - generic [ref=e1302]: 75%
+                  - generic [ref=e1303]:
+                    - generic [ref=e1304]: Sweet
+                    - generic [ref=e1307]: 30%
+                  - generic [ref=e1308]:
+                    - generic [ref=e1309]: Aromatic
+                    - generic [ref=e1312]: 80%
+            - generic [ref=e1313]:
+              - generic [ref=e1314]:
+                - heading "Notes Pyramid" [level=2] [ref=e1315]
+                - paragraph [ref=e1316]: Top - Heart - Base
+              - generic [ref=e1317]:
+                - generic [ref=e1318]:
+                  - generic [ref=e1319]:
+                    - generic [ref=e1320]: TOP NOTES
+                    - generic [ref=e1321]: 0-30 min
+                  - generic [ref=e1322]:
+                    - generic [ref=e1323]:
+                      - generic [ref=e1324]: 🍊
+                      - generic [ref=e1325]: bergamot
+                    - generic [ref=e1326]:
+                      - generic [ref=e1327]: 🌶️
+                      - generic [ref=e1328]: saffron
+                - generic [ref=e1329]:
+                  - generic [ref=e1330]:
+                    - generic [ref=e1331]: HEART NOTES
+                    - generic [ref=e1332]: 30min-2hr
+                  - generic [ref=e1333]:
+                    - generic [ref=e1334]:
+                      - generic [ref=e1335]: 💜
+                      - generic [ref=e1336]: rose
+                    - generic [ref=e1337]:
+                      - generic [ref=e1338]: ⚡
+                      - generic [ref=e1339]: oud
+                    - generic [ref=e1340]:
+                      - generic [ref=e1341]: 🌸
+                      - generic [ref=e1342]: sandalwood
+                - generic [ref=e1343]:
+                  - generic [ref=e1344]:
+                    - generic [ref=e1345]: BASE NOTES
+                    - generic [ref=e1346]: 2hr+
+                  - generic [ref=e1347]:
+                    - generic [ref=e1348]:
+                      - generic [ref=e1349]: 💎
+                      - generic [ref=e1350]: amber
+                    - generic [ref=e1351]:
+                      - generic [ref=e1352]: 🌲
+                      - generic [ref=e1353]: bergamot
+                    - generic [ref=e1354]:
+                      - generic [ref=e1355]: 🍯
+                      - generic [ref=e1356]: saffron
+        - generic [ref=e1357]:
+          - heading "The Story" [level=3] [ref=e1358]
+          - paragraph [ref=e1359]:
+            - strong [ref=e1360]: Zion
+            - text: by
+            - strong [ref=e1361]: Alexandria Fragrances
+            - text: opens with bergamot, saffron, rose, setting a oriental woody signature from the first spray.
+          - paragraph [ref=e1362]: The drydown settles into oud, sandalwood, amber, giving the section the same full fragrance-story rhythm as the home collection.
+          - paragraph [ref=e1363]: A luxurious blend with bergamot, rose, and oud.
+        - generic [ref=e1364]:
+          - generic [ref=e1365]:
+            - generic [ref=e1366]:
+              - paragraph [ref=e1367]: Best Seasons
+              - generic [ref=e1368]:
+                - generic [ref=e1369]:
+                  - generic [ref=e1370]: 🌸
+                  - generic [ref=e1371]: Spring
+                - generic [ref=e1373]:
+                  - generic [ref=e1374]: ☀️
+                  - generic [ref=e1375]: Summer
+                - generic [ref=e1377]:
+                  - generic [ref=e1378]: 🍂
+                  - generic [ref=e1379]: Fall
+                - generic [ref=e1381]:
+                  - generic [ref=e1382]: ❄️
+                  - generic [ref=e1383]: Winter
+            - generic [ref=e1385]:
+              - paragraph [ref=e1386]: Mood
+              - generic [ref=e1387]:
+                - generic [ref=e1388]:
+                  - generic [ref=e1389]: 💪
+                  - generic [ref=e1390]: Confident
+                - generic [ref=e1392]:
+                  - generic [ref=e1393]: ⚡
+                  - generic [ref=e1394]: Energetic
+                - generic [ref=e1396]:
+                  - generic [ref=e1397]: 😎
+                  - generic [ref=e1398]: Casual
+          - paragraph [ref=e1400]: Sauvage — 8.8/10 overall from 847 votes
+        - generic [ref=e1402]:
+          - generic [ref=e1403]:
+            - generic [ref=e1404]:
+              - button "▲" [ref=e1405] [cursor=pointer]
+              - generic [ref=e1406]: "847"
+              - button "▼" [ref=e1407] [cursor=pointer]
+            - generic [ref=e1408]: r/fragrance · Posted by u/FragranceConnoisseur · 8 months ago
+          - paragraph [ref=e1410]:
+            - strong [ref=e1411]: Zion
+            - text: by
+            - strong [ref=e1412]: Alexandria Fragrances
+            - text: opens with bergamot, saffron, rose, setting a oriental woody signature from the first spray.
+          - generic [ref=e1413]:
+            - generic [ref=e1414]: 💬 127 comments
+            - generic [ref=e1415]: 🔄 Share
+            - generic [ref=e1416]: ⭐ Save
+        - generic [ref=e1418]:
+          - generic [ref=e1419]:
+            - generic [ref=e1420]: ⏱️ PERFORMANCE
+            - generic [ref=e1421]:
+              - generic [ref=e1422]:
+                - generic [ref=e1423]: Longevity
+                - generic [ref=e1426]: "8.5"
+              - generic [ref=e1427]:
+                - generic [ref=e1428]: Sillage
+                - generic [ref=e1431]: "8"
+          - generic [ref=e1432]:
+            - generic [ref=e1433]: 💎 VALUE
+            - generic [ref=e1434]:
+              - generic [ref=e1435]:
+                - generic [ref=e1436]: Versatility
+                - generic [ref=e1439]: "9.5"
+              - generic [ref=e1440]:
+                - generic [ref=e1441]: Value
+                - generic [ref=e1444]: "9"
+        - generic [ref=e1445]:
+          - generic [ref=e1446]:
+            - heading "💬 User Reviews & Comments" [level=3] [ref=e1447]:
+              - generic [ref=e1448]: 💬
+              - text: User Reviews & Comments
+            - generic [ref=e1450]: 0 reviews
+          - generic [ref=e1452]:
+            - generic [ref=e1453]: 🔒
+            - heading "Share Your Experience" [level=4] [ref=e1454]
+            - paragraph [ref=e1455]: Sign in to write a review for Sauvage.
+            - button "Sign In to Review" [ref=e1456] [cursor=pointer]
+      - generic [ref=e1458]:
+        - generic [ref=e1459]:
+          - generic [ref=e1460]:
+            - img "Amouage Epic Man bottle"
+            - generic [ref=e1461]:
+              - generic [ref=e1463]:
+                - heading "AMOUAGE" [level=1] [ref=e1464] [cursor=pointer]
+                - heading "Men - Oriental Spicy" [level=2] [ref=e1465]
+                - heading "Epic Man" [level=3] [ref=e1466]
+              - generic [ref=e1467]:
+                - generic [ref=e1474]: EDT
+                - generic [ref=e1475]: 2009 - Oriental Spicy
+              - generic [ref=e1476]:
+                - button "Add to Favorites" [ref=e1478] [cursor=pointer]:
+                  - generic [ref=e1479]:
+                    - img [ref=e1480]
+                    - img [ref=e1482]
+                  - generic [ref=e1484]: Add to Favorites
+                - button "Request Scent" [ref=e1486] [cursor=pointer]:
+                  - img [ref=e1488]
+                  - generic [ref=e1492]: Request Scent
+              - generic [ref=e1493]:
+                - generic [ref=e1494]:
+                  - heading "Select Concentration" [level=4] [ref=e1495]
+                  - generic [ref=e1496]: Choose Your Preference
+                - generic [ref=e1497]:
+                  - generic [ref=e1505] [cursor=pointer]:
+                    - generic [ref=e1506]: EDT
+                    - generic [ref=e1507]: Premium oil formulation
+                  - generic [ref=e1516] [cursor=pointer]:
+                    - generic [ref=e1517]: Discovery Vial
+                    - generic [ref=e1518]: High-quality sample format
+          - generic [ref=e1520]:
+            - generic [ref=e1521]:
+              - generic [ref=e1522]:
+                - heading "Scent DNA" [level=2] [ref=e1523]
+                - paragraph [ref=e1524]: Oriental Spicy Analysis
+              - generic [ref=e1526]:
+                - generic [ref=e1527]:
+                  - generic [ref=e1528]: FRESH
+                  - generic [ref=e1531]: "70"
+                - generic [ref=e1532]:
+                  - generic [ref=e1533]: WOODY
+                  - generic [ref=e1536]: "85"
+                - generic [ref=e1537]:
+                  - generic [ref=e1538]: SPICY
+                  - generic [ref=e1541]: "50"
+                - generic [ref=e1542]:
+                  - generic [ref=e1543]: SWEET
+                  - generic [ref=e1546]: "35"
+                - generic [ref=e1547]:
+                  - generic [ref=e1548]: AROMATIC
+                  - generic [ref=e1551]: "75"
+            - generic [ref=e1552]:
+              - generic [ref=e1553]:
+                - heading "Notes Pyramid" [level=2] [ref=e1554]
+                - paragraph [ref=e1555]: Top - Heart - Base
+              - generic [ref=e1557]:
+                - generic [ref=e1562]:
+                  - generic [ref=e1563]:
+                    - generic [ref=e1564]: OPENING
+                    - generic [ref=e1565]: First impression
+                  - generic [ref=e1566]:
+                    - generic [ref=e1567]:
+                      - generic [ref=e1568]: 🍊
+                      - generic [ref=e1569]: cumin
+                      - generic [ref=e1570]: Crisp
+                    - generic [ref=e1571]:
+                      - generic [ref=e1572]: 🍋
+                      - generic [ref=e1573]: pink pepper
+                      - generic [ref=e1574]: Bright
+                    - generic [ref=e1575]:
+                      - generic [ref=e1576]: 🌿
+                      - generic [ref=e1577]: cardamom
+                      - generic [ref=e1578]: Cool
+                - generic [ref=e1583]:
+                  - generic [ref=e1584]:
+                    - generic [ref=e1585]: HEART
+                    - generic [ref=e1586]: Development
+                  - generic [ref=e1587]:
+                    - generic [ref=e1588]:
+                      - generic [ref=e1589]: 🫚
+                      - generic [ref=e1590]: incense
+                      - generic [ref=e1591]: Warm
+                    - generic [ref=e1592]:
+                      - generic [ref=e1593]: 🥜
+                      - generic [ref=e1594]: oud
+                      - generic [ref=e1595]: Spicy
+                    - generic [ref=e1596]:
+                      - generic [ref=e1597]: 🌼
+                      - generic [ref=e1598]: leather
+                      - generic [ref=e1599]: Delicate
+                - generic [ref=e1604]:
+                  - generic [ref=e1605]:
+                    - generic [ref=e1606]: DRY DOWN
+                    - generic [ref=e1607]: Lasting trail
+                  - generic [ref=e1608]:
+                    - generic [ref=e1609]:
+                      - generic [ref=e1610]: 🪵
+                      - generic [ref=e1611]: cumin
+                      - generic [ref=e1612]: Creamy
+                    - generic [ref=e1613]:
+                      - generic [ref=e1614]: 🌲
+                      - generic [ref=e1615]: pink pepper
+                      - generic [ref=e1616]: Dry
+                    - generic [ref=e1617]:
+                      - generic [ref=e1618]: 🕯️
+                      - generic [ref=e1619]: cardamom
+                      - generic [ref=e1620]: Smoky
+        - generic [ref=e1621]:
+          - heading "The Story" [level=3] [ref=e1622]
+          - paragraph [ref=e1623]:
+            - strong [ref=e1624]: Epic Man
+            - text: by
+            - strong [ref=e1625]: Amouage
+            - text: opens with cumin, pink pepper, cardamom, setting a oriental spicy signature from the first spray.
+          - paragraph [ref=e1626]: The drydown settles into incense, oud, leather, giving the section the same full fragrance-story rhythm as the home collection.
+          - paragraph [ref=e1627]: A complex and mysterious fragrance with cumin, pink pepper, and oud.
+        - generic [ref=e1628]:
+          - generic [ref=e1629]:
+            - generic [ref=e1630]:
+              - paragraph [ref=e1631]: Best Seasons
+              - generic [ref=e1632]:
+                - generic [ref=e1633]:
+                  - generic [ref=e1634]: 🌸
+                  - generic [ref=e1635]: Spring
+                - generic [ref=e1637]:
+                  - generic [ref=e1638]: ☀️
+                  - generic [ref=e1639]: Summer
+                - generic [ref=e1641]:
+                  - generic [ref=e1642]: 🍂
+                  - generic [ref=e1643]: Fall
+                - generic [ref=e1645]:
+                  - generic [ref=e1646]: ❄️
+                  - generic [ref=e1647]: Winter
+            - generic [ref=e1649]:
+              - paragraph [ref=e1650]: Mood
+              - generic [ref=e1651]:
+                - generic [ref=e1652]:
+                  - generic [ref=e1653]: 💪
+                  - generic [ref=e1654]: Confident
+                - generic [ref=e1656]:
+                  - generic [ref=e1657]: 💼
+                  - generic [ref=e1658]: Professional
+                - generic [ref=e1660]:
+                  - generic [ref=e1661]: 🎩
+                  - generic [ref=e1662]: Refined
+          - paragraph [ref=e1664]: Bleu de Chanel — 7.9/10 overall from 623 votes
+        - generic [ref=e1666]:
+          - generic [ref=e1667]:
+            - generic [ref=e1668]:
+              - button "▲" [ref=e1669] [cursor=pointer]
+              - generic [ref=e1670]: "623"
+              - button "▼" [ref=e1671] [cursor=pointer]
+            - generic [ref=e1672]: r/fragrance · Posted by u/ScentEnthusiast · 5 months ago
+          - paragraph [ref=e1674]:
+            - strong [ref=e1675]: Epic Man
+            - text: by
+            - strong [ref=e1676]: Amouage
+            - text: opens with cumin, pink pepper, cardamom, setting a oriental spicy signature from the first spray.
+          - generic [ref=e1677]:
+            - generic [ref=e1678]: 💬 93 comments
+            - generic [ref=e1679]: 🔄 Share
+            - generic [ref=e1680]: ⭐ Save
+        - generic [ref=e1682]:
+          - generic [ref=e1683]:
+            - generic [ref=e1684]: ⏱️ PERFORMANCE
+            - generic [ref=e1685]:
+              - generic [ref=e1686]:
+                - generic [ref=e1687]: Longevity
+                - generic [ref=e1690]: "8"
+              - generic [ref=e1691]:
+                - generic [ref=e1692]: Sillage
+                - generic [ref=e1695]: "7"
+          - generic [ref=e1696]:
+            - generic [ref=e1697]: 💎 VALUE
+            - generic [ref=e1698]:
+              - generic [ref=e1699]:
+                - generic [ref=e1700]: Versatility
+                - generic [ref=e1703]: "9"
+              - generic [ref=e1704]:
+                - generic [ref=e1705]: Value
+                - generic [ref=e1708]: "7.5"
+        - generic [ref=e1709]:
+          - generic [ref=e1710]:
+            - heading "💬 User Reviews & Comments" [level=3] [ref=e1711]:
+              - generic [ref=e1712]: 💬
+              - text: User Reviews & Comments
+            - generic [ref=e1714]: 0 reviews
+          - generic [ref=e1716]:
+            - generic [ref=e1717]: 🔒
+            - heading "Share Your Experience" [level=4] [ref=e1718]
+            - paragraph [ref=e1719]: Sign in to write a review for Bleu de Chanel.
+            - button "Sign In to Review" [ref=e1720] [cursor=pointer]
+      - generic [ref=e1722]:
+        - generic [ref=e1723]:
+          - generic [ref=e1724]:
+            - img "Amouage Guidance bottle"
+            - generic [ref=e1725]:
+              - generic [ref=e1727]:
+                - heading "AMOUAGE" [level=1] [ref=e1728] [cursor=pointer]
+                - heading "Women - Floral Amber" [level=2] [ref=e1729]
+                - heading "Guidance" [level=3] [ref=e1730]
+              - generic [ref=e1731]:
+                - generic [ref=e1738]: EDP
+                - generic [ref=e1739]: 2023 - Floral Amber
+              - generic [ref=e1740]:
+                - button "Add to Favorites" [ref=e1742] [cursor=pointer]:
+                  - generic [ref=e1743]:
+                    - img [ref=e1744]
+                    - img [ref=e1746]
+                  - generic [ref=e1748]: Add to Favorites
+                - button "Request Scent" [ref=e1750] [cursor=pointer]:
+                  - img [ref=e1752]
+                  - generic [ref=e1756]: Request Scent
+              - generic [ref=e1757]:
+                - generic [ref=e1758]:
+                  - heading "Select Concentration" [level=4] [ref=e1759]
+                  - generic [ref=e1760]: Choose Your Preference
+                - generic [ref=e1761]:
+                  - generic [ref=e1769] [cursor=pointer]:
+                    - generic [ref=e1770]: EDP
+                    - generic [ref=e1771]: Premium oil formulation
+                  - generic [ref=e1780] [cursor=pointer]:
+                    - generic [ref=e1781]: Discovery Vial
+                    - generic [ref=e1782]: High-quality sample format
+          - generic [ref=e1784]:
+            - generic [ref=e1785]:
+              - generic [ref=e1786]:
+                - heading "Scent DNA" [level=2] [ref=e1787]
+                - paragraph [ref=e1788]: Floral Amber Analysis
+              - generic [ref=e1789]:
+                - generic [ref=e1790]:
+                  - generic [ref=e1791]:
+                    - generic [ref=e1792]: FRESH
+                    - generic [ref=e1796]: 10%
+                  - generic [ref=e1797]:
+                    - generic [ref=e1798]: WOODY
+                    - generic [ref=e1802]: 40%
+                  - generic [ref=e1803]:
+                    - generic [ref=e1804]: SPICY
+                    - generic [ref=e1808]: 80%
+                  - generic [ref=e1809]:
+                    - generic [ref=e1810]: SWEET
+                    - generic [ref=e1814]: 95%
+                  - generic [ref=e1815]:
+                    - generic [ref=e1816]: AROMATIC
+                    - generic [ref=e1820]: 60%
+                - generic [ref=e1821]:
+                  - generic [ref=e1822]: WARMTH INDEX
+                  - generic [ref=e1825]:
+                    - generic [ref=e1826]: Cool
+                    - generic [ref=e1827]: Warm
+                    - generic [ref=e1828]: Hot
+            - generic [ref=e1829]:
+              - generic [ref=e1830]:
+                - heading "Notes Pyramid" [level=2] [ref=e1831]
+                - paragraph [ref=e1832]: Top - Heart - Base
+              - generic [ref=e1833]:
+                - generic [ref=e1834]:
+                  - generic [ref=e1835]: OPENING SPARK
+                  - generic [ref=e1836]:
+                    - generic [ref=e1837]:
+                      - generic [ref=e1838]: 🍂
+                      - generic [ref=e1839]: pear
+                      - generic [ref=e1840]: Rich
+                    - generic [ref=e1841]:
+                      - generic [ref=e1842]: 🌶️
+                      - generic [ref=e1843]: hazelnut
+                      - generic [ref=e1844]: Warm
+                - generic [ref=e1845]:
+                  - generic [ref=e1846]: GOLDEN HEART
+                  - generic [ref=e1847]:
+                    - generic [ref=e1848]:
+                      - generic [ref=e1849]: 🍦
+                      - generic [ref=e1850]: rose
+                      - generic [ref=e1851]: Lush
+                    - generic [ref=e1852]:
+                      - generic [ref=e1853]: 🫘
+                      - generic [ref=e1854]: saffron
+                      - generic [ref=e1855]: Sweet
+                    - generic [ref=e1856]:
+                      - generic [ref=e1857]: 🍫
+                      - generic [ref=e1858]: sandalwood
+                      - generic [ref=e1859]: Dark
+                - generic [ref=e1860]:
+                  - generic [ref=e1861]: SMOKY BASE
+                  - generic [ref=e1862]:
+                    - generic [ref=e1863]:
+                      - generic [ref=e1864]: 🍇
+                      - generic [ref=e1865]: vanilla
+                      - generic [ref=e1866]: Complex
+                    - generic [ref=e1867]:
+                      - generic [ref=e1868]: ✨
+                      - generic [ref=e1869]: pear
+                      - generic [ref=e1870]: Resinous
+                    - generic [ref=e1871]:
+                      - generic [ref=e1872]: 💨
+                      - generic [ref=e1873]: hazelnut
+                      - generic [ref=e1874]: Subtle
+        - generic [ref=e1875]:
+          - heading "The Story" [level=3] [ref=e1876]
+          - paragraph [ref=e1877]:
+            - strong [ref=e1878]: Guidance
+            - text: by
+            - strong [ref=e1879]: Amouage
+            - text: opens with pear, hazelnut, rose, setting a floral amber signature from the first spray.
+          - paragraph [ref=e1880]: The drydown settles into saffron, sandalwood, vanilla, giving the section the same full fragrance-story rhythm as the home collection.
+          - paragraph [ref=e1881]: An opulent pear hazelnut floral with rose, saffron, sandalwood, and vanilla.
+        - generic [ref=e1882]:
+          - generic [ref=e1883]:
+            - generic [ref=e1884]:
+              - paragraph [ref=e1885]: Best Seasons
+              - generic [ref=e1886]:
+                - generic [ref=e1887]:
+                  - generic [ref=e1888]: 🌸
+                  - generic [ref=e1889]: Spring
+                - generic [ref=e1891]:
+                  - generic [ref=e1892]: ☀️
+                  - generic [ref=e1893]: Summer
+                - generic [ref=e1895]:
+                  - generic [ref=e1896]: 🍂
+                  - generic [ref=e1897]: Fall
+                - generic [ref=e1899]:
+                  - generic [ref=e1900]: ❄️
+                  - generic [ref=e1901]: Winter
+            - generic [ref=e1903]:
+              - paragraph [ref=e1904]: Mood
+              - generic [ref=e1905]:
+                - generic [ref=e1906]:
+                  - generic [ref=e1907]: 🌙
+                  - generic [ref=e1908]: Evening
+                - generic [ref=e1910]:
+                  - generic [ref=e1911]: 👑
+                  - generic [ref=e1912]: Luxurious
+                - generic [ref=e1914]:
+                  - generic [ref=e1915]: 🕯️
+                  - generic [ref=e1916]: Intimate
+          - paragraph [ref=e1918]: Tobacco Vanille — 7.3/10 overall from 1124 votes
+        - generic [ref=e1920]:
+          - generic [ref=e1921]:
+            - generic [ref=e1922]:
+              - button "▲" [ref=e1923] [cursor=pointer]
+              - generic [ref=e1924]: "1124"
+              - button "▼" [ref=e1925] [cursor=pointer]
+            - generic [ref=e1926]: r/fragrance · Posted by u/GourmandAddict · 3 months ago
+          - paragraph [ref=e1928]:
+            - strong [ref=e1929]: Guidance
+            - text: by
+            - strong [ref=e1930]: Amouage
+            - text: opens with pear, hazelnut, rose, setting a floral amber signature from the first spray.
+          - generic [ref=e1931]:
+            - generic [ref=e1932]: 💬 168 comments
+            - generic [ref=e1933]: 🔄 Share
+            - generic [ref=e1934]: ⭐ Save
+        - generic [ref=e1936]:
+          - generic [ref=e1937]:
+            - generic [ref=e1938]: ⏱️ PERFORMANCE
+            - generic [ref=e1939]:
+              - generic [ref=e1940]:
+                - generic [ref=e1941]: Longevity
+                - generic [ref=e1944]: "9.5"
+              - generic [ref=e1945]:
+                - generic [ref=e1946]: Sillage
+                - generic [ref=e1949]: "8.5"
+          - generic [ref=e1950]:
+            - generic [ref=e1951]: 💎 VALUE
+            - generic [ref=e1952]:
+              - generic [ref=e1953]:
+                - generic [ref=e1954]: Versatility
+                - generic [ref=e1957]: "5"
+              - generic [ref=e1958]:
+                - generic [ref=e1959]: Value
+                - generic [ref=e1962]: "6"
+        - generic [ref=e1963]:
+          - generic [ref=e1964]:
+            - heading "💬 User Reviews & Comments" [level=3] [ref=e1965]:
+              - generic [ref=e1966]: 💬
+              - text: User Reviews & Comments
+            - generic [ref=e1968]: 0 reviews
+          - generic [ref=e1970]:
+            - generic [ref=e1971]: 🔒
+            - heading "Share Your Experience" [level=4] [ref=e1972]
+            - paragraph [ref=e1973]: Sign in to write a review for Tobacco Vanille.
+            - button "Sign In to Review" [ref=e1974] [cursor=pointer]
+      - generic [ref=e1976]:
+        - generic [ref=e1977]:
+          - generic [ref=e1978]:
+            - img "Amouage Interlude Man bottle"
+            - generic [ref=e1979]:
+              - generic [ref=e1981]:
+                - heading "AMOUAGE" [level=1] [ref=e1982] [cursor=pointer]
+                - heading "Men - Oriental Woody" [level=2] [ref=e1983]
+                - heading "Interlude Man" [level=3] [ref=e1984]
+              - generic [ref=e1985]:
+                - generic [ref=e1992]: EDT
+                - generic [ref=e1993]: 2012 - Oriental Woody
+              - generic [ref=e1994]:
+                - button "Add to Favorites" [ref=e1996] [cursor=pointer]:
+                  - generic [ref=e1997]:
+                    - img [ref=e1998]
+                    - img [ref=e2000]
+                  - generic [ref=e2002]: Add to Favorites
+                - button "Request Scent" [ref=e2004] [cursor=pointer]:
+                  - img [ref=e2006]
+                  - generic [ref=e2010]: Request Scent
+              - generic [ref=e2011]:
+                - generic [ref=e2012]:
+                  - heading "Select Concentration" [level=4] [ref=e2013]
+                  - generic [ref=e2014]: Choose Your Preference
+                - generic [ref=e2015]:
+                  - generic [ref=e2023] [cursor=pointer]:
+                    - generic [ref=e2024]: EDT
+                    - generic [ref=e2025]: Premium oil formulation
+                  - generic [ref=e2034] [cursor=pointer]:
+                    - generic [ref=e2035]: Discovery Vial
+                    - generic [ref=e2036]: High-quality sample format
+          - generic [ref=e2038]:
+            - generic [ref=e2039]:
+              - generic [ref=e2040]:
+                - heading "Scent DNA" [level=2] [ref=e2041]
+                - paragraph [ref=e2042]: Oriental Woody Analysis
+              - generic [ref=e2044]:
+                - img [ref=e2045]:
+                  - generic [ref=e2056]: OUD
+                  - generic [ref=e2057]: PROFILE
+                - generic [ref=e2058]:
+                  - generic [ref=e2059]:
+                    - text: "Fresh:"
+                    - strong [ref=e2060]: 20%
+                  - generic [ref=e2061]:
+                    - text: "Woody:"
+                    - strong [ref=e2062]: 95%
+                  - generic [ref=e2063]:
+                    - text: "Spicy:"
+                    - strong [ref=e2064]: 55%
+                  - generic [ref=e2065]:
+                    - text: "Sweet:"
+                    - strong [ref=e2066]: 45%
+                  - generic [ref=e2067]:
+                    - text: "Aromatic:"
+                    - strong [ref=e2068]: 65%
+            - generic [ref=e2069]:
+              - generic [ref=e2070]:
+                - heading "Notes Pyramid" [level=2] [ref=e2071]
+                - paragraph [ref=e2072]: Top - Heart - Base
+              - generic [ref=e2073]:
+                - generic [ref=e2074]:
+                  - generic [ref=e2077]: OPENING WOOD
+                  - generic [ref=e2079]:
+                    - generic [ref=e2080]:
+                      - generic [ref=e2081]: 🌹
+                      - generic [ref=e2082]: oregano Elegant
+                    - generic [ref=e2083]:
+                      - generic [ref=e2084]: 🫛
+                      - generic [ref=e2085]: pepper Aromatic
+                    - generic [ref=e2086]:
+                      - generic [ref=e2087]: 🌸
+                      - generic [ref=e2088]: incense Spicy
+                - generic [ref=e2089]:
+                  - generic [ref=e2092]: SACRED HEART
+                  - generic [ref=e2094]:
+                    - generic [ref=e2095]:
+                      - generic [ref=e2096]: 🕌
+                      - generic [ref=e2097]: opoponax Smooth
+                    - generic [ref=e2098]:
+                      - generic [ref=e2099]: 🪵
+                      - generic [ref=e2100]: oud Creamy
+                - generic [ref=e2101]:
+                  - generic [ref=e2104]: RESINOUS BASE
+                  - generic [ref=e2106]:
+                    - generic [ref=e2107]:
+                      - generic [ref=e2108]: 🟤
+                      - generic [ref=e2109]: leather Warm
+                    - generic [ref=e2110]:
+                      - generic [ref=e2111]: 🍦
+                      - generic [ref=e2112]: oregano Soft
+                    - generic [ref=e2113]:
+                      - generic [ref=e2114]: 🌾
+                      - generic [ref=e2115]: pepper Earthy
+        - generic [ref=e2116]:
+          - heading "The Story" [level=3] [ref=e2117]
+          - paragraph [ref=e2118]:
+            - strong [ref=e2119]: Interlude Man
+            - text: by
+            - strong [ref=e2120]: Amouage
+            - text: opens with oregano, pepper, incense, setting a oriental woody signature from the first spray.
+          - paragraph [ref=e2121]: The drydown settles into opoponax, oud, leather, giving the section the same full fragrance-story rhythm as the home collection.
+          - paragraph [ref=e2122]: A smoky and mysterious fragrance with oregano, incense, and oud.
+        - generic [ref=e2123]:
+          - generic [ref=e2124]:
+            - generic [ref=e2125]:
+              - paragraph [ref=e2126]: Best Seasons
+              - generic [ref=e2127]:
+                - generic [ref=e2128]:
+                  - generic [ref=e2129]: 🌸
+                  - generic [ref=e2130]: Spring
+                - generic [ref=e2132]:
+                  - generic [ref=e2133]: ☀️
+                  - generic [ref=e2134]: Summer
+                - generic [ref=e2136]:
+                  - generic [ref=e2137]: 🍂
+                  - generic [ref=e2138]: Fall
+                - generic [ref=e2140]:
+                  - generic [ref=e2141]: ❄️
+                  - generic [ref=e2142]: Winter
+            - generic [ref=e2144]:
+              - paragraph [ref=e2145]: Mood
+              - generic [ref=e2146]:
+                - generic [ref=e2147]:
+                  - generic [ref=e2148]: 🎩
+                  - generic [ref=e2149]: Refined
+                - generic [ref=e2151]:
+                  - generic [ref=e2152]: 🧘
+                  - generic [ref=e2153]: Meditative
+                - generic [ref=e2155]:
+                  - generic [ref=e2156]: 🔮
+                  - generic [ref=e2157]: Mysterious
+          - paragraph [ref=e2159]: Oud Wood — 6.8/10 overall from 734 votes
+        - generic [ref=e2161]:
+          - generic [ref=e2162]:
+            - generic [ref=e2163]:
+              - button "▲" [ref=e2164] [cursor=pointer]
+              - generic [ref=e2165]: "734"
+              - button "▼" [ref=e2166] [cursor=pointer]
+            - generic [ref=e2167]: r/fragrance · Posted by u/OudEnthusiast · 6 months ago
+          - paragraph [ref=e2169]:
+            - strong [ref=e2170]: Interlude Man
+            - text: by
+            - strong [ref=e2171]: Amouage
+            - text: opens with oregano, pepper, incense, setting a oriental woody signature from the first spray.
+          - generic [ref=e2172]:
+            - generic [ref=e2173]: 💬 110 comments
+            - generic [ref=e2174]: 🔄 Share
+            - generic [ref=e2175]: ⭐ Save
+        - generic [ref=e2177]:
+          - generic [ref=e2178]:
+            - generic [ref=e2179]: ⏱️ PERFORMANCE
+            - generic [ref=e2180]:
+              - generic [ref=e2181]:
+                - generic [ref=e2182]: Longevity
+                - generic [ref=e2185]: "7.5"
+              - generic [ref=e2186]:
+                - generic [ref=e2187]: Sillage
+                - generic [ref=e2190]: "6.5"
+          - generic [ref=e2191]:
+            - generic [ref=e2192]: 💎 VALUE
+            - generic [ref=e2193]:
+              - generic [ref=e2194]:
+                - generic [ref=e2195]: Versatility
+                - generic [ref=e2198]: "7.5"
+              - generic [ref=e2199]:
+                - generic [ref=e2200]: Value
+                - generic [ref=e2203]: "5.5"
+        - generic [ref=e2204]:
+          - generic [ref=e2205]:
+            - heading "💬 User Reviews & Comments" [level=3] [ref=e2206]:
+              - generic [ref=e2207]: 💬
+              - text: User Reviews & Comments
+            - generic [ref=e2209]: 0 reviews
+          - generic [ref=e2211]:
+            - generic [ref=e2212]: 🔒
+            - heading "Share Your Experience" [level=4] [ref=e2213]
+            - paragraph [ref=e2214]: Sign in to write a review for Oud Wood.
+            - button "Sign In to Review" [ref=e2215] [cursor=pointer]
+      - generic [ref=e2217]:
+        - generic [ref=e2218]:
+          - generic [ref=e2219]:
+            - img "Amouage Interlude Woman bottle"
+            - generic [ref=e2220]:
+              - generic [ref=e2222]:
+                - heading "AMOUAGE" [level=1] [ref=e2223] [cursor=pointer]
+                - heading "Women - Oriental Woody" [level=2] [ref=e2224]
+                - heading "Interlude Woman" [level=3] [ref=e2225]
+              - generic [ref=e2226]:
+                - generic [ref=e2233]: EDT
+                - generic [ref=e2234]: 2012 - Oriental Woody
+              - generic [ref=e2235]:
+                - button "Add to Favorites" [ref=e2237] [cursor=pointer]:
+                  - generic [ref=e2238]:
+                    - img [ref=e2239]
+                    - img [ref=e2241]
+                  - generic [ref=e2243]: Add to Favorites
+                - button "Request Scent" [ref=e2245] [cursor=pointer]:
+                  - img [ref=e2247]
+                  - generic [ref=e2251]: Request Scent
+              - generic [ref=e2252]:
+                - generic [ref=e2253]:
+                  - heading "Select Concentration" [level=4] [ref=e2254]
+                  - generic [ref=e2255]: Choose Your Preference
+                - generic [ref=e2256]:
+                  - generic [ref=e2264] [cursor=pointer]:
+                    - generic [ref=e2265]: EDT
+                    - generic [ref=e2266]: Premium oil formulation
+                  - generic [ref=e2275] [cursor=pointer]:
+                    - generic [ref=e2276]: Discovery Vial
+                    - generic [ref=e2277]: High-quality sample format
+          - generic [ref=e2279]:
+            - generic [ref=e2280]:
+              - generic [ref=e2281]:
+                - heading "Scent DNA" [level=2] [ref=e2282]
+                - paragraph [ref=e2283]: Oriental Woody Analysis
+              - generic [ref=e2284]:
+                - img [ref=e2286]:
+                  - generic [ref=e2290]: FRESH
+                  - generic [ref=e2294]: WOODY
+                  - generic [ref=e2298]: SPICY
+                  - generic [ref=e2302]: SWEET
+                  - generic [ref=e2306]: AROMATIC
+                - generic [ref=e2308]:
+                  - generic [ref=e2309]:
+                    - generic [ref=e2310]: Fresh
+                    - generic [ref=e2313]: 50%
+                  - generic [ref=e2314]:
+                    - generic [ref=e2315]: Woody
+                    - generic [ref=e2318]: 65%
+                  - generic [ref=e2319]:
+                    - generic [ref=e2320]: Spicy
+                    - generic [ref=e2323]: 85%
+                  - generic [ref=e2324]:
+                    - generic [ref=e2325]: Sweet
+                    - generic [ref=e2328]: 55%
+                  - generic [ref=e2329]:
+                    - generic [ref=e2330]: Aromatic
+                    - generic [ref=e2333]: 70%
+            - generic [ref=e2334]:
+              - generic [ref=e2335]:
+                - heading "Notes Pyramid" [level=2] [ref=e2336]
+                - paragraph [ref=e2337]: Top - Heart - Base
+              - generic [ref=e2338]:
+                - generic [ref=e2339]:
+                  - generic [ref=e2340]: TWILIGHT OPENING
+                  - generic [ref=e2341]:
+                    - generic [ref=e2342]:
+                      - generic [ref=e2343]: 🫛
+                      - generic [ref=e2344]: oregano
+                      - generic [ref=e2345]: Magnetic
+                    - generic [ref=e2346]:
+                      - generic [ref=e2347]: 🍊
+                      - generic [ref=e2348]: bergamot
+                      - generic [ref=e2349]: Fresh
+                - generic [ref=e2350]:
+                  - generic [ref=e2351]: MIDNIGHT HEART
+                  - generic [ref=e2352]:
+                    - generic [ref=e2353]:
+                      - generic [ref=e2354]: 💜
+                      - generic [ref=e2355]: incense
+                      - generic [ref=e2356]: Soft
+                    - generic [ref=e2357]:
+                      - generic [ref=e2358]: 🌲
+                      - generic [ref=e2359]: oud
+                      - generic [ref=e2360]: Warm
+                    - generic [ref=e2361]:
+                      - generic [ref=e2362]: 🌿
+                      - generic [ref=e2363]: amber
+                      - generic [ref=e2364]: Spicy
+                - generic [ref=e2365]:
+                  - generic [ref=e2366]: DAWN BASE
+                  - generic [ref=e2367]:
+                    - generic [ref=e2368]:
+                      - generic [ref=e2369]: 🌾
+                      - generic [ref=e2370]: leather
+                      - generic [ref=e2371]: Earthy
+                    - generic [ref=e2372]:
+                      - generic [ref=e2373]: 🤍
+                      - generic [ref=e2374]: sandalwood
+                      - generic [ref=e2375]: Sensual
+                    - generic [ref=e2376]:
+                      - generic [ref=e2377]: 🟤
+                      - generic [ref=e2378]: oregano
+                      - generic [ref=e2379]: Deep
+        - generic [ref=e2380]:
+          - heading "The Story" [level=3] [ref=e2381]
+          - paragraph [ref=e2382]:
+            - strong [ref=e2383]: Interlude Woman
+            - text: by
+            - strong [ref=e2384]: Amouage
+            - text: opens with oregano, bergamot, incense, setting a oriental woody signature from the first spray.
+          - paragraph [ref=e2385]: The drydown settles into oud, amber, leather, sandalwood, giving the section the same full fragrance-story rhythm as the home collection.
+          - paragraph [ref=e2386]: A complex and smoky fragrance with oregano, incense, and oud.
+        - generic [ref=e2387]:
+          - generic [ref=e2388]:
+            - generic [ref=e2389]:
+              - paragraph [ref=e2390]: Best Seasons
+              - generic [ref=e2391]:
+                - generic [ref=e2392]:
+                  - generic [ref=e2393]: 🌸
+                  - generic [ref=e2394]: Spring
+                - generic [ref=e2396]:
+                  - generic [ref=e2397]: ☀️
+                  - generic [ref=e2398]: Summer
+                - generic [ref=e2400]:
+                  - generic [ref=e2401]: 🍂
+                  - generic [ref=e2402]: Fall
+                - generic [ref=e2404]:
+                  - generic [ref=e2405]: ❄️
+                  - generic [ref=e2406]: Winter
+            - generic [ref=e2408]:
+              - paragraph [ref=e2409]: Mood
+              - generic [ref=e2410]:
+                - generic [ref=e2411]:
+                  - generic [ref=e2412]: ❤️
+                  - generic [ref=e2413]: Romantic
+                - generic [ref=e2415]:
+                  - generic [ref=e2416]: 🌙
+                  - generic [ref=e2417]: Evening
+                - generic [ref=e2419]:
+                  - generic [ref=e2420]: 🔮
+                  - generic [ref=e2421]: Mysterious
+          - paragraph [ref=e2423]: La Nuit de L'Homme — 6.9/10 overall from 912 votes
+        - generic [ref=e2425]:
+          - generic [ref=e2426]:
+            - generic [ref=e2427]:
+              - button "▲" [ref=e2428] [cursor=pointer]
+              - generic [ref=e2429]: "912"
+              - button "▼" [ref=e2430] [cursor=pointer]
+            - generic [ref=e2431]: r/fragrance · Posted by u/NightOwlFrags · 4 months ago
+          - paragraph [ref=e2433]:
+            - strong [ref=e2434]: Interlude Woman
+            - text: by
+            - strong [ref=e2435]: Amouage
+            - text: opens with oregano, bergamot, incense, setting a oriental woody signature from the first spray.
+          - generic [ref=e2436]:
+            - generic [ref=e2437]: 💬 136 comments
+            - generic [ref=e2438]: 🔄 Share
+            - generic [ref=e2439]: ⭐ Save
+        - generic [ref=e2441]:
+          - generic [ref=e2442]:
+            - generic [ref=e2443]: ⏱️ PERFORMANCE
+            - generic [ref=e2444]:
+              - generic [ref=e2445]:
+                - generic [ref=e2446]: Longevity
+                - generic [ref=e2449]: "6"
+              - generic [ref=e2450]:
+                - generic [ref=e2451]: Sillage
+                - generic [ref=e2454]: "6.5"
+          - generic [ref=e2455]:
+            - generic [ref=e2456]: 💎 VALUE
+            - generic [ref=e2457]:
+              - generic [ref=e2458]:
+                - generic [ref=e2459]: Versatility
+                - generic [ref=e2462]: "7"
+              - generic [ref=e2463]:
+                - generic [ref=e2464]: Value
+                - generic [ref=e2467]: "8"
+        - generic [ref=e2468]:
+          - generic [ref=e2469]:
+            - heading "💬 User Reviews & Comments" [level=3] [ref=e2470]:
+              - generic [ref=e2471]: 💬
+              - text: User Reviews & Comments
+            - generic [ref=e2473]: 0 reviews
+          - generic [ref=e2475]:
+            - generic [ref=e2476]: 🔒
+            - heading "Share Your Experience" [level=4] [ref=e2477]
+            - paragraph [ref=e2478]: Sign in to write a review for La Nuit de L'Homme.
+            - button "Sign In to Review" [ref=e2479] [cursor=pointer]
+    - navigation "Collection pages" [ref=e2480]:
+      - generic [ref=e2481]: Pages
+      - link "1" [ref=e2482] [cursor=pointer]:
+        - /url: index.html#catalogPageNav
+      - link "Prev" [ref=e2483] [cursor=pointer]:
+        - /url: fragrance-page.html?page=2
+      - link "2" [ref=e2484] [cursor=pointer]:
+        - /url: fragrance-page.html?page=2
+      - link "3" [ref=e2485] [cursor=pointer]:
+        - /url: fragrance-page.html?page=3
+      - link "4" [ref=e2486] [cursor=pointer]:
+        - /url: fragrance-page.html?page=4
+      - link "5" [ref=e2487] [cursor=pointer]:
+        - /url: fragrance-page.html?page=5
+      - link "6" [ref=e2488] [cursor=pointer]:
+        - /url: fragrance-page.html?page=6
+      - link "7" [ref=e2489] [cursor=pointer]:
+        - /url: fragrance-page.html?page=7
+      - link "8" [ref=e2490] [cursor=pointer]:
+        - /url: fragrance-page.html?page=8
+      - link "Next" [ref=e2491] [cursor=pointer]:
+        - /url: fragrance-page.html?page=4

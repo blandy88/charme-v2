@@ -85,14 +85,6 @@ class _AppShellState extends State<AppShell> with TickerProviderStateMixin {
   int _currentIndex = 0;
   late final AnimationController _navAnimController;
 
-  final _screens = const [
-    HomeScreen(),
-    SearchScreen(),
-    FavoritesScreen(),
-    CartScreen(),
-    ProfileScreen(),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -123,7 +115,28 @@ class _AppShellState extends State<AppShell> with TickerProviderStateMixin {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: [
+          TickerMode(
+            enabled: _currentIndex == 0,
+            child: HomeScreen(isActive: _currentIndex == 0),
+          ),
+          TickerMode(
+            enabled: _currentIndex == 1,
+            child: SearchScreen(
+              showBackButton: false,
+              onBack: () => _onTabTap(0),
+            ),
+          ),
+          TickerMode(
+            enabled: _currentIndex == 2,
+            child: FavoritesScreen(onDiscover: () => _onTabTap(0)),
+          ),
+          TickerMode(
+            enabled: _currentIndex == 3,
+            child: CartScreen(onExplore: () => _onTabTap(0)),
+          ),
+          TickerMode(enabled: _currentIndex == 4, child: const ProfileScreen()),
+        ],
       ),
       bottomNavigationBar: ClipRRect(
         child: BackdropFilter(

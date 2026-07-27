@@ -89,7 +89,7 @@ class _FragranceDetailScreenState extends State<FragranceDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final favorites = context.watch<FavoritesProvider>();
-    final isFavorite = favorites.isFavorite(f.name);
+    final isFavorite = favorites.isFavorite(f);
     final scentProfile = _getScentProfile();
     final similarFragrances = FragranceDatabase().getSimilar(f, limit: 8);
     final bottomPadding = MediaQuery.of(context).padding.bottom;
@@ -576,7 +576,7 @@ class _FragranceDetailScreenState extends State<FragranceDetailScreen> {
                       // ADD TO BAG button
                       GestureDetector(
                         onTap: () {
-                          if (_selectedSize == null) return;
+                          if (_selectedSize == null || !f.available) return;
                           context.read<CartProvider>().addItem(
                                 f,
                                 _selectedSize!,
@@ -601,20 +601,21 @@ class _FragranceDetailScreenState extends State<FragranceDetailScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 28, vertical: 14),
                           decoration: BoxDecoration(
-                            gradient: AppTheme.goldGradient,
+                            gradient: f.available ? AppTheme.goldGradient : null,
+                            color: f.available ? null : AppTheme.surfaceRaised,
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [
                               BoxShadow(
-                                color: AppTheme.gold.withValues(alpha: 0.3),
+                                color: (f.available ? AppTheme.gold : AppTheme.textMuted).withValues(alpha: 0.3),
                                 blurRadius: 16,
                                 offset: const Offset(0, 4),
                               ),
                             ],
                           ),
                           child: Text(
-                            'ADD TO BAG',
+                            f.available ? 'ADD TO BAG' : 'UNAVAILABLE',
                             style: GoogleFonts.dmSans(
-                              color: Colors.black,
+                              color: f.available ? Colors.black : AppTheme.textMuted,
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 1.2,

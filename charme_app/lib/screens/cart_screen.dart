@@ -8,7 +8,9 @@ import '../providers/cart_provider.dart';
 import '../models/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+  final VoidCallback? onExplore;
+
+  const CartScreen({super.key, this.onExplore});
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +123,11 @@ class CartScreen extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: () => Navigator.of(context).pop(),
+                onTap: onExplore ?? () {
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.of(context).pop();
+                  }
+                },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                   child: Text(
@@ -175,7 +181,7 @@ class CartScreen extends StatelessWidget {
 
   Widget _buildCartItem(BuildContext context, CartProvider cart, CartItem item, int index) {
     return Dismissible(
-      key: Key('${item.fragranceName}_${item.selectedSize}_$index'),
+      key: Key('${item.fragranceId}_${item.selectedSize}_$index'),
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,

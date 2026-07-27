@@ -7,19 +7,24 @@ class CartProvider extends ChangeNotifier {
 
   List<CartItem> get items => List.unmodifiable(_items);
 
-  int get itemCount => _items.length;
+  int get itemCount => _items.fold(0, (sum, item) => sum + item.quantity);
+
+  int get lineItemCount => _items.length;
 
   double get total => _items.fold(0, (sum, item) => sum + item.total);
 
   void addItem(Fragrance fragrance, String size, double price) {
+    if (!fragrance.available) return;
+
     final existingIndex = _items.indexWhere(
-      (item) => item.fragranceName == fragrance.name && item.selectedSize == size,
+      (item) => item.fragranceId == fragrance.id && item.selectedSize == size,
     );
 
     if (existingIndex >= 0) {
       _items[existingIndex].quantity++;
     } else {
       _items.add(CartItem(
+        fragranceId: fragrance.id,
         fragranceName: fragrance.name,
         brand: fragrance.brand,
         selectedSize: size,

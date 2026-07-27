@@ -26,13 +26,22 @@ const allowedOrigins = (process.env.CORS_ORIGINS || "")
   .split(",")
   .map((o) => o.trim())
   .filter(Boolean);
-const JWT_SECRET =
-  process.env.JWT_SECRET ||
-  (ENV === "development"
-    ? "your-super-secret-jwt-key-change-this-in-production"
-    : "");
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET must be set in environment variables");
+const INSECURE_JWT_SECRET_PREFIX =
+  "your-super-secret-jwt-key-change-this-in-production";
+const JWT_SECRET = process.env.JWT_SECRET || "";
+if (
+  !JWT_SECRET ||
+  JWT_SECRET.length < 32 ||
+  JWT_SECRET.startsWith(INSECURE_JWT_SECRET_PREFIX) ||
+  JWT_SECRET === "CHANGE_ME_TO_RANDOM_SECRET"
+) {
+  throw new Error(
+    "JWT_SECRET must be set to a non-placeholder random value of at least 32 characters",
+  );
+}
+
+if (ENV === "production" && allowedOrigins.length === 0) {
+  throw new Error("CORS_ORIGINS must be set in production");
 }
 
 // Setup DOMPurify for server-side HTML sanitization
@@ -95,7 +104,7 @@ async function migrateAvatarsToFileSystem() {
             if (!base64Data) continue;
 
             const buffer = Buffer.from(base64Data, "base64");
-            const fileName = `avatar_${user.id}_migrated_${Date.now()}.jpg`;
+            const fileName = `avatar_${user.id}_migrated_${Date.now()}_${user.id}.jpg`;
             const filePath = path.join(uploadsDir, fileName);
 
             // Process and save image
@@ -148,8 +157,10 @@ const db = new sqlite3.Database("./database/parfumerie.db", (err) => {
   } else {
     console.log("Connected to SQLite database");
 
-    // Ensure foreign keys are enforced in SQLite
+    // Ensure foreign keys are enforced and concurrent writes wait briefly.
     db.run("PRAGMA foreign_keys = ON");
+    db.run("PRAGMA journal_mode = WAL");
+    db.run("PRAGMA busy_timeout = 5000");
 
     // 🚀 ENHANCED REVIEW SYSTEM: Comprehensive database migration
     console.log("🔄 Checking for required database migrations...");
@@ -258,6 +269,27 @@ const db = new sqlite3.Database("./database/parfumerie.db", (err) => {
       },
     );
 
+    // Create review_likes table used by review like/dislike routes.
+    console.log("🔄 Creating review_likes table...");
+    db.run(
+      `
+            CREATE TABLE IF NOT EXISTS review_likes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                review_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                like_type TEXT NOT NULL CHECK (like_type IN ('like', 'dislike')),
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(review_id, user_id),
+                FOREIGN KEY (review_id) REFERENCES reviews (id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        `,
+      (err) => {
+        if (err) console.error("❌ Error creating review_likes table:", err);
+        else console.log("✅ Created review_likes table");
+      },
+    );
+
     // 🔧 ENHANCED: Create indexes for better performance
     console.log("🔄 Creating database indexes for better performance...");
 
@@ -292,6 +324,14 @@ const db = new sqlite3.Database("./database/parfumerie.db", (err) => {
       (err) => {
         if (err) console.error("❌ Error creating reply_likes index:", err);
         else console.log("✅ Created reply_likes index");
+      },
+    );
+
+    db.run(
+      "CREATE INDEX IF NOT EXISTS idx_review_likes_review_id ON review_likes(review_id)",
+      (err) => {
+        if (err) console.error("❌ Error creating review_likes index:", err);
+        else console.log("✅ Created review_likes index");
       },
     );
 
@@ -345,7 +385,8 @@ const helmetOptions =
           directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "'unsafe-inline'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
             imgSrc: ["'self'", "data:", "blob:"],
             mediaSrc: ["'self'"],
             connectSrc: ["'self'"],
@@ -358,7 +399,7 @@ const helmetOptions =
     : { contentSecurityPolicy: false };
 app.use(helmet(helmetOptions));
 
-if (ENV === "production" && allowedOrigins.length > 0) {
+if (ENV === "production") {
   app.use(
     cors({
       origin: (origin, callback) => {
@@ -418,7 +459,47 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(".", { index: "index.html", dotfiles: "ignore" }));
+const allowedStaticFiles = new Map(
+  [
+    "index.html",
+    "styles.css",
+    "script.js",
+    "background.mp4",
+    "default.jpg",
+    ...fs.readdirSync(__dirname).filter((file) => file.toLowerCase().endsWith(".png")),
+  ].map((file) => [`/${file.toLowerCase()}`, file]),
+);
+app.use((req, res, next) => {
+  if (req.path === "/") {
+    return res.sendFile(path.join(__dirname, "index.html"));
+  }
+
+  const normalizedPath = req.path.toLowerCase();
+  const staticFile = allowedStaticFiles.get(normalizedPath);
+  if (staticFile) {
+    return res.sendFile(path.join(__dirname, staticFile));
+  }
+
+  next();
+});
+app.use("/css", express.static(path.join(__dirname, "css"), { index: false }));
+app.use("/js", express.static(path.join(__dirname, "js"), { index: false }));
+app.use(
+  "/uploads/fragrances",
+  express.static(path.join(__dirname, "uploads", "fragrances"), {
+    index: false,
+  }),
+);
+app.use(
+  "/images/notes",
+  express.static(path.join(__dirname, "images", "notes"), { index: false }),
+);
+app.use(
+  "/images/mood-pictures",
+  express.static(path.join(__dirname, "images", "mood-pictures"), {
+    index: false,
+  }),
+);
 
 // Serve avatar files
 app.use(
@@ -439,6 +520,27 @@ const authLimiter = rateLimit({
   skipFailedRequests: false, // Count failed requests
 });
 
+const resendVerificationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 3,
+  message: {
+    error: "Too many verification code requests. Please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: false,
+});
+
+const uploadLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: {
+    error: "Too many upload requests. Please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Apply rate limiting to auth routes
 app.use("/api/auth", authLimiter);
 
@@ -456,6 +558,26 @@ const writeLimiter = rateLimit({
 
 app.use(["/api/reviews", "/api/replies"], writeLimiter);
 
+function getUserById(userId) {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM users WHERE id = ?", [userId], (err, row) => {
+      if (err) reject(err);
+      else resolve(row);
+    });
+  });
+}
+
+function safeAvatarValue(avatar) {
+  if (!avatar || avatar === "default.jpg") return "default.jpg";
+  if (typeof avatar !== "string") return "default.jpg";
+  if (avatar.startsWith("/uploads/avatars/")) return avatar;
+  return "default.jpg";
+}
+
+function userDisplayName(user) {
+  return `${user.first_name || ""} ${user.last_name || ""}`.trim();
+}
+
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -465,12 +587,24 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ error: "Access token required" });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
+  jwt.verify(token, JWT_SECRET, async (err, user) => {
     if (err) {
       return res.status(403).json({ error: "Invalid or expired token" });
     }
-    req.user = user;
-    next();
+    try {
+      const dbUser = await getUserById(user.userId);
+      if (!dbUser) {
+        return res.status(401).json({ error: "User no longer exists" });
+      }
+      if (dbUser.is_banned) {
+        return res.status(403).json({ error: "Account is banned" });
+      }
+      req.user = { ...user, dbUser };
+      next();
+    } catch (error) {
+      console.error("Token user lookup error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
   });
 };
 
@@ -484,7 +618,12 @@ const validatePassword = (password) => {
 };
 
 const validateName = (name) => {
-  return name && name.trim().length >= 2 && name.trim().length <= 100;
+  return (
+    name &&
+    name.trim().length >= 2 &&
+    name.trim().length <= 100 &&
+    /^[\p{L}\p{M}' .-]+$/u.test(name.trim())
+  );
 };
 
 // 🆕 Level System Functions
@@ -631,11 +770,12 @@ app.get("/api/auth/verify", authenticateToken, async (req, res) => {
 app.post("/api/auth/verify-email", async (req, res) => {
   try {
     const { userId, verificationCode } = req.body;
+    const normalizedCode = String(verificationCode || "").trim();
 
-    if (!userId || !verificationCode) {
+    if (!userId || !/^\d{6}$/.test(normalizedCode)) {
       return res
         .status(400)
-        .json({ error: "User ID and verification code are required" });
+        .json({ error: "A valid verification code is required" });
     }
 
     // Get user from database
@@ -655,7 +795,7 @@ app.post("/api/auth/verify-email", async (req, res) => {
     }
 
     // Check if verification code matches and hasn't expired
-    if (user.verification_code !== verificationCode) {
+    if (user.verification_code !== normalizedCode) {
       return res.status(400).json({ error: "Invalid verification code" });
     }
 
@@ -704,7 +844,7 @@ app.post("/api/auth/verify-email", async (req, res) => {
 });
 
 // Resend verification code endpoint
-app.post("/api/auth/resend-verification", async (req, res) => {
+app.post("/api/auth/resend-verification", resendVerificationLimiter, async (req, res) => {
   try {
     const { userId } = req.body;
 
@@ -918,20 +1058,20 @@ app.get("/api/user/profile", authenticateToken, async (req, res) => {
   }
 });
 
-// Get profile details for any user (for profile modal)
-app.get("/api/user/profile-details", async (req, res) => {
+// FIX ISS-002: Added authenticateToken; changed to POST to match frontend; fixed table/column names
+app.post("/api/user/profile-details", authenticateToken, async (req, res) => {
   try {
-    const { userId, email } = req.query;
+    const { userId } = req.body;
     
-    if (!userId && !email) {
-      return res.status(400).json({ error: "User ID or email required" });
+    if (!userId) {
+      return res.status(400).json({ error: "User ID required" });
     }
     
-    console.log(`🔍 Fetching profile details for: userId=${userId}, email=${email}`);
+    console.log(`🔍 Fetching profile details for: userId=${userId}`);
     
-    // Query user by ID or email
-    const query = userId ? "SELECT * FROM users WHERE id = ?" : "SELECT * FROM users WHERE email = ?";
-    const param = userId || email;
+    // Query user by ID or email — exclude sensitive fields
+    const query = "SELECT id, first_name, last_name, avatar_url, is_admin, created_at FROM users WHERE id = ? AND is_banned = 0";
+    const param = userId;
     
     const user = await new Promise((resolve, reject) => {
       db.get(query, [param], (err, row) => {
@@ -952,19 +1092,19 @@ app.get("/api/user/profile-details", async (req, res) => {
       });
     });
 
-    // Get user's reply count  
+    // Get user's reply count (FIX: correct table name is review_replies, not replies)
     const replyCount = await new Promise((resolve, reject) => {
-      db.get("SELECT COUNT(*) as count FROM replies WHERE user_id = ?", [user.id], (err, row) => {
+      db.get("SELECT COUNT(*) as count FROM review_replies WHERE user_id = ?", [user.id], (err, row) => {
         if (err) reject(err);
         else resolve(row?.count || 0);
       });
     });
 
-    // Get user's favorite fragrances (if favorites table exists)
+    // Get user's favorite fragrances from the canonical favorites table.
     let favorites = [];
     try {
       favorites = await new Promise((resolve, reject) => {
-        db.all("SELECT fragrance_name FROM favorites WHERE user_id = ? LIMIT 5", [user.id], (err, rows) => {
+        db.all("SELECT product_name FROM user_favorites WHERE user_id = ? LIMIT 5", [user.id], (err, rows) => {
           if (err) resolve([]); // Table might not exist
           else resolve(rows || []);
         });
@@ -976,45 +1116,34 @@ app.get("/api/user/profile-details", async (req, res) => {
     // Calculate display name
     const displayName = user.first_name && user.last_name 
       ? `${user.first_name} ${user.last_name}`.trim()
-      : user.first_name || user.last_name || user.email.split('@')[0];
+      : user.first_name || user.last_name || "Member";
 
     // Return profile data for modal
     const profileData = {
       id: user.id,
-      email: user.email,
       displayName: displayName,
       first_name: user.first_name || "",
       last_name: user.last_name || "",
       avatar_url: user.avatar_url || "default.jpg",
       is_admin: Boolean(user.is_admin),
-      is_banned: Boolean(user.is_banned),
       created_at: user.created_at,
       member_since: user.created_at,
       
       // Stats
       reviewCount: reviewCount,
       replyCount: replyCount,
-      followers: 0, // Placeholder - implement followers system later
-      following: 0, // Placeholder - implement following system later
+      followers: 0,
+      following: 0,
       
       // Activity
-      favorites: favorites.map(f => f.fragrance_name),
-      purchases: [], // Placeholder - implement purchases system later
+      favorites: favorites.map(f => f.product_name),
+      purchases: [],
       
       // Badge/Level info
       level: 1,
       badge: user.is_admin ? "Admin" : "Member",
       bio: `Member since ${new Date(user.created_at).getFullYear()}. ${reviewCount} reviews, ${replyCount} replies.`
     };
-
-    console.log(`✅ Profile details fetched for ${displayName}:`, {
-      id: profileData.id,
-      displayName: profileData.displayName,
-      reviewCount: profileData.reviewCount,
-      replyCount: profileData.replyCount,
-      favoritesCount: profileData.favorites.length,
-      isAdmin: profileData.is_admin
-    });
 
     res.json({
       success: true,
@@ -1060,12 +1189,12 @@ app.put("/api/user/profile", authenticateToken, async (req, res) => {
     }
 
     // Validation
-    if (firstName && !validateName(firstName)) {
+    if (firstName !== null && !validateName(firstName)) {
       return res.status(400).json({ error: "Invalid first name format" });
     }
 
-    if (lastName && lastName.length > 100) {
-      return res.status(400).json({ error: "Last name too long" });
+    if (lastName !== null && !validateName(lastName)) {
+      return res.status(400).json({ error: "Invalid last name format" });
     }
 
     if (
@@ -1084,8 +1213,7 @@ app.put("/api/user/profile", authenticateToken, async (req, res) => {
     if (sanitizedAvatar) {
       const isValidPath =
         sanitizedAvatar === "default.jpg" ||
-        sanitizedAvatar.startsWith("/uploads/avatars/") ||
-        sanitizedAvatar.startsWith("data:image/");
+        sanitizedAvatar.startsWith("/uploads/avatars/");
       if (!isValidPath) {
         return res.status(400).json({ error: "Invalid avatar path" });
       }
@@ -1097,8 +1225,8 @@ app.put("/api/user/profile", authenticateToken, async (req, res) => {
                 UPDATE users
                 SET first_name = COALESCE(?, first_name),
                     last_name = COALESCE(?, last_name),
-                    phone = ?,
-                    birthday = ?,
+                    phone = COALESCE(?, phone),
+                    birthday = COALESCE(?, birthday),
                     avatar_url = COALESCE(?, avatar_url),
                     updated_at = datetime('now')
                 WHERE id = ?
@@ -1491,8 +1619,8 @@ const requireAdmin = async (req, res, next) => {
   }
 };
 
-// Public user statistics endpoint (no authentication required)
-app.get("/api/stats/users", async (req, res) => {
+// FIX ISS-007: Added authenticateToken — user counts should not be public
+app.get("/api/stats/users", authenticateToken, async (req, res) => {
   try {
     const stats = await new Promise((resolve, reject) => {
       db.get(
@@ -1577,10 +1705,11 @@ app.get(
 );
 
 // Search user profiles endpoint
-app.get("/api/search/users", async (req, res) => {
+// FIX ISS-003: Added authenticateToken to prevent unauthenticated user enumeration
+app.get("/api/search/users", authenticateToken, async (req, res) => {
   try {
-    const query = req.query.q;
-    if (!query || query.length < 2) {
+    const query = String(req.query.q || "").trim();
+    if (query.length < 2 || query.length > 100) {
       return res.json([]);
     }
 
@@ -1592,15 +1721,13 @@ app.get("/api/search/users", async (req, res) => {
                     id,
                     first_name,
                     last_name,
-                    email,
                     avatar_url,
                     created_at,
                     is_admin
                 FROM users
                 WHERE
                     (LOWER(first_name) LIKE ? OR
-                     LOWER(last_name) LIKE ? OR
-                     LOWER(email) LIKE ?)
+                     LOWER(last_name) LIKE ?)
                     AND is_banned = 0
                 ORDER BY
                     CASE
@@ -1613,7 +1740,6 @@ app.get("/api/search/users", async (req, res) => {
                 LIMIT 10
             `,
         [
-          searchTerm,
           searchTerm,
           searchTerm,
           query,
@@ -1634,7 +1760,6 @@ app.get("/api/search/users", async (req, res) => {
       display_name: `${user.first_name} ${user.last_name}`.trim(),
       first_name: user.first_name,
       last_name: user.last_name,
-      email: user.email,
       avatar_url: user.avatar_url,
       member_since: user.created_at,
       is_admin: user.is_admin === 1,
@@ -1648,8 +1773,9 @@ app.get("/api/search/users", async (req, res) => {
   }
 });
 
-app.get(
-  "/api/admin/users",
+// FIX ISS-001: Changed from duplicate GET /api/admin/users to POST /api/admin/ban-user
+app.post(
+  "/api/admin/ban-user",
   authenticateToken,
   requireAdmin,
   async (req, res) => {
@@ -1865,48 +1991,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Avatar upload endpoint
-app.post("/api/user/upload-avatar", authenticateToken, async (req, res) => {
-  try {
-    const { avatarData } = req.body;
-
-    if (!avatarData) {
-      return res.status(400).json({ error: "Avatar data is required" });
-    }
-
-    // Validate that it's a base64 image
-    if (!avatarData.startsWith("data:image/")) {
-      return res.status(400).json({ error: "Invalid image format" });
-    }
-
-    console.log(`📸 Uploading avatar for user ${req.user.userId}`);
-
-    // Update user's avatar in database
-    await new Promise((resolve, reject) => {
-      const stmt = db.prepare(`
-                UPDATE users
-                SET avatar_url = ?, updated_at = datetime('now')
-                WHERE id = ?
-            `);
-
-      stmt.run([avatarData, req.user.userId], function (err) {
-        if (err) reject(err);
-        else resolve();
-      });
-      stmt.finalize();
-    });
-
-    console.log(`✅ Avatar updated in database for user ${req.user.userId}`);
-
-    // Return success with the new avatar URL
-    res.json({
-      success: true,
-      message: "Avatar updated successfully",
-      avatar: avatarData,
-    });
-  } catch (error) {
-    console.error("Avatar upload error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
+app.post("/api/user/upload-avatar", authenticateToken, (req, res) => {
+  res.status(410).json({
+    error: "Base64 avatar uploads are no longer supported. Use /api/upload-avatar.",
+  });
 });
 
 // Reviews API endpoints
@@ -1963,6 +2051,13 @@ app.post("/api/reviews", authenticateToken, (req, res) => {
     return res
       .status(400)
       .json({ error: "Review must be at least 10 characters long" });
+  }
+
+  // FIX ISS-011: Add max length check (consistent with PUT endpoint's 500 char limit)
+  if (review_text.length > 500) {
+    return res
+      .status(400)
+      .json({ error: "Review must be at most 500 characters long" });
   }
 
   // Get user info including admin status
@@ -2053,6 +2148,7 @@ app.post("/api/reviews/:reviewId/like", (req, res) => {
 // 🔧 NEW: Avatar upload endpoint with file system storage
 app.post(
   "/api/upload-avatar",
+  uploadLimiter,
   authenticateToken,
   upload.single("avatar"),
   async (req, res) => {
@@ -2062,8 +2158,8 @@ app.post(
       }
 
       const userId = req.user.userId;
-      const fileExtension = path.extname(req.file.originalname).toLowerCase();
-      const fileName = `avatar_${userId}_${Date.now()}${fileExtension}`;
+      const previousAvatar = safeAvatarValue(req.user.dbUser?.avatar_url);
+      const fileName = `avatar_${userId}_${Date.now()}.jpg`;
       const filePath = path.join(uploadsDir, fileName);
 
       // Process and resize image using Sharp
@@ -2090,6 +2186,13 @@ app.post(
           }
 
           console.log(`✅ Avatar updated for user ${userId}: ${avatarUrl}`);
+          if (previousAvatar.startsWith("/uploads/avatars/")) {
+            const previousPath = path.join(
+              uploadsDir,
+              path.basename(previousAvatar),
+            );
+            if (previousPath !== filePath) fs.unlink(previousPath, () => {});
+          }
           res.json({
             success: true,
             avatarUrl: avatarUrl,
@@ -2106,17 +2209,17 @@ app.post(
 
 // Update user profile in all existing reviews and replies
 app.post("/api/reviews/update-user-profile", authenticateToken, (req, res) => {
-  console.log("📝 Update profile request body:", req.body);
-  const { name, avatar } = req.body;
   const userId = req.user.userId;
+  const name = userDisplayName(req.user.dbUser);
+  const avatar = safeAvatarValue(req.user.dbUser?.avatar_url);
 
   console.log(
     `📝 Updating profile for user ${userId}: name="${name}", avatar="${avatar}"`,
   );
 
-  if (!name) {
-    console.error("❌ Name is missing from request");
-    return res.status(400).json({ error: "Name is required" });
+  if (!validateName(name)) {
+    console.error("❌ Stored user name is invalid");
+    return res.status(400).json({ error: "Valid user name is required" });
   }
 
   // Start transaction to update both reviews and replies
@@ -2130,7 +2233,7 @@ app.post("/api/reviews/update-user-profile", authenticateToken, (req, res) => {
     // Update all reviews for this user
     db.run(
       "UPDATE reviews SET user_name = ?, user_avatar = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
-      [name, avatar || "default.jpg", userId],
+      [name, avatar, userId],
       function (err) {
         if (err) {
           console.error("Error updating user profile in reviews:", err);
@@ -2145,7 +2248,7 @@ app.post("/api/reviews/update-user-profile", authenticateToken, (req, res) => {
         // Update all replies for this user
         db.run(
           "UPDATE review_replies SET user_name = ?, user_avatar = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
-          [name, avatar || "default.jpg", userId],
+          [name, avatar, userId],
           function (err) {
             if (err) {
               console.error("Error updating user profile in replies:", err);

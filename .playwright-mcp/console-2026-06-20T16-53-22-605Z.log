@@ -1,0 +1,699 @@
+[    2086ms] [LOG] ðŸ‘¤ User not logged in, loading from localStorage @ http://127.0.0.1:4177/script.js:9667
+[    2086ms] [LOG] âœ… Favorites loaded from localStorage for perfumeFavorites_guest: [] @ http://127.0.0.1:4177/script.js:9688
+[    2087ms] [LOG] ✅ Updated favorite button for layton: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2088ms] [LOG] ✅ Updated favorite button for haltane: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2088ms] [LOG] ✅ Updated favorite button for pegasus: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2088ms] [LOG] ✅ Updated favorite button for greenly: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2088ms] [LOG] ✅ Updated favorite button for baccaratrouge: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2088ms] [LOG] ✅ Updated favorite button for blackorchid: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2089ms] [LOG] ✅ Updated favorite button for aventus: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2089ms] [LOG] ✅ Updated favorite button for sauvage: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2089ms] [LOG] ✅ Updated favorite button for bleudechanel: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2089ms] [LOG] ✅ Updated favorite button for tobaccovanille: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2089ms] [LOG] ✅ Updated favorite button for oudwood: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2089ms] [LOG] ✅ Updated favorite button for lanuit: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2090ms] [LOG] ✅ Updated favorite button for lostcherry: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2090ms] [LOG] ✅ Updated favorite button for yvsl: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2090ms] [LOG] ✅ Updated favorite button for aquadigio: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2090ms] [LOG] ✅ Updated favorite button for dy: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2090ms] [LOG] ✅ Updated favorite button for versaceeros: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2090ms] [LOG] ✅ Updated favorite button for jpgultramale: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2091ms] [LOG] ✅ Updated favorite button for invictus: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2091ms] [LOG] ✅ Updated favorite button for valentinouomo: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2091ms] [LOG] ✅ Updated favorite button for spicebomb: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2091ms] [LOG] ✅ Updated favorite button for explorer: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2091ms] [LOG] ✅ Updated favorite button for blv: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2091ms] [LOG] ✅ Updated favorite button for diorhomme: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2092ms] [LOG] ✅ Updated favorite button for allure: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2092ms] [LOG] ✅ Updated favorite button for tuscanleather: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2092ms] [LOG] ✅ Updated favorite button for armanicode: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2092ms] [LOG] ✅ Updated favorite button for lhommeideal: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2092ms] [LOG] ✅ Updated favorite button for terredhermes: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2093ms] [LOG] ✅ Updated favorite button for gentleman: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2093ms] [LOG] ✅ Updated favorite button for wantedbynight: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2093ms] [LOG] ✅ Updated favorite button for kbyDG: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2093ms] [LOG] ✅ Updated favorite button for leaudissey: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2093ms] [LOG] ✅ Updated favorite button for chbadboy: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2094ms] [LOG] ✅ Updated favorite button for ysllibre: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2094ms] [LOG] ✅ Updated favorite button for fireplace: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2094ms] [LOG] ✅ Updated favorite button for pradacarbon: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2094ms] [LOG] ✅ Updated favorite button for burberryhero: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2094ms] [LOG] ✅ Updated favorite button for narcisoforhim: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2095ms] [LOG] ✅ Updated favorite button for cketernity: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2095ms] [LOG] ✅ Updated favorite button for gucciguilty: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2095ms] [LOG] ✅ Updated favorite button for valentinodonna: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2095ms] [LOG] ✅ Updated favorite button for greenirish: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2095ms] [LOG] ✅ Updated favorite button for egoiste: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2096ms] [LOG] ✅ Updated favorite button for amenpure: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2096ms] [LOG] ✅ Updated favorite button for declarationcartier: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2096ms] [LOG] ✅ Updated favorite button for laween: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2096ms] [LOG] ✅ Updated favorite button for cedarsmancera: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2097ms] [LOG] ✅ Updated favorite button for reflectionman: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2097ms] [LOG] ✅ Updated favorite button for sedley: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2097ms] [LOG] ✅ Updated favorite button for sideeffect: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2098ms] [LOG] ✅ Updated favorite button for naxos: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2098ms] [LOG] ✅ Updated favorite button for grandSoir: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2099ms] [LOG] ðŸ”„ Initializing 53 favorite buttons... @ http://127.0.0.1:4177/script.js:10151
+[    2099ms] [LOG] ðŸ”§ Initializing button 1: layton (ID: laytonFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2099ms] [LOG] ðŸ”„ Replaced button for layton to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2100ms] [LOG] ✅ Updated favorite button for layton: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2100ms] [LOG] ðŸ”§ Initializing button 2: haltane (ID: haltaneFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2100ms] [LOG] ðŸ”„ Replaced button for haltane to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2100ms] [LOG] ✅ Updated favorite button for haltane: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2100ms] [LOG] ðŸ”§ Initializing button 3: pegasus (ID: pegasusFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2100ms] [LOG] ðŸ”„ Replaced button for pegasus to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2100ms] [LOG] ✅ Updated favorite button for pegasus: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2100ms] [LOG] ðŸ”§ Initializing button 4: greenly (ID: greenlyFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2101ms] [LOG] ðŸ”„ Replaced button for greenly to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2101ms] [LOG] ✅ Updated favorite button for greenly: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2101ms] [LOG] ðŸ”§ Initializing button 5: baccaratrouge (ID: baccaratrougeFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2101ms] [LOG] ðŸ”„ Replaced button for baccaratrouge to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2101ms] [LOG] ✅ Updated favorite button for baccaratrouge: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2101ms] [LOG] ðŸ”§ Initializing button 6: blackorchid (ID: blackorchidFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2101ms] [LOG] ðŸ”„ Replaced button for blackorchid to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2102ms] [LOG] ✅ Updated favorite button for blackorchid: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2102ms] [LOG] ðŸ”§ Initializing button 7: aventus (ID: aventusFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2102ms] [LOG] ðŸ”„ Replaced button for aventus to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2102ms] [LOG] ✅ Updated favorite button for aventus: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2102ms] [LOG] ðŸ”§ Initializing button 8: sauvage (ID: sauvageFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2102ms] [LOG] ðŸ”„ Replaced button for sauvage to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2102ms] [LOG] ✅ Updated favorite button for sauvage: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2102ms] [LOG] ðŸ”§ Initializing button 9: bleudechanel (ID: bleudechanelFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2102ms] [LOG] ðŸ”„ Replaced button for bleudechanel to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2103ms] [LOG] ✅ Updated favorite button for bleudechanel: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2103ms] [LOG] ðŸ”§ Initializing button 10: tobaccovanille (ID: tobaccovanilleFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2103ms] [LOG] ðŸ”„ Replaced button for tobaccovanille to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2103ms] [LOG] ✅ Updated favorite button for tobaccovanille: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2103ms] [LOG] ðŸ”§ Initializing button 11: oudwood (ID: oudwoodFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2103ms] [LOG] ðŸ”„ Replaced button for oudwood to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2103ms] [LOG] ✅ Updated favorite button for oudwood: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2104ms] [LOG] ðŸ”§ Initializing button 12: lanuit (ID: lanuitFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2104ms] [LOG] ðŸ”„ Replaced button for lanuit to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2104ms] [LOG] ✅ Updated favorite button for lanuit: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2104ms] [LOG] ðŸ”§ Initializing button 13: lostcherry (ID: lostcherryFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2104ms] [LOG] ðŸ”„ Replaced button for lostcherry to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2104ms] [LOG] ✅ Updated favorite button for lostcherry: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2104ms] [LOG] ðŸ”§ Initializing button 14: yvsl (ID: yvslFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2104ms] [LOG] ðŸ”„ Replaced button for yvsl to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2105ms] [LOG] ✅ Updated favorite button for yvsl: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2105ms] [LOG] ðŸ”§ Initializing button 15: aquadigio (ID: aquadigioFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2105ms] [LOG] ðŸ”„ Replaced button for aquadigio to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2105ms] [LOG] ✅ Updated favorite button for aquadigio: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2105ms] [LOG] ðŸ”§ Initializing button 16: dy (ID: dyFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2105ms] [LOG] ðŸ”„ Replaced button for dy to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2105ms] [LOG] ✅ Updated favorite button for dy: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2105ms] [LOG] ðŸ”§ Initializing button 17: versaceeros (ID: versaceerosFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2106ms] [LOG] ðŸ”„ Replaced button for versaceeros to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2106ms] [LOG] ✅ Updated favorite button for versaceeros: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2106ms] [LOG] ðŸ”§ Initializing button 18: jpgultramale (ID: jpgultramaleFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2106ms] [LOG] ðŸ”„ Replaced button for jpgultramale to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2106ms] [LOG] ✅ Updated favorite button for jpgultramale: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2106ms] [LOG] ðŸ”§ Initializing button 19: invictus (ID: invictusFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2106ms] [LOG] ðŸ”„ Replaced button for invictus to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2107ms] [LOG] ✅ Updated favorite button for invictus: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2107ms] [LOG] ðŸ”§ Initializing button 20: valentinouomo (ID: valentinouomoFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2107ms] [LOG] ðŸ”„ Replaced button for valentinouomo to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2107ms] [LOG] ✅ Updated favorite button for valentinouomo: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2107ms] [LOG] ðŸ”§ Initializing button 21: spicebomb (ID: spicebombFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2107ms] [LOG] ðŸ”„ Replaced button for spicebomb to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2107ms] [LOG] ✅ Updated favorite button for spicebomb: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2107ms] [LOG] ðŸ”§ Initializing button 22: explorer (ID: explorerFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2108ms] [LOG] ðŸ”„ Replaced button for explorer to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2108ms] [LOG] ✅ Updated favorite button for explorer: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2108ms] [LOG] ðŸ”§ Initializing button 23: blv (ID: blvFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2108ms] [LOG] ðŸ”„ Replaced button for blv to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2108ms] [LOG] ✅ Updated favorite button for blv: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2108ms] [LOG] ðŸ”§ Initializing button 24: diorhomme (ID: diorhommeFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2108ms] [LOG] ðŸ”„ Replaced button for diorhomme to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2108ms] [LOG] ✅ Updated favorite button for diorhomme: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2108ms] [LOG] ðŸ”§ Initializing button 25: allure (ID: allureFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2109ms] [LOG] ðŸ”„ Replaced button for allure to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2109ms] [LOG] ✅ Updated favorite button for allure: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2109ms] [LOG] ðŸ”§ Initializing button 26: tuscanleather (ID: tuscanleatherFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2109ms] [LOG] ðŸ”„ Replaced button for tuscanleather to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2109ms] [LOG] ✅ Updated favorite button for tuscanleather: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2109ms] [LOG] ðŸ”§ Initializing button 27: armanicode (ID: armanicodeFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2109ms] [LOG] ðŸ”„ Replaced button for armanicode to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2110ms] [LOG] ✅ Updated favorite button for armanicode: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2110ms] [LOG] ðŸ”§ Initializing button 28: lhommeideal (ID: lhommeidealFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2110ms] [LOG] ðŸ”„ Replaced button for lhommeideal to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2110ms] [LOG] ✅ Updated favorite button for lhommeideal: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2110ms] [LOG] ðŸ”§ Initializing button 29: terredhermes (ID: terredhermesFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2110ms] [LOG] ðŸ”„ Replaced button for terredhermes to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2110ms] [LOG] ✅ Updated favorite button for terredhermes: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2110ms] [LOG] ðŸ”§ Initializing button 30: gentleman (ID: gentlemanFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2111ms] [LOG] ðŸ”„ Replaced button for gentleman to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2111ms] [LOG] ✅ Updated favorite button for gentleman: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2111ms] [LOG] ðŸ”§ Initializing button 31: wantedbynight (ID: wantedbynightFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2111ms] [LOG] ðŸ”„ Replaced button for wantedbynight to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2111ms] [LOG] ✅ Updated favorite button for wantedbynight: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2111ms] [LOG] ðŸ”§ Initializing button 32: kbyDG (ID: kbyDGFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2111ms] [LOG] ðŸ”„ Replaced button for kbyDG to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2112ms] [LOG] ✅ Updated favorite button for kbyDG: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2112ms] [LOG] ðŸ”§ Initializing button 33: leaudissey (ID: leaudisseyFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2112ms] [LOG] ðŸ”„ Replaced button for leaudissey to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2112ms] [LOG] ✅ Updated favorite button for leaudissey: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2112ms] [LOG] ðŸ”§ Initializing button 34: chbadboy (ID: chbadboyFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2112ms] [LOG] ðŸ”„ Replaced button for chbadboy to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2112ms] [LOG] ✅ Updated favorite button for chbadboy: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2113ms] [LOG] ðŸ”§ Initializing button 35: ysllibre (ID: ysllibreFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2113ms] [LOG] ðŸ”„ Replaced button for ysllibre to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2113ms] [LOG] ✅ Updated favorite button for ysllibre: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2113ms] [LOG] ðŸ”§ Initializing button 36: fireplace (ID: fireplaceFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2113ms] [LOG] ðŸ”„ Replaced button for fireplace to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2113ms] [LOG] ✅ Updated favorite button for fireplace: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2113ms] [LOG] ðŸ”§ Initializing button 37: pradacarbon (ID: pradacarbonFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2114ms] [LOG] ðŸ”„ Replaced button for pradacarbon to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2114ms] [LOG] ✅ Updated favorite button for pradacarbon: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2114ms] [LOG] ðŸ”§ Initializing button 38: burberryhero (ID: burberryheroFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2114ms] [LOG] ðŸ”„ Replaced button for burberryhero to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2114ms] [LOG] ✅ Updated favorite button for burberryhero: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2114ms] [LOG] ðŸ”§ Initializing button 39: narcisoforhim (ID: narcisoforhimFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2115ms] [LOG] ðŸ”„ Replaced button for narcisoforhim to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2115ms] [LOG] ✅ Updated favorite button for narcisoforhim: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2115ms] [LOG] ðŸ”§ Initializing button 40: cketernity (ID: cketernityFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2115ms] [LOG] ðŸ”„ Replaced button for cketernity to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2115ms] [LOG] ✅ Updated favorite button for cketernity: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2116ms] [LOG] ðŸ”§ Initializing button 41: gucciguilty (ID: gucciguiltyFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2116ms] [LOG] ðŸ”„ Replaced button for gucciguilty to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2116ms] [LOG] ✅ Updated favorite button for gucciguilty: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2116ms] [LOG] ðŸ”§ Initializing button 42: valentinodonna (ID: valentinodonnaFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2116ms] [LOG] ðŸ”„ Replaced button for valentinodonna to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2116ms] [LOG] ✅ Updated favorite button for valentinodonna: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2117ms] [LOG] ðŸ”§ Initializing button 43: greenirish (ID: greenirishFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2117ms] [LOG] ðŸ”„ Replaced button for greenirish to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2117ms] [LOG] ✅ Updated favorite button for greenirish: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2117ms] [LOG] ðŸ”§ Initializing button 44: egoiste (ID: egoisteFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2117ms] [LOG] ðŸ”„ Replaced button for egoiste to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2118ms] [LOG] ✅ Updated favorite button for egoiste: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2118ms] [LOG] ðŸ”§ Initializing button 45: amenpure (ID: amenpureFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2118ms] [LOG] ðŸ”„ Replaced button for amenpure to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2118ms] [LOG] ✅ Updated favorite button for amenpure: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2118ms] [LOG] ðŸ”§ Initializing button 46: declarationcartier (ID: declarationcartierFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2118ms] [LOG] ðŸ”„ Replaced button for declarationcartier to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2119ms] [LOG] ✅ Updated favorite button for declarationcartier: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2119ms] [LOG] ðŸ”§ Initializing button 47: laween (ID: laweenFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2119ms] [LOG] ðŸ”„ Replaced button for laween to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2119ms] [LOG] ✅ Updated favorite button for laween: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2119ms] [LOG] ðŸ”§ Initializing button 48: cedarsmancera (ID: cedarsmanceraFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2119ms] [LOG] ðŸ”„ Replaced button for cedarsmancera to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2120ms] [LOG] ✅ Updated favorite button for cedarsmancera: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2120ms] [LOG] ðŸ”§ Initializing button 49: reflectionman (ID: reflectionmanFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2120ms] [LOG] ðŸ”„ Replaced button for reflectionman to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2120ms] [LOG] ✅ Updated favorite button for reflectionman: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2120ms] [LOG] ðŸ”§ Initializing button 50: sedley (ID: sedleyFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2120ms] [LOG] ðŸ”„ Replaced button for sedley to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2121ms] [LOG] ✅ Updated favorite button for sedley: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2121ms] [LOG] ðŸ”§ Initializing button 51: sideeffect (ID: sideeffectFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2121ms] [LOG] ðŸ”„ Replaced button for sideeffect to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2121ms] [LOG] ✅ Updated favorite button for sideeffect: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2121ms] [LOG] ðŸ”§ Initializing button 52: naxos (ID: naxosFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2121ms] [LOG] ðŸ”„ Replaced button for naxos to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2122ms] [LOG] ✅ Updated favorite button for naxos: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2122ms] [LOG] ðŸ”§ Initializing button 53: grandSoir (ID: grandSoirFavoriteBtn) @ http://127.0.0.1:4177/script.js:10166
+[    2122ms] [LOG] ðŸ”„ Replaced button for grandSoir to remove old listeners @ http://127.0.0.1:4177/script.js:10174
+[    2122ms] [LOG] ✅ Updated favorite button for grandSoir: not favorited @ http://127.0.0.1:4177/script.js:10429
+[    2122ms] [LOG] âœ… Favorite buttons initialized successfully @ http://127.0.0.1:4177/script.js:10227
+[    2123ms] [LOG] â¤ï¸ Enhanced Favorites system initialized! @ http://127.0.0.1:4177/script.js:9626
+[    2164ms] [LOG] ðŸ“ Theme transition points calculated: {creamStart: 5326, creamEnd: 5584.3, greyStart: 9704} @ http://127.0.0.1:4177/script.js:12809
+[    2164ms] [LOG] ðŸŽ¨ Theme system initialized with stable transition points @ http://127.0.0.1:4177/script.js:12741
+[    2164ms] [LOG] ðŸ”§ Auto-fixing avatars to use default.jpg... @ http://127.0.0.1:4177/script.js:13328
+[    2165ms] [LOG] 🔧 Setting up profile click handlers... @ http://127.0.0.1:4177/script.js:18089
+[    2165ms] [LOG] 🚨 EMERGENCY: Adding click handlers to ALL search suggestions... @ http://127.0.0.1:4177/script.js:18234
+[    2166ms] [LOG] ✅ Found search dropdown, adding event delegation... @ http://127.0.0.1:4177/script.js:18240
+[    2166ms] [LOG] ✅ Event delegation added to search dropdown @ http://127.0.0.1:4177/script.js:18246
+[    2166ms] [LOG] 👤 Profile Modal System initialized! @ http://127.0.0.1:4177/script.js:18316
+[    2166ms] [LOG] 🚨 EMERGENCY MODE: Added universal click handlers @ http://127.0.0.1:4177/script.js:18317
+[    2166ms] [LOG] 📋 Available commands: @ http://127.0.0.1:4177/script.js:18318
+[    2166ms] [LOG]    • testProfileModal("email@example.com") - Test profile modal @ http://127.0.0.1:4177/script.js:18319
+[    2166ms] [LOG]    • testClickOnElement() - Add red borders and test clicks @ http://127.0.0.1:4177/script.js:18320
+[    2166ms] [LOG]    • debugProfileHandlers() - Debug existing handlers @ http://127.0.0.1:4177/script.js:18321
+[    2166ms] [LOG]    • triggerProfileSearch("query") - Search and add handlers @ http://127.0.0.1:4177/script.js:18322
+[    2166ms] [LOG]  @ http://127.0.0.1:4177/script.js:18323
+[    2166ms] [LOG] 🔧 Try: testClickOnElement() then click any red-bordered element @ http://127.0.0.1:4177/script.js:18324
+[    2174ms] [LOG] 🔧 Setting up Enhanced Ingredient Finder event listeners @ http://127.0.0.1:4177/js/ingredient-finder.js:331
+[    2175ms] [LOG] 🏷️ Updated fragrance count badge: 396 fragrances @ http://127.0.0.1:4177/js/ingredient-finder.js:497
+[    2175ms] [LOG] 🧪 Ingredient Fragrance Finder initialized @ http://127.0.0.1:4177/js/ingredient-finder.js:327
+[    2175ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    2176ms] [LOG] 🚀 Initializing profile search system @ http://127.0.0.1:4177/script.js:483
+[    2176ms] [LOG] 📋 Found search tabs: 2 @ http://127.0.0.1:4177/script.js:484
+[    2176ms] [LOG] 🔍 DOM elements: {quickSearchInput: true, quickSearchResults: true, quickSearchDropdown: true} @ http://127.0.0.1:4177/script.js:485
+[    2473ms] [LOG] Pegasus Elements Found: @ http://127.0.0.1:4177/script.js:2098
+[    2473ms] [LOG] pegasusImage: JSHandle@node @ http://127.0.0.1:4177/script.js:2099
+[    2473ms] [LOG] pegasusProductTitle: JSHandle@node @ http://127.0.0.1:4177/script.js:2100
+[    2473ms] [LOG] pegasusFragranceProfile: JSHandle@node @ http://127.0.0.1:4177/script.js:2101
+[    2474ms] [LOG] pegasusFragranceNotes: JSHandle@node @ http://127.0.0.1:4177/script.js:2102
+[    2679ms] [LOG] ðŸ§¹ Checking for stale user data... @ http://127.0.0.1:4177/script.js:8472
+[    2679ms] [LOG] âœ… No stale user data found @ http://127.0.0.1:4177/script.js:8507
+[    2679ms] [LOG] ðŸ” Checking authentication state... @ http://127.0.0.1:4177/script.js:5548
+[    2679ms] [LOG] ðŸ” Initializing authentication state... @ http://127.0.0.1:4177/script.js:8458
+[    2679ms] [LOG] ðŸ§¹ Checking for stale user data... @ http://127.0.0.1:4177/script.js:8472
+[    2679ms] [LOG] âœ… No stale user data found @ http://127.0.0.1:4177/script.js:8507
+[    2680ms] [LOG] ðŸ‘¤ No authentication data found @ http://127.0.0.1:4177/script.js:8540
+[    2680ms] [LOG] ðŸ”§ Initializing user modals... @ http://127.0.0.1:4177/script.js:6088
+[    2680ms] [LOG] ðŸ‘¤ Profile elements: {profileBtn: true, profileModal: true, profileModalClose: true} @ http://127.0.0.1:4177/script.js:6098
+[    2680ms] [LOG] â­ Favorites elements: {favoritesBtn: true, favoritesModal: true, favoritesModalClose: true} @ http://127.0.0.1:4177/script.js:6112
+[    2680ms] [LOG] âš™ï¸ Settings elements: {settingsBtn: true, settingsModal: true, settingsModalClose: true} @ http://127.0.0.1:4177/script.js:6126
+[    2680ms] [LOG] ðŸ”— Attaching click event to changeAvatarBtn @ http://127.0.0.1:4177/script.js:6255
+[    2680ms] [LOG] âœ… User modals initialized successfully @ http://127.0.0.1:4177/script.js:6322
+[    2681ms] [LOG] âœ… All modals hidden on page load @ http://127.0.0.1:4177/script.js:4377
+[    2681ms] [LOG] âœ… Authentication state initialized @ http://127.0.0.1:4177/script.js:8467
+[    2681ms] [LOG] ðŸ‘¤ No valid authentication found @ http://127.0.0.1:4177/script.js:5607
+[    2681ms] [LOG] ðŸ›’ Loading guest cart @ http://127.0.0.1:4177/script.js:10971
+[    2681ms] [LOG] ðŸ“¦ Loaded cart for guest: [] @ http://127.0.0.1:4177/script.js:10981
+[    2682ms] [LOG] âœ… Cart manager initialized with user-specific carts @ http://127.0.0.1:4177/script.js:11510
+[    2682ms] [LOG] ðŸ” UserStatsManager initializing... @ http://127.0.0.1:4177/script.js:12301
+[    2682ms] [LOG] ðŸ” === IMMEDIATE DEBUG SCAN === @ http://127.0.0.1:4177/script.js:12314
+[    2683ms] [LOG] localStorage length: 0 @ http://127.0.0.1:4177/script.js:12315
+[    2683ms] [LOG] ðŸ“Š User statistics manager initialized @ http://127.0.0.1:4177/script.js:11548
+[    2683ms] [LOG] ðŸ“° News manager initialized @ http://127.0.0.1:4177/script.js:11570
+[    2683ms] [LOG] ðŸ’¬ Initializing Reviews Manager... @ http://127.0.0.1:4177/script.js:14476
+[    2683ms] [LOG] ðŸ”„ Loading all reviews from database... @ http://127.0.0.1:4177/script.js:14929
+[    2683ms] [LOG] ðŸ’¬ Reviews system initialized @ http://127.0.0.1:4177/script.js:11575
+[    2684ms] [LOG] ðŸ”” Notification system: Hidden for guest user @ http://127.0.0.1:4177/script.js:11741
+[    2684ms] [LOG] ðŸ”” Notification manager initialized @ http://127.0.0.1:4177/script.js:11580
+[    2684ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    2684ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    2684ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    2686ms] [LOG] 🔧 Setting up Enhanced Ingredient Finder event listeners @ http://127.0.0.1:4177/js/ingredient-finder.js:331
+[    2687ms] [LOG] 🏷️ Updated fragrance count badge: 396 fragrances @ http://127.0.0.1:4177/js/ingredient-finder.js:497
+[    2687ms] [LOG] 🧪 Ingredient Fragrance Finder initialized @ http://127.0.0.1:4177/js/ingredient-finder.js:327
+[    2687ms] [LOG] 🧪 Ingredient Fragrance Finder initialized! @ http://127.0.0.1:4177/script.js:14203
+[    2687ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    2719ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://127.0.0.1:4177/:0
+[    2719ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ http://127.0.0.1:4177/:0
+[    2719ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ http://127.0.0.1:4177/:0
+[    3077ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/layton:0
+[    3077ms] [ERROR] âŒ Failed to load reviews for layton @ http://127.0.0.1:4177/script.js:14862
+[    3077ms] [LOG] âš ï¸ Falling back to localStorage for layton @ http://127.0.0.1:4177/script.js:14941
+[    3079ms] [LOG] ðŸ”” Notification system: Hidden for guest user @ http://127.0.0.1:4177/script.js:11741
+[    3197ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3197ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3197ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3197ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3198ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3198ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3199ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3199ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3199ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3199ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3199ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3200ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3200ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3200ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3201ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3201ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3201ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3201ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3201ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3202ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3202ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3202ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3202ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3203ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3203ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3203ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3203ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3203ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3203ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/haltane:0
+[    3204ms] [ERROR] âŒ Failed to load reviews for haltane @ http://127.0.0.1:4177/script.js:14862
+[    3204ms] [LOG] âš ï¸ Falling back to localStorage for haltane @ http://127.0.0.1:4177/script.js:14941
+[    3204ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3204ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3205ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3205ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3205ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3205ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3205ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3206ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3206ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3206ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3206ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3206ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3207ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3207ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3207ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3207ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3207ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3207ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3208ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3208ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3209ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3209ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3209ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3209ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3210ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3291ms] [LOG] 🔄 Checking for existing profile suggestions... @ http://127.0.0.1:4177/script.js:18180
+[    3292ms] [LOG] 📊 Found 0 existing profile suggestions @ http://127.0.0.1:4177/script.js:18182
+[    3292ms] [LOG] âœ… All modals hidden on page load @ http://127.0.0.1:4177/script.js:4377
+[    3292ms] [LOG] ðŸ”’ Final modal safety check completed @ http://127.0.0.1:4177/script.js:4058
+[    3292ms] [LOG] ðŸ”„ Force refreshing user counter... @ http://127.0.0.1:4177/script.js:12684
+[    3292ms] [LOG] ðŸ“Š Force refresh complete - Found 0 Gmail users @ http://127.0.0.1:4177/script.js:12689
+[    3292ms] [LOG] âš ï¸ No Gmail users found. Running detailed scan... @ http://127.0.0.1:4177/script.js:12693
+[    3292ms] [LOG] ðŸ“Š === COMPLETE DATABASE SCAN === @ http://127.0.0.1:4177/script.js:12624
+[    3292ms] [LOG] Total Gmail users found: [object Promise] @ http://127.0.0.1:4177/script.js:12625
+[    3292ms] [LOG] Gmail accounts detected: [] @ http://127.0.0.1:4177/script.js:12626
+[    3293ms] [LOG] 
+ðŸ’¾ Full localStorage scan: @ http://127.0.0.1:4177/script.js:12628
+[    3293ms] [LOG] 
+ðŸ’¾ SessionStorage: @ http://127.0.0.1:4177/script.js:12659
+[    3293ms] [LOG]   â€¢ No session user @ http://127.0.0.1:4177/script.js:12670
+[    3293ms] [LOG] 
+ðŸ” Search patterns used: @ http://127.0.0.1:4177/script.js:12676
+[    3293ms] [LOG]   â€¢ Looking for objects with email property @ http://127.0.0.1:4177/script.js:12677
+[    3293ms] [LOG]   â€¢ Filtering for @gmail.com addresses only @ http://127.0.0.1:4177/script.js:12678
+[    3293ms] [LOG]   â€¢ Scanning all localStorage and sessionStorage @ http://127.0.0.1:4177/script.js:12679
+[    3293ms] [LOG] 🚨 EMERGENCY: Adding click handlers to ALL search suggestions... @ http://127.0.0.1:4177/script.js:18234
+[    3293ms] [LOG] ✅ Found search dropdown, adding event delegation... @ http://127.0.0.1:4177/script.js:18240
+[    3293ms] [LOG] ✅ Event delegation added to search dropdown @ http://127.0.0.1:4177/script.js:18246
+[    3295ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/pegasus:0
+[    3295ms] [ERROR] âŒ Failed to load reviews for pegasus @ http://127.0.0.1:4177/script.js:14862
+[    3295ms] [LOG] âš ï¸ Falling back to localStorage for pegasus @ http://127.0.0.1:4177/script.js:14941
+[    3351ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/greenly:0
+[    3351ms] [ERROR] âŒ Failed to load reviews for greenly @ http://127.0.0.1:4177/script.js:14862
+[    3352ms] [LOG] âš ï¸ Falling back to localStorage for greenly @ http://127.0.0.1:4177/script.js:14941
+[    3412ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/baccaratrouge:0
+[    3412ms] [ERROR] âŒ Failed to load reviews for baccaratrouge @ http://127.0.0.1:4177/script.js:14862
+[    3412ms] [LOG] âš ï¸ Falling back to localStorage for baccaratrouge @ http://127.0.0.1:4177/script.js:14941
+[    3414ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3415ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3415ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3415ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3416ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3416ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3417ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3417ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3417ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3418ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3418ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3419ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3419ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3419ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3420ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3420ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3420ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3421ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3421ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3421ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3422ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3422ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3423ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3423ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3423ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3424ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3424ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3424ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3502ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3503ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3503ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3503ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3504ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3504ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3504ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3505ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3505ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3505ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3506ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3506ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3506ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3507ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3507ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3507ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3508ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3508ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3508ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/blackorchid:0
+[    3509ms] [ERROR] âŒ Failed to load reviews for blackorchid @ http://127.0.0.1:4177/script.js:14862
+[    3509ms] [LOG] âš ï¸ Falling back to localStorage for blackorchid @ http://127.0.0.1:4177/script.js:14941
+[    3509ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3510ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3510ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3510ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3511ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3511ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3511ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    3598ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/aventus:0
+[    3599ms] [ERROR] âŒ Failed to load reviews for aventus @ http://127.0.0.1:4177/script.js:14862
+[    3599ms] [LOG] âš ï¸ Falling back to localStorage for aventus @ http://127.0.0.1:4177/script.js:14941
+[    3698ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/sauvage:0
+[    3698ms] [ERROR] âŒ Failed to load reviews for sauvage @ http://127.0.0.1:4177/script.js:14862
+[    3698ms] [LOG] âš ï¸ Falling back to localStorage for sauvage @ http://127.0.0.1:4177/script.js:14941
+[    3729ms] [LOG] 🎨 Theme System Initialized! @ http://127.0.0.1:4177/script.js:14210
+[    3729ms] [LOG] 📋 Available commands: @ http://127.0.0.1:4177/script.js:14211
+[    3729ms] [LOG]    • showCurrentTheme() - Show current theme status @ http://127.0.0.1:4177/script.js:14212
+[    3729ms] [LOG]    • testThemes() - Test all themes @ http://127.0.0.1:4177/script.js:14213
+[    3729ms] [LOG]    • enableThemeDebug() - Show theme indicator @ http://127.0.0.1:4177/script.js:14214
+[    3729ms] [LOG]    • testFavorites() - Test favorites system @ http://127.0.0.1:4177/script.js:14215
+[    3729ms] [LOG]    • testFavoritesModal() - Test favorites modal @ http://127.0.0.1:4177/script.js:14216
+[    3730ms] [LOG]  @ http://127.0.0.1:4177/script.js:14217
+[    3730ms] [LOG] ❤️ Favorites added to all perfume sections with adaptive themes! @ http://127.0.0.1:4177/script.js:14218
+[    3730ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/bleudechanel:0
+[    3730ms] [ERROR] âŒ Failed to load reviews for bleudechanel @ http://127.0.0.1:4177/script.js:14862
+[    3730ms] [LOG] âš ï¸ Falling back to localStorage for bleudechanel @ http://127.0.0.1:4177/script.js:14941
+[    3790ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/tobaccovanille:0
+[    3790ms] [ERROR] âŒ Failed to load reviews for tobaccovanille @ http://127.0.0.1:4177/script.js:14862
+[    3791ms] [LOG] âš ï¸ Falling back to localStorage for tobaccovanille @ http://127.0.0.1:4177/script.js:14941
+[    5596ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/oudwood:0
+[    5596ms] [ERROR] âŒ Failed to load reviews for oudwood @ http://127.0.0.1:4177/script.js:14862
+[    5596ms] [LOG] âš ï¸ Falling back to localStorage for oudwood @ http://127.0.0.1:4177/script.js:14941
+[    5599ms] [LOG] âœ… No avatar fixes needed @ http://127.0.0.1:4177/script.js:13372
+[    5619ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    5620ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[    5845ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/lanuit:0
+[    5845ms] [ERROR] âŒ Failed to load reviews for lanuit @ http://127.0.0.1:4177/script.js:14862
+[    5845ms] [LOG] âš ï¸ Falling back to localStorage for lanuit @ http://127.0.0.1:4177/script.js:14941
+[    6006ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/lostcherry:0
+[    6006ms] [ERROR] âŒ Failed to load reviews for lostcherry @ http://127.0.0.1:4177/script.js:14862
+[    6006ms] [LOG] âš ï¸ Falling back to localStorage for lostcherry @ http://127.0.0.1:4177/script.js:14941
+[    6155ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/yvsl:0
+[    6156ms] [ERROR] âŒ Failed to load reviews for yvsl @ http://127.0.0.1:4177/script.js:14862
+[    6156ms] [LOG] âš ï¸ Falling back to localStorage for yvsl @ http://127.0.0.1:4177/script.js:14941
+[    6310ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/aquadigio:0
+[    6310ms] [ERROR] âŒ Failed to load reviews for aquadigio @ http://127.0.0.1:4177/script.js:14862
+[    6310ms] [LOG] âš ï¸ Falling back to localStorage for aquadigio @ http://127.0.0.1:4177/script.js:14941
+[    6471ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/dy:0
+[    6472ms] [ERROR] âŒ Failed to load reviews for dy @ http://127.0.0.1:4177/script.js:14862
+[    6472ms] [LOG] âš ï¸ Falling back to localStorage for dy @ http://127.0.0.1:4177/script.js:14941
+[    6628ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/versaceeros:0
+[    6628ms] [ERROR] âŒ Failed to load reviews for versaceeros @ http://127.0.0.1:4177/script.js:14862
+[    6629ms] [LOG] âš ï¸ Falling back to localStorage for versaceeros @ http://127.0.0.1:4177/script.js:14941
+[    6634ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/jpgultramale:0
+[    6634ms] [ERROR] âŒ Failed to load reviews for jpgultramale @ http://127.0.0.1:4177/script.js:14862
+[    6635ms] [LOG] âš ï¸ Falling back to localStorage for jpgultramale @ http://127.0.0.1:4177/script.js:14941
+[    6803ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/invictus:0
+[    6803ms] [ERROR] âŒ Failed to load reviews for invictus @ http://127.0.0.1:4177/script.js:14862
+[    6803ms] [LOG] âš ï¸ Falling back to localStorage for invictus @ http://127.0.0.1:4177/script.js:14941
+[    6963ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/valentinouomo:0
+[    6963ms] [ERROR] âŒ Failed to load reviews for valentinouomo @ http://127.0.0.1:4177/script.js:14862
+[    6963ms] [LOG] âš ï¸ Falling back to localStorage for valentinouomo @ http://127.0.0.1:4177/script.js:14941
+[    7124ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/spicebomb:0
+[    7124ms] [ERROR] âŒ Failed to load reviews for spicebomb @ http://127.0.0.1:4177/script.js:14862
+[    7124ms] [LOG] âš ï¸ Falling back to localStorage for spicebomb @ http://127.0.0.1:4177/script.js:14941
+[    7130ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/explorer:0
+[    7130ms] [ERROR] âŒ Failed to load reviews for explorer @ http://127.0.0.1:4177/script.js:14862
+[    7130ms] [LOG] âš ï¸ Falling back to localStorage for explorer @ http://127.0.0.1:4177/script.js:14941
+[    7292ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/blv:0
+[    7292ms] [ERROR] âŒ Failed to load reviews for blv @ http://127.0.0.1:4177/script.js:14862
+[    7292ms] [LOG] âš ï¸ Falling back to localStorage for blv @ http://127.0.0.1:4177/script.js:14941
+[    7296ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/diorhomme:0
+[    7296ms] [ERROR] âŒ Failed to load reviews for diorhomme @ http://127.0.0.1:4177/script.js:14862
+[    7296ms] [LOG] âš ï¸ Falling back to localStorage for diorhomme @ http://127.0.0.1:4177/script.js:14941
+[    7454ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/allure:0
+[    7455ms] [ERROR] âŒ Failed to load reviews for allure @ http://127.0.0.1:4177/script.js:14862
+[    7455ms] [LOG] âš ï¸ Falling back to localStorage for allure @ http://127.0.0.1:4177/script.js:14941
+[    7637ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/tuscanleather:0
+[    7698ms] [ERROR] âŒ Failed to load reviews for tuscanleather @ http://127.0.0.1:4177/script.js:14862
+[    7699ms] [LOG] âš ï¸ Falling back to localStorage for tuscanleather @ http://127.0.0.1:4177/script.js:14941
+[    7858ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/armanicode:0
+[    7858ms] [ERROR] âŒ Failed to load reviews for armanicode @ http://127.0.0.1:4177/script.js:14862
+[    7858ms] [LOG] âš ï¸ Falling back to localStorage for armanicode @ http://127.0.0.1:4177/script.js:14941
+[    8015ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/lhommeideal:0
+[    8015ms] [ERROR] âŒ Failed to load reviews for lhommeideal @ http://127.0.0.1:4177/script.js:14862
+[    8015ms] [LOG] âš ï¸ Falling back to localStorage for lhommeideal @ http://127.0.0.1:4177/script.js:14941
+[    8187ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/terredhermes:0
+[    8187ms] [ERROR] âŒ Failed to load reviews for terredhermes @ http://127.0.0.1:4177/script.js:14862
+[    8187ms] [LOG] âš ï¸ Falling back to localStorage for terredhermes @ http://127.0.0.1:4177/script.js:14941
+[    8349ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/gentleman:0
+[    8349ms] [ERROR] âŒ Failed to load reviews for gentleman @ http://127.0.0.1:4177/script.js:14862
+[    8349ms] [LOG] âš ï¸ Falling back to localStorage for gentleman @ http://127.0.0.1:4177/script.js:14941
+[    8518ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/wantedbynight:0
+[    8518ms] [ERROR] âŒ Failed to load reviews for wantedbynight @ http://127.0.0.1:4177/script.js:14862
+[    8518ms] [LOG] âš ï¸ Falling back to localStorage for wantedbynight @ http://127.0.0.1:4177/script.js:14941
+[    8694ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/kbyDG:0
+[    8694ms] [ERROR] âŒ Failed to load reviews for kbyDG @ http://127.0.0.1:4177/script.js:14862
+[    8694ms] [LOG] âš ï¸ Falling back to localStorage for kbyDG @ http://127.0.0.1:4177/script.js:14941
+[    8864ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/leaudissey:0
+[    8864ms] [ERROR] âŒ Failed to load reviews for leaudissey @ http://127.0.0.1:4177/script.js:14862
+[    8864ms] [LOG] âš ï¸ Falling back to localStorage for leaudissey @ http://127.0.0.1:4177/script.js:14941
+[    9037ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/chbadboy:0
+[    9038ms] [ERROR] âŒ Failed to load reviews for chbadboy @ http://127.0.0.1:4177/script.js:14862
+[    9038ms] [LOG] âš ï¸ Falling back to localStorage for chbadboy @ http://127.0.0.1:4177/script.js:14941
+[    9204ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/ysllibre:0
+[    9204ms] [ERROR] âŒ Failed to load reviews for ysllibre @ http://127.0.0.1:4177/script.js:14862
+[    9204ms] [LOG] âš ï¸ Falling back to localStorage for ysllibre @ http://127.0.0.1:4177/script.js:14941
+[    9369ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/fireplace:0
+[    9369ms] [ERROR] âŒ Failed to load reviews for fireplace @ http://127.0.0.1:4177/script.js:14862
+[    9370ms] [LOG] âš ï¸ Falling back to localStorage for fireplace @ http://127.0.0.1:4177/script.js:14941
+[    9538ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/pradacarbon:0
+[    9538ms] [ERROR] âŒ Failed to load reviews for pradacarbon @ http://127.0.0.1:4177/script.js:14862
+[    9538ms] [LOG] âš ï¸ Falling back to localStorage for pradacarbon @ http://127.0.0.1:4177/script.js:14941
+[    9713ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/burberryhero:0
+[    9713ms] [ERROR] âŒ Failed to load reviews for burberryhero @ http://127.0.0.1:4177/script.js:14862
+[    9713ms] [LOG] âš ï¸ Falling back to localStorage for burberryhero @ http://127.0.0.1:4177/script.js:14941
+[    9879ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/narcisoforhim:0
+[    9879ms] [ERROR] âŒ Failed to load reviews for narcisoforhim @ http://127.0.0.1:4177/script.js:14862
+[    9879ms] [LOG] âš ï¸ Falling back to localStorage for narcisoforhim @ http://127.0.0.1:4177/script.js:14941
+[   10032ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/cketernity:0
+[   10033ms] [ERROR] âŒ Failed to load reviews for cketernity @ http://127.0.0.1:4177/script.js:14862
+[   10033ms] [LOG] âš ï¸ Falling back to localStorage for cketernity @ http://127.0.0.1:4177/script.js:14941
+[   10199ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/gucciguilty:0
+[   10199ms] [ERROR] âŒ Failed to load reviews for gucciguilty @ http://127.0.0.1:4177/script.js:14862
+[   10199ms] [LOG] âš ï¸ Falling back to localStorage for gucciguilty @ http://127.0.0.1:4177/script.js:14941
+[   10377ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/valentinodonna:0
+[   10377ms] [ERROR] âŒ Failed to load reviews for valentinodonna @ http://127.0.0.1:4177/script.js:14862
+[   10378ms] [LOG] âš ï¸ Falling back to localStorage for valentinodonna @ http://127.0.0.1:4177/script.js:14941
+[   10543ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/greenirish:0
+[   10544ms] [ERROR] âŒ Failed to load reviews for greenirish @ http://127.0.0.1:4177/script.js:14862
+[   10544ms] [LOG] âš ï¸ Falling back to localStorage for greenirish @ http://127.0.0.1:4177/script.js:14941
+[   10718ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/egoiste:0
+[   10719ms] [ERROR] âŒ Failed to load reviews for egoiste @ http://127.0.0.1:4177/script.js:14862
+[   10719ms] [LOG] âš ï¸ Falling back to localStorage for egoiste @ http://127.0.0.1:4177/script.js:14941
+[   10900ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/amenpure:0
+[   10900ms] [ERROR] âŒ Failed to load reviews for amenpure @ http://127.0.0.1:4177/script.js:14862
+[   10900ms] [LOG] âš ï¸ Falling back to localStorage for amenpure @ http://127.0.0.1:4177/script.js:14941
+[   11077ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/declarationcartier:0
+[   11077ms] [ERROR] âŒ Failed to load reviews for declarationcartier @ http://127.0.0.1:4177/script.js:14862
+[   11077ms] [LOG] âš ï¸ Falling back to localStorage for declarationcartier @ http://127.0.0.1:4177/script.js:14941
+[   11252ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/laween:0
+[   11252ms] [ERROR] âŒ Failed to load reviews for laween @ http://127.0.0.1:4177/script.js:14862
+[   11252ms] [LOG] âš ï¸ Falling back to localStorage for laween @ http://127.0.0.1:4177/script.js:14941
+[   11428ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/cedarsmancera:0
+[   11429ms] [ERROR] âŒ Failed to load reviews for cedarsmancera @ http://127.0.0.1:4177/script.js:14862
+[   11429ms] [LOG] âš ï¸ Falling back to localStorage for cedarsmancera @ http://127.0.0.1:4177/script.js:14941
+[   11436ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/reflectionman:0
+[   11436ms] [ERROR] âŒ Failed to load reviews for reflectionman @ http://127.0.0.1:4177/script.js:14862
+[   11436ms] [LOG] âš ï¸ Falling back to localStorage for reflectionman @ http://127.0.0.1:4177/script.js:14941
+[   11616ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/sedley:0
+[   11616ms] [ERROR] âŒ Failed to load reviews for sedley @ http://127.0.0.1:4177/script.js:14862
+[   11616ms] [LOG] âš ï¸ Falling back to localStorage for sedley @ http://127.0.0.1:4177/script.js:14941
+[   11792ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/sideeffect:0
+[   11793ms] [ERROR] âŒ Failed to load reviews for sideeffect @ http://127.0.0.1:4177/script.js:14862
+[   11793ms] [LOG] âš ï¸ Falling back to localStorage for sideeffect @ http://127.0.0.1:4177/script.js:14941
+[   11958ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/naxos:0
+[   11958ms] [ERROR] âŒ Failed to load reviews for naxos @ http://127.0.0.1:4177/script.js:14862
+[   11958ms] [LOG] âš ï¸ Falling back to localStorage for naxos @ http://127.0.0.1:4177/script.js:14941
+[   12132ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4177/api/reviews/grandSoir:0
+[   12132ms] [ERROR] âŒ Failed to load reviews for grandSoir @ http://127.0.0.1:4177/script.js:14862
+[   12132ms] [LOG] âš ï¸ Falling back to localStorage for grandSoir @ http://127.0.0.1:4177/script.js:14941
+[   12132ms] [LOG] âš ï¸ No reviews loaded from database, trying localStorage... @ http://127.0.0.1:4177/script.js:14950
+[   12132ms] [LOG] âœ… Loaded 0 total reviews from database @ http://127.0.0.1:4177/script.js:14956
+[   12138ms] [LOG] ðŸ’¬ Reviews Manager initialized successfully @ http://127.0.0.1:4177/script.js:14487
+[   12140ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12140ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12140ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12140ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12140ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12141ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12141ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12141ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12141ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12141ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12141ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12142ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12142ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12142ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12142ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12142ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12142ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12142ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12142ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12143ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12143ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12143ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12143ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12143ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12143ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12143ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12144ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12144ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12144ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12144ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12144ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12144ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12144ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12145ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12145ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12145ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12145ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12145ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12145ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12145ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12146ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12146ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12146ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12146ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12146ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12146ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12146ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12147ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12147ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12147ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12147ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12147ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12147ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12147ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12147ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12148ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12148ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12148ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12148ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12148ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12148ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12148ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12149ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12149ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12149ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12149ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12149ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12149ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12149ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12150ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12150ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12150ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12150ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12150ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12150ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12150ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12151ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12151ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12151ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12151ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12151ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12151ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12151ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12152ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12152ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12152ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12152ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12152ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12152ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12152ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12152ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12153ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12153ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12153ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12153ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12153ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12153ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12153ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12154ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12154ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12154ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12154ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12154ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12154ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12154ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12155ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12155ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12155ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12155ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104
+[   12155ms] [LOG] 🔍 Found 0 profile suggestions to add handlers to @ http://127.0.0.1:4177/script.js:18104

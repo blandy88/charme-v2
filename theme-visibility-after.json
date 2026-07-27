@@ -1,0 +1,101 @@
+[
+  {
+    "label": "top",
+    "y": 0,
+    "bodyClass": "has-marquee",
+    "bg": "rgb(0, 0, 0)",
+    "theme": "dark",
+    "visibleProducts": []
+  },
+  {
+    "label": "layton",
+    "y": 1282,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden",
+    "bg": "rgb(0, 0, 0)",
+    "theme": "dark",
+    "visibleProducts": [
+      {
+        "name": "Layton",
+        "color": "rgba(245, 243, 240, 0.88)"
+      }
+    ]
+  },
+  {
+    "label": "haltane",
+    "y": 5470,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-cream",
+    "bg": "rgb(245, 240, 230)",
+    "theme": "cream",
+    "visibleProducts": [
+      {
+        "name": "HALTANE",
+        "color": "rgba(93, 64, 55, 0.9)"
+      }
+    ]
+  },
+  {
+    "label": "pegasus",
+    "y": 9408,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(240, 248, 240)",
+    "theme": "light",
+    "visibleProducts": [
+      {
+        "name": "Pegasus",
+        "color": "rgb(255, 255, 255)"
+      }
+    ]
+  },
+  {
+    "label": "greenly",
+    "y": 14931,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(240, 248, 240)",
+    "theme": "light",
+    "visibleProducts": [
+      {
+        "name": "Greenly",
+        "color": "rgb(40, 167, 69)"
+      }
+    ]
+  },
+  {
+    "label": "baccarat",
+    "y": 19726,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(240, 248, 240)",
+    "theme": "light",
+    "visibleProducts": [
+      {
+        "name": "Baccarat Rouge 540",
+        "color": "rgb(74, 44, 47)"
+      }
+    ]
+  },
+  {
+    "label": "sauvage",
+    "y": 31558,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(240, 248, 240)",
+    "theme": "light",
+    "visibleProducts": [
+      {
+        "name": "Sauvage",
+        "color": "rgb(29, 42, 54)"
+      }
+    ]
+  },
+  {
+    "label": "grandSoir",
+    "y": 161614,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(240, 248, 240)",
+    "theme": "light",
+    "visibleProducts": [
+      {
+        "name": "Grand Soir",
+        "color": "rgba(255, 255, 255, 0.95)"
+      }
+    ]
+  }
+]

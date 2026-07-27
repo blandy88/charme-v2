@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 
@@ -22,6 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
   late final Animation<double> _scaleAnim;
   late final Animation<double> _subtitleFade;
   late final Animation<double> _taglineFade;
+  Timer? _completionTimer;
 
   @override
   void initState() {
@@ -67,13 +69,14 @@ class _SplashScreenState extends State<SplashScreen>
     _fadeController.forward();
 
     // Transition after splash duration
-    Future.delayed(const Duration(milliseconds: 2800), () {
+    _completionTimer = Timer(const Duration(milliseconds: 2800), () {
       if (mounted) widget.onComplete();
     });
   }
 
   @override
   void dispose() {
+    _completionTimer?.cancel();
     _fadeController.dispose();
     _shimmerController.dispose();
     _pulseController.dispose();

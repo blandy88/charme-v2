@@ -1,0 +1,370 @@
+[
+  {
+    "id": "pegasus",
+    "section": {
+      "x": 0,
+      "y": 9548,
+      "w": 1910,
+      "h": 5395
+    },
+    "display": "grid",
+    "columns": "420px 520px",
+    "img": {
+      "x": 423,
+      "y": 9703,
+      "w": 288,
+      "h": 288
+    },
+    "imgTransform": "matrix(0.8, 0, 0, 0.8, -100, 0)",
+    "info": {
+      "x": 941,
+      "y": 9577,
+      "w": 504,
+      "h": 579
+    },
+    "infoTransform": "matrix(0.97, 0, 0, 0.97, 0, 20)",
+    "scent": {
+      "x": 599,
+      "y": 10300,
+      "w": 336,
+      "h": 870
+    },
+    "scentTransform": "matrix(0.8, 0, 0, 0.8, 100, 0)",
+    "ing": {
+      "x": 1135,
+      "y": 10300,
+      "w": 416,
+      "h": 870
+    },
+    "ingTransform": "matrix(0.8, 0, 0, 0.8, 150, 0)",
+    "noteCount": 8,
+    "noteStats": {
+      "min": 32,
+      "max": 32
+    },
+    "noteSamples": [
+      {
+        "w": 32,
+        "h": 32,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "chip"
+      },
+      {
+        "w": 32,
+        "h": 32,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "chip"
+      },
+      {
+        "w": 32,
+        "h": 32,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "chip"
+      },
+      {
+        "w": 32,
+        "h": 32,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "chip"
+      },
+      {
+        "w": 32,
+        "h": 32,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "chip"
+      },
+      {
+        "w": 32,
+        "h": 32,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "chip"
+      },
+      {
+        "w": 32,
+        "h": 32,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "chip"
+      },
+      {
+        "w": 32,
+        "h": 32,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "chip"
+      }
+    ],
+    "overflowX": 0
+  },
+  {
+    "id": "baccaratrouge",
+    "section": {
+      "x": 0,
+      "y": 19938,
+      "w": 1910,
+      "h": 4289
+    },
+    "display": "block",
+    "columns": "none",
+    "img": {
+      "x": 465,
+      "y": 20144,
+      "w": 420,
+      "h": 420
+    },
+    "imgTransform": "none",
+    "info": {
+      "x": 941,
+      "y": 19998,
+      "w": 504,
+      "h": 711
+    },
+    "infoTransform": "none",
+    "scent": {
+      "x": 335,
+      "y": 20756,
+      "w": 603,
+      "h": 906
+    },
+    "scentTransform": "none",
+    "ing": {
+      "x": 972,
+      "y": 20756,
+      "w": 603,
+      "h": 906
+    },
+    "ingTransform": "none",
+    "noteCount": 6,
+    "noteStats": {
+      "min": 46,
+      "max": 46
+    },
+    "noteSamples": [
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "baccaratrouge-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "baccaratrouge-crystal-card"
+      }
+    ],
+    "overflowX": 0
+  },
+  {
+    "id": "sauvage",
+    "section": {
+      "x": 0,
+      "y": 33744,
+      "w": 1910,
+      "h": 3338
+    },
+    "display": "block",
+    "columns": "none",
+    "img": {
+      "x": 465,
+      "y": 33947,
+      "w": 420,
+      "h": 420
+    },
+    "imgTransform": "none",
+    "info": {
+      "x": 941,
+      "y": 33804,
+      "w": 504,
+      "h": 707
+    },
+    "infoTransform": "none",
+    "scent": {
+      "x": 335,
+      "y": 34557,
+      "w": 603,
+      "h": 559
+    },
+    "scentTransform": "none",
+    "ing": {
+      "x": 972,
+      "y": 34557,
+      "w": 603,
+      "h": 559
+    },
+    "ingTransform": "none",
+    "noteCount": 8,
+    "noteStats": {
+      "min": 38,
+      "max": 38
+    },
+    "noteSamples": [
+      {
+        "w": 38,
+        "h": 38,
+        "parent": "sauvage-chip-emoji note-image-icon",
+        "grand": "sauvage-chip"
+      },
+      {
+        "w": 38,
+        "h": 38,
+        "parent": "sauvage-chip-emoji note-image-icon",
+        "grand": "sauvage-chip"
+      },
+      {
+        "w": 38,
+        "h": 38,
+        "parent": "sauvage-chip-emoji note-image-icon",
+        "grand": "sauvage-chip"
+      },
+      {
+        "w": 38,
+        "h": 38,
+        "parent": "sauvage-chip-emoji note-image-icon",
+        "grand": "sauvage-chip"
+      },
+      {
+        "w": 38,
+        "h": 38,
+        "parent": "sauvage-chip-emoji note-image-icon",
+        "grand": "sauvage-chip"
+      },
+      {
+        "w": 38,
+        "h": 38,
+        "parent": "sauvage-chip-emoji note-image-icon",
+        "grand": "sauvage-chip"
+      },
+      {
+        "w": 38,
+        "h": 38,
+        "parent": "sauvage-chip-emoji note-image-icon",
+        "grand": "sauvage-chip"
+      },
+      {
+        "w": 38,
+        "h": 38,
+        "parent": "sauvage-chip-emoji note-image-icon",
+        "grand": "sauvage-chip"
+      }
+    ],
+    "overflowX": 0
+  },
+  {
+    "id": "diorhomme",
+    "section": {
+      "x": 0,
+      "y": 101117,
+      "w": 1910,
+      "h": 3036
+    },
+    "display": "block",
+    "columns": "none",
+    "img": {
+      "x": 465,
+      "y": 101329,
+      "w": 420,
+      "h": 382
+    },
+    "imgTransform": "none",
+    "info": {
+      "x": 941,
+      "y": 101177,
+      "w": 504,
+      "h": 686
+    },
+    "infoTransform": "none",
+    "scent": {
+      "x": 335,
+      "y": 101909,
+      "w": 603,
+      "h": 644
+    },
+    "scentTransform": "none",
+    "ing": {
+      "x": 972,
+      "y": 101909,
+      "w": 603,
+      "h": 644
+    },
+    "ingTransform": "none",
+    "noteCount": 9,
+    "noteStats": {
+      "min": 46,
+      "max": 46
+    },
+    "noteSamples": [
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "diorhomme-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "diorhomme-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "diorhomme-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "diorhomme-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "diorhomme-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "diorhomme-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "diorhomme-crystal-card"
+      },
+      {
+        "w": 46,
+        "h": 46,
+        "parent": "ingredient-icon note-image-icon generated-note-image",
+        "grand": "diorhomme-crystal-card"
+      }
+    ],
+    "overflowX": 0
+  }
+]

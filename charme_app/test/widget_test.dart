@@ -12,6 +12,6 @@ import 'package:charme_app/main.dart';
 void main() {
   testWidgets('App launches smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const CharmeApp());
-    expect(find.text('PARFUMERIE'), findsOneWidget);
+    expect(find.text('P A R F U M E R I E'), findsOneWidget);
   });
 }

@@ -10,7 +10,7 @@ class IngredientFragranceFinder {
     // Initialize the comprehensive fragrance API service
     this.fragranceService = new FragranceAPIService();
 
-    // Ingredient Icons Mapping
+    // Ingredient icon mapping retained as text fallback; UI uses real note images.
     this.ingredientIcons = {
       // Top notes - Citrus & Fresh
       bergamot: "🍊",
@@ -541,7 +541,9 @@ class IngredientFragranceFinder {
 
       selectedDisplay.innerHTML = this.selectedIngredients
         .map((ingredient) => {
-          const icon = this.ingredientIcons[ingredient] || "🌿";
+          const icon = window.NoteImageResolver
+            ? `<img class="note-real-image" src="${window.NoteImageResolver.imageFor(ingredient)}" alt="${ingredient}" loading="lazy" decoding="async">`
+            : this.ingredientIcons[ingredient] || "";
           return `
                     <div class="selected-ingredient-pill" data-ingredient="${ingredient}">
                         <span class="ingredient-icon">${icon}</span>
@@ -615,7 +617,9 @@ class IngredientFragranceFinder {
 
     dropdown.innerHTML = suggestions
       .map((ingredient) => {
-        const icon = this.ingredientIcons[ingredient] || "🌿";
+        const icon = window.NoteImageResolver
+          ? `<img class="note-real-image" src="${window.NoteImageResolver.imageFor(ingredient)}" alt="${ingredient}" loading="lazy" decoding="async">`
+          : this.ingredientIcons[ingredient] || "";
         const isSelected = this.selectedIngredients.includes(ingredient);
 
         return `
@@ -653,6 +657,7 @@ class IngredientFragranceFinder {
       modal.style.display = "flex";
       setTimeout(() => {
         modal.classList.add("show");
+        window.NoteImageResolver?.scheduleHydration?.(modal);
 
         // Auto-focus the search input after animation
         setTimeout(() => {
@@ -902,8 +907,9 @@ class IngredientFragranceFinder {
                     <div class="ingredient-pills">
                         ${match.profile.ingredients
                           .map((ingredient) => {
-                            const icon =
-                              this.ingredientIcons[ingredient] || "🌿";
+                            const icon = window.NoteImageResolver
+                              ? `<img class="note-real-image" src="${window.NoteImageResolver.imageFor(ingredient)}" alt="${ingredient}" loading="lazy" decoding="async">`
+                              : this.ingredientIcons[ingredient] || "";
                             const isMatched =
                               match.matchedIngredients.includes(ingredient);
                             return `

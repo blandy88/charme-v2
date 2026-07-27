@@ -1,4 +1,5 @@
 class Fragrance {
+  final String? explicitId;
   final String name;
   final String brand;
   final String family;
@@ -12,6 +13,7 @@ class Fragrance {
   final bool available;
 
   const Fragrance({
+    this.explicitId,
     required this.name,
     required this.brand,
     required this.family,
@@ -24,6 +26,12 @@ class Fragrance {
     this.sizes = const {},
     this.available = false,
   });
+
+  String get id =>
+      explicitId ??
+      '${brand.toLowerCase()}::${name.toLowerCase()}'
+          .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
+          .replaceAll(RegExp(r'^-+|-+$'), '');
 
   /// Returns a placeholder image URL based on brand
   String get imageUrl {
@@ -47,6 +55,14 @@ class Fragrance {
 
   /// Price range based on brand tier
   String get priceRange {
+    if (sizes.isNotEmpty) {
+      final values = sizes.values.toList()..sort();
+      final min = values.first;
+      final max = values.last;
+      if (min == max) return '\$${min.toStringAsFixed(0)}';
+      return '\$${min.toStringAsFixed(0)} - \$${max.toStringAsFixed(0)}';
+    }
+
     switch (brand) {
       case 'Parfums de Marly':
       case 'Tom Ford':

@@ -65,10 +65,12 @@
         <link rel="stylesheet" href="css/sideeffect-profile.css" media="print" onload="this.media='all'" />
         <link rel="stylesheet" href="css/naxos-profile.css" media="print" onload="this.media='all'" />
         <link rel="stylesheet" href="css/grandSoir-profile.css" media="print" onload="this.media='all'" />
+        <link rel="stylesheet" href="css/fragrance-layout-normalize.css" />
 
         <!-- Scripts (deferred for performance) -->
         <script src="js/fragrance-api-service.js" defer></script>
         <script src="js/ai-fragrance-finder.js" defer></script>
+        <script src="js/note-image-resolver.js" defer></script>
         <script src="js/ingredient-finder.js" defer></script>
         <script src="js/smooth-scroll.js" defer></script>
 
@@ -129,7 +131,7 @@
                 <div class="nav-left">
                     <a href="#" class="nav-link">Home</a>
                     <a href="#" class="nav-link">About</a>
-                    <a href="#" class="nav-link">Services</a>
+                <a href="#" class="nav-link">Services</a>
 
                     <a href="#" class="nav-link">Contact</a>
                 </div>
@@ -3169,74 +3171,7 @@
             style="display: none"
         />
 
-        <!-- Photo Editor Modal -->
-        <div
-            class="photo-editor-modal"
-            id="photoEditorModal"
-            style="display: none"
-        >
-            <div class="modal-overlay"></div>
-            <div class="modal-content photo-editor-content">
-                <div class="modal-header">
-                    <h2>Edit Profile Photo</h2>
-                    <button class="close-btn" id="photoEditorClose">
-                        &times;
-                    </button>
-                </div>
-                <div class="photo-editor-body">
-                    <div class="image-preview-container">
-                        <canvas
-                            id="photoCanvas"
-                            width="400"
-                            height="400"
-                        ></canvas>
-                        <div class="crop-overlay" id="cropOverlay">
-                            <div class="crop-handle top-left"></div>
-                            <div class="crop-handle top-right"></div>
-                            <div class="crop-handle bottom-left"></div>
-                            <div class="crop-handle bottom-right"></div>
-                        </div>
-                    </div>
-                    <div class="photo-controls">
-                        <div class="control-group">
-                            <label>Size:</label>
-                            <input
-                                type="range"
-                                id="sizeSlider"
-                                min="50"
-                                max="200"
-                                value="100"
-                            />
-                            <span id="sizeValue">100%</span>
-                        </div>
-                        <div class="control-group">
-                            <label>Shape:</label>
-                            <select id="shapeSelect">
-                                <option value="circle">Circle</option>
-                                <option value="square">Square</option>
-                                <option value="rounded">Rounded Square</option>
-                            </select>
-                        </div>
-                        <div class="control-group">
-                            <button id="rotateBtn" class="control-btn">
-                                🔄 Rotate
-                            </button>
-                            <button id="flipBtn" class="control-btn">
-                                🔃 Flip
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="cancelPhotoEdit" class="btn-secondary">
-                        Cancel
-                    </button>
-                    <button id="savePhotoEdit" class="btn-primary">
-                        Save Photo
-                    </button>
-                </div>
-            </div>
-        </div>
+        <!-- FIX ISS-008: Removed duplicate photoEditorModal (was duplicate of earlier definition at line ~3055) -->
 
         <!-- Favorites Modal -->
         <div class="favorites-modal" id="favoritesModal">
@@ -3874,30 +3809,7 @@
                     <source src="background.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
-                <video
-                    id="background-video-2"
-                    muted
-                    loop
-                    playsinline
-                    disableRemotePlayback
-                    preload="none"
-                    style="display: none"
-                >
-                    <source src="background2.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
-                <video
-                    id="background-video-3"
-                    muted
-                    loop
-                    playsinline
-                    disableRemotePlayback
-                    preload="none"
-                    style="display: none"
-                >
-                    <source src="background3.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
+                <!-- FIX ISS-009: Removed background-video-2 and background-video-3 references (files do not exist) -->
 
                 <!-- Hero Content Overlay -->
                 <div class="hero-content">
@@ -24963,17 +24875,6 @@
                 </div>
             </section>
 
-            <section class="content database-fragrances-section" id="databaseFragrancesSection">
-                <div class="database-fragrances-container">
-                    <div class="database-fragrances-header">
-                        <h2 class="database-fragrances-title">Complete Perfume Database</h2>
-                        <p class="database-fragrances-subtitle" id="databaseFragranceCount">Loading additional perfumes...</p>
-                    </div>
-                    <div class="database-fragrance-grid" id="databaseFragranceGrid"></div>
-                </div>
-            </section>
-            <section class="content"></section>
-            <section class="content final"></section>
         </div>
 
         <!-- Floating Cart Icon -->

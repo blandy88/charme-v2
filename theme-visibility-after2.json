@@ -1,0 +1,56 @@
+[
+  {
+    "label": "haltane",
+    "y": 5470,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-cream",
+    "bg": "rgb(217, 212, 203)",
+    "theme": "cream",
+    "product": "HALTANE",
+    "productColor": "rgba(92, 63, 55, 0.906)"
+  },
+  {
+    "label": "pegasus",
+    "y": 9408,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(23, 23, 25)",
+    "theme": "light",
+    "product": "Pegasus",
+    "productColor": "rgb(255, 255, 255)"
+  },
+  {
+    "label": "greenly",
+    "y": 14931,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(240, 248, 240)",
+    "theme": "light",
+    "product": "Greenly",
+    "productColor": "rgb(40, 167, 69)"
+  },
+  {
+    "label": "baccarat",
+    "y": 19726,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(253, 242, 242)",
+    "theme": "light",
+    "product": "Baccarat Rouge 540",
+    "productColor": "rgb(74, 44, 47)"
+  },
+  {
+    "label": "sauvage",
+    "y": 31558,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(214, 221, 230)",
+    "theme": "light",
+    "product": "Sauvage",
+    "productColor": "rgb(29, 42, 54)"
+  },
+  {
+    "label": "grandSoir",
+    "y": 161614,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(18, 14, 4)",
+    "theme": "light",
+    "product": "Grand Soir",
+    "productColor": "rgba(255, 255, 255, 0.95)"
+  }
+]

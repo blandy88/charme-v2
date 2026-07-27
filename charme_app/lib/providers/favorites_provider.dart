@@ -2,30 +2,30 @@ import 'package:flutter/foundation.dart';
 import '../models/fragrance.dart';
 
 class FavoritesProvider extends ChangeNotifier {
-  final Set<String> _favoriteNames = {};
+  final Set<String> _favoriteIds = {};
 
-  Set<String> get favoriteNames => Set.unmodifiable(_favoriteNames);
+  Set<String> get favoriteIds => Set.unmodifiable(_favoriteIds);
 
-  int get count => _favoriteNames.length;
+  int get count => _favoriteIds.length;
 
-  bool isFavorite(String fragranceName) => _favoriteNames.contains(fragranceName);
+  bool isFavorite(Fragrance fragrance) => _favoriteIds.contains(fragrance.id);
 
   void toggle(Fragrance fragrance) {
-    if (_favoriteNames.contains(fragrance.name)) {
-      _favoriteNames.remove(fragrance.name);
+    if (_favoriteIds.contains(fragrance.id)) {
+      _favoriteIds.remove(fragrance.id);
     } else {
-      _favoriteNames.add(fragrance.name);
+      _favoriteIds.add(fragrance.id);
     }
     notifyListeners();
   }
 
-  void remove(String name) {
-    _favoriteNames.remove(name);
+  void remove(Fragrance fragrance) {
+    _favoriteIds.remove(fragrance.id);
     notifyListeners();
   }
 
   void clear() {
-    _favoriteNames.clear();
+    _favoriteIds.clear();
     notifyListeners();
   }
 }

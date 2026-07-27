@@ -15,7 +15,9 @@ import 'search_screen.dart';
 // ═══════════════════════════════════════════════════════════════════════════
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool isActive;
+
+  const HomeScreen({super.key, this.isActive = true});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -163,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       color: AppTheme.surface,
       child: Stack(
         children: [
-          const Positioned.fill(child: _HeroBackgroundVideos()),
+          Positioned.fill(child: _HeroBackgroundVideos(isActive: widget.isActive)),
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -1168,7 +1170,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 }
 
 class _HeroBackgroundVideos extends StatefulWidget {
-  const _HeroBackgroundVideos();
+  final bool isActive;
+
+  const _HeroBackgroundVideos({required this.isActive});
 
   @override
   State<_HeroBackgroundVideos> createState() => _HeroBackgroundVideosState();
@@ -1197,6 +1201,19 @@ class _HeroBackgroundVideosState extends State<_HeroBackgroundVideos>
     _initVideos();
   }
 
+  @override
+  void didUpdateWidget(covariant _HeroBackgroundVideos oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!_initialized || oldWidget.isActive == widget.isActive) return;
+    if (widget.isActive) {
+      _controllers[_activeIndex].play();
+    } else {
+      for (final controller in _controllers) {
+        controller.pause();
+      }
+    }
+  }
+
   Future<void> _initVideos() async {
     try {
       for (final controller in _controllers) {
@@ -1207,7 +1224,9 @@ class _HeroBackgroundVideosState extends State<_HeroBackgroundVideos>
 
       if (!mounted) return;
 
-      await _controllers[_activeIndex].play();
+      if (widget.isActive) {
+        await _controllers[_activeIndex].play();
+      }
       setState(() => _initialized = true);
 
       if (_controllers.length > 1) {
@@ -1223,7 +1242,7 @@ class _HeroBackgroundVideosState extends State<_HeroBackgroundVideos>
   }
 
   void _switchTo(int nextIndex) {
-    if (!_initialized) return;
+    if (!_initialized || !widget.isActive) return;
     if (nextIndex == _activeIndex) return;
 
     final previousIndex = _activeIndex;
@@ -1244,7 +1263,7 @@ class _HeroBackgroundVideosState extends State<_HeroBackgroundVideos>
 
     switch (state) {
       case AppLifecycleState.resumed:
-        active.play();
+        if (widget.isActive) active.play();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.hidden:

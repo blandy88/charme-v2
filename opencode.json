@@ -1,0 +1,138 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "azure/gpt-5.5-1",
+  "provider": {
+    "azure": {
+      "npm": "@ai-sdk/openai",
+      "name": "AIPilot AI",
+      "options": {
+        "baseURL": "https://nextgen.azure-api.net/api/openai/v1"
+      },
+      "models": {
+        "gpt-5.4-1": {
+          "id": "gpt-5.4-1",
+          "name": "GPT-5.4 stable (AIPilot)",
+          "options": {
+            "reasoningEffort": "xhigh"
+          }
+        },
+        "gpt-5.5-1": {
+          "id": "gpt-5.5-1",
+          "name": "GPT-5.5 premium (AIPilot)",
+          "options": {
+            "reasoningEffort": "xhigh"
+          }
+        },
+        "gpt-5.3-codex": {
+          "id": "gpt-5.3-codex",
+          "name": "GPT-5.3 Codex (AIPilot)",
+          "options": {
+            "reasoningEffort": "xhigh"
+          }
+        },
+        "gpt-5.4-2": {
+          "id": "gpt-5.4-2",
+          "name": "GPT-5.4 secondary (AIPilot)",
+          "options": {
+            "reasoningEffort": "xhigh"
+          }
+        },
+        "gpt-5.4-pro": {
+          "id": "gpt-5.4-pro",
+          "name": "GPT-5.4 Pro (AIPilot)",
+          "options": {
+            "reasoningEffort": "xhigh"
+          }
+        }
+      },
+      "env": [
+        "AIPILOT_OPENAI_BASE_URL",
+        "AZURE_OPENAI_API_KEY"
+      ]
+    }
+  },
+  "mcp": {
+    "serena": {
+      "type": "local",
+      "command": [
+        "C:\\Users\\cheri\\.local\\bin\\serena.exe",
+        "start-mcp-server",
+        "--context",
+        "ide",
+        "--project",
+        "C:\\Users\\cheri\\OneDrive\\Documents\\GitHub\\charme"
+      ],
+      "enabled": true,
+      "timeout": 30000
+    },
+    "taskmaster-ai": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "task-master-ai"
+      ],
+      "environment": {
+        "TASK_MASTER_TOOLS": "standard"
+      },
+      "enabled": true,
+      "timeout": 30000
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true,
+      "timeout": 30000
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "enabled": true,
+      "timeout": 30000
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp"
+      ],
+      "enabled": true,
+      "timeout": 30000
+    }
+  },
+  "watcher": {
+    "ignore": [
+      "model/**",
+      "models/**",
+      "silent_face_models/**",
+      "mask-glasses-caps-etc/**",
+      "twins-lookalike/**",
+      "output/**",
+      "tmp/**",
+      "diagnostics/**",
+      "raspi/pi_brain/data/**",
+      "raspi/pi_brain/**/enrollments/**",
+      "raspi/pi_brain/**/gallery/**",
+      "raspi/pi_brain/**/captures/**",
+      "raspi/pi_brain/**/snapshots/**",
+      "raspi/pi_brain/**/replays/**",
+      "**/*.jpg",
+      "**/*.jpeg",
+      "**/*.png",
+      "**/*.webp",
+      "**/*.bmp",
+      "**/*.gif",
+      "**/*.mp4",
+      "**/*.avi",
+      "**/*.mov",
+      "**/*.onnx",
+      "**/*.tflite",
+      "**/*.bin"
+    ]
+  }
+}

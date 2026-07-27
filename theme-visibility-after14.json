@@ -1,0 +1,42 @@
+[
+  {
+    "label": "haltane",
+    "y": 5559,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-cream",
+    "bg": "rgb(245, 240, 230)",
+    "theme": "cream",
+    "classifier": "cream"
+  },
+  {
+    "label": "pegasus",
+    "y": 9498,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-dark",
+    "bg": "rgb(23, 23, 25)",
+    "theme": "dark",
+    "classifier": "dark"
+  },
+  {
+    "label": "baccarat",
+    "y": 19816,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-cream",
+    "bg": "rgb(253, 242, 242)",
+    "theme": "cream",
+    "classifier": "cream"
+  },
+  {
+    "label": "sauvage",
+    "y": 31816,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-light",
+    "bg": "rgb(214, 221, 230)",
+    "theme": "light",
+    "classifier": "light"
+  },
+  {
+    "label": "grandSoir",
+    "y": 169095,
+    "bodyClass": "has-marquee top-shell-scrolled top-shell-hidden theme-dark",
+    "bg": "rgb(18, 14, 4)",
+    "theme": "dark",
+    "classifier": "dark"
+  }
+]

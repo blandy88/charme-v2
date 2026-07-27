@@ -1,0 +1,1212 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "← Home" [ref=e3] [cursor=pointer]:
+      - /url: index.html
+    - generic [ref=e4]:
+      - paragraph [ref=e5]: Parfumerie Charme
+      - heading "Fragrance Pages" [level=1] [ref=e6]
+      - paragraph [ref=e7]: Page 2 of 84 • 1000 fragrances • 12 full sections per page
+    - navigation [ref=e8]:
+      - link "Prev" [ref=e9] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=1
+      - link "1" [ref=e10] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=1
+      - link "2" [ref=e11] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=2
+      - link "3" [ref=e12] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=3
+      - link "4" [ref=e13] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=4
+      - link "5" [ref=e14] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=5
+      - link "6" [ref=e15] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=6
+      - link "7" [ref=e16] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=7
+      - text: …
+      - link "84" [ref=e17] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=84
+      - link "Next" [ref=e18] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=3
+  - main [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - img "Amouage Epic Man bottle" [ref=e24]
+          - generic [ref=e25]:
+            - generic [ref=e27]:
+              - heading "Amouage" [level=1] [ref=e28] [cursor=pointer]
+              - heading "Men • Oriental Spicy" [level=2] [ref=e29]
+              - heading "Amouage Epic Man" [level=3] [ref=e30]
+            - generic [ref=e31]:
+              - generic [ref=e34]: EDT
+              - generic [ref=e35]: "2009"
+            - generic [ref=e36]:
+              - button "Catalog Favorite" [ref=e37] [cursor=pointer]:
+                - generic [ref=e38]: Catalog Favorite
+              - button "Request Scent" [ref=e39] [cursor=pointer]:
+                - generic [ref=e40]: Request Scent
+            - paragraph [ref=e41]: A complex and mysterious fragrance with cumin, pink pepper, and oud.
+        - generic [ref=e42]:
+          - article [ref=e43]:
+            - generic [ref=e44]:
+              - heading "Scent Profile" [level=3] [ref=e45]
+              - generic [ref=e46]: Performance estimate
+            - generic [ref=e47]:
+              - generic [ref=e48]:
+                - generic [ref=e49]: Longevity
+                - strong [ref=e52]: 84%
+              - generic [ref=e53]:
+                - generic [ref=e54]: Projection
+                - strong [ref=e57]: 69%
+              - generic [ref=e58]:
+                - generic [ref=e59]: Versatility
+                - strong [ref=e62]: 60%
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - img "cumin"
+                - generic [ref=e65]: cumin
+              - generic [ref=e66]:
+                - img "pink pepper"
+                - generic [ref=e67]: pink pepper
+              - generic [ref=e68]:
+                - img "cardamom"
+                - generic [ref=e69]: cardamom
+              - generic [ref=e70]:
+                - img "incense"
+                - generic [ref=e71]: incense
+              - generic [ref=e72]:
+                - img "oud"
+                - generic [ref=e73]: oud
+              - generic [ref=e74]:
+                - img "leather"
+                - generic [ref=e75]: leather
+          - article [ref=e76]:
+            - generic [ref=e77]:
+              - heading "Ingredients" [level=3] [ref=e78]
+              - generic [ref=e79]: Top • Heart • Base
+            - generic [ref=e80]:
+              - generic [ref=e81]: Top
+              - generic [ref=e82]:
+                - generic [ref=e83]:
+                  - img "cumin"
+                  - generic [ref=e84]: cumin
+                - generic [ref=e85]:
+                  - img "pink pepper"
+                  - generic [ref=e86]: pink pepper
+            - generic [ref=e87]:
+              - generic [ref=e88]: Heart
+              - generic [ref=e89]:
+                - generic [ref=e90]:
+                  - img "cardamom"
+                  - generic [ref=e91]: cardamom
+                - generic [ref=e92]:
+                  - img "incense"
+                  - generic [ref=e93]: incense
+            - generic [ref=e94]:
+              - generic [ref=e95]: Base
+              - generic [ref=e96]:
+                - generic [ref=e97]:
+                  - img "oud"
+                  - generic [ref=e98]: oud
+                - generic [ref=e99]:
+                  - img "leather"
+                  - generic [ref=e100]: leather
+      - article [ref=e101]:
+        - generic [ref=e102]:
+          - heading "Fragrance Story" [level=3] [ref=e103]
+          - generic [ref=e104]: Amouage • Oriental Spicy
+        - paragraph [ref=e105]: A complex and mysterious fragrance with cumin, pink pepper, and oud.
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - heading "User Reviews & Comments" [level=3] [ref=e108]
+          - generic [ref=e110]: Catalog fragrance
+        - generic [ref=e111]:
+          - generic [ref=e112]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e113]
+          - paragraph [ref=e114]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e116]:
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - img "Amouage Guidance bottle"
+          - generic [ref=e119]:
+            - generic [ref=e121]:
+              - heading "Amouage" [level=1] [ref=e122] [cursor=pointer]
+              - heading "Women • Floral Amber" [level=2] [ref=e123]
+              - heading "Amouage Guidance" [level=3] [ref=e124]
+            - generic [ref=e125]:
+              - generic [ref=e128]: EDP
+              - generic [ref=e129]: "2023"
+            - generic [ref=e130]:
+              - button "Catalog Favorite" [ref=e131] [cursor=pointer]:
+                - generic [ref=e132]: Catalog Favorite
+              - button "Request Scent" [ref=e133] [cursor=pointer]:
+                - generic [ref=e134]: Request Scent
+            - paragraph [ref=e135]: An opulent pear hazelnut floral with rose, saffron, sandalwood, and vanilla.
+        - generic [ref=e136]:
+          - article [ref=e137]:
+            - generic [ref=e138]:
+              - heading "Scent Profile" [level=3] [ref=e139]
+              - generic [ref=e140]: Performance estimate
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - generic [ref=e143]: Longevity
+                - strong [ref=e146]: 69%
+              - generic [ref=e147]:
+                - generic [ref=e148]: Projection
+                - strong [ref=e151]: 69%
+              - generic [ref=e152]:
+                - generic [ref=e153]: Versatility
+                - strong [ref=e156]: 71%
+            - generic [ref=e157]:
+              - generic [ref=e158]:
+                - img "pear"
+                - generic [ref=e159]: pear
+              - generic [ref=e160]:
+                - img "hazelnut"
+                - generic [ref=e161]: hazelnut
+              - generic [ref=e162]:
+                - img "rose"
+                - generic [ref=e163]: rose
+              - generic [ref=e164]:
+                - img "saffron"
+                - generic [ref=e165]: saffron
+              - generic [ref=e166]:
+                - img "sandalwood"
+                - generic [ref=e167]: sandalwood
+              - generic [ref=e168]:
+                - img "vanilla"
+                - generic [ref=e169]: vanilla
+          - article [ref=e170]:
+            - generic [ref=e171]:
+              - heading "Ingredients" [level=3] [ref=e172]
+              - generic [ref=e173]: Top • Heart • Base
+            - generic [ref=e174]:
+              - generic [ref=e175]: Top
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - img "pear"
+                  - generic [ref=e178]: pear
+                - generic [ref=e179]:
+                  - img "hazelnut"
+                  - generic [ref=e180]: hazelnut
+            - generic [ref=e181]:
+              - generic [ref=e182]: Heart
+              - generic [ref=e183]:
+                - generic [ref=e184]:
+                  - img "rose"
+                  - generic [ref=e185]: rose
+                - generic [ref=e186]:
+                  - img "saffron"
+                  - generic [ref=e187]: saffron
+            - generic [ref=e188]:
+              - generic [ref=e189]: Base
+              - generic [ref=e190]:
+                - generic [ref=e191]:
+                  - img "sandalwood"
+                  - generic [ref=e192]: sandalwood
+                - generic [ref=e193]:
+                  - img "vanilla"
+                  - generic [ref=e194]: vanilla
+      - article [ref=e195]:
+        - generic [ref=e196]:
+          - heading "Fragrance Story" [level=3] [ref=e197]
+          - generic [ref=e198]: Amouage • Floral Amber
+        - paragraph [ref=e199]: An opulent pear hazelnut floral with rose, saffron, sandalwood, and vanilla.
+      - generic [ref=e200]:
+        - generic [ref=e201]:
+          - heading "User Reviews & Comments" [level=3] [ref=e202]
+          - generic [ref=e204]: Catalog fragrance
+        - generic [ref=e205]:
+          - generic [ref=e206]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e207]
+          - paragraph [ref=e208]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e210]:
+      - generic [ref=e211]:
+        - generic [ref=e212]:
+          - img "Amouage Interlude Man bottle"
+          - generic [ref=e213]:
+            - generic [ref=e215]:
+              - heading "Amouage" [level=1] [ref=e216] [cursor=pointer]
+              - heading "Men • Oriental Woody" [level=2] [ref=e217]
+              - heading "Amouage Interlude Man" [level=3] [ref=e218]
+            - generic [ref=e219]:
+              - generic [ref=e222]: EDT
+              - generic [ref=e223]: "2012"
+            - generic [ref=e224]:
+              - button "Catalog Favorite" [ref=e225] [cursor=pointer]:
+                - generic [ref=e226]: Catalog Favorite
+              - button "Request Scent" [ref=e227] [cursor=pointer]:
+                - generic [ref=e228]: Request Scent
+            - paragraph [ref=e229]: A smoky and mysterious fragrance with oregano, incense, and oud.
+        - generic [ref=e230]:
+          - article [ref=e231]:
+            - generic [ref=e232]:
+              - heading "Scent Profile" [level=3] [ref=e233]
+              - generic [ref=e234]: Performance estimate
+            - generic [ref=e235]:
+              - generic [ref=e236]:
+                - generic [ref=e237]: Longevity
+                - strong [ref=e240]: 69%
+              - generic [ref=e241]:
+                - generic [ref=e242]: Projection
+                - strong [ref=e245]: 69%
+              - generic [ref=e246]:
+                - generic [ref=e247]: Versatility
+                - strong [ref=e250]: 70%
+            - generic [ref=e251]:
+              - generic [ref=e252]:
+                - img "oregano"
+                - generic [ref=e253]: oregano
+              - generic [ref=e254]:
+                - img "pepper"
+                - generic [ref=e255]: pepper
+              - generic [ref=e256]:
+                - img "incense"
+                - generic [ref=e257]: incense
+              - generic [ref=e258]:
+                - img "opoponax"
+                - generic [ref=e259]: opoponax
+              - generic [ref=e260]:
+                - img "oud"
+                - generic [ref=e261]: oud
+              - generic [ref=e262]:
+                - img "leather"
+                - generic [ref=e263]: leather
+          - article [ref=e264]:
+            - generic [ref=e265]:
+              - heading "Ingredients" [level=3] [ref=e266]
+              - generic [ref=e267]: Top • Heart • Base
+            - generic [ref=e268]:
+              - generic [ref=e269]: Top
+              - generic [ref=e270]:
+                - generic [ref=e271]:
+                  - img "oregano"
+                  - generic [ref=e272]: oregano
+                - generic [ref=e273]:
+                  - img "pepper"
+                  - generic [ref=e274]: pepper
+            - generic [ref=e275]:
+              - generic [ref=e276]: Heart
+              - generic [ref=e277]:
+                - generic [ref=e278]:
+                  - img "incense"
+                  - generic [ref=e279]: incense
+                - generic [ref=e280]:
+                  - img "opoponax"
+                  - generic [ref=e281]: opoponax
+            - generic [ref=e282]:
+              - generic [ref=e283]: Base
+              - generic [ref=e284]:
+                - generic [ref=e285]:
+                  - img "oud"
+                  - generic [ref=e286]: oud
+                - generic [ref=e287]:
+                  - img "leather"
+                  - generic [ref=e288]: leather
+      - article [ref=e289]:
+        - generic [ref=e290]:
+          - heading "Fragrance Story" [level=3] [ref=e291]
+          - generic [ref=e292]: Amouage • Oriental Woody
+        - paragraph [ref=e293]: A smoky and mysterious fragrance with oregano, incense, and oud.
+      - generic [ref=e294]:
+        - generic [ref=e295]:
+          - heading "User Reviews & Comments" [level=3] [ref=e296]
+          - generic [ref=e298]: Catalog fragrance
+        - generic [ref=e299]:
+          - generic [ref=e300]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e301]
+          - paragraph [ref=e302]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e304]:
+      - generic [ref=e305]:
+        - generic [ref=e306]:
+          - img "Amouage Interlude Woman bottle"
+          - generic [ref=e307]:
+            - generic [ref=e309]:
+              - heading "Amouage" [level=1] [ref=e310] [cursor=pointer]
+              - heading "Women • Oriental Woody" [level=2] [ref=e311]
+              - heading "Amouage Interlude Woman" [level=3] [ref=e312]
+            - generic [ref=e313]:
+              - generic [ref=e316]: EDT
+              - generic [ref=e317]: "2012"
+            - generic [ref=e318]:
+              - button "Catalog Favorite" [ref=e319] [cursor=pointer]:
+                - generic [ref=e320]: Catalog Favorite
+              - button "Request Scent" [ref=e321] [cursor=pointer]:
+                - generic [ref=e322]: Request Scent
+            - paragraph [ref=e323]: A complex and smoky fragrance with oregano, incense, and oud.
+        - generic [ref=e324]:
+          - article [ref=e325]:
+            - generic [ref=e326]:
+              - heading "Scent Profile" [level=3] [ref=e327]
+              - generic [ref=e328]: Performance estimate
+            - generic [ref=e329]:
+              - generic [ref=e330]:
+                - generic [ref=e331]: Longevity
+                - strong [ref=e334]: 71%
+              - generic [ref=e335]:
+                - generic [ref=e336]: Projection
+                - strong [ref=e339]: 69%
+              - generic [ref=e340]:
+                - generic [ref=e341]: Versatility
+                - strong [ref=e344]: 70%
+            - generic [ref=e345]:
+              - generic [ref=e346]:
+                - img "oregano"
+                - generic [ref=e347]: oregano
+              - generic [ref=e348]:
+                - img "bergamot"
+                - generic [ref=e349]: bergamot
+              - generic [ref=e350]:
+                - img "incense"
+                - generic [ref=e351]: incense
+              - generic [ref=e352]:
+                - img "oud"
+                - generic [ref=e353]: oud
+              - generic [ref=e354]:
+                - img "amber"
+                - generic [ref=e355]: amber
+              - generic [ref=e356]:
+                - img "leather"
+                - generic [ref=e357]: leather
+              - generic [ref=e358]:
+                - img "sandalwood"
+                - generic [ref=e359]: sandalwood
+          - article [ref=e360]:
+            - generic [ref=e361]:
+              - heading "Ingredients" [level=3] [ref=e362]
+              - generic [ref=e363]: Top • Heart • Base
+            - generic [ref=e364]:
+              - generic [ref=e365]: Top
+              - generic [ref=e366]:
+                - generic [ref=e367]:
+                  - img "oregano"
+                  - generic [ref=e368]: oregano
+                - generic [ref=e369]:
+                  - img "bergamot"
+                  - generic [ref=e370]: bergamot
+            - generic [ref=e371]:
+              - generic [ref=e372]: Heart
+              - generic [ref=e373]:
+                - generic [ref=e374]:
+                  - img "incense"
+                  - generic [ref=e375]: incense
+                - generic [ref=e376]:
+                  - img "oud"
+                  - generic [ref=e377]: oud
+            - generic [ref=e378]:
+              - generic [ref=e379]: Base
+              - generic [ref=e380]:
+                - generic [ref=e381]:
+                  - img "amber"
+                  - generic [ref=e382]: amber
+                - generic [ref=e383]:
+                  - img "leather"
+                  - generic [ref=e384]: leather
+                - generic [ref=e385]:
+                  - img "sandalwood"
+                  - generic [ref=e386]: sandalwood
+      - article [ref=e387]:
+        - generic [ref=e388]:
+          - heading "Fragrance Story" [level=3] [ref=e389]
+          - generic [ref=e390]: Amouage • Oriental Woody
+        - paragraph [ref=e391]: A complex and smoky fragrance with oregano, incense, and oud.
+      - generic [ref=e392]:
+        - generic [ref=e393]:
+          - heading "User Reviews & Comments" [level=3] [ref=e394]
+          - generic [ref=e396]: Catalog fragrance
+        - generic [ref=e397]:
+          - generic [ref=e398]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e399]
+          - paragraph [ref=e400]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e402]:
+      - generic [ref=e403]:
+        - generic [ref=e404]:
+          - img "Amouage Jubilation XXV bottle"
+          - generic [ref=e405]:
+            - generic [ref=e407]:
+              - heading "Amouage" [level=1] [ref=e408] [cursor=pointer]
+              - heading "Unisex • Oriental Spicy" [level=2] [ref=e409]
+              - heading "Amouage Jubilation XXV" [level=3] [ref=e410]
+            - generic [ref=e411]:
+              - generic [ref=e414]: EDT
+              - generic [ref=e415]: "2007"
+            - generic [ref=e416]:
+              - button "Catalog Favorite" [ref=e417] [cursor=pointer]:
+                - generic [ref=e418]: Catalog Favorite
+              - button "Request Scent" [ref=e419] [cursor=pointer]:
+                - generic [ref=e420]: Request Scent
+            - paragraph [ref=e421]: A celebratory fragrance with frankincense, rose, and oud.
+        - generic [ref=e422]:
+          - article [ref=e423]:
+            - generic [ref=e424]:
+              - heading "Scent Profile" [level=3] [ref=e425]
+              - generic [ref=e426]: Performance estimate
+            - generic [ref=e427]:
+              - generic [ref=e428]:
+                - generic [ref=e429]: Longevity
+                - strong [ref=e432]: 72%
+              - generic [ref=e433]:
+                - generic [ref=e434]: Projection
+                - strong [ref=e437]: 69%
+              - generic [ref=e438]:
+                - generic [ref=e439]: Versatility
+                - strong [ref=e442]: 60%
+            - generic [ref=e443]:
+              - generic [ref=e444]:
+                - img "frankincense"
+                - generic [ref=e445]: frankincense
+              - generic [ref=e446]:
+                - img "coriander"
+                - generic [ref=e447]: coriander
+              - generic [ref=e448]:
+                - img "rose"
+                - generic [ref=e449]: rose
+              - generic [ref=e450]:
+                - img "bay leaves"
+                - generic [ref=e451]: bay leaves
+              - generic [ref=e452]:
+                - img "oud"
+                - generic [ref=e453]: oud
+              - generic [ref=e454]:
+                - img "amber"
+                - generic [ref=e455]: amber
+          - article [ref=e456]:
+            - generic [ref=e457]:
+              - heading "Ingredients" [level=3] [ref=e458]
+              - generic [ref=e459]: Top • Heart • Base
+            - generic [ref=e460]:
+              - generic [ref=e461]: Top
+              - generic [ref=e462]:
+                - generic [ref=e463]:
+                  - img "frankincense"
+                  - generic [ref=e464]: frankincense
+                - generic [ref=e465]:
+                  - img "coriander"
+                  - generic [ref=e466]: coriander
+            - generic [ref=e467]:
+              - generic [ref=e468]: Heart
+              - generic [ref=e469]:
+                - generic [ref=e470]:
+                  - img "rose"
+                  - generic [ref=e471]: rose
+                - generic [ref=e472]:
+                  - img "bay leaves"
+                  - generic [ref=e473]: bay leaves
+            - generic [ref=e474]:
+              - generic [ref=e475]: Base
+              - generic [ref=e476]:
+                - generic [ref=e477]:
+                  - img "oud"
+                  - generic [ref=e478]: oud
+                - generic [ref=e479]:
+                  - img "amber"
+                  - generic [ref=e480]: amber
+      - article [ref=e481]:
+        - generic [ref=e482]:
+          - heading "Fragrance Story" [level=3] [ref=e483]
+          - generic [ref=e484]: Amouage • Oriental Spicy
+        - paragraph [ref=e485]: A celebratory fragrance with frankincense, rose, and oud.
+      - generic [ref=e486]:
+        - generic [ref=e487]:
+          - heading "User Reviews & Comments" [level=3] [ref=e488]
+          - generic [ref=e490]: Catalog fragrance
+        - generic [ref=e491]:
+          - generic [ref=e492]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e493]
+          - paragraph [ref=e494]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e496]:
+      - generic [ref=e497]:
+        - generic [ref=e498]:
+          - img "Amouage Reflection Man bottle"
+          - generic [ref=e499]:
+            - generic [ref=e501]:
+              - heading "Amouage" [level=1] [ref=e502] [cursor=pointer]
+              - heading "Men • Floral Woody Musk" [level=2] [ref=e503]
+              - heading "Amouage Reflection Man" [level=3] [ref=e504]
+            - generic [ref=e505]:
+              - generic [ref=e508]: EDT
+              - generic [ref=e509]: "2007"
+            - generic [ref=e510]:
+              - button "Catalog Favorite" [ref=e511] [cursor=pointer]:
+                - generic [ref=e512]: Catalog Favorite
+              - button "Request Scent" [ref=e513] [cursor=pointer]:
+                - generic [ref=e514]: Request Scent
+            - paragraph [ref=e515]: An elegant and sophisticated fragrance with rosemary, jasmine, and sandalwood.
+        - generic [ref=e516]:
+          - article [ref=e517]:
+            - generic [ref=e518]:
+              - heading "Scent Profile" [level=3] [ref=e519]
+              - generic [ref=e520]: Performance estimate
+            - generic [ref=e521]:
+              - generic [ref=e522]:
+                - generic [ref=e523]: Longevity
+                - strong [ref=e526]: 88%
+              - generic [ref=e527]:
+                - generic [ref=e528]: Projection
+                - strong [ref=e531]: 69%
+              - generic [ref=e532]:
+                - generic [ref=e533]: Versatility
+                - strong [ref=e536]: 68%
+            - generic [ref=e537]:
+              - generic [ref=e538]:
+                - img "rosemary"
+                - generic [ref=e539]: rosemary
+              - generic [ref=e540]:
+                - img "pink pepper"
+                - generic [ref=e541]: pink pepper
+              - generic [ref=e542]:
+                - img "jasmine"
+                - generic [ref=e543]: jasmine
+              - generic [ref=e544]:
+                - img "ylang-ylang"
+                - generic [ref=e545]: ylang-ylang
+              - generic [ref=e546]:
+                - img "sandalwood"
+                - generic [ref=e547]: sandalwood
+              - generic [ref=e548]:
+                - img "cedar"
+                - generic [ref=e549]: cedar
+          - article [ref=e550]:
+            - generic [ref=e551]:
+              - heading "Ingredients" [level=3] [ref=e552]
+              - generic [ref=e553]: Top • Heart • Base
+            - generic [ref=e554]:
+              - generic [ref=e555]: Top
+              - generic [ref=e556]:
+                - generic [ref=e557]:
+                  - img "rosemary"
+                  - generic [ref=e558]: rosemary
+                - generic [ref=e559]:
+                  - img "pink pepper"
+                  - generic [ref=e560]: pink pepper
+            - generic [ref=e561]:
+              - generic [ref=e562]: Heart
+              - generic [ref=e563]:
+                - generic [ref=e564]:
+                  - img "jasmine"
+                  - generic [ref=e565]: jasmine
+                - generic [ref=e566]:
+                  - img "ylang-ylang"
+                  - generic [ref=e567]: ylang-ylang
+            - generic [ref=e568]:
+              - generic [ref=e569]: Base
+              - generic [ref=e570]:
+                - generic [ref=e571]:
+                  - img "sandalwood"
+                  - generic [ref=e572]: sandalwood
+                - generic [ref=e573]:
+                  - img "cedar"
+                  - generic [ref=e574]: cedar
+      - article [ref=e575]:
+        - generic [ref=e576]:
+          - heading "Fragrance Story" [level=3] [ref=e577]
+          - generic [ref=e578]: Amouage • Floral Woody Musk
+        - paragraph [ref=e579]: An elegant and sophisticated fragrance with rosemary, jasmine, and sandalwood.
+      - generic [ref=e580]:
+        - generic [ref=e581]:
+          - heading "User Reviews & Comments" [level=3] [ref=e582]
+          - generic [ref=e584]: Catalog fragrance
+        - generic [ref=e585]:
+          - generic [ref=e586]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e587]
+          - paragraph [ref=e588]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e590]:
+      - generic [ref=e591]:
+        - generic [ref=e592]:
+          - img "Ariana Grande Cloud bottle"
+          - generic [ref=e593]:
+            - generic [ref=e595]:
+              - heading "Ariana Grande" [level=1] [ref=e596] [cursor=pointer]
+              - heading "Women • Oriental Gourmand" [level=2] [ref=e597]
+              - heading "Ariana Grande Cloud" [level=3] [ref=e598]
+            - generic [ref=e599]:
+              - generic [ref=e602]: EDT
+              - generic [ref=e603]: "2018"
+            - generic [ref=e604]:
+              - button "Catalog Favorite" [ref=e605] [cursor=pointer]:
+                - generic [ref=e606]: Catalog Favorite
+              - button "Request Scent" [ref=e607] [cursor=pointer]:
+                - generic [ref=e608]: Request Scent
+            - paragraph [ref=e609]: A dreamy gourmand with bergamot, pear, and coconut.
+        - generic [ref=e610]:
+          - article [ref=e611]:
+            - generic [ref=e612]:
+              - heading "Scent Profile" [level=3] [ref=e613]
+              - generic [ref=e614]: Performance estimate
+            - generic [ref=e615]:
+              - generic [ref=e616]:
+                - generic [ref=e617]: Longevity
+                - strong [ref=e620]: 92%
+              - generic [ref=e621]:
+                - generic [ref=e622]: Projection
+                - strong [ref=e625]: 85%
+              - generic [ref=e626]:
+                - generic [ref=e627]: Versatility
+                - strong [ref=e630]: 65%
+            - generic [ref=e631]:
+              - generic [ref=e632]:
+                - img "bergamot"
+                - generic [ref=e633]: bergamot
+              - generic [ref=e634]:
+                - img "pear"
+                - generic [ref=e635]: pear
+              - generic [ref=e636]:
+                - img "coconut"
+                - generic [ref=e637]: coconut
+              - generic [ref=e638]:
+                - img "vanilla"
+                - generic [ref=e639]: vanilla
+              - generic [ref=e640]:
+                - img "praline"
+                - generic [ref=e641]: praline
+              - generic [ref=e642]:
+                - img "musk"
+                - generic [ref=e643]: musk
+          - article [ref=e644]:
+            - generic [ref=e645]:
+              - heading "Ingredients" [level=3] [ref=e646]
+              - generic [ref=e647]: Top • Heart • Base
+            - generic [ref=e648]:
+              - generic [ref=e649]: Top
+              - generic [ref=e650]:
+                - generic [ref=e651]:
+                  - img "bergamot"
+                  - generic [ref=e652]: bergamot
+                - generic [ref=e653]:
+                  - img "pear"
+                  - generic [ref=e654]: pear
+            - generic [ref=e655]:
+              - generic [ref=e656]: Heart
+              - generic [ref=e657]:
+                - generic [ref=e658]:
+                  - img "coconut"
+                  - generic [ref=e659]: coconut
+                - generic [ref=e660]:
+                  - img "vanilla"
+                  - generic [ref=e661]: vanilla
+            - generic [ref=e662]:
+              - generic [ref=e663]: Base
+              - generic [ref=e664]:
+                - generic [ref=e665]:
+                  - img "praline"
+                  - generic [ref=e666]: praline
+                - generic [ref=e667]:
+                  - img "musk"
+                  - generic [ref=e668]: musk
+      - article [ref=e669]:
+        - generic [ref=e670]:
+          - heading "Fragrance Story" [level=3] [ref=e671]
+          - generic [ref=e672]: Ariana Grande • Oriental Gourmand
+        - paragraph [ref=e673]: A dreamy gourmand with bergamot, pear, and coconut.
+      - generic [ref=e674]:
+        - generic [ref=e675]:
+          - heading "User Reviews & Comments" [level=3] [ref=e676]
+          - generic [ref=e678]: Catalog fragrance
+        - generic [ref=e679]:
+          - generic [ref=e680]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e681]
+          - paragraph [ref=e682]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e684]:
+      - generic [ref=e685]:
+        - generic [ref=e686]:
+          - img "Armaf Club de Nuit Intense bottle"
+          - generic [ref=e687]:
+            - generic [ref=e689]:
+              - heading "Armaf" [level=1] [ref=e690] [cursor=pointer]
+              - heading "Unisex • Fresh Spicy" [level=2] [ref=e691]
+              - heading "Armaf Club de Nuit Intense" [level=3] [ref=e692]
+            - generic [ref=e693]:
+              - generic [ref=e696]: EDP
+              - generic [ref=e697]: "2015"
+            - generic [ref=e698]:
+              - button "Catalog Favorite" [ref=e699] [cursor=pointer]:
+                - generic [ref=e700]: Catalog Favorite
+              - button "Request Scent" [ref=e701] [cursor=pointer]:
+                - generic [ref=e702]: Request Scent
+            - paragraph [ref=e703]: A powerful and long-lasting fragrance with citrus, pineapple, and birch.
+        - generic [ref=e704]:
+          - article [ref=e705]:
+            - generic [ref=e706]:
+              - heading "Scent Profile" [level=3] [ref=e707]
+              - generic [ref=e708]: Performance estimate
+            - generic [ref=e709]:
+              - generic [ref=e710]:
+                - generic [ref=e711]: Longevity
+                - strong [ref=e714]: 84%
+              - generic [ref=e715]:
+                - generic [ref=e716]: Projection
+                - strong [ref=e719]: 81%
+              - generic [ref=e720]:
+                - generic [ref=e721]: Versatility
+                - strong [ref=e724]: 76%
+            - generic [ref=e725]:
+              - generic [ref=e726]:
+                - img "pineapple"
+                - generic [ref=e727]: pineapple
+              - generic [ref=e728]:
+                - img "bergamot"
+                - generic [ref=e729]: bergamot
+              - generic [ref=e730]:
+                - img "blackcurrant"
+                - generic [ref=e731]: blackcurrant
+              - generic [ref=e732]:
+                - img "birch"
+                - generic [ref=e733]: birch
+              - generic [ref=e734]:
+                - img "musk"
+                - generic [ref=e735]: musk
+              - generic [ref=e736]:
+                - img "oakmoss"
+                - generic [ref=e737]: oakmoss
+          - article [ref=e738]:
+            - generic [ref=e739]:
+              - heading "Ingredients" [level=3] [ref=e740]
+              - generic [ref=e741]: Top • Heart • Base
+            - generic [ref=e742]:
+              - generic [ref=e743]: Top
+              - generic [ref=e744]:
+                - generic [ref=e745]:
+                  - img "pineapple"
+                  - generic [ref=e746]: pineapple
+                - generic [ref=e747]:
+                  - img "bergamot"
+                  - generic [ref=e748]: bergamot
+            - generic [ref=e749]:
+              - generic [ref=e750]: Heart
+              - generic [ref=e751]:
+                - generic [ref=e752]:
+                  - img "blackcurrant"
+                  - generic [ref=e753]: blackcurrant
+                - generic [ref=e754]:
+                  - img "birch"
+                  - generic [ref=e755]: birch
+            - generic [ref=e756]:
+              - generic [ref=e757]: Base
+              - generic [ref=e758]:
+                - generic [ref=e759]:
+                  - img "musk"
+                  - generic [ref=e760]: musk
+                - generic [ref=e761]:
+                  - img "oakmoss"
+                  - generic [ref=e762]: oakmoss
+      - article [ref=e763]:
+        - generic [ref=e764]:
+          - heading "Fragrance Story" [level=3] [ref=e765]
+          - generic [ref=e766]: Armaf • Fresh Spicy
+        - paragraph [ref=e767]: A powerful and long-lasting fragrance with citrus, pineapple, and birch.
+      - generic [ref=e768]:
+        - generic [ref=e769]:
+          - heading "User Reviews & Comments" [level=3] [ref=e770]
+          - generic [ref=e772]: Catalog fragrance
+        - generic [ref=e773]:
+          - generic [ref=e774]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e775]
+          - paragraph [ref=e776]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e778]:
+      - generic [ref=e779]:
+        - generic [ref=e780]:
+          - img "Armaf Hunter Intense bottle"
+          - generic [ref=e781]:
+            - generic [ref=e783]:
+              - heading "Armaf" [level=1] [ref=e784] [cursor=pointer]
+              - heading "Unisex • Oriental Spicy" [level=2] [ref=e785]
+              - heading "Armaf Hunter Intense" [level=3] [ref=e786]
+            - generic [ref=e787]:
+              - generic [ref=e790]: EDP
+              - generic [ref=e791]: "2018"
+            - generic [ref=e792]:
+              - button "Catalog Favorite" [ref=e793] [cursor=pointer]:
+                - generic [ref=e794]: Catalog Favorite
+              - button "Request Scent" [ref=e795] [cursor=pointer]:
+                - generic [ref=e796]: Request Scent
+            - paragraph [ref=e797]: An intense and sophisticated fragrance with tobacco, vanilla, and spices.
+        - generic [ref=e798]:
+          - article [ref=e799]:
+            - generic [ref=e800]:
+              - heading "Scent Profile" [level=3] [ref=e801]
+              - generic [ref=e802]: Performance estimate
+            - generic [ref=e803]:
+              - generic [ref=e804]:
+                - generic [ref=e805]: Longevity
+                - strong [ref=e808]: 61%
+              - generic [ref=e809]:
+                - generic [ref=e810]: Projection
+                - strong [ref=e813]: 81%
+              - generic [ref=e814]:
+                - generic [ref=e815]: Versatility
+                - strong [ref=e818]: 60%
+            - generic [ref=e819]:
+              - generic [ref=e820]:
+                - img "tobacco"
+                - generic [ref=e821]: tobacco
+              - generic [ref=e822]:
+                - img "vanilla"
+                - generic [ref=e823]: vanilla
+              - generic [ref=e824]:
+                - img "cinnamon"
+                - generic [ref=e825]: cinnamon
+              - generic [ref=e826]:
+                - img "amber"
+                - generic [ref=e827]: amber
+              - generic [ref=e828]:
+                - img "musk"
+                - generic [ref=e829]: musk
+              - generic [ref=e830]:
+                - img "cedar"
+                - generic [ref=e831]: cedar
+          - article [ref=e832]:
+            - generic [ref=e833]:
+              - heading "Ingredients" [level=3] [ref=e834]
+              - generic [ref=e835]: Top • Heart • Base
+            - generic [ref=e836]:
+              - generic [ref=e837]: Top
+              - generic [ref=e838]:
+                - generic [ref=e839]:
+                  - img "tobacco"
+                  - generic [ref=e840]: tobacco
+                - generic [ref=e841]:
+                  - img "vanilla"
+                  - generic [ref=e842]: vanilla
+            - generic [ref=e843]:
+              - generic [ref=e844]: Heart
+              - generic [ref=e845]:
+                - generic [ref=e846]:
+                  - img "cinnamon"
+                  - generic [ref=e847]: cinnamon
+                - generic [ref=e848]:
+                  - img "amber"
+                  - generic [ref=e849]: amber
+            - generic [ref=e850]:
+              - generic [ref=e851]: Base
+              - generic [ref=e852]:
+                - generic [ref=e853]:
+                  - img "musk"
+                  - generic [ref=e854]: musk
+                - generic [ref=e855]:
+                  - img "cedar"
+                  - generic [ref=e856]: cedar
+      - article [ref=e857]:
+        - generic [ref=e858]:
+          - heading "Fragrance Story" [level=3] [ref=e859]
+          - generic [ref=e860]: Armaf • Oriental Spicy
+        - paragraph [ref=e861]: An intense and sophisticated fragrance with tobacco, vanilla, and spices.
+      - generic [ref=e862]:
+        - generic [ref=e863]:
+          - heading "User Reviews & Comments" [level=3] [ref=e864]
+          - generic [ref=e866]: Catalog fragrance
+        - generic [ref=e867]:
+          - generic [ref=e868]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e869]
+          - paragraph [ref=e870]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e872]:
+      - generic [ref=e873]:
+        - generic [ref=e874]:
+          - img "Armaf Tres Nuit bottle"
+          - generic [ref=e875]:
+            - generic [ref=e877]:
+              - heading "Armaf" [level=1] [ref=e878] [cursor=pointer]
+              - heading "Unisex • Citrus Aromatic" [level=2] [ref=e879]
+              - heading "Armaf Tres Nuit" [level=3] [ref=e880]
+            - generic [ref=e881]:
+              - generic [ref=e884]: EDP
+              - generic [ref=e885]: "2017"
+            - generic [ref=e886]:
+              - button "Catalog Favorite" [ref=e887] [cursor=pointer]:
+                - generic [ref=e888]: Catalog Favorite
+              - button "Request Scent" [ref=e889] [cursor=pointer]:
+                - generic [ref=e890]: Request Scent
+            - paragraph [ref=e891]: A fresh fragrance with lemon, lavender, and sandalwood.
+        - generic [ref=e892]:
+          - article [ref=e893]:
+            - generic [ref=e894]:
+              - heading "Scent Profile" [level=3] [ref=e895]
+              - generic [ref=e896]: Performance estimate
+            - generic [ref=e897]:
+              - generic [ref=e898]:
+                - generic [ref=e899]: Longevity
+                - strong [ref=e902]: 67%
+              - generic [ref=e903]:
+                - generic [ref=e904]: Projection
+                - strong [ref=e907]: 81%
+              - generic [ref=e908]:
+                - generic [ref=e909]: Versatility
+                - strong [ref=e912]: 84%
+            - generic [ref=e913]:
+              - generic [ref=e914]:
+                - img "lemon"
+                - generic [ref=e915]: lemon
+              - generic [ref=e916]:
+                - img "lavender"
+                - generic [ref=e917]: lavender
+              - generic [ref=e918]:
+                - img "violet leaf"
+                - generic [ref=e919]: violet leaf
+              - generic [ref=e920]:
+                - img "sandalwood"
+                - generic [ref=e921]: sandalwood
+              - generic [ref=e922]:
+                - img "amber"
+                - generic [ref=e923]: amber
+              - generic [ref=e924]:
+                - img "musk"
+                - generic [ref=e925]: musk
+          - article [ref=e926]:
+            - generic [ref=e927]:
+              - heading "Ingredients" [level=3] [ref=e928]
+              - generic [ref=e929]: Top • Heart • Base
+            - generic [ref=e930]:
+              - generic [ref=e931]: Top
+              - generic [ref=e932]:
+                - generic [ref=e933]:
+                  - img "lemon"
+                  - generic [ref=e934]: lemon
+                - generic [ref=e935]:
+                  - img "lavender"
+                  - generic [ref=e936]: lavender
+            - generic [ref=e937]:
+              - generic [ref=e938]: Heart
+              - generic [ref=e939]:
+                - generic [ref=e940]:
+                  - img "violet leaf"
+                  - generic [ref=e941]: violet leaf
+                - generic [ref=e942]:
+                  - img "sandalwood"
+                  - generic [ref=e943]: sandalwood
+            - generic [ref=e944]:
+              - generic [ref=e945]: Base
+              - generic [ref=e946]:
+                - generic [ref=e947]:
+                  - img "amber"
+                  - generic [ref=e948]: amber
+                - generic [ref=e949]:
+                  - img "musk"
+                  - generic [ref=e950]: musk
+      - article [ref=e951]:
+        - generic [ref=e952]:
+          - heading "Fragrance Story" [level=3] [ref=e953]
+          - generic [ref=e954]: Armaf • Citrus Aromatic
+        - paragraph [ref=e955]: A fresh fragrance with lemon, lavender, and sandalwood.
+      - generic [ref=e956]:
+        - generic [ref=e957]:
+          - heading "User Reviews & Comments" [level=3] [ref=e958]
+          - generic [ref=e960]: Catalog fragrance
+        - generic [ref=e961]:
+          - generic [ref=e962]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e963]
+          - paragraph [ref=e964]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e966]:
+      - generic [ref=e967]:
+        - generic [ref=e968]:
+          - img "Azzaro Chrome bottle"
+          - generic [ref=e969]:
+            - generic [ref=e971]:
+              - heading "Azzaro" [level=1] [ref=e972] [cursor=pointer]
+              - heading "Men • Citrus Aromatic" [level=2] [ref=e973]
+              - heading "Azzaro Chrome" [level=3] [ref=e974]
+            - generic [ref=e975]:
+              - generic [ref=e978]: EDT
+              - generic [ref=e979]: "1996"
+            - generic [ref=e980]:
+              - button "Catalog Favorite" [ref=e981] [cursor=pointer]:
+                - generic [ref=e982]: Catalog Favorite
+              - button "Request Scent" [ref=e983] [cursor=pointer]:
+                - generic [ref=e984]: Request Scent
+            - paragraph [ref=e985]: A fresh and aquatic fragrance with citrus, rosemary, and musk.
+        - generic [ref=e986]:
+          - article [ref=e987]:
+            - generic [ref=e988]:
+              - heading "Scent Profile" [level=3] [ref=e989]
+              - generic [ref=e990]: Performance estimate
+            - generic [ref=e991]:
+              - generic [ref=e992]:
+                - generic [ref=e993]: Longevity
+                - strong [ref=e996]: 69%
+              - generic [ref=e997]:
+                - generic [ref=e998]: Projection
+                - strong [ref=e1001]: 73%
+              - generic [ref=e1002]:
+                - generic [ref=e1003]: Versatility
+                - strong [ref=e1006]: 84%
+            - generic [ref=e1007]:
+              - generic [ref=e1008]:
+                - img "lemon"
+                - generic [ref=e1009]: lemon
+              - generic [ref=e1010]:
+                - img "rosemary"
+                - generic [ref=e1011]: rosemary
+              - generic [ref=e1012]:
+                - img "coriander"
+                - generic [ref=e1013]: coriander
+              - generic [ref=e1014]:
+                - img "cedar"
+                - generic [ref=e1015]: cedar
+              - generic [ref=e1016]:
+                - img "sandalwood"
+                - generic [ref=e1017]: sandalwood
+              - generic [ref=e1018]:
+                - img "musk"
+                - generic [ref=e1019]: musk
+          - article [ref=e1020]:
+            - generic [ref=e1021]:
+              - heading "Ingredients" [level=3] [ref=e1022]
+              - generic [ref=e1023]: Top • Heart • Base
+            - generic [ref=e1024]:
+              - generic [ref=e1025]: Top
+              - generic [ref=e1026]:
+                - generic [ref=e1027]:
+                  - img "lemon"
+                  - generic [ref=e1028]: lemon
+                - generic [ref=e1029]:
+                  - img "rosemary"
+                  - generic [ref=e1030]: rosemary
+            - generic [ref=e1031]:
+              - generic [ref=e1032]: Heart
+              - generic [ref=e1033]:
+                - generic [ref=e1034]:
+                  - img "coriander"
+                  - generic [ref=e1035]: coriander
+                - generic [ref=e1036]:
+                  - img "cedar"
+                  - generic [ref=e1037]: cedar
+            - generic [ref=e1038]:
+              - generic [ref=e1039]: Base
+              - generic [ref=e1040]:
+                - generic [ref=e1041]:
+                  - img "sandalwood"
+                  - generic [ref=e1042]: sandalwood
+                - generic [ref=e1043]:
+                  - img "musk"
+                  - generic [ref=e1044]: musk
+      - article [ref=e1045]:
+        - generic [ref=e1046]:
+          - heading "Fragrance Story" [level=3] [ref=e1047]
+          - generic [ref=e1048]: Azzaro • Citrus Aromatic
+        - paragraph [ref=e1049]: A fresh and aquatic fragrance with citrus, rosemary, and musk.
+      - generic [ref=e1050]:
+        - generic [ref=e1051]:
+          - heading "User Reviews & Comments" [level=3] [ref=e1052]
+          - generic [ref=e1054]: Catalog fragrance
+        - generic [ref=e1055]:
+          - generic [ref=e1056]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e1057]
+          - paragraph [ref=e1058]: This fragrance can be promoted to a shop product page when needed.
+    - generic [ref=e1060]:
+      - generic [ref=e1061]:
+        - generic [ref=e1062]:
+          - img "Azzaro The Most Wanted bottle"
+          - generic [ref=e1063]:
+            - generic [ref=e1065]:
+              - heading "Azzaro" [level=1] [ref=e1066] [cursor=pointer]
+              - heading "Men • Oriental Fougere" [level=2] [ref=e1067]
+              - heading "Azzaro The Most Wanted" [level=3] [ref=e1068]
+            - generic [ref=e1069]:
+              - generic [ref=e1072]: EDT
+              - generic [ref=e1073]: "2021"
+            - generic [ref=e1074]:
+              - button "Catalog Favorite" [ref=e1075] [cursor=pointer]:
+                - generic [ref=e1076]: Catalog Favorite
+              - button "Request Scent" [ref=e1077] [cursor=pointer]:
+                - generic [ref=e1078]: Request Scent
+            - paragraph [ref=e1079]: A magnetic fragrance with bergamot, cardamom, and toffee.
+        - generic [ref=e1080]:
+          - article [ref=e1081]:
+            - generic [ref=e1082]:
+              - heading "Scent Profile" [level=3] [ref=e1083]
+              - generic [ref=e1084]: Performance estimate
+            - generic [ref=e1085]:
+              - generic [ref=e1086]:
+                - generic [ref=e1087]: Longevity
+                - strong [ref=e1090]: 86%
+              - generic [ref=e1091]:
+                - generic [ref=e1092]: Projection
+                - strong [ref=e1095]: 73%
+              - generic [ref=e1096]:
+                - generic [ref=e1097]: Versatility
+                - strong [ref=e1100]: 67%
+            - generic [ref=e1101]:
+              - generic [ref=e1102]:
+                - img "bergamot"
+                - generic [ref=e1103]: bergamot
+              - generic [ref=e1104]:
+                - img "cardamom"
+                - generic [ref=e1105]: cardamom
+              - generic [ref=e1106]:
+                - img "ginger"
+                - generic [ref=e1107]: ginger
+              - generic [ref=e1108]:
+                - img "lavender"
+                - generic [ref=e1109]: lavender
+              - generic [ref=e1110]:
+                - img "toffee"
+                - generic [ref=e1111]: toffee
+              - generic [ref=e1112]:
+                - img "amberwood"
+                - generic [ref=e1113]: amberwood
+          - article [ref=e1114]:
+            - generic [ref=e1115]:
+              - heading "Ingredients" [level=3] [ref=e1116]
+              - generic [ref=e1117]: Top • Heart • Base
+            - generic [ref=e1118]:
+              - generic [ref=e1119]: Top
+              - generic [ref=e1120]:
+                - generic [ref=e1121]:
+                  - img "bergamot"
+                  - generic [ref=e1122]: bergamot
+                - generic [ref=e1123]:
+                  - img "cardamom"
+                  - generic [ref=e1124]: cardamom
+            - generic [ref=e1125]:
+              - generic [ref=e1126]: Heart
+              - generic [ref=e1127]:
+                - generic [ref=e1128]:
+                  - img "ginger"
+                  - generic [ref=e1129]: ginger
+                - generic [ref=e1130]:
+                  - img "lavender"
+                  - generic [ref=e1131]: lavender
+            - generic [ref=e1132]:
+              - generic [ref=e1133]: Base
+              - generic [ref=e1134]:
+                - generic [ref=e1135]:
+                  - img "toffee"
+                  - generic [ref=e1136]: toffee
+                - generic [ref=e1137]:
+                  - img "amberwood"
+                  - generic [ref=e1138]: amberwood
+      - article [ref=e1139]:
+        - generic [ref=e1140]:
+          - heading "Fragrance Story" [level=3] [ref=e1141]
+          - generic [ref=e1142]: Azzaro • Oriental Fougere
+        - paragraph [ref=e1143]: A magnetic fragrance with bergamot, cardamom, and toffee.
+      - generic [ref=e1144]:
+        - generic [ref=e1145]:
+          - heading "User Reviews & Comments" [level=3] [ref=e1146]
+          - generic [ref=e1148]: Catalog fragrance
+        - generic [ref=e1149]:
+          - generic [ref=e1150]: 💬
+          - heading "Reviews available by request" [level=4] [ref=e1151]
+          - paragraph [ref=e1152]: This fragrance can be promoted to a shop product page when needed.
+  - contentinfo [ref=e1153]:
+    - navigation [ref=e1154]:
+      - link "Prev" [ref=e1155] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=1
+      - link "1" [ref=e1156] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=1
+      - link "2" [ref=e1157] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=2
+      - link "3" [ref=e1158] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=3
+      - link "4" [ref=e1159] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=4
+      - link "5" [ref=e1160] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=5
+      - link "6" [ref=e1161] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=6
+      - link "7" [ref=e1162] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=7
+      - text: …
+      - link "84" [ref=e1163] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=84
+      - link "Next" [ref=e1164] [cursor=pointer]:
+        - /url: fragrance-pages.html?page=3

@@ -1,4 +1,5 @@
 class CartItem {
+  final String fragranceId;
   final String fragranceName;
   final String brand;
   final String selectedSize;
@@ -6,6 +7,7 @@ class CartItem {
   int quantity;
 
   CartItem({
+    required this.fragranceId,
     required this.fragranceName,
     required this.brand,
     required this.selectedSize,

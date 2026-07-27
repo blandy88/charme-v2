@@ -23,7 +23,7 @@ const db = new sqlite3.Database('./database/parfumerie.db', (err) => {
 const createTables = () => {
     return new Promise((resolve, reject) => {
         let tablesCreated = 0;
-        const totalTables = 6;
+        const totalTables = 8;
 
         const checkComplete = () => {
             tablesCreated++;
@@ -181,6 +181,60 @@ const createTables = () => {
                 checkComplete();
             }
         });
+
+        // Review likes table for review like/dislike functionality
+        db.run(`
+            CREATE TABLE IF NOT EXISTS review_likes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                review_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                like_type TEXT NOT NULL CHECK (like_type IN ('like', 'dislike')),
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(review_id, user_id),
+                FOREIGN KEY (review_id) REFERENCES reviews (id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        `, (err) => {
+            if (err) {
+                console.error('Error creating review_likes table:', err.message);
+                reject(err);
+            } else {
+                console.log('✓ Review likes table created');
+                checkComplete();
+            }
+        });
+
+        // Review replies table for nested replies
+        db.run(`
+            CREATE TABLE IF NOT EXISTS review_replies (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                review_id INTEGER NOT NULL,
+                parent_reply_id INTEGER,
+                user_id INTEGER NOT NULL,
+                user_name TEXT NOT NULL,
+                user_email TEXT,
+                user_avatar TEXT,
+                is_admin INTEGER DEFAULT 0,
+                reply_text TEXT NOT NULL,
+                likes INTEGER DEFAULT 0,
+                dislikes INTEGER DEFAULT 0,
+                is_edited INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                edited_at DATETIME,
+                FOREIGN KEY (review_id) REFERENCES reviews (id) ON DELETE CASCADE,
+                FOREIGN KEY (parent_reply_id) REFERENCES review_replies (id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        `, (err) => {
+            if (err) {
+                console.error('Error creating review_replies table:', err.message);
+                reject(err);
+            } else {
+                console.log('✓ Review replies table created');
+                checkComplete();
+            }
+        });
     });
 };
 
@@ -216,6 +270,16 @@ const createIndexes = () => {
             db.run('CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON reviews(user_id)', (err) => {
                 if (err) console.error('Error creating reviews user_id index:', err.message);
                 else console.log('✓ Reviews user_id index created');
+            });
+
+            db.run('CREATE INDEX IF NOT EXISTS idx_review_likes_review_id ON review_likes(review_id)', (err) => {
+                if (err) console.error('Error creating review_likes index:', err.message);
+                else console.log('✓ Review likes index created');
+            });
+
+            db.run('CREATE INDEX IF NOT EXISTS idx_review_replies_review_id ON review_replies(review_id)', (err) => {
+                if (err) console.error('Error creating review_replies index:', err.message);
+                else console.log('✓ Review replies index created');
                 resolve();
             });
         });

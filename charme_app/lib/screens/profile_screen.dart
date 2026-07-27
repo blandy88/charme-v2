@@ -946,6 +946,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ),
                                 onPressed: () {
                                   Navigator.of(ctx).pop();
+                                  context.read<CartProvider>().clear();
+                                  context.read<FavoritesProvider>().clear();
                                   auth.logout();
                                 },
                                 child: Text(

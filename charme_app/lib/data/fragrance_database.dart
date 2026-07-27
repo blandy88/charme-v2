@@ -12,7 +12,7 @@ class FragranceDatabase {
   factory FragranceDatabase() => _instance;
   FragranceDatabase._internal();
 
-  late final List<Fragrance> _all = [
+  late final List<Fragrance> _all = _dedupe([
     ...pdmFragrances,
     ...nicheFragrances,
     ...designerAFragrances,
@@ -20,7 +20,15 @@ class FragranceDatabase {
     ...affordableFragrances,
     ...extraFragrances,
     ...expansionFragrances,
-  ];
+  ]);
+
+  List<Fragrance> _dedupe(List<Fragrance> fragrances) {
+    final byId = <String, Fragrance>{};
+    for (final fragrance in fragrances) {
+      byId.putIfAbsent(fragrance.id, () => fragrance);
+    }
+    return List.unmodifiable(byId.values);
+  }
 
   List<Fragrance> get all => _all;
   int get totalCount => _all.length;
@@ -35,8 +43,27 @@ class FragranceDatabase {
     return families;
   }
 
+  String _canonicalConcentration(String value) {
+    final normalized = value.toLowerCase().trim();
+    if (normalized == 'edp' || normalized.contains('eau de parfum')) {
+      return 'edp';
+    }
+    if (normalized == 'edt' || normalized.contains('eau de toilette')) {
+      return 'edt';
+    }
+    if (normalized.contains('parfum') || normalized.contains('extrait')) {
+      return 'parfum';
+    }
+    return normalized;
+  }
+
   List<String> get allConcentrations {
-    final c = _all.where((f) => f.concentration != null).map((f) => f.concentration!).toSet().toList()..sort();
+    final c = _all
+        .where((f) => f.concentration != null)
+        .map((f) => _canonicalConcentration(f.concentration!))
+        .toSet()
+        .toList()
+      ..sort();
     return c;
   }
 
@@ -76,7 +103,9 @@ class FragranceDatabase {
 
   List<Fragrance> getByConcentration(String concentration) => _all
       .where((f) =>
-          f.concentration?.toLowerCase() == concentration.toLowerCase())
+          f.concentration != null &&
+          _canonicalConcentration(f.concentration!) ==
+              _canonicalConcentration(concentration))
       .toList();
 
   List<Fragrance> getByYear(int year) =>
