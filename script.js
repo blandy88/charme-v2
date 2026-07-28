@@ -2045,6 +2045,15 @@ const _sectionColorMap = [
   ['sideeffect', '.sideeffect-section', '#061208', '#180606'],
   ['naxos', '.naxos-section', '#180606', '#140e04'],
   ['grandSoir', '.grandSoir-section', '#140e04', '#120e04'],
+  ['balayage', '.balayage-section', '#120e04', '#0a0814'],
+  ['valayaexclusive', '.valayaexclusive-section', '#0a0814', '#0a1020'],
+  ['1millionnight', '.1millionnight-section', '#0a1020', '#1a0606'],
+  ['freedommuskmatcha', '.freedommuskmatcha-section', '#1a0606', '#0a1208'],
+  ['torrino21', '.torrino21-section', '#0a1208', '#1a1404'],
+  ['kayalimarshmallow', '.kayalimarshmallow-section', '#1a1404', '#140a12'],
+  ['aquaallegoriaflorabloom', '.aquaallegoriaflorabloom-section', '#140a12', '#0a0a18'],
+  ['angelnova', '.angelnova-section', '#0a0a18', '#180410'],
+  ['aquadigioelixir', '.aquadigioelixir-section', '#180410', '#041014'],
 ];
 
 function _buildBgBreakpoints(windowHeight) {
@@ -4755,7 +4764,16 @@ function updateColors() {
     { id: 'sedley', imageClass: '.sedley-image', infoSelector: '.sedley-theme .product-info-section', scentClass: '.sedley-scent-profile', ingredientsClass: '.sedley-ingredients', descClass: '.sedley-fragrance-description', containerClass: '.sedley-main-container' },
     { id: 'sideeffect', imageClass: '.sideeffect-image', infoSelector: '.sideeffect-theme .product-info-section', scentClass: '.sideeffect-scent-profile', ingredientsClass: '.sideeffect-ingredients', descClass: '.sideeffect-fragrance-description', containerClass: '.sideeffect-main-container' },
     { id: 'naxos', imageClass: '.naxos-image', infoSelector: '.naxos-theme .product-info-section', scentClass: '.naxos-scent-profile', ingredientsClass: '.naxos-ingredients', descClass: '.naxos-fragrance-description', containerClass: '.naxos-main-container' },
-    { id: 'grandSoir', imageClass: '.grandSoir-image', infoSelector: '.grandSoir-theme .product-info-section', scentClass: '.grandSoir-scent-profile', ingredientsClass: '.grandSoir-ingredients', descClass: '.grandSoir-fragrance-description', containerClass: '.grandSoir-main-container' }
+    { id: 'grandSoir', imageClass: '.grandSoir-image', infoSelector: '.grandSoir-theme .product-info-section', scentClass: '.grandSoir-scent-profile', ingredientsClass: '.grandSoir-ingredients', descClass: '.grandSoir-fragrance-description', containerClass: '.grandSoir-main-container' },
+    { id: 'balayage', imageClass: '.balayage-image', infoSelector: '.balayage-theme .product-info-section', scentClass: '.balayage-scent-profile', ingredientsClass: '.balayage-ingredients', descClass: '.balayage-fragrance-description', containerClass: '.balayage-main-container' },
+    { id: 'valayaexclusive', imageClass: '.valayaexclusive-image', infoSelector: '.valayaexclusive-theme .product-info-section', scentClass: '.valayaexclusive-scent-profile', ingredientsClass: '.valayaexclusive-ingredients', descClass: '.valayaexclusive-fragrance-description', containerClass: '.valayaexclusive-main-container' },
+    { id: '1millionnight', imageClass: '.1millionnight-image', infoSelector: '.1millionnight-theme .product-info-section', scentClass: '.1millionnight-scent-profile', ingredientsClass: '.1millionnight-ingredients', descClass: '.1millionnight-fragrance-description', containerClass: '.1millionnight-main-container' },
+    { id: 'freedommuskmatcha', imageClass: '.freedommuskmatcha-image', infoSelector: '.freedommuskmatcha-theme .product-info-section', scentClass: '.freedommuskmatcha-scent-profile', ingredientsClass: '.freedommuskmatcha-ingredients', descClass: '.freedommuskmatcha-fragrance-description', containerClass: '.freedommuskmatcha-main-container' },
+    { id: 'torrino21', imageClass: '.torrino21-image', infoSelector: '.torrino21-theme .product-info-section', scentClass: '.torrino21-scent-profile', ingredientsClass: '.torrino21-ingredients', descClass: '.torrino21-fragrance-description', containerClass: '.torrino21-main-container' },
+    { id: 'kayalimarshmallow', imageClass: '.kayalimarshmallow-image', infoSelector: '.kayalimarshmallow-theme .product-info-section', scentClass: '.kayalimarshmallow-scent-profile', ingredientsClass: '.kayalimarshmallow-ingredients', descClass: '.kayalimarshmallow-fragrance-description', containerClass: '.kayalimarshmallow-main-container' },
+    { id: 'aquaallegoriaflorabloom', imageClass: '.aquaallegoriaflorabloom-image', infoSelector: '.aquaallegoriaflorabloom-theme .product-info-section', scentClass: '.aquaallegoriaflorabloom-scent-profile', ingredientsClass: '.aquaallegoriaflorabloom-ingredients', descClass: '.aquaallegoriaflorabloom-fragrance-description', containerClass: '.aquaallegoriaflorabloom-main-container' },
+    { id: 'angelnova', imageClass: '.angelnova-image', infoSelector: '.angelnova-theme .product-info-section', scentClass: '.angelnova-scent-profile', ingredientsClass: '.angelnova-ingredients', descClass: '.angelnova-fragrance-description', containerClass: '.angelnova-main-container' },
+    { id: 'aquadigioelixir', imageClass: '.aquadigioelixir-image', infoSelector: '.aquadigioelixir-theme .product-info-section', scentClass: '.aquadigioelixir-scent-profile', ingredientsClass: '.aquadigioelixir-ingredients', descClass: '.aquadigioelixir-fragrance-description', containerClass: '.aquadigioelixir-main-container' }
   ];
 
   // Generic parallax function factory
@@ -8903,7 +8921,7 @@ async function refreshAllCommentSections() {
     updateProfileModalData(currentUser);
 
     // Refresh all review sections and replies
-    const fragrances = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir"];
+    const fragrances = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir", "balayage", "valayaexclusive", "1millionnight", "freedommuskmatcha", "torrino21", "kayalimarshmallow", "aquaallegoriaflorabloom", "angelnova", "aquadigioelixir"];
 
     for (const fragrance of fragrances) {
       console.log(`ðŸ”„ Refreshing ${fragrance} reviews and replies...`);
@@ -12065,7 +12083,7 @@ class CartManager {
 
   initializeCartButtons() {
     // Check which products are already in cart and update button states
-    const productIds = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir"];
+    const productIds = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir", "balayage", "valayaexclusive", "1millionnight", "freedommuskmatcha", "torrino21", "kayalimarshmallow", "aquaallegoriaflorabloom", "angelnova", "aquadigioelixir"];
     productIds.forEach((productId) => {
       const inCart = this.cart.some((item) => item.productId === productId);
       this.updateCartButton(productId, inCart);
@@ -12127,6 +12145,15 @@ class CartManager {
       sideeffect: { name: "Side Effect", brand: "Initio", image: "initio-side-effect.png" },
       naxos: { name: "Naxos", brand: "Xerjoff", image: "xerjoff-naxos.png" },
       grandSoir: { name: "Grand Soir", brand: "Maison Francis Kurkdjian", image: "mfk-grand-soir.png" },
+      balayage: { name: "Balayage", brand: "Sospiro", image: "balayage.png" },
+      valayaexclusive: { name: "Valaya Exclusive", brand: "Parfums de Marly", image: "valaya-exclusive.png" },
+      1millionnight: { name: "1 Million Night", brand: "Paco Rabanne", image: "1-million-night.png" },
+      freedommuskmatcha: { name: "Freedom Musk Matcha", brand: "Kayali", image: "freedom-musk-matcha.png" },
+      torrino21: { name: "Torino21", brand: "Xerjoff", image: "xerjoff-torrino-21.png" },
+      kayalimarshmallow: { name: "Marshmallow", brand: "Kayali", image: "kayali-marshmallow.png" },
+      aquaallegoriaflorabloom: { name: "Florabloom Forte", brand: "Guerlain", image: "aqua-allegoria-florabloom.png" },
+      angelnova: { name: "Angel Nova", brand: "Mugler", image: "angel-nova.png" },
+      aquadigioelixir: { name: "Acqua di Gio Elixir", brand: "Giorgio Armani", image: "aqua-di-gio-elixir.png" },
     };
     return products[productId];
   }
@@ -14799,7 +14826,7 @@ window.testGoToSection = function (productId = "layton") {
 window.testAllGoToSections = function () {
   console.log('ðŸŽ¯ Testing "Go to Section" for all products...');
 
-  const products = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir"];
+  const products = ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir", "balayage", "valayaexclusive", "1millionnight", "freedommuskmatcha", "torrino21", "kayalimarshmallow", "aquaallegoriaflorabloom", "angelnova", "aquadigioelixir"];
   let index = 0;
 
   function testNext() {
@@ -15381,7 +15408,7 @@ class ReviewsManager {
   }
 
   getFragranceIds() {
-    return ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir"];
+    return ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir", "balayage", "valayaexclusive", "1millionnight", "freedommuskmatcha", "torrino21", "kayalimarshmallow", "aquaallegoriaflorabloom", "angelnova", "aquadigioelixir"];
   }
 
   setupLazyReviewLoading() {
@@ -18531,7 +18558,16 @@ class ProfileModalManager {
       sedley: { name: 'Sedley', brand: 'Parfums de Marly', price: '$60', image: 'pdm-sedley.png' },
       sideeffect: { name: 'Side Effect', brand: 'Initio', price: '$60', image: 'initio-side-effect.png' },
       naxos: { name: 'Naxos', brand: 'Xerjoff', price: '$65', image: 'xerjoff-naxos.png' },
-      grandSoir: { name: 'Grand Soir', brand: 'Maison Francis Kurkdjian', price: '$65', image: 'mfk-grand-soir.png' }
+      grandSoir: { name: 'Grand Soir', brand: 'Maison Francis Kurkdjian', price: '$65', image: 'mfk-grand-soir.png' },
+      balayage: { name: 'Balayage', brand: 'Sospiro', price: '$55', image: 'balayage.png' },
+      valayaexclusive: { name: 'Valaya Exclusive', brand: 'Parfums de Marly', price: '$60', image: 'valaya-exclusive.png' },
+      1millionnight: { name: '1 Million Night', brand: 'Paco Rabanne', price: '$50', image: '1-million-night.png' },
+      freedommuskmatcha: { name: 'Freedom Musk Matcha', brand: 'Kayali', price: '$40', image: 'freedom-musk-matcha.png' },
+      torrino21: { name: 'Torino21', brand: 'Xerjoff', price: '$55', image: 'xerjoff-torrino-21.png' },
+      kayalimarshmallow: { name: 'Marshmallow', brand: 'Kayali', price: '$38', image: 'kayali-marshmallow.png' },
+      aquaallegoriaflorabloom: { name: 'Florabloom Forte', brand: 'Guerlain', price: '$42', image: 'aqua-allegoria-florabloom.png' },
+      angelnova: { name: 'Angel Nova', brand: 'Mugler', price: '$45', image: 'angel-nova.png' },
+      aquadigioelixir: { name: 'Acqua di Gio Elixir', brand: 'Giorgio Armani', price: '$50', image: 'aqua-di-gio-elixir.png' }
     };
 
     return fragrances[fragranceId] || {
