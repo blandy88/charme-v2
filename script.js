@@ -129,7 +129,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function initTopChromeScrollBehavior() {
     if (!navbarEl) return null;
 
-    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)");
     const chromeElements = [navbarEl, marqueeBar].filter(Boolean);
     let isHidden = false;
     let downIntent = 0;
@@ -155,7 +154,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setHidden(nextHidden) {
-      if (reduceMotion?.matches) nextHidden = false;
       if (nextHidden === isHidden) return;
       isHidden = nextHidden;
       document.body.classList.toggle("top-shell-hidden", isHidden);
@@ -209,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.body.classList.toggle("top-shell-scrolled", y > 10);
 
-      if (reduceMotion?.matches || y <= 10 || chromeLockedOpen()) {
+      if (y <= 10 || chromeLockedOpen()) {
         reveal();
         lastY = y;
         lastTs = now;
@@ -252,7 +250,6 @@ document.addEventListener("DOMContentLoaded", function () {
       reveal();
       requestTopChromeUpdate();
     });
-    reduceMotion?.addEventListener?.("change", requestTopChromeUpdate);
     requestTopChromeUpdate();
 
     return { reveal, requestUpdate: requestTopChromeUpdate, updateNow: updateTopChrome };
