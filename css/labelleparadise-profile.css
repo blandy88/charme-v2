@@ -1,0 +1,312 @@
+/* ============================================================================
+   Lolita Lempicka — La Belle Paradise Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.labelleparadise-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.labelleparadise-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.labelleparadise-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.labelleparadise-theme .brand-location {
+    color: #86E6A6 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.labelleparadise-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.labelleparadise-theme .price-badge {
+    background: linear-gradient(135deg, #4aaa6a, #d4b868) !important;
+    border: 2px solid #4aaa6a !important;
+}
+
+.labelleparadise-theme .price-glow {
+    background: radial-gradient(circle, rgba(74,170,106,0.3) 0%, transparent 70%) !important;
+}
+
+.labelleparadise-theme .quality-badge {
+    border: 1px solid rgba(74,170,106,0.3) !important;
+    background: rgba(74,170,106,0.04) !important;
+}
+
+.labelleparadise-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.labelleparadise-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.labelleparadise-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #4aaa6a !important;
+    background: rgba(74,170,106,0.08) !important;
+    box-shadow: none !important;
+}
+
+.labelleparadise-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.labelleparadise-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #86E6A6 !important;
+}
+
+.labelleparadise-theme .selection-indicator {
+    border-color: rgba(74,170,106,0.4) !important;
+}
+
+.labelleparadise-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #4aaa6a !important;
+    background: rgba(74,170,106,0.1) !important;
+    box-shadow: none !important;
+}
+
+.labelleparadise-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #4aaa6a !important;
+    box-shadow: none !important;
+}
+
+.labelleparadise-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(74,170,106,0.1), transparent) !important;
+}
+
+.labelleparadise-theme .quality-glow {
+    display: none !important;
+}
+
+.labelleparadise-theme .quality-ornament {
+    border-color: rgba(74,170,106,0.3) !important;
+}
+
+.labelleparadise-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #4aaa6a !important;
+    box-shadow: none !important;
+}
+
+.labelleparadise-theme .quality-title,
+.labelleparadise-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.labelleparadise-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.labelleparadise-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(74,170,106,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.labelleparadise-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(74,170,106,0.35)) !important;
+}
+
+/* Profiles Container */
+.labelleparadise-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.labelleparadise-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(74,170,106,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(74,170,106,0.1) !important;
+}
+
+.labelleparadise-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.labelleparadise-profile-card .profile-subtitle {
+    color: #86E6A6 !important;
+}
+
+/* Radar Chart */
+.labelleparadise-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.labelleparadise-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.labelleparadise-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.labelleparadise-radar-svg { width: 100% !important; height: 100% !important; }
+.labelleparadise-radar-data { animation: labelleparadiseRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes labelleparadiseRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.labelleparadise-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.labelleparadise-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.labelleparadise-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.labelleparadise-radar-label .label-value { font-size: 0.65rem !important; color: #86E6A6 !important; font-weight: 500 !important; }
+.labelleparadise-radar-label.pos-0 { top: 2%; left: 50%; }
+.labelleparadise-radar-label.pos-1 { top: 28%; left: 96%; }
+.labelleparadise-radar-label.pos-2 { top: 88%; left: 82%; }
+.labelleparadise-radar-label.pos-3 { top: 88%; left: 18%; }
+.labelleparadise-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.labelleparadise-ingredients { flex: 1 !important; min-width: 300px !important; }
+.labelleparadise-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.labelleparadise-note-tier { margin-bottom: 10px !important; }
+.labelleparadise-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.labelleparadise-tier-icon { font-size: 1rem !important; }
+.labelleparadise-tier-time { font-size: 0.7rem !important; color: #86E6A6 !important; font-weight: 400 !important; margin-left: auto !important; }
+.labelleparadise-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.labelleparadise-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(74,170,106,0.06)) !important;
+    border: 1px solid rgba(74,170,106,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.labelleparadise-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(74,170,106,0.08) 50%, transparent 60%) !important;
+    animation: labelleparadiseCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes labelleparadiseCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.labelleparadise-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(74,170,106,0.2) !important; }
+.labelleparadise-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.labelleparadise-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.labelleparadise-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.labelleparadise-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.labelleparadise-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.labelleparadise-fill { background: linear-gradient(90deg, #4aaa6a, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.labelleparadise-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #86E6A6 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.labelleparadise-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(74,170,106,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.labelleparadise-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.labelleparadise-reddit-review-container { margin-top: 10px !important; }
+.labelleparadise-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(74,170,106,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.labelleparadise-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(74,170,106,0.1) !important; }
+.labelleparadise-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.labelleparadise-vote-btn { background: none !important; border: none !important; color: #86E6A6 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.labelleparadise-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.labelleparadise-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.labelleparadise-post-dot { color: #86E6A6 !important; margin: 0 5px !important; }
+.labelleparadise-post-info, .labelleparadise-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.labelleparadise-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.labelleparadise-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.labelleparadise-user-details { display: flex !important; flex-direction: column !important; }
+.labelleparadise-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.labelleparadise-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.labelleparadise-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(74,170,106,0.1) !important; }
+.labelleparadise-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.labelleparadise-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.labelleparadise-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.labelleparadise-mood-indicators, .labelleparadise-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.labelleparadise-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.labelleparadise-indicator-item.active { opacity: 1 !important; }
+.labelleparadise-indicator-icon { font-size: 1.3rem !important; }
+.labelleparadise-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.labelleparadise-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(74,170,106,0.2) !important; border-radius: 2px !important; }
+.labelleparadise-indicator-item.active .labelleparadise-indicator-bar { background: #4aaa6a !important; }
+.labelleparadise-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.labelleparadise-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.labelleparadise-votes { font-weight: 600 !important; color: #86E6A6 !important; }
+.labelleparadise-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.labelleparadise-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.labelleparadise-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(74,170,106, 0.3) !important; background: transparent !important; }
+.labelleparadise-theme .favorite-btn:hover { background: rgba(74,170,106, 0.08) !important; border-color: #4aaa6a !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(74,170,106, 0.2) !important; }
+.labelleparadise-theme .favorite-btn .heart-outline, .labelleparadise-theme .favorite-btn .heart-filled { color: #86E6A6 !important; }
+.labelleparadise-theme .favorite-btn.favorited { background: rgba(74,170,106, 0.06) !important; border-color: #4aaa6a !important; color: rgba(255, 255, 255, 0.95) !important; }
+.labelleparadise-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(74,170,106, 0.3) !important; background: transparent !important; }
+.labelleparadise-theme .add-to-cart-btn:hover { background: rgba(74,170,106, 0.08) !important; border-color: #4aaa6a !important; box-shadow: 0 4px 20px rgba(74,170,106, 0.2) !important; }
+.labelleparadise-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.labelleparadise-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.labelleparadise-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.labelleparadise-theme .price-currency, .labelleparadise-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.labelleparadise-theme .price-subtitle { color: rgba(74,170,106, 0.5) !important; letter-spacing: 3px !important; }
+.labelleparadise-theme .price-ornament { border-color: rgba(74,170,106, 0.35) !important; }
+.labelleparadise-theme .price-badge:hover .price-ornament { border-color: #4aaa6a !important; }
+
+/* Card Enhancements */
+.labelleparadise-theme .product-actions-buttons { position: relative !important; }
+.labelleparadise-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(74,170,106, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .labelleparadise-product-section { flex-direction: column !important; text-align: center !important; }
+    .labelleparadise-image { width: 250px !important; }
+    .labelleparadise-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .labelleparadise-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.labelleparadise-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.labelleparadise-theme .reviews-header, .labelleparadise-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.labelleparadise-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(74,170,106,0.15) !important; }
+.labelleparadise-theme .signin-prompt-content h4, .labelleparadise-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.labelleparadise-theme .signin-prompt-btn { background: linear-gradient(135deg, #255535, #4aaa6a) !important; color: #0a0a0f !important; }
+.labelleparadise-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(74,170,106,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.labelleparadise-theme .submit-btn { background: linear-gradient(135deg, #255535, #4aaa6a) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .labelleparadise-product-section { flex-direction: column !important; text-align: center !important; }
+    .labelleparadise-image { width: 250px !important; }
+    .labelleparadise-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .labelleparadise-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .labelleparadise-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .labelleparadise-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

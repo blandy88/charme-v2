@@ -1,0 +1,312 @@
+/* ============================================================================
+   Maison Crivelli — Les Sables Roses Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.lessablesroses-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.lessablesroses-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.lessablesroses-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.lessablesroses-theme .brand-location {
+    color: #FFA484 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.lessablesroses-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.lessablesroses-theme .price-badge {
+    background: linear-gradient(135deg, #c86848, #d4b868) !important;
+    border: 2px solid #c86848 !important;
+}
+
+.lessablesroses-theme .price-glow {
+    background: radial-gradient(circle, rgba(200,104,72,0.3) 0%, transparent 70%) !important;
+}
+
+.lessablesroses-theme .quality-badge {
+    border: 1px solid rgba(200,104,72,0.3) !important;
+    background: rgba(200,104,72,0.04) !important;
+}
+
+.lessablesroses-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.lessablesroses-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.lessablesroses-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #c86848 !important;
+    background: rgba(200,104,72,0.08) !important;
+    box-shadow: none !important;
+}
+
+.lessablesroses-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.lessablesroses-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #FFA484 !important;
+}
+
+.lessablesroses-theme .selection-indicator {
+    border-color: rgba(200,104,72,0.4) !important;
+}
+
+.lessablesroses-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #c86848 !important;
+    background: rgba(200,104,72,0.1) !important;
+    box-shadow: none !important;
+}
+
+.lessablesroses-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #c86848 !important;
+    box-shadow: none !important;
+}
+
+.lessablesroses-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(200,104,72,0.1), transparent) !important;
+}
+
+.lessablesroses-theme .quality-glow {
+    display: none !important;
+}
+
+.lessablesroses-theme .quality-ornament {
+    border-color: rgba(200,104,72,0.3) !important;
+}
+
+.lessablesroses-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #c86848 !important;
+    box-shadow: none !important;
+}
+
+.lessablesroses-theme .quality-title,
+.lessablesroses-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.lessablesroses-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.lessablesroses-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(200,104,72,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.lessablesroses-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(200,104,72,0.35)) !important;
+}
+
+/* Profiles Container */
+.lessablesroses-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.lessablesroses-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(200,104,72,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(200,104,72,0.1) !important;
+}
+
+.lessablesroses-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.lessablesroses-profile-card .profile-subtitle {
+    color: #FFA484 !important;
+}
+
+/* Radar Chart */
+.lessablesroses-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.lessablesroses-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.lessablesroses-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.lessablesroses-radar-svg { width: 100% !important; height: 100% !important; }
+.lessablesroses-radar-data { animation: lessablesrosesRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes lessablesrosesRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.lessablesroses-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.lessablesroses-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.lessablesroses-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.lessablesroses-radar-label .label-value { font-size: 0.65rem !important; color: #FFA484 !important; font-weight: 500 !important; }
+.lessablesroses-radar-label.pos-0 { top: 2%; left: 50%; }
+.lessablesroses-radar-label.pos-1 { top: 28%; left: 96%; }
+.lessablesroses-radar-label.pos-2 { top: 88%; left: 82%; }
+.lessablesroses-radar-label.pos-3 { top: 88%; left: 18%; }
+.lessablesroses-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.lessablesroses-ingredients { flex: 1 !important; min-width: 300px !important; }
+.lessablesroses-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.lessablesroses-note-tier { margin-bottom: 10px !important; }
+.lessablesroses-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.lessablesroses-tier-icon { font-size: 1rem !important; }
+.lessablesroses-tier-time { font-size: 0.7rem !important; color: #FFA484 !important; font-weight: 400 !important; margin-left: auto !important; }
+.lessablesroses-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.lessablesroses-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(200,104,72,0.06)) !important;
+    border: 1px solid rgba(200,104,72,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.lessablesroses-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(200,104,72,0.08) 50%, transparent 60%) !important;
+    animation: lessablesrosesCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes lessablesrosesCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.lessablesroses-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(200,104,72,0.2) !important; }
+.lessablesroses-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.lessablesroses-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.lessablesroses-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.lessablesroses-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.lessablesroses-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.lessablesroses-fill { background: linear-gradient(90deg, #c86848, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.lessablesroses-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #FFA484 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.lessablesroses-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(200,104,72,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.lessablesroses-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.lessablesroses-reddit-review-container { margin-top: 10px !important; }
+.lessablesroses-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(200,104,72,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.lessablesroses-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(200,104,72,0.1) !important; }
+.lessablesroses-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.lessablesroses-vote-btn { background: none !important; border: none !important; color: #FFA484 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.lessablesroses-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.lessablesroses-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.lessablesroses-post-dot { color: #FFA484 !important; margin: 0 5px !important; }
+.lessablesroses-post-info, .lessablesroses-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.lessablesroses-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.lessablesroses-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.lessablesroses-user-details { display: flex !important; flex-direction: column !important; }
+.lessablesroses-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.lessablesroses-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.lessablesroses-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(200,104,72,0.1) !important; }
+.lessablesroses-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.lessablesroses-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.lessablesroses-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.lessablesroses-mood-indicators, .lessablesroses-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.lessablesroses-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.lessablesroses-indicator-item.active { opacity: 1 !important; }
+.lessablesroses-indicator-icon { font-size: 1.3rem !important; }
+.lessablesroses-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.lessablesroses-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(200,104,72,0.2) !important; border-radius: 2px !important; }
+.lessablesroses-indicator-item.active .lessablesroses-indicator-bar { background: #c86848 !important; }
+.lessablesroses-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.lessablesroses-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.lessablesroses-votes { font-weight: 600 !important; color: #FFA484 !important; }
+.lessablesroses-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.lessablesroses-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.lessablesroses-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(200,104,72, 0.3) !important; background: transparent !important; }
+.lessablesroses-theme .favorite-btn:hover { background: rgba(200,104,72, 0.08) !important; border-color: #c86848 !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(200,104,72, 0.2) !important; }
+.lessablesroses-theme .favorite-btn .heart-outline, .lessablesroses-theme .favorite-btn .heart-filled { color: #FFA484 !important; }
+.lessablesroses-theme .favorite-btn.favorited { background: rgba(200,104,72, 0.06) !important; border-color: #c86848 !important; color: rgba(255, 255, 255, 0.95) !important; }
+.lessablesroses-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(200,104,72, 0.3) !important; background: transparent !important; }
+.lessablesroses-theme .add-to-cart-btn:hover { background: rgba(200,104,72, 0.08) !important; border-color: #c86848 !important; box-shadow: 0 4px 20px rgba(200,104,72, 0.2) !important; }
+.lessablesroses-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.lessablesroses-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.lessablesroses-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.lessablesroses-theme .price-currency, .lessablesroses-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.lessablesroses-theme .price-subtitle { color: rgba(200,104,72, 0.5) !important; letter-spacing: 3px !important; }
+.lessablesroses-theme .price-ornament { border-color: rgba(200,104,72, 0.35) !important; }
+.lessablesroses-theme .price-badge:hover .price-ornament { border-color: #c86848 !important; }
+
+/* Card Enhancements */
+.lessablesroses-theme .product-actions-buttons { position: relative !important; }
+.lessablesroses-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(200,104,72, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .lessablesroses-product-section { flex-direction: column !important; text-align: center !important; }
+    .lessablesroses-image { width: 250px !important; }
+    .lessablesroses-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .lessablesroses-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.lessablesroses-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.lessablesroses-theme .reviews-header, .lessablesroses-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.lessablesroses-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(200,104,72,0.15) !important; }
+.lessablesroses-theme .signin-prompt-content h4, .lessablesroses-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.lessablesroses-theme .signin-prompt-btn { background: linear-gradient(135deg, #643424, #c86848) !important; color: #0a0a0f !important; }
+.lessablesroses-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(200,104,72,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.lessablesroses-theme .submit-btn { background: linear-gradient(135deg, #643424, #c86848) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .lessablesroses-product-section { flex-direction: column !important; text-align: center !important; }
+    .lessablesroses-image { width: 250px !important; }
+    .lessablesroses-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .lessablesroses-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .lessablesroses-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .lessablesroses-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

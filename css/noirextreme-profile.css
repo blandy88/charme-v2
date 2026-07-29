@@ -1,0 +1,312 @@
+/* ============================================================================
+   Tom Ford — Noir Extreme Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.noirextreme-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.noirextreme-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.noirextreme-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.noirextreme-theme .brand-location {
+    color: #665666 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.noirextreme-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.noirextreme-theme .price-badge {
+    background: linear-gradient(135deg, #2a1a2a, #d4b868) !important;
+    border: 2px solid #2a1a2a !important;
+}
+
+.noirextreme-theme .price-glow {
+    background: radial-gradient(circle, rgba(42,26,42,0.3) 0%, transparent 70%) !important;
+}
+
+.noirextreme-theme .quality-badge {
+    border: 1px solid rgba(42,26,42,0.3) !important;
+    background: rgba(42,26,42,0.04) !important;
+}
+
+.noirextreme-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.noirextreme-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.noirextreme-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #2a1a2a !important;
+    background: rgba(42,26,42,0.08) !important;
+    box-shadow: none !important;
+}
+
+.noirextreme-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.noirextreme-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #665666 !important;
+}
+
+.noirextreme-theme .selection-indicator {
+    border-color: rgba(42,26,42,0.4) !important;
+}
+
+.noirextreme-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #2a1a2a !important;
+    background: rgba(42,26,42,0.1) !important;
+    box-shadow: none !important;
+}
+
+.noirextreme-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #2a1a2a !important;
+    box-shadow: none !important;
+}
+
+.noirextreme-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(42,26,42,0.1), transparent) !important;
+}
+
+.noirextreme-theme .quality-glow {
+    display: none !important;
+}
+
+.noirextreme-theme .quality-ornament {
+    border-color: rgba(42,26,42,0.3) !important;
+}
+
+.noirextreme-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #2a1a2a !important;
+    box-shadow: none !important;
+}
+
+.noirextreme-theme .quality-title,
+.noirextreme-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.noirextreme-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.noirextreme-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(42,26,42,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.noirextreme-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(42,26,42,0.35)) !important;
+}
+
+/* Profiles Container */
+.noirextreme-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.noirextreme-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(42,26,42,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(42,26,42,0.1) !important;
+}
+
+.noirextreme-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.noirextreme-profile-card .profile-subtitle {
+    color: #665666 !important;
+}
+
+/* Radar Chart */
+.noirextreme-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.noirextreme-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.noirextreme-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.noirextreme-radar-svg { width: 100% !important; height: 100% !important; }
+.noirextreme-radar-data { animation: noirextremeRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes noirextremeRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.noirextreme-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.noirextreme-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.noirextreme-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.noirextreme-radar-label .label-value { font-size: 0.65rem !important; color: #665666 !important; font-weight: 500 !important; }
+.noirextreme-radar-label.pos-0 { top: 2%; left: 50%; }
+.noirextreme-radar-label.pos-1 { top: 28%; left: 96%; }
+.noirextreme-radar-label.pos-2 { top: 88%; left: 82%; }
+.noirextreme-radar-label.pos-3 { top: 88%; left: 18%; }
+.noirextreme-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.noirextreme-ingredients { flex: 1 !important; min-width: 300px !important; }
+.noirextreme-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.noirextreme-note-tier { margin-bottom: 10px !important; }
+.noirextreme-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.noirextreme-tier-icon { font-size: 1rem !important; }
+.noirextreme-tier-time { font-size: 0.7rem !important; color: #665666 !important; font-weight: 400 !important; margin-left: auto !important; }
+.noirextreme-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.noirextreme-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(42,26,42,0.06)) !important;
+    border: 1px solid rgba(42,26,42,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.noirextreme-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(42,26,42,0.08) 50%, transparent 60%) !important;
+    animation: noirextremeCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes noirextremeCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.noirextreme-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(42,26,42,0.2) !important; }
+.noirextreme-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.noirextreme-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.noirextreme-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.noirextreme-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.noirextreme-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.noirextreme-fill { background: linear-gradient(90deg, #2a1a2a, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.noirextreme-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #665666 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.noirextreme-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(42,26,42,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.noirextreme-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.noirextreme-reddit-review-container { margin-top: 10px !important; }
+.noirextreme-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(42,26,42,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.noirextreme-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(42,26,42,0.1) !important; }
+.noirextreme-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.noirextreme-vote-btn { background: none !important; border: none !important; color: #665666 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.noirextreme-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.noirextreme-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.noirextreme-post-dot { color: #665666 !important; margin: 0 5px !important; }
+.noirextreme-post-info, .noirextreme-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.noirextreme-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.noirextreme-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.noirextreme-user-details { display: flex !important; flex-direction: column !important; }
+.noirextreme-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.noirextreme-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.noirextreme-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(42,26,42,0.1) !important; }
+.noirextreme-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.noirextreme-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.noirextreme-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.noirextreme-mood-indicators, .noirextreme-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.noirextreme-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.noirextreme-indicator-item.active { opacity: 1 !important; }
+.noirextreme-indicator-icon { font-size: 1.3rem !important; }
+.noirextreme-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.noirextreme-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(42,26,42,0.2) !important; border-radius: 2px !important; }
+.noirextreme-indicator-item.active .noirextreme-indicator-bar { background: #2a1a2a !important; }
+.noirextreme-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.noirextreme-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.noirextreme-votes { font-weight: 600 !important; color: #665666 !important; }
+.noirextreme-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.noirextreme-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.noirextreme-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(42,26,42, 0.3) !important; background: transparent !important; }
+.noirextreme-theme .favorite-btn:hover { background: rgba(42,26,42, 0.08) !important; border-color: #2a1a2a !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(42,26,42, 0.2) !important; }
+.noirextreme-theme .favorite-btn .heart-outline, .noirextreme-theme .favorite-btn .heart-filled { color: #665666 !important; }
+.noirextreme-theme .favorite-btn.favorited { background: rgba(42,26,42, 0.06) !important; border-color: #2a1a2a !important; color: rgba(255, 255, 255, 0.95) !important; }
+.noirextreme-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(42,26,42, 0.3) !important; background: transparent !important; }
+.noirextreme-theme .add-to-cart-btn:hover { background: rgba(42,26,42, 0.08) !important; border-color: #2a1a2a !important; box-shadow: 0 4px 20px rgba(42,26,42, 0.2) !important; }
+.noirextreme-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.noirextreme-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.noirextreme-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.noirextreme-theme .price-currency, .noirextreme-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.noirextreme-theme .price-subtitle { color: rgba(42,26,42, 0.5) !important; letter-spacing: 3px !important; }
+.noirextreme-theme .price-ornament { border-color: rgba(42,26,42, 0.35) !important; }
+.noirextreme-theme .price-badge:hover .price-ornament { border-color: #2a1a2a !important; }
+
+/* Card Enhancements */
+.noirextreme-theme .product-actions-buttons { position: relative !important; }
+.noirextreme-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(42,26,42, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .noirextreme-product-section { flex-direction: column !important; text-align: center !important; }
+    .noirextreme-image { width: 250px !important; }
+    .noirextreme-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .noirextreme-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.noirextreme-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.noirextreme-theme .reviews-header, .noirextreme-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.noirextreme-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(42,26,42,0.15) !important; }
+.noirextreme-theme .signin-prompt-content h4, .noirextreme-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.noirextreme-theme .signin-prompt-btn { background: linear-gradient(135deg, #150D15, #2a1a2a) !important; color: #0a0a0f !important; }
+.noirextreme-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(42,26,42,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.noirextreme-theme .submit-btn { background: linear-gradient(135deg, #150D15, #2a1a2a) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .noirextreme-product-section { flex-direction: column !important; text-align: center !important; }
+    .noirextreme-image { width: 250px !important; }
+    .noirextreme-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .noirextreme-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .noirextreme-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .noirextreme-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

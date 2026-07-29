@@ -1,0 +1,312 @@
+/* ============================================================================
+   Narciso Rodriguez — Narciso Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.narciso-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.narciso-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.narciso-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.narciso-theme .brand-location {
+    color: #FFE4C4 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.narciso-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.narciso-theme .price-badge {
+    background: linear-gradient(135deg, #c8a888, #d4b868) !important;
+    border: 2px solid #c8a888 !important;
+}
+
+.narciso-theme .price-glow {
+    background: radial-gradient(circle, rgba(200,168,136,0.3) 0%, transparent 70%) !important;
+}
+
+.narciso-theme .quality-badge {
+    border: 1px solid rgba(200,168,136,0.3) !important;
+    background: rgba(200,168,136,0.04) !important;
+}
+
+.narciso-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.narciso-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.narciso-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #c8a888 !important;
+    background: rgba(200,168,136,0.08) !important;
+    box-shadow: none !important;
+}
+
+.narciso-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.narciso-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #FFE4C4 !important;
+}
+
+.narciso-theme .selection-indicator {
+    border-color: rgba(200,168,136,0.4) !important;
+}
+
+.narciso-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #c8a888 !important;
+    background: rgba(200,168,136,0.1) !important;
+    box-shadow: none !important;
+}
+
+.narciso-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #c8a888 !important;
+    box-shadow: none !important;
+}
+
+.narciso-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(200,168,136,0.1), transparent) !important;
+}
+
+.narciso-theme .quality-glow {
+    display: none !important;
+}
+
+.narciso-theme .quality-ornament {
+    border-color: rgba(200,168,136,0.3) !important;
+}
+
+.narciso-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #c8a888 !important;
+    box-shadow: none !important;
+}
+
+.narciso-theme .quality-title,
+.narciso-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.narciso-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.narciso-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(200,168,136,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.narciso-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(200,168,136,0.35)) !important;
+}
+
+/* Profiles Container */
+.narciso-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.narciso-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(200,168,136,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(200,168,136,0.1) !important;
+}
+
+.narciso-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.narciso-profile-card .profile-subtitle {
+    color: #FFE4C4 !important;
+}
+
+/* Radar Chart */
+.narciso-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.narciso-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.narciso-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.narciso-radar-svg { width: 100% !important; height: 100% !important; }
+.narciso-radar-data { animation: narcisoRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes narcisoRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.narciso-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.narciso-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.narciso-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.narciso-radar-label .label-value { font-size: 0.65rem !important; color: #FFE4C4 !important; font-weight: 500 !important; }
+.narciso-radar-label.pos-0 { top: 2%; left: 50%; }
+.narciso-radar-label.pos-1 { top: 28%; left: 96%; }
+.narciso-radar-label.pos-2 { top: 88%; left: 82%; }
+.narciso-radar-label.pos-3 { top: 88%; left: 18%; }
+.narciso-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.narciso-ingredients { flex: 1 !important; min-width: 300px !important; }
+.narciso-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.narciso-note-tier { margin-bottom: 10px !important; }
+.narciso-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.narciso-tier-icon { font-size: 1rem !important; }
+.narciso-tier-time { font-size: 0.7rem !important; color: #FFE4C4 !important; font-weight: 400 !important; margin-left: auto !important; }
+.narciso-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.narciso-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(200,168,136,0.06)) !important;
+    border: 1px solid rgba(200,168,136,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.narciso-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(200,168,136,0.08) 50%, transparent 60%) !important;
+    animation: narcisoCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes narcisoCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.narciso-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(200,168,136,0.2) !important; }
+.narciso-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.narciso-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.narciso-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.narciso-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.narciso-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.narciso-fill { background: linear-gradient(90deg, #c8a888, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.narciso-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #FFE4C4 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.narciso-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(200,168,136,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.narciso-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.narciso-reddit-review-container { margin-top: 10px !important; }
+.narciso-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(200,168,136,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.narciso-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(200,168,136,0.1) !important; }
+.narciso-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.narciso-vote-btn { background: none !important; border: none !important; color: #FFE4C4 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.narciso-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.narciso-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.narciso-post-dot { color: #FFE4C4 !important; margin: 0 5px !important; }
+.narciso-post-info, .narciso-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.narciso-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.narciso-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.narciso-user-details { display: flex !important; flex-direction: column !important; }
+.narciso-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.narciso-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.narciso-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(200,168,136,0.1) !important; }
+.narciso-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.narciso-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.narciso-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.narciso-mood-indicators, .narciso-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.narciso-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.narciso-indicator-item.active { opacity: 1 !important; }
+.narciso-indicator-icon { font-size: 1.3rem !important; }
+.narciso-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.narciso-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(200,168,136,0.2) !important; border-radius: 2px !important; }
+.narciso-indicator-item.active .narciso-indicator-bar { background: #c8a888 !important; }
+.narciso-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.narciso-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.narciso-votes { font-weight: 600 !important; color: #FFE4C4 !important; }
+.narciso-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.narciso-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.narciso-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(200,168,136, 0.3) !important; background: transparent !important; }
+.narciso-theme .favorite-btn:hover { background: rgba(200,168,136, 0.08) !important; border-color: #c8a888 !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(200,168,136, 0.2) !important; }
+.narciso-theme .favorite-btn .heart-outline, .narciso-theme .favorite-btn .heart-filled { color: #FFE4C4 !important; }
+.narciso-theme .favorite-btn.favorited { background: rgba(200,168,136, 0.06) !important; border-color: #c8a888 !important; color: rgba(255, 255, 255, 0.95) !important; }
+.narciso-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(200,168,136, 0.3) !important; background: transparent !important; }
+.narciso-theme .add-to-cart-btn:hover { background: rgba(200,168,136, 0.08) !important; border-color: #c8a888 !important; box-shadow: 0 4px 20px rgba(200,168,136, 0.2) !important; }
+.narciso-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.narciso-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.narciso-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.narciso-theme .price-currency, .narciso-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.narciso-theme .price-subtitle { color: rgba(200,168,136, 0.5) !important; letter-spacing: 3px !important; }
+.narciso-theme .price-ornament { border-color: rgba(200,168,136, 0.35) !important; }
+.narciso-theme .price-badge:hover .price-ornament { border-color: #c8a888 !important; }
+
+/* Card Enhancements */
+.narciso-theme .product-actions-buttons { position: relative !important; }
+.narciso-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(200,168,136, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .narciso-product-section { flex-direction: column !important; text-align: center !important; }
+    .narciso-image { width: 250px !important; }
+    .narciso-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .narciso-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.narciso-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.narciso-theme .reviews-header, .narciso-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.narciso-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(200,168,136,0.15) !important; }
+.narciso-theme .signin-prompt-content h4, .narciso-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.narciso-theme .signin-prompt-btn { background: linear-gradient(135deg, #645444, #c8a888) !important; color: #0a0a0f !important; }
+.narciso-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(200,168,136,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.narciso-theme .submit-btn { background: linear-gradient(135deg, #645444, #c8a888) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .narciso-product-section { flex-direction: column !important; text-align: center !important; }
+    .narciso-image { width: 250px !important; }
+    .narciso-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .narciso-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .narciso-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .narciso-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

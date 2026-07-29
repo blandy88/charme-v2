@@ -159,47 +159,15 @@ document.addEventListener("DOMContentLoaded", function () {
       if (nextHidden === isHidden) return;
       isHidden = nextHidden;
       document.body.classList.toggle("top-shell-hidden", isHidden);
-      applyChromeState();
     }
 
     function applyChromeState() {
-      const hidden = isHidden && !reduceMotion?.matches;
-      const visibleMarquee = marqueeIsVisible();
-      const navShift = visibleMarquee
-        ? navbarEl.offsetHeight + marqueeBar.offsetHeight + 8
-        : navbarEl.offsetHeight + 8;
-      const marqueeShift = visibleMarquee ? marqueeBar.offsetHeight + 2 : 0;
-
-      if (hidden) {
-        if (visibleMarquee) {
-          marqueeBar.style.setProperty("transform", `translate3d(0, -${marqueeShift}px, 0)`, "important");
-          marqueeBar.style.setProperty("opacity", "0", "important");
-          marqueeBar.style.setProperty("filter", "blur(3px) saturate(80%)", "important");
-          marqueeBar.style.pointerEvents = "none";
-        }
-        navbarEl.style.setProperty("transform", `translate3d(0, -${navShift}px, 0)`, "important");
-        navbarEl.style.setProperty("opacity", "0.08", "important");
-        navbarEl.style.setProperty("filter", "blur(5px) saturate(70%)", "important");
-        navbarEl.style.pointerEvents = "none";
-      } else {
-        if (marqueeBar) {
-          marqueeBar.style.removeProperty("transform");
-          marqueeBar.style.removeProperty("opacity");
-          marqueeBar.style.removeProperty("filter");
-          marqueeBar.style.pointerEvents = "";
-        }
-        navbarEl.style.removeProperty("transform");
-        navbarEl.style.removeProperty("opacity");
-        navbarEl.style.removeProperty("filter");
-        navbarEl.style.pointerEvents = "";
-      }
     }
 
     function reveal() {
       downIntent = 0;
       upIntent = 0;
       setHidden(false);
-      applyChromeState();
     }
 
     function hasChromeFocus() {
@@ -225,26 +193,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function chromeLockedOpen() {
       return (
-        document.body.classList.contains("top-shell-interacting") ||
         hasChromeFocus() ||
         hasOpenChromeSurface()
       );
     }
-
-    function updateInteractionState() {
-      const active = chromeElements.some(
-        (element) => element?.matches?.(":hover") || element?.contains(document.activeElement),
-      );
-      document.body.classList.toggle("top-shell-interacting", active);
-      if (active) reveal();
-    }
-
-    chromeElements.forEach((element) => {
-      element.addEventListener("pointerenter", updateInteractionState);
-      element.addEventListener("pointerleave", () => setTimeout(updateInteractionState, 0));
-      element.addEventListener("focusin", updateInteractionState);
-      element.addEventListener("focusout", () => setTimeout(updateInteractionState, 0));
-    });
 
     function updateTopChrome() {
       rafPending = false;
@@ -255,9 +207,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const dt = Math.max(16, now - lastTs);
       const velocity = Math.abs(dy) / dt;
 
-      document.body.classList.toggle("top-shell-scrolled", y > 12);
+      document.body.classList.toggle("top-shell-scrolled", y > 10);
 
-      if (reduceMotion?.matches || y <= 8 || chromeLockedOpen()) {
+      if (reduceMotion?.matches || y <= 10 || chromeLockedOpen()) {
         reveal();
         lastY = y;
         lastTs = now;
@@ -269,15 +221,13 @@ document.addEventListener("DOMContentLoaded", function () {
       if (dy > 0) {
         downIntent += dy;
         upIntent = 0;
-        const downThreshold = velocity > 1 ? 8 : 28;
-        if (y > chromeHeight() + 36 && downIntent > downThreshold) {
+        if (y > 30 && downIntent > 4) {
           setHidden(true);
         }
       } else {
         upIntent += -dy;
         downIntent = 0;
-        const upThreshold = velocity > 0.7 ? 4 : 12;
-        if (upIntent > upThreshold) {
+        if (upIntent > 4) {
           setHidden(false);
         }
       }
@@ -293,6 +243,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     window.addEventListener("scroll", requestTopChromeUpdate, { passive: true });
+    window.addEventListener("mousemove", (e) => {
+      if (e.clientY <= 30) {
+        reveal();
+      }
+    }, { passive: true });
     window.addEventListener("resize", () => {
       reveal();
       requestTopChromeUpdate();
@@ -2071,22 +2026,18 @@ function _buildBgBreakpoints(windowHeight) {
 }
 
 function _lookupSectionBgColor(scrollTop, breakpoints) {
-  // breakpoints is sorted by .start ascending (sections appear in DOM order)
-  // Find the relevant zone with a simple scan (already fast for ~50 items,
-  // and most frames hit an early exit since user is in ONE zone)
+  // Linear scan through sorted breakpoints.
+  // Finds the FIRST matching transition zone for correct overlap resolution.
   for (let i = 0; i < breakpoints.length; i++) {
     const bp = breakpoints[i];
     if (scrollTop < bp.start) {
-      // We're before this section's transition — return the "from" color as static
       return bp.colorFrom;
     }
     if (scrollTop < bp.end) {
-      // We're inside this transition
       const progress = Math.pow((scrollTop - bp.start) / (bp.end - bp.start), 0.6);
       return interpolateColor(bp.colorFrom, bp.colorTo, progress);
     }
   }
-  // Past all sections
   if (breakpoints.length > 0) {
     return breakpoints[breakpoints.length - 1].colorTo;
   }
@@ -2490,9 +2441,6 @@ function updateColors() {
     settledThemeSyncTimer = setTimeout(() => {
       window._globalScrollTop = window.pageYOffset || document.documentElement.scrollTop;
       updateScrollBackgroundAndTheme();
-      requestAnimationFrame(() => {
-        forceBodyTheme(themeFromBackgroundColor(getComputedStyle(document.body).backgroundColor));
-      });
     }, 90);
   }
 
@@ -2510,9 +2458,6 @@ function updateColors() {
         if (now - lastThemeScrollUpdate > 140) {
           lastThemeScrollUpdate = now;
           updateScrollBackgroundAndTheme();
-          requestAnimationFrame(() => {
-            forceBodyTheme(themeFromBackgroundColor(getComputedStyle(document.body).backgroundColor));
-          });
         }
         ticking = false;
       });
@@ -4767,7 +4712,7 @@ function updateColors() {
     { id: 'grandSoir', imageClass: '.grandSoir-image', infoSelector: '.grandSoir-theme .product-info-section', scentClass: '.grandSoir-scent-profile', ingredientsClass: '.grandSoir-ingredients', descClass: '.grandSoir-fragrance-description', containerClass: '.grandSoir-main-container' },
     { id: 'balayage', imageClass: '.balayage-image', infoSelector: '.balayage-theme .product-info-section', scentClass: '.balayage-scent-profile', ingredientsClass: '.balayage-ingredients', descClass: '.balayage-fragrance-description', containerClass: '.balayage-main-container' },
     { id: 'valayaexclusive', imageClass: '.valayaexclusive-image', infoSelector: '.valayaexclusive-theme .product-info-section', scentClass: '.valayaexclusive-scent-profile', ingredientsClass: '.valayaexclusive-ingredients', descClass: '.valayaexclusive-fragrance-description', containerClass: '.valayaexclusive-main-container' },
-    { id: '1millionnight', imageClass: '.1millionnight-image', infoSelector: '.1millionnight-theme .product-info-section', scentClass: '.1millionnight-scent-profile', ingredientsClass: '.1millionnight-ingredients', descClass: '.1millionnight-fragrance-description', containerClass: '.1millionnight-main-container' },
+    { id: '1millionnight', imageClass: '[class*="1millionnight-image"]', infoSelector: '[class*="1millionnight-theme"] .product-info-section', scentClass: '[class*="1millionnight-scent-profile"]', ingredientsClass: '[class*="1millionnight-ingredients"]', descClass: '[class*="1millionnight-fragrance-description"]', containerClass: '[class*="1millionnight-main-container"]' },
     { id: 'freedommuskmatcha', imageClass: '.freedommuskmatcha-image', infoSelector: '.freedommuskmatcha-theme .product-info-section', scentClass: '.freedommuskmatcha-scent-profile', ingredientsClass: '.freedommuskmatcha-ingredients', descClass: '.freedommuskmatcha-fragrance-description', containerClass: '.freedommuskmatcha-main-container' },
     { id: 'torrino21', imageClass: '.torrino21-image', infoSelector: '.torrino21-theme .product-info-section', scentClass: '.torrino21-scent-profile', ingredientsClass: '.torrino21-ingredients', descClass: '.torrino21-fragrance-description', containerClass: '.torrino21-main-container' },
     { id: 'kayalimarshmallow', imageClass: '.kayalimarshmallow-image', infoSelector: '.kayalimarshmallow-theme .product-info-section', scentClass: '.kayalimarshmallow-scent-profile', ingredientsClass: '.kayalimarshmallow-ingredients', descClass: '.kayalimarshmallow-fragrance-description', containerClass: '.kayalimarshmallow-main-container' },
@@ -4874,13 +4819,15 @@ function updateColors() {
     }
   });
 
-  newSectionParallaxUpdaters.length = 0;
-
-  // Inject new section parallax into scroll handler
+  // Inject new section parallax into scroll handler,
+  // preserving background-color / theme updates from the original onScroll.
   if (newSectionParallaxUpdaters.length > 0) {
+    newSectionParallaxUpdaters.length = 0;
     const previousOnScroll = onScroll;
     onScroll = function () {
       if (!ticking) {
+        topChromeController?.requestUpdate?.();
+        syncThemeAfterBackgroundSettles();
         requestAnimationFrame(() => {
           try {
             // Global cache update
@@ -4888,6 +4835,12 @@ function updateColors() {
             if (backToTopBtn && progressRing) { updateBackToTop(); }
             if (floatingSearch) { updateFloatingElements(); }
             updateSocialLinks();
+
+            const now = performance.now();
+            if (now - lastThemeScrollUpdate > 140) {
+              lastThemeScrollUpdate = now;
+              updateScrollBackgroundAndTheme();
+            }
 
             // Heavy per-section parallax is intentionally disabled; layout is now static for scroll performance.
           } finally {
@@ -12147,7 +12100,7 @@ class CartManager {
       grandSoir: { name: "Grand Soir", brand: "Maison Francis Kurkdjian", image: "mfk-grand-soir.png" },
       balayage: { name: "Balayage", brand: "Sospiro", image: "balayage.png" },
       valayaexclusive: { name: "Valaya Exclusive", brand: "Parfums de Marly", image: "valaya-exclusive.png" },
-      1millionnight: { name: "1 Million Night", brand: "Paco Rabanne", image: "1-million-night.png" },
+      "1millionnight": { name: "1 Million Night", brand: "Paco Rabanne", image: "1-million-night.png" },
       freedommuskmatcha: { name: "Freedom Musk Matcha", brand: "Kayali", image: "freedom-musk-matcha.png" },
       torrino21: { name: "Torino21", brand: "Xerjoff", image: "xerjoff-torrino-21.png" },
       kayalimarshmallow: { name: "Marshmallow", brand: "Kayali", image: "kayali-marshmallow.png" },
@@ -18561,7 +18514,7 @@ class ProfileModalManager {
       grandSoir: { name: 'Grand Soir', brand: 'Maison Francis Kurkdjian', price: '$65', image: 'mfk-grand-soir.png' },
       balayage: { name: 'Balayage', brand: 'Sospiro', price: '$55', image: 'balayage.png' },
       valayaexclusive: { name: 'Valaya Exclusive', brand: 'Parfums de Marly', price: '$60', image: 'valaya-exclusive.png' },
-      1millionnight: { name: '1 Million Night', brand: 'Paco Rabanne', price: '$50', image: '1-million-night.png' },
+      "1millionnight": { name: '1 Million Night', brand: 'Paco Rabanne', price: '$50', image: '1-million-night.png' },
       freedommuskmatcha: { name: 'Freedom Musk Matcha', brand: 'Kayali', price: '$40', image: 'freedom-musk-matcha.png' },
       torrino21: { name: 'Torino21', brand: 'Xerjoff', price: '$55', image: 'xerjoff-torrino-21.png' },
       kayalimarshmallow: { name: 'Marshmallow', brand: 'Kayali', price: '$38', image: 'kayali-marshmallow.png' },

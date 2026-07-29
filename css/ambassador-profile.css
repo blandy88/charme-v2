@@ -1,0 +1,312 @@
+/* ============================================================================
+   Gisada — Ambassador Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.ambassador-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.ambassador-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.ambassador-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.ambassador-theme .brand-location {
+    color: #7696C6 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.ambassador-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.ambassador-theme .price-badge {
+    background: linear-gradient(135deg, #3a5a8a, #d4b868) !important;
+    border: 2px solid #3a5a8a !important;
+}
+
+.ambassador-theme .price-glow {
+    background: radial-gradient(circle, rgba(58,90,138,0.3) 0%, transparent 70%) !important;
+}
+
+.ambassador-theme .quality-badge {
+    border: 1px solid rgba(58,90,138,0.3) !important;
+    background: rgba(58,90,138,0.04) !important;
+}
+
+.ambassador-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.ambassador-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.ambassador-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #3a5a8a !important;
+    background: rgba(58,90,138,0.08) !important;
+    box-shadow: none !important;
+}
+
+.ambassador-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.ambassador-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #7696C6 !important;
+}
+
+.ambassador-theme .selection-indicator {
+    border-color: rgba(58,90,138,0.4) !important;
+}
+
+.ambassador-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #3a5a8a !important;
+    background: rgba(58,90,138,0.1) !important;
+    box-shadow: none !important;
+}
+
+.ambassador-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #3a5a8a !important;
+    box-shadow: none !important;
+}
+
+.ambassador-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(58,90,138,0.1), transparent) !important;
+}
+
+.ambassador-theme .quality-glow {
+    display: none !important;
+}
+
+.ambassador-theme .quality-ornament {
+    border-color: rgba(58,90,138,0.3) !important;
+}
+
+.ambassador-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #3a5a8a !important;
+    box-shadow: none !important;
+}
+
+.ambassador-theme .quality-title,
+.ambassador-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.ambassador-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.ambassador-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(58,90,138,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.ambassador-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(58,90,138,0.35)) !important;
+}
+
+/* Profiles Container */
+.ambassador-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.ambassador-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(58,90,138,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(58,90,138,0.1) !important;
+}
+
+.ambassador-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.ambassador-profile-card .profile-subtitle {
+    color: #7696C6 !important;
+}
+
+/* Radar Chart */
+.ambassador-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.ambassador-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.ambassador-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.ambassador-radar-svg { width: 100% !important; height: 100% !important; }
+.ambassador-radar-data { animation: ambassadorRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes ambassadorRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.ambassador-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.ambassador-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.ambassador-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.ambassador-radar-label .label-value { font-size: 0.65rem !important; color: #7696C6 !important; font-weight: 500 !important; }
+.ambassador-radar-label.pos-0 { top: 2%; left: 50%; }
+.ambassador-radar-label.pos-1 { top: 28%; left: 96%; }
+.ambassador-radar-label.pos-2 { top: 88%; left: 82%; }
+.ambassador-radar-label.pos-3 { top: 88%; left: 18%; }
+.ambassador-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.ambassador-ingredients { flex: 1 !important; min-width: 300px !important; }
+.ambassador-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.ambassador-note-tier { margin-bottom: 10px !important; }
+.ambassador-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.ambassador-tier-icon { font-size: 1rem !important; }
+.ambassador-tier-time { font-size: 0.7rem !important; color: #7696C6 !important; font-weight: 400 !important; margin-left: auto !important; }
+.ambassador-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.ambassador-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(58,90,138,0.06)) !important;
+    border: 1px solid rgba(58,90,138,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.ambassador-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(58,90,138,0.08) 50%, transparent 60%) !important;
+    animation: ambassadorCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes ambassadorCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.ambassador-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(58,90,138,0.2) !important; }
+.ambassador-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.ambassador-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.ambassador-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.ambassador-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.ambassador-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.ambassador-fill { background: linear-gradient(90deg, #3a5a8a, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.ambassador-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #7696C6 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.ambassador-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(58,90,138,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.ambassador-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.ambassador-reddit-review-container { margin-top: 10px !important; }
+.ambassador-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(58,90,138,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.ambassador-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(58,90,138,0.1) !important; }
+.ambassador-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.ambassador-vote-btn { background: none !important; border: none !important; color: #7696C6 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.ambassador-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.ambassador-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.ambassador-post-dot { color: #7696C6 !important; margin: 0 5px !important; }
+.ambassador-post-info, .ambassador-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.ambassador-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.ambassador-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.ambassador-user-details { display: flex !important; flex-direction: column !important; }
+.ambassador-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.ambassador-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.ambassador-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(58,90,138,0.1) !important; }
+.ambassador-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.ambassador-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.ambassador-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.ambassador-mood-indicators, .ambassador-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.ambassador-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.ambassador-indicator-item.active { opacity: 1 !important; }
+.ambassador-indicator-icon { font-size: 1.3rem !important; }
+.ambassador-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.ambassador-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(58,90,138,0.2) !important; border-radius: 2px !important; }
+.ambassador-indicator-item.active .ambassador-indicator-bar { background: #3a5a8a !important; }
+.ambassador-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.ambassador-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.ambassador-votes { font-weight: 600 !important; color: #7696C6 !important; }
+.ambassador-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.ambassador-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.ambassador-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(58,90,138, 0.3) !important; background: transparent !important; }
+.ambassador-theme .favorite-btn:hover { background: rgba(58,90,138, 0.08) !important; border-color: #3a5a8a !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(58,90,138, 0.2) !important; }
+.ambassador-theme .favorite-btn .heart-outline, .ambassador-theme .favorite-btn .heart-filled { color: #7696C6 !important; }
+.ambassador-theme .favorite-btn.favorited { background: rgba(58,90,138, 0.06) !important; border-color: #3a5a8a !important; color: rgba(255, 255, 255, 0.95) !important; }
+.ambassador-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(58,90,138, 0.3) !important; background: transparent !important; }
+.ambassador-theme .add-to-cart-btn:hover { background: rgba(58,90,138, 0.08) !important; border-color: #3a5a8a !important; box-shadow: 0 4px 20px rgba(58,90,138, 0.2) !important; }
+.ambassador-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.ambassador-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.ambassador-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.ambassador-theme .price-currency, .ambassador-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.ambassador-theme .price-subtitle { color: rgba(58,90,138, 0.5) !important; letter-spacing: 3px !important; }
+.ambassador-theme .price-ornament { border-color: rgba(58,90,138, 0.35) !important; }
+.ambassador-theme .price-badge:hover .price-ornament { border-color: #3a5a8a !important; }
+
+/* Card Enhancements */
+.ambassador-theme .product-actions-buttons { position: relative !important; }
+.ambassador-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(58,90,138, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ambassador-product-section { flex-direction: column !important; text-align: center !important; }
+    .ambassador-image { width: 250px !important; }
+    .ambassador-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .ambassador-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.ambassador-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.ambassador-theme .reviews-header, .ambassador-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.ambassador-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(58,90,138,0.15) !important; }
+.ambassador-theme .signin-prompt-content h4, .ambassador-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.ambassador-theme .signin-prompt-btn { background: linear-gradient(135deg, #1D2D45, #3a5a8a) !important; color: #0a0a0f !important; }
+.ambassador-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(58,90,138,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.ambassador-theme .submit-btn { background: linear-gradient(135deg, #1D2D45, #3a5a8a) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ambassador-product-section { flex-direction: column !important; text-align: center !important; }
+    .ambassador-image { width: 250px !important; }
+    .ambassador-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .ambassador-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .ambassador-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .ambassador-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

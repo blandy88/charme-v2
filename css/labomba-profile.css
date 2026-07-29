@@ -1,0 +1,312 @@
+/* ============================================================================
+   Jean Paul Gaultier — La Bomba Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.labomba-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.labomba-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.labomba-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.labomba-theme .brand-location {
+    color: #FF8484 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.labomba-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.labomba-theme .price-badge {
+    background: linear-gradient(135deg, #e84848, #d4b868) !important;
+    border: 2px solid #e84848 !important;
+}
+
+.labomba-theme .price-glow {
+    background: radial-gradient(circle, rgba(232,72,72,0.3) 0%, transparent 70%) !important;
+}
+
+.labomba-theme .quality-badge {
+    border: 1px solid rgba(232,72,72,0.3) !important;
+    background: rgba(232,72,72,0.04) !important;
+}
+
+.labomba-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.labomba-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.labomba-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #e84848 !important;
+    background: rgba(232,72,72,0.08) !important;
+    box-shadow: none !important;
+}
+
+.labomba-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.labomba-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #FF8484 !important;
+}
+
+.labomba-theme .selection-indicator {
+    border-color: rgba(232,72,72,0.4) !important;
+}
+
+.labomba-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #e84848 !important;
+    background: rgba(232,72,72,0.1) !important;
+    box-shadow: none !important;
+}
+
+.labomba-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #e84848 !important;
+    box-shadow: none !important;
+}
+
+.labomba-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(232,72,72,0.1), transparent) !important;
+}
+
+.labomba-theme .quality-glow {
+    display: none !important;
+}
+
+.labomba-theme .quality-ornament {
+    border-color: rgba(232,72,72,0.3) !important;
+}
+
+.labomba-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #e84848 !important;
+    box-shadow: none !important;
+}
+
+.labomba-theme .quality-title,
+.labomba-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.labomba-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.labomba-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(232,72,72,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.labomba-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(232,72,72,0.35)) !important;
+}
+
+/* Profiles Container */
+.labomba-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.labomba-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(232,72,72,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(232,72,72,0.1) !important;
+}
+
+.labomba-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.labomba-profile-card .profile-subtitle {
+    color: #FF8484 !important;
+}
+
+/* Radar Chart */
+.labomba-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.labomba-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.labomba-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.labomba-radar-svg { width: 100% !important; height: 100% !important; }
+.labomba-radar-data { animation: labombaRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes labombaRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.labomba-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.labomba-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.labomba-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.labomba-radar-label .label-value { font-size: 0.65rem !important; color: #FF8484 !important; font-weight: 500 !important; }
+.labomba-radar-label.pos-0 { top: 2%; left: 50%; }
+.labomba-radar-label.pos-1 { top: 28%; left: 96%; }
+.labomba-radar-label.pos-2 { top: 88%; left: 82%; }
+.labomba-radar-label.pos-3 { top: 88%; left: 18%; }
+.labomba-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.labomba-ingredients { flex: 1 !important; min-width: 300px !important; }
+.labomba-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.labomba-note-tier { margin-bottom: 10px !important; }
+.labomba-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.labomba-tier-icon { font-size: 1rem !important; }
+.labomba-tier-time { font-size: 0.7rem !important; color: #FF8484 !important; font-weight: 400 !important; margin-left: auto !important; }
+.labomba-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.labomba-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(232,72,72,0.06)) !important;
+    border: 1px solid rgba(232,72,72,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.labomba-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(232,72,72,0.08) 50%, transparent 60%) !important;
+    animation: labombaCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes labombaCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.labomba-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(232,72,72,0.2) !important; }
+.labomba-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.labomba-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.labomba-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.labomba-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.labomba-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.labomba-fill { background: linear-gradient(90deg, #e84848, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.labomba-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #FF8484 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.labomba-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(232,72,72,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.labomba-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.labomba-reddit-review-container { margin-top: 10px !important; }
+.labomba-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(232,72,72,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.labomba-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(232,72,72,0.1) !important; }
+.labomba-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.labomba-vote-btn { background: none !important; border: none !important; color: #FF8484 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.labomba-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.labomba-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.labomba-post-dot { color: #FF8484 !important; margin: 0 5px !important; }
+.labomba-post-info, .labomba-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.labomba-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.labomba-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.labomba-user-details { display: flex !important; flex-direction: column !important; }
+.labomba-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.labomba-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.labomba-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(232,72,72,0.1) !important; }
+.labomba-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.labomba-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.labomba-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.labomba-mood-indicators, .labomba-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.labomba-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.labomba-indicator-item.active { opacity: 1 !important; }
+.labomba-indicator-icon { font-size: 1.3rem !important; }
+.labomba-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.labomba-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(232,72,72,0.2) !important; border-radius: 2px !important; }
+.labomba-indicator-item.active .labomba-indicator-bar { background: #e84848 !important; }
+.labomba-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.labomba-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.labomba-votes { font-weight: 600 !important; color: #FF8484 !important; }
+.labomba-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.labomba-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.labomba-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(232,72,72, 0.3) !important; background: transparent !important; }
+.labomba-theme .favorite-btn:hover { background: rgba(232,72,72, 0.08) !important; border-color: #e84848 !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(232,72,72, 0.2) !important; }
+.labomba-theme .favorite-btn .heart-outline, .labomba-theme .favorite-btn .heart-filled { color: #FF8484 !important; }
+.labomba-theme .favorite-btn.favorited { background: rgba(232,72,72, 0.06) !important; border-color: #e84848 !important; color: rgba(255, 255, 255, 0.95) !important; }
+.labomba-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(232,72,72, 0.3) !important; background: transparent !important; }
+.labomba-theme .add-to-cart-btn:hover { background: rgba(232,72,72, 0.08) !important; border-color: #e84848 !important; box-shadow: 0 4px 20px rgba(232,72,72, 0.2) !important; }
+.labomba-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.labomba-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.labomba-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.labomba-theme .price-currency, .labomba-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.labomba-theme .price-subtitle { color: rgba(232,72,72, 0.5) !important; letter-spacing: 3px !important; }
+.labomba-theme .price-ornament { border-color: rgba(232,72,72, 0.35) !important; }
+.labomba-theme .price-badge:hover .price-ornament { border-color: #e84848 !important; }
+
+/* Card Enhancements */
+.labomba-theme .product-actions-buttons { position: relative !important; }
+.labomba-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(232,72,72, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .labomba-product-section { flex-direction: column !important; text-align: center !important; }
+    .labomba-image { width: 250px !important; }
+    .labomba-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .labomba-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.labomba-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.labomba-theme .reviews-header, .labomba-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.labomba-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(232,72,72,0.15) !important; }
+.labomba-theme .signin-prompt-content h4, .labomba-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.labomba-theme .signin-prompt-btn { background: linear-gradient(135deg, #742424, #e84848) !important; color: #0a0a0f !important; }
+.labomba-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(232,72,72,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.labomba-theme .submit-btn { background: linear-gradient(135deg, #742424, #e84848) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .labomba-product-section { flex-direction: column !important; text-align: center !important; }
+    .labomba-image { width: 250px !important; }
+    .labomba-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .labomba-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .labomba-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .labomba-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

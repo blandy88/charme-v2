@@ -1,0 +1,312 @@
+/* ============================================================================
+   Narciso Rodriguez — Narciso Bleu Noir Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.narcisobleunoir-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.narcisobleunoir-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.narcisobleunoir-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.narcisobleunoir-theme .brand-location {
+    color: #566696 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.narcisobleunoir-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.narcisobleunoir-theme .price-badge {
+    background: linear-gradient(135deg, #1a2a5a, #d4b868) !important;
+    border: 2px solid #1a2a5a !important;
+}
+
+.narcisobleunoir-theme .price-glow {
+    background: radial-gradient(circle, rgba(26,42,90,0.3) 0%, transparent 70%) !important;
+}
+
+.narcisobleunoir-theme .quality-badge {
+    border: 1px solid rgba(26,42,90,0.3) !important;
+    background: rgba(26,42,90,0.04) !important;
+}
+
+.narcisobleunoir-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.narcisobleunoir-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.narcisobleunoir-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #1a2a5a !important;
+    background: rgba(26,42,90,0.08) !important;
+    box-shadow: none !important;
+}
+
+.narcisobleunoir-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.narcisobleunoir-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #566696 !important;
+}
+
+.narcisobleunoir-theme .selection-indicator {
+    border-color: rgba(26,42,90,0.4) !important;
+}
+
+.narcisobleunoir-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #1a2a5a !important;
+    background: rgba(26,42,90,0.1) !important;
+    box-shadow: none !important;
+}
+
+.narcisobleunoir-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #1a2a5a !important;
+    box-shadow: none !important;
+}
+
+.narcisobleunoir-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(26,42,90,0.1), transparent) !important;
+}
+
+.narcisobleunoir-theme .quality-glow {
+    display: none !important;
+}
+
+.narcisobleunoir-theme .quality-ornament {
+    border-color: rgba(26,42,90,0.3) !important;
+}
+
+.narcisobleunoir-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #1a2a5a !important;
+    box-shadow: none !important;
+}
+
+.narcisobleunoir-theme .quality-title,
+.narcisobleunoir-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.narcisobleunoir-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.narcisobleunoir-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(26,42,90,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.narcisobleunoir-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(26,42,90,0.35)) !important;
+}
+
+/* Profiles Container */
+.narcisobleunoir-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.narcisobleunoir-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(26,42,90,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(26,42,90,0.1) !important;
+}
+
+.narcisobleunoir-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.narcisobleunoir-profile-card .profile-subtitle {
+    color: #566696 !important;
+}
+
+/* Radar Chart */
+.narcisobleunoir-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.narcisobleunoir-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.narcisobleunoir-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.narcisobleunoir-radar-svg { width: 100% !important; height: 100% !important; }
+.narcisobleunoir-radar-data { animation: narcisobleunoirRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes narcisobleunoirRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.narcisobleunoir-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.narcisobleunoir-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.narcisobleunoir-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.narcisobleunoir-radar-label .label-value { font-size: 0.65rem !important; color: #566696 !important; font-weight: 500 !important; }
+.narcisobleunoir-radar-label.pos-0 { top: 2%; left: 50%; }
+.narcisobleunoir-radar-label.pos-1 { top: 28%; left: 96%; }
+.narcisobleunoir-radar-label.pos-2 { top: 88%; left: 82%; }
+.narcisobleunoir-radar-label.pos-3 { top: 88%; left: 18%; }
+.narcisobleunoir-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.narcisobleunoir-ingredients { flex: 1 !important; min-width: 300px !important; }
+.narcisobleunoir-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.narcisobleunoir-note-tier { margin-bottom: 10px !important; }
+.narcisobleunoir-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.narcisobleunoir-tier-icon { font-size: 1rem !important; }
+.narcisobleunoir-tier-time { font-size: 0.7rem !important; color: #566696 !important; font-weight: 400 !important; margin-left: auto !important; }
+.narcisobleunoir-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.narcisobleunoir-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(26,42,90,0.06)) !important;
+    border: 1px solid rgba(26,42,90,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.narcisobleunoir-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(26,42,90,0.08) 50%, transparent 60%) !important;
+    animation: narcisobleunoirCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes narcisobleunoirCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.narcisobleunoir-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(26,42,90,0.2) !important; }
+.narcisobleunoir-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.narcisobleunoir-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.narcisobleunoir-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.narcisobleunoir-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.narcisobleunoir-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.narcisobleunoir-fill { background: linear-gradient(90deg, #1a2a5a, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.narcisobleunoir-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #566696 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.narcisobleunoir-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(26,42,90,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.narcisobleunoir-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.narcisobleunoir-reddit-review-container { margin-top: 10px !important; }
+.narcisobleunoir-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(26,42,90,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.narcisobleunoir-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(26,42,90,0.1) !important; }
+.narcisobleunoir-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.narcisobleunoir-vote-btn { background: none !important; border: none !important; color: #566696 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.narcisobleunoir-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.narcisobleunoir-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.narcisobleunoir-post-dot { color: #566696 !important; margin: 0 5px !important; }
+.narcisobleunoir-post-info, .narcisobleunoir-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.narcisobleunoir-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.narcisobleunoir-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.narcisobleunoir-user-details { display: flex !important; flex-direction: column !important; }
+.narcisobleunoir-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.narcisobleunoir-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.narcisobleunoir-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(26,42,90,0.1) !important; }
+.narcisobleunoir-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.narcisobleunoir-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.narcisobleunoir-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.narcisobleunoir-mood-indicators, .narcisobleunoir-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.narcisobleunoir-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.narcisobleunoir-indicator-item.active { opacity: 1 !important; }
+.narcisobleunoir-indicator-icon { font-size: 1.3rem !important; }
+.narcisobleunoir-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.narcisobleunoir-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(26,42,90,0.2) !important; border-radius: 2px !important; }
+.narcisobleunoir-indicator-item.active .narcisobleunoir-indicator-bar { background: #1a2a5a !important; }
+.narcisobleunoir-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.narcisobleunoir-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.narcisobleunoir-votes { font-weight: 600 !important; color: #566696 !important; }
+.narcisobleunoir-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.narcisobleunoir-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.narcisobleunoir-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(26,42,90, 0.3) !important; background: transparent !important; }
+.narcisobleunoir-theme .favorite-btn:hover { background: rgba(26,42,90, 0.08) !important; border-color: #1a2a5a !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(26,42,90, 0.2) !important; }
+.narcisobleunoir-theme .favorite-btn .heart-outline, .narcisobleunoir-theme .favorite-btn .heart-filled { color: #566696 !important; }
+.narcisobleunoir-theme .favorite-btn.favorited { background: rgba(26,42,90, 0.06) !important; border-color: #1a2a5a !important; color: rgba(255, 255, 255, 0.95) !important; }
+.narcisobleunoir-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(26,42,90, 0.3) !important; background: transparent !important; }
+.narcisobleunoir-theme .add-to-cart-btn:hover { background: rgba(26,42,90, 0.08) !important; border-color: #1a2a5a !important; box-shadow: 0 4px 20px rgba(26,42,90, 0.2) !important; }
+.narcisobleunoir-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.narcisobleunoir-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.narcisobleunoir-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.narcisobleunoir-theme .price-currency, .narcisobleunoir-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.narcisobleunoir-theme .price-subtitle { color: rgba(26,42,90, 0.5) !important; letter-spacing: 3px !important; }
+.narcisobleunoir-theme .price-ornament { border-color: rgba(26,42,90, 0.35) !important; }
+.narcisobleunoir-theme .price-badge:hover .price-ornament { border-color: #1a2a5a !important; }
+
+/* Card Enhancements */
+.narcisobleunoir-theme .product-actions-buttons { position: relative !important; }
+.narcisobleunoir-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(26,42,90, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .narcisobleunoir-product-section { flex-direction: column !important; text-align: center !important; }
+    .narcisobleunoir-image { width: 250px !important; }
+    .narcisobleunoir-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .narcisobleunoir-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.narcisobleunoir-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.narcisobleunoir-theme .reviews-header, .narcisobleunoir-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.narcisobleunoir-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(26,42,90,0.15) !important; }
+.narcisobleunoir-theme .signin-prompt-content h4, .narcisobleunoir-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.narcisobleunoir-theme .signin-prompt-btn { background: linear-gradient(135deg, #0D152D, #1a2a5a) !important; color: #0a0a0f !important; }
+.narcisobleunoir-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(26,42,90,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.narcisobleunoir-theme .submit-btn { background: linear-gradient(135deg, #0D152D, #1a2a5a) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .narcisobleunoir-product-section { flex-direction: column !important; text-align: center !important; }
+    .narcisobleunoir-image { width: 250px !important; }
+    .narcisobleunoir-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .narcisobleunoir-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .narcisobleunoir-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .narcisobleunoir-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

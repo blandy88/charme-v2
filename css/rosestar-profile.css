@@ -1,0 +1,312 @@
+/* ============================================================================
+   Dior — Rose Star Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.rosestar-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.rosestar-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.rosestar-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.rosestar-theme .brand-location {
+    color: #FF84A4 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.rosestar-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.rosestar-theme .price-badge {
+    background: linear-gradient(135deg, #c84868, #d4b868) !important;
+    border: 2px solid #c84868 !important;
+}
+
+.rosestar-theme .price-glow {
+    background: radial-gradient(circle, rgba(200,72,104,0.3) 0%, transparent 70%) !important;
+}
+
+.rosestar-theme .quality-badge {
+    border: 1px solid rgba(200,72,104,0.3) !important;
+    background: rgba(200,72,104,0.04) !important;
+}
+
+.rosestar-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.rosestar-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.rosestar-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #c84868 !important;
+    background: rgba(200,72,104,0.08) !important;
+    box-shadow: none !important;
+}
+
+.rosestar-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.rosestar-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #FF84A4 !important;
+}
+
+.rosestar-theme .selection-indicator {
+    border-color: rgba(200,72,104,0.4) !important;
+}
+
+.rosestar-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #c84868 !important;
+    background: rgba(200,72,104,0.1) !important;
+    box-shadow: none !important;
+}
+
+.rosestar-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #c84868 !important;
+    box-shadow: none !important;
+}
+
+.rosestar-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(200,72,104,0.1), transparent) !important;
+}
+
+.rosestar-theme .quality-glow {
+    display: none !important;
+}
+
+.rosestar-theme .quality-ornament {
+    border-color: rgba(200,72,104,0.3) !important;
+}
+
+.rosestar-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #c84868 !important;
+    box-shadow: none !important;
+}
+
+.rosestar-theme .quality-title,
+.rosestar-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.rosestar-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.rosestar-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(200,72,104,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.rosestar-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(200,72,104,0.35)) !important;
+}
+
+/* Profiles Container */
+.rosestar-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.rosestar-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(200,72,104,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(200,72,104,0.1) !important;
+}
+
+.rosestar-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.rosestar-profile-card .profile-subtitle {
+    color: #FF84A4 !important;
+}
+
+/* Radar Chart */
+.rosestar-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.rosestar-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.rosestar-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.rosestar-radar-svg { width: 100% !important; height: 100% !important; }
+.rosestar-radar-data { animation: rosestarRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes rosestarRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.rosestar-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.rosestar-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.rosestar-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.rosestar-radar-label .label-value { font-size: 0.65rem !important; color: #FF84A4 !important; font-weight: 500 !important; }
+.rosestar-radar-label.pos-0 { top: 2%; left: 50%; }
+.rosestar-radar-label.pos-1 { top: 28%; left: 96%; }
+.rosestar-radar-label.pos-2 { top: 88%; left: 82%; }
+.rosestar-radar-label.pos-3 { top: 88%; left: 18%; }
+.rosestar-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.rosestar-ingredients { flex: 1 !important; min-width: 300px !important; }
+.rosestar-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.rosestar-note-tier { margin-bottom: 10px !important; }
+.rosestar-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.rosestar-tier-icon { font-size: 1rem !important; }
+.rosestar-tier-time { font-size: 0.7rem !important; color: #FF84A4 !important; font-weight: 400 !important; margin-left: auto !important; }
+.rosestar-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.rosestar-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(200,72,104,0.06)) !important;
+    border: 1px solid rgba(200,72,104,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.rosestar-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(200,72,104,0.08) 50%, transparent 60%) !important;
+    animation: rosestarCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes rosestarCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.rosestar-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(200,72,104,0.2) !important; }
+.rosestar-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.rosestar-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.rosestar-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.rosestar-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.rosestar-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.rosestar-fill { background: linear-gradient(90deg, #c84868, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.rosestar-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #FF84A4 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.rosestar-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(200,72,104,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.rosestar-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.rosestar-reddit-review-container { margin-top: 10px !important; }
+.rosestar-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(200,72,104,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.rosestar-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(200,72,104,0.1) !important; }
+.rosestar-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.rosestar-vote-btn { background: none !important; border: none !important; color: #FF84A4 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.rosestar-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.rosestar-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.rosestar-post-dot { color: #FF84A4 !important; margin: 0 5px !important; }
+.rosestar-post-info, .rosestar-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.rosestar-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.rosestar-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.rosestar-user-details { display: flex !important; flex-direction: column !important; }
+.rosestar-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.rosestar-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.rosestar-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(200,72,104,0.1) !important; }
+.rosestar-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.rosestar-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.rosestar-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.rosestar-mood-indicators, .rosestar-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.rosestar-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.rosestar-indicator-item.active { opacity: 1 !important; }
+.rosestar-indicator-icon { font-size: 1.3rem !important; }
+.rosestar-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.rosestar-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(200,72,104,0.2) !important; border-radius: 2px !important; }
+.rosestar-indicator-item.active .rosestar-indicator-bar { background: #c84868 !important; }
+.rosestar-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.rosestar-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.rosestar-votes { font-weight: 600 !important; color: #FF84A4 !important; }
+.rosestar-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.rosestar-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.rosestar-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(200,72,104, 0.3) !important; background: transparent !important; }
+.rosestar-theme .favorite-btn:hover { background: rgba(200,72,104, 0.08) !important; border-color: #c84868 !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(200,72,104, 0.2) !important; }
+.rosestar-theme .favorite-btn .heart-outline, .rosestar-theme .favorite-btn .heart-filled { color: #FF84A4 !important; }
+.rosestar-theme .favorite-btn.favorited { background: rgba(200,72,104, 0.06) !important; border-color: #c84868 !important; color: rgba(255, 255, 255, 0.95) !important; }
+.rosestar-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(200,72,104, 0.3) !important; background: transparent !important; }
+.rosestar-theme .add-to-cart-btn:hover { background: rgba(200,72,104, 0.08) !important; border-color: #c84868 !important; box-shadow: 0 4px 20px rgba(200,72,104, 0.2) !important; }
+.rosestar-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.rosestar-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.rosestar-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.rosestar-theme .price-currency, .rosestar-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.rosestar-theme .price-subtitle { color: rgba(200,72,104, 0.5) !important; letter-spacing: 3px !important; }
+.rosestar-theme .price-ornament { border-color: rgba(200,72,104, 0.35) !important; }
+.rosestar-theme .price-badge:hover .price-ornament { border-color: #c84868 !important; }
+
+/* Card Enhancements */
+.rosestar-theme .product-actions-buttons { position: relative !important; }
+.rosestar-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(200,72,104, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .rosestar-product-section { flex-direction: column !important; text-align: center !important; }
+    .rosestar-image { width: 250px !important; }
+    .rosestar-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .rosestar-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.rosestar-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.rosestar-theme .reviews-header, .rosestar-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.rosestar-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(200,72,104,0.15) !important; }
+.rosestar-theme .signin-prompt-content h4, .rosestar-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.rosestar-theme .signin-prompt-btn { background: linear-gradient(135deg, #642434, #c84868) !important; color: #0a0a0f !important; }
+.rosestar-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(200,72,104,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.rosestar-theme .submit-btn { background: linear-gradient(135deg, #642434, #c84868) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .rosestar-product-section { flex-direction: column !important; text-align: center !important; }
+    .rosestar-image { width: 250px !important; }
+    .rosestar-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .rosestar-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .rosestar-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .rosestar-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

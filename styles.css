@@ -357,7 +357,7 @@ html {
 /* Enable smooth scrolling for modern browsers and reserve space for fixed header */
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 80px;
+    scroll-padding-top: calc(var(--marquee-height) + var(--navbar-height) + 12px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: auto; /* FIX: optimizeLegibility causes severe relayout lag */
@@ -569,18 +569,8 @@ body {
     }
 }
 
-/* Shift navbar down to avoid overlap */
-.navbar {
-    top: 0;
-    transition: none;
-}
 body.has-marquee .navbar {
     top: var(--marquee-height);
-}
-
-body.marquee-compact,
-body.marquee-minimal {
-    --marquee-height: 32px;
 }
 
 /* Navigation Bar */
@@ -596,20 +586,7 @@ body.marquee-minimal {
     border-bottom: 1px solid rgba(201, 169, 78, 0.10);
     z-index: var(--z-navbar);
     padding: 10px 0;
-    transition: none;
     transform-origin: center top;
-}
-
-/* Enhanced navbar fade states */
-.navbar.fading {
-    background: rgba(6, 6, 6, 0.85);
-    border-bottom: 1px solid rgba(201, 169, 78, 0.08);
-    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.4);
-    padding: 12px 0;
-}
-
-.navbar.fade-complete {
-    pointer-events: none;
 }
 
 .nav-container {
@@ -21971,11 +21948,6 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 /* Compact fixed top navigation override */
-:root {
-    --marquee-height: 30px;
-    --navbar-height: 60px;
-}
-
 html {
     scroll-padding-top: calc(var(--marquee-height) + var(--navbar-height) + 12px);
 }
@@ -21996,11 +21968,6 @@ html {
     width: 20px !important;
     height: 20px !important;
     right: 10px !important;
-}
-
-body.marquee-compact,
-body.marquee-minimal {
-    --marquee-height: 30px;
 }
 
 .navbar {
@@ -22343,13 +22310,11 @@ body.has-marquee .navbar {
 /* Advanced scroll-aware top shell */
 .top-marquee,
 .navbar {
-    will-change: transform, opacity, filter !important;
+    will-change: transform, opacity !important;
     transition:
         transform 560ms cubic-bezier(0.22, 1, 0.36, 1),
         opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
-        filter 520ms cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1),
-        background 520ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+        filter 520ms cubic-bezier(0.22, 1, 0.36, 1) !important;
     transform: translate3d(0, 0, 0) !important;
 }
 
@@ -22369,6 +22334,8 @@ body.top-shell-hidden .navbar {
     transform: translate3d(0, calc(-1 * (var(--navbar-height) + var(--marquee-height)) - 8px), 0) !important;
     opacity: 0.08 !important;
     filter: blur(5px) saturate(70%) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     pointer-events: none !important;
     box-shadow: none !important;
 }
@@ -22398,7 +22365,7 @@ body.top-shell-interacting .navbar,
 }
 
 /* Avoid painting/layout work for the many off-screen fragrance sections. */
-section.content[id],
+section.content,
 .haltane-section-container,
 .database-fragrances-section {
     content-visibility: auto;
@@ -22607,3 +22574,5 @@ body.fragrance-detail-open {
         max-height: 260px;
     }
 }
+
+

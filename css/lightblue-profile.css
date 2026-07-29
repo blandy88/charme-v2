@@ -1,0 +1,312 @@
+/* ============================================================================
+   Dolce & Gabbana — Light Blue Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.lightblue-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.lightblue-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.lightblue-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.lightblue-theme .brand-location {
+    color: #8BE0FF !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.lightblue-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.lightblue-theme .price-badge {
+    background: linear-gradient(135deg, #4fa4d4, #d4b868) !important;
+    border: 2px solid #4fa4d4 !important;
+}
+
+.lightblue-theme .price-glow {
+    background: radial-gradient(circle, rgba(79,164,212,0.3) 0%, transparent 70%) !important;
+}
+
+.lightblue-theme .quality-badge {
+    border: 1px solid rgba(79,164,212,0.3) !important;
+    background: rgba(79,164,212,0.04) !important;
+}
+
+.lightblue-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.lightblue-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.lightblue-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #4fa4d4 !important;
+    background: rgba(79,164,212,0.08) !important;
+    box-shadow: none !important;
+}
+
+.lightblue-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.lightblue-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #8BE0FF !important;
+}
+
+.lightblue-theme .selection-indicator {
+    border-color: rgba(79,164,212,0.4) !important;
+}
+
+.lightblue-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #4fa4d4 !important;
+    background: rgba(79,164,212,0.1) !important;
+    box-shadow: none !important;
+}
+
+.lightblue-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #4fa4d4 !important;
+    box-shadow: none !important;
+}
+
+.lightblue-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(79,164,212,0.1), transparent) !important;
+}
+
+.lightblue-theme .quality-glow {
+    display: none !important;
+}
+
+.lightblue-theme .quality-ornament {
+    border-color: rgba(79,164,212,0.3) !important;
+}
+
+.lightblue-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #4fa4d4 !important;
+    box-shadow: none !important;
+}
+
+.lightblue-theme .quality-title,
+.lightblue-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.lightblue-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.lightblue-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(79,164,212,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.lightblue-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(79,164,212,0.35)) !important;
+}
+
+/* Profiles Container */
+.lightblue-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.lightblue-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(79,164,212,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(79,164,212,0.1) !important;
+}
+
+.lightblue-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.lightblue-profile-card .profile-subtitle {
+    color: #8BE0FF !important;
+}
+
+/* Radar Chart */
+.lightblue-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.lightblue-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.lightblue-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.lightblue-radar-svg { width: 100% !important; height: 100% !important; }
+.lightblue-radar-data { animation: lightblueRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes lightblueRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.lightblue-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.lightblue-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.lightblue-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.lightblue-radar-label .label-value { font-size: 0.65rem !important; color: #8BE0FF !important; font-weight: 500 !important; }
+.lightblue-radar-label.pos-0 { top: 2%; left: 50%; }
+.lightblue-radar-label.pos-1 { top: 28%; left: 96%; }
+.lightblue-radar-label.pos-2 { top: 88%; left: 82%; }
+.lightblue-radar-label.pos-3 { top: 88%; left: 18%; }
+.lightblue-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.lightblue-ingredients { flex: 1 !important; min-width: 300px !important; }
+.lightblue-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.lightblue-note-tier { margin-bottom: 10px !important; }
+.lightblue-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.lightblue-tier-icon { font-size: 1rem !important; }
+.lightblue-tier-time { font-size: 0.7rem !important; color: #8BE0FF !important; font-weight: 400 !important; margin-left: auto !important; }
+.lightblue-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.lightblue-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(79,164,212,0.06)) !important;
+    border: 1px solid rgba(79,164,212,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.lightblue-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(79,164,212,0.08) 50%, transparent 60%) !important;
+    animation: lightblueCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes lightblueCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.lightblue-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(79,164,212,0.2) !important; }
+.lightblue-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.lightblue-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.lightblue-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.lightblue-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.lightblue-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.lightblue-fill { background: linear-gradient(90deg, #4fa4d4, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.lightblue-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #8BE0FF !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.lightblue-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(79,164,212,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.lightblue-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.lightblue-reddit-review-container { margin-top: 10px !important; }
+.lightblue-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(79,164,212,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.lightblue-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(79,164,212,0.1) !important; }
+.lightblue-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.lightblue-vote-btn { background: none !important; border: none !important; color: #8BE0FF !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.lightblue-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.lightblue-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.lightblue-post-dot { color: #8BE0FF !important; margin: 0 5px !important; }
+.lightblue-post-info, .lightblue-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.lightblue-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.lightblue-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.lightblue-user-details { display: flex !important; flex-direction: column !important; }
+.lightblue-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.lightblue-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.lightblue-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(79,164,212,0.1) !important; }
+.lightblue-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.lightblue-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.lightblue-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.lightblue-mood-indicators, .lightblue-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.lightblue-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.lightblue-indicator-item.active { opacity: 1 !important; }
+.lightblue-indicator-icon { font-size: 1.3rem !important; }
+.lightblue-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.lightblue-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(79,164,212,0.2) !important; border-radius: 2px !important; }
+.lightblue-indicator-item.active .lightblue-indicator-bar { background: #4fa4d4 !important; }
+.lightblue-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.lightblue-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.lightblue-votes { font-weight: 600 !important; color: #8BE0FF !important; }
+.lightblue-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.lightblue-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.lightblue-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(79,164,212, 0.3) !important; background: transparent !important; }
+.lightblue-theme .favorite-btn:hover { background: rgba(79,164,212, 0.08) !important; border-color: #4fa4d4 !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(79,164,212, 0.2) !important; }
+.lightblue-theme .favorite-btn .heart-outline, .lightblue-theme .favorite-btn .heart-filled { color: #8BE0FF !important; }
+.lightblue-theme .favorite-btn.favorited { background: rgba(79,164,212, 0.06) !important; border-color: #4fa4d4 !important; color: rgba(255, 255, 255, 0.95) !important; }
+.lightblue-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(79,164,212, 0.3) !important; background: transparent !important; }
+.lightblue-theme .add-to-cart-btn:hover { background: rgba(79,164,212, 0.08) !important; border-color: #4fa4d4 !important; box-shadow: 0 4px 20px rgba(79,164,212, 0.2) !important; }
+.lightblue-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.lightblue-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.lightblue-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.lightblue-theme .price-currency, .lightblue-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.lightblue-theme .price-subtitle { color: rgba(79,164,212, 0.5) !important; letter-spacing: 3px !important; }
+.lightblue-theme .price-ornament { border-color: rgba(79,164,212, 0.35) !important; }
+.lightblue-theme .price-badge:hover .price-ornament { border-color: #4fa4d4 !important; }
+
+/* Card Enhancements */
+.lightblue-theme .product-actions-buttons { position: relative !important; }
+.lightblue-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(79,164,212, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .lightblue-product-section { flex-direction: column !important; text-align: center !important; }
+    .lightblue-image { width: 250px !important; }
+    .lightblue-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .lightblue-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.lightblue-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.lightblue-theme .reviews-header, .lightblue-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.lightblue-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(79,164,212,0.15) !important; }
+.lightblue-theme .signin-prompt-content h4, .lightblue-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.lightblue-theme .signin-prompt-btn { background: linear-gradient(135deg, #27526A, #4fa4d4) !important; color: #0a0a0f !important; }
+.lightblue-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(79,164,212,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.lightblue-theme .submit-btn { background: linear-gradient(135deg, #27526A, #4fa4d4) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .lightblue-product-section { flex-direction: column !important; text-align: center !important; }
+    .lightblue-image { width: 250px !important; }
+    .lightblue-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .lightblue-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .lightblue-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .lightblue-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}

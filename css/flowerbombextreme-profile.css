@@ -1,0 +1,312 @@
+/* ============================================================================
+   Viktor & Rolf — Flowerbomb Extrême Theme
+   Unique: Radar Chart, Crystal Shard Cards, Glassmorphism
+   ============================================================================ */
+
+/* Main Container */
+.flowerbombextreme-main-container {
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 60px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    position: relative !important;
+}
+
+.flowerbombextreme-theme {
+    color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.flowerbombextreme-theme .brand-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    letter-spacing: 3px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.flowerbombextreme-theme .brand-location {
+    color: #F474B4 !important;
+    letter-spacing: 5px !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.flowerbombextreme-theme .product-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-style: italic !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.flowerbombextreme-theme .price-badge {
+    background: linear-gradient(135deg, #b83878, #d4b868) !important;
+    border: 2px solid #b83878 !important;
+}
+
+.flowerbombextreme-theme .price-glow {
+    background: radial-gradient(circle, rgba(184,56,120,0.3) 0%, transparent 70%) !important;
+}
+
+.flowerbombextreme-theme .quality-badge {
+    border: 1px solid rgba(184,56,120,0.3) !important;
+    background: rgba(184,56,120,0.04) !important;
+}
+
+.flowerbombextreme-theme .quality-name {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.flowerbombextreme-theme .quality-description {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.flowerbombextreme-theme .quality-option input:checked + .quality-label .quality-badge {
+    border-color: #b83878 !important;
+    background: rgba(184,56,120,0.08) !important;
+    box-shadow: none !important;
+}
+
+.flowerbombextreme-theme .quality-option input:checked + .quality-label .quality-name {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-weight: 600 !important;
+}
+
+.flowerbombextreme-theme .quality-option input:checked + .quality-label .quality-description {
+    color: #F474B4 !important;
+}
+
+.flowerbombextreme-theme .selection-indicator {
+    border-color: rgba(184,56,120,0.4) !important;
+}
+
+.flowerbombextreme-theme .quality-option input:checked + .quality-label .selection-indicator {
+    border-color: #b83878 !important;
+    background: rgba(184,56,120,0.1) !important;
+    box-shadow: none !important;
+}
+
+.flowerbombextreme-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+    background: #b83878 !important;
+    box-shadow: none !important;
+}
+
+.flowerbombextreme-theme .quality-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(184,56,120,0.1), transparent) !important;
+}
+
+.flowerbombextreme-theme .quality-glow {
+    display: none !important;
+}
+
+.flowerbombextreme-theme .quality-ornament {
+    border-color: rgba(184,56,120,0.3) !important;
+}
+
+.flowerbombextreme-theme .quality-option input:checked + .quality-label .quality-ornament {
+    border-color: #b83878 !important;
+    box-shadow: none !important;
+}
+
+.flowerbombextreme-theme .quality-title,
+.flowerbombextreme-theme .quality-subtitle {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+/* Product Section */
+.flowerbombextreme-product-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 50px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.flowerbombextreme-image {
+    width: 320px !important;
+    height: auto !important;
+    max-height: 440px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 20px 40px rgba(184,56,120,0.25)) !important;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
+}
+
+.flowerbombextreme-image:hover {
+    transform: scale(1.05) translateY(-10px) !important;
+    filter: drop-shadow(0 30px 60px rgba(184,56,120,0.35)) !important;
+}
+
+/* Profiles Container */
+.flowerbombextreme-profiles-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: stretch !important;
+}
+
+/* Profile Card - Glassmorphism */
+.flowerbombextreme-profile-card {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(184,56,120,0.2) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 8px 32px rgba(184,56,120,0.1) !important;
+}
+
+.flowerbombextreme-profile-card .profile-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+.flowerbombextreme-profile-card .profile-subtitle {
+    color: #F474B4 !important;
+}
+
+/* Radar Chart */
+.flowerbombextreme-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.flowerbombextreme-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.flowerbombextreme-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.flowerbombextreme-radar-svg { width: 100% !important; height: 100% !important; }
+.flowerbombextreme-radar-data { animation: flowerbombextremeRadarPulse 3s ease-in-out infinite !important; }
+
+@keyframes flowerbombextremeRadarPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.flowerbombextreme-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.flowerbombextreme-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.flowerbombextreme-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.flowerbombextreme-radar-label .label-value { font-size: 0.65rem !important; color: #F474B4 !important; font-weight: 500 !important; }
+.flowerbombextreme-radar-label.pos-0 { top: 2%; left: 50%; }
+.flowerbombextreme-radar-label.pos-1 { top: 28%; left: 96%; }
+.flowerbombextreme-radar-label.pos-2 { top: 88%; left: 82%; }
+.flowerbombextreme-radar-label.pos-3 { top: 88%; left: 18%; }
+.flowerbombextreme-radar-label.pos-4 { top: 28%; left: 4%; }
+
+/* Crystal Shard Notes */
+.flowerbombextreme-ingredients { flex: 1 !important; min-width: 300px !important; }
+.flowerbombextreme-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.flowerbombextreme-note-tier { margin-bottom: 10px !important; }
+.flowerbombextreme-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.flowerbombextreme-tier-icon { font-size: 1rem !important; }
+.flowerbombextreme-tier-time { font-size: 0.7rem !important; color: #F474B4 !important; font-weight: 400 !important; margin-left: auto !important; }
+.flowerbombextreme-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.flowerbombextreme-crystal-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(184,56,120,0.06)) !important;
+    border: 1px solid rgba(184,56,120,0.2) !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;
+    flex: 1 !important; min-width: 90px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    position: relative !important; overflow: hidden !important;
+}
+.flowerbombextreme-crystal-card::before {
+    content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
+    width: 200% !important; height: 200% !important;
+    background: linear-gradient(45deg, transparent 40%, rgba(184,56,120,0.08) 50%, transparent 60%) !important;
+    animation: flowerbombextremeCrystalShimmer 4s ease-in-out infinite !important;
+}
+@keyframes flowerbombextremeCrystalShimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+.flowerbombextreme-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(184,56,120,0.2) !important; }
+.flowerbombextreme-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+
+/* Metrics */
+.flowerbombextreme-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.flowerbombextreme-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.flowerbombextreme-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.flowerbombextreme-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.flowerbombextreme-fill { background: linear-gradient(90deg, #b83878, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.flowerbombextreme-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #F474B4 !important; min-width: 35px !important; text-align: right !important; }
+
+/* Description */
+.flowerbombextreme-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(184,56,120,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.flowerbombextreme-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Reddit Review */
+.flowerbombextreme-reddit-review-container { margin-top: 10px !important; }
+.flowerbombextreme-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(184,56,120,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.flowerbombextreme-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(184,56,120,0.1) !important; }
+.flowerbombextreme-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.flowerbombextreme-vote-btn { background: none !important; border: none !important; color: #F474B4 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.flowerbombextreme-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.flowerbombextreme-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.flowerbombextreme-post-dot { color: #F474B4 !important; margin: 0 5px !important; }
+.flowerbombextreme-post-info, .flowerbombextreme-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.flowerbombextreme-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.flowerbombextreme-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.flowerbombextreme-user-details { display: flex !important; flex-direction: column !important; }
+.flowerbombextreme-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.flowerbombextreme-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.flowerbombextreme-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(184,56,120,0.1) !important; }
+.flowerbombextreme-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+
+/* Mood/Season Indicators */
+.flowerbombextreme-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.flowerbombextreme-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.flowerbombextreme-mood-indicators, .flowerbombextreme-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.flowerbombextreme-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.flowerbombextreme-indicator-item.active { opacity: 1 !important; }
+.flowerbombextreme-indicator-icon { font-size: 1.3rem !important; }
+.flowerbombextreme-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.flowerbombextreme-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(184,56,120,0.2) !important; border-radius: 2px !important; }
+.flowerbombextreme-indicator-item.active .flowerbombextreme-indicator-bar { background: #b83878 !important; }
+.flowerbombextreme-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.flowerbombextreme-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.flowerbombextreme-votes { font-weight: 600 !important; color: #F474B4 !important; }
+.flowerbombextreme-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.flowerbombextreme-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+
+/* Favourite & Cart Buttons */
+.flowerbombextreme-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(184,56,120, 0.3) !important; background: transparent !important; }
+.flowerbombextreme-theme .favorite-btn:hover { background: rgba(184,56,120, 0.08) !important; border-color: #b83878 !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(184,56,120, 0.2) !important; }
+.flowerbombextreme-theme .favorite-btn .heart-outline, .flowerbombextreme-theme .favorite-btn .heart-filled { color: #F474B4 !important; }
+.flowerbombextreme-theme .favorite-btn.favorited { background: rgba(184,56,120, 0.06) !important; border-color: #b83878 !important; color: rgba(255, 255, 255, 0.95) !important; }
+.flowerbombextreme-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(184,56,120, 0.3) !important; background: transparent !important; }
+.flowerbombextreme-theme .add-to-cart-btn:hover { background: rgba(184,56,120, 0.08) !important; border-color: #b83878 !important; box-shadow: 0 4px 20px rgba(184,56,120, 0.2) !important; }
+.flowerbombextreme-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.flowerbombextreme-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+
+/* Price Section */
+.flowerbombextreme-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.flowerbombextreme-theme .price-currency, .flowerbombextreme-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.flowerbombextreme-theme .price-subtitle { color: rgba(184,56,120, 0.5) !important; letter-spacing: 3px !important; }
+.flowerbombextreme-theme .price-ornament { border-color: rgba(184,56,120, 0.35) !important; }
+.flowerbombextreme-theme .price-badge:hover .price-ornament { border-color: #b83878 !important; }
+
+/* Card Enhancements */
+.flowerbombextreme-theme .product-actions-buttons { position: relative !important; }
+.flowerbombextreme-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(184,56,120, 0.25), transparent) !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .flowerbombextreme-product-section { flex-direction: column !important; text-align: center !important; }
+    .flowerbombextreme-image { width: 250px !important; }
+    .flowerbombextreme-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .flowerbombextreme-rating-row { flex-direction: column !important; }
+}
+/* Reviews Section */
+.flowerbombextreme-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.flowerbombextreme-theme .reviews-header, .flowerbombextreme-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.flowerbombextreme-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(184,56,120,0.15) !important; }
+.flowerbombextreme-theme .signin-prompt-content h4, .flowerbombextreme-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.flowerbombextreme-theme .signin-prompt-btn { background: linear-gradient(135deg, #5C1C3C, #b83878) !important; color: #0a0a0f !important; }
+.flowerbombextreme-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(184,56,120,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.flowerbombextreme-theme .submit-btn { background: linear-gradient(135deg, #5C1C3C, #b83878) !important; color: #0a0a0f !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .flowerbombextreme-product-section { flex-direction: column !important; text-align: center !important; }
+    .flowerbombextreme-image { width: 250px !important; }
+    .flowerbombextreme-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .flowerbombextreme-rating-row { flex-direction: column !important; }
+}
+
+/* Mobile overflow fix */
+@media (max-width: 760px) {
+    .flowerbombextreme-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .flowerbombextreme-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+}
