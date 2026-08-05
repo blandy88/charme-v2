@@ -46,6 +46,68 @@ const ITEMS = [
   { file: 'initio-side-effect.png', name: 'Initio Side Effect', groups: [['initio'], ['side effect']] },
   { file: 'xerjoff-naxos.png', name: 'Xerjoff Naxos', groups: [['xerjoff'], ['naxos']] },
   { file: 'mfk-grand-soir.png', name: 'Maison Francis Kurkdjian Grand Soir', groups: [['maison francis kurkdjian', 'mfk'], ['grand soir']] },
+
+  // === 14 items needing better sources (downloaded from pngwing, no transparency) ===
+  { file: 'ysl-black-opium.png', name: 'Yves Saint Laurent Black Opium', groups: [['yves saint laurent', 'ysl'], ['black opium']], forbidden: ['intense', 'le parfum', 'eau de toilette', 'edt', 'body', 'shower', 'shampoo', 'lotion'] },
+  { file: 'kenzo-flower.png', name: 'Kenzo Flower Eau de Parfum', groups: [['kenzo'], ['flower', 'fleur']], forbidden: ['poppy', 'body', 'shower', 'lotion', 'shampoo', 'soap'] },
+  { file: 'dg-limperatrice-3.png', name: "Dolce and Gabbana L'Imperatrice 3", groups: [['dolce', 'gabbana', 'd&g'], ['limperatrice', 'imperatrice']], forbidden: ['the one', 'light blue', 'intense', 'k by'] },
+  { file: 'chanel-no5.png', name: 'Chanel No 5 Eau de Parfum', groups: [['chanel'], ['no 5', 'no5', 'n5', 'n°5', 'number 5']], forbidden: ['lotion', 'body', 'shower', 'shampoo', 'eau premiere', 'eau de toilette', 'edt'] },
+  { file: 'lolita-lempicka-la-belle-paradise.png', name: 'Lolita Lempicka La Belle Paradise', groups: [['lolita lempicka'], ['la belle'], ['paradise', 'paradis']] },
+  { file: 'aqua-di-gio-elixir.png', name: 'Giorgio Armani Acqua di Gio Elixir', groups: [['armani', 'giorgio armani'], ['acqua di gio'], ['elixir']] },
+  { file: 'xerjoff-torrino-21.png', name: 'Xerjoff Torino 21', groups: [['xerjoff'], ['torino', 'torino21', 'torrino21']] },
+  { file: 'armani-prive-stellaris.png', name: 'Giorgio Armani Prive Stellaris', groups: [['armani', 'giorgio armani'], ['prive', 'privé'], ['stellaris']] },
+  { file: 'ch-power-of-you.png', name: 'Carolina Herrera Power of You', groups: [['carolina herrera'], ['power of you']], forbidden: ['bad boy', 'good girl', 'ch men'] },
+  { file: 'guerlain-santal-royal.png', name: 'Guerlain Santal Royal', groups: [['guerlain'], ['santal royal']] },
+  { file: 'lancome-tresor-la-nuit.png', name: 'Lancome Tresor La Nuit', groups: [['lancome', 'lancôme'], ['tresor', 'trésor'], ['la nuit']], forbidden: ['edt', 'eau de toilette'] },
+  { file: 'jo-malone-myrrh-tonka.png', name: 'Jo Malone Myrrh and Tonka', groups: [['jo malone'], ['myrrh'], ['tonka']], forbidden: ['cologne', 'soap', 'body', 'shower', 'candle'] },
+  { file: 'tom-ford-noir-extreme.png', name: 'Tom Ford Noir Extreme', groups: [['tom ford'], ['noir extreme', 'noir extrême']], forbidden: ['parfum', 'beau de jour', 'ombre leather', 'tuscan leather', 'oud wood', 'lost cherry'] },
+  { file: 'viktor-rolf-flowerbomb-extreme.png', name: 'Viktor and Rolf Flowerbomb Extreme', groups: [['viktor', 'rolf'], ['flowerbomb'], ['extreme']], forbidden: ['spicebomb', 'midnight', 'edt', 'eau de toilette'] },
+
+  // === Newly discovered white-background placeholders ===
+  { file: '1-million-night.png', name: 'Paco Rabanne 1 Million Night', groups: [['paco rabanne', 'rabanne'], ['1 million', 'one million'], ['night']] },
+  { file: '1-million-temp.png', name: 'Paco Rabanne 1 Million Temper or Temptation', groups: [['paco rabanne', 'rabanne'], ['1 million', 'one million'], ['temp', 'temptation', 'temper']] },
+  { file: 'armani-code-parfum.png', name: 'Giorgio Armani Code Parfum', groups: [['armani', 'giorgio armani'], ['code'], ['parfum']], forbidden: ['absolu', 'colonia', 'edt'] },
+  { file: 'armani-si-passione-intense.png', name: 'Giorgio Armani Si Passione Intense', groups: [['armani', 'giorgio armani'], ['si passione', 'passione'], ['intense']], forbidden: ['edp', 'eau de parfum', 'absolu'] },
+  { file: 'dg-light-blue.png', name: 'Dolce and Gabbana Light Blue', groups: [['dolce', 'gabbana', 'd&g'], ['light blue']], forbidden: ['intense', 'sun', 'edt', 'eau de toilette', 'the one', 'pour homme'] },
+  { file: 'mugler-alien.png', name: 'Mugler Alien', groups: [['mugler', 'thierry mugler'], ['alien']] },
+  { file: 'suspect-ch-power-of-you.png', name: 'Carolina Herrera Power of You suspect', groups: [['carolina herrera'], ['power of you']] },
+  { file: 'ysl-mon-paris.png', name: 'Yves Saint Laurent Mon Paris', groups: [['yves saint laurent', 'ysl'], ['mon paris']], forbidden: ['intense', 'edt', 'edp', 'eau de parfum', 'body', 'lotion'] },
+
+  // === 35 niche/designer perfumes (200x280 no-transparency thumbnails) ===
+  { file: 'armani-pacific-chill.png', name: 'Giorgio Armani Pacific Chill', groups: [['armani', 'giorgio armani'], ['pacific chill']] },
+  { file: 'artisan-parfumeur-rose-amira.png', name: "L'Artisan Parfumeur Rose Amira", groups: [['artisan parfumeur'], ['rose amira']] },
+  { file: 'azzaro-wanted-elixir.png', name: 'Azzaro Wanted Elixir', groups: [['azzaro'], ['wanted'], ['elixir']], forbidden: ['most wanted', 'by night', 'chrome'] },
+  { file: 'elie-saab-in-white.png', name: 'Elie Saab in White', groups: [['elie saab'], ['in white']], forbidden: ['absolu', 'shower', 'body', 'edp', 'eau de parfum'] },
+  { file: 'gisada-ambassador.png', name: 'Gisada Ambassador', groups: [['gisada'], ['ambassador']] },
+  { file: 'gisada-hudson-valley.png', name: 'Gisada Hudson Valley', groups: [['gisada'], ['hudson valley']] },
+  { file: 'guerlain-oud-royal.png', name: 'Guerlain Oud Royal', groups: [['guerlain'], ['oud royal']] },
+  { file: 'initio-phantom-in-red.png', name: 'Initio Phantom in Red', groups: [['initio'], ['phantom in red', 'phantom red']] },
+  { file: 'kayali-freedom-musk.png', name: 'Kayali Freedom Musk', groups: [['kayali'], ['freedom musk']] },
+  { file: 'kayali-vanilla-candy-rock-sugar.png', name: 'Kayali Vanilla Candy Rock Sugar', groups: [['kayali'], ['vanilla candy rock sugar', 'candy rock sugar']] },
+  { file: 'kerosene-donna-extradose.png', name: 'Kerosene Donna Extradose', groups: [['kerosene'], ['donna'], ['extradose']] },
+  { file: 'kerosene-umo-extradose.png', name: 'Kerosene Umo Extradose', groups: [['kerosene'], ['umo'], ['extradose']] },
+  { file: 'kilian-her-majesty.png', name: 'Kilian Her Majesty', groups: [['by kilian', 'kilian'], ['her majesty']] },
+  { file: 'lattafa-assad-elixir.png', name: 'Lattafa Assad Elixir', groups: [['lattafa'], ['assad'], ['elixir']] },
+  { file: 'lattafa-fantasmagoria.png', name: 'Lattafa Fantasmagoria', groups: [['lattafa'], ['fantasmagoria']] },
+  { file: 'maison-crivelli-ambre-samar.png', name: 'Maison Crivelli Ambre Samar', groups: [['maison crivelli', 'crivelli'], ['ambre samar']] },
+  { file: 'maison-crivelli-les-sables-roses.png', name: 'Maison Crivelli Les Sables Roses', groups: [['maison crivelli', 'crivelli'], ['sables roses']] },
+  { file: 'marc-antoine-barrois-ganymede.png', name: 'Marc Antoine Barrois Ganymede', groups: [['marc antoine barrois'], ['ganymede']] },
+  { file: 'matiere-premiere-vanilla-powder.png', name: 'Matiere Premiere Vanilla Powder', groups: [['matiere premiere'], ['vanilla powder']] },
+  { file: 'narciso-cedar-chic.png', name: 'Narciso Rodriguez Cedar Chic', groups: [['narciso'], ['cedar chic']] },
+  { file: 'narciso-manifesto-elixir.png', name: 'Narciso Rodriguez Manifesto Elixir', groups: [['narciso'], ['manifesto'], ['elixir']] },
+  { file: 'narciso-rodriguez-narciso.png', name: 'Narciso Rodriguez Narciso', groups: [['narciso rodriguez', 'narciso'], ['narciso'], ['rodriguez']], forbidden: ['bleu noir', 'for him', 'cedar chic', 'poudree', 'ambree'] },
+  { file: 'nautica-voyage.png', name: 'Nautica Voyage', groups: [['nautica'], ['voyage']] },
+  { file: 'orto-parisi-terroni.png', name: 'Orto Parisi Terroni', groups: [['orto parisi'], ['terroni']] },
+  { file: 'paco-rabanne-fame-in-love.png', name: 'Paco Rabanne Fame in Love', groups: [['paco rabanne', 'rabanne'], ['fame'], ['in love']], forbidden: ['victory', 'phantom', 'invictus', 'pour homme', '1 million', 'one million'] },
+  { file: 'paco-rabanne-guilty-elixir-femme.png', name: 'Paco Rabanne Guilty Elixir Femme', groups: [['paco rabanne', 'rabanne'], ['guilty'], ['elixir']] },
+  { file: 'raghba-cristal-noir.png', name: 'Raghba Crystal Noir', groups: [['raghba', 'rasasi'], ['cristal noir']] },
+  { file: 'rosendo-mateu-no5.png', name: 'Rosendo Mateu No 5', groups: [['rosendo mateu'], ['no 5', 'no5', 'n5', 'number 5']] },
+  { file: 'sisley-eau-du-soir.png', name: 'Sisley Eau du Soir', groups: [['sisley'], ['eau du soir']] },
+  { file: 'spirit-of-dubai-elves.png', name: 'Spirit of Dubai Elves', groups: [['spirit of dubai'], ['elves']] },
+  { file: 'tom-ford-oud-voyager.png', name: 'Tom Ford Oud Wood Voyager', groups: [['tom ford'], ['oud wood', 'oudwood', 'oud'], ['voyager']] },
+  { file: 'valentino-valentina-absolue.png', name: 'Valentino Valentina Absolue', groups: [['valentino'], ['valentina'], ['absolue']] },
+  { file: 'valentino-valentina-poudre.png', name: 'Valentino Valentina Poudre', groups: [['valentino'], ['valentina'], ['poudre']] },
+  { file: 'xerjoff-40-knots.png', name: 'Xerjoff 40 Knots', groups: [['xerjoff'], ['40 knots', 'forty knots']] },
 ];
 
 function decodeHtml(value) {
@@ -288,6 +350,30 @@ async function verifyTransparentImage(buffer) {
   };
 }
 
+async function fixWhiteFringe(buffer) {
+  const image = sharp(buffer, { limitInputPixels: 80_000_000 }).rotate();
+  const metadata = await image.metadata();
+  const { data, info } = await image
+    .ensureAlpha()
+    .resize({ width: Math.min(metadata.width, 900), withoutEnlargement: true })
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  // Smart decontamination: only fix pixels that are near-white (R,G,B > 200)
+  // with semi-transparency (alpha < 245). These are white background remnants
+  // from poor cutouts. Darken them to 30% to eliminate visible halos on dark backgrounds.
+  for (let i = 0; i < data.length; i += info.channels) {
+    const r = data[i], g = data[i+1], b = data[i+2], a = data[i + info.channels - 1];
+    if (a > 0 && a < 245 && r > 200 && g > 200 && b > 200) {
+      data[i]     = Math.round(r * 0.3);
+      data[i+1]   = Math.round(g * 0.3);
+      data[i+2]   = Math.round(b * 0.3);
+    }
+  }
+
+  return sharp(data, { raw: { width: info.width, height: info.height, channels: info.channels } }).png().toBuffer();
+}
+
 async function processItem(item) {
   const target = path.join(ROOT, item.file);
   if (fs.existsSync(target) && !process.argv.includes('--force')) {
@@ -301,7 +387,8 @@ async function processItem(item) {
     try {
       const buffer = await downloadCandidate(candidate);
       const verification = await verifyTransparentImage(buffer);
-      await sharp(buffer, { limitInputPixels: 80_000_000 })
+      const fixed = await fixWhiteFringe(buffer);
+      await sharp(fixed, { limitInputPixels: 80_000_000 })
         .rotate()
         .png()
         .toFile(target);
@@ -331,7 +418,20 @@ async function processItem(item) {
 
 async function main() {
   const results = [];
-  for (const item of ITEMS) {
+
+  let items = ITEMS;
+  const targetsArg = process.argv.find((a) => a.startsWith('--targets='));
+  if (targetsArg) {
+    const targetNames = new Set(targetsArg.split('=')[1].split(',').map((s) => s.trim()));
+    items = ITEMS.filter((item) => targetNames.has(item.file));
+    if (items.length === 0) {
+      console.error('No items matched --targets. Available files:', ITEMS.map((i) => i.file).join(', '));
+      process.exit(1);
+    }
+    console.log(`Filtered to ${items.length} target items.`);
+  }
+
+  for (const item of items) {
     process.stdout.write(`Searching ${item.file} ... `);
     const result = await processItem(item);
     results.push(result);

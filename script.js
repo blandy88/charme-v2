@@ -4870,6 +4870,12 @@ function updateColors() {
   // Initialize Admin Dashboard
   initializeAdminDashboard();
 
+  // Initialize Carte Fidélité modal
+  initializeLoyaltyModal();
+
+  // Initialize News & Notifications (admin + public managers)
+  initializeNewsAdmin();
+
   // Initialize Email Verification
   initializeEmailVerification();
 
@@ -4893,6 +4899,10 @@ function updateColors() {
       console.log("Admin dashboard forced to show");
     } else {
       console.log("Admin dashboard element not found");
+    }
+    const loyaltyCardBtn = document.getElementById("loyaltyCardBtn");
+    if (loyaltyCardBtn) {
+      loyaltyCardBtn.style.display = "block";
     }
   };
 
@@ -5183,6 +5193,7 @@ function updateColors() {
       "favoritesModal",
       "settingsModal",
       "cartModal",
+      "newsComposerModal",
     ];
 
     modals.forEach((modalId) => {
@@ -6543,15 +6554,16 @@ function initializeAuth() {
 
     // Show admin dashboard if user is admin
     const adminDashboard = document.getElementById("adminDashboard");
+    const effectiveIsAdmin = Boolean(userData.is_admin || userData.isAdmin);
     console.log("User data:", userData); // Debug log
-    console.log("Is admin:", userData.isAdmin); // Debug log
+    console.log("Is admin:", effectiveIsAdmin); // Debug log
     console.log(
       "Server-provided admin:",
-      Boolean(userData.isAdmin),
+      effectiveIsAdmin,
     ); // Debug log
     console.log("Admin dashboard element:", adminDashboard); // Debug log
 
-    if (userData.isAdmin && adminDashboard) {
+    if (effectiveIsAdmin && adminDashboard) {
       adminDashboard.style.display = "block";
       console.log("ðŸ”‘ Admin dashboard access granted for:", userData.email);
     } else {
@@ -6559,6 +6571,11 @@ function initializeAuth() {
         adminDashboard.style.display = "none";
       }
       console.log("ðŸš« Admin dashboard access denied for:", userData.email);
+    }
+
+    const loyaltyCardBtn = document.getElementById("loyaltyCardBtn");
+    if (loyaltyCardBtn) {
+      loyaltyCardBtn.style.display = effectiveIsAdmin ? "block" : "none";
     }
 
     console.log("ðŸ‘¤ User styling applied for:", userData.email);
@@ -10102,6 +10119,320 @@ function clearAllAuthErrors() {
 // Admin Dashboard Functions
 let currentUsers = [];
 let currentBanUserId = null;
+let loyaltyCards = [];
+let loyaltyTotalRewards = 0;
+let loyaltyUsersWithoutCards = [];
+let loyaltySearchQuery = "";
+const LOYALTY_REWARD_THRESHOLD = 6;
+
+// 📰 NEWS & NOTIFICATIONS — admin composer + management
+const NEWS_TEMPLATES = {
+  promotion: {
+    icon: "🏷️",
+    badge: "Promo",
+    color: "#c9a94e",
+    ctaLabel: "Découvrir l'offre",
+    sampleTitle: "Offre spéciale en boutique",
+    sampleContent:
+      "Profitez de -30% sur une sélection de parfums. Offre valable jusqu'à la fin du mois, en boutique et en ligne.",
+  },
+  new_perfume: {
+    icon: "🌸",
+    badge: "Nouveau",
+    color: "#e58fb8",
+    ctaLabel: "Découvrir le parfum",
+    sampleTitle: "Nouveau parfum disponible",
+    sampleContent:
+      "Notre dernier parfum vient d'arriver. Venez le découvrir et trouvez votre nouvelle signature olfactive.",
+  },
+  event: {
+    icon: "📅",
+    badge: "Événement",
+    color: "#7cb3ff",
+    ctaLabel: "S'inscrire",
+    sampleTitle: "Événement en boutique",
+    sampleContent:
+      "Rejoignez-nous en boutique pour une découverte exclusive et des conseils personnalisés de nos experts.",
+  },
+  general: {
+    icon: "📣",
+    badge: "Info",
+    color: "#e6e1d5",
+    ctaLabel: "",
+    sampleTitle: "Annonce générale",
+    sampleContent:
+      "Une information importante à partager avec tous nos clients.",
+  },
+};
+
+let newsComposerTemplate = "promotion";
+
+async function loadAdminNews() {
+  try {
+    const token = window.getAuthToken();
+    const response = await fetch("/api/admin/news", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    if (data.success) {
+      renderAdminNews(data.news || []);
+    } else {
+      console.error("Failed to load admin news:", data.error);
+    }
+  } catch (error) {
+    console.error("Error loading admin news:", error);
+  }
+}
+
+function renderAdminNews(newsItems) {
+  const container = document.getElementById("adminNewsList");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (!newsItems.length) {
+    const empty = document.createElement("p");
+    empty.className = "news-admin-empty";
+    empty.textContent = "Aucune actualité publiée pour le moment.";
+    container.appendChild(empty);
+    return;
+  }
+
+  newsItems.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "news-admin-item";
+
+    const meta = document.createElement("div");
+    meta.className = "news-admin-item__meta";
+
+    const badge = document.createElement("span");
+    badge.className = "news-admin-item__badge";
+    badge.textContent = item.badge || NEWS_TEMPLATES[item.template_type]?.badge || "Info";
+    if (item.color) badge.style.setProperty("--news-accent", item.color);
+
+    const title = document.createElement("div");
+    title.className = "news-admin-item__title";
+    title.textContent = item.title;
+
+    meta.appendChild(badge);
+    meta.appendChild(title);
+
+    const date = document.createElement("span");
+    date.className = "news-admin-item__date";
+    try {
+      date.textContent = new Date(item.created_at).toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    } catch (e) {
+      date.textContent = "";
+    }
+
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "btn-small btn-loyalty-delete";
+    del.textContent = "Supprimer";
+    del.addEventListener("click", () => {
+      if (window.confirm(`Supprimer l'actualité « ${item.title} » ?\n\nElle sera retirée pour tous les utilisateurs.`)) {
+        deleteNews(item.id);
+      }
+    });
+
+    row.appendChild(meta);
+    row.appendChild(date);
+    row.appendChild(del);
+    container.appendChild(row);
+  });
+}
+
+async function deleteNews(newsId) {
+  try {
+    const token = window.getAuthToken();
+    const response = await fetch(`/api/admin/news/${newsId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    if (data.success) {
+      showNotification("Actualité supprimée", "success");
+      await loadAdminNews();
+    } else {
+      showNotification(data.error || "Échec de la suppression", "error");
+    }
+  } catch (error) {
+    console.error("Error deleting news:", error);
+    showNotification("Erreur lors de la suppression", "error");
+  }
+}
+
+function openNewsComposer() {
+  const modal = document.getElementById("newsComposerModal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+  applyNewsTemplate("promotion");
+}
+
+function closeNewsComposer() {
+  const modal = document.getElementById("newsComposerModal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+function applyNewsTemplate(template) {
+  newsComposerTemplate = NEWS_TEMPLATES[template] ? template : "general";
+  const tpl = NEWS_TEMPLATES[newsComposerTemplate];
+
+  document.querySelectorAll(".news-template-card").forEach((card) => {
+    const on = card.dataset.newsTemplate === newsComposerTemplate;
+    card.classList.toggle("is-active", on);
+  });
+
+  const icon = document.getElementById("newsComposerIcon");
+  const badge = document.getElementById("newsComposerBadge");
+  const title = document.getElementById("newsComposerTitle");
+  const content = document.getElementById("newsComposerContent");
+  const cta = document.getElementById("newsComposerCtaLabel");
+
+  if (icon) icon.value = tpl.icon;
+  if (badge) badge.value = tpl.badge;
+  if (title && !title.value) title.value = tpl.sampleTitle;
+  if (content && !content.value) content.value = tpl.sampleContent;
+  if (cta) cta.value = tpl.ctaLabel;
+
+  renderNewsPreview();
+}
+
+function renderNewsPreview() {
+  const preview = document.getElementById("newsComposerPreview");
+  if (!preview) return;
+
+  const tpl = NEWS_TEMPLATES[newsComposerTemplate] || NEWS_TEMPLATES.general;
+  const title = document.getElementById("newsComposerTitle")?.value.trim() || tpl.sampleTitle;
+  const content = document.getElementById("newsComposerContent")?.value.trim() || tpl.sampleContent;
+  const badge = document.getElementById("newsComposerBadge")?.value.trim() || tpl.badge;
+  const icon = document.getElementById("newsComposerIcon")?.value.trim() || tpl.icon;
+  const ctaLabel = document.getElementById("newsComposerCtaLabel")?.value.trim();
+  const ctaUrl = document.getElementById("newsComposerCtaUrl")?.value.trim();
+
+  preview.style.setProperty("--news-accent", tpl.color);
+
+  const badgeEl = preview.querySelector(".news-preview-badge");
+  if (badgeEl) badgeEl.textContent = badge;
+  const titleEl = preview.querySelector(".news-preview-title");
+  if (titleEl) titleEl.textContent = `${icon} ${title}`;
+  const contentEl = preview.querySelector(".news-preview-content");
+  if (contentEl) contentEl.textContent = content;
+  const ctaEl = preview.querySelector(".news-preview-cta");
+  if (ctaEl) {
+    if (ctaLabel) {
+      ctaEl.textContent = ctaLabel;
+      ctaEl.href = ctaUrl || "#";
+      ctaEl.style.display = "";
+    } else {
+      ctaEl.style.display = "none";
+    }
+  }
+}
+
+async function publishNews() {
+  const title = document.getElementById("newsComposerTitle")?.value.trim();
+  const content = document.getElementById("newsComposerContent")?.value.trim();
+  if (!title || !content) {
+    showNotification("Le titre et le message sont requis", "error");
+    return;
+  }
+
+  const tpl = NEWS_TEMPLATES[newsComposerTemplate] || NEWS_TEMPLATES.general;
+  const payload = {
+    template_type: newsComposerTemplate,
+    title,
+    content,
+    badge: document.getElementById("newsComposerBadge")?.value.trim() || tpl.badge,
+    icon: document.getElementById("newsComposerIcon")?.value.trim() || tpl.icon,
+    color: tpl.color,
+    cta_label: document.getElementById("newsComposerCtaLabel")?.value.trim() || "",
+    cta_url: document.getElementById("newsComposerCtaUrl")?.value.trim() || "",
+  };
+
+  try {
+    const token = window.getAuthToken();
+    const response = await fetch("/api/admin/news", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json();
+    if (data.success) {
+      showNotification("Actualité publiée pour tous les utilisateurs", "success");
+      closeNewsComposer();
+      await loadAdminNews();
+    } else {
+      showNotification(data.error || "Échec de la publication", "error");
+    }
+  } catch (error) {
+    console.error("Error publishing news:", error);
+    showNotification("Erreur lors de la publication", "error");
+  }
+}
+
+function initializeNewsAdmin() {
+  const newsAdminBtn = document.getElementById("newsAdminBtn");
+  newsAdminBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    openNewsComposer();
+  });
+
+  const newBtn = document.getElementById("newsAdminNewBtn");
+  newBtn?.addEventListener("click", openNewsComposer);
+
+  const modal = document.getElementById("newsComposerModal");
+  const close = document.getElementById("newsComposerClose");
+  const overlay = document.getElementById("newsComposerOverlay");
+  const cancel = document.getElementById("newsComposerCancel");
+  const publish = document.getElementById("newsComposerPublish");
+
+  close?.addEventListener("click", closeNewsComposer);
+  overlay?.addEventListener("click", closeNewsComposer);
+  cancel?.addEventListener("click", closeNewsComposer);
+  publish?.addEventListener("click", publishNews);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) {
+      closeNewsComposer();
+    }
+  });
+
+  document.querySelectorAll(".news-template-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      applyNewsTemplate(card.dataset.newsTemplate);
+    });
+  });
+
+  ["newsComposerBadge", "newsComposerIcon", "newsComposerTitle", "newsComposerContent", "newsComposerCtaLabel", "newsComposerCtaUrl"].forEach((id) => {
+    document.getElementById(id)?.addEventListener("input", renderNewsPreview);
+  });
+
+  // Show/hide the admin dropdown item alongside the other admin links
+  const observer = new MutationObserver(() => {
+    const adminDashboard = document.getElementById("adminDashboard");
+    if (newsAdminBtn && adminDashboard) {
+      newsAdminBtn.style.display = adminDashboard.style.display;
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
+  const adminDashboard = document.getElementById("adminDashboard");
+  if (newsAdminBtn && adminDashboard) {
+    newsAdminBtn.style.display = adminDashboard.style.display;
+  }
+}
 
 function initializeAdminDashboard() {
   const adminDashboard = document.getElementById("adminDashboard");
@@ -10201,6 +10532,12 @@ async function openAdminDashboard() {
 
   // Load users data
   await loadUsersData();
+
+  // Load loyalty cards data
+  await loadLoyaltyData();
+
+  // Load news & notifications
+  await loadAdminNews();
 }
 
 async function loadUsersData() {
@@ -10305,6 +10642,592 @@ function renderUsersTable() {
   });
 
   console.log("âœ… Users table rendered successfully");
+}
+
+// 🎁 Carte Fidélité (Loyalty Cards) Functions
+async function loadLoyaltyData() {
+  try {
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const response = await fetch("/api/admin/loyalty", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      loyaltyCards = data.cards || [];
+      loyaltyTotalRewards = data.totalRewards || 0;
+      loyaltyUsersWithoutCards = data.usersWithoutCards || [];
+      renderLoyaltyTable();
+      renderLoyaltyModalTable();
+      updateLoyaltyModalStats();
+    } else {
+      showNotification("Failed to load loyalty cards", "error");
+    }
+  } catch (error) {
+    console.error("Error loading loyalty cards:", error);
+    showNotification("Error loading loyalty cards", "error");
+  }
+}
+
+function renderLoyaltyTable() {
+  const tbody = document.getElementById("loyaltyTableBody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  if (loyaltyCards.length === 0) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 5;
+    cell.textContent = "No loyalty cards yet.";
+    cell.style.textAlign = "center";
+    cell.style.color = "rgba(255, 255, 255, 0.6)";
+    row.appendChild(cell);
+    tbody.appendChild(row);
+    return;
+  }
+
+  loyaltyCards.forEach((card) => {
+    const row = document.createElement("tr");
+
+    const nameCell = document.createElement("td");
+    nameCell.textContent = card.name;
+    if (card.isManual) {
+      const manualTag = document.createElement("span");
+      manualTag.className = "user-status active";
+      manualTag.style.marginLeft = "8px";
+      manualTag.textContent = "Manuel";
+      nameCell.appendChild(manualTag);
+    }
+    if (card.isBanned) {
+      const banTag = document.createElement("span");
+      banTag.className = "user-status banned";
+      banTag.style.marginLeft = "8px";
+      banTag.textContent = "Banned";
+      nameCell.appendChild(banTag);
+    }
+
+    const emailCell = document.createElement("td");
+    emailCell.textContent = card.email || card.phone || "—";
+    if (card.email && card.phone) emailCell.textContent = `${card.email} · ${card.phone}`;
+
+    const pointsCell = document.createElement("td");
+    pointsCell.textContent = `${card.points} / ${LOYALTY_REWARD_THRESHOLD}`;
+    pointsCell.style.fontWeight = "600";
+    if (card.eligible) pointsCell.style.color = "var(--color-gold)";
+
+    const progressCell = document.createElement("td");
+    const progressWrap = document.createElement("div");
+    progressWrap.className = "loyalty-progress";
+    const progressBar = document.createElement("div");
+    progressBar.className = "loyalty-progress-fill";
+    progressBar.style.width = `${Math.min(100, card.progress)}%`;
+    progressWrap.appendChild(progressBar);
+    progressCell.appendChild(progressWrap);
+
+    const actionsCell = document.createElement("td");
+    const actions = document.createElement("div");
+    actions.className = "user-actions";
+
+    const addOneBtn = document.createElement("button");
+    addOneBtn.className = "btn-small btn-loyalty-add";
+    addOneBtn.textContent = "+1";
+    addOneBtn.title = "Ajouter 1 point";
+    addOneBtn.addEventListener("click", () => addLoyaltyPoints(card.cardId, 1));
+    actions.appendChild(addOneBtn);
+
+    const addBtn = document.createElement("button");
+    addBtn.className = "btn-small btn-loyalty-add";
+    addBtn.textContent = "+ Points";
+    addBtn.title = "Ajouter plusieurs points";
+    addBtn.addEventListener("click", () =>
+      promptAddLoyaltyPoints(card.cardId, card.name),
+    );
+    actions.appendChild(addBtn);
+
+    const redeemBtn = document.createElement("button");
+    redeemBtn.className = "btn-small btn-loyalty-redeem";
+    redeemBtn.textContent = "Offrir parfum";
+    redeemBtn.title = "Offrir un parfum (6 points)";
+    redeemBtn.disabled = !card.eligible;
+    if (card.eligible) {
+      redeemBtn.addEventListener("click", () =>
+        redeemLoyaltyReward(card.cardId, card.name),
+      );
+    }
+    actions.appendChild(redeemBtn);
+
+    actionsCell.appendChild(actions);
+    row.append(nameCell, emailCell, pointsCell, progressCell, actionsCell);
+
+    tbody.appendChild(row);
+  });
+}
+
+function promptAddLoyaltyPoints(cardId, name) {
+  const raw = window.prompt(
+    `Ajouter combien de points pour ${name} ?`,
+    "1",
+  );
+  if (raw === null) return;
+  const pts = Number.parseInt(raw, 10);
+  if (!Number.isInteger(pts) || pts < 1) {
+    showNotification("Veuillez entrer un nombre de points valide", "error");
+    return;
+  }
+  addLoyaltyPoints(cardId, pts, true);
+}
+
+async function addLoyaltyPoints(cardId, points, skipConfirm = false) {
+  if (!skipConfirm) {
+    const target = loyaltyCards.find((c) => c.cardId === cardId);
+    const label = target ? target.name : `la carte #${cardId}`;
+    if (
+      !window.confirm(
+        `Ajouter ${points} point${points > 1 ? "s" : ""} à ${label} ?`,
+      )
+    ) {
+      return;
+    }
+  }
+
+  try {
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const response = await fetch("/api/admin/loyalty/add-points", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ cardId, points }),
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      showNotification(data.message, "success");
+      await loadLoyaltyData();
+    } else {
+      showNotification(data.error || "Failed to add points", "error");
+    }
+  } catch (error) {
+    console.error("Error adding loyalty points:", error);
+    showNotification("Error adding loyalty points", "error");
+  }
+}
+
+async function redeemLoyaltyReward(cardId, name) {
+  if (
+    !window.confirm(
+      `Offrir un parfum gratuit à ${name} ? Les 6 points seront déduits.`,
+    )
+  ) {
+    return;
+  }
+  try {
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const response = await fetch("/api/admin/loyalty/redeem", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ cardId }),
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      showNotification(data.message, "success");
+      await loadLoyaltyData();
+    } else {
+      showNotification(data.error || "Failed to redeem reward", "error");
+    }
+  } catch (error) {
+    console.error("Error redeeming loyalty reward:", error);
+    showNotification("Error redeeming loyalty reward", "error");
+  }
+}
+
+// 🎁 Carte Fidélité — dedicated modal management
+function initializeLoyaltyModal() {
+  const loyaltyBtn = document.getElementById("loyaltyCardBtn");
+  const loyaltyModal = document.getElementById("loyaltyModal");
+  const loyaltyModalClose = document.getElementById("loyaltyModalClose");
+  const loyaltyModalOverlay = document.getElementById("loyaltyModalOverlay");
+
+  loyaltyBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    openLoyaltyModal();
+  });
+
+  function closeLoyaltyModal() {
+    loyaltyModal.style.setProperty("display", "none", "important");
+    loyaltyModal.style.setProperty("position", "static", "important");
+    loyaltyModal.style.setProperty("z-index", "auto", "important");
+    loyaltyModal.classList.remove("show");
+    document.body.style.overflow = "auto";
+  }
+
+  [loyaltyModalClose, loyaltyModalOverlay].forEach((element) => {
+    element?.addEventListener("click", closeLoyaltyModal);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && loyaltyModal.style.display === "flex") {
+      closeLoyaltyModal();
+    }
+  });
+
+  window.closeLoyaltyModal = closeLoyaltyModal;
+
+  const createManualBtn = document.getElementById("loyaltyCreateManualBtn");
+  createManualBtn?.addEventListener("click", createManualLoyaltyCard);
+
+  const searchInput = document.getElementById("loyaltySearchInput");
+  const searchClear = document.getElementById("loyaltySearchClear");
+  const applySearch = () => {
+    loyaltySearchQuery = searchInput ? searchInput.value : "";
+    renderLoyaltyModalTable();
+    if (searchClear) {
+      searchClear.style.display = loyaltySearchQuery ? "flex" : "none";
+    }
+  };
+  searchInput?.addEventListener("input", applySearch);
+  searchClear?.addEventListener("click", () => {
+    if (searchInput) searchInput.value = "";
+    applySearch();
+    searchInput?.focus();
+  });
+}
+
+async function openLoyaltyModal() {
+  const loyaltyModal = document.getElementById("loyaltyModal");
+
+  loyaltyModal.style.position = "fixed";
+  loyaltyModal.style.top = "0";
+  loyaltyModal.style.left = "0";
+  loyaltyModal.style.width = "100vw";
+  loyaltyModal.style.height = "100vh";
+  loyaltyModal.style.zIndex = "100002";
+  loyaltyModal.style.display = "flex";
+  loyaltyModal.style.alignItems = "center";
+  loyaltyModal.style.justifyContent = "center";
+  loyaltyModal.style.background = "rgba(0, 0, 0, 0.9)";
+  loyaltyModal.style.backdropFilter = "blur(15px)";
+  loyaltyModal.classList.add("show");
+  document.body.style.overflow = "hidden";
+
+  const searchInput = document.getElementById("loyaltySearchInput");
+  const searchClear = document.getElementById("loyaltySearchClear");
+  if (searchInput) searchInput.value = "";
+  if (searchClear) searchClear.style.display = "none";
+  loyaltySearchQuery = "";
+
+  await loadLoyaltyData();
+}
+
+function renderLoyaltyModalTable() {
+  const tbody = document.getElementById("loyaltyModalTableBody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  const withCards = loyaltyCards.filter((card) => card.cardId);
+
+  const q = loyaltySearchQuery.trim().toLowerCase();
+  let visible = withCards;
+  if (q) {
+    visible = withCards.filter((card) => {
+      const haystack = [
+        card.name,
+        card.phone,
+        card.email,
+        card.cardNumber,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(q);
+    });
+  }
+
+  tbody.dataset.total = q ? String(withCards.length) : "";
+
+  if (withCards.length === 0) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 5;
+    cell.textContent = "Aucune carte créée pour le moment.";
+    cell.style.textAlign = "center";
+    cell.style.color = "rgba(255, 255, 255, 0.6)";
+    row.appendChild(cell);
+    tbody.appendChild(row);
+    return;
+  }
+
+  if (visible.length === 0) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 5;
+    const empty = document.createElement("div");
+    empty.className = "loyalty-empty";
+    empty.innerHTML = `
+      <span class="loyalty-empty__icon">❦</span>
+      <div class="loyalty-empty__title">Aucun résultat</div>`;
+    const emptyText = document.createElement("div");
+    emptyText.className = "loyalty-empty__text";
+    emptyText.textContent = `Aucun client ne correspond à « ${q} »`;
+    empty.appendChild(emptyText);
+    cell.appendChild(empty);
+    row.appendChild(cell);
+    tbody.appendChild(row);
+    return;
+  }
+
+  visible.forEach((card) => {
+    const row = document.createElement("tr");
+
+    const nameCell = document.createElement("td");
+    nameCell.textContent = card.name;
+    nameCell.title = card.name;
+    if (card.isManual) {
+      const manualTag = document.createElement("span");
+      manualTag.className = "user-status active";
+      manualTag.style.marginLeft = "8px";
+      manualTag.textContent = "Manuel";
+      nameCell.appendChild(manualTag);
+    }
+    if (card.isBanned) {
+      const banTag = document.createElement("span");
+      banTag.className = "user-status banned";
+      banTag.style.marginLeft = "8px";
+      banTag.textContent = "Banned";
+      nameCell.appendChild(banTag);
+    }
+
+    const contactCell = document.createElement("td");
+    contactCell.textContent = card.email || card.phone || "—";
+    if (card.email && card.phone) {
+      contactCell.textContent = `${card.email} · ${card.phone}`;
+    }
+    contactCell.title = contactCell.textContent;
+
+    const numberCell = document.createElement("td");
+    numberCell.textContent = card.cardNumber || "—";
+    numberCell.style.fontFamily = "var(--font-mono)";
+    numberCell.style.letterSpacing = "1px";
+
+    const pointsCell = document.createElement("td");
+    const pointsWrap = document.createElement("div");
+    pointsWrap.className = "loyalty-cell-points";
+
+    const pointsTop = document.createElement("div");
+    pointsTop.className = "loyalty-cell-points__top";
+    const pointsValue = document.createElement("span");
+    pointsValue.className = "loyalty-cell-points__value";
+    pointsValue.textContent = `${card.points} / ${LOYALTY_REWARD_THRESHOLD}`;
+    if (card.eligible) pointsValue.style.color = "var(--color-gold)";
+    pointsTop.appendChild(pointsValue);
+    if (card.rewards > 0) {
+      const rewardTag = document.createElement("span");
+      rewardTag.className = "user-status active";
+      rewardTag.textContent = `${card.rewards} offert${card.rewards > 1 ? "s" : ""}`;
+      pointsTop.appendChild(rewardTag);
+    }
+
+    const progressWrap = document.createElement("div");
+    progressWrap.className = "loyalty-progress loyalty-cell-points__progress";
+    const progressBar = document.createElement("div");
+    progressBar.className = "loyalty-progress-fill";
+    progressBar.style.width = `${Math.min(100, card.progress)}%`;
+    progressWrap.appendChild(progressBar);
+
+    pointsWrap.append(pointsTop, progressWrap);
+    pointsCell.appendChild(pointsWrap);
+
+    const actionsCell = document.createElement("td");
+    const actions = document.createElement("div");
+    actions.className = "user-actions";
+
+    const addOneBtn = document.createElement("button");
+    addOneBtn.className = "btn-small btn-loyalty-add";
+    addOneBtn.textContent = "+1";
+    addOneBtn.title = "Ajouter 1 point";
+    addOneBtn.addEventListener("click", () => addLoyaltyPoints(card.cardId, 1));
+    actions.appendChild(addOneBtn);
+
+    const modifyBtn = document.createElement("button");
+    modifyBtn.className = "btn-small btn-loyalty-modify";
+    modifyBtn.textContent = "Modifier";
+    modifyBtn.title = "Modifier le nombre de points";
+    modifyBtn.addEventListener("click", () =>
+      updateLoyaltyPoints(card.cardId, card.name),
+    );
+    actions.appendChild(modifyBtn);
+
+    const redeemBtn = document.createElement("button");
+    redeemBtn.className = "btn-small btn-loyalty-redeem";
+    redeemBtn.textContent = "Offrir parfum";
+    redeemBtn.title = "Offrir un parfum (6 points)";
+    redeemBtn.disabled = !card.eligible;
+    if (card.eligible) {
+      redeemBtn.addEventListener("click", () =>
+        redeemLoyaltyReward(card.cardId, card.name),
+      );
+    }
+    actions.appendChild(redeemBtn);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "btn-small btn-loyalty-delete";
+    deleteBtn.textContent = "Supprimer";
+    deleteBtn.title = "Supprimer la carte";
+    deleteBtn.addEventListener("click", () =>
+      deleteLoyaltyCard(card.cardId, card.name),
+    );
+    actions.appendChild(deleteBtn);
+
+    actionsCell.appendChild(actions);
+    row.append(
+      nameCell,
+      contactCell,
+      numberCell,
+      pointsCell,
+      actionsCell,
+    );
+
+    tbody.appendChild(row);
+  });
+}
+
+function updateLoyaltyModalStats() {
+  const totalCards = loyaltyCards.filter((card) => card.cardId).length;
+  const eligible = loyaltyCards.filter((card) => card.cardId && card.eligible).length;
+
+  const totalEl = document.getElementById("loyaltyTotalCards");
+  const eligibleEl = document.getElementById("loyaltyEligibleCards");
+  const rewardsEl = document.getElementById("loyaltyRewardsGiven");
+  if (totalEl) totalEl.textContent = totalCards;
+  if (eligibleEl) eligibleEl.textContent = eligible;
+  if (rewardsEl) rewardsEl.textContent = loyaltyTotalRewards;
+}
+
+async function createManualLoyaltyCard() {
+  const nameInput = document.getElementById("loyaltyManualName");
+  const phoneInput = document.getElementById("loyaltyManualPhone");
+  const emailInput = document.getElementById("loyaltyManualEmail");
+
+  const name = (nameInput?.value || "").trim();
+  const phone = (phoneInput?.value || "").trim();
+  const email = (emailInput?.value || "").trim();
+
+  if (!name) {
+    showNotification("Le nom est requis", "error");
+    nameInput?.focus();
+    return;
+  }
+
+  try {
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const response = await fetch("/api/admin/loyalty/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name, email: email || undefined, phone: phone || undefined }),
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      showNotification(data.message, "success");
+      if (nameInput) nameInput.value = "";
+      if (phoneInput) phoneInput.value = "";
+      if (emailInput) emailInput.value = "";
+      await loadLoyaltyData();
+    } else {
+      showNotification(data.error || "Failed to create card", "error");
+    }
+  } catch (error) {
+    console.error("Error creating manual loyalty card:", error);
+    showNotification("Error creating loyalty card", "error");
+  }
+}
+
+async function updateLoyaltyPoints(cardId, name) {
+  const card = loyaltyCards.find((c) => c.cardId === cardId);
+  const current = card ? card.points : 0;
+  const raw = window.prompt(
+    `Nouveau nombre de points pour ${name} ?`,
+    String(current),
+  );
+  if (raw === null) return;
+
+  const pts = Number.parseInt(raw, 10);
+  if (!Number.isInteger(pts) || pts < 0) {
+    showNotification("Veuillez entrer un nombre de points valide", "error");
+    return;
+  }
+
+  try {
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const response = await fetch("/api/admin/loyalty/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ cardId, points: pts }),
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      showNotification(data.message, "success");
+      await loadLoyaltyData();
+    } else {
+      showNotification(data.error || "Failed to update points", "error");
+    }
+  } catch (error) {
+    console.error("Error updating loyalty points:", error);
+    showNotification("Error updating loyalty points", "error");
+  }
+}
+
+async function deleteLoyaltyCard(cardId, name) {
+  const card = loyaltyCards.find((c) => c.cardId === cardId);
+  const cardNumber = card ? card.cardNumber : "";
+  const points = card ? card.points : 0;
+  const label = cardNumber ? `${name} (${cardNumber})` : name;
+  if (
+    !window.confirm(
+      `Supprimer définitivement la carte fidélité de ${label} (${points} point${points > 1 ? "s" : ""}) ?\n\nCette action est irréversible.`,
+    )
+  ) {
+    return;
+  }
+
+  try {
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const response = await fetch(`/api/admin/loyalty/delete?cardId=${cardId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      showNotification(data.message, "success");
+      await loadLoyaltyData();
+    } else {
+      showNotification(data.error || "Failed to delete card", "error");
+    }
+  } catch (error) {
+    console.error("Error deleting loyalty card:", error);
+    showNotification("Error deleting loyalty card", "error");
+  }
 }
 
 function showBanModal(userId, userName) {
@@ -12669,54 +13592,22 @@ class NotificationManager {
   }
 
   async fetchNotifications() {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    // Mock notification data - replace with real API call
-    const mockNotifications = [
-      {
-        id: 1,
-        title: "Welcome to Parfumerie Charme!",
-        content:
-          "Thank you for joining us. Explore our exclusive collection of luxury fragrances.",
-        time: new Date().toISOString(),
-        type: "system",
+    try {
+      const response = await fetch("/api/news", { cache: "no-store" });
+      const data = await response.json();
+      if (!data.success) return [];
+      return (data.news || []).map((item) => ({
+        id: item.id,
+        title: `${item.icon ? item.icon + " " : ""}${item.title}`,
+        content: item.content,
+        time: item.created_at,
+        type: item.template_type,
         read: false,
-      },
-      {
-        id: 2,
-        title: "New Fragrance Alert",
-        content:
-          "Check out our latest arrival: 'Midnight Elegance' - now available with 20% off.",
-        time: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
-        type: "promotion",
-        read: false,
-      },
-      {
-        id: 3,
-        title: "Order Confirmation",
-        content:
-          "Your order #12345 has been confirmed and will be shipped within 2-3 business days.",
-        time: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-        type: "order",
-        read: true,
-      },
-    ];
-
-    // Add random notifications for demo
-    if (Math.random() > 0.5) {
-      mockNotifications.unshift({
-        id: Date.now(),
-        title: "Flash Sale Alert!",
-        content:
-          "Limited time offer: 30% off on all premium fragrances. Don't miss out!",
-        time: new Date().toISOString(),
-        type: "promotion",
-        read: false,
-      });
+      }));
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      throw error;
     }
-
-    return mockNotifications;
   }
 
   displayNotifications(notifications) {
@@ -12861,14 +13752,14 @@ class NotificationManager {
 
   // Add a new notification (for real-time updates)
   addNotification(notification) {
-    notification.id = Date.now();
-    notification.time = new Date().toISOString();
+    if (!notification.id) notification.id = Date.now();
+    if (!notification.time) notification.time = new Date().toISOString();
     notification.read = false;
 
     this.notifications.unshift(notification);
     this.updateUnreadCount();
 
-    console.log("ðŸ”” New notification:", notification.title);
+    console.log("🔔 New notification:", notification.title);
   }
 
   // Start periodic check for new notifications
@@ -12886,32 +13777,16 @@ class NotificationManager {
     // Only check for signed-in users
     if (!this.isUserSignedIn) return;
 
-    // Simulate random new notifications
-    if (Math.random() > 0.9) {
-      // 10% chance
-      const randomNotifications = [
-        {
-          title: "Special Offer Available",
-          content: "Limited time: Get 25% off on your next purchase!",
-          type: "promotion",
-        },
-        {
-          title: "New Product Launch",
-          content: "Discover our latest fragrance collection now available.",
-          type: "system",
-        },
-        {
-          title: "Account Security",
-          content: "Your account security settings have been updated.",
-          type: "system",
-        },
-      ];
-
-      const randomNotification =
-        randomNotifications[
-          Math.floor(Math.random() * randomNotifications.length)
-        ];
-      this.addNotification(randomNotification);
+    try {
+      const notifications = await this.fetchNotifications();
+      const knownIds = new Set(this.notifications.map((n) => n.id));
+      notifications.forEach((notification) => {
+        if (!knownIds.has(notification.id)) {
+          this.addNotification(notification);
+        }
+      });
+    } catch (error) {
+      console.error("Error checking for new notifications:", error);
     }
   }
 }
@@ -13008,45 +13883,41 @@ class NewsManager {
   }
 
   async fetchNews() {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Mock news data - replace with real API call
-    return [
-      {
-        id: 1,
-        title: "New Luxury Fragrance Collection Launch",
-        content:
-          "We're excited to announce the launch of our exclusive luxury fragrance collection featuring rare ingredients from around the world.",
-        date: new Date().toISOString(),
-        type: "feature",
-        badge: "New",
-      },
-      {
-        id: 2,
-        title: "Website Performance Improvements",
-        content:
-          "We've upgraded our servers and optimized the website for faster loading times and better user experience.",
-        date: new Date(Date.now() - 86400000).toISOString(), // Yesterday
-        type: "update",
-        badge: "Update",
-      },
-      {
-        id: 3,
-        title: "Special Holiday Discounts Available",
-        content:
-          "Don't miss our limited-time holiday offers with up to 30% off on selected premium fragrances.",
-        date: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-        type: "urgent",
-        badge: "Limited Time",
-      },
-    ];
+    try {
+      const response = await fetch("/api/news", { cache: "no-store" });
+      const data = await response.json();
+      if (!data.success) return [];
+      return (data.news || []).map((item) => ({
+        id: item.id,
+        title: item.title,
+        content: item.content,
+        date: item.created_at,
+        type: item.template_type,
+        badge: item.badge,
+        icon: item.icon,
+        color: item.color,
+        cta_label: item.cta_label,
+        cta_url: item.cta_url,
+      }));
+    } catch (error) {
+      console.error("Error fetching news:", error);
+      throw error;
+    }
   }
 
   displayNews(newsItems) {
     if (!this.newsList) return;
 
     this.newsList.innerHTML = "";
+
+    if (!newsItems.length) {
+      const empty = document.createElement("div");
+      empty.className = "news-empty";
+      empty.textContent = "Aucune actualité pour le moment.";
+      this.newsList.appendChild(empty);
+      this.showContentState();
+      return;
+    }
 
     newsItems.forEach((item) => {
       const newsElement = this.createNewsElement(item);
@@ -13059,6 +13930,7 @@ class NewsManager {
   createNewsElement(item) {
     const newsItem = document.createElement("div");
     newsItem.className = "news-item";
+    if (item.color) newsItem.style.setProperty("--news-accent", item.color);
 
     const formattedDate = new Date(item.date).toLocaleDateString("en-US", {
       month: "short",
@@ -13066,14 +13938,48 @@ class NewsManager {
       year: "numeric",
     });
 
-    newsItem.innerHTML = `
-            <div class="news-item-header">
-                <h3 class="news-item-title">${item.title}</h3>
-                <span class="news-item-date">${formattedDate}</span>
-            </div>
-            <p class="news-item-content">${item.content}</p>
-            ${item.badge ? `<span class="news-item-badge ${item.type}">${item.badge}</span>` : ""}
-        `;
+    const title = document.createElement("h3");
+    title.className = "news-item-title";
+    title.textContent = `${item.icon ? item.icon + " " : ""}${item.title}`;
+
+    const header = document.createElement("div");
+    header.className = "news-item-header";
+    header.appendChild(title);
+
+    const date = document.createElement("span");
+    date.className = "news-item-date";
+    date.textContent = formattedDate;
+    header.appendChild(date);
+
+    const content = document.createElement("p");
+    content.className = "news-item-content";
+    content.textContent = item.content;
+
+    newsItem.appendChild(header);
+    newsItem.appendChild(content);
+
+    if (item.badge) {
+      const badge = document.createElement("span");
+      badge.className = `news-item-badge ${item.type || "general"}`;
+      badge.textContent = item.badge;
+      newsItem.appendChild(badge);
+    }
+
+    if (item.cta_label) {
+      const cta = document.createElement("a");
+      cta.className = "news-item-cta";
+      cta.textContent = item.cta_label;
+      if (item.cta_url) {
+        cta.href = item.cta_url;
+        cta.target = item.cta_url.startsWith("http") ? "_blank" : "_self";
+      } else {
+        cta.href = "#";
+      }
+      cta.addEventListener("click", (e) => {
+        if (!item.cta_url) e.preventDefault();
+      });
+      newsItem.appendChild(cta);
+    }
 
     return newsItem;
   }
@@ -13097,14 +14003,21 @@ class NewsManager {
   }
 
   checkForNewNews() {
-    // Check if there are new news items (simulate)
-    const lastCheck = localStorage.getItem("lastNewsCheck");
-    const now = Date.now();
+    // Show the badge if a news item is newer than the last check timestamp
+    const lastCheck = parseInt(localStorage.getItem("lastNewsCheck") || "0", 10);
 
-    if (!lastCheck || now - parseInt(lastCheck) > 86400000) {
-      // 24 hours
-      this.showNotificationBadge();
-    }
+    fetch("/api/news", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.success || !Array.isArray(data.news) || !data.news.length) return;
+        const latest = new Date(data.news[0].created_at).getTime();
+        if (!lastCheck || latest > lastCheck) {
+          this.showNotificationBadge();
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking for new news:", error);
+      });
   }
 
   showNotificationBadge() {
@@ -19214,3 +20127,67 @@ window.testClickOnElement = function() {
 };
 
 
+
+// ═════════════════════════════════════════════════════════════
+// CARTE FIDÉLITÉ · REDESIGN HELPERS (additive, preserves all wiring)
+//   elegant empty state + responsive data-labels via observer
+// ═════════════════════════════════════════════════════════════
+(function () {
+  // EMPTY STATE + counter + responsive data-labels
+  const tbody = document.getElementById('loyaltyModalTableBody');
+  const meta = document.getElementById('loyaltyListMeta');
+  if (!tbody) return;
+
+  const EMPTY_MARKUP = `
+    <tr>
+      <td colspan="5">
+        <div class="loyalty-empty">
+          <span class="loyalty-empty__icon">❦</span>
+          <div class="loyalty-empty__title">Aucune carte créée</div>
+          <div class="loyalty-empty__text">Créez une carte depuis un compte ou en manuel</div>
+        </div>
+      </td>
+    </tr>`;
+
+  let decorating = false;
+
+  const decorate = () => {
+    if (decorating) return;
+    decorating = true;
+    try {
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const isEmpty =
+        rows.length === 0 ||
+        (rows.length === 1 && rows[0].querySelector('td[colspan]'));
+
+      if (isEmpty) {
+        if (!tbody.querySelector('.loyalty-empty')) {
+          tbody.innerHTML = EMPTY_MARKUP;
+        }
+        if (meta) {
+          meta.textContent = tbody.dataset.total ? `0 / ${tbody.dataset.total} cartes` : '';
+        }
+      } else {
+        if (meta) {
+          meta.textContent = tbody.dataset.total
+            ? `${rows.length} / ${tbody.dataset.total} cartes`
+            : `${rows.length} carte${rows.length > 1 ? 's' : ''}`;
+        }
+        const labels = ['Client', 'Contact', 'N° Carte', 'Points', 'Actions'];
+        rows.forEach((row) => {
+          if (row.querySelector('td[colspan]')) return;
+          row.querySelectorAll('td').forEach((td, i) => {
+            if (!td.hasAttribute('data-label') && labels[i]) {
+              td.setAttribute('data-label', labels[i]);
+            }
+          });
+        });
+      }
+    } finally {
+      decorating = false;
+    }
+  };
+
+  new MutationObserver(decorate).observe(tbody, { childList: true });
+  decorate();
+})();

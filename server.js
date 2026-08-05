@@ -290,6 +290,109 @@ const db = new sqlite3.Database("./database/parfumerie.db", (err) => {
       },
     );
 
+    // 🎁 CARTE FIDÉLITÉ: loyalty cards + reward history
+    console.log("🔄 Setting up loyalty cards tables...");
+    db.all("PRAGMA table_info(loyalty_cards)", (err, columns) => {
+      const hasHolderName =
+        !err && columns && columns.some((col) => col.name === "holder_name");
+
+      const createLoyaltyTables = () => {
+        db.run(
+          `
+            CREATE TABLE IF NOT EXISTS loyalty_cards (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER UNIQUE,
+                holder_name TEXT,
+                holder_email TEXT,
+                holder_phone TEXT,
+                card_number TEXT UNIQUE,
+                points INTEGER NOT NULL DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        `,
+          (createErr) => {
+            if (createErr)
+              console.error("❌ Error creating loyalty_cards table:", createErr);
+            else console.log("✅ Created loyalty_cards table");
+          },
+        );
+
+        db.run(
+          `
+            CREATE TABLE IF NOT EXISTS loyalty_transactions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                card_id INTEGER NOT NULL,
+                user_id INTEGER,
+                points_change INTEGER NOT NULL,
+                type TEXT NOT NULL CHECK (type IN ('earn', 'redeem')),
+                description TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (card_id) REFERENCES loyalty_cards (id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        `,
+          (createErr) => {
+            if (createErr)
+              console.error(
+                "❌ Error creating loyalty_transactions table:",
+                createErr,
+              );
+            else console.log("✅ Created loyalty_transactions table");
+          },
+        );
+
+        // Index for loyalty transactions table
+        db.run(
+          "CREATE INDEX IF NOT EXISTS idx_loyalty_transactions_card_id ON loyalty_transactions(card_id)",
+          (idxErr) => {
+            if (idxErr)
+              console.error(
+                "❌ Error creating loyalty_transactions index:",
+                idxErr,
+              );
+            else console.log("✅ Created loyalty_transactions index");
+          },
+        );
+      };
+
+      if (hasHolderName) {
+        createLoyaltyTables();
+      } else {
+        console.log("🔄 Migrating loyalty tables to support manual cards...");
+        db.run("DROP TABLE IF EXISTS loyalty_transactions", () => {
+          db.run("DROP TABLE IF EXISTS loyalty_cards", () => {
+            createLoyaltyTables();
+          });
+        });
+      }
+    });
+
+    // 📰 NEWS & NOTIFICATIONS: published announcements (visible to all users)
+    console.log("🔄 Setting up news table...");
+    db.run(
+      `
+        CREATE TABLE IF NOT EXISTS news (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            template_type TEXT NOT NULL DEFAULT 'general',
+            badge TEXT,
+            icon TEXT,
+            color TEXT,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            cta_label TEXT,
+            cta_url TEXT,
+            is_active INTEGER NOT NULL DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `,
+      (createErr) => {
+        if (createErr) console.error("❌ Error creating news table:", createErr);
+        else console.log("✅ Created news table");
+      },
+    );
+
     // 🔧 ENHANCED: Create indexes for better performance
     console.log("🔄 Creating database indexes for better performance...");
 
@@ -1872,6 +1975,549 @@ app.post(
       });
     } catch (error) {
       console.error("Unban user error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+// 🎁 CARTE FIDÉLITÉ: Loyalty cards admin routes
+const LOYALTY_REWARD_THRESHOLD = 6;
+
+function getLoyaltyCardByUserId(userId) {
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT * FROM loyalty_cards WHERE user_id = ?",
+      [userId],
+      (err, row) => (err ? reject(err) : resolve(row)),
+    );
+  });
+}
+
+function getLoyaltyCardById(cardId) {
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT * FROM loyalty_cards WHERE id = ?",
+      [cardId],
+      (err, row) => (err ? reject(err) : resolve(row)),
+    );
+  });
+}
+
+function cardNumberExists(cardNumber) {
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT 1 AS found FROM loyalty_cards WHERE card_number = ?",
+      [cardNumber],
+      (err, row) => (err ? reject(err) : resolve(!!row)),
+    );
+  });
+}
+
+async function generateCardNumber() {
+  const count = await new Promise((resolve, reject) => {
+    db.get("SELECT COUNT(*) AS total FROM loyalty_cards", (err, row) =>
+      err ? reject(err) : resolve(row ? row.total : 0),
+    );
+  });
+  let sequence = count;
+  let number;
+  do {
+    sequence += 1;
+    number = "CH" + String(sequence).padStart(4, "0");
+  } while (await cardNumberExists(number));
+  return number;
+}
+
+function insertLoyaltyCard({ userId, cardNumber, holderName, holderEmail, holderPhone }) {
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare(
+      "INSERT INTO loyalty_cards (user_id, holder_name, holder_email, holder_phone, card_number) VALUES (?, ?, ?, ?, ?)",
+    );
+    stmt.run(
+      [userId, holderName, holderEmail, holderPhone, cardNumber],
+      function (err) {
+        if (err) return reject(err);
+        getLoyaltyCardById(this.lastID).then(resolve, reject);
+      },
+    );
+    stmt.finalize();
+  });
+}
+
+async function ensureLoyaltyCard(userId) {
+  let card = await getLoyaltyCardByUserId(userId);
+  if (!card) {
+    const cardNumber = await generateCardNumber();
+    card = await insertLoyaltyCard({
+      userId,
+      cardNumber,
+      holderName: null,
+      holderEmail: null,
+      holderPhone: null,
+    });
+  }
+  return card;
+}
+
+function logLoyaltyTransaction(cardId, userId, pointsChange, type, description) {
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare(
+      "INSERT INTO loyalty_transactions (card_id, user_id, points_change, type, description) VALUES (?, ?, ?, ?, ?)",
+    );
+    stmt.run([cardId, userId, pointsChange, type, description], function (err) {
+      if (err) reject(err);
+      else resolve(this.lastID);
+    });
+    stmt.finalize();
+  });
+}
+
+app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const rows = await new Promise((resolve, reject) => {
+      db.all(
+        `
+            SELECT
+              c.id AS card_id, c.user_id, c.card_number, c.points,
+              c.holder_name, c.holder_email, c.holder_phone,
+              c.created_at AS card_created_at, c.updated_at AS card_updated_at,
+              u.first_name, u.last_name, u.email AS user_email, u.is_banned,
+              (SELECT COUNT(*) FROM loyalty_transactions lt WHERE lt.card_id = c.id AND lt.type = 'redeem') AS rewards
+            FROM loyalty_cards c
+            LEFT JOIN users u ON u.id = c.user_id
+            ORDER BY c.points DESC, c.id ASC
+          `,
+        (err, rows) => (err ? reject(err) : resolve(rows)),
+      );
+    });
+
+    const usersWithoutCards = await new Promise((resolve, reject) => {
+      db.all(
+        `
+            SELECT u.id, u.first_name, u.last_name, u.email
+            FROM users u
+            WHERE u.id NOT IN (SELECT user_id FROM loyalty_cards WHERE user_id IS NOT NULL)
+            ORDER BY u.first_name ASC
+          `,
+        (err, rows) => (err ? reject(err) : resolve(rows)),
+      );
+    });
+
+    const totalRewards = await new Promise((resolve, reject) => {
+      db.get(
+        "SELECT COUNT(*) AS total FROM loyalty_transactions WHERE type = 'redeem'",
+        (err, row) => (err ? reject(err) : resolve(row ? row.total : 0)),
+      );
+    });
+
+    res.json({
+      success: true,
+      rewardThreshold: LOYALTY_REWARD_THRESHOLD,
+      totalRewards,
+      usersWithoutCards: usersWithoutCards.map((u) => ({
+        userId: u.id,
+        name: `${u.first_name} ${u.last_name}`.trim(),
+        email: u.email,
+      })),
+      cards: rows.map((row) => {
+        const linkedName = `${row.first_name} ${row.last_name}`.trim();
+        return {
+          userId: row.user_id,
+          cardId: row.card_id,
+          name: (row.holder_name || "").trim() || linkedName,
+          email: (row.holder_email || "").trim() || row.user_email || null,
+          phone: (row.holder_phone || "").trim() || null,
+          isManual: !row.user_id,
+          isBanned: row.is_banned === 1,
+          cardNumber: row.card_number || null,
+          points: row.points || 0,
+          eligible: (row.points || 0) >= LOYALTY_REWARD_THRESHOLD,
+          progress: Math.min(100, Math.round(((row.points || 0) / LOYALTY_REWARD_THRESHOLD) * 100)),
+          rewards: row.rewards || 0,
+          cardCreatedAt: row.card_created_at,
+          cardUpdatedAt: row.card_updated_at,
+        };
+      }),
+    });
+  } catch (error) {
+    console.error("Admin loyalty fetch error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/api/admin/loyalty/add-points", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { cardId, points } = req.body;
+    if (!cardId) return res.status(400).json({ error: "Card ID is required" });
+
+    const pts = Math.floor(Number(points));
+    if (!Number.isInteger(pts) || pts < 1 || pts > 1000) {
+      return res.status(400).json({ error: "Points must be a positive integer between 1 and 1000" });
+    }
+
+    const card = await getLoyaltyCardById(cardId);
+    if (!card) return res.status(404).json({ error: "Carte introuvable" });
+
+    const newPoints = (card.points || 0) + pts;
+
+    await new Promise((resolve, reject) => {
+      db.run(
+        "UPDATE loyalty_cards SET points = points + ?, updated_at = datetime('now') WHERE id = ?",
+        [pts, card.id],
+        function (err) {
+          if (err) reject(err);
+          else resolve();
+        },
+      );
+    });
+
+    await logLoyaltyTransaction(card.id, card.user_id, pts, "earn", `Ajout de ${pts} point(s)`);
+
+    res.json({
+      success: true,
+      message: `${pts} point(s) added`,
+      card: {
+        cardId: card.id,
+        userId: card.user_id,
+        points: newPoints,
+        eligible: newPoints >= LOYALTY_REWARD_THRESHOLD,
+      },
+    });
+  } catch (error) {
+    console.error("Add loyalty points error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/api/admin/loyalty/redeem", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { cardId } = req.body;
+    if (!cardId) return res.status(400).json({ error: "Card ID is required" });
+
+    const card = await getLoyaltyCardById(cardId);
+    if (!card) return res.status(404).json({ error: "Carte introuvable" });
+
+    if ((card.points || 0) < LOYALTY_REWARD_THRESHOLD) {
+      return res.status(400).json({
+        error: `Pas assez de points (${card.points || 0}/${LOYALTY_REWARD_THRESHOLD} requis)`,
+      });
+    }
+
+    const newPoints = (card.points || 0) - LOYALTY_REWARD_THRESHOLD;
+    await new Promise((resolve, reject) => {
+      db.run(
+        "UPDATE loyalty_cards SET points = ?, updated_at = datetime('now') WHERE id = ?",
+        [newPoints, card.id],
+        function (err) {
+          if (err) reject(err);
+          else resolve();
+        },
+      );
+    });
+
+    await logLoyaltyTransaction(
+      card.id,
+      card.user_id,
+      -LOYALTY_REWARD_THRESHOLD,
+      "redeem",
+      "Parfum offert (6 points)",
+    );
+
+    res.json({
+      success: true,
+      message: "Parfum offert : récompense accordée (6 points déduits)",
+      card: { cardId: card.id, userId: card.user_id, points: newPoints, eligible: false },
+    });
+  } catch (error) {
+    console.error("Redeem loyalty reward error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/api/admin/loyalty/create", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { userId, name, email, phone } = req.body;
+
+    if (userId) {
+      const target = await new Promise((resolve, reject) => {
+        db.get("SELECT id FROM users WHERE id = ?", [userId], (err, row) =>
+          err ? reject(err) : resolve(row),
+        );
+      });
+      if (!target) return res.status(404).json({ error: "User not found" });
+
+      const existing = await getLoyaltyCardByUserId(userId);
+      if (existing) {
+        return res.status(400).json({ error: "Ce client possède déjà une carte" });
+      }
+
+      const cardNumber = await generateCardNumber();
+      const card = await insertLoyaltyCard({
+        userId,
+        cardNumber,
+        holderName: null,
+        holderEmail: null,
+        holderPhone: null,
+      });
+      return res.json({
+        success: true,
+        message: "Carte fidélité créée",
+        card: {
+          cardId: card.id,
+          userId,
+          cardNumber: card.card_number,
+          points: card.points || 0,
+          eligible: false,
+        },
+      });
+    }
+
+    const holderName = String(name || "").trim();
+    if (!holderName) {
+      return res.status(400).json({ error: "Le nom est requis" });
+    }
+
+    const cardNumber = await generateCardNumber();
+    const card = await insertLoyaltyCard({
+      userId: null,
+      cardNumber,
+      holderName,
+      holderEmail: String(email || "").trim(),
+      holderPhone: String(phone || "").trim(),
+    });
+    res.json({
+      success: true,
+      message: "Carte fidélité créée",
+      card: {
+        cardId: card.id,
+        userId: null,
+        cardNumber: card.card_number,
+        points: card.points || 0,
+        eligible: false,
+      },
+    });
+  } catch (error) {
+    console.error("Create loyalty card error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { cardId, points } = req.body;
+    if (!cardId) return res.status(400).json({ error: "Card ID is required" });
+
+    const pts = Math.floor(Number(points));
+    if (!Number.isInteger(pts) || pts < 0 || pts > 10000) {
+      return res.status(400).json({ error: "Points must be an integer between 0 and 10000" });
+    }
+
+    const card = await getLoyaltyCardById(cardId);
+    if (!card) return res.status(404).json({ error: "Carte introuvable" });
+
+    const diff = pts - (card.points || 0);
+
+    await new Promise((resolve, reject) => {
+      db.run(
+        "UPDATE loyalty_cards SET points = ?, updated_at = datetime('now') WHERE id = ?",
+        [pts, card.id],
+        function (err) {
+          if (err) reject(err);
+          else resolve();
+        },
+      );
+    });
+
+    if (diff !== 0) {
+      await logLoyaltyTransaction(
+        card.id,
+        card.user_id,
+        diff,
+        "earn",
+        diff > 0 ? `Modification : +${diff} point(s)` : `Modification : ${diff} point(s)`,
+      );
+    }
+
+    res.json({
+      success: true,
+      message: "Points mis à jour",
+      card: {
+        cardId: card.id,
+        userId: card.user_id,
+        points: pts,
+        eligible: pts >= LOYALTY_REWARD_THRESHOLD,
+      },
+    });
+  } catch (error) {
+    console.error("Update loyalty points error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.delete("/api/admin/loyalty/delete", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const cardId = Number(req.query.cardId);
+    if (!cardId) return res.status(400).json({ error: "Card ID is required" });
+
+    const card = await getLoyaltyCardById(cardId);
+    if (!card) return res.status(404).json({ error: "Carte introuvable" });
+
+    await new Promise((resolve, reject) => {
+      db.run(
+        "DELETE FROM loyalty_cards WHERE id = ?",
+        [card.id],
+        function (err) {
+          if (err) reject(err);
+          else resolve();
+        },
+      );
+    });
+
+    res.json({ success: true, message: "Carte supprimée" });
+  } catch (error) {
+    console.error("Delete loyalty card error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 📰 NEWS & NOTIFICATIONS — public (visible to all users)
+app.get("/api/news", async (req, res) => {
+  try {
+    const news = await new Promise((resolve, reject) => {
+      db.all(
+        "SELECT * FROM news WHERE is_active = 1 ORDER BY created_at DESC, id DESC",
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        },
+      );
+    });
+    res.json({ success: true, news });
+  } catch (error) {
+    console.error("Error fetching news:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch news" });
+  }
+});
+
+// 📰 NEWS & NOTIFICATIONS — admin: list all (including inactive)
+app.get(
+  "/api/admin/news",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const news = await new Promise((resolve, reject) => {
+        db.all(
+          "SELECT * FROM news ORDER BY created_at DESC, id DESC",
+          (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows);
+          },
+        );
+      });
+      res.json({ success: true, news });
+    } catch (error) {
+      console.error("Error fetching admin news:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch news" });
+    }
+  },
+);
+
+// 📰 NEWS & NOTIFICATIONS — admin: create
+app.post(
+  "/api/admin/news",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const {
+        template_type = "general",
+        badge = "",
+        icon = "",
+        color = "",
+        title = "",
+        content = "",
+        cta_label = "",
+        cta_url = "",
+      } = req.body || {};
+
+      const cleanTitle = String(title).trim();
+      const cleanContent = String(content).trim();
+
+      if (!cleanTitle || !cleanContent) {
+        return res
+          .status(400)
+          .json({ error: "Titre et message sont requis" });
+      }
+
+      const allowedTypes = ["promotion", "new_perfume", "event", "general"];
+      const cleanType = allowedTypes.includes(template_type)
+        ? template_type
+        : "general";
+
+      const cleanBadge = String(badge).trim().slice(0, 40);
+      const cleanIcon = String(icon).trim().slice(0, 8);
+      const cleanColor = String(color).trim().slice(0, 32);
+      const cleanCtaLabel = String(cta_label).trim().slice(0, 60);
+      const cleanCtaUrl = String(cta_url).trim().slice(0, 500);
+
+      const result = await new Promise((resolve, reject) => {
+        db.run(
+          `INSERT INTO news (template_type, badge, icon, color, title, content, cta_label, cta_url)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            cleanType,
+            cleanBadge,
+            cleanIcon,
+            cleanColor,
+            cleanTitle,
+            cleanContent,
+            cleanCtaLabel,
+            cleanCtaUrl,
+          ],
+          function (err) {
+            if (err) reject(err);
+            else resolve(this.lastID);
+          },
+        );
+      });
+
+      res.json({
+        success: true,
+        id: result,
+        message: "Actualité publiée pour tous les utilisateurs",
+      });
+    } catch (error) {
+      console.error("Error creating news:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+// 📰 NEWS & NOTIFICATIONS — admin: delete
+app.delete(
+  "/api/admin/news/:id",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const newsId = Number(req.params.id);
+      if (!newsId)
+        return res.status(400).json({ error: "News ID is required" });
+
+      const result = await new Promise((resolve, reject) => {
+        db.run("DELETE FROM news WHERE id = ?", [newsId], function (err) {
+          if (err) reject(err);
+          else resolve(this.changes);
+        });
+      });
+
+      if (!result)
+        return res.status(404).json({ error: "Actualité introuvable" });
+
+      res.json({ success: true, message: "Actualité supprimée" });
+    } catch (error) {
+      console.error("Error deleting news:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   },

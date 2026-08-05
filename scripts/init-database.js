@@ -23,7 +23,7 @@ const db = new sqlite3.Database('./database/parfumerie.db', (err) => {
 const createTables = () => {
     return new Promise((resolve, reject) => {
         let tablesCreated = 0;
-        const totalTables = 8;
+        const totalTables = 10;
 
         const checkComplete = () => {
             tablesCreated++;
@@ -235,6 +235,78 @@ const createTables = () => {
                 checkComplete();
             }
         });
+
+        // Loyalty cards table (carte fidélité)
+        db.run(`
+            CREATE TABLE IF NOT EXISTS loyalty_cards (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER UNIQUE,
+                holder_name TEXT,
+                holder_email TEXT,
+                holder_phone TEXT,
+                card_number TEXT UNIQUE,
+                points INTEGER NOT NULL DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        `, (err) => {
+            if (err) {
+                console.error('Error creating loyalty_cards table:', err.message);
+                reject(err);
+            } else {
+                console.log('✓ Loyalty cards table created');
+                checkComplete();
+            }
+        });
+
+        // Loyalty transactions table (carte fidélité history)
+        db.run(`
+            CREATE TABLE IF NOT EXISTS loyalty_transactions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                card_id INTEGER NOT NULL,
+                user_id INTEGER,
+                points_change INTEGER NOT NULL,
+                type TEXT NOT NULL CHECK (type IN ('earn', 'redeem')),
+                description TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (card_id) REFERENCES loyalty_cards (id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        `, (err) => {
+            if (err) {
+                console.error('Error creating loyalty_transactions table:', err.message);
+                reject(err);
+            } else {
+                console.log('✓ Loyalty transactions table created');
+                checkComplete();
+            }
+        });
+
+        // News & notifications table (published announcements for all users)
+        db.run(`
+            CREATE TABLE IF NOT EXISTS news (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                template_type TEXT NOT NULL DEFAULT 'general',
+                badge TEXT,
+                icon TEXT,
+                color TEXT,
+                title TEXT NOT NULL,
+                content TEXT NOT NULL,
+                cta_label TEXT,
+                cta_url TEXT,
+                is_active INTEGER NOT NULL DEFAULT 1,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        `, (err) => {
+            if (err) {
+                console.error('Error creating news table:', err.message);
+                reject(err);
+            } else {
+                console.log('✓ News table created');
+                checkComplete();
+            }
+        });
     });
 };
 
@@ -280,6 +352,11 @@ const createIndexes = () => {
             db.run('CREATE INDEX IF NOT EXISTS idx_review_replies_review_id ON review_replies(review_id)', (err) => {
                 if (err) console.error('Error creating review_replies index:', err.message);
                 else console.log('✓ Review replies index created');
+            });
+
+            db.run('CREATE INDEX IF NOT EXISTS idx_loyalty_transactions_card_id ON loyalty_transactions(card_id)', (err) => {
+                if (err) console.error('Error creating loyalty_transactions index:', err.message);
+                else console.log('✓ Loyalty transactions index created');
                 resolve();
             });
         });

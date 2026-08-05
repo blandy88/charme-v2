@@ -788,7 +788,7 @@
                             </button>
                         </div>
                         <div
-                            class="user-logged-in hidden"
+                            class="user-logged-in"
                             id="userLoggedIn"
                         >
                             <div class="user-profile" id="userProfile">
@@ -917,6 +917,55 @@
                                             />
                                         </svg>
                                         Admin Dashboard
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="loyaltyCardBtn"
+                                        style="display: none"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <rect
+                                                x="2"
+                                                y="5"
+                                                width="20"
+                                                height="14"
+                                                rx="2"
+                                                ry="2"
+                                            />
+                                            <line x1="2" y1="10" x2="22" y2="10" />
+                                        </svg>
+                                        Carte Fidélité
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="newsAdminBtn"
+                                        style="display: none"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <path
+                                                d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"
+                                            />
+                                            <path
+                                                d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"
+                                            />
+                                            <path d="M6 8h2" />
+                                            <path d="M6 12h2" />
+                                            <path d="M16 8h2" />
+                                            <path d="M16 12h2" />
+                                        </svg>
+                                        News &amp; Notifications
                                     </div>
                                     <div class="dropdown-divider"></div>
                                     <div class="dropdown-item" id="logoutBtn">
@@ -3601,6 +3650,249 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <div class="admin-section">
+                        <h3>Carte Fidélité <span class="loyalty-hint">— 6 points = 1 parfum offert</span></h3>
+                        <div class="users-table-container">
+                            <table class="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Client</th>
+                                        <th>Contact</th>
+                                        <th>Points</th>
+                                        <th>Progression</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="loyaltyTableBody">
+                                    <!-- Loyalty cards will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="admin-section news-admin-section">
+                        <div class="news-admin-section__head">
+                            <h3>News &amp; Notifications</h3>
+                            <button type="button" class="btn-small news-admin-new" id="newsAdminNewBtn">
+                                + Nouvelle actualité
+                            </button>
+                        </div>
+                        <p class="news-admin-section__hint">
+                            Publiez une actualité pour tous les utilisateurs : promotion, nouveau parfum, événement…
+                        </p>
+                        <div class="users-table-container">
+                            <div class="news-admin-list" id="adminNewsList">
+                                <p class="news-admin-empty">Aucune actualité publiée pour le moment.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- News & Notifications Composer Modal -->
+        <div id="newsComposerModal" class="admin-modal news-composer-modal hidden">
+            <div class="modal-overlay" id="newsComposerOverlay"></div>
+            <div class="admin-modal-content news-composer-shell">
+                <div class="admin-modal-header news-composer-header">
+                    <div>
+                        <span class="loyalty-header__eyebrow">News &amp; Notifications</span>
+                        <h2>Nouvelle actualité</h2>
+                    </div>
+                    <button class="admin-close-btn" id="newsComposerClose" aria-label="Fermer">&times;</button>
+                </div>
+
+                <div class="modal-body news-composer-body">
+                    <!-- ═══════ TEMPLATE PICKER ═══════ -->
+                    <div class="news-composer-templates">
+                        <span class="news-composer-label">Choisir un modèle</span>
+                        <div class="news-composer-template-grid">
+                            <button type="button" class="news-template-card is-active" data-news-template="promotion">
+                                <span class="news-template-card__icon" aria-hidden="true">🏷️</span>
+                                <span class="news-template-card__name">Promotion</span>
+                                <span class="news-template-card__desc">Offre spéciale / remise</span>
+                            </button>
+                            <button type="button" class="news-template-card" data-news-template="new_perfume">
+                                <span class="news-template-card__icon" aria-hidden="true">🌸</span>
+                                <span class="news-template-card__name">Nouveau parfum</span>
+                                <span class="news-template-card__desc">Lancement d'un produit</span>
+                            </button>
+                            <button type="button" class="news-template-card" data-news-template="event">
+                                <span class="news-template-card__icon" aria-hidden="true">📅</span>
+                                <span class="news-template-card__name">Événement</span>
+                                <span class="news-template-card__desc">Événement en boutique</span>
+                            </button>
+                            <button type="button" class="news-template-card" data-news-template="general">
+                                <span class="news-template-card__icon" aria-hidden="true">📣</span>
+                                <span class="news-template-card__name">Annonce</span>
+                                <span class="news-template-card__desc">Message général</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ═══════ FORM ═══════ -->
+                    <div class="news-composer-form">
+                        <div class="news-composer-form__row">
+                            <label class="loyalty-field">
+                                <span class="loyalty-field__label">Badge <em>(optionnel)</em></span>
+                                <input type="text" id="newsComposerBadge" class="loyalty-select" maxlength="40" placeholder="Ex. -30%" />
+                            </label>
+                            <label class="loyalty-field">
+                                <span class="loyalty-field__label">Icône</span>
+                                <input type="text" id="newsComposerIcon" class="loyalty-select" maxlength="8" placeholder="Ex. ✨" />
+                            </label>
+                        </div>
+                        <label class="loyalty-field">
+                            <span class="loyalty-field__label">Titre <em>*</em></span>
+                            <input type="text" id="newsComposerTitle" class="loyalty-select" maxlength="120" placeholder="Ex. -30% sur toute la boutique" />
+                        </label>
+                        <label class="loyalty-field">
+                            <span class="loyalty-field__label">Message <em>*</em></span>
+                            <textarea id="newsComposerContent" class="loyalty-select news-composer-textarea" rows="4" maxlength="1000" placeholder="Décrivez l'actualité…"></textarea>
+                        </label>
+                        <div class="news-composer-form__row">
+                            <label class="loyalty-field">
+                                <span class="loyalty-field__label">Texte du bouton <em>(optionnel)</em></span>
+                                <input type="text" id="newsComposerCtaLabel" class="loyalty-select" maxlength="60" placeholder="Ex. Découvrir l'offre" />
+                            </label>
+                            <label class="loyalty-field">
+                                <span class="loyalty-field__label">Lien du bouton <em>(optionnel)</em></span>
+                                <input type="text" id="newsComposerCtaUrl" class="loyalty-select" maxlength="500" placeholder="Ex. /#fragrances" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ═══════ LIVE PREVIEW ═══════ -->
+                    <div class="news-composer-preview">
+                        <span class="news-composer-label">Aperçu</span>
+                        <div class="news-composer-preview-card" id="newsComposerPreview">
+                            <div class="news-preview-badge">Promo</div>
+                            <h4 class="news-preview-title">Titre de l'actualité</h4>
+                            <p class="news-preview-content">Le message apparaîtra ici pour tous les utilisateurs.</p>
+                            <a class="news-preview-cta" href="#">Découvrir</a>
+                        </div>
+                    </div>
+
+                    <div class="news-composer-actions">
+                        <button type="button" class="btn-small news-composer-cancel" id="newsComposerCancel">Annuler</button>
+                        <button type="button" class="btn-small btn-loyalty-add news-composer-publish" id="newsComposerPublish">
+                            Publier pour tous
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte Fidélité Modal -->
+        <div id="loyaltyModal" class="admin-modal loyalty-modal hidden">
+            <div class="modal-overlay" id="loyaltyModalOverlay"></div>
+
+            <div class="admin-modal-content loyalty-shell">
+
+                <!-- ═══════ HEADER ═══════ -->
+                <div class="admin-modal-header loyalty-header">
+                    <div class="loyalty-header__title">
+                        <span class="loyalty-header__eyebrow">Programme de fidélité</span>
+                        <h2>Carte Fidélité</h2>
+                        <span class="loyalty-header__rule"></span>
+                    </div>
+                    <button class="admin-close-btn loyalty-close" id="loyaltyModalClose" aria-label="Fermer">&times;</button>
+                </div>
+
+                <div class="modal-body loyalty-body">
+
+                    <!-- ═══════ STATS ═══════ -->
+                    <div class="admin-stats loyalty-stats">
+                        <div class="stat-card loyalty-stat">
+                            <span class="loyalty-stat__icon" aria-hidden="true">◈</span>
+                            <h3 id="loyaltyTotalCards">0</h3>
+                            <span class="loyalty-stat__rule"></span>
+                            <p>Cartes émises</p>
+                        </div>
+                        <div class="stat-card loyalty-stat loyalty-stat--accent">
+                            <span class="loyalty-stat__icon" aria-hidden="true">✦</span>
+                            <h3 id="loyaltyEligibleCards">0</h3>
+                            <span class="loyalty-stat__rule"></span>
+                            <p>Éligibles · 6 pts</p>
+                        </div>
+                        <div class="stat-card loyalty-stat">
+                            <span class="loyalty-stat__icon" aria-hidden="true">❦</span>
+                            <h3 id="loyaltyRewardsGiven">0</h3>
+                            <span class="loyalty-stat__rule"></span>
+                            <p>Parfums offerts</p>
+                        </div>
+                    </div>
+
+                    <!-- ═══════ TWO-COLUMN GRID ═══════ -->
+                    <div class="loyalty-grid">
+
+                        <!-- ─── LEFT · CREATE PANEL ─── -->
+                        <aside class="loyalty-panel loyalty-create">
+                            <header class="loyalty-panel__head">
+                                <span class="loyalty-panel__eyebrow">Ajouter</span>
+                                <h3>Nouvelle carte</h3>
+                            </header>
+
+                            <!-- Manual card form -->
+                            <label class="loyalty-field">
+                                <span class="loyalty-field__label">Nom complet <em>*</em></span>
+                                <input type="text" id="loyaltyManualName" class="loyalty-select" placeholder="Ex. Camille Laurent" maxlength="80" />
+                            </label>
+                            <div class="loyalty-field-row">
+                                <label class="loyalty-field">
+                                    <span class="loyalty-field__label">Téléphone</span>
+                                    <input type="tel" id="loyaltyManualPhone" class="loyalty-select" placeholder="+33 6 12 34 56 78" maxlength="30" />
+                                </label>
+                                <label class="loyalty-field">
+                                    <span class="loyalty-field__label">Email <em>(optionnel)</em></span>
+                                    <input type="email" id="loyaltyManualEmail" class="loyalty-select" placeholder="client@exemple.fr" maxlength="120" />
+                                </label>
+                            </div>
+                            <button class="btn-small btn-loyalty-add loyalty-submit" id="loyaltyCreateManualBtn">
+                                <span>Créer la carte</span>
+                            </button>
+                            <p class="loyalty-hint">Ajoutez un client et créez sa carte fidélité.</p>
+                        </aside>
+
+                        <!-- ─── RIGHT · CARDS LIST ─── -->
+                        <section class="loyalty-panel loyalty-list">
+                            <header class="loyalty-panel__head loyalty-panel__head--split">
+                                <div>
+                                    <span class="loyalty-panel__eyebrow">Répertoire</span>
+                                    <h3>Cartes des clients</h3>
+                                </div>
+                                <span class="loyalty-panel__meta" id="loyaltyListMeta"></span>
+                            </header>
+
+                            <div class="loyalty-search">
+                                <svg class="loyalty-search__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.3-4.3"></path>
+                                </svg>
+                                <input type="search" id="loyaltySearchInput" placeholder="Rechercher par nom ou téléphone…" autocomplete="off" spellcheck="false">
+                                <button type="button" class="loyalty-search__clear" id="loyaltySearchClear" aria-label="Effacer la recherche">✕</button>
+                            </div>
+
+                            <div class="users-table-container loyalty-table-wrap">
+                                <table class="users-table loyalty-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Client</th>
+                                            <th>Contact</th>
+                                            <th>N° Carte</th>
+                                            <th>Points</th>
+                                            <th class="loyalty-th-actions">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="loyaltyModalTableBody">
+                                        <!-- filled by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
                     </div>
                 </div>
             </div>
