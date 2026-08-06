@@ -22,10 +22,15 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.NODE_ENV || "development";
-const allowedOrigins = (process.env.CORS_ORIGINS || "")
-  .split(",")
-  .map((o) => o.trim())
-  .filter(Boolean);
+const allowedOrigins = [
+  ...(process.env.CORS_ORIGINS || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean),
+  process.env.RENDER_EXTERNAL_URL,
+  "https://charmeperfume.me",
+  "https://www.charmeperfume.me",
+].filter(Boolean);
 const INSECURE_JWT_SECRET_PREFIX =
   "your-super-secret-jwt-key-change-this-in-production";
 const JWT_SECRET = process.env.JWT_SECRET || "";
@@ -76,6 +81,12 @@ const upload = multer({
 const uploadsDir = path.join(__dirname, "uploads", "avatars");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Ensure database directory exists (fresh clones omit the git-ignored database/)
+const dbDir = path.join(__dirname, "database");
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
 }
 
 // 🔧 Avatar migration function
