@@ -1,4 +1,22 @@
 
+// GitHub Pages frontend -> Render backend. Rewrites backend-relative URLs
+// (/api, /uploads) to the Render origin so auth, API calls and avatar images
+// keep working when this static site is hosted away from the Express server.
+window.CHARME_API_ORIGIN = "https://parfumerie-charme-4dw8.onrender.com";
+(function () {
+  if (window.location.origin === window.CHARME_API_ORIGIN) return;
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = function (input, init) {
+    if (
+      typeof input === "string" &&
+      (input.startsWith("/api/") || input.startsWith("/uploads/"))
+    ) {
+      input = window.CHARME_API_ORIGIN + input;
+    }
+    return nativeFetch(input, init);
+  };
+})();
+
 // Caches element zero-state to prevent layout thrashing
 const _parallaxZeroState = new WeakSet();
   function resetParallaxElement(element, transformString) {
@@ -78,6 +96,14 @@ window.normalizeAvatarSrc = function (src) {
   if (typeof src === "string" && src.startsWith("data:image/")) {
     const base64Part = src.split(",")[1] || "";
     if (base64Part.length < 500) return "default.jpg";
+  }
+  if (
+    window.CHARME_API_ORIGIN &&
+    window.location.origin !== window.CHARME_API_ORIGIN &&
+    typeof src === "string" &&
+    src.startsWith("/uploads/")
+  ) {
+    return window.CHARME_API_ORIGIN + src;
   }
   return src;
 };
