@@ -13,5 +13,7 @@ services:
         value: 10000
       - key: CORS_ORIGINS
         value: https://charmeperfume.me,https://www.charmeperfume.me
+      - key: ALLOW_UNVERIFIED_LOGIN
+        value: "true"
       - key: JWT_SECRET
         sync: false

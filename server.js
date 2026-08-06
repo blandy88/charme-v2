@@ -1067,8 +1067,12 @@ app.post("/api/auth/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // Check if email is verified (skip for admin)
-    if (!user.email_verified && user.is_admin !== 1) {
+    // Check if email is verified (skip for admin or when unverified login is enabled)
+    if (
+      !user.email_verified &&
+      user.is_admin !== 1 &&
+      process.env.ALLOW_UNVERIFIED_LOGIN !== "true"
+    ) {
       return res.status(403).json({
         error: "Please verify your email address before logging in",
         requiresVerification: true,
