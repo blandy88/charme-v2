@@ -13,15 +13,5 @@ services:
         value: 10000
       - key: CORS_ORIGINS
         value: https://charmeperfume.me,https://www.charmeperfume.me
-      - key: EMAIL_HOST
-        value: smtp.gmail.com
-      - key: EMAIL_PORT
-        value: "587"
-      - key: EMAIL_USER
-        sync: false
-      - key: EMAIL_PASS
-        sync: false
-      - key: EMAIL_FROM
-        sync: false
       - key: JWT_SECRET
         sync: false
