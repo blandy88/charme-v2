@@ -16,15 +16,15 @@ async function createTables() {
                 avatar_url TEXT,
                 email_verified INTEGER DEFAULT 0,
                 verification_code TEXT,
-                verification_expires TIMESTAMP,
+                verification_expires TIMESTAMPTZ,
                 is_admin INTEGER DEFAULT 0,
                 is_banned INTEGER DEFAULT 0,
                 banned_reason TEXT,
-                banned_at TIMESTAMP,
+                banned_at TIMESTAMPTZ,
                 banned_by INTEGER,
-                created_at TIMESTAMP DEFAULT NOW(),
-                updated_at TIMESTAMP DEFAULT NOW(),
-                last_login TIMESTAMP,
+                created_at TIMESTAMPTZ DEFAULT NOW(),
+                updated_at TIMESTAMPTZ DEFAULT NOW(),
+                last_login TIMESTAMPTZ,
                 FOREIGN KEY (banned_by) REFERENCES users (id)
             )
         `,
@@ -36,8 +36,8 @@ async function createTables() {
                 sms_notifications INTEGER DEFAULT 0,
                 profile_visibility INTEGER DEFAULT 1,
                 data_collection INTEGER DEFAULT 1,
-                created_at TIMESTAMP DEFAULT NOW(),
-                updated_at TIMESTAMP DEFAULT NOW(),
+                created_at TIMESTAMPTZ DEFAULT NOW(),
+                updated_at TIMESTAMPTZ DEFAULT NOW(),
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
                 UNIQUE(user_id)
             )
@@ -48,7 +48,7 @@ async function createTables() {
                 user_id INTEGER NOT NULL,
                 product_id TEXT NOT NULL,
                 product_name TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT NOW(),
+                created_at TIMESTAMPTZ DEFAULT NOW(),
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
                 UNIQUE(user_id, product_id)
             )
@@ -64,8 +64,8 @@ async function createTables() {
                 category TEXT,
                 mood_indicators TEXT,
                 seasonal_indicators TEXT,
-                created_at TIMESTAMP DEFAULT NOW(),
-                updated_at TIMESTAMP DEFAULT NOW()
+                created_at TIMESTAMPTZ DEFAULT NOW(),
+                updated_at TIMESTAMPTZ DEFAULT NOW()
             )
         `,
         `
@@ -73,8 +73,8 @@ async function createTables() {
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER NOT NULL,
                 token_hash TEXT NOT NULL,
-                expires_at TIMESTAMP NOT NULL,
-                created_at TIMESTAMP DEFAULT NOW(),
+                expires_at TIMESTAMPTZ NOT NULL,
+                created_at TIMESTAMPTZ DEFAULT NOW(),
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         `,
@@ -89,8 +89,8 @@ async function createTables() {
                 review_text TEXT NOT NULL,
                 likes INTEGER DEFAULT 0,
                 dislikes INTEGER DEFAULT 0,
-                created_at TIMESTAMP DEFAULT NOW(),
-                updated_at TIMESTAMP DEFAULT NOW(),
+                created_at TIMESTAMPTZ DEFAULT NOW(),
+                updated_at TIMESTAMPTZ DEFAULT NOW(),
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         `,
@@ -100,7 +100,7 @@ async function createTables() {
                 review_id INTEGER NOT NULL,
                 user_id INTEGER NOT NULL,
                 like_type TEXT NOT NULL CHECK (like_type IN ('like', 'dislike')),
-                created_at TIMESTAMP DEFAULT NOW(),
+                created_at TIMESTAMPTZ DEFAULT NOW(),
                 UNIQUE(review_id, user_id),
                 FOREIGN KEY (review_id) REFERENCES reviews (id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
@@ -120,9 +120,9 @@ async function createTables() {
                 likes INTEGER DEFAULT 0,
                 dislikes INTEGER DEFAULT 0,
                 is_edited INTEGER DEFAULT 0,
-                created_at TIMESTAMP DEFAULT NOW(),
-                updated_at TIMESTAMP DEFAULT NOW(),
-                edited_at TIMESTAMP,
+                created_at TIMESTAMPTZ DEFAULT NOW(),
+                updated_at TIMESTAMPTZ DEFAULT NOW(),
+                edited_at TIMESTAMPTZ,
                 FOREIGN KEY (review_id) REFERENCES reviews (id) ON DELETE CASCADE,
                 FOREIGN KEY (parent_reply_id) REFERENCES review_replies (id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
@@ -137,8 +137,8 @@ async function createTables() {
                 holder_phone TEXT,
                 card_number TEXT UNIQUE,
                 points INTEGER NOT NULL DEFAULT 0,
-                created_at TIMESTAMP DEFAULT NOW(),
-                updated_at TIMESTAMP DEFAULT NOW(),
+                created_at TIMESTAMPTZ DEFAULT NOW(),
+                updated_at TIMESTAMPTZ DEFAULT NOW(),
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         `,
@@ -150,7 +150,7 @@ async function createTables() {
                 points_change INTEGER NOT NULL,
                 type TEXT NOT NULL CHECK (type IN ('earn', 'redeem')),
                 description TEXT,
-                created_at TIMESTAMP DEFAULT NOW(),
+                created_at TIMESTAMPTZ DEFAULT NOW(),
                 FOREIGN KEY (card_id) REFERENCES loyalty_cards (id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
@@ -167,7 +167,7 @@ async function createTables() {
                 cta_label TEXT,
                 cta_url TEXT,
                 is_active INTEGER NOT NULL DEFAULT 1,
-                created_at TIMESTAMP DEFAULT NOW()
+                created_at TIMESTAMPTZ DEFAULT NOW()
             )
         `,
     ];

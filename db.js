@@ -36,6 +36,7 @@ const pool = new pg.Pool({
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
+  options: "-c timezone=UTC",
   ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
 });
 
@@ -108,7 +109,7 @@ function translate(sql) {
   // Type rewrites
   s = s.replace(/INTEGER\s+PRIMARY\s+KEY\s+AUTOINCREMENT/gi, "SERIAL PRIMARY KEY");
   s = s.replace(/\bAUTOINCREMENT\b/gi, "");
-  s = s.replace(/\bDATETIME\b/gi, "TIMESTAMP");
+  s = s.replace(/\bDATETIME\b/gi, "TIMESTAMPTZ");
   s = s.replace(/\bBOOLEAN\b/gi, "INTEGER");
   s = s.replace(/\bADD\s+COLUMN\s+/gi, "ADD COLUMN IF NOT EXISTS ");
 
