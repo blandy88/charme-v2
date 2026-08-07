@@ -1984,7 +1984,7 @@ app.post(
 );
 
 // 🎁 CARTE FIDÉLITÉ: Loyalty cards admin routes
-const LOYALTY_REWARD_THRESHOLD = 6;
+const LOYALTY_REWARD_THRESHOLD = 5;
 
 function getLoyaltyCardByUserId(userId) {
   return new Promise((resolve, reject) => {
@@ -2223,12 +2223,12 @@ app.post("/api/admin/loyalty/redeem", authenticateToken, requireAdmin, async (re
       card.user_id,
       -LOYALTY_REWARD_THRESHOLD,
       "redeem",
-      "Parfum offert (6 points)",
+      `Parfum offert (${LOYALTY_REWARD_THRESHOLD} points)`,
     );
 
     res.json({
       success: true,
-      message: "Parfum offert : récompense accordée (6 points déduits)",
+      message: `Parfum offert : récompense accordée (${LOYALTY_REWARD_THRESHOLD} points déduits)`,
       card: { cardId: card.id, userId: card.user_id, points: newPoints, eligible: false },
     });
   } catch (error) {

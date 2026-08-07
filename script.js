@@ -10037,7 +10037,7 @@ let loyaltyCards = [];
 let loyaltyTotalRewards = 0;
 let loyaltyUsersWithoutCards = [];
 let loyaltySearchQuery = "";
-const LOYALTY_REWARD_THRESHOLD = 6;
+const LOYALTY_REWARD_THRESHOLD = 5;
 
 // 📰 NEWS & NOTIFICATIONS — admin composer + management
 const NEWS_TEMPLATES = {
@@ -10663,7 +10663,7 @@ function renderLoyaltyTable() {
     const redeemBtn = document.createElement("button");
     redeemBtn.className = "btn-small btn-loyalty-redeem";
     redeemBtn.textContent = "Offrir parfum";
-    redeemBtn.title = "Offrir un parfum (6 points)";
+    redeemBtn.title = `Offrir un parfum (${LOYALTY_REWARD_THRESHOLD} points)`;
     redeemBtn.disabled = !card.eligible;
     if (card.eligible) {
       redeemBtn.addEventListener("click", () =>
@@ -10734,7 +10734,7 @@ async function addLoyaltyPoints(cardId, points, skipConfirm = false) {
 async function redeemLoyaltyReward(cardId, name) {
   if (
     !window.confirm(
-      `Offrir un parfum gratuit à ${name} ? Les 6 points seront déduits.`,
+      `Offrir un parfum gratuit à ${name} ? Les ${LOYALTY_REWARD_THRESHOLD} points seront déduits.`,
     )
   ) {
     return;
@@ -10984,7 +10984,7 @@ function renderLoyaltyModalTable() {
     const redeemBtn = document.createElement("button");
     redeemBtn.className = "btn-small btn-loyalty-redeem";
     redeemBtn.textContent = "Offrir parfum";
-    redeemBtn.title = "Offrir un parfum (6 points)";
+    redeemBtn.title = `Offrir un parfum (${LOYALTY_REWARD_THRESHOLD} points)`;
     redeemBtn.disabled = !card.eligible;
     if (card.eligible) {
       redeemBtn.addEventListener("click", () =>
