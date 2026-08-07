@@ -3962,6 +3962,9 @@ body.has-marquee .navbar {
     height: 100vh;
     position: relative;
     overflow: hidden;
+    background:
+        radial-gradient(120% 100% at 50% -10%, rgba(201, 169, 78, 0.12), transparent 50%),
+        linear-gradient(180deg, #17130c 0%, #0c0b0a 55%, #060606 100%);
 }
 
 /* Additional blur overlay for bottom-focused effect - only composites when blur active */
@@ -4014,19 +4017,6 @@ body.has-marquee .navbar {
     isolation: isolate !important;
 }
 
-#background-video,
-#background-video-2,
-#background-video-3 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-    transition: opacity 1s ease-in-out;
-}
-
 /* Dynamic scroll-responsive vignette overlay */
 /* Using fixed gradient with opacity control for GPU-composited animation (no per-frame gradient recalc) */
 .hero::after {
@@ -4065,131 +4055,6 @@ body.has-marquee .navbar {
     z-index: 1;
     pointer-events: none;
     /* transition removed to prevent rendering conflicts with JS frame-by-frame updates */
-}
-
-/* Video Controls */
-.video-controls {
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    gap: 15px;
-    z-index: 10;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
-}
-
-.hero:hover .video-controls {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: all;
-}
-
-.video-control-btn {
-    width: 50px;
-    height: 50px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.9);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    box-shadow:
-        0 4px 15px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.video-control-btn::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-    );
-    transition: left 0.6s ease;
-}
-
-.video-control-btn:hover::before {
-    left: 100%;
-}
-
-.video-control-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(255, 255, 255, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 1);
-}
-
-.video-control-btn:active {
-    transform: translateY(-1px) scale(1.02);
-    transition: all 0.1s ease;
-}
-
-.video-control-btn svg {
-    width: 20px;
-    height: 20px;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
-}
-
-.video-control-btn:hover svg {
-    transform: scale(1.02);
-}
-
-/* Responsive video controls */
-@media (max-width: 768px) {
-    .video-controls {
-        bottom: 20px;
-        right: 20px;
-        gap: 12px;
-    }
-
-    .video-control-btn {
-        width: 45px;
-        height: 45px;
-    }
-
-    .video-control-btn svg {
-        width: 18px;
-        height: 18px;
-    }
-}
-
-@media (max-width: 480px) {
-    .video-controls {
-        bottom: 15px;
-        right: 15px;
-        gap: 10px;
-    }
-
-    .video-control-btn {
-        width: 40px;
-        height: 40px;
-    }
-
-    .video-control-btn svg {
-        width: 16px;
-        height: 16px;
-    }
 }
 
 /* --------------------------------------------------- */

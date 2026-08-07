@@ -567,7 +567,6 @@ const allowedStaticFiles = new Map(
     "index.html",
     "styles.css",
     "script.js",
-    "background.mp4",
     "default.jpg",
     ...fs.readdirSync(__dirname).filter((file) => file.toLowerCase().endsWith(".png")),
   ].map((file) => [`/${file.toLowerCase()}`, file]),

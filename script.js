@@ -148,7 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   body.classList.remove("marquee-compact", "marquee-minimal");
   topChromeController = initTopChromeScrollBehavior();
-  const video = document.getElementById("background-video");
   const navbar = document.querySelector(".navbar");
   let ticking = false;
 
@@ -1932,10 +1931,9 @@ let _cachedElements = new Map();
 let _lastCacheTime = 0;
 let _lastAppliedBackgroundColor = null;
 let _lastAppliedTextColor = null;
-let _lastScrollProgressRounded = -1;  // guards navbar/video/vignette writes
+let _lastScrollProgressRounded = -1;  // guards navbar/vignette writes
 let _navbarScrollFxDisabledApplied = false;
 let _lastBlurActive = null; // track hero blur-active class state
-let _lastVideoBlurAmount = -1; // track video blur to avoid redundant writes
 let _lastVignetteIntensity = -1; // track vignette intensity to avoid redundant writes
 // Pre-built sorted breakpoint table for background transitions
 let _bgBreakpoints = null;
@@ -2175,14 +2173,12 @@ function updateColors() {
 
     const getSectionEl = _getEl;
 
-    // Calculate when user has scrolled past the video section (100vh)
-    const videoSectionHeight = windowHeight; // 100vh
     const contentHeight =
       _getOffsetHeight(_getEl("", ".content")) || windowHeight * 3;
 
-    // Define transition zones - black stays much longer
+    // Calculate transition zones - black stays much longer
     const blackDuration = contentHeight * 0.92; // Black stays for 92% of content height (was 85%)
-    const transitionStart = videoSectionHeight + blackDuration; // Start transition much later
+    const transitionStart = windowHeight + blackDuration; // Start transition much later
     const transitionRange = contentHeight * 0.08; // Use 8% of content height for transition (was 15%)
     const transitionEnd = transitionStart + transitionRange;
 
@@ -2429,9 +2425,6 @@ function updateColors() {
     // Apply gentle cubic easing for ultra-smooth fade-out
     const gentleEase = 1 - Math.pow(topVignetteProgress, 3); // Cubic ease-out for gentler transition
 
-    // Calculate blur reduction (starts at 8px, reduces to 0px)
-    const blurAmount = gentleEase * 8;
-
     // Bottom/edge vignette effect (appears on scroll)
     // Start vignette after 5% scroll, reach full intensity at 80% scroll
     const vignetteStart = 0.05;
@@ -2591,152 +2584,6 @@ function updateColors() {
     if (e.key === "Escape") {
       languageSelector.classList.remove("active");
       languageDropdown.classList.remove("active");
-    }
-  });
-
-  // Multiple background videos cycling — filter out null entries for missing video elements
-  const videos = [
-    document.getElementById("background-video"),
-    document.getElementById("background-video-2"),
-    document.getElementById("background-video-3"),
-  ].filter(Boolean);
-
-  let currentVideoIndex = 0;
-  let videoTransitionInterval;
-  let isPlaying = true;
-
-  // Video control elements
-  const playPauseBtn = document.getElementById("play-pause-btn");
-  const nextVideoBtn = document.getElementById("next-video-btn");
-  const playIcon = playPauseBtn.querySelector(".play-icon");
-  const pauseIcon = playPauseBtn.querySelector(".pause-icon");
-
-  function switchToNextVideo() {
-    if (videos.length <= 1) return;
-
-    const currentVideo = videos[currentVideoIndex];
-    const nextVideoIndex = (currentVideoIndex + 1) % videos.length;
-    const nextVideo = videos[nextVideoIndex];
-
-    // Fade out current video
-    currentVideo.style.opacity = "0";
-
-    // After fade out, switch videos and fade in
-    setTimeout(() => {
-      currentVideo.style.display = "none";
-      nextVideo.style.display = "block";
-      nextVideo.style.opacity = "0";
-
-      // Force reflow
-      nextVideo.offsetHeight;
-
-      // Fade in next video
-      nextVideo.style.opacity = "1";
-
-      currentVideoIndex = nextVideoIndex;
-    }, 1000); // Match CSS transition duration
-  }
-
-  function startVideoRotation() {
-    // Switch video every 15 seconds
-    videoTransitionInterval = setInterval(switchToNextVideo, 15000);
-  }
-
-  function stopVideoRotation() {
-    if (videoTransitionInterval) {
-      clearInterval(videoTransitionInterval);
-    }
-  }
-
-  // Initialize video rotation
-  if (videos.length > 1) {
-    // Ensure all videos are loaded before starting rotation
-    let loadedVideos = 0;
-    videos.forEach((video) => {
-      if (video) {
-        video.addEventListener("loadeddata", () => {
-          loadedVideos++;
-          if (loadedVideos === videos.length) {
-            startVideoRotation();
-          }
-        });
-      }
-    });
-  }
-
-  // Video control functionality
-  function togglePlayPause() {
-    const currentVideo = videos[currentVideoIndex];
-    if (!currentVideo) return;
-
-    if (isPlaying) {
-      // Pause video
-      currentVideo.pause();
-      playIcon.style.display = "block";
-      pauseIcon.style.display = "none";
-      stopVideoRotation();
-      isPlaying = false;
-    } else {
-      // Play video
-      currentVideo.play();
-      playIcon.style.display = "none";
-      pauseIcon.style.display = "block";
-      startVideoRotation();
-      isPlaying = true;
-    }
-  }
-
-  function manualNextVideo() {
-    // Stop auto rotation temporarily
-    stopVideoRotation();
-
-    // Switch to next video
-    switchToNextVideo();
-
-    // Restart auto rotation after 3 seconds if playing
-    if (isPlaying) {
-      setTimeout(() => {
-        startVideoRotation();
-      }, 3000);
-    }
-  }
-
-  // Event listeners for video controls
-  if (playPauseBtn) {
-    playPauseBtn.addEventListener("click", togglePlayPause);
-  }
-
-  if (nextVideoBtn) {
-    nextVideoBtn.addEventListener("click", manualNextVideo);
-  }
-
-  // Initialize play/pause button state
-  if (isPlaying) {
-    playIcon.style.display = "none";
-    pauseIcon.style.display = "block";
-  }
-
-  // Update play/pause state when videos change
-  function updatePlayPauseState() {
-    const currentVideo = videos[currentVideoIndex];
-    if (currentVideo) {
-      if (currentVideo.paused) {
-        playIcon.style.display = "block";
-        pauseIcon.style.display = "none";
-        isPlaying = false;
-      } else {
-        playIcon.style.display = "none";
-        pauseIcon.style.display = "block";
-        isPlaying = true;
-      }
-    }
-  }
-
-  // Listen for video events to sync button state
-  videos.forEach((video) => {
-    if (video) {
-      video.addEventListener("play", updatePlayPauseState);
-      video.addEventListener("pause", updatePlayPauseState);
     }
   });
 
