@@ -1,5 +1,5 @@
 const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
+const db = require("./db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
@@ -161,20 +161,11 @@ async function migrateAvatarsToFileSystem() {
   });
 }
 
-// Database setup
-const db = new sqlite3.Database("./database/parfumerie.db", (err) => {
-  if (err) {
-    console.error("Error opening database:", err.message);
-  } else {
-    console.log("Connected to SQLite database");
+// Database setup (PostgreSQL)
+console.log("Connected to PostgreSQL database");
 
-    // Ensure foreign keys are enforced and concurrent writes wait briefly.
-    db.run("PRAGMA foreign_keys = ON");
-    db.run("PRAGMA journal_mode = WAL");
-    db.run("PRAGMA busy_timeout = 5000");
-
-    // 🚀 ENHANCED REVIEW SYSTEM: Comprehensive database migration
-    console.log("🔄 Checking for required database migrations...");
+// Ensure foreign keys are enforced and concurrent writes wait briefly.
+console.log("🔄 Checking for required database migrations...");
 
     // Check existing table structure
     db.all("PRAGMA table_info(reviews)", (err, columns) => {
@@ -487,8 +478,6 @@ const db = new sqlite3.Database("./database/parfumerie.db", (err) => {
     migrateAvatarsToFileSystem();
 
     console.log("✅ Enhanced review system database migration completed");
-  }
-});
 
 // Security hardening
 app.disable("x-powered-by");

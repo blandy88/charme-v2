@@ -1,15 +1,8 @@
-const sqlite3 = require('sqlite3').verbose();
+const db = require('../db');
 const path = require('path');
 
 // Connect to database
-const db = new sqlite3.Database('./database/parfumerie.db', (err) => {
-    if (err) {
-        console.error('Error connecting to database:', err.message);
-        process.exit(1);
-    } else {
-        console.log('Connected to SQLite database');
-    }
-});
+console.log('Connected to PostgreSQL database');
 
 // Update existing users to use default.jpg avatar
 async function updateExistingUsersAvatars() {
