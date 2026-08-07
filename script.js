@@ -156,13 +156,25 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!navbarEl) return null;
 
     const chromeElements = [navbarEl, marqueeBar].filter(Boolean);
-    let isHidden = false;
-    let downIntent = 0;
-    let upIntent = 0;
-    let lastY = Math.max(0, window.pageYOffset || document.documentElement.scrollTop || 0);
-    let lastTs = performance.now();
-    let rafPending = false;
 
+    // Tunables
+    const SCROLL_TOP_ZONE     = 8;    // px — always show near the top
+    const SHOW_DELTA          = 6;    // px accumulated upward to reveal
+    const HIDE_DELTA          = 14;   // px accumulated downward to hide
+    const HIDE_MIN_Y          = 96;   // don't hide until past this y
+    const HIDE_MIN_VELOCITY   = 0.12; // px/ms — ignore slow drifts
+    const EDGE_REVEAL_Y       = 48;   // mouse near top => reveal
+    const RESIZE_DEBOUNCE_MS  = 120;
+
+    let isHidden      = false;
+    let downIntent    = 0;
+    let upIntent      = 0;
+    let lastY         = readScrollY();
+    let lastTs        = performance.now();
+    let rafPending    = false;
+    let resizeTimer   = 0;
+
+    // ---- helpers -------------------------------------------------
     function readScrollY() {
       return Math.max(0, window.pageYOffset || document.documentElement.scrollTop || 0);
     }
@@ -170,93 +182,101 @@ document.addEventListener("DOMContentLoaded", function () {
     function marqueeIsVisible() {
       return Boolean(
         marqueeBar &&
-          document.body.classList.contains("has-marquee") &&
-          getComputedStyle(marqueeBar).display !== "none",
+        document.body.classList.contains("has-marquee") &&
+        getComputedStyle(marqueeBar).display !== "none"
       );
     }
 
-    function chromeHeight() {
-      return navbarEl.offsetHeight + (marqueeIsVisible() ? marqueeBar.offsetHeight : 0);
+    function writeChromeHeightVar() {
+      // Measured height keeps the hide transform pixel-perfect on any viewport
+      const h = navbarEl.offsetHeight + (marqueeIsVisible() ? marqueeBar.offsetHeight : 0);
+      document.documentElement.style.setProperty("--nav-h", h + "px");
     }
 
-    function setHidden(nextHidden) {
-      if (nextHidden === isHidden) return;
-      isHidden = nextHidden;
+    function setHidden(next) {
+      if (next === isHidden) return;
+      isHidden = next;
       document.body.classList.toggle("top-shell-hidden", isHidden);
-    }
-
-    function applyChromeState() {
     }
 
     function reveal() {
       downIntent = 0;
-      upIntent = 0;
+      upIntent   = 0;
       setHidden(false);
     }
 
     function hasChromeFocus() {
       const active = document.activeElement;
-      return chromeElements.some((element) => element?.contains(active));
+      return chromeElements.some((el) => el && el.contains(active));
     }
 
     function hasOpenChromeSurface() {
       return Boolean(
-        document.querySelector(
-          [
-            "#quickSearchDropdown.show",
-            ".language-dropdown.active",
-            ".notification-dropdown.show",
-            ".ai-finder-dropdown.show",
-            ".ingredient-modal.show",
-            ".auth-modal.show",
-            ".modal.show",
-          ].join(","),
-        ),
+        document.querySelector([
+          "#quickSearchDropdown.show",
+          ".language-dropdown.active",
+          ".notification-dropdown.show",
+          ".ai-finder-dropdown.show",
+          ".ingredient-modal.show",
+          ".auth-modal.show",
+          ".modal.show",
+        ].join(","))
       );
     }
 
     function chromeLockedOpen() {
-      return (
-        hasChromeFocus() ||
-        hasOpenChromeSurface()
-      );
+      return hasChromeFocus() || hasOpenChromeSurface();
     }
 
+    // ---- main tick ----------------------------------------------
     function updateTopChrome() {
       rafPending = false;
 
-      const y = readScrollY();
+      const y   = readScrollY();
       const now = performance.now();
-      const dy = y - lastY;
-      const dt = Math.max(16, now - lastTs);
-      const velocity = Math.abs(dy) / dt;
+      const dy  = y - lastY;
+      const dt  = Math.max(1, now - lastTs);
+      const v   = Math.abs(dy) / dt; // px per ms
 
-      document.body.classList.toggle("top-shell-scrolled", y > 10);
+      // Background/hairline state (used by .top-shell-scrolled CSS)
+      document.body.classList.toggle("top-shell-scrolled", y > SCROLL_TOP_ZONE);
 
-      if (y <= 10 || chromeLockedOpen()) {
+      // Always reveal near the top or when a chrome surface is open
+      if (y <= SCROLL_TOP_ZONE || chromeLockedOpen()) {
         reveal();
-        lastY = y;
+        lastY  = y;
         lastTs = now;
         return;
       }
 
-      if (Math.abs(dy) < 1) return;
+      // Ignore sub-pixel jitter (touchpad rubber-banding, overscroll)
+      if (Math.abs(dy) < 0.5) {
+        lastTs = now;
+        return;
+      }
 
       if (dy > 0) {
+        // scrolling DOWN
         downIntent += dy;
         upIntent = 0;
-        if (y > 30 && downIntent > 4) {
+        if (
+          !isHidden &&
+          y > HIDE_MIN_Y &&
+          downIntent > HIDE_DELTA &&
+          v > HIDE_MIN_VELOCITY
+        ) {
           setHidden(true);
         }
       } else {
+        // scrolling UP
         upIntent += -dy;
         downIntent = 0;
-        if (upIntent > 4) {
+        if (isHidden && upIntent > SHOW_DELTA) {
           setHidden(false);
         }
       }
 
-      lastY = y;
+      lastY  = y;
       lastTs = now;
     }
 
@@ -266,19 +286,40 @@ document.addEventListener("DOMContentLoaded", function () {
       requestAnimationFrame(updateTopChrome);
     }
 
+    // ---- listeners ----------------------------------------------
     window.addEventListener("scroll", requestTopChromeUpdate, { passive: true });
+
     window.addEventListener("mousemove", (e) => {
-      if (e.clientY <= 30) {
-        reveal();
-      }
+      if (e.clientY <= EDGE_REVEAL_Y) reveal();
     }, { passive: true });
+
     window.addEventListener("resize", () => {
-      reveal();
-      requestTopChromeUpdate();
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        writeChromeHeightVar();
+        reveal();
+        requestTopChromeUpdate();
+      }, RESIZE_DEBOUNCE_MS);
     });
+
+    // Keep --nav-h correct if the marquee is added/removed at runtime
+    const bodyObserver = new MutationObserver(() => writeChromeHeightVar());
+    bodyObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+    // Also recompute once fonts finish loading (affects nav height)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(writeChromeHeightVar).catch(() => {});
+    }
+
+    // Init
+    writeChromeHeightVar();
     requestTopChromeUpdate();
 
-    return { reveal, requestUpdate: requestTopChromeUpdate, updateNow: updateTopChrome };
+    return {
+      reveal,
+      requestUpdate: requestTopChromeUpdate,
+      updateNow: updateTopChrome,
+    };
   }
 
   // Search Modal Functionality
