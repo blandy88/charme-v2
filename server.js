@@ -8,6 +8,8 @@ const rateLimit = require("express-rate-limit");
 const validator = require("validator");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
+const compression = require("compression");
 const multer = require("multer");
 const sharp = require("sharp");
 const {
@@ -488,6 +490,7 @@ const helmetOptions =
           directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrcAttr: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             imgSrc: ["'self'", "data:", "blob:"],
@@ -501,6 +504,9 @@ const helmetOptions =
       }
     : { contentSecurityPolicy: false };
 app.use(helmet(helmetOptions));
+
+// Gzip/Brotli compression for HTML, CSS, JS and JSON responses
+app.use(compression({ threshold: 1024 }));
 
 if (ENV === "production") {
   app.use(
@@ -562,51 +568,178 @@ app.use((req, res, next) => {
   next();
 });
 
-const allowedStaticFiles = new Map(
-  [
-    "index.html",
-    "styles.css",
-    "script.js",
-    "default.jpg",
-    ...fs.readdirSync(__dirname).filter((file) => file.toLowerCase().endsWith(".png")),
-  ].map((file) => [`/${file.toLowerCase()}`, file]),
+// =========================================================
+// Image optimization: serve resized WebP (with caches)
+// Original PNGs are 1-3.5MB @1920px; display sizes are 28-390px.
+// We resize + convert to WebP once, cache on disk + in memory.
+// =========================================================
+const IMAGE_CACHE_DIR = path.join(__dirname, ".cache", "img");
+const imageMemoryCache = new Map(); // key -> { buf, etag }
+const IMAGE_SIZES = [
+  { prefix: "/images/notes/", width: 96 },
+  { prefix: "/uploads/avatars/", width: 128 },
+  { prefix: "/uploads/fragrances/", width: 800 },
+  { prefix: "/images/mood-pictures/", width: 1600 },
+];
+const IMAGE_EXT = /\.(png|jpe?g)$/i;
+
+function resolveImageSource(reqPath) {
+  // Root-level perfume bottle images (e.g. /layton.png)
+  if (reqPath.startsWith("/") && IMAGE_EXT.test(reqPath) && reqPath.indexOf("/", 1) === -1) {
+    const file = reqPath.slice(1).toLowerCase();
+    if (allowedStaticFiles.has(`/${file}`)) {
+      const real = allowedStaticFiles.get(`/${file}`);
+      return { filePath: path.join(__dirname, real), width: 800 };
+    }
+    return null;
+  }
+  for (const { prefix, width } of IMAGE_SIZES) {
+    if (reqPath.startsWith(prefix)) {
+      const rel = reqPath.slice(prefix.length).replace(/[/\\]/g, "");
+      const filePath = path.join(__dirname, prefix, rel);
+      if (fs.existsSync(filePath)) return { filePath, width };
+      return null;
+    }
+  }
+  return null;
+}
+
+async function serveOptimizedImage(req, res, src) {
+  const acceptsWebp =
+    /image\/webp/i.test(req.headers.accept || "") ||
+    /image\/avif/i.test(req.headers.accept || "") ||
+    (req.headers.accept || "").includes("*/*");
+  if (!acceptsWebp) return null;
+
+  let stat;
+  try {
+    stat = fs.statSync(src.filePath);
+  } catch {
+    return null;
+  }
+  const mtime = stat.mtimeMs;
+  const key = `${src.filePath.toLowerCase()}|${mtime}|${src.width}`;
+
+  let cached = imageMemoryCache.get(key);
+  if (!cached) {
+    const diskFile = path.join(IMAGE_CACHE_DIR, `${crypto.createHash("md5").update(key).digest("hex")}.webp`);
+    try {
+      if (fs.existsSync(diskFile)) {
+        cached = { buf: fs.readFileSync(diskFile), etag: `"${key}"` };
+      }
+    } catch { /* fallthrough */ }
+  }
+  if (!cached) {
+    try {
+      const buf = await sharp(src.filePath, { animated: false })
+        .rotate()
+        .resize(src.width, null, { withoutEnlargement: true })
+        .webp({ quality: 78, effort: 3 })
+        .toBuffer();
+      cached = { buf, etag: `"${key}"` };
+      imageMemoryCache.set(key, cached);
+      if (imageMemoryCache.size > 400) {
+        const firstKey = imageMemoryCache.keys().next().value;
+        imageMemoryCache.delete(firstKey);
+      }
+      try {
+        fs.mkdirSync(IMAGE_CACHE_DIR, { recursive: true });
+        fs.writeFileSync(diskFile, buf);
+      } catch { /* cache write is best-effort */ }
+    } catch {
+      return null; // fall back to original on any sharp error
+    }
+  }
+
+  res.setHeader("Content-Type", "image/webp");
+  res.setHeader("ETag", cached.etag);
+  res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+  if (req.headers["if-none-match"] === cached.etag) {
+    res.statusCode = 304;
+    return res.end();
+  }
+  return res.send(cached.buf);
+}
+
+app.use(async (req, res, next) => {
+  if (req.method !== "GET") return next();
+  if (!IMAGE_EXT.test(req.path)) return next();
+  const src = resolveImageSource(req.path);
+  if (!src) return next();
+  try {
+    const served = await serveOptimizedImage(req, res, src);
+    if (served) return;
+  } catch { /* fall through to original handler */ }
+  next();
+});
+
+const allowedStaticFiles = new Map([
+  "index.html",
+  "styles.css",
+  "script.js",
+  "default.jpg",
+  ...fs.readdirSync(__dirname).filter((file) => file.toLowerCase().endsWith(".png")),
+].map((file) => [`/${file.toLowerCase()}`, file]),
 );
 app.use((req, res, next) => {
   if (req.path === "/") {
+    res.setHeader("Cache-Control", "no-cache, must-revalidate");
     return res.sendFile(path.join(__dirname, "index.html"));
   }
 
   const normalizedPath = req.path.toLowerCase();
   const staticFile = allowedStaticFiles.get(normalizedPath);
   if (staticFile) {
+    const isHtml = staticFile.toLowerCase().endsWith(".html");
+    res.setHeader(
+      "Cache-Control",
+      isHtml ? "no-cache, must-revalidate" : "public, max-age=604800",
+    );
     return res.sendFile(path.join(__dirname, staticFile));
   }
 
   next();
 });
-app.use("/css", express.static(path.join(__dirname, "css"), { index: false }));
-app.use("/js", express.static(path.join(__dirname, "js"), { index: false }));
+app.use(
+  "/css",
+  express.static(path.join(__dirname, "css"), {
+    index: false,
+    maxAge: "7d",
+  }),
+);
+app.use(
+  "/js",
+  express.static(path.join(__dirname, "js"), {
+    index: false,
+    maxAge: "7d",
+  }),
+);
 app.use(
   "/uploads/fragrances",
   express.static(path.join(__dirname, "uploads", "fragrances"), {
     index: false,
+    maxAge: "7d",
   }),
 );
 app.use(
   "/images/notes",
-  express.static(path.join(__dirname, "images", "notes"), { index: false }),
+  express.static(path.join(__dirname, "images", "notes"), {
+    index: false,
+    maxAge: "30d",
+  }),
 );
 app.use(
   "/images/mood-pictures",
   express.static(path.join(__dirname, "images", "mood-pictures"), {
     index: false,
+    maxAge: "30d",
   }),
 );
 
 // Serve avatar files
 app.use(
   "/uploads/avatars",
-  express.static(path.join(__dirname, "uploads", "avatars")),
+  express.static(path.join(__dirname, "uploads", "avatars"), { maxAge: "7d" }),
 );
 
 // Rate limiting
