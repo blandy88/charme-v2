@@ -2490,7 +2490,6 @@ function updateColors() {
     ticking = false;
   }
 
-  let lastThemeScrollUpdate = 0;
   let settledThemeSyncTimer = null;
 
   function syncThemeAfterBackgroundSettles() {
@@ -2511,11 +2510,7 @@ function updateColors() {
         if (backToTopBtn && progressRing) updateBackToTop();
         if (floatingSearch || floatingMenu) updateFloatingElements();
         updateSocialLinks();
-        const now = performance.now();
-        if (now - lastThemeScrollUpdate > 140) {
-          lastThemeScrollUpdate = now;
-          updateScrollBackgroundAndTheme();
-        }
+        updateScrollBackgroundAndTheme();
         ticking = false;
       });
       ticking = true;
@@ -4747,11 +4742,7 @@ function updateColors() {
             if (floatingSearch) { updateFloatingElements(); }
             updateSocialLinks();
 
-            const now = performance.now();
-            if (now - lastThemeScrollUpdate > 140) {
-              lastThemeScrollUpdate = now;
-              updateScrollBackgroundAndTheme();
-            }
+            updateScrollBackgroundAndTheme();
 
             // Heavy per-section parallax is intentionally disabled; layout is now static for scroll performance.
           } finally {
