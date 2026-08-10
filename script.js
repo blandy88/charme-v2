@@ -350,7 +350,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const byKey = new Map();
 
     function addSearchFragrance(fragrance) {
-      const sectionMatch = findFragranceSectionMatch(fragrance, sectionIndex);
+      const sectionMatch = fragrance.exactSectionMatch
+        ? findExactFragranceSectionMatch(fragrance, sectionIndex)
+        : findFragranceSectionMatch(fragrance, sectionIndex);
       const merged = {
         ...fragrance,
         notes: Array.isArray(fragrance.notes) ? fragrance.notes : [],
@@ -424,6 +426,30 @@ document.addEventListener("DOMContentLoaded", function () {
         sectionId: entry.sectionId,
         productId: entry.productId,
         searchAliases: entry.aliases,
+      });
+    });
+
+    const catalogData =
+      (typeof window !== "undefined" && window.FRAGRANCE_CATALOG_DATA) || [];
+    catalogData.forEach((catalogFragrance) => {
+      if (!catalogFragrance || !catalogFragrance.name) return;
+      addSearchFragrance({
+        name: catalogFragrance.name,
+        brand: catalogFragrance.brand || "Unknown Brand",
+        notes: catalogFragrance.ingredients || [],
+        type: catalogFragrance.family || "Unknown",
+        audience: catalogFragrance.audience || "unisex",
+        description: catalogFragrance.description || "",
+        image: catalogFragrance.image || "",
+        available: catalogFragrance.available !== false,
+        year: catalogFragrance.year || "",
+        perfumer: catalogFragrance.perfumer || "",
+        concentration: catalogFragrance.concentration || "",
+        sizes: (catalogFragrance.sizes || []).map(
+          (size) =>
+            `${size.size}${size.price != null ? ` · ${size.price}€` : ""}`,
+        ),
+        exactSectionMatch: true,
       });
     });
 
@@ -617,6 +643,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     return bestMatch;
+  }
+
+  function findExactFragranceSectionMatch(fragrance, index = buildSearchSectionIndex()) {
+    const aliases = new Set();
+    addAlias(aliases, fragrance.sectionId || "");
+    addAlias(aliases, fragrance.productId || "");
+    addAlias(aliases, fragrance.name || "");
+    addAlias(aliases, `${fragrance.brand || ""} ${fragrance.name || ""}`);
+    (fragrance.searchAliases || []).forEach((alias) => addAlias(aliases, alias));
+
+    for (const alias of aliases) {
+      const exact = index.byAlias.get(alias);
+      if (exact) return exact;
+    }
+    return null;
   }
 
   function getFragranceSearchScore(fragrance, query) {
@@ -1004,8 +1045,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function navigateToFragranceSearchResult(fragrance, sourceElement = null) {
-    const match = findFragranceSectionMatch(fragrance);
-    const target =
+    const match = fragrance.exactSectionMatch
+      ? findExactFragranceSectionMatch(fragrance)
+      : findFragranceSectionMatch(fragrance);
+    let target =
       (sourceElement?.dataset.sectionId ? document.getElementById(sourceElement.dataset.sectionId) : null) ||
       match?.target;
 
