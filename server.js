@@ -679,6 +679,7 @@ const allowedStaticFiles = new Map([
   "script.js",
   "default.jpg",
   ...fs.readdirSync(__dirname).filter((file) => file.toLowerCase().endsWith(".png")),
+  ...fs.readdirSync(__dirname).filter((file) => file.toLowerCase().endsWith(".svg")),
 ].map((file) => [`/${file.toLowerCase()}`, file]),
 );
 app.use((req, res, next) => {

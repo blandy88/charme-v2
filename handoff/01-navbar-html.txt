@@ -1,0 +1,1016 @@
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-left">
+                    <a href="#" class="nav-link">Home</a>
+                    <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Services</a>
+
+                    <a href="#" class="nav-link">Contact</a>
+                </div>
+                <div class="nav-center">
+                    <div
+                        class="quick-search-container"
+                        id="quickSearchContainer"
+                    >
+                        <div class="search-tabs">
+                            <button class="search-tab active" data-search-type="fragrances">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                </svg>
+                                Fragrances
+                            </button>
+                            <button class="search-tab" data-search-type="profiles">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Profiles
+                            </button>
+                        </div>
+                        <div class="quick-search-bar" id="quickSearchBar">
+                            <div class="search-icon">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="M21 21l-4.35-4.35"></path>
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Search fragrances..."
+                                id="quickSearchInput"
+                                autocomplete="off"
+                                data-fragrance-placeholder="Search fragrances..."
+                                data-profile-placeholder="Search user profiles..."
+                            />
+                            <button
+                                type="button"
+                                class="clear-search"
+                                id="clearQuickSearch"
+                                style="display: none"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div
+                            class="quick-search-dropdown"
+                            id="quickSearchDropdown"
+                            style="display: none"
+                        >
+                            <div
+                                class="dropdown-content"
+                                id="quickSearchResults"
+                            >
+                                <!-- Search suggestions will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <!-- News Icon -->
+                    <div
+                        class="navbar-news-icon"
+                        id="navbarNewsIcon"
+                        title="Latest News & Updates"
+                    >
+                        <svg
+                            class="news-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"
+                            />
+                            <path
+                                d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"
+                            />
+                            <path d="M6 8h2" />
+                            <path d="M6 12h2" />
+                            <path d="M16 8h2" />
+                            <path d="M16 12h2" />
+                        </svg>
+                        <span
+                            class="news-badge"
+                            id="newsNotificationBadge"
+                            style="display: none"
+                            >•</span
+                        >
+                    </div>
+
+                    <!-- Notification Icon -->
+                    <div
+                        class="navbar-notification-container"
+                        id="navbarNotificationContainer"
+                    >
+                        <div
+                            class="navbar-notification-icon"
+                            id="navbarNotificationIcon"
+                            title="Notifications"
+                        >
+                            <svg
+                                class="notification-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
+                                />
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                            </svg>
+                            <span
+                                class="notification-badge"
+                                id="notificationBadge"
+                                style="display: none"
+                                >0</span
+                            >
+                        </div>
+
+                        <!-- Notification Dropdown -->
+                        <div
+                            class="notification-dropdown"
+                            id="notificationDropdown"
+                        >
+                            <div class="notification-dropdown-header">
+                                <h3 class="notification-dropdown-title">
+                                    <svg
+                                        class="notification-title-icon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path
+                                            d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
+                                        />
+                                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                                    </svg>
+                                    Notifications
+                                </h3>
+                                <button
+                                    class="notification-mark-all-read"
+                                    id="markAllReadBtn"
+                                    title="Mark all as read"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <polyline points="20,6 9,17 4,12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="notification-dropdown-body">
+                                <div
+                                    class="notification-loading"
+                                    id="notificationLoading"
+                                >
+                                    <div
+                                        class="notification-loading-spinner"
+                                    ></div>
+                                    <p>Loading notifications...</p>
+                                </div>
+
+                                <div
+                                    class="notification-content"
+                                    id="notificationContent"
+                                    style="display: none"
+                                >
+                                    <div
+                                        class="notification-list"
+                                        id="notificationList"
+                                    >
+                                        <!-- Notification items will be loaded here -->
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="notification-empty"
+                                    id="notificationEmpty"
+                                    style="display: none"
+                                >
+                                    <div class="notification-empty-icon">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
+                                            />
+                                            <path
+                                                d="M13.73 21a2 2 0 0 1-3.46 0"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <h4>No notifications</h4>
+                                    <p>You're all caught up!</p>
+                                </div>
+
+                                <div
+                                    class="notification-error"
+                                    id="notificationError"
+                                    style="display: none"
+                                >
+                                    <div class="notification-error-icon">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line
+                                                x1="12"
+                                                y1="8"
+                                                x2="12"
+                                                y2="12"
+                                            />
+                                            <line
+                                                x1="12"
+                                                y1="16"
+                                                x2="12.01"
+                                                y2="16"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <h4>Unable to load</h4>
+                                    <p>Please try again</p>
+                                    <button
+                                        class="notification-retry-btn"
+                                        id="notificationRetryBtn"
+                                    >
+                                        Retry
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Cart Icon -->
+                    <div class="navbar-cart-icon" id="navbarCartIcon">
+                        <svg
+                            class="cart-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path
+                                d="m1 1 4 4 2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                            ></path>
+                        </svg>
+                        <span
+                            class="cart-badge"
+                            id="navbarCartBadge"
+                            style="display: none"
+                            >0</span
+                        >
+                    </div>
+
+                    <!-- Scent Profiler -->
+                    <div class="ai-fragrance-finder" id="aiFragranceFinder">
+                        <div
+                            class="ai-finder-icon"
+                            id="aiFinderIcon"
+                            title="Scent Profiler"
+                        >
+                            <svg
+                                class="brain-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"
+                            >
+                                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                            </svg>
+                            <span class="ai-pulse"></span>
+                        </div>
+
+                        <!-- Scent Profiler Dropdown -->
+                        <div class="ai-finder-dropdown" id="aiFinderDropdown">
+                            <div class="ai-finder-header">
+                                <h3 class="ai-finder-title">
+                                    <svg
+                                        class="ai-title-icon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round" 
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                                    </svg>
+                                    Scent Profiler
+                                </h3>
+                                <div class="ai-finder-subtitle">
+                                    Curate your signature scent
+                                </div>
+                            </div>
+
+                            <div class="ai-finder-body">
+                                <!-- Welcome State -->
+                                <div
+                                    class="ai-finder-welcome"
+                                    id="aiFinderWelcome"
+                                >
+                                    <div class="ai-welcome-content">
+                                        <div class="ai-welcome-icon">
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round" 
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                                            </svg>
+                                        </div>
+                                        <h4>Find Your Signature</h4>
+                                        <p>
+                                            Answer a few questions and we'll suggest fragrances you'll love.
+                                        </p>
+                                        <button
+                                            class="ai-start-btn"
+                                            id="aiStartBtn"
+                                        >
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <polygon
+                                                    points="5,3 19,12 5,21"
+                                                />
+                                            </svg>
+                                            Start Profiling
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Question State -->
+                                <div
+                                    class="ai-finder-question"
+                                    id="aiFinderQuestion"
+                                    style="display: none"
+                                >
+                                    <div class="ai-question-progress">
+                                        <div class="progress-bar">
+                                            <div
+                                                class="progress-fill"
+                                                id="aiProgressFill"
+                                            ></div>
+                                        </div>
+                                        <span
+                                            class="progress-text"
+                                            id="aiProgressText"
+                                            >Question 1 of 8</span
+                                        >
+                                    </div>
+
+                                    <div class="ai-question-content">
+                                        <h4
+                                            class="ai-question-title"
+                                            id="aiQuestionTitle"
+                                        >
+                                            What time of day do you usually wear
+                                            fragrance?
+                                        </h4>
+                                        <div
+                                            class="ai-question-options"
+                                            id="aiQuestionOptions"
+                                        >
+                                            <!-- Options will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+
+                                    <div class="ai-question-navigation">
+                                        <button
+                                            class="ai-nav-btn ai-back-btn"
+                                            id="aiBackBtn"
+                                            style="display: none"
+                                        >
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <polyline
+                                                    points="15,18 9,12 15,6"
+                                                />
+                                            </svg>
+                                            Back
+                                        </button>
+                                        <button
+                                            class="ai-nav-btn ai-next-btn"
+                                            id="aiNextBtn"
+                                            disabled
+                                        >
+                                            Next
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <polyline
+                                                    points="9,18 15,12 9,6"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Results State -->
+                                <div
+                                    class="ai-finder-results"
+                                    id="aiFinderResults"
+                                    style="display: none"
+                                >
+                                    <div class="ai-results-header">
+                                        <div class="ai-results-icon">
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                                                />
+                                            </svg>
+                                        </div>
+                                        <h4>Your Perfect Match</h4>
+                                        <p
+                                            class="ai-personality-type"
+                                            id="aiPersonalityType"
+                                        >
+                                            Sophisticated & Elegant
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        class="ai-recommended-fragrance"
+                                        id="aiRecommendedFragrance"
+                                    >
+                                        <!-- Recommendation content will be populated by JavaScript -->
+                                    </div>
+
+                                    <div class="ai-results-actions">
+                                        <button
+                                            class="ai-action-btn ai-view-fragrance"
+                                            id="aiViewFragrance"
+                                        >
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                                                />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                            View Fragrance
+                                        </button>
+                                        <button
+                                            class="ai-action-btn ai-retake-quiz"
+                                            id="aiRetakeQuiz"
+                                        >
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <polyline
+                                                    points="1,4 1,10 7,10"
+                                                />
+                                                <path
+                                                    d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"
+                                                />
+                                            </svg>
+                                            Retake Quiz
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Loading State -->
+                                <div
+                                    class="ai-finder-loading hidden"
+                                    id="aiFinderLoading"
+                                >
+                                    <div class="ai-loading-animation">
+                                        <div class="ai-loading-brain">
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M9.5 2A2.5 2.5 0 0 0 7 4.5v.5a2.5 2.5 0 0 0-2.5 2.5v0a2.5 2.5 0 0 0 2.5 2.5v0a2.5 2.5 0 0 0-2.5 2.5v0a2.5 2.5 0 0 0 2.5 2.5v0a2.5 2.5 0 0 0-2.5 2.5V19A2.5 2.5 0 0 0 9.5 22h5a2.5 2.5 0 0 0 2.5-2.5v-1.5a2.5 2.5 0 0 0-2.5-2.5v0a2.5 2.5 0 0 0 2.5-2.5v0a2.5 2.5 0 0 0-2.5-2.5v0a2.5 2.5 0 0 0 2.5-2.5V5A2.5 2.5 0 0 0 14.5 2.5v-.5A2.5 2.5 0 0 0 12 0h-2.5z"
+                                                />
+                                            </svg>
+                                            <div class="loading-dots">
+                                                <span></span><span></span
+                                                ><span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4>Analyzing Your Preferences</h4>
+                                    <p>
+                                        Curating your personal selection...
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ingredient-Based AI Fragrance Finder -->
+                    <div class="ingredient-finder" id="ingredientFinder">
+                        <div class="ingredient-finder-icon" id="ingredientFinderIcon" title="Search by Ingredients">
+                            <svg class="molecule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 3H15M10 9H14M6 21H18C19.1046 21 20 20.1046 20 19V18.1333C20 17.603 19.7893 17.0944 19.4142 16.7192L15.5858 12.8908C15.2107 12.5156 15 12.007 15 11.4767V5C15 3.89543 14.1046 3 13 3H11C9.89543 3 9 3.89543 9 5V11.4767C9 12.007 8.78929 12.5156 8.41421 12.8908L4.58579 16.7192C4.21071 17.0944 4 17.603 4 18.1333V19C4 20.1046 4.89543 21 6 21Z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- User Account Section -->
+                    <div class="user-account-section" id="userAccountSection">
+                        <div class="user-logged-out" id="userLoggedOut">
+                            <button class="login-btn" id="loginBtn">
+                                <svg
+                                    class="login-icon"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"
+                                    />
+                                    <polyline points="10,17 15,12 10,7" />
+                                    <line x1="15" y1="12" x2="3" y2="12" />
+                                </svg>
+                                <span>Sign In</span>
+                            </button>
+                        </div>
+                        <div
+                            class="user-logged-in"
+                            id="userLoggedIn"
+                        >
+                            <div class="user-profile" id="userProfile">
+                                <img
+                                    class="user-avatar"
+                                    id="userAvatar"
+                                    src=""
+                                    alt="User Avatar"
+                                />
+                                <span class="user-name" id="userName"></span>
+                                <div class="user-dropdown" id="userDropdown">
+                                    <div
+                                        class="dropdown-item"
+                                        id="userProfileLink"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                                            />
+                                            <circle cx="12" cy="7" r="4" />
+                                        </svg>
+                                        Profile
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="userFavorites"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <polygon
+                                                points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                                            />
+                                        </svg>
+                                        Favorites
+                                    </div>
+                                    <div class="dropdown-item" id="userCart">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <circle
+                                                cx="9"
+                                                cy="21"
+                                                r="1"
+                                            ></circle>
+                                            <circle
+                                                cx="20"
+                                                cy="21"
+                                                r="1"
+                                            ></circle>
+                                            <path
+                                                d="m1 1 4 4 2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                                            ></path>
+                                        </svg>
+                                        Cart
+                                        <span
+                                            id="cartItemCount"
+                                            class="cart-count"
+                                            >0</span
+                                        >
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="userSettings"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <circle cx="12" cy="12" r="3" />
+                                            <path
+                                                d="M12 1v6m0 6v6m11-7h-6m-6 0H1"
+                                            />
+                                        </svg>
+                                        Settings
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="adminDashboard"
+                                        style="display: none"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <rect
+                                                x="3"
+                                                y="3"
+                                                width="18"
+                                                height="18"
+                                                rx="2"
+                                                ry="2"
+                                            />
+                                            <line
+                                                x1="9"
+                                                y1="9"
+                                                x2="15"
+                                                y2="9"
+                                            />
+                                            <line
+                                                x1="9"
+                                                y1="12"
+                                                x2="15"
+                                                y2="12"
+                                            />
+                                            <line
+                                                x1="9"
+                                                y1="15"
+                                                x2="15"
+                                                y2="15"
+                                            />
+                                        </svg>
+                                        Admin Dashboard
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="loyaltyCardBtn"
+                                        style="display: none"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <rect
+                                                x="2"
+                                                y="5"
+                                                width="20"
+                                                height="14"
+                                                rx="2"
+                                                ry="2"
+                                            />
+                                            <line x1="2" y1="10" x2="22" y2="10" />
+                                        </svg>
+                                        Carte Fidélité
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="newsAdminBtn"
+                                        style="display: none"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <path
+                                                d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"
+                                            />
+                                            <path
+                                                d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"
+                                            />
+                                            <path d="M6 8h2" />
+                                            <path d="M6 12h2" />
+                                            <path d="M16 8h2" />
+                                            <path d="M16 12h2" />
+                                        </svg>
+                                        News &amp; Notifications
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <div class="dropdown-item" id="logoutBtn">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+                                            />
+                                            <polyline
+                                                points="16,17 21,12 16,7"
+                                            />
+                                            <line
+                                                x1="21"
+                                                y1="12"
+                                                x2="9"
+                                                y2="12"
+                                            />
+                                        </svg>
+                                        Sign Out
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Registration Counter - Hidden for cleaner UI -->
+                    <!-- <div class="user-counter-compact" id="userCounterCompact">...</div> -->
+
+                    <div class="language-changer">
+                        <div class="language-selector">
+                            <span class="current-lang" id="current-lang">
+                                <span class="flag">
+                                    <svg
+                                        width="20"
+                                        height="14"
+                                        viewBox="0 0 20 14"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <!-- US Flag -->
+                                        <rect
+                                            width="20"
+                                            height="14"
+                                            fill="#B22234"
+                                        />
+                                        <rect
+                                            y="1"
+                                            width="20"
+                                            height="1"
+                                            fill="#FFFFFF"
+                                        />
+                                        <rect
+                                            y="3"
+                                            width="20"
+                                            height="1"
+                                            fill="#FFFFFF"
+                                        />
+                                        <rect
+                                            y="5"
+                                            width="20"
+                                            height="1"
+                                            fill="#FFFFFF"
+                                        />
+                                        <rect
+                                            y="7"
+                                            width="20"
+                                            height="1"
+                                            fill="#FFFFFF"
+                                        />
+                                        <rect
+                                            y="9"
+                                            width="20"
+                                            height="1"
+                                            fill="#FFFFFF"
+                                        />
+                                        <rect
+                                            y="11"
+                                            width="20"
+                                            height="1"
+                                            fill="#FFFFFF"
+                                        />
+                                        <rect
+                                            y="13"
+                                            width="20"
+                                            height="1"
+                                            fill="#FFFFFF"
+                                        />
+                                        <rect
+                                            width="8"
+                                            height="7"
+                                            fill="#3C3B6E"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="lang-code">ENG</span>
+                            </span>
+                            <div
+                                class="language-dropdown"
+                                id="language-dropdown"
+                            >
+                                <div
+                                    class="lang-option"
+                                    data-lang="en"
+                                    data-code="ENG"
+                                >
+                                    <span class="flag">
+                                        <svg
+                                            width="18"
+                                            height="12"
+                                            viewBox="0 0 20 14"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <!-- US Flag -->
+                                            <rect
+                                                width="20"
+                                                height="14"
+                                                fill="#B22234"
+                                            />
+                                            <rect
+                                                y="1"
+                                                width="20"
+                                                height="1"
+                                                fill="#FFFFFF"
+                                            />
+                                            <rect
+                                                y="3"
+                                                width="20"
+                                                height="1"
+                                                fill="#FFFFFF"
+                                            />
+                                            <rect
+                                                y="5"
+                                                width="20"
+                                                height="1"
+                                                fill="#FFFFFF"
+                                            />
+                                            <rect
+                                                y="7"
+                                                width="20"
+                                                height="1"
+                                                fill="#FFFFFF"
+                                            />
+                                            <rect
+                                                y="9"
+                                                width="20"
+                                                height="1"
+                                                fill="#FFFFFF"
+                                            />
+                                            <rect
+                                                y="11"
+                                                width="20"
+                                                height="1"
+                                                fill="#FFFFFF"
+                                            />
+                                            <rect
+                                                y="13"
+                                                width="20"
+                                                height="1"
+                                                fill="#FFFFFF"
+                                            />
+                                            <rect
+                                                width="8"
+                                                height="7"
+                                                fill="#3C3B6E"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <span class="lang-name">English</span>
+                                </div>
+                                <div
+                                    class="lang-option"
+                                    data-lang="fr"
+                                    data-code="FR"
+                                >
+                                    <span class="flag">
+                                        <svg
+                                            width="18"
+                                            height="12"
+                                            viewBox="0 0 20 14"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <!-- French Flag -->
+                                            <rect
+                                                width="6.67"
+                                                height="14"
+                                                fill="#002395"
+                                            />
+                                            <rect
+                                                x="6.67"
+                                                width="6.67"
+                                                height="14"
+                                                fill="#FFFFFF"
+                                            />
+                                            <rect
+                                                x="13.33"
+                                                width="6.67"
+                                                height="14"
+                                                fill="#ED2939"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <span class="lang-name">Français</span>
+                                </div>
+                                <div
+                                    class="lang-option"
+                                    data-lang="ar"
+                                    data-code="ARB"
+                                >
+                                    <span class="flag">
+                                        <svg
+                                            width="18"
+                                            height="12"
+                                            viewBox="0 0 20 14"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <!-- Saudi Arabia Flag -->
+                                            <rect
+                                                width="20"
+                                                height="14"
+                                                fill="#006C35"
+                                            />
+                                            <text
+                                                x="10"
+                                                y="9"
+                                                font-family="Arial"
+                                                font-size="3"
+                                                fill="#FFFFFF"
+                                                text-anchor="middle"
+                                            >
+                                                العربية
+                                            </text>
+                                        </svg>
+                                    </span>
+                                    <span class="lang-name">العربية</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>

@@ -1,0 +1,128 @@
+  function initTopChromeScrollBehavior() {
+    if (!navbarEl) return null;
+
+    const chromeElements = [navbarEl, marqueeBar].filter(Boolean);
+    let isHidden = false;
+    let downIntent = 0;
+    let upIntent = 0;
+    let lastY = Math.max(0, window.pageYOffset || document.documentElement.scrollTop || 0);
+    let lastTs = performance.now();
+    let rafPending = false;
+
+    function readScrollY() {
+      return Math.max(0, window.pageYOffset || document.documentElement.scrollTop || 0);
+    }
+
+    function marqueeIsVisible() {
+      return Boolean(
+        marqueeBar &&
+          document.body.classList.contains("has-marquee") &&
+          getComputedStyle(marqueeBar).display !== "none",
+      );
+    }
+
+    function chromeHeight() {
+      return navbarEl.offsetHeight + (marqueeIsVisible() ? marqueeBar.offsetHeight : 0);
+    }
+
+    function setHidden(nextHidden) {
+      if (nextHidden === isHidden) return;
+      isHidden = nextHidden;
+      document.body.classList.toggle("top-shell-hidden", isHidden);
+    }
+
+    function applyChromeState() {
+    }
+
+    function reveal() {
+      downIntent = 0;
+      upIntent = 0;
+      setHidden(false);
+    }
+
+    function hasChromeFocus() {
+      const active = document.activeElement;
+      return chromeElements.some((element) => element?.contains(active));
+    }
+
+    function hasOpenChromeSurface() {
+      return Boolean(
+        document.querySelector(
+          [
+            "#quickSearchDropdown.show",
+            ".language-dropdown.active",
+            ".notification-dropdown.show",
+            ".ai-finder-dropdown.show",
+            ".ingredient-modal.show",
+            ".auth-modal.show",
+            ".modal.show",
+          ].join(","),
+        ),
+      );
+    }
+
+    function chromeLockedOpen() {
+      return (
+        hasChromeFocus() ||
+        hasOpenChromeSurface()
+      );
+    }
+
+    function updateTopChrome() {
+      rafPending = false;
+
+      const y = readScrollY();
+      const now = performance.now();
+      const dy = y - lastY;
+      const dt = Math.max(16, now - lastTs);
+      const velocity = Math.abs(dy) / dt;
+
+      document.body.classList.toggle("top-shell-scrolled", y > 10);
+
+      if (y <= 10 || chromeLockedOpen()) {
+        reveal();
+        lastY = y;
+        lastTs = now;
+        return;
+      }
+
+      if (Math.abs(dy) < 1) return;
+
+      if (dy > 0) {
+        downIntent += dy;
+        upIntent = 0;
+        if (y > 30 && downIntent > 4) {
+          setHidden(true);
+        }
+      } else {
+        upIntent += -dy;
+        downIntent = 0;
+        if (upIntent > 4) {
+          setHidden(false);
+        }
+      }
+
+      lastY = y;
+      lastTs = now;
+    }
+
+    function requestTopChromeUpdate() {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(updateTopChrome);
+    }
+
+    window.addEventListener("scroll", requestTopChromeUpdate, { passive: true });
+    window.addEventListener("mousemove", (e) => {
+      if (e.clientY <= 30) {
+        reveal();
+      }
+    }, { passive: true });
+    window.addEventListener("resize", () => {
+      reveal();
+      requestTopChromeUpdate();
+    });
+    requestTopChromeUpdate();
+
+    return { reveal, requestUpdate: requestTopChromeUpdate, updateNow: updateTopChrome };
+  }

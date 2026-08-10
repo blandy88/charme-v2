@@ -1,0 +1,69 @@
+/* ============================================================
+   SCROLL-DOWN ANIMATION CSS — from styles.css (end of file)
+   This is the "navbar hides when you scroll down" effect.
+   It is driven by JS toggling body classes:
+     - body.top-shell-scrolled  (y > 10)
+     - body.top-shell-hidden    (scrolled down past threshold)
+     - body.top-shell-interacting
+   The transition duration comes from CSS vars:
+     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+     --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+   ============================================================ */
+
+body.top-shell-scrolled .navbar {
+    background: linear-gradient(180deg, rgba(8, 8, 8, 0.82), rgba(8, 8, 8, 0.46)) !important;
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.18) !important;
+}
+
+body.top-shell-hidden .top-marquee {
+    transform: translate3d(0, calc(-1 * var(--marquee-height) - 2px), 0) !important;
+    opacity: 0 !important;
+    filter: blur(3px) saturate(80%) !important;
+    pointer-events: none !important;
+}
+
+body.top-shell-hidden .navbar {
+    transform: translate3d(0, calc(-1 * (var(--navbar-height) + var(--marquee-height)) - 8px), 0) !important;
+    opacity: 0.08 !important;
+    filter: blur(5px) saturate(70%) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    pointer-events: none !important;
+    box-shadow: none !important;
+}
+
+body.top-shell-hidden:not(.has-marquee) .navbar {
+    transform: translate3d(0, calc(-1 * var(--navbar-height) - 8px), 0) !important;
+}
+
+body.top-shell-interacting .top-marquee,
+body.top-shell-interacting .navbar,
+.top-marquee:focus-within,
+.navbar:focus-within {
+    transform: translate3d(0, 0, 0) !important;
+    opacity: 1 !important;
+    filter: none !important;
+    pointer-events: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .top-marquee,
+    .navbar {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+        filter: none !important;
+    }
+}
+
+/* ============================================================
+   NOTE — additional scroll-driven motion lives in script.js:
+   1. "top chrome" hide/reveal logic        -> handoff/03-scroll-anim-js.txt
+   2. Background color / vignette transitions
+      that follow the scroll position (the page background
+      changes as you scroll between sections). If you also want
+      to redesign THAT effect, it is the block in script.js:
+      // --- OPTIMIZED SCROLL CACHING ---
+      getScrollBackgroundColor() / updateScrollBackgroundAndTheme()
+      (~lines 1886-2220) plus the onScroll() handler (~2471).
+   ============================================================ */

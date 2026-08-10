@@ -476,6 +476,32 @@ final List<Fragrance> affordableFragrances = [
     sizes: {'75ml': 89.00, '125ml': 115.00},
     available: false,
   ),
+  Fragrance(
+    name: 'Scandal Pour Homme Absolu',
+    brand: 'Jean Paul Gaultier',
+    family: 'Woody Amber',
+    description: 'Cardamom and bergamot warmed by honey and cinnamon over tonka, amberwood and patchouli — the scandal in absolute form.',
+    ingredients: ['Cardamom', 'Bergamot', 'Honey', 'Cinnamon', 'Lavender', 'Tonka Bean', 'Amberwood', 'Patchouli'],
+    year: 2023,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'75ml': 89.00, '125ml': 115.00},
+    available: false,
+  ),
+
+
+  Fragrance(
+    name: 'Le Male Elixir Absolu',
+    brand: 'Jean Paul Gaultier',
+    family: 'Aromatic Woody',
+    description: 'A heady Le Male, plum and cinnamon over lavender, davana and artemisia with a tonka, benzoin and patchouli drydown.',
+    ingredients: ['Plum', 'Cinnamon', 'Cardamom', 'Bergamot', 'Lavender', 'Davana', 'Artemisia', 'Tonka Bean', 'Benzoin', 'Patchouli'],
+    year: 2024,
+    perfumer: 'Unknown',
+    concentration: 'Parfum',
+    sizes: {'75ml': 99.00, '125ml': 130.00},
+    available: true,
+  ),
 
   // ═══════════════════════════════════════════
   // ISSEY MIYAKE
@@ -555,6 +581,18 @@ final List<Fragrance> affordableFragrances = [
     concentration: 'EDT',
     sizes: {'50ml': 55.00, '100ml': 79.00},
     available: false,
+  ),
+  Fragrance(
+    name: 'Forever Wanted Elixir',
+    brand: 'Azzaro',
+    family: 'Fruity Leathery',
+    description: 'A richer Forever Wanted, red fruits and mandarin over lavender, cinnamon and iris, drying into amber, tonka and suede leather.',
+    ingredients: ['Red Fruits', 'Mandarin', 'Lavender', 'Cinnamon', 'Iris', 'Amber', 'Tonka Bean', 'Leather'],
+    year: 2025,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'50ml': 62.00, '100ml': 88.00},
+    available: true,
   ),
 
   // ═══════════════════════════════════════════
@@ -785,6 +823,20 @@ final List<Fragrance> affordableFragrances = [
     available: false,
   ),
   Fragrance(
+    name: 'Born in Roma Uomo Extradose',
+    brand: 'Valentino',
+    family: 'Woody Fougere',
+    description: 'Bergamot and mandarin sharpened with lavandin over vetiver and guaiac wood — the Roman statement pushed to extradose.',
+    ingredients: ['Bergamot', 'Mandarin', 'Spice Blend', 'Lavandin', 'Vetiver', 'Guaiac Wood'],
+    year: 2025,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'50ml': 79.00, '100ml': 115.00},
+    available: false,
+  ),
+
+
+  Fragrance(
     name: 'Donna Born in Roma',
     brand: 'Valentino',
     family: 'Floral Woody',
@@ -796,6 +848,20 @@ final List<Fragrance> affordableFragrances = [
     sizes: {'50ml': 79.00, '100ml': 115.00},
     available: false,
   ),
+
+  Fragrance(
+    name: 'Valentina Assoluto',
+    brand: 'Valentino',
+    family: 'Floral Chypre',
+    description: 'Truffle and peach with vanilla, tuberose and jasmine over patchouli, oakmoss and cedar — Valentina in velvet and fur.',
+    ingredients: ['Truffle', 'Peach', 'Bergamot', 'Vanilla', 'Tuberose', 'Jasmine', 'Patchouli', 'Oakmoss', 'Cedar'],
+    year: 2012,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'50ml': 79.00, '100ml': 115.00},
+    available: false,
+  ),
+
 
   // ═══════════════════════════════════════════
   // ABERCROMBIE & FITCH
@@ -850,6 +916,142 @@ final List<Fragrance> affordableFragrances = [
     perfumer: '',
     concentration: 'EDT',
     sizes: {'75ml': 89.00, '125ml': 115.00},
+    available: false,
+  ),
+
+
+  Fragrance(
+    name: 'Sabah Al Waed',
+    brand: 'Paris Corner',
+    family: 'Amber Floral',
+    description: 'A creamy morning promise, jasmine and orange blossom over cocoa, amber and a vanilla-tonka base dusted with patchouli and sandalwood.',
+    ingredients: ['Jasmine', 'Orange Blossom', 'Cocoa', 'Musk', 'Amber', 'Vanilla', 'Tonka Bean', 'Patchouli', 'Sandalwood'],
+    year: 2023,
+    perfumer: 'Al Haramain Perfumes',
+    concentration: 'EDP',
+    sizes: {'60ml': 30.00},
+    available: false,
+  ),
+  Fragrance(
+    name: 'Amirat Al Arab',
+    brand: 'Lattafa',
+    family: 'Floral Oud',
+    description: 'An opulent Arabian floral-oud, rose and jasmine laced with saffron over smoky oud, amber and vanilla.',
+    ingredients: ['Rose', 'Jasmine', 'Oud', 'Saffron', 'Amber', 'Vanilla', 'Musk'],
+    year: 2016,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'100ml': 32.00},
+    available: true,
+  ),
+  Fragrance(
+    name: 'Yara Moi',
+    brand: 'Lattafa',
+    family: 'Floral',
+    description: 'A creamy sparkling flanker to Yara, pear and jasmine over gardenia, vanilla and white musk.',
+    ingredients: ['Pear', 'Bergamot', 'Jasmine', 'Gardenia', 'Vanilla', 'Musk', 'Sandalwood'],
+    year: 2023,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'100ml': 32.00},
+    available: true,
+  ),
+  Fragrance(
+    name: 'Eclaire',
+    brand: 'Lattafa',
+    family: 'Gourmand Vanilla',
+    description: 'A creamy vanilla bomb of milk, hazelnut and caramel over vanilla, tonka and sandalwood, a favorite cozy winter gourmand.',
+    ingredients: ['Milk', 'Hazelnut', 'Almond', 'Caramel', 'Vanilla', 'Tonka Bean', 'Sandalwood', 'Musk'],
+    year: 2024,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'100ml': 35.00},
+    available: true,
+  ),
+  Fragrance(
+    name: 'The Kingdom',
+    brand: 'Lattafa',
+    family: 'Amber Fougere',
+    description: 'Lavender and mint over cinnamon, cardamom, sage and geranium with tonka, vanilla and amber, a regal modern oriental.',
+    ingredients: ['Lavender', 'Mint', 'Cinnamon', 'Cardamom', 'Sage', 'Geranium', 'Tonka Bean', 'Vanilla', 'Amber'],
+    year: 2024,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'100ml': 38.00},
+    available: true,
+  ),
+  // ═══════════════════════════════════════════
+  // JACADI
+  // ═══════════════════════════════════════════
+  Fragrance(
+    name: 'Tout Petit',
+    brand: 'Jacadi',
+    family: 'Fresh Citrus',
+    description: 'Jacadi\'s signature baby eau de toilette, a soft citrus-floral veil of lemon, bergamot and orange blossom over warm musk and cedar.',
+    ingredients: ['Lemon', 'Bergamot', 'Orange Blossom', 'Musk', 'Cedar'],
+    year: 2000,
+    perfumer: 'Unknown',
+    concentration: 'EDT',
+    sizes: {'50ml': 28.00, '100ml': 45.00},
+    available: true,
+  ),
+  Fragrance(
+    name: 'Mademoiselle',
+    brand: 'Jacadi',
+    family: 'Floral Powdery',
+    description: 'Orange blossom and lily-of-the-valley over rose and white musk — a powder-soft floral for the littlest demoiselle.',
+    ingredients: ['Orange Blossom', 'Lily-of-the-Valley', 'Rose', 'White Musk'],
+    year: 2016,
+    perfumer: '',
+    concentration: 'EDT',
+    sizes: {'100ml': 28.00},
+    available: true,
+  ),
+
+
+  // CREATION LAMIS
+  Fragrance(
+    name: 'Diable Bleu',
+    brand: 'Creation Lamis',
+    family: 'Woody Aromatic',
+    description: 'A fresh modern masculine, mandarin and lavender over geranium and nutmeg with a patchouli, tonka and amber base.',
+    ingredients: ['Mandarin', 'Lavender', 'Geranium', 'Nutmeg', 'Patchouli', 'Tonka Bean', 'Amber'],
+    year: 2024,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'100ml': 45.00},
+    available: true,
+  ),
+
+  // ═══════════════════════════════════════════
+  // EL NABIL
+  // ═══════════════════════════════════════════
+  Fragrance(
+    name: 'Musc Sultan',
+    brand: 'El Nabil',
+    family: 'Amber Musk',
+    description: 'Nutmeg and pink pepper with mint and citrus melting into jasmine and cedar with olibanum, musk, labdanum and patchouli — oriental royalty at a steal.',
+    ingredients: ['Nutmeg', 'Pink Pepper', 'Mint', 'Citrus', 'Jasmine', 'Cedar', 'Vetiver', 'Olibanum', 'Musk', 'Labdanum', 'Patchouli', 'Sandalwood'],
+    year: 2005,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'100ml': 30.00},
+    available: true,
+  ),
+
+  // ═══════════════════════════════════════════
+  // LACOSTE
+  // ═══════════════════════════════════════════
+  Fragrance(
+    name: 'L.12.12 Bleu',
+    brand: 'Lacoste',
+    family: 'Aromatic Fougere',
+    description: 'Grapefruit and mint over sage and orange blossom with fern, patchouli and Virginia cedar — the polo shirt in crisp blue.',
+    ingredients: ['Grapefruit', 'Mint', 'Sage', 'African Orange Blossom', 'Fern', 'Patchouli', 'Virginia Cedar'],
+    year: 2011,
+    perfumer: '',
+    concentration: 'EDT',
+    sizes: {'50ml': 55.00, '100ml': 79.00},
     available: false,
   ),
 ];

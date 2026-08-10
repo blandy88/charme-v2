@@ -1,8 +1,14 @@
 
-// GitHub Pages frontend -> Render backend. Rewrites backend-relative URLs
-// (/api, /uploads) to the Render origin so auth, API calls and avatar images
-// keep working when this static site is hosted away from the Express server.
-window.CHARME_API_ORIGIN = "https://parfumerie-charme-4dw8.onrender.com";
+// Backend origin. When served by the Express server itself (local dev on
+// localhost/127.0.0.1), API calls stay on the same origin. When this static
+// site is hosted away from the backend (e.g. GitHub Pages), the /api and
+// /uploads URLs are rewritten to the Render origin below so auth, API calls
+// and avatar images keep working.
+const _isLocalHost =
+  /^(localhost|127\.0\.0\.1|\[::1\]|::1)$/i.test(window.location.hostname);
+window.CHARME_API_ORIGIN = _isLocalHost
+  ? window.location.origin
+  : "https://parfumerie-charme-4dw8.onrender.com";
 (function () {
   if (window.location.origin === window.CHARME_API_ORIGIN) return;
   const nativeFetch = window.fetch.bind(window);
@@ -16176,7 +16182,7 @@ class ReviewsManager {
   }
 
   getFragranceIds() {
-    return ["layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir", "balayage", "valayaexclusive", "1millionnight", "freedommuskmatcha", "torrino21", "kayalimarshmallow", "aquaallegoriaflorabloom", "angelnova", "aquadigioelixir"];
+    return ["aventusabsolu", "preciousoud", "hypnoticamber", "amberoud", "goldenoud", "smokeroyaloud", "arabianoud", "muskrose", "tabacoroyal", "mysteriousoud", "heavenlyoud", "luxuryoud", "charmedoud", "emperorsoud", "majesticoud", "radiantoud", "sensualoud", "timelessoud", "twilightoud", "velvetoud", "moonlightoud", "midnightoud", "sultanoud", "regaloud", "bosselixir", "coolwater", "milliongold", "fahrenheit", "lacosteblue", "cerruti1881", "ckone", "kirke", "velvetbdk", "amenfantasm", "tuxedo", "onemillionroyale", "yintensely", "ymenelixir", "bossintense", "kouros", "bleuelectrique", "purexs", "onemillionelixir", "clubdenuit", "strongerwithyousandalwood", "pineapple", "dylanbleuintense", "nowade", "legendmontblanc", "azzarochrome", "ombrenomade", "silvermountain", "jagwar", "strongerwithyououd", "delinaexclusif", "versacevanillerouge", "narcoticdelight", "lamar", "dired", "themoon", "sospiroopera", "queenofsilk", "orza", "noirkogane", "grisdior", "kajaldahab", "layton", "haltane", "pegasus", "greenly", "baccaratrouge", "blackorchid", "aventus", "sauvage", "bleudechanel", "tobaccovanille", "oudwood", "lanuit", "lostcherry", "yvsl", "aquadigio", "dy", "versaceeros", "jpgultramale", "invictus", "valentinouomo", "spicebomb", "explorer", "blv", "diorhomme", "allure", "tuscanleather", "armanicode", "lhommeideal", "terredhermes", "gentleman", "wantedbynight", "kbyDG", "leaudissey", "chbadboy", "ysllibre", "fireplace", "pradacarbon", "burberryhero", "narcisoforhim", "cketernity", "gucciguilty", "valentinodonna", "greenirish", "egoiste", "amenpure", "declarationcartier", "laween", "cedarsmancera", "reflectionman", "sedley", "sideeffect", "naxos", "grandSoir", "balayage", "valayaexclusive", "1millionnight", "freedommuskmatcha", "torrino21", "kayalimarshmallow", "aquaallegoriaflorabloom", "angelnova", "aquadigioelixir"];
   }
 
   setupLazyReviewLoading() {

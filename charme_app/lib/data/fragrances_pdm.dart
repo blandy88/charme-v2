@@ -124,6 +124,32 @@ final List<Fragrance> pdmFragrances = [
     sizes: {'75ml': 259.99, '125ml': 309.99},
     available: false,
   ),
+  Fragrance(
+    name: 'Oriana',
+    brand: 'Parfums de Marly',
+    family: 'Floral Gourmand',
+    description: 'A princess of pink fluff, raspberry and bergamot over orange blossom, jasmine and iris with marshmallow, vanilla and musk.',
+    ingredients: ['Raspberry', 'Bergamot', 'Orange Blossom', 'Jasmine', 'Iris', 'Marshmallow', 'Vanilla', 'Musk'],
+    year: 2021,
+    perfumer: 'Nicolas Beaulieu',
+    concentration: 'EDP',
+    sizes: {'75ml': 259.99, '125ml': 309.99},
+    available: false,
+  ),
+
+  Fragrance(
+    name: 'Delina',
+    brand: 'Parfums de Marly',
+    family: 'Floral',
+    description: 'Lychee and rhubarb sparkling through Turkish rose and peony with vanilla, musk and cashmeran — the rose reinvented as a jewel.',
+    ingredients: ['Lychee', 'Rhubarb', 'Bergamot', 'Peony', 'Turkish Rose', 'Vanilla', 'Musk', 'Cashmeran', 'Cedar'],
+    year: 2017,
+    perfumer: 'Quentin Bisch',
+    concentration: 'EDP',
+    sizes: {'75ml': 259.99, '125ml': 309.99},
+    available: false,
+  ),
+
 
   // ═══════════════════════════════════════════
   // CREED
@@ -413,6 +439,20 @@ final List<Fragrance> pdmFragrances = [
     available: false,
   ),
 
+  Fragrance(
+    name: 'Oud for Happiness',
+    brand: 'Initio Parfums Prives',
+    family: 'Woody Amber',
+    description: 'Saffron and rose sweetened with cinnamon over oud, vanilla and amber — the oud of joy, bright and beatific.',
+    ingredients: ['Saffron', 'Rose', 'Cinnamon', 'Oud', 'Vanilla', 'Amber'],
+    year: 2022,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'90ml': 349.00},
+    available: false,
+  ),
+
+
   // ═══════════════════════════════════════════
   // XERJOFF
   // ═══════════════════════════════════════════
@@ -672,4 +712,17 @@ final List<Fragrance> pdmFragrances = [
     sizes: {'50ml': 375.00, '100ml': 650.00},
     available: false,
   ),
+  Fragrance(
+    name: 'Magenta Tanzanite',
+    brand: 'Roja Parfums',
+    family: 'Oriental Floral',
+    description: 'Bergamot opening onto rose and jasmine with amber, vetiver, patchouli and musk — Roja Dove at his most regally colorful.',
+    ingredients: ['Bergamot', 'Rose', 'Jasmine', 'Amber', 'Vetiver', 'Patchouli', 'Musk'],
+    year: 2021,
+    perfumer: 'Roja Dove',
+    concentration: 'EDP',
+    sizes: {'50ml': 345.00, '100ml': 590.00},
+    available: false,
+  ),
+
 ];

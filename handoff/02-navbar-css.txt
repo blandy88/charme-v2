@@ -1,0 +1,323 @@
+/* ============================================================
+   NAVBAR CSS — from styles.css (root file)
+   All navbar-related rules, exact as in the repo.
+   NOTE: the quick-search block, dropdown, notifications, ai-finder
+   and auth sections inside the navbar have MORE css further down in
+   styles.css (lines ~700-1560). This is the core navbar chrome.
+   ============================================================ */
+
+/* --- CSS variables used by the navbar --- */
+--marquee-height: 32px;
+--navbar-height: 72px;
+--content-max-width: 1400px;
+
+--z-dropdown: 100;
+--z-sticky: 200;
+--z-navbar: 500;
+--z-marquee: 510;
+
+--transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+--transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+--transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+--transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+/* --- Navbar sits below the marquee when present --- */
+body.has-marquee .navbar {
+    top: var(--marquee-height);
+}
+
+/* Navigation Bar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background:
+        linear-gradient(180deg, rgba(9, 9, 9, 0.78), rgba(9, 9, 9, 0.52));
+    backdrop-filter: blur(18px) saturate(130%);
+    -webkit-backdrop-filter: blur(18px) saturate(130%);
+    border-bottom: 1px solid rgba(201, 169, 78, 0.10);
+    z-index: var(--z-navbar);
+    padding: 10px 0;
+    transform-origin: center top;
+}
+
+.nav-container {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(18px, 3vw, 42px);
+    transition: inherit;
+    min-height: 52px;
+    gap: clamp(12px, 2vw, 26px);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+    gap: 8px;
+}
+
+.nav-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 0 clamp(10px, 2vw, 28px);
+    gap: 12px;
+}
+
+/* Brand Name Styling */
+.brand-name {
+    color: rgba(245, 243, 240, 0.85);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: all var(--transition-normal);
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Georgia', serif;
+}
+
+.brand-name:hover {
+    color: var(--color-gold);
+}
+
+.brand-name::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    transition: width var(--transition-normal);
+}
+
+.brand-name:hover::after {
+    width: 120%;
+}
+
+/* Quick Search Container */
+.quick-search-container {
+    position: relative;
+    z-index: var(--z-navbar);
+}
+
+/* Quick Search Bar */
+.quick-search-bar {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-full);
+    padding: 10px 18px;
+    transition: all var(--transition-normal) ease;
+    min-width: 260px;
+    max-width: 360px;
+    position: relative;
+}
+
+.quick-search-bar::before {
+    display: none;
+}
+
+.quick-search-bar:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0 20px rgba(201, 169, 78, 0.05);
+}
+
+.quick-search-bar:hover::before {
+    display: none;
+}
+
+/* Nav Links */
+.nav-link {
+    color: rgba(245, 243, 240, 0.58);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    padding: 10px 12px;
+    border-radius: 999px;
+}
+
+.nav-link:hover {
+    color: var(--color-gold);
+    background: rgba(201, 169, 78, 0.08);
+    transform: none;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover::after {
+    width: 58%;
+}
+
+/* Header Image in Navigation */
+#header-image {
+    height: 40px;
+    width: auto;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    border-radius: 2px;
+}
+
+/* Responsive navigation */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 0 20px;
+    }
+
+    .nav-left,
+    .nav-right {
+        gap: 20px;
+    }
+
+    .nav-link {
+        font-size: 14px;
+    }
+
+    #header-image {
+        height: 35px;
+    }
+
+    .search-container {
+        width: 32px;
+        height: 32px;
+    }
+
+    .search-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* User profile mobile adjustments */
+    .user-profile {
+        padding: 6px 12px;
+        gap: 8px;
+        border-radius: 2px;
+    }
+
+    .user-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        object-fit: cover;
+        overflow: hidden;
+    }
+
+    .user-profile.admin-user .user-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+        overflow: hidden;
+    }
+
+    .user-name {
+        font-size: 11px;
+        max-width: 80px;
+    }
+
+    .user-profile.admin-user .user-name {
+        font-size: 12px;
+        max-width: 100px;
+    }
+
+    .user-profile.admin-user .user-name::after {
+        font-size: 7px;
+        top: -14px;
+        padding: 1px 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-left,
+    .nav-right {
+        gap: 15px;
+    }
+
+    .nav-link {
+        font-size: 13px;
+    }
+
+    #header-image {
+        height: 30px;
+    }
+}
+
+/* Navbar Cart Icon */
+.navbar-cart-icon {
+    position: relative;
+    cursor: pointer;
+    padding: 6px;
+    margin-right: 10px;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    opacity: 0.8;
+}
+
+.navbar-cart-icon:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+    opacity: 1;
+}
+
+.navbar-cart-icon .cart-icon {
+    width: 20px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.3s ease;
+    stroke-width: 1.8;
+}
+
+.navbar-cart-icon:hover .cart-icon {
+    color: rgba(255, 215, 0, 0.9);
+    transform: scale(1.02);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--color-gold);
+    color: #060606;
+    border-radius: 50%;
+    padding: 2px 5px;
+}

@@ -601,6 +601,20 @@ final List<Fragrance> extraFragrances = [
     available: false,
   ),
 
+  Fragrance(
+    name: 'Midnight Rose',
+    brand: 'Lancome',
+    family: 'Floral Fruity',
+    description: 'Raspberry and pink pepper igniting rose and peony over woods and amber — the tresor heritage reimagined after dark.',
+    ingredients: ['Raspberry', 'Pink Pepper', 'Blackcurrant', 'Rose', 'Peony', 'Musk', 'Woods', 'Amber'],
+    year: 2011,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'30ml': 72.00, '50ml': 99.00, '100ml': 145.00},
+    available: false,
+  ),
+
+
   // ═══════════════════════════════════════════
   // VIKTOR & ROLF
   // ═══════════════════════════════════════════
@@ -1004,6 +1018,20 @@ final List<Fragrance> extraFragrances = [
     sizes: {'30ml': 72.00, '50ml': 99.00, '100ml': 145.00},
     available: false,
   ),
+
+  Fragrance(
+    name: 'Fleur Musc',
+    brand: 'Narciso Rodriguez',
+    family: 'Musky Floral',
+    description: 'Rose and jasmine floating in a veil of amber musk — the house signature dressed in fresh white florals.',
+    ingredients: ['Rose', 'Jasmine', 'Musk', 'Amber', 'Benzoin'],
+    year: 2017,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'30ml': 72.00, '50ml': 99.00, '100ml': 145.00},
+    available: false,
+  ),
+
 
   // ═══════════════════════════════════════════
   // BOTTEGA VENETA
@@ -1896,6 +1924,44 @@ final List<Fragrance> extraFragrances = [
     sizes: {'50ml': 89.00, '80ml': 115.00},
     available: false,
   ),
+  Fragrance(
+    name: 'La Bomba',
+    brand: 'Carolina Herrera',
+    family: 'Floral Fruity',
+    description: 'The 2024 feminine explosion, pink pepper and raspberry over jasmine, peony and vanilla with a cacao-sandalwood base.',
+    ingredients: ['Pink Pepper', 'Raspberry', 'Jasmine', 'Peony', 'Cacao', 'Vanilla', 'Sandalwood'],
+    year: 2024,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'50ml': 89.00, '100ml': 120.00},
+    available: false,
+  ),
+
+  Fragrance(
+    name: 'Good Girl Blush',
+    brand: 'Carolina Herrera',
+    family: 'Floral Amber',
+    description: 'Pink pepper and bergamot over orange blossom, peony and jasmine with tonka and amber — the stiletto in a softer blush.',
+    ingredients: ['Pink Pepper', 'Bergamot', 'Orange Blossom', 'Peony', 'Jasmine', 'Tonka Bean', 'Amber'],
+    year: 2020,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'50ml': 89.00, '100ml': 120.00},
+    available: false,
+  ),
+  Fragrance(
+    name: 'Good Girl Elixir',
+    brand: 'Carolina Herrera',
+    family: 'Gourmand Floral',
+    description: 'Cherry and almond folded into orange blossom, vanilla and tonka — Good Girl distilled into its sweetest elixir.',
+    ingredients: ['Cherry', 'Almond', 'Orange Blossom', 'Vanilla', 'Tonka Bean'],
+    year: 2022,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'50ml': 89.00, '100ml': 120.00},
+    available: false,
+  ),
+
 
   // ═══════════════════════════════════════════
   // MONTBLANC
@@ -1963,5 +2029,76 @@ final List<Fragrance> extraFragrances = [
     concentration: 'EDP',
     sizes: {'40ml': 55.00, '90ml': 79.00},
     available: false,
+  ),
+
+
+  Fragrance(
+    name: 'Man Rain Essence',
+    brand: 'Bvlgari',
+    family: 'Aromatic Fresh',
+    description: 'Alberto Morillas captures the scent of rain on warm stone, green tea and orange petal chilled by a petrichor musk-amber base with guaiac wood.',
+    ingredients: ['Green Tea', 'Orange', 'White Lotus', 'Musk', 'Amber', 'Guaiac Wood'],
+    year: 2023,
+    perfumer: 'Alberto Morillas',
+    concentration: 'EDP',
+    sizes: {'100ml': 110.00},
+    available: false,
+  ),
+  Fragrance(
+    name: 'Magic',
+    brand: 'Al-Jazeera Perfumes',
+    family: 'Oriental Floral',
+    description: 'Loc Dong\'s salty ozonic opening crashes into Turkish rose and praline, settling on a warm vanilla-amber-patchouli shore.',
+    ingredients: ['Ozonic Notes', 'Salt', 'Turkish Rose', 'Praline', 'Vanilla', 'Amber Xtreme', 'Patchouli'],
+    year: 2016,
+    perfumer: 'Loc Dong',
+    concentration: 'EDP',
+    sizes: {'50ml': 45.00, '100ml': 65.00},
+    available: false,
+  ),
+  // SHISEIDO
+  Fragrance(
+    name: 'Grinza Datura',
+    brand: 'Shiseido',
+    family: 'Floral Green',
+    description: 'A cult green-floral from the Ginza line, galbanum and green leaves over narcotic white datura flowers with warm musk and woods.',
+    ingredients: ['Galbanum', 'Green Notes', 'Datura', 'White Flowers', 'Narcissus', 'Musk', 'Woody Notes'],
+    year: 1999,
+    perfumer: 'Unknown',
+    concentration: 'EDP',
+    sizes: {'50ml': 120.00, '100ml': 165.00},
+    available: false,
+  ),
+
+  // ═══════════════════════════════════════════
+  // ELIE SAAB
+  // ═══════════════════════════════════════════
+  Fragrance(
+    name: 'Le Parfum',
+    brand: 'Elie Saab',
+    family: 'Floral Oriental',
+    description: 'Orange blossom lifted with bergamot over jasmine, rose, cedar and honey — couture in a single radiant note.',
+    ingredients: ['Orange Blossom', 'Bergamot', 'Jasmine', 'Rose', 'Cedar', 'Patchouli', 'Honey'],
+    year: 2011,
+    perfumer: 'Francis Kurkdjian',
+    concentration: 'EDP',
+    sizes: {'50ml': 89.00, '100ml': 125.00},
+    available: true,
+  ),
+
+  // ═══════════════════════════════════════════
+  // SISLEY
+  // ═══════════════════════════════════════════
+  Fragrance(
+    name: 'Eau du Soir',
+    brand: 'Sisley',
+    family: 'Chypre',
+    description: 'Citrus and aldehydes with jasmine, rose and iris sinking into vetiver, oakmoss, amber and musk — a Parisian evening in a bottle.',
+    ingredients: ['Citrus', 'Aldehydes', 'Jasmine', 'Rose', 'Iris', 'Vetiver', 'Oakmoss', 'Amber', 'Musk'],
+    year: 1990,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'50ml': 150.00, '100ml': 215.00},
+    available: true,
   ),
 ];
