@@ -164,16 +164,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Tunables
     const SCROLL_TOP_ZONE     = 8;    // px — always show near the top
-    const SHOW_DELTA          = 6;    // px accumulated upward to reveal
-    const HIDE_DELTA          = 14;   // px accumulated downward to hide
-    const HIDE_MIN_Y          = 96;   // don't hide until past this y
-    const HIDE_MIN_VELOCITY   = 0.12; // px/ms — ignore slow drifts
-    const EDGE_REVEAL_Y       = 48;   // mouse near top => reveal
-    const RESIZE_DEBOUNCE_MS  = 120;
 
     let isHidden      = false;
-    let downIntent    = 0;
-    let upIntent      = 0;
     let lastY         = readScrollY();
     let lastTs        = performance.now();
     let rafPending    = false;
@@ -205,8 +197,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function reveal() {
-      downIntent = 0;
-      upIntent   = 0;
       setHidden(false);
     }
 
@@ -246,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Background/hairline state (used by .top-shell-scrolled CSS)
       document.body.classList.toggle("top-shell-scrolled", y > SCROLL_TOP_ZONE);
 
-      // Always reveal near the top or when a chrome surface is open
+      // Show ONLY near the top of the page; otherwise keep hidden.
       if (y <= SCROLL_TOP_ZONE || chromeLockedOpen()) {
         reveal();
         lastY  = y;
@@ -260,26 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      if (dy > 0) {
-        // scrolling DOWN
-        downIntent += dy;
-        upIntent = 0;
-        if (
-          !isHidden &&
-          y > HIDE_MIN_Y &&
-          downIntent > HIDE_DELTA &&
-          v > HIDE_MIN_VELOCITY
-        ) {
-          setHidden(true);
-        }
-      } else {
-        // scrolling UP
-        upIntent += -dy;
-        downIntent = 0;
-        if (isHidden && upIntent > SHOW_DELTA) {
-          setHidden(false);
-        }
-      }
+      setHidden(true);
 
       lastY  = y;
       lastTs = now;
@@ -293,10 +264,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ---- listeners ----------------------------------------------
     window.addEventListener("scroll", requestTopChromeUpdate, { passive: true });
-
-    window.addEventListener("mousemove", (e) => {
-      if (e.clientY <= EDGE_REVEAL_Y) reveal();
-    }, { passive: true });
 
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
