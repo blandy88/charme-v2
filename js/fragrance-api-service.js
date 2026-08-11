@@ -25,7 +25,7 @@ class FragranceAPIService {
       this.make("Uomo Extradose", "Valentino", "Woody Ambery Fougere", "men", "kerosene-umo-extradose.png", ["spices", "lavandin", "vetiver", "guaiac wood", "amber accord", "vanilla"], 2025, "", "A deeper Born in Roma twist powered by extra vetiver, aromatic lavandin, warm spice, and an addictive amber-vanilla trail."),
       this.make("Donna Extradose", "Valentino", "Floral Ambery", "women", "kerosene-donna-extradose.png", ["black currant", "rum accord", "jasmine", "vanilla"], 2025, "", "A richer Born in Roma Donna built around black currant, liquor-like rum facets, jasmine, and a plush vanilla overdose."),
       this.make("Cedar Chic", "Carolina Herrera", "Floral Woody Musk", "unisex", "narciso-cedar-chic.png", ["aldehydes", "bergamot", "orange blossom", "white musk", "cedarwood"], 2025, "Antoine Maisondieu", "A polished Carolina Herrera cedar scent inspired by a crisp white shirt, airy aldehydes, orange blossom, white musk, and cedarwood."),
-      this.make("L'Impératrice 3", "Dolce & Gabbana", "Floral Fruity", "women", "dg-limperatrice-3.png", ["kiwi", "watermelon", "pink cyclamen", "lychee", "heliotrope", "rose", "musk", "cedar", "sandalwood"], "", "", ""),
+      this.make("L'Imp\u00e9ratrice 3", "Dolce & Gabbana", "Floral Fruity", "women", "dg-limperatrice-3.png", ["kiwi", "watermelon", "pink cyclamen", "lychee", "heliotrope", "rose", "musk", "cedar", "sandalwood"], "", "", ""),
       this.make("Eau du Soir", "Sisley", "Chypre Floral", "women", "sisley-eau-du-soir.png", ["grapefruit", "mandarin", "rose", "jasmine", "lily", "may rose", "musk", "cedar", "amber"], "", "", ""),
       this.make("Guidance 46", "Amouage", "Oriental", "unisex", "amouage-guidance-46.png", ["saffron", "pink pepper", "frankincense", "rose", "oud", "iris", "amber", "musk", "sandalwood"], "", "", ""),
       this.make("Her Majesty", "Kilian", "Oriental Floral", "women", "kilian-her-majesty.png", ["champagne accord", "raspberry", "pink pepper", "rose", "iris", "peony", "musk", "amber", "vanilla"], "", "", ""),
@@ -43,25 +43,25 @@ class FragranceAPIService {
       this.make("Valentina Poudre", "Valentino", "Floral Powdery", "women", "valentino-valentina-poudre.png", ["iris", "pink pepper", "bergamot", "rose", "heliotrope", "violet", "musk", "vanilla", "sandalwood"], "", "", ""),
       this.make("Valentina Absolue", "Valentino", "Floral Oriental", "women", "valentino-valentina-absolue.png", ["jasmine", "pear", "bergamot", "rose", "tuberose", "iris", "vanilla", "musk", "amber"], "", "", ""),
       this.make("Fantasmagoria", "Lattafa", "Oriental", "unisex", "lattafa-fantasmagoria.png", ["bergamot", "saffron", "pink pepper", "oud", "rose", "incense", "amber", "musk", "sandalwood"], "", "", ""),
-      this.make("Suprême Bouquet", "Yves Saint Laurent", "Amber Floral", "unisex", "yves-rocher-supreme-bouquet.png", ["pink pepper", "bergamot", "tuberose", "ylang-ylang", "amber", "musk", "patchouli"], 2013, "Dominique Ropion", "An opulent YSL white floral from Le Vestiaire des Parfums where tuberose and ylang-ylang bloom over amber, musk, and patchouli."),
+      this.make("Supr\u00eame Bouquet", "Yves Saint Laurent", "Amber Floral", "unisex", "yves-rocher-supreme-bouquet.png", ["pink pepper", "bergamot", "tuberose", "ylang-ylang", "amber", "musk", "patchouli"], 2013, "Dominique Ropion", "An opulent YSL white floral from Le Vestiaire des Parfums where tuberose and ylang-ylang bloom over amber, musk, and patchouli."),
       this.make("Rose Star", "Dior", "Floral Oud", "unisex", "dior-rose-star.png", ["rose", "raspberry", "pink pepper", "oud", "iris", "jasmine", "amber", "musk", "sandalwood"], "", "", ""),
       this.make("Oud Voyager", "Tom Ford", "Oriental Woody", "unisex", "tom-ford-oud-voyager.png", ["oud", "saffron", "cardamom", "rose", "leather", "incense", "amber", "musk", "cedar"], "", "", ""),
       this.make("Assad Elixir", "Lattafa", "Oriental Spicy", "unisex", "lattafa-assad-elixir.png", ["saffron", "pink pepper", "bergamot", "oud", "rose", "tobacco", "amber", "musk", "vanilla"], "", "", ""),
-      this.make("Flowerbomb Extrême", "Viktor & Rolf", "Floral Oriental", "women", "viktor-rolf-flowerbomb-extreme.png", ["rose", "freesia", "cattleya orchid", "jasmine", "orange blossom", "patchouli", "musk", "vanilla", "amber"], "", "", ""),
+      this.make("Flowerbomb Extr\u00eame", "Viktor & Rolf", "Floral Oriental", "women", "viktor-rolf-flowerbomb-extreme.png", ["rose", "freesia", "cattleya orchid", "jasmine", "orange blossom", "patchouli", "musk", "vanilla", "amber"], "", "", ""),
       this.make("Santal Royal", "Guerlain", "Woody Oriental", "unisex", "guerlain-santal-royal.png", ["sandalwood", "rose", "jasmine", "oud", "leather", "incense", "amber", "musk", "cedar"], "", "", ""),
       this.make("Terroni", "Orto Parisi", "Leather", "unisex", "orto-parisi-terroni.png", ["earth", "petrichor", "moss", "leather", "tobacco", "vetiver", "amber", "musk", "cedar"], "", "", ""),
       this.make("Oud Royal", "Guerlain", "Oriental", "unisex", "guerlain-oud-royal.png", ["oud", "saffron", "rose", "leather", "incense", "cardamom", "amber", "musk", "sandalwood"], "", "", ""),
       this.make("Noir Extreme", "Tom Ford", "Oriental Gourmand", "men", "tom-ford-noir-extreme.png", ["cardamom", "nutmeg", "bergamot", "milk", "kulfi", "rose", "amber", "sandalwood", "vanilla"], "", "", ""),
       this.make("Guilty Elixir Femme", "Gucci", "Amber Floral Woody", "women", "paco-rabanne-guilty-elixir-femme.png", ["bergamot", "mandora", "violet", "wisteria", "rose", "osmanthus", "vanilla absolute", "tonka bean", "patchouli"], 2023, "Quentin Bisch & Nathalie Cetto", "A richer Gucci Guilty pour Femme with violet, wisteria, osmanthus, vanilla absolute, and tonka over earthy patchouli."),
-      this.make("Rosendo Mateu Nº5", "Rosendo Mateu", "Woody Floral", "unisex", "rosendo-mateu-no5.png", ["pink pepper", "bergamot", "lemon", "rose", "jasmine", "iris", "musk", "sandalwood", "amber"], "", "", ""),
+      this.make("Rosendo Mateu N\u00ba5", "Rosendo Mateu", "Woody Floral", "unisex", "rosendo-mateu-no5.png", ["pink pepper", "bergamot", "lemon", "rose", "jasmine", "iris", "musk", "sandalwood", "amber"], "", "", ""),
       this.make("Les Sables Roses", "Louis Vuitton", "Floral Oud", "unisex", "maison-crivelli-les-sables-roses.png", ["rose", "oud", "ambergris", "black pepper", "saffron"], 2019, "Jacques Cavallier Belletrud", "A dramatic Louis Vuitton rose-oud composition that balances velvety petals with ambergris warmth and dark spice."),
       this.make("Wanted Elixir", "Azzaro", "Oriental Spicy", "men", "azzaro-wanted-elixir.png", ["lavender", "cardamom", "bergamot", "leather", "vanilla", "tonka bean", "amber", "musk", "cedar"], "", "", ""),
       this.make("Ambassador", "Gisada", "Woody Aromatic", "men", "gisada-ambassador.png", ["bergamot", "grapefruit", "pink pepper", "lavender", "geranium", "violet", "musk", "cedar", "amber"], "", "", ""),
       this.make("La Bomba", "Jean Paul Gaultier", "Floral Fruity", "women", "jpg-la-bomba.png", ["strawberry", "raspberry", "pink pepper", "rose", "jasmine", "tuberose", "vanilla", "musk", "cedar"], "", "", ""),
       this.make("Ambre Samar", "Maison Crivelli", "Oriental Amber", "unisex", "maison-crivelli-ambre-samar.png", ["amber", "saffron", "bergamot", "rose", "oud", "incense", "musk", "sandalwood", "vanilla"], "", "", ""),
       this.make("Myrrh & Tonka", "Jo Malone", "Oriental", "unisex", "jo-malone-myrrh-tonka.png", ["bergamot", "lavender", "mandarin", "myrrh", "tonka bean", "orris", "musk", "cedar", "amber"], "", "", ""),
-      this.make("Chanel N°5", "Chanel", "Aldehyde Floral", "women", "chanel-no5.png", ["ylang-ylang", "neroli", "aldehydes", "rose", "jasmine", "may rose", "musk", "sandalwood", "vanilla"], "", "", ""),
-      this.make("Ganymède", "Marc-Antoine Barrois", "Mineral Woody", "unisex", "marc-antoine-barrois-ganymede.png", ["mandarin", "saffron", "suede", "iris", "violet", "orris", "musk", "ambroxan", "mineral"], "", "", ""),
+      this.make("Chanel N\u00b05", "Chanel", "Aldehyde Floral", "women", "chanel-no5.png", ["ylang-ylang", "neroli", "aldehydes", "rose", "jasmine", "may rose", "musk", "sandalwood", "vanilla"], "", "", ""),
+      this.make("Ganym\u00e8de", "Marc-Antoine Barrois", "Mineral Woody", "unisex", "marc-antoine-barrois-ganymede.png", ["mandarin", "saffron", "suede", "iris", "violet", "orris", "musk", "ambroxan", "mineral"], "", "", ""),
       this.make("Crush on Me", "Dolce & Gabbana", "Floral Fruity", "women", "dg-crush-on-me.png", ["strawberry", "raspberry", "pink pepper", "rose", "jasmine", "peony", "musk", "vanilla", "cedar"], "", "", ""),
       this.make("Armani Code Parfum", "Armani", "Oriental Woody", "men", "armani-code-parfum.png", ["bergamot", "lavender", "star anise", "olive flower", "tonka bean", "leather", "musk", "sandalwood", "amber"], "", "", ""),
       this.make("Hudson Valley", "Gissah", "Aromatic Green", "unisex", "gisada-hudson-valley.png", ["green apple", "bergamot", "mint", "vetiver", "cedar", "geranium", "musk", "amber", "sandalwood"], "", "", ""),
@@ -71,7 +71,7 @@ class FragranceAPIService {
       this.make("Flower by Kenzo", "Kenzo", "Floral Powdery", "women", "kenzo-flower.png", ["rose", "violet", "hawthorn", "cassie", "poppy", "peony", "musk", "vanilla", "white cedar"], "", "", ""),
       this.make("Narciso", "Narciso Rodriguez", "Musk Floral", "unisex", "narciso-rodriguez-narciso.png", ["bergamot", "rose", "peony", "musk", "iris", "lily", "cedar", "amber", "sandalwood"], "", "", ""),
       this.make("Cristal Noir", "Versace", "Oriental Floral", "women", "raghba-cristal-noir.png", ["ginger", "cardamom", "pepper", "gardenia", "orange blossom", "coconut", "sandalwood", "amber", "musk"], 2004, "", "Versace's darkly glamorous oriental, spice-kissed ginger and cardamom over gardenia, coconut, and warm woods."),
-      this.make("Trésor la Nuit", "Lancôme", "Floral Oriental", "women", "lancome-tresor-la-nuit.png", ["rose", "pink pepper", "pear", "datura", "iris", "heliotrope", "musk", "vanilla", "sandalwood"], "", "", ""),
+      this.make("Tr\u00e9sor la Nuit", "Lanc\u00f4me", "Floral Oriental", "women", "lancome-tresor-la-nuit.png", ["rose", "pink pepper", "pear", "datura", "iris", "heliotrope", "musk", "vanilla", "sandalwood"], "", "", ""),
       this.make("Manifesto Elixir", "Narciso Rodriguez", "Floral Musk", "women", "narciso-manifesto-elixir.png", ["rose", "bergamot", "pink pepper", "musk", "jasmine", "vanilla", "cedar", "amber", "tonka bean"], "", "", ""),
       this.make("Alien", "Mugler", "Oriental Woody", "women", "mugler-alien.png", ["jasmine sambac", "bergamot", "mandarin", "cashmeran", "white amber", "woody", "musk", "sandalwood", "vanilla"], "", "", ""),
       this.make("Elie Saab In White", "Elie Saab", "White Floral", "women", "elie-saab-in-white.png", ["bergamot", "lemon", "orange blossom", "jasmine", "rose", "lily", "musk", "cedar", "amber"], "", "", ""),
@@ -137,5 +137,350 @@ class FragranceAPIService {
       this.make("Aqua Allegoria Florabloom Forte", "Guerlain", "Floral", "women", "aqua-allegoria-florabloom.png", ["rose", "peony", "violet", "jasmine", "iris", "musk", "cedar", "white amber"], 2023, "Thierry Wasser", "A radiant floral with rose, peony, violet, jasmine, and musk."),
       this.make("Angel Nova", "Mugler", "Amber Fruity", "women", "angel-nova.png", ["raspberry", "bergamot", "pink pepper", "jasmine", "rose", "benzoin", "vanilla", "akigalawood"], 2020, "Alienor Massenet & Quentin Bisch", "A vibrant amber fruity with raspberry, jasmine, benzoin, and akigalawood."),
       this.make("Acqua di Gio Elixir", "Giorgio Armani", "Woody Aquatic", "men", "aqua-di-gio-elixir.png", ["bergamot", "marine accord", "green mandarin", "lavender", "rosemary", "sage", "patchouli", "amber", "cedar"], 2024, "Alberto Morillas", "A deep woody aquatic with bergamot, marine accord, lavender, patchouli, and amber."),
-      this.make("Äican", "Kajal", "Fruity Gourmand", "unisex", "", ["passion fruit", "pineapple", "mandarin", "ginger", "black pepper", "jasmine", "musk", "vanilla", "praline", "vetiver", "sandalwood", "patchouli"], 2024, "Gökhan Şimşek", "A tropical burst of passion fruit and pineapple laced with ginger and praline, Äican is Kajal's golden-hour gourmand that glows on warm skin."),
-      this.make("Saharian Wind
+      this.make("\u00c4ican", "Kajal", "Fruity Gourmand", "unisex", "", ["passion fruit", "pineapple", "mandarin", "ginger", "black pepper", "jasmine", "musk", "vanilla", "praline", "vetiver", "sandalwood", "patchouli"], 2024, "G\u00f6khan \u015eim\u015fek", "A tropical burst of passion fruit and pineapple laced with ginger and praline, \u00c4ican is Kajal's golden-hour gourmand that glows on warm skin."),
+      this.make("Saharian Wind", "Mancera", "Spicy Oriental", "unisex", "", ["pink pepper", "saffron", "cinnamon", "spices", "leather", "amber", "woody notes", "musk"], 2020, "Pierre Montale", "A sweltering desert gust of pink pepper and warm spices blown over leather and woods, Pierre Montale's ode to the Sahara."),
+      this.make("Sole Patchouli", "Vertus", "Woody Earthy", "unisex", "", ["patchouli", "green notes", "orris root", "mimosa", "marshmallow", "civet"], 2017, "", "Sun-drenched patchouli softened by orris root and a whisper of marshmallow, an earthy-green signature with a surprisingly plush drydown."),
+      this.make("Scirocco", "Moresque", "Oriental Spicy", "unisex", "", ["cardamom", "saffron", "apple", "elemi", "orange", "damask rose", "nutmeg", "cinnamon", "jasmine", "amber", "vanilla", "tonka bean", "leather", "cedar", "patchouli", "vetiver", "musk"], 2023, "", "A saffron-rose oriental that melts in the heat, cardamom, cinnamon and Damask rose over a plush amber-vanilla base with a leathery spine."),
+      this.make("Bois Imp\u00e9rial", "Essential Parfums", "Woody Spicy", "unisex", "", ["thai basil", "grapefruit", "nepalese pepper absolute", "akigalawood", "haitian vetiver"], 2020, "Quentin Bisch", "Quentin Bisch's cult woody minimalist, Thai basil and grapefruit zipping over Nepalese pepper and a creamy Akigalawood-vetiver core."),
+      this.make("Stellar Times", "Louis Vuitton", "Amber Floral", "unisex", "armani-prive-stellaris.png", ["orange blossom", "white amber", "peru balsam", "vanilla"], 2021, "Jacques Cavallier Belletrud", "A warm, resinous extrait from the Les Extraits collection, orange blossom and white amber wrapped in Peru balsam and vanilla for a stellar golden glow."),
+      this.make("Erba Gold", "Xerjoff", "Fruity Citrus", "unisex", "", ["orange", "bergamot", "lemon", "ginger", "melon", "pear", "green apple", "cinnamon", "cardamom", "cloves", "white musk", "vanilla", "amber", "woody notes"], 2016, "Unknown", "A sunlit citrus cocktail, Amalfi lemon, Brazilian orange and ginger sparkling over melon, pear and cinnamon, melting into white musk and Madagascan vanilla."),
+      this.make("Purple Accento", "Xerjoff", "Oriental Floral", "unisex", "", ["pineapple", "mandarin", "bergamot", "hyacinth", "loganberry", "jasmine", "orris", "pink pepper", "musk", "oud", "vanilla", "amber", "sandalwood"], 2025, "Unknown", "The Accento universe goes plush, pineapple and loganberry over jasmine and orris, wrapped in oud, amber and vanilla for a regal violet glow."),
+      this.make("Fleur de Mat\u00e9", "Versace", "Aromatic Woody", "unisex", "", ["patchouli", "cypriol", "mat\u00e9", "olibanum", "atlas cedar"], 2021, "Olivier Cresp", "Olivier Cresp's verde tapestry, patchouli and cypriol shadowing the bitter lift of mat\u00e9, olibanum and Atlas cedar for a tailored, smoky-herbal elegance."),
+      this.make("Iris d'\u00c9lite", "Versace", "Floral Woody", "unisex", "", ["bergamot", "pink pepper", "iris", "orris", "heliotrope", "suede", "vetiver", "musk"], 2021, "", "A regal powdery iris dressed in soft suede and woody warmth, Versace's most refined, quiet-luxury side."),
+      this.make("Jahwara Oriental", "Giorgio Armani", "Oriental Woody", "unisex", "", ["spices", "incense", "myrrh", "iris", "opoponax", "labdanum", "ambroxan", "bourbon vanilla", "amberwood", "guaiac wood", "cedar"], 2021, "", "A princely Armani Priv\u00e9 journey, incense, myrrh and spices over iris, opoponax and labdanum, drying into bourbon vanilla, guaiac wood and amberwood."),
+      this.make("Dolce Blue Jasmine", "Dolce & Gabbana", "Floral Fruity", "women", "", ["blue fig", "jasmine sambac", "cedarwood", "musk"], 2024, "", "A Sicilian breeze in a bottle, juicy blue fig and jasmine sambac rising over clean cedarwood, luminous and effortlessly Mediterranean."),
+      this.make("Light Blue Summer Vibes", "Dolce & Gabbana", "Citrus Fruity", "unisex", "", ["bergamot", "peach", "fruity notes", "cedar", "musk"], 2023, "Olivier Cresp", "Olivier Cresp's sun-soaked seasonal twist on Light Blue, sparkling bergamot and juicy peach over the iconic cedarwood drydown."),
+      this.make("Patchouli Ardent", "Guerlain", "Woody Oriental", "unisex", "", ["patchouli", "incense", "spices", "cedar", "amber", "vanilla", "musk"], 2024, "Thierry Wasser", "Thierry Wasser's molten patchouli from the Absolus Allegoria line, dark, smoky and glowing, with resins and woods feeding the flames."),
+      this.make("Mandarine Basilic", "Guerlain", "Citrus Aromatic", "unisex", "", ["mandarin", "basil", "neroli", "bitter orange", "petitgrain", "sandalwood", "musk"], 2007, "", "The Aqua Allegoria classic, a glass of chilled mandarin juice bruised with fresh basil, herbal and sunny in equal measure."),
+      this.make("Bvlgari Man Rain Essence", "Bvlgari", "Aromatic Fresh", "men", "", ["green tea", "orange", "white lotus", "musk", "amber", "guaiac wood"], 2023, "Alberto Morillas", "Alberto Morillas captures the scent of rain on warm stone, green tea and orange petal chilled by a petrichor musk-amber base with guaiac wood."),
+      this.make("Magic", "Al-Jazeera Perfumes", "Oriental Floral", "unisex", "", ["ozonic notes", "salt", "turkish rose", "praline", "vanilla", "amber extreme", "patchouli"], 2016, "Loc Dong", "Loc Dong's salty ozonic opening crashes into Turkish rose and praline, settling on a warm vanilla-amber-patchouli shore."),
+      this.make("Sabah Al Waed", "Paris Corner", "Amber Floral", "unisex", "", ["jasmine", "orange blossom", "cocoa", "musk", "amber", "vanilla", "tonka bean", "patchouli", "sandalwood"], 2023, "Al Haramain Perfumes", "A creamy morning promise, jasmine and orange blossom over cocoa, amber and a vanilla-tonka base dusted with patchouli and sandalwood."),
+      this.make("Smoking Hot", "Kilian", "Oriental Spicy", "unisex", "", ["apple", "smoke", "cinnamon", "tobacco", "vanilla", "moss", "bourbon vanilla", "licorice", "iso e super", "clary sage"], 2023, "Mathieu Nardin", "Smoke curling through caramelized apple and cinnamon, a tobacco-vanilla hearth cooled by licorice and clary sage."),
+      this.make("Lamar Noir", "Kajal", "Oriental Amber", "unisex", "", ["tropical fruits", "green apple", "violet", "bergamot", "caramel", "balsamic notes", "vanilla", "rose", "geranium", "leather", "oud", "cashmere wood", "amber", "guaiac wood", "sandalwood", "moss", "musk"], 2024, "Patrick M\u00fcller", "An ambery-leather noir, tropical fruits and violet brightening caramel-vanilla before oud, leather and cashmere woods take hold."),
+      this.make("Tobacco Mandarin", "Byredo", "Tobacco Woody", "unisex", "", ["cumin", "mandarin", "coriander", "tobacco", "leather", "labdanum", "frankincense", "oud", "sandalwood"], 2020, "J\u00e9r\u00f4me Epinette", "Juicy mandarin colliding with cumin and coriander over smoldering tobacco, leather and labdanum, drying into frankincense and oud."),
+      this.make("Alexandria II", "Xerjoff", "Oriental Woody", "unisex", "", ["palisander rosewood", "lavender", "apple", "cinnamon", "rose", "cedar", "lily of the valley", "oud", "sandalwood", "amber", "vanilla", "musk"], 2012, "Chris Maurice", "A regal oriental masterpiece, palisander rosewood and lavender opening over rose and cedar, melting into oud, amber and vanilla."),
+      this.make("Italica", "Xerjoff", "Gourmand Oriental", "unisex", "", ["almond", "milk", "saffron", "vanilla", "toffee", "sandalwood", "musk", "cedar"], 2016, "Unknown", "Tuscan almond milk steeped in saffron and vanilla toffee, a creamy gourmand wrapped in sandalwood, cedar and musk."),
+      this.make("Mefisto", "Xerjoff", "Citrus Aromatic", "unisex", "", ["grapefruit", "bergamot", "lemon", "lavender", "rose", "iris", "musk", "sandalwood", "cedar", "amber"], 2009, "Unknown", "A sparkling Casamorati cologne, grapefruit, bergamot and Amalfi lemon brightening lavender, rose and iris over cedar, musk and amber."),
+      this.make("1888", "Xerjoff", "Oriental Floral", "unisex", "", ["carnation", "coriander", "green pepper", "saffron", "rose", "neroli", "ylang-ylang", "sandalwood", "patchouli", "amber", "birch"], 2013, "Unknown", "A tribute to the founding of Casamorati, carnation and saffron over rose, neroli and ylang-ylang, grounded in Mysore sandalwood, amber and birch."),
+      this.make("Bois d'Argent", "Dior", "Iris Woody", "unisex", "", ["iris", "cypress", "juniper berries", "myrrh", "patchouli", "woody notes", "honey", "vanilla", "amber", "musk", "leather"], 2004, "Annick Menardo", "Iris and myrrh suspended in honeyed amber over a dry woody base, the Maison Dior original of delicate, luminous restraint."),
+      this.make("Tobacco Honey", "Guerlain", "Oriental Woody", "unisex", "", ["honey", "cloves", "anise", "tobacco", "vanilla", "tonka bean", "sesame", "oud", "sandalwood"], 2023, "Delphine Jelk", "Delphine Jelk's L'Art & La Mati\u00e8re masterpiece, beeswax honey and cloves over tobacco and tonka, drying into a smoky oud-sandalwood base."),
+      this.make("Yes I Am", "Cacharel", "Floral Gourmand", "women", "", ["raspberry", "mandarin", "bergamot", "lemon", "gardenia", "ginger flower", "amber", "jasmine", "orange blossom", "rose", "milk", "caramel", "vanilla", "cardamom", "licorice", "benzoin", "sandalwood"], 2018, "Honorine Blanc & Christophe Raynaud", "The spicy-cremoso accord of warm milk and cardamom at its heart, raspberry and mandarin opening into gardenia, ginger flower and jasmine."),
+      this.make("Jasmin Noir", "Bvlgari", "Floral Woody Musk", "women", "", ["jasmine sambac", "star anise", "gardenia", "tonka bean", "white musk", "woody notes", "amber"], 2008, "Sophie Labbe", "Bvlgari's femme fatale jasmine, luminous jasmine sambac wrapped in star anise and gardenia over tonka, woods and white musk."),
+      this.make("L'Instant de Guerlain", "Guerlain", "Floral Woody Musk", "women", "", ["bergamot", "mandarin", "honeysuckle", "magnolia", "jasmine", "iris", "woody notes", "white musk"], 2004, "Maurice Roucel", "Maurice Roucel's golden classic, honeysuckle and magnolia over iris, woods and radiant white musk."),
+      this.make("Alien Goddess", "Mugler", "Amber Floral", "women", "", ["bergamot", "coconut", "frangipani", "jasmine sambac", "cashmeran", "amber", "benzoin"], 2021, "Quentin Bisch", "A sun-drenched amber floral, bergamot and frangipani over jasmine sambac and cashmeran on a warm benzoin base."),
+      this.make("Hypnotic Poison", "Dior", "Oriental Vanilla", "women", "", ["bitter almond", "caraway", "jasmine", "lily of the valley", "vanilla", "musk", "sandalwood"], 1998, "Annick Menardo", "Annick Menardo's dangerously addictive almond-vanilla, a retro-glamour oriental that opens bitter and dries seductively sweet."),
+      this.make("Si Passione", "Giorgio Armani", "Floral Fruity", "women", "", ["pear", "black currant", "pink pepper", "rose", "jasmine", "vanilla", "cedar", "patchouli"], 2017, "Unknown", "A passionate rework of Si, juicy pear and black currant igniting rose, jasmine and patchouli."),
+      this.make("Coco Mademoiselle", "Chanel", "Chypre Floral", "women", "", ["orange", "bergamot", "rose", "jasmine", "orange blossom", "patchouli", "vetiver", "vanilla", "white musk"], 2001, "Jacques Polge", "Jacques Polge's contemporary chypre, fresh orange and rose over a deep patchouli-vetiver base, a study in modern Chanel elegance."),
+      this.make("Lady Million", "Paco Rabanne", "Floral Fruity", "women", "", ["raspberry", "neroli", "bitter orange", "jasmine", "honey", "amber", "patchouli"], 2010, "Unknown", "The dazzling gold counterpart to 1 Million, raspberry and neroli brightened by honey, amber and patchouli."),
+      this.make("Crystal Noir", "Versace", "Oriental Floral", "women", "raghba-cristal-noir.png", ["ginger", "cardamom", "pepper", "gardenia", "orange blossom", "coconut", "sandalwood", "amber", "musk"], 2004, "Unknown", "Versace's darkly glamorous oriental, spice-kissed ginger and cardamom over gardenia, coconut and warm woods."),
+      this.make("Scandal Absolu", "Jean Paul Gaultier", "Floral Gourmand", "women", "", ["gardenia", "orange blossom", "honey", "caramel", "tonka bean", "vanilla", "patchouli"], 2022, "Unknown", "A richer Scandal, honeyed caramel and tonka poured over gardenia and orange blossom with a patchouli backbone."),
+      this.make("Flora Gorgeous Jasmine", "Gucci", "Floral", "women", "", ["jasmine grandiflorum", "pear", "brown sugar", "mandarin", "sandalwood"], 2022, "Unknown", "Gucci's radiant jasmine, grandiflorum jasmine entwined with pear and brown sugar over a creamy sandalwood drydown."),
+      this.make("Gucci Guilty", "Gucci", "Floral Oriental", "women", "", ["mandarin", "pink pepper", "peach", "lilac", "rose", "amber", "patchouli"], 2010, "Unknown", "A magnetic amber-floral, mandarin and pink pepper opening into lilac, rose and peach on patchouli."),
+      this.make("Amirat Al Arab", "Lattafa", "Floral Oud", "women", "", ["rose", "jasmine", "oud", "saffron", "amber", "vanilla", "musk"], 2016, "Unknown", "An opulent Arabian floral-oud, rose and jasmine laced with saffron over smoky oud, amber and vanilla."),
+      this.make("Angelique Noire", "Guerlain", "Woody Aromatic", "unisex", "", ["angelica root", "bergamot", "lemon", "neroli", "white musk", "sandalwood", "vanilla"], 2005, "Unknown", "The first of L'Art et la Matiere, crisp angelica and citrus over a creamy sandalwood-vanilla base."),
+      this.make("Chloe by Chloe", "Chloe", "Chypre Floral", "women", "", ["peony", "lychee", "freesia", "rose", "lily of the valley", "magnolia", "amber", "cedar", "musk"], 2008, "Unknown", "A classic rose-powder chypre, peony and freesia around a soft rose heart with warm cedar and musk."),
+      this.make("Irresistible", "Givenchy", "Floral Powdery", "women", "", ["pear", "bergamot", "rose", "iris", "musk", "sandalwood", "patchouli", "vanilla"], 2020, "Fanny Bal", "Fanny Bal's luminous powdery floral, sparkling pear and rose with velvety iris over white musk."),
+      this.make("Guidance", "Amouage", "Amber Floral", "women", "", ["pear", "saffron", "osmanthus", "rose", "hazelnut", "amber", "sandalwood", "tonka"], 2023, "Cecile Krakower", "Cecile Krakower's soaring amber-rose, saffron and pear lifted over hazelnut, tonka and creamy sandalwood."),
+      this.make("Insolence", "Guerlain", "Floral Powdery", "women", "", ["violet", "iris", "orange blossom", "jasmine", "vanilla", "tonka bean", "musk"], 2006, "Maurice Roucel", "Maurice Roucel's extrovert violet-iris, a candy-sweet powder puff of playful Guerlain opulence."),
+      this.make("Envy Me", "Gucci", "Floral Fruity", "women", "", ["pineapple", "pink pepper", "peony", "jasmine", "rose", "musk", "sandalwood"], 2004, "Unknown", "A fresh juicy floral, pineapple and pink pepper over peony, jasmine and rose with a musk-wood base."),
+      this.make("Chloe Roses", "Chloe", "Floral", "women", "", ["rose", "peony", "magnolia", "amber", "cedar", "musk"], 2014, "Unknown", "A pure rose eau de toilette, fresh rose and peony over magnolia with a soft amber-musk trail."),
+      this.make("Devotion", "Dolce & Gabbana", "Floral Gourmand", "women", "", ["orange", "candied orange", "marzipan", "butter", "jasmine", "vanilla"], 2023, "Unknown", "An edible Sicilian gourmand, candied orange and marzipan over jasmine, vanilla and warm butter."),
+      this.make("Lady Million Gold", "Paco Rabanne", "Floral Fruity", "women", "", ["raspberry", "black currant", "neroli", "orange blossom", "honey", "vanilla", "patchouli"], 2017, "Unknown", "The gilded flanker of Lady Million, black currant and orange blossom over honey, vanilla and patchouli."),
+      this.make("Musc Noble", "Atelier Cologne", "Musky Woody", "unisex", "", ["bergamot", "saffron", "white musk", "amber", "sandalwood", "cedar", "vanilla"], 2020, "Unknown", "A refined musk cologne, bergamot and saffron glowing over clean white musk, amber and sandalwood."),
+      this.make("Libre Absolu Platine", "Yves Saint Laurent", "Amber Fougere", "women", "", ["lavender", "ginger", "orange blossom", "jasmine", "vanilla", "musk"], 2023, "Unknown", "A sharper, more metallic Libre, lavender and ginger frozen over orange blossom, jasmine and vanilla."),
+      this.make("Scandal", "Jean Paul Gaultier", "Floral Gourmand", "women", "", ["gardenia", "orange blossom", "honey", "caramel", "vanilla", "patchouli"], 2017, "Unknown", "Scandal's scandalous heart, gardenia and orange blossom drenched in honey-caramel on patchouli."),
+      this.make("La Vie Est Belle Elixir", "Lancome", "Gourmand Floral", "women", "", ["iris", "orange blossom", "jasmine", "pear", "praline", "vanilla", "benzoin"], 2023, "Unknown", "An intensified La Vie Est Belle, pear and praline deepened with iris, orange blossom and smoky benzoin."),
+      this.make("Miss Dior Blooming Bouquet", "Dior", "Floral", "women", "", ["peony", "rose", "cherry blossom", "mandarin", "white musk", "sandalwood"], 2014, "Unknown", "A tender blush bouquet, peony and rose with cherry blossom on fresh mandarin and white musk."),
+      this.make("Black XS L'Exces", "Paco Rabanne", "Floral Woody Musk", "women", "", ["blackberry", "rhubarb", "rose", "amyris", "vanilla", "patchouli", "benzoin"], 2008, "Unknown", "A darker, headier Black XS, blackberry and rhubarb cut with rose over amyris, vanilla and patchouli."),
+      this.make("Carmine", "Creed", "Floral Amber", "women", "", ["ylang-ylang", "tuberose", "rose", "amber", "vanilla", "sandalwood"], 2022, "Olivier Creed", "Olivier Creed's femme fatale rose-amber, ylang-ylang and tuberose over warm amber, vanilla and sandalwood."),
+      this.make("Yara", "Lattafa", "Floral Gourmand", "women", "", ["tangerine", "orchid", "jasmine", "iris", "musk", "vanilla", "sandalwood", "caramel"], 2020, "Unknown", "An addictive powdery floral-gourmand, tangerine and orchid melting into musk, vanilla and caramel."),
+      this.make("L'Interdit", "Givenchy", "Floral Oriental", "women", "", ["pear", "black currant", "tuberose", "jasmine", "orange blossom", "vetiver", "patchouli", "vanilla"], 2018, "Dominique Ropion", "A voluptuous tuberose built by Dominique Ropion, pear and black currant over orange blossom, vetiver and patchouli."),
+      this.make("Nomade", "Chloe", "Chypre Floral", "women", "", ["mirabelle plum", "freesia", "oakmoss", "sandalwood", "patchouli", "cedar"], 2018, "Unknown", "A chic bohemian chypre, mirabelle plum and freesia over oakmoss, patchouli and sandalwood."),
+      this.make("Burberry Her", "Burberry", "Floral Fruity", "women", "", ["strawberry", "raspberry", "blackberry", "violet", "jasmine", "musk", "amber", "sandalwood"], 2018, "Francis Kurkdjian", "Francis Kurkdjian's modern fruity-floral, juicy berries and violet over musk, amber and sandalwood."),
+      this.make("Pure XS", "Paco Rabanne", "Floral Vanilla", "women", "", ["ginger", "white truffle", "jasmine", "vanilla", "caramel", "woody notes"], 2017, "Unknown", "An intimate take on excess, ginger and white truffle with jasmine and caramelized vanilla."),
+      this.make("Dylan Blue Pour Femme", "Versace", "Floral Fruity", "women", "", ["black currant", "green apple", "freesia", "rose", "jasmine", "patchouli", "white musk"], 2017, "Unknown", "A fresh juicy women's Dylan Blue, black currant and green apple over freesia, rose and patchouli."),
+      this.make("Yara Moi", "Lattafa", "Floral", "women", "", ["pear", "bergamot", "jasmine", "gardenia", "vanilla", "musk", "sandalwood"], 2023, "Unknown", "A creamy sparkling flanker to Yara, pear and jasmine over gardenia, vanilla and white musk."),
+    ];
+
+    return Object.fromEntries(fragrances.map((fragrance) => [fragrance.name, fragrance]));
+  }
+
+  make(name, brand, family, audience, image, ingredients, year, perfumer, description) {
+    return {
+      name,
+      brand,
+      family,
+      audience,
+      description,
+      ingredients,
+      year,
+      perfumer,
+      image,
+      concentration: "EDP",
+      sizes: ["50ml", "100ml"],
+      available: true,
+    };
+  }
+
+  normalize(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/&/g, "and")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
+  async searchByIngredients(ingredients) {
+    return this.searchLocalDatabase(ingredients);
+  }
+
+  searchLocalDatabase(ingredients) {
+    const normalizedIngredients = (ingredients || [])
+      .map((ingredient) => this.normalize(ingredient))
+      .filter(Boolean);
+    const matches = [];
+
+    Object.entries(this.comprehensiveDatabase).forEach(([fragranceName, profile]) => {
+      const profileIngredients = (profile.ingredients || []).map((ingredient) => this.normalize(ingredient));
+      const matchedIngredients = normalizedIngredients.filter((ingredient) =>
+        profileIngredients.some((profileIngredient) => profileIngredient.includes(ingredient) || ingredient.includes(profileIngredient)),
+      );
+      if (!matchedIngredients.length) return;
+      matches.push({
+        fragrance: fragranceName,
+        matchCount: matchedIngredients.length,
+        matchedIngredients,
+        percentage: Math.round((matchedIngredients.length / Math.max(1, normalizedIngredients.length)) * 100),
+        profile,
+      });
+    });
+
+    return matches.sort((a, b) => b.matchCount - a.matchCount || a.fragrance.localeCompare(b.fragrance));
+  }
+
+  getFragranceByName(name) {
+    const exact = this.comprehensiveDatabase[name];
+    if (exact) return exact;
+    const normalized = this.normalize(name);
+    const found = Object.entries(this.comprehensiveDatabase).find(([fragranceName, profile]) =>
+      this.normalize(fragranceName) === normalized || this.normalize(`${profile.brand} ${fragranceName}`) === normalized,
+    );
+    return found ? found[1] : null;
+  }
+
+  getFragrancesByIngredient(ingredient) {
+    const normalizedIngredient = this.normalize(ingredient);
+    return this.ingredientDatabase[normalizedIngredient] || [];
+  }
+
+  getRandomFragrances(count = 10) {
+    return Object.keys(this.comprehensiveDatabase)
+      .sort(() => 0.5 - Math.random())
+      .slice(0, count)
+      .map((name) => ({ fragrance: name, profile: this.comprehensiveDatabase[name] }));
+  }
+
+  searchByBrand(brand) {
+    const normalizedBrand = this.normalize(brand);
+    return Object.entries(this.comprehensiveDatabase)
+      .filter(([, profile]) => this.normalize(profile.brand).includes(normalizedBrand))
+      .map(([name, profile]) => ({ fragrance: name, profile }));
+  }
+
+  searchByFamily(family) {
+    const normalizedFamily = this.normalize(family);
+    return Object.entries(this.comprehensiveDatabase)
+      .filter(([, profile]) => this.normalize(profile.family).includes(normalizedFamily))
+      .map(([name, profile]) => ({ fragrance: name, profile }));
+  }
+
+  initializeIngredientDatabase() {
+    const db = {};
+    Object.entries(this.comprehensiveDatabase).forEach(([fragrance, profile]) => {
+      (profile.ingredients || []).forEach((ingredient) => {
+        const normalizedIngredient = this.normalize(ingredient);
+        if (!db[normalizedIngredient]) db[normalizedIngredient] = [];
+        db[normalizedIngredient].push(fragrance);
+      });
+    });
+    return db;
+  }
+
+  async fetchFromAPIs() {
+    return null;
+  }
+
+  formatResults(apiResults) {
+    return (apiResults || []).map((result) => ({
+      fragrance: result.name || result.title,
+      profile: {
+        brand: result.brand || "Unknown",
+        description: result.description || "",
+        ingredients: result.notes || result.ingredients || [],
+        year: result.year || result.launch_year,
+        perfumer: result.perfumer || result.nose,
+        image: result.image || "default.jpg",
+      },
+      matchCount: result.match_count || 0,
+      matchedIngredients: result.matched_ingredients || [],
+      percentage: result.match_percentage || 0,
+    }));
+  }
+
+  getAllIngredients() {
+    return Object.keys(this.ingredientDatabase).sort();
+  }
+
+  getPopularIngredients(limit = 50) {
+    return Object.entries(this.ingredientDatabase)
+      .sort(([, a], [, b]) => b.length - a.length)
+      .slice(0, limit)
+      .map(([ingredient]) => ingredient);
+  }
+
+  getIngredientSuggestions(query, limit = 10) {
+    const normalizedQuery = this.normalize(query);
+    if (normalizedQuery.length < 2) return [];
+    const allIngredients = this.getAllIngredients();
+    return [
+      ...allIngredients.filter((ingredient) => ingredient.startsWith(normalizedQuery)),
+      ...allIngredients.filter((ingredient) => !ingredient.startsWith(normalizedQuery) && ingredient.includes(normalizedQuery)),
+    ].slice(0, limit);
+  }
+
+  getStatistics() {
+    const fragrances = Object.values(this.comprehensiveDatabase);
+    const brandCounts = {};
+    const familyCounts = {};
+    fragrances.forEach((profile) => {
+      brandCounts[profile.brand] = (brandCounts[profile.brand] || 0) + 1;
+      familyCounts[profile.family] = (familyCounts[profile.family] || 0) + 1;
+    });
+    return {
+      totalFragrances: fragrances.length,
+      totalIngredients: Object.keys(this.ingredientDatabase).length,
+      brands: Object.keys(brandCounts).length,
+      families: Object.keys(familyCounts).length,
+      topBrands: Object.entries(brandCounts)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10)
+        .map(([brand, count]) => ({ brand, count })),
+      topFamilies: Object.entries(familyCounts)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10)
+        .map(([family, count]) => ({ family, count })),
+    };
+  }
+
+  searchByText(query) {
+    const normalizedQuery = this.normalize(query);
+    if (!normalizedQuery) return [];
+    return Object.entries(this.comprehensiveDatabase)
+      .map(([name, profile]) => {
+        const haystack = this.normalize(`${name} ${profile.brand} ${profile.family} ${profile.description} ${(profile.ingredients || []).join(" ")}`);
+        return { fragrance: name, profile, score: haystack.includes(normalizedQuery) ? 1 : 0 };
+      })
+      .filter((result) => result.score > 0)
+      .sort((a, b) => a.fragrance.localeCompare(b.fragrance));
+  }
+
+  getSimilarFragrances(fragranceName, limit = 5) {
+    const reference = this.getFragranceByName(fragranceName);
+    if (!reference) return [];
+    const referenceNotes = new Set((reference.ingredients || []).map((ingredient) => this.normalize(ingredient)));
+    return Object.entries(this.comprehensiveDatabase)
+      .filter(([name]) => name !== fragranceName)
+      .map(([name, profile]) => {
+        const sharedNotes = (profile.ingredients || []).filter((ingredient) => referenceNotes.has(this.normalize(ingredient)));
+        const sameFamily = profile.family === reference.family ? 1 : 0;
+        return { fragrance: name, profile, similarity: sharedNotes.length + sameFamily, sharedIngredients: sharedNotes };
+      })
+      .filter((result) => result.similarity > 0)
+      .sort((a, b) => b.similarity - a.similarity || a.fragrance.localeCompare(b.fragrance))
+      .slice(0, limit);
+  }
+
+  exportDatabase() {
+    return {
+      fragrances: this.comprehensiveDatabase,
+      ingredients: this.ingredientDatabase,
+      statistics: this.getStatistics(),
+      exportDate: new Date().toISOString(),
+    };
+  }
+
+  validateFragrance(fragrance) {
+    const errors = [];
+    const warnings = [];
+    if (!fragrance.brand) errors.push("Missing brand");
+    if (!fragrance.ingredients || fragrance.ingredients.length === 0) errors.push("Missing ingredients");
+    if (!fragrance.description) warnings.push("Missing description");
+    if (!fragrance.family) warnings.push("Missing fragrance family");
+    if (!fragrance.year) warnings.push("Missing launch year");
+    if (!fragrance.perfumer) warnings.push("Missing perfumer");
+    return { valid: errors.length === 0, errors, warnings };
+  }
+}
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = FragranceAPIService;
+} else if (typeof window !== "undefined") {
+  window.FragranceAPIService = FragranceAPIService;
+}
+
+// =================================================================
+// SVG placeholder -> real Fragrantica CDN bottle image fix
+// Injected here because this file is already loaded by index.html.
+// Runs on DOMContentLoaded + two timed retries for dynamic renders.
+// =================================================================
+(function fixSvgPlaceholders() {
+  var REAL_IMAGES = {
+    'coolwater.svg':           'https://fimgs.net/mdimg/perfume/375x500.507.jpg',
+    'milliongold.svg':         'https://fimgs.net/mdimg/perfume/375x500.95641.jpg',
+    'fahrenheit.svg':          'https://fimgs.net/mdimg/perfume/375x500.228.jpg',
+    'lacosteblue.svg':         'https://fimgs.net/mdimg/perfume/375x500.132382.jpg',
+    'cerruti1881.svg':         'https://fimgs.net/mdimg/perfume/375x500.329.jpg',
+    'velvetbdk.svg':           'https://fimgs.net/mdimg/perfume/375x500.68119.jpg',
+    'amenfantasm.svg':         'https://fimgs.net/mdimg/perfume/375x500.93266.jpg',
+    'tuxedo.svg':              'https://fimgs.net/mdimg/perfume/375x500.32269.jpg',
+    'onemillionroyale.svg':    'https://fimgs.net/mdimg/perfume/375x500.79159.jpg',
+    'yintensely.svg':          'https://fimgs.net/mdimg/perfume/375x500.79243.jpg',
+    'ymenelixir.svg':          'https://fimgs.net/mdimg/perfume/375x500.90024.jpg',
+    'bossintense.svg':         'https://fimgs.net/mdimg/perfume/375x500.29904.jpg',
+    'onemillionelixir.svg':    'https://fimgs.net/mdimg/perfume/375x500.71708.jpg',
+    'pineapple.svg':           'https://fimgs.net/mdimg/perfume/375x500.68226.jpg',
+    'legendmontblanc.svg':     'https://fimgs.net/mdimg/perfume/375x500.11784.jpg',
+    'azzarochrome.svg':        'https://fimgs.net/mdimg/perfume/375x500.788.jpg',
+    'ombrenomade.svg':         'https://fimgs.net/mdimg/perfume/375x500.49755.jpg',
+    'versacevanillerouge.svg': 'https://fimgs.net/mdimg/perfume/375x500.57701.jpg',
+    'narcoticdelight.svg':     'https://fimgs.net/mdimg/perfume/375x500.89368.jpg',
+    'dired.svg':               'https://fimgs.net/mdimg/perfume/375x500.5532.jpg',
+    'themoon.svg':             'https://fimgs.net/mdimg/perfume/375x500.35973.jpg',
+    'sospiroopera.svg':        'https://fimgs.net/mdimg/perfume/375x500.26282.jpg',
+    'queenofsilk.svg':         'https://fimgs.net/mdimg/perfume/375x500.89643.jpg',
+    'orza.svg':                'https://fimgs.net/mdimg/perfume/375x500.61873.jpg',
+    'kajaldahab.svg':          'https://fimgs.net/mdimg/perfume/375x500.32266.jpg'
+  };
+
+  function applyFixes() {
+    var imgs = document.querySelectorAll('img[src]');
+    for (var i = 0; i < imgs.length; i++) {
+      var img = imgs[i];
+      var raw = img.getAttribute('src') || '';
+      var file = raw.split('/').pop().split('?')[0];
+      var real = REAL_IMAGES[file];
+      if (real) img.src = real;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyFixes);
+  } else {
+    applyFixes();
+  }
+  setTimeout(applyFixes, 800);
+  setTimeout(applyFixes, 2500);
+})();
