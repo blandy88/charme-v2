@@ -400,7 +400,6 @@
   const noteCardSelector = noteCardSelectors.join(",");
 
   function hydrateStaticNotes(root = document) {
-
     root.querySelectorAll(noteCardSelector).forEach((item) => {
       if (item.closest("#ingredientModal") && !item.closest("#ingredientModal.show")) return;
       const nameElement =
@@ -511,22 +510,64 @@
 })();
 
 (function () {
+  const validatedFragranceImages = {
+    pacificchill: "https://media.parfumo.com/perfumes/d8/d8608c-pacific-chill-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    louisvuittonpacificchill: "https://media.parfumo.com/perfumes/d8/d8608c-pacific-chill-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    uomoborninromaextradose: "https://media.parfumo.com/perfumes/7b/7bee88-valentino-uomo-born-in-roma-extradose-valentino_1200.jpg?width=720&aspect_ratio=1:1",
+    valentinouomoborninromaextradose: "https://media.parfumo.com/perfumes/7b/7bee88-valentino-uomo-born-in-roma-extradose-valentino_1200.jpg?width=720&aspect_ratio=1:1",
+    uomoextradose: "https://media.parfumo.com/perfumes/7b/7bee88-valentino-uomo-born-in-roma-extradose-valentino_1200.jpg?width=720&aspect_ratio=1:1",
+    donnaborninromaextradose: "https://media.parfumo.com/perfumes/b0/b0f936-valentino-donna-born-in-roma-extradose-valentino_1200.jpg?width=720&aspect_ratio=1:1",
+    valentinodonnaborninromaextradose: "https://media.parfumo.com/perfumes/b0/b0f936-valentino-donna-born-in-roma-extradose-valentino_1200.jpg?width=720&aspect_ratio=1:1",
+    donnaextradose: "https://media.parfumo.com/perfumes/b0/b0f936-valentino-donna-born-in-roma-extradose-valentino_1200.jpg?width=720&aspect_ratio=1:1",
+    cedarchic: "https://media.parfumo.com/perfumes/51/514aaf_cedar-chic-carolina-herrera_1200.jpg?width=720&aspect_ratio=1:1",
+    carolinaherreracedarchic: "https://media.parfumo.com/perfumes/51/514aaf_cedar-chic-carolina-herrera_1200.jpg?width=720&aspect_ratio=1:1",
+    labelleparadisegarden: "https://media.parfumo.com/perfumes/6d/6d40db-la-belle-paradise-garden-la-belle-fleur-terrible-jean-paul-gaultier_1200.jpg?width=480&aspect_ratio=1:1",
+    labellefleurterrible: "https://media.parfumo.com/perfumes/6d/6d40db-la-belle-paradise-garden-la-belle-fleur-terrible-jean-paul-gaultier_1200.jpg?width=480&aspect_ratio=1:1",
+    jeanpaulgaultierlabelleparadisegarden: "https://media.parfumo.com/perfumes/6d/6d40db-la-belle-paradise-garden-la-belle-fleur-terrible-jean-paul-gaultier_1200.jpg?width=480&aspect_ratio=1:1",
+    phantominred: "https://media.parfumo.com/perfumes/c2/c22d71_phantom-in-red-rabanne_1200.jpg?width=720&aspect_ratio=1:1",
+    rabannephantominred: "https://media.parfumo.com/perfumes/c2/c22d71_phantom-in-red-rabanne_1200.jpg?width=720&aspect_ratio=1:1",
+    stellartimes: "https://media.parfumo.com/perfumes/9b/9b2621-stellar-times-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    stellaritimes: "https://media.parfumo.com/perfumes/9b/9b2621-stellar-times-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    louisvuittonstellartimes: "https://media.parfumo.com/perfumes/9b/9b2621-stellar-times-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    elves: "https://media.parfumo.com/perfumes/07/076db4_elves-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    louisvuittonelves: "https://media.parfumo.com/perfumes/07/076db4_elves-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    roseamira: "https://media.parfumo.com/perfumes/66/66fdc7-rose-amira-eau-de-parfum-guerlain_1200.jpg?width=720&aspect_ratio=1:1",
+    guerlainroseamira: "https://media.parfumo.com/perfumes/66/66fdc7-rose-amira-eau-de-parfum-guerlain_1200.jpg?width=720&aspect_ratio=1:1",
+    powerofyou: "https://media.parfumo.com/perfumes/8b/8b9c86_emporio-armani-power-of-you-giorgio-armani_1200.jpg?width=720&aspect_ratio=1:1",
+    emporioarmanipowerofyou: "https://media.parfumo.com/perfumes/8b/8b9c86_emporio-armani-power-of-you-giorgio-armani_1200.jpg?width=720&aspect_ratio=1:1",
+    giorgioarmanipowerofyou: "https://media.parfumo.com/perfumes/8b/8b9c86_emporio-armani-power-of-you-giorgio-armani_1200.jpg?width=720&aspect_ratio=1:1",
+    supremebouquet: "https://media.parfumo.com/perfumes/bb/bbc6cc_gold-supreme-bouquet-yves-saint-laurent_1200.jpg?width=720&aspect_ratio=1:1",
+    goldsupremebouquet: "https://media.parfumo.com/perfumes/bb/bbc6cc_gold-supreme-bouquet-yves-saint-laurent_1200.jpg?width=720&aspect_ratio=1:1",
+    yvessaintlaurentsupremebouquet: "https://media.parfumo.com/perfumes/bb/bbc6cc_gold-supreme-bouquet-yves-saint-laurent_1200.jpg?width=720&aspect_ratio=1:1",
+    guiltyelixirfemme: "https://media.parfumo.com/perfumes/d1/d1a3ba-guilty-elixir-de-parfum-pour-femme-gucci_1200.jpg?width=720&aspect_ratio=1:1",
+    guiltyelixirdeparfumpourfemme: "https://media.parfumo.com/perfumes/d1/d1a3ba-guilty-elixir-de-parfum-pour-femme-gucci_1200.jpg?width=720&aspect_ratio=1:1",
+    gucciguiltyelixirdeparfumpourfemme: "https://media.parfumo.com/perfumes/d1/d1a3ba-guilty-elixir-de-parfum-pour-femme-gucci_1200.jpg?width=720&aspect_ratio=1:1",
+    lessablesroses: "https://media.parfumo.com/perfumes/30/3001b0-les-sables-roses-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    louisvuittonlessablesroses: "https://media.parfumo.com/perfumes/30/3001b0-les-sables-roses-louis-vuitton_1200.jpg?width=720&aspect_ratio=1:1",
+    hudsonvalley: "https://media.parfumo.com/perfumes/ea/ea5751-hudson-valley-gissah_1200.jpg?width=720&aspect_ratio=1:1",
+    gissahhudsonvalley: "https://media.parfumo.com/perfumes/ea/ea5751-hudson-valley-gissah_1200.jpg?width=720&aspect_ratio=1:1",
+    crystalnoir: "https://media.parfumo.com/perfumes/61/612d9d-crystal-noir-eau-de-parfum-versace_1200.jpg?width=720&aspect_ratio=1:1",
+    crystalnoireaudeparfum: "https://media.parfumo.com/perfumes/61/612d9d-crystal-noir-eau-de-parfum-versace_1200.jpg?width=720&aspect_ratio=1:1",
+    cristalnoir: "https://media.parfumo.com/perfumes/61/612d9d-crystal-noir-eau-de-parfum-versace_1200.jpg?width=720&aspect_ratio=1:1",
+    versacecrystalnoir: "https://media.parfumo.com/perfumes/61/612d9d-crystal-noir-eau-de-parfum-versace_1200.jpg?width=720&aspect_ratio=1:1",
+  };
+
   const sectionCorrections = [
-    { id: "pacificchill", imageClass: "pacificchill-image", brand: "Louis Vuitton", product: "Pacific Chill", accent: "#8fd3ff" },
-    { id: "umoextradose", imageClass: "umoextradose-image", brand: "Valentino", product: "Uomo Extradose", image: "valentino-uomo.png", accent: "#c9a17a" },
-    { id: "donnaextradose", imageClass: "donnaextradose-image", brand: "Valentino", product: "Donna Extradose", image: "valentino-donna.png", accent: "#d8a4b8" },
-    { id: "edarchic", imageClass: "edarchic-image", brand: "Carolina Herrera", product: "Cedar Chic", accent: "#d6c59c" },
-    { id: "labelleparadise", imageClass: "labelleparadise-image", brand: "Jean Paul Gaultier", product: "La Belle Paradise Garden", accent: "#8ccf9a" },
-    { id: "phantominred", imageClass: "phantominred-image", brand: "Rabanne", product: "Phantom in Red", accent: "#d35a4b" },
-    { id: "stellaritimes", imageClass: "stellaritimes-image", brand: "Louis Vuitton", product: "Stellar Times", accent: "#f1cf73" },
-    { id: "elves", imageClass: "elves-image", brand: "Louis Vuitton", product: "eLVes", accent: "#b9a7ff" },
-    { id: "roseamira", imageClass: "roseamira-image", brand: "Guerlain", product: "Rose Amira", accent: "#d48ca4" },
-    { id: "powerofyou", imageClass: "powerofyou-image", brand: "Giorgio Armani", product: "Power of You", accent: "#a93d56" },
-    { id: "supremebouquet", imageClass: "supremebouquet-image", brand: "Yves Saint Laurent", product: "Suprême Bouquet", accent: "#d7c07a" },
-    { id: "guiltyelixirfemme", imageClass: "guiltyelixirfemme-image", brand: "Gucci", product: "Guilty Elixir Femme", image: "gucci-guilty.png", accent: "#8b68c9" },
-    { id: "lessablesroses", imageClass: "lessablesroses-image", brand: "Louis Vuitton", product: "Les Sables Roses", accent: "#cf7b95" },
-    { id: "hudsonvalley", imageClass: "hudsonvalley-image", brand: "Gissah", product: "Hudson Valley", accent: "#8ab47a" },
-    { id: "cristalnoir", imageClass: "cristalnoir-image", brand: "Versace", product: "Crystal Noir", accent: "#9b8ec7" },
+    { id: "pacificchill", imageClass: "pacificchill-image", brand: "Louis Vuitton", product: "Pacific Chill", image: validatedFragranceImages.pacificchill, accent: "#8fd3ff" },
+    { id: "umoextradose", imageClass: "umoextradose-image", brand: "Valentino", product: "Uomo Born In Roma Extradose", image: validatedFragranceImages.uomoborninromaextradose, accent: "#c9a17a" },
+    { id: "donnaextradose", imageClass: "donnaextradose-image", brand: "Valentino", product: "Donna Born In Roma Extradose", image: validatedFragranceImages.donnaborninromaextradose, accent: "#d8a4b8" },
+    { id: "edarchic", imageClass: "edarchic-image", brand: "Carolina Herrera", product: "Cedar Chic", image: validatedFragranceImages.cedarchic, accent: "#d6c59c" },
+    { id: "labelleparadise", imageClass: "labelleparadise-image", brand: "Jean Paul Gaultier", product: "La Belle Paradise Garden", image: validatedFragranceImages.labelleparadisegarden, accent: "#8ccf9a" },
+    { id: "phantominred", imageClass: "phantominred-image", brand: "Rabanne", product: "Phantom in Red", image: validatedFragranceImages.phantominred, accent: "#d35a4b" },
+    { id: "stellaritimes", imageClass: "stellaritimes-image", brand: "Louis Vuitton", product: "Stellar Times", image: validatedFragranceImages.stellartimes, accent: "#f1cf73" },
+    { id: "elves", imageClass: "elves-image", brand: "Louis Vuitton", product: "eLVes", image: validatedFragranceImages.elves, accent: "#b9a7ff" },
+    { id: "roseamira", imageClass: "roseamira-image", brand: "Guerlain", product: "Rose Amira", image: validatedFragranceImages.roseamira, accent: "#d48ca4" },
+    { id: "powerofyou", imageClass: "powerofyou-image", brand: "Giorgio Armani", product: "Power of You", image: validatedFragranceImages.powerofyou, accent: "#a93d56" },
+    { id: "supremebouquet", imageClass: "supremebouquet-image", brand: "Yves Saint Laurent", product: "Suprême Bouquet", image: validatedFragranceImages.supremebouquet, accent: "#d7c07a" },
+    { id: "guiltyelixirfemme", imageClass: "guiltyelixirfemme-image", brand: "Gucci", product: "Guilty Elixir de Parfum pour Femme", image: validatedFragranceImages.guiltyelixirdeparfumpourfemme, accent: "#8b68c9" },
+    { id: "lessablesroses", imageClass: "lessablesroses-image", brand: "Louis Vuitton", product: "Les Sables Roses", image: validatedFragranceImages.lessablesroses, accent: "#cf7b95" },
+    { id: "hudsonvalley", imageClass: "hudsonvalley-image", brand: "Gissah", product: "Hudson Valley", image: validatedFragranceImages.hudsonvalley, accent: "#8ab47a" },
+    { id: "cristalnoir", imageClass: "cristalnoir-image", brand: "Versace", product: "Crystal Noir", image: validatedFragranceImages.crystalnoir, accent: "#9b8ec7" },
   ];
 
   let themeSyncScheduled = false;
@@ -565,6 +606,26 @@
       </svg>
     `;
     return `data:image/svg+xml,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
+  }
+
+  function normalizeFragranceKey(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\([^)]*\)/g, " ")
+      .replace(/\beau de parfum\b/g, " ")
+      .replace(/\beau de toilette\b/g, " ")
+      .replace(/\bparfum\b/g, " ")
+      .replace(/\bfor women and men\b/g, " ")
+      .replace(/\bbottle\b/g, " ")
+      .replace(/\bby\b/g, " ")
+      .replace(/[^a-z0-9]+/g, "");
+  }
+
+  function validatedImageFor(value) {
+    const key = normalizeFragranceKey(value);
+    return validatedFragranceImages[key] || "";
   }
 
   function findSectionRoot(id) {
@@ -694,11 +755,90 @@
     });
   }
 
+  function imageElementCandidates(root) {
+    return root.querySelectorAll([
+      "img[src^='data:image/svg+xml']",
+      ".product-section img",
+      ".database-product-section img",
+      "img.database-product-image",
+      "img.fragrance-match-image",
+      "img.fragrance-detail-image",
+      "img[class$='-image']",
+    ].join(","));
+  }
+
+  function fragranceNameCandidatesFromImage(image) {
+    const candidates = [];
+    const push = (value) => {
+      if (value && typeof value === "string" && value.trim()) candidates.push(value.trim());
+    };
+
+    push(image.dataset.fragrance);
+    push(image.alt);
+    const dataRoot = image.closest("[data-fragrance]");
+    push(dataRoot?.getAttribute("data-fragrance"));
+    push(image.closest(".result-card")?.dataset.fragrance);
+    push(image.closest("section")?.getAttribute("data-fragrance"));
+
+    const root =
+      image.closest(".content") ||
+      image.closest("section") ||
+      image.closest(".result-card") ||
+      image.closest(".fragrance-detail-content") ||
+      image.parentElement;
+
+    if (root) {
+      push(root.querySelector(".product-name")?.textContent);
+      push(root.querySelector(".database-fragrance-name")?.textContent);
+      push(root.querySelector(".result-name")?.textContent);
+      push(root.querySelector(".ai-fragrance-name")?.textContent);
+      push(root.querySelector(".fragrance-detail-title")?.textContent);
+      push(root.querySelector(".brand-name")?.textContent);
+      const brand = root.querySelector(".brand-name")?.textContent?.trim();
+      const product = root.querySelector(".product-name")?.textContent?.trim();
+      if (brand && product) push(`${brand} ${product}`);
+    }
+
+    return candidates;
+  }
+
+  function hydrateFragranceImages(root = document) {
+    imageElementCandidates(root).forEach((image) => {
+      if (!(image instanceof HTMLImageElement)) return;
+      if (image.classList.contains("note-real-image")) return;
+      const src = image.getAttribute("src") || "";
+      if (src.includes("images/notes/")) return;
+
+      let nextSrc = "";
+      const candidates = fragranceNameCandidatesFromImage(image);
+      for (const candidate of candidates) {
+        nextSrc = validatedImageFor(candidate);
+        if (nextSrc) break;
+      }
+      if (!nextSrc) return;
+
+      if (image.getAttribute("src") !== nextSrc) image.setAttribute("src", nextSrc);
+      image.removeAttribute("srcset");
+      image.loading = image.loading || "lazy";
+      image.decoding = "async";
+    });
+  }
+
+  window.ValidatedFragranceImages = validatedFragranceImages;
+  window.getValidatedFragranceImage = validatedImageFor;
+
   function bootCorrections() {
     applyHomepageFragranceCorrections();
+    hydrateFragranceImages(document);
     scheduleLateSectionThemeSync();
-    setTimeout(applyHomepageFragranceCorrections, 400);
-    setTimeout(applyHomepageFragranceCorrections, 1400);
+    setTimeout(() => {
+      applyHomepageFragranceCorrections();
+      hydrateFragranceImages(document);
+    }, 400);
+    setTimeout(() => {
+      applyHomepageFragranceCorrections();
+      hydrateFragranceImages(document);
+    }, 1400);
     setTimeout(scheduleLateSectionThemeSync, 700);
   }
 
@@ -712,8 +852,17 @@
   window.addEventListener("scroll", scheduleLateSectionThemeSync, { passive: true });
   window.addEventListener("resize", scheduleLateSectionThemeSync, { passive: true });
 
-  const homepageObserver = new MutationObserver(() => {
+  const homepageObserver = new MutationObserver((mutations) => {
+    let shouldHydrate = false;
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
+        shouldHydrate = true;
+        hydrateFragranceImages(node);
+      });
+    });
     applyHomepageFragranceCorrections();
+    if (shouldHydrate) hydrateFragranceImages(document);
     scheduleLateSectionThemeSync();
   });
 
