@@ -262,6 +262,48 @@ class AIFragranceFinder {
     this.init();
   }
 
+  escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  buildFallbackFragranceImage(name, brand, accent = "#c9a94e") {
+    const safeName = this.escapeHtml(name || "Fragrance");
+    const safeBrand = this.escapeHtml(brand || "Charme");
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560">
+        <defs>
+          <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+            <stop stop-color="#090909"/>
+            <stop offset="1" stop-color="#211a10"/>
+          </linearGradient>
+          <linearGradient id="bottle" x1="0" x2="1" y1="0" y2="1">
+            <stop stop-color="${accent}" stop-opacity="0.96"/>
+            <stop offset="1" stop-color="#fff4cf" stop-opacity="0.56"/>
+          </linearGradient>
+        </defs>
+        <rect width="420" height="560" rx="34" fill="url(#bg)"/>
+        <circle cx="210" cy="172" r="134" fill="${accent}" opacity="0.14"/>
+        <rect x="160" y="94" width="100" height="40" rx="12" fill="${accent}" opacity="0.84"/>
+        <rect x="126" y="132" width="168" height="268" rx="34" fill="#111" stroke="${accent}" stroke-width="4"/>
+        <rect x="146" y="156" width="128" height="198" rx="22" fill="url(#bottle)" opacity="0.9"/>
+        <text x="210" y="430" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#f5efdf">${safeBrand}</text>
+        <text x="210" y="466" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#d0b66f">${safeName}</text>
+      </svg>
+    `;
+    return `data:image/svg+xml,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
+  }
+
+  fragranceImage(profile = {}, fragranceName = "Fragrance") {
+    const provided = String(profile.image || "").trim();
+    if (provided && provided !== "default-fragrance.png") return provided;
+    return this.buildFallbackFragranceImage(fragranceName, profile.brand || "Charme");
+  }
+
   generateDatabaseFromService() {
     const db = this.fragranceService.comprehensiveDatabase;
     return Object.entries(db).map(([name, profile]) => {
@@ -371,7 +413,7 @@ class AIFragranceFinder {
         price_range: price_range,
         best_for: uniqueBestFor,
         personality: uniquePersonality,
-        image: profile.image || 'default-fragrance.png'
+        image: this.fragranceImage(profile, name)
       };
     });
   }
