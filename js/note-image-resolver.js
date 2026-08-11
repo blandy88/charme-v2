@@ -509,3 +509,215 @@
   });
   observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
+
+(function () {
+  const sectionCorrections = [
+    { id: "pacificchill", imageClass: "pacificchill-image", brand: "Louis Vuitton", product: "Pacific Chill", accent: "#8fd3ff" },
+    { id: "umoextradose", imageClass: "umoextradose-image", brand: "Valentino", product: "Uomo Extradose", image: "valentino-uomo.png", accent: "#c9a17a" },
+    { id: "donnaextradose", imageClass: "donnaextradose-image", brand: "Valentino", product: "Donna Extradose", image: "valentino-donna.png", accent: "#d8a4b8" },
+    { id: "edarchic", imageClass: "edarchic-image", brand: "Carolina Herrera", product: "Cedar Chic", accent: "#d6c59c" },
+    { id: "labelleparadise", imageClass: "labelleparadise-image", brand: "Jean Paul Gaultier", product: "La Belle Paradise Garden", accent: "#8ccf9a" },
+    { id: "phantominred", imageClass: "phantominred-image", brand: "Rabanne", product: "Phantom in Red", accent: "#d35a4b" },
+    { id: "stellaritimes", imageClass: "stellaritimes-image", brand: "Louis Vuitton", product: "Stellar Times", accent: "#f1cf73" },
+    { id: "elves", imageClass: "elves-image", brand: "Louis Vuitton", product: "eLVes", accent: "#b9a7ff" },
+    { id: "roseamira", imageClass: "roseamira-image", brand: "Guerlain", product: "Rose Amira", accent: "#d48ca4" },
+    { id: "powerofyou", imageClass: "powerofyou-image", brand: "Giorgio Armani", product: "Power of You", accent: "#a93d56" },
+    { id: "supremebouquet", imageClass: "supremebouquet-image", brand: "Yves Saint Laurent", product: "Suprême Bouquet", accent: "#d7c07a" },
+    { id: "guiltyelixirfemme", imageClass: "guiltyelixirfemme-image", brand: "Gucci", product: "Guilty Elixir Femme", image: "gucci-guilty.png", accent: "#8b68c9" },
+    { id: "lessablesroses", imageClass: "lessablesroses-image", brand: "Louis Vuitton", product: "Les Sables Roses", accent: "#cf7b95" },
+    { id: "hudsonvalley", imageClass: "hudsonvalley-image", brand: "Gissah", product: "Hudson Valley", accent: "#8ab47a" },
+    { id: "cristalnoir", imageClass: "cristalnoir-image", brand: "Versace", product: "Crystal Noir", accent: "#9b8ec7" },
+  ];
+
+  let themeSyncScheduled = false;
+
+  function escapeXml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function createFallbackBottleImage(brand, product, accent = "#c9a94e") {
+    const safeBrand = escapeXml(brand || "Charme");
+    const safeProduct = escapeXml(product || "Fragrance");
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560">
+        <defs>
+          <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+            <stop stop-color="#080808" />
+            <stop offset="1" stop-color="#1e1712" />
+          </linearGradient>
+          <linearGradient id="bottle" x1="0" x2="1" y1="0" y2="1">
+            <stop stop-color="${accent}" stop-opacity="0.98" />
+            <stop offset="1" stop-color="#fff6dd" stop-opacity="0.62" />
+          </linearGradient>
+        </defs>
+        <rect width="420" height="560" rx="34" fill="url(#bg)" />
+        <circle cx="210" cy="170" r="136" fill="${accent}" opacity="0.16" />
+        <rect x="164" y="92" width="92" height="38" rx="12" fill="${accent}" opacity="0.88" />
+        <rect x="126" y="130" width="168" height="268" rx="34" fill="#101010" stroke="${accent}" stroke-width="4" />
+        <rect x="146" y="154" width="128" height="198" rx="22" fill="url(#bottle)" opacity="0.9" />
+        <text x="210" y="430" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#f5efdf">${safeBrand}</text>
+        <text x="210" y="466" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#cfb36b">${safeProduct}</text>
+      </svg>
+    `;
+    return `data:image/svg+xml,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
+  }
+
+  function findSectionRoot(id) {
+    return document.getElementById(id) || document.querySelector(`.${id}-section`);
+  }
+
+  function setText(root, selector, value) {
+    if (!root || !value) return;
+    root.querySelectorAll(selector).forEach((node) => {
+      if (node.textContent !== value) node.textContent = value;
+    });
+  }
+
+  function sectionImageSource(config) {
+    return config.image || createFallbackBottleImage(config.brand, config.product, config.accent);
+  }
+
+  function applySectionCorrection(config) {
+    const root = findSectionRoot(config.id);
+    if (!root) return false;
+
+    setText(root, ".brand-name", config.brand);
+    setText(root, ".product-name", config.product);
+    root.setAttribute("data-fragrance", config.product);
+
+    const image = root.querySelector(`.${config.imageClass}`) || root.querySelector("img");
+    if (image) {
+      const nextSrc = sectionImageSource(config);
+      if (image.getAttribute("src") !== nextSrc) image.setAttribute("src", nextSrc);
+      image.setAttribute("alt", `${config.product} bottle`);
+      image.removeAttribute("srcset");
+      image.loading = image.loading || "lazy";
+      image.decoding = "async";
+    }
+
+    return true;
+  }
+
+  function applyHomepageFragranceCorrections() {
+    sectionCorrections.forEach(applySectionCorrection);
+  }
+
+  function parseRgb(color) {
+    const match = String(color || "").match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+    if (!match) return null;
+    return {
+      r: Number(match[1]),
+      g: Number(match[2]),
+      b: Number(match[3]),
+    };
+  }
+
+  function themeFromColor(color) {
+    const rgb = parseRgb(color);
+    if (!rgb) return null;
+    const luminance = 0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b;
+    if (luminance < 115) return "dark";
+    if (rgb.r >= rgb.g && rgb.g >= rgb.b && rgb.r - rgb.b >= 8) return "cream";
+    return "light";
+  }
+
+  function applyBodyTheme(theme) {
+    if (!theme || !document.body) return;
+    document.body.classList.remove("theme-dark", "theme-cream", "theme-light");
+    document.body.classList.add(`theme-${theme}`);
+    if (window.themeManager?.applyTheme) {
+      window.themeManager.currentTheme = theme;
+      window.themeManager.lastAppliedTheme = null;
+      window.themeManager.applyTheme(theme);
+    }
+  }
+
+  function computedSectionColor(root, config) {
+    const candidates = [
+      root.querySelector(`.${config.id}-main-container`),
+      root.querySelector(`.${config.id}-theme`),
+      root.querySelector(".perfume-top-row"),
+      root,
+      root.parentElement,
+    ].filter(Boolean);
+
+    for (const candidate of candidates) {
+      const color = window.getComputedStyle(candidate).backgroundColor;
+      if (color && color !== "rgba(0, 0, 0, 0)" && color !== "transparent") {
+        return color;
+      }
+    }
+    return null;
+  }
+
+  function activeLateSection() {
+    const viewportAnchor = window.innerHeight * 0.34;
+    let best = null;
+    let bestDistance = Number.POSITIVE_INFINITY;
+
+    sectionCorrections.forEach((config) => {
+      const root = findSectionRoot(config.id);
+      if (!root) return;
+      const rect = root.getBoundingClientRect();
+      if (rect.bottom < window.innerHeight * 0.18) return;
+      if (rect.top > window.innerHeight * 0.82) return;
+      const distance = Math.abs(rect.top - viewportAnchor);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = { root, config };
+      }
+    });
+
+    return best;
+  }
+
+  function syncLateSectionThemeNow() {
+    themeSyncScheduled = false;
+    const active = activeLateSection();
+    if (!active) return;
+    const color = computedSectionColor(active.root, active.config);
+    if (!color) return;
+    document.body.style.backgroundColor = color;
+    applyBodyTheme(themeFromColor(color));
+  }
+
+  function scheduleLateSectionThemeSync() {
+    if (themeSyncScheduled) return;
+    themeSyncScheduled = true;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(syncLateSectionThemeNow);
+    });
+  }
+
+  function bootCorrections() {
+    applyHomepageFragranceCorrections();
+    scheduleLateSectionThemeSync();
+    setTimeout(applyHomepageFragranceCorrections, 400);
+    setTimeout(applyHomepageFragranceCorrections, 1400);
+    setTimeout(scheduleLateSectionThemeSync, 700);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootCorrections);
+  } else {
+    bootCorrections();
+  }
+
+  window.addEventListener("load", bootCorrections, { passive: true });
+  window.addEventListener("scroll", scheduleLateSectionThemeSync, { passive: true });
+  window.addEventListener("resize", scheduleLateSectionThemeSync, { passive: true });
+
+  const homepageObserver = new MutationObserver(() => {
+    applyHomepageFragranceCorrections();
+    scheduleLateSectionThemeSync();
+  });
+
+  if (document.documentElement) {
+    homepageObserver.observe(document.documentElement, { childList: true, subtree: true });
+  }
+})();
