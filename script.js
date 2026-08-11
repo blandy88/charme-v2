@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ? true
             : fragrance.available !== false,
       };
-      const key = merged.sectionId || normalizeFragranceName(merged.name);
+      const key = normalizeFragranceName(merged.name);
       const existing = byKey.get(key);
       if (!existing) {
         byKey.set(key, merged);
@@ -545,8 +545,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const aliases = new Set();
 
     addAlias(aliases, name);
-    addAlias(aliases, productId);
-    addAlias(aliases, sectionId);
     addAlias(aliases, `${brand} ${name}`);
     addAlias(aliases, `${name} ${brand}`);
     if (/^the\s+/i.test(name)) addAlias(aliases, name.replace(/^the\s+/i, ""));
@@ -6470,26 +6468,9 @@ function initializeAuth() {
           avatarContainer.classList.add("admin-avatar-container");
         }
         if (resolvedAvatarImg) resolvedAvatarImg.classList.add("admin-avatar");
-
-        // Create admin crown indicator if it doesn't exist
-        let crownIndicator = avatarContainer?.querySelector(
-          ".admin-crown-indicator",
-        );
-        if (!crownIndicator && avatarContainer) {
-          crownIndicator = document.createElement("div");
-          crownIndicator.className = "admin-crown-indicator";
-          // Use unicode escape to avoid encoding issues
-          crownIndicator.textContent = "\uD83D\uDC51"; // 👑
-          crownIndicator.title = "Administrator";
-          avatarContainer.appendChild(crownIndicator);
-        }
       } else {
         if (avatarContainer) {
           avatarContainer.classList.remove("admin-avatar-container");
-          const crownIndicator = avatarContainer.querySelector(
-            ".admin-crown-indicator",
-          );
-          if (crownIndicator) crownIndicator.remove();
         }
         if (resolvedAvatarImg)
           resolvedAvatarImg.classList.remove("admin-avatar");
@@ -16916,11 +16897,6 @@ class ReviewsManager {
     // Add admin styling if needed
     if (isAdminReview) {
       avatarContainer.classList.add("admin-review-avatar");
-      // Add crown to admin avatars
-      const crown = document.createElement("div");
-      crown.className = "review-avatar-crown";
-      crown.textContent = "\uD83D\uDC51";
-      avatarContainer.appendChild(crown);
     }
 
     const reviewUserDetails = document.createElement("div");
@@ -18172,7 +18148,6 @@ class ReviewsManager {
                         <div class="reply-avatar-container">
                                                         <div class="reply-avatar ${isAdminReply ? "admin-reply-avatar" : ""}">
                                 <img src="${safeAvatarSrc}" alt="${safeReplyName}'s Avatar">
-                                ${isAdminReply ? '<div class="reply-avatar-crown">\uD83D\uDC51</div>' : ""}
                             </div>
                             <div class="level-badge">${reply.level || 1}</div>
                         </div>
@@ -19105,7 +19080,6 @@ class ProfileModalManager {
           <div class="profile-avatar-section">
             <div class="profile-avatar-container ${profile.isAdmin ? 'admin-avatar' : ''}">
               <img src="${safeProfile.avatar}" alt="${safeProfile.name}'s Avatar" class="profile-avatar-img">
-              ${profile.isAdmin ? '<div class="profile-avatar-crown">👑</div>' : ''}
               <div class="profile-level-badge">Lv.${safeProfile.level}</div>
             </div>
           </div>
