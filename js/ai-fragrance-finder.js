@@ -299,6 +299,11 @@ class AIFragranceFinder {
   }
 
   fragranceImage(profile = {}, fragranceName = "Fragrance") {
+    const validated =
+      window.getValidatedFragranceImage?.(`${profile.brand || ""} ${fragranceName}`) ||
+      window.getValidatedFragranceImage?.(fragranceName) ||
+      "";
+    if (validated) return validated;
     const provided = String(profile.image || "").trim();
     if (provided && provided !== "default-fragrance.png") return provided;
     return this.buildFallbackFragranceImage(fragranceName, profile.brand || "Charme");
