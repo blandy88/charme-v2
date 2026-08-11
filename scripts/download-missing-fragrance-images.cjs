@@ -52,11 +52,11 @@ const ITEMS = [
   { file: 'kenzo-flower.png', name: 'Kenzo Flower Eau de Parfum', groups: [['kenzo'], ['flower', 'fleur']], forbidden: ['poppy', 'body', 'shower', 'lotion', 'shampoo', 'soap'] },
   { file: 'dg-limperatrice-3.png', name: "Dolce and Gabbana L'Imperatrice 3", groups: [['dolce', 'gabbana', 'd&g'], ['limperatrice', 'imperatrice']], forbidden: ['the one', 'light blue', 'intense', 'k by'] },
   { file: 'chanel-no5.png', name: 'Chanel No 5 Eau de Parfum', groups: [['chanel'], ['no 5', 'no5', 'n5', 'n°5', 'number 5']], forbidden: ['lotion', 'body', 'shower', 'shampoo', 'eau premiere', 'eau de toilette', 'edt'] },
-  { file: 'lolita-lempicka-la-belle-paradise.png', name: 'Lolita Lempicka La Belle Paradise', groups: [['lolita lempicka'], ['la belle'], ['paradise', 'paradis']] },
+  { file: 'lolita-lempicka-la-belle-paradise.png', name: 'Jean Paul Gaultier La Belle Paradise Garden', groups: [['jean paul gaultier', 'gaultier', 'jpg'], ['la belle'], ['paradise garden', 'paradise']], forbidden: ['lolita lempicka'] },
   { file: 'aqua-di-gio-elixir.png', name: 'Giorgio Armani Acqua di Gio Elixir', groups: [['armani', 'giorgio armani'], ['acqua di gio'], ['elixir']] },
   { file: 'xerjoff-torrino-21.png', name: 'Xerjoff Torino 21', groups: [['xerjoff'], ['torino', 'torino21', 'torrino21']] },
-  { file: 'armani-prive-stellaris.png', name: 'Giorgio Armani Prive Stellaris', groups: [['armani', 'giorgio armani'], ['prive', 'privé'], ['stellaris']] },
-  { file: 'ch-power-of-you.png', name: 'Carolina Herrera Power of You', groups: [['carolina herrera'], ['power of you']], forbidden: ['bad boy', 'good girl', 'ch men'] },
+  { file: 'armani-prive-stellaris.png', name: 'Louis Vuitton Stellar Times', groups: [['louis vuitton', 'lv'], ['stellar times']], forbidden: ['stellaris', 'armani', 'prive', 'privé'] },
+  { file: 'ch-power-of-you.png', name: 'Giorgio Armani Power of You', groups: [['giorgio armani', 'armani'], ['power of you']], forbidden: ['carolina herrera', 'bad boy', 'good girl', 'ch men'] },
   { file: 'guerlain-santal-royal.png', name: 'Guerlain Santal Royal', groups: [['guerlain'], ['santal royal']] },
   { file: 'lancome-tresor-la-nuit.png', name: 'Lancome Tresor La Nuit', groups: [['lancome', 'lancôme'], ['tresor', 'trésor'], ['la nuit']], forbidden: ['edt', 'eau de toilette'] },
   { file: 'jo-malone-myrrh-tonka.png', name: 'Jo Malone Myrrh and Tonka', groups: [['jo malone'], ['myrrh'], ['tonka']], forbidden: ['cologne', 'soap', 'body', 'shower', 'candle'] },
@@ -70,40 +70,40 @@ const ITEMS = [
   { file: 'armani-si-passione-intense.png', name: 'Giorgio Armani Si Passione Intense', groups: [['armani', 'giorgio armani'], ['si passione', 'passione'], ['intense']], forbidden: ['edp', 'eau de parfum', 'absolu'] },
   { file: 'dg-light-blue.png', name: 'Dolce and Gabbana Light Blue', groups: [['dolce', 'gabbana', 'd&g'], ['light blue']], forbidden: ['intense', 'sun', 'edt', 'eau de toilette', 'the one', 'pour homme'] },
   { file: 'mugler-alien.png', name: 'Mugler Alien', groups: [['mugler', 'thierry mugler'], ['alien']] },
-  { file: 'suspect-ch-power-of-you.png', name: 'Carolina Herrera Power of You suspect', groups: [['carolina herrera'], ['power of you']] },
+  { file: 'suspect-ch-power-of-you.png', name: 'Giorgio Armani Power of You suspect', groups: [['giorgio armani', 'armani'], ['power of you']], forbidden: ['carolina herrera'] },
   { file: 'ysl-mon-paris.png', name: 'Yves Saint Laurent Mon Paris', groups: [['yves saint laurent', 'ysl'], ['mon paris']], forbidden: ['intense', 'edt', 'edp', 'eau de parfum', 'body', 'lotion'] },
 
   // === 35 niche/designer perfumes (200x280 no-transparency thumbnails) ===
-  { file: 'armani-pacific-chill.png', name: 'Giorgio Armani Pacific Chill', groups: [['armani', 'giorgio armani'], ['pacific chill']] },
-  { file: 'artisan-parfumeur-rose-amira.png', name: "L'Artisan Parfumeur Rose Amira", groups: [['artisan parfumeur'], ['rose amira']] },
+  { file: 'armani-pacific-chill.png', name: 'Louis Vuitton Pacific Chill', groups: [['louis vuitton', 'lv'], ['pacific chill']], forbidden: ['armani', 'prive', 'privé'] },
+  { file: 'artisan-parfumeur-rose-amira.png', name: 'Guerlain Rose Amira', groups: [['guerlain'], ['rose amira']], forbidden: ['artisan parfumeur', "l'artisan parfumeur"] },
   { file: 'azzaro-wanted-elixir.png', name: 'Azzaro Wanted Elixir', groups: [['azzaro'], ['wanted'], ['elixir']], forbidden: ['most wanted', 'by night', 'chrome'] },
   { file: 'elie-saab-in-white.png', name: 'Elie Saab in White', groups: [['elie saab'], ['in white']], forbidden: ['absolu', 'shower', 'body', 'edp', 'eau de parfum'] },
   { file: 'gisada-ambassador.png', name: 'Gisada Ambassador', groups: [['gisada'], ['ambassador']] },
-  { file: 'gisada-hudson-valley.png', name: 'Gisada Hudson Valley', groups: [['gisada'], ['hudson valley']] },
+  { file: 'gisada-hudson-valley.png', name: 'Gissah Hudson Valley', groups: [['gissah'], ['hudson valley']], forbidden: ['gisada'] },
   { file: 'guerlain-oud-royal.png', name: 'Guerlain Oud Royal', groups: [['guerlain'], ['oud royal']] },
-  { file: 'initio-phantom-in-red.png', name: 'Initio Phantom in Red', groups: [['initio'], ['phantom in red', 'phantom red']] },
+  { file: 'initio-phantom-in-red.png', name: 'Rabanne Phantom in Red', groups: [['rabanne', 'paco rabanne'], ['phantom in red', 'phantom red']], forbidden: ['initio'] },
   { file: 'kayali-freedom-musk.png', name: 'Kayali Freedom Musk', groups: [['kayali'], ['freedom musk']] },
   { file: 'kayali-vanilla-candy-rock-sugar.png', name: 'Kayali Vanilla Candy Rock Sugar', groups: [['kayali'], ['vanilla candy rock sugar', 'candy rock sugar']] },
-  { file: 'kerosene-donna-extradose.png', name: 'Kerosene Donna Extradose', groups: [['kerosene'], ['donna'], ['extradose']] },
-  { file: 'kerosene-umo-extradose.png', name: 'Kerosene Umo Extradose', groups: [['kerosene'], ['umo'], ['extradose']] },
+  { file: 'kerosene-donna-extradose.png', name: 'Valentino Donna Born in Roma Extradose', groups: [['valentino'], ['donna'], ['born in roma'], ['extradose']], forbidden: ['kerosene'] },
+  { file: 'kerosene-umo-extradose.png', name: 'Valentino Uomo Born in Roma Extradose', groups: [['valentino'], ['uomo', 'umo'], ['born in roma'], ['extradose']], forbidden: ['kerosene'] },
   { file: 'kilian-her-majesty.png', name: 'Kilian Her Majesty', groups: [['by kilian', 'kilian'], ['her majesty']] },
   { file: 'lattafa-assad-elixir.png', name: 'Lattafa Assad Elixir', groups: [['lattafa'], ['assad'], ['elixir']] },
   { file: 'lattafa-fantasmagoria.png', name: 'Lattafa Fantasmagoria', groups: [['lattafa'], ['fantasmagoria']] },
   { file: 'maison-crivelli-ambre-samar.png', name: 'Maison Crivelli Ambre Samar', groups: [['maison crivelli', 'crivelli'], ['ambre samar']] },
-  { file: 'maison-crivelli-les-sables-roses.png', name: 'Maison Crivelli Les Sables Roses', groups: [['maison crivelli', 'crivelli'], ['sables roses']] },
+  { file: 'maison-crivelli-les-sables-roses.png', name: 'Louis Vuitton Les Sables Roses', groups: [['louis vuitton', 'lv'], ['les sables roses', 'sables roses']], forbidden: ['maison crivelli', 'crivelli'] },
   { file: 'marc-antoine-barrois-ganymede.png', name: 'Marc Antoine Barrois Ganymede', groups: [['marc antoine barrois'], ['ganymede']] },
   { file: 'matiere-premiere-vanilla-powder.png', name: 'Matiere Premiere Vanilla Powder', groups: [['matiere premiere'], ['vanilla powder']] },
-  { file: 'narciso-cedar-chic.png', name: 'Narciso Rodriguez Cedar Chic', groups: [['narciso'], ['cedar chic']] },
+  { file: 'narciso-cedar-chic.png', name: 'Carolina Herrera Cedar Chic', groups: [['carolina herrera'], ['cedar chic']], forbidden: ['narciso'] },
   { file: 'narciso-manifesto-elixir.png', name: 'Narciso Rodriguez Manifesto Elixir', groups: [['narciso'], ['manifesto'], ['elixir']] },
   { file: 'narciso-rodriguez-narciso.png', name: 'Narciso Rodriguez Narciso', groups: [['narciso rodriguez', 'narciso'], ['narciso'], ['rodriguez']], forbidden: ['bleu noir', 'for him', 'cedar chic', 'poudree', 'ambree'] },
   { file: 'nautica-voyage.png', name: 'Nautica Voyage', groups: [['nautica'], ['voyage']] },
   { file: 'orto-parisi-terroni.png', name: 'Orto Parisi Terroni', groups: [['orto parisi'], ['terroni']] },
   { file: 'paco-rabanne-fame-in-love.png', name: 'Paco Rabanne Fame in Love', groups: [['paco rabanne', 'rabanne'], ['fame'], ['in love']], forbidden: ['victory', 'phantom', 'invictus', 'pour homme', '1 million', 'one million'] },
-  { file: 'paco-rabanne-guilty-elixir-femme.png', name: 'Paco Rabanne Guilty Elixir Femme', groups: [['paco rabanne', 'rabanne'], ['guilty'], ['elixir']] },
-  { file: 'raghba-cristal-noir.png', name: 'Raghba Crystal Noir', groups: [['raghba', 'rasasi'], ['cristal noir']] },
+  { file: 'paco-rabanne-guilty-elixir-femme.png', name: 'Gucci Guilty Elixir de Parfum Pour Femme', groups: [['gucci'], ['guilty'], ['elixir'], ['pour femme', 'femme']], forbidden: ['paco rabanne', 'rabanne'] },
+  { file: 'raghba-cristal-noir.png', name: 'Versace Crystal Noir', groups: [['versace'], ['crystal noir', 'cristal noir']], forbidden: ['raghba', 'rasasi'] },
   { file: 'rosendo-mateu-no5.png', name: 'Rosendo Mateu No 5', groups: [['rosendo mateu'], ['no 5', 'no5', 'n5', 'number 5']] },
   { file: 'sisley-eau-du-soir.png', name: 'Sisley Eau du Soir', groups: [['sisley'], ['eau du soir']] },
-  { file: 'spirit-of-dubai-elves.png', name: 'Spirit of Dubai Elves', groups: [['spirit of dubai'], ['elves']] },
+  { file: 'spirit-of-dubai-elves.png', name: 'Louis Vuitton eLVes', groups: [['louis vuitton', 'lv'], ['elves', 'elves louis vuitton']], forbidden: ['spirit of dubai'] },
   { file: 'tom-ford-oud-voyager.png', name: 'Tom Ford Oud Wood Voyager', groups: [['tom ford'], ['oud wood', 'oudwood', 'oud'], ['voyager']] },
   { file: 'valentino-valentina-absolue.png', name: 'Valentino Valentina Absolue', groups: [['valentino'], ['valentina'], ['absolue']] },
   { file: 'valentino-valentina-poudre.png', name: 'Valentino Valentina Poudre', groups: [['valentino'], ['valentina'], ['poudre']] },
@@ -152,7 +152,7 @@ function bingSearchUrl(query) {
     qft: '+filterui:photo-transparent',
     form: 'IRFLTR',
   });
-  return `https://www.bing.com/images/search?${params.toString()}`;
+  return `{{https://www.bing.com/images/search?${params.toString(}})}`;
 }
 
 function extractDuckDuckGoToken(html) {
@@ -176,7 +176,7 @@ async function duckDuckGoCandidates(item) {
 
   for (const query of queries) {
     const page = await fetch(
-      `https://duckduckgo.com/?q=${encodeURIComponent(query)}&iax=images&ia=images`,
+      `{{https://duckduckgo.com/?q=${encodeURIComponent(query}})}&iax=images&ia=images`,
       {
         headers: {
           'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36',
@@ -189,7 +189,7 @@ async function duckDuckGoCandidates(item) {
     if (!token) continue;
 
     const apiUrl =
-      `https://duckduckgo.com/i.js?l=us-en&o=json&q=${encodeURIComponent(query)}` +
+      `{{https://duckduckgo.com/i.js?l=us-en&o=json&q=${encodeURIComponent(query}})}` +
       `&vqd=${encodeURIComponent(token)}&f=type:transparent`;
     const response = await fetch(apiUrl, {
       headers: {
