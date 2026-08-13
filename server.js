@@ -36,14 +36,19 @@ const allowedOrigins = [
 const INSECURE_JWT_SECRET_PREFIX =
   "your-super-secret-jwt-key-change-this-in-production";
 const JWT_SECRET = process.env.JWT_SECRET || "";
-if (
+const _missingJwtSecret =
   !JWT_SECRET ||
   JWT_SECRET.length < 32 ||
   JWT_SECRET.startsWith(INSECURE_JWT_SECRET_PREFIX) ||
-  JWT_SECRET === "CHANGE_ME_TO_RANDOM_SECRET"
-) {
-  throw new Error(
-    "JWT_SECRET must be set to a non-placeholder random value of at least 32 characters",
+  JWT_SECRET === "CHANGE_ME_TO_RANDOM_SECRET";
+const ACTIVE_JWT_SECRET = _missingJwtSecret
+  ? crypto.randomBytes(64).toString("hex")
+  : JWT_SECRET;
+if (_missingJwtSecret) {
+  console.warn(
+    "WARNING: JWT_SECRET is missing or is a placeholder. " +
+      "A temporary random secret was generated. " +
+      "Set a persistent JWT_SECRET in the environment to keep sessions valid across restarts.",
   );
 }
 
@@ -823,7 +828,7 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ error: "Access token required" });
   }
 
-  jwt.verify(token, JWT_SECRET, async (err, user) => {
+  jwt.verify(token, ACTIVE_JWT_SECRET, async (err, user) => {
     if (err) {
       return res.status(403).json({ error: "Invalid or expired token" });
     }
@@ -1057,7 +1062,7 @@ app.post("/api/auth/verify-email", async (req, res) => {
     await sendWelcomeEmail(user.email, user.first_name);
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
+    const token = jwt.sign({ userId: user.id, email: user.email }, ACTIVE_JWT_SECRET, {
       expiresIn: "7d",
     });
 
@@ -1209,7 +1214,7 @@ app.post("/api/auth/login", async (req, res) => {
     ]);
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
+    const token = jwt.sign({ userId: user.id, email: user.email }, ACTIVE_JWT_SECRET, {
       expiresIn: "7d",
     });
 
