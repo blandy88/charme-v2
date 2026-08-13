@@ -1151,9 +1151,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         <path d="M2 12l10 5 10-5"/>
                     </svg>
                 </div>
-                <div class="suggestion-content">
-                    <div class="suggestion-title">${safeName}</div>
-                    <div class="suggestion-subtitle">${safeBrand} • ${safeNotes}</div>
+<div class="suggestion-content">
+                    <div class="suggestion-title">${safeName} ${fragrance.audience ? `<span class="audience-label audience-${fragrance.audience}">${fragrance.audience}</span>` : ''}</div>
+                    <div class="suggestion-subtitle">${safeBrand}  ${safeNotes}</div>
                 </div>
                 <div class="suggestion-type">${safeType}</div>
                 <div class="suggestion-availability">
