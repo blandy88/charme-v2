@@ -219,6 +219,7 @@ class FragranceResultsHandler {
                             <span class="size-badge">${this.escapeHtml(size)}</span>
                         `).join('')}
                     </div>
+                    <span class="audience-badge">${this.audienceLabels[result.audience] || result.audience}</span>
                 </div>
             `;
         }
