@@ -240,11 +240,11 @@
                                     <circle cx="11" cy="11" r="8"></circle>
                                     <path d="M21 21l-4.35-4.35"></path>
                                 </svg>
-                                <div class="gender-indicators">
-                                    <span class="gender-badge mixte" title="Mixte/unisex" aria-label="Mixte"></span>
-                                    <span class="gender-badge homme" title="Homme/men" aria-label="Homme"></span>
-                                    <span class="gender-badge femme" title="Femme/women" aria-label="Femme"></span>
-                                </div>
+                            </div>
+                            <div class="search-gender-indicators">
+                                <span class="gender-badge mixte" title="Mixte/unisex" aria-label="Mixte"></span>
+                                <span class="gender-badge homme" title="Homme/men" aria-label="Homme"></span>
+                                <span class="gender-badge femme" title="Femme/women" aria-label="Femme"></span>
                             </div>
                             <input
                                 type="text"
@@ -29119,10 +29119,12 @@
             </div>
         </div>
     <style>
-.gender-indicators {
+.search-gender-indicators {
     display: flex;
-    gap: 8px;
-    margin-left: 12px;
+    align-items: center;
+    gap: 6px;
+    margin: 0 10px 0 6px;
+    flex-shrink: 0;
 }
 .gender-badge {
     width: 12px;
