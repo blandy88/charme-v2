@@ -138,7 +138,7 @@ class FragranceResultsHandler {
 
         card.innerHTML = `
             <div class="result-header">
-                <h3 class="fragrance-title">${this.escapeHtml(result.fragrance || result.name)} ${result.audience ? `<span class="audience-label">${this.audienceLabels[result.audience] || result.audience}</span>` : ''}</h3>
+                <h3 class="fragrance-title">${this.escapeHtml(result.fragrance || result.name)}</h3>
                 <div class="result-actions-top">
                     <button class="action-button favorite-button ${isFavorited ? 'active' : ''}"
                             data-fragrance="${this.escapeHtml(result.fragrance || result.name)}"
@@ -219,7 +219,7 @@ class FragranceResultsHandler {
                             <span class="size-badge">${this.escapeHtml(size)}</span>
                         `).join('')}
                     </div>
-                    <span class="audience-badge">${this.audienceLabels[result.audience] || result.audience}</span>
+                    <span class="audience-badge audience-${result.audience}">${this.audienceLabels[result.audience] || result.audience}</span>
                 </div>
             `;
         }

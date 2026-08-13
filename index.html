@@ -29138,7 +29138,23 @@
 .gender-badge.femme { background: #d9a3b8; }
 .gender-badge:hover { transform: scale(1.2); }
 .gender-badge.active { box-shadow: 0 0 0 3px var(--primary); }
+.audience-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 0.7em;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.02em;
+    color: var(--background);
+    border: 1px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    opacity: 0.9;
+}
+.audience-badge:hover { transform: scale(1.08); opacity: 1; }
+.audience-badge.audience-men { background: #c9a94e; }
+.audience-badge.audience-women { background: #d9a3b8; }
+.audience-badge.audience-unisex { background: #91a8c8; }
 </style>
-<script src="scripts/add_gender_badge.js"></script>
 </body>
 </html>
