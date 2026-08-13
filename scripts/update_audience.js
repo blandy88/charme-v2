@@ -1,152 +1,17 @@
-// Validate and update brand-location audience for each perfume
-// Source: js/fragrance-api-service.js audience field
-// Values: "unisex" (mixte), "men" (homme), "women" (femme)
+// Simplified: add data-audience to brand-location based on known perfume names
+// from the HTML sections that are currently visible
 
-// Normalize function for matching
-function normalizeText(text) {
-  return text.toString()
-    .toLowerCase()
-    .replace(/[^\w\s]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-// Audience labels mapping
-const audienceLabels = {
-  unisex: "Mixte",
-  men: "Homme", 
-  women: "Femme"
-};
-
-// Perfume name to audience mapping (validated from codebase)
-// Keys are lowercase normalized for matching
+// Map of perfume names (as they appear in HTML h3.product-name) to audience
+// Keys are case-insensitive and handle common variations
 const perfumeAudienceMap = {
-  // Unisex (mixte) - 65
-  "pacific chill": "unisex",
-  "freedom musk": "unisex",
-  "light blue": "unisex",
-  "cedar chic": "unisex",
-  "guidance 46": "unisex",
-  "vanilla powder": "unisex",
-  "rose amira": "unisex",
-  "40 knots": "unisex",
-  "fantasmagoria": "unisex",
-  "supreme bouquet": "unisex",
-  "rose star": "unisex",
-  "oud voyager": "unisex",
-  "assad elixir": "unisex",
-  "santal royal": "unisex",
-  "terroni": "unisex",
-  "oud royal": "unisex",
-  "narciso": "unisex",
-  "by the fireplace": "unisex",
+  // From the validated codebase data
+  "armani code parfum": "men",
   "hudson valley": "unisex",
-  "black orchid": "unisex",
-  "aventus": "men",
-  "sauvage": "men",
-  "bleu de chanel": "men",
-  "tobacco vanille": "unisex",
-  "oud wood": "unisex",
-  "lost cherry": "unisex",
-  "y eau de parfum": "men",
-  "acqua di gio profumo": "men",
-  "the one edp": "men",
-  "eros": "men",
-  "ultra male": "men",
-  "invictus": "men",
-  "uomo born in roma": "men",
-  "spicebomb extreme": "men",
-  "explorer": "men",
-  "man in black": "men",
-  "homme intense": "men",
-  "allure homme sport": "men",
-  "armani code absolu": "men",
-  "gentleman": "men",
-  "wanted by night": "men",
-  "k by dolce & gabbana": "men",
-  "bad boy": "men",
-  "libre": "women",
-  "donna born in roma": "women",
-  "green irish tweed": "men",
-  "egoiste": "men",
-  "a*men pure havane": "men",
-  "declaration": "men",
-  "la yuqawam": "men",
-  "cedrat boise": "unisex",
-  "reflection man": "men",
-  "sedley": "unisex",
-  "side effect": "unisex",
-  "naxos": "unisex",
-  "grand soire": "unisex",
-  "balayage": "women",
-  "valaya exclusive": "women",
-  "1 million night": "men",
-  "freedom musk matcha": "unisex",
-  "torino21": "unisex",
-  "kayali marshmallow": "women",
-  "aqua allegoria florabloom forte": "women",
-  "angel nova": "women",
-  "acqua di gio elixir": "men",
-  "ácican": "unisex",
-  "saharian wind": "unisex",
-  "sole patchouli": "unisex",
-  "scirocco": "unisex",
-  "bois impérial": "unisex",
-  "stellar times": "unisex",
-  "erba gold": "unisex",
-  "purple accent": "unisex",
-  "fleur de mandarin": "unisex",
-  "jahwara oriental": "unisex",
-  "doble blue jasmine": "women",
-  "light blue summer vibes": "unisex",
-  "patchouli ardent": "unisex",
-  "mandarine basilic": "unisex",
-  "bvlgari man rain essence": "men",
-  "magic": "unisex",
-  "sabah al waed": "unisex",
-  "smoking hot": "unisex",
-  "lamar noir": "unisex",
-  "tobacco mandarin": "unisex",
-  "alexandria ii": "unisex",
-  "italica": "unisex",
-  "mefisto": "unisex",
-  "1888": "unisex",
-  "tobacco honey": "unisex",
-  "yes i am": "women",
-  "jasmin noir": "women",
-  "alien goddess": "women",
-  "hypnotic poison": "women",
-  "si passione": "women",
-  "coco mademoiselle": "women",
-  "lady million": "women",
-  "crystal noir": "women",
-  "scandal absolu": "women",
-  "flora gorgeous jasmine": "women",
-  "gucci guilty": "women",
-  "amirat al arab": "women",
-  "angelique noire": "unisex",
-  "chloe by chloe": "women",
-  "irresistible": "women",
-  "guidance": "women",
-  "insolence": "women",
-  "envy me": "women",
-  "chloe roses": "women",
-  "devotion": "women",
-  "lady million gold": "women",
-  "musc noble": "unisex",
-  "libre absolu platine": "women",
-  "scandal": "women",
-  "la vie est belle elixir": "women",
-  "miss dior blooming bouquet": "women",
-  "carmine": "women",
-  "yara": "women",
-  "nomade": "women",
-  "burberry her": "women",
-  "pure xs": "women",
-  "dylan blue pour femme": "women",
-  "yara moi": "women",
-  
-  // Additional perfumes from HTML sections
+  "black opium": "women",
+  "mon paris": "women",
+  "flower by kenzo": "women",
+  "narciso": "unisex",
+  "cristal noir": "women",
   "aventus absolu": "men",
   "hypnotic amber": "women",
   "golden oud": "unisex",
@@ -207,59 +72,62 @@ const perfumeAudienceMap = {
   "lhommeideal": "men"
 };
 
-// Function to update brand-location for a perfume section
-function updatePerfumeAudience() {
+// Get all brand-location elements and try to match perfume names
+document.addEventListener('DOMContentLoaded', () => {
   const brandLocations = document.querySelectorAll('.brand-location');
   
   brandLocations.forEach(el => {
-    // Get the perfume name from the product header
-    const productNameEl = el.closest('.product-header-row')?.querySelector('.product-name');
+    // Find the product name in the same product-header-row
+    const productHeader = el.closest('.product-header-row');
+    if (!productHeader) return;
+    
+    const productNameEl = productHeader.querySelector('.product-name');
     if (!productNameEl) return;
     
-    const productText = productNameEl.innerText.trim();
-    if (!productText) return;
+    const perfumeName = productNameEl.innerText.trim();
+    if (!perfumeName) return;
     
-    const normalizedProduct = normalizeText(productText);
-    
-    // Try to match the perfume name to the audience map
+    // Try to find a matching audience
     let audience = null;
+    const normalizedName = perfumeName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    
     for (const [name, aud] of Object.entries(perfumeAudienceMap)) {
-      const normalizedName = normalizeText(name);
-      if (normalizedProduct.includes(normalizedName) || normalizedName.includes(normalizedProduct)) {
+      const normalizedMapKey = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (normalizedName.includes(normalizedMapKey) || normalizedMapKey.includes(normalizedName)) {
         audience = aud;
         break;
       }
     }
     
-    // Also try exact match on the full product name
+    // If no match found, try exact case-insensitive match
     if (!audience) {
       for (const [name, aud] of Object.entries(perfumeAudienceMap)) {
-        if (productText.toLowerCase() === name.toLowerCase() || 
-            productText.toLowerCase().includes(name.toLowerCase())) {
+        if (perfumeName.toLowerCase() === name.toLowerCase()) {
+          audience = aud;
+          break;
+        }
+        if (perfumeName.toLowerCase().includes(name.toLowerCase())) {
+          audience = aud;
+          break;
+        }
+        if (name.toLowerCase().includes(perfumeName.toLowerCase())) {
           audience = aud;
           break;
         }
       }
     }
     
-    // Also try matching if the brand-location text is "PARIS" (default)
-    if (!audience && el.innerText.trim() === "PARIS") {
-      // Try matching by looking at nearby content or just set a default
-      // For now, leave as PARIS if no match
-    }
-    
+    // Set the audience on the brand-location element
     if (audience) {
-      const label = audienceLabels[audience] || audience;
-      el.innerHTML = `${label} • Premium`;
+      const label = { unisex: "Mixte", men: "Homme", women: "Femme" }[audience] || audience;
       el.dataset.audience = audience;
+      // Replace "PARIS" with the audience label, keeping "• Premium" suffix
+      if (el.innerText.trim() === "PARIS") {
+        el.innerHTML = `${label} • Premium`;
+      } else {
+        // Prepend the label if there's already text
+        el.innerHTML = `${label} • ${el.innerText.trim()}`;
+      }
     }
   });
-}
-
-// Run on page load
-document.addEventListener('DOMContentLoaded', updatePerfumeAudience);
-// Also run on hash change for SPA
-window.addEventListener('hashchange', updatePerfumeAudience);
-
-// Initial run (will be called by DOMContentLoaded)
-updatePerfumeAudience();
+});
