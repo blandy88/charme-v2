@@ -1122,9 +1122,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const quickSearchDropdown = document.getElementById("quickSearchDropdown");
   const quickSearchResults = document.getElementById("quickSearchResults");
   let selectedSuggestionIndex = -1;
+  let genderPanelOpen = false;
 
   function showQuickSearchSuggestions(query) {
     if (!quickSearchResults || !quickSearchDropdown) return;
+    if (genderPanelOpen) {
+      genderPanelOpen = false;
+      document.querySelectorAll(".search-gender-indicators .gender-badge").forEach((badge) => {
+        badge.classList.remove("active");
+        badge.setAttribute("aria-pressed", "false");
+      });
+    }
 
     const filteredFragrances = searchFragranceList(query);
 
@@ -1216,6 +1224,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function hideQuickSearchSuggestions() {
+    if (genderPanelOpen) return;
     hideDropdown();
   }
 
@@ -1239,11 +1248,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Handle blur
     quickSearchInput.addEventListener("blur", function () {
+      if (genderPanelOpen) return;
       setTimeout(hideQuickSearchSuggestions, 120);
     });
 
     // Handle keyboard navigation
     quickSearchInput.addEventListener("keydown", function (e) {
+      if (genderPanelOpen) return;
       const suggestions =
         quickSearchResults?.querySelectorAll(".search-suggestion");
       if (!suggestions || suggestions.length === 0) return;
@@ -1297,11 +1308,194 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Gender category panel: click a gender dot to browse all fragrances of that audience
+  const GENDER_CONFIGS = {
+    unisex: { label: "Unisex", color: "#c9a94e", keyword: "unisex" },
+    men: { label: "Men", color: "#91a8c8", keyword: "men" },
+    women: { label: "Women", color: "#d9a3b8", keyword: "women" },
+  };
+
+  function bindGenderPanelSuggestionClicks(listEl) {
+    const suggestions = listEl?.querySelectorAll(".search-suggestion");
+    if (!suggestions) return;
+    suggestions.forEach((suggestion) => {
+      suggestion.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const fragranceName = this.dataset.fragrance;
+        const fragrance = getSearchFragrances().find(
+          (item) => item.name === fragranceName,
+        );
+        if (fragrance) {
+          closeGenderPanel();
+          navigateToFragranceSearchResult(fragrance, this);
+        }
+      });
+    });
+  }
+
+  function openGenderPanel(audience) {
+    const config = GENDER_CONFIGS[audience];
+    if (!config || !quickSearchResults || !quickSearchDropdown) return;
+
+    genderPanelOpen = true;
+    quickSearchDropdown.style.display = "block";
+    quickSearchDropdown.offsetHeight;
+    quickSearchDropdown.classList.add("show");
+
+    document.querySelectorAll(".search-gender-indicators .gender-badge").forEach((badge) => {
+      const isActive = badge.dataset.audience === audience;
+      badge.classList.toggle("active", isActive);
+      badge.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+
+    const allFragrances = getSearchFragrances();
+    const fragrances = allFragrances.filter(
+      (fragrance) => (fragrance.audience || "unisex") === config.keyword,
+    );
+
+    quickSearchResults.innerHTML = `
+      <div class="gender-panel" data-audience="${audience}">
+        <div class="gender-panel-header">
+          <div class="gender-panel-title">
+            <span class="gender-panel-dot" style="background:${config.color}"></span>
+            ${config.label} Fragrances
+            <span class="gender-panel-count">${fragrances.length}</span>
+            <button type="button" class="gender-panel-close" aria-label="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="gender-panel-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" placeholder="Search ${config.label.toLowerCase()} fragrances..." autocomplete="off" aria-label="Search ${config.label} fragrances" />
+          </div>
+        </div>
+        <div class="gender-panel-list">
+          ${renderGenderPanelList(fragrances)}
+        </div>
+      </div>
+    `;
+
+    bindGenderPanelSuggestionClicks(
+      quickSearchResults.querySelector(".gender-panel-list"),
+    );
+
+    const panelSearch = quickSearchResults.querySelector(".gender-panel-search input");
+    if (panelSearch) {
+      panelSearch.addEventListener("input", function () {
+        const query = this.value.trim();
+        const listEl = quickSearchResults.querySelector(".gender-panel-list");
+        if (!listEl) return;
+        const filtered = query
+          ? fragrances.filter((fragrance) => {
+              const haystack = `${fragrance.name} ${fragrance.brand}`.toLowerCase();
+              return haystack.includes(query.toLowerCase());
+            })
+          : fragrances;
+        listEl.innerHTML = renderGenderPanelList(filtered);
+        bindGenderPanelSuggestionClicks(listEl);
+        const countEl = quickSearchResults.querySelector(".gender-panel-count");
+        if (countEl) countEl.textContent = filtered.length;
+      });
+      panelSearch.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          closeGenderPanel();
+        }
+      });
+      setTimeout(() => panelSearch.focus(), 50);
+    }
+
+    const closeBtn = quickSearchResults.querySelector(".gender-panel-close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        closeGenderPanel();
+      });
+    }
+  }
+
+  function renderGenderPanelList(fragrances) {
+    if (!fragrances.length) {
+      return '<div class="gender-panel-empty">No fragrances found in this category.</div>';
+    }
+    return fragrances
+      .slice()
+      .sort((a, b) => a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name))
+      .map((fragrance) => {
+        const safeName = escapeHtml(fragrance.name);
+        const safeBrand = escapeHtml(fragrance.brand);
+        const safeType = escapeHtml(fragrance.type);
+        const safeNotes = escapeHtml(fragrance.notes.slice(0, 3).join(", "));
+        const safeSectionId = window.safeAttribute(fragrance.sectionId || "");
+        return `
+          <div class="search-suggestion ${fragrance.available ? "available" : "unavailable"}" data-fragrance="${safeName}" data-section-id="${safeSectionId}">
+              <div class="suggestion-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                      <path d="M2 17l10 5 10-5"/>
+                      <path d="M2 12l10 5 10-5"/>
+                  </svg>
+              </div>
+              <div class="suggestion-content">
+                  <div class="suggestion-title">${safeName}</div>
+                  <div class="suggestion-subtitle">${safeBrand} · ${safeNotes}</div>
+              </div>
+              <div class="suggestion-type">${safeType}</div>
+              <div class="suggestion-availability">
+                  <span class="availability-badge ${fragrance.available ? "available" : "unavailable"}">
+                      ${fragrance.available ? "✓ Available" : "✗ Not Available"}
+                  </span>
+                  <span class="audience-badge audience-${fragrance.audience || "unisex"}">${audienceMap[fragrance.audience] || "unisex"}</span>
+              </div>
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  function closeGenderPanel() {
+    genderPanelOpen = false;
+    hideDropdown();
+    document.querySelectorAll(".search-gender-indicators .gender-badge").forEach((badge) => {
+      badge.classList.remove("active");
+      badge.setAttribute("aria-pressed", "false");
+    });
+  }
+
+  document.querySelectorAll(".search-gender-indicators .gender-badge").forEach((badge) => {
+    function activateBadge() {
+      const audience = badge.dataset.audience;
+      if (!audience) return;
+      if (genderPanelOpen && badge.classList.contains("active")) {
+        closeGenderPanel();
+        return;
+      }
+      openGenderPanel(audience);
+    }
+    badge.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      activateBadge();
+    });
+    badge.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        activateBadge();
+      }
+    });
+  });
+
   // Close dropdown when clicking outside
   document.addEventListener("click", function (e) {
+    const inGenderIndicator = document
+      .querySelector(".search-gender-indicators")
+      ?.contains(e.target);
     if (
       !quickSearchInput?.contains(e.target) &&
-      !quickSearchDropdown?.contains(e.target)
+      !quickSearchDropdown?.contains(e.target) &&
+      !inGenderIndicator
     ) {
       hideDropdown();
     }
