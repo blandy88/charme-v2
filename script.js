@@ -299,6 +299,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const clearQuickSearch = document.getElementById("clearQuickSearch");
   const floatingSearch = document.getElementById("floatingSearch");
   const floatingMenu = document.getElementById("floatingMenu");
+  
+  // Map audience codes to display labels
+  const audienceMap = {
+    men: 'man',
+    women: 'woman',
+    unisex: 'unisex'
+  };
   const searchModal = document.getElementById("searchModal");
   const searchClose = document.getElementById("searchClose");
   const searchInput = document.getElementById("searchInput");
@@ -1152,7 +1159,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </svg>
                 </div>
 <div class="suggestion-content">
-                    <div class="suggestion-title">${safeName} ${fragrance.audience ? `<span class="audience-label audience-${fragrance.audience}">${fragrance.audience}</span>` : ''}</div>
+                    <div class="suggestion-title">${safeName} ${fragrance.audience ? `<span class="audience-label">${audienceMap[fragrance.audience] || fragrance.audience}</span>` : ''}</div>
                     <div class="suggestion-subtitle">${safeBrand}  ${safeNotes}</div>
                 </div>
                 <div class="suggestion-type">${safeType}</div>
