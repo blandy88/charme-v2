@@ -3962,8 +3962,8 @@ body.has-marquee .navbar {
     position: relative;
     overflow: hidden;
     background:
-        radial-gradient(120% 100% at 50% -10%, rgba(201, 169, 78, 0.12), transparent 50%),
-        linear-gradient(180deg, #17130c 0%, #0c0b0a 55%, #060606 100%);
+        radial-gradient(120% 100% at 50% -10%, rgba(201, 169, 78, 0.10), transparent 50%),
+        url('hero-bg.jpg') center 18% / cover no-repeat #0a0908;
 }
 
 /* Additional blur overlay for bottom-focused effect - only composites when blur active */
