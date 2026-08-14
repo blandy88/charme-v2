@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Background/hairline state (used by .top-shell-scrolled CSS)
       document.body.classList.toggle("top-shell-scrolled", y > SCROLL_TOP_ZONE);
 
-      // Show ONLY near the top of the page; otherwise keep hidden.
+      // Show near the top, while interacting, or when scrolling back up.
       if (y <= SCROLL_TOP_ZONE || chromeLockedOpen()) {
         reveal();
         lastY  = y;
@@ -250,7 +250,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      setHidden(true);
+      // Hide on scroll down, reveal on scroll up (smooth CSS transition).
+      if (dy < 0) {
+        reveal();
+      } else {
+        setHidden(true);
+      }
 
       lastY  = y;
       lastTs = now;
