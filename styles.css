@@ -22510,16 +22510,6 @@ body.top-shell-interacting .top-marquee,
   pointer-events: auto !important;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .navbar,
-  .top-marquee {
-    transition: none !important;
-    transform: none !important;
-    opacity: 1 !important;
-    filter: none !important;
-  }
-}
-
 /* Avoid painting/layout work for the many off-screen fragrance sections. */
 section.content,
 .haltane-section-container,
