@@ -602,6 +602,43 @@ final List<Fragrance> extraFragrances = [
   ),
 
   Fragrance(
+    name: 'La Nuit Trésor Fleur de Nuit',
+    brand: 'Lancôme',
+    family: 'Oriental Floral',
+    description: 'Damask rose dipped in midnight dew, blooming over tuberose, jasmine and mirabilis with a macchiato-whipped cream and patchouli base — Trésor reinvented as a moonlight garden.',
+    ingredients: ['Damask Rose', 'Tuberose', 'Jasmine', 'Mirabilis', 'Whipped Cream', 'Macchiato', 'Patchouli'],
+    year: 2023,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'30ml': 72.00, '50ml': 99.00, '100ml': 145.00},
+    available: false,
+  ),
+  Fragrance(
+    name: 'La Nuit Trésor Vanille Noire',
+    brand: 'Lancôme',
+    family: 'Oriental Vanilla',
+    description: 'Honeyed Damask rose absolute sheathed in leathery Bourbon vanilla and oud smoke, the darkest, most ambered chapter of the Trésor night.',
+    ingredients: ['Damask Rose', 'Honey', 'Bourbon Vanilla', 'Oud', 'Leather', 'Amber'],
+    year: 2025,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'30ml': 72.00, '50ml': 99.00, '100ml': 145.00},
+    available: false,
+  ),
+  Fragrance(
+    name: 'La Vie Est Belle Vanille Nude',
+    brand: 'Lancôme',
+    family: 'Sweet Gourmand',
+    description: 'The iconic iris-praline gourmand stripped to bare vanilla skin, Tahitian vanilla and white musk over a gossamer amber glow.',
+    ingredients: ['Iris', 'Praline', 'Tahitian Vanilla', 'White Musk', 'Amber', 'Patchouli'],
+    year: 2019,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'30ml': 72.00, '50ml': 99.00, '100ml': 145.00},
+    available: false,
+  ),
+
+  Fragrance(
     name: 'Midnight Rose',
     brand: 'Lancome',
     family: 'Floral Fruity',
@@ -845,6 +882,18 @@ final List<Fragrance> extraFragrances = [
     concentration: 'EDP',
     sizes: {'50ml': 99.00, '100ml': 155.00},
     available: false,
+  ),
+  Fragrance(
+    name: 'Luminous Night',
+    brand: 'Bvlgari',
+    family: 'Amber Woody',
+    description: 'Le Gemme\'s amethyst jewel — olibanum and saffron igniting over iris, cacao, sandalwood and ambergris, a nocturne etched in gold.',
+    ingredients: ['Olibanum', 'Saffron', 'Iris', 'Cacao', 'Sandalwood', 'Ambergris', 'Tonka Bean'],
+    year: 2014,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'50ml': 175.00, '100ml': 260.00},
+    available: true,
   ),
 
   // ═══════════════════════════════════════════
@@ -1238,6 +1287,22 @@ final List<Fragrance> extraFragrances = [
   ),
 
   // ═══════════════════════════════════════════
+  // YVES DE SISTELLE
+  // ═══════════════════════════════════════════
+  Fragrance(
+    name: 'Chairman',
+    brand: 'Yves de Sistelle',
+    family: 'Woody Spicy',
+    description: 'A sweet woody power play from the French house, green freshness melting into vanilla, cedar and warm spices — leadership bottled for the boardroom.',
+    ingredients: ['Citrus', 'Green Notes', 'Spices', 'Cedar', 'Vanilla', 'Wood', 'Musk'],
+    year: 2010,
+    perfumer: '',
+    concentration: 'EDT',
+    sizes: {'50ml': 32.00, '100ml': 49.00},
+    available: false,
+  ),
+
+  // ═══════════════════════════════════════════
   // SWISS ARABIAN
   // ═══════════════════════════════════════════
   Fragrance(
@@ -1295,6 +1360,31 @@ final List<Fragrance> extraFragrances = [
     description: 'Peach-kissed rose and jasmine settling over cedar and amber, hopeful femininity rendered in warm pastel hues.',
     ingredients: ['Rose', 'Peach', 'Jasmine', 'Sandalwood', 'Musk', 'Vanilla', 'Amber', 'Cedar'],
     year: 2017,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'75ml': 49.00},
+    available: false,
+  ),
+
+  Fragrance(
+    name: 'Mudhila',
+    brand: 'Swiss Arabian',
+    family: 'Amber Oriental',
+    description: 'Cumin and bergamot sharpened with heliotrope, unfolding into jasmine and bitter almond before settling on amber, vanilla and sandalwood — the house signature Gulf warmth.',
+    ingredients: ['Cumin', 'Bergamot', 'Heliotrope', 'Jasmine', 'Bitter Almond', 'Lavender', 'Amber', 'Vanilla', 'Sandalwood'],
+    year: 2015,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'75ml': 49.00},
+    available: false,
+  ),
+  Fragrance(
+    name: 'Kalimat',
+    brand: 'Swiss Arabian',
+    family: 'Amber Oriental',
+    description: 'Words made of scent — saffron and rose folding into sweet oud, amber and musk, a fragrant language spoken in the golden tones of Gulf perfumery.',
+    ingredients: ['Saffron', 'Rose', 'Oud', 'Amber', 'Vanilla', 'Musk', 'Sandalwood'],
+    year: 2016,
     perfumer: '',
     concentration: 'EDP',
     sizes: {'75ml': 49.00},

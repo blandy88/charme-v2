@@ -2263,4 +2263,17 @@ const expansionFragrances = <Fragrance>[
     sizes: {'50ml': 95.0, '100ml': 145.0},
     available: true,
   ),
+  Fragrance(
+    name: 'Eden Juicy Apple',
+    brand: 'Kayali',
+    family: 'Fruity Floral',
+    description:
+        'The scent of the forbidden fruit — crisp red apple and blackcurrant over jasmine and rose with a soft vanilla-amber bite, Eden\'s juiciest temptation.',
+    ingredients: ['Red Apple', 'Black Currant', 'Bergamot', 'Jasmine', 'Peony', 'Rose', 'Vanilla', 'Amber', 'Musk'],
+    year: 2023,
+    perfumer: 'Unknown',
+    concentration: 'Eau de Parfum',
+    sizes: {'50ml': 95.0, '100ml': 145.0},
+    available: true,
+  ),
 ];

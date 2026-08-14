@@ -358,6 +358,70 @@
     "available": false
   },
   {
+    "name": "Delina Exclusif",
+    "brand": "Parfums de Marly",
+    "family": "Amber Floral",
+    "description": "Lychee and raspberry unfurling over Turkish rose and peony, deepened with vanilla, oud and amber — Delina draped in midnight velvet.",
+    "ingredients": [
+      "Lychee",
+      "Raspberry",
+      "Bergamot",
+      "Turkish Rose",
+      "Peony",
+      "Vanilla",
+      "Oud",
+      "Amber",
+      "Musk",
+      "Cedar"
+    ],
+    "year": 2018,
+    "perfumer": "Quentin Bisch",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "75ml",
+        "price": 279.99
+      },
+      {
+        "size": "125ml",
+        "price": 329.99
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Delina La Rosée",
+    "brand": "Parfums de Marly",
+    "family": "Floral Fruity",
+    "description": "Delina distilled into morning dew — lychee and peony over fresh jasmine and rose, veiled in white musk and cashmeran, a rosier, airier sister.",
+    "ingredients": [
+      "Lychee",
+      "Bergamot",
+      "Pink Pepper",
+      "Peony",
+      "Jasmine",
+      "Turkish Rose",
+      "White Musk",
+      "Cashmeran",
+      "Cedar",
+      "Vanilla"
+    ],
+    "year": 2020,
+    "perfumer": "Quentin Bisch",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "75ml",
+        "price": 279.99
+      },
+      {
+        "size": "125ml",
+        "price": 329.99
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "Aventus",
     "brand": "Creed",
     "family": "Fruity Chypre",
@@ -386,6 +450,39 @@
       {
         "size": "100ml",
         "price": 445
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Absolu Aventus",
+    "brand": "Creed",
+    "family": "Fruity Chypre",
+    "description": "The intensified Aventus — pineapple and blackcurrant sharpened by cardamom, cinnamon and ginger over smoky birch and vetiver, the king amplified.",
+    "ingredients": [
+      "Pineapple",
+      "Black Currant",
+      "Grapefruit",
+      "Pink Pepper",
+      "Bergamot",
+      "Lemon",
+      "Cardamom",
+      "Cinnamon",
+      "Ginger",
+      "Vetiver",
+      "Patchouli"
+    ],
+    "year": 2025,
+    "perfumer": "Olivier Creed",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 345
+      },
+      {
+        "size": "100ml",
+        "price": 465
       }
     ],
     "available": false
@@ -649,6 +746,35 @@
       },
       {
         "size": "100ml",
+        "price": 445
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Queen of Silk",
+    "brand": "Creed",
+    "family": "Amber Floral",
+    "description": "A rose of royal velvet — pink pepper and peony over Turkish rose and jasmine, glided onto amber, musk and sandalwood.",
+    "ingredients": [
+      "Pink Pepper",
+      "Peony",
+      "Rose",
+      "Jasmine",
+      "Amber",
+      "Musk",
+      "Sandalwood"
+    ],
+    "year": 2024,
+    "perfumer": "Olivier Creed",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "75ml",
+        "price": 325
+      },
+      {
+        "size": "120ml",
         "price": 445
       }
     ],
@@ -1035,6 +1161,32 @@
     ],
     "year": 2022,
     "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "90ml",
+        "price": 349
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Narcotic Delight",
+    "brand": "Initio",
+    "family": "Oriental Vanilla",
+    "description": "A venomous gourmand of cherry and cognac soaked in saffron and tobacco, dark vanilla and amber — Initio's sweetness with a bite.",
+    "ingredients": [
+      "Cherry",
+      "Cognac",
+      "Saffron",
+      "Tobacco",
+      "Vanilla",
+      "Amber",
+      "Musk",
+      "Cashmeran"
+    ],
+    "year": 2024,
+    "perfumer": "Guillaume Flavigny",
     "concentration": "EDP",
     "sizes": [
       {
@@ -3198,6 +3350,36 @@
     "available": false
   },
   {
+    "name": "Velvet Fantasy",
+    "brand": "Montale",
+    "family": "Floral Oriental",
+    "description": "Sun-warmed fruits and citruses tumbling into violet and rose, dusted with white musk, incense and amber — Montale plush velveteen daydream.",
+    "ingredients": [
+      "Fruity Notes",
+      "Citruses",
+      "Solar Notes",
+      "Violet",
+      "Rose",
+      "White Musk",
+      "Incense",
+      "Amber"
+    ],
+    "year": 2020,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 120
+      },
+      {
+        "size": "100ml",
+        "price": 175
+      }
+    ],
+    "available": false
+  },
+  {
     "name": "Clémentine California",
     "brand": "Atelier Cologne",
     "family": "Citrus Aromatic",
@@ -3582,6 +3764,29 @@
     "available": false
   },
   {
+    "name": "Megamare",
+    "brand": "Orto Parisi",
+    "family": "Aquatic Woody",
+    "description": "An oceanic bomb of salt and ambergris that smells like the open sea in a thunderstorm — Gualtieri's most colossal aquatic.",
+    "ingredients": [
+      "Sea Salt",
+      "Marine Notes",
+      "Ambergris",
+      "Amber",
+      "Woody Notes"
+    ],
+    "year": 2019,
+    "perfumer": "Alessandro Gualtieri",
+    "concentration": "Extrait",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 220
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "Äican",
     "brand": "Kajal",
     "family": "Fruity Gourmand",
@@ -3641,6 +3846,38 @@
     ],
     "year": 2024,
     "perfumer": "Patrick Müller",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 130
+      },
+      {
+        "size": "100ml",
+        "price": 180
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Dahab",
+    "brand": "Kajal",
+    "family": "Fruity Amber",
+    "description": "Kajal's golden amber — mandarin and jasmine glazed with honey and caramel over vanilla, oud and sandalwood, Cairo gilded at dusk.",
+    "ingredients": [
+      "Mandarin",
+      "Saffron",
+      "Jasmine",
+      "Honey",
+      "Caramel",
+      "Vanilla",
+      "Oud",
+      "Sandalwood",
+      "Amber",
+      "Musk"
+    ],
+    "year": 2015,
+    "perfumer": "",
     "concentration": "EDP",
     "sizes": [
       {
@@ -4197,6 +4434,35 @@
     "available": true
   },
   {
+    "name": "Opera",
+    "brand": "Sospiro",
+    "family": "Oriental Spicy",
+    "description": "A grand floriental overture — saffron and rose soaring over amber with vanilla, sandalwood and musk, the sister house at full crescendo.",
+    "ingredients": [
+      "Saffron",
+      "Rose",
+      "Nutmeg",
+      "Amber",
+      "Vanilla",
+      "Sandalwood",
+      "Musk"
+    ],
+    "year": 2015,
+    "perfumer": "Chris Maurice",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 165
+      },
+      {
+        "size": "100ml",
+        "price": 230
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "Ambassador",
     "brand": "Gisada",
     "family": "Woody Aromatic",
@@ -4333,6 +4599,37 @@
       {
         "size": "100ml",
         "price": 240
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Gris Charnel",
+    "brand": "BDK Parfums",
+    "family": "Woody Spicy",
+    "description": "A cashmere-and-tea embrace, fig and black currant unfurling over sandalwood, iris and tonka — the scent of a silk scarf in autumn rain.",
+    "ingredients": [
+      "Bergamot",
+      "Cardamom",
+      "Fig",
+      "Black Currant",
+      "Tea",
+      "Iris",
+      "Sandalwood",
+      "Tonka Bean",
+      "Vetiver"
+    ],
+    "year": 2019,
+    "perfumer": "Mathilde Bijaoui",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 155
+      },
+      {
+        "size": "100ml",
+        "price": 220
       }
     ],
     "available": true
@@ -5074,6 +5371,40 @@
       {
         "size": "200ml",
         "price": 185
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Tobacco Dior",
+    "brand": "Dior",
+    "family": "Tobacco Woody",
+    "description": "Tobacco flower and honeyed leaf steeped in tonka, vanilla and balsam — Demachy's smoky homage to the gentleman's club, from La Collection Privée.",
+    "ingredients": [
+      "Tobacco Leaf",
+      "Tobacco Flower",
+      "Honey",
+      "Hay",
+      "Tonka Bean",
+      "Vanilla",
+      "Balsam",
+      "Woody Notes"
+    ],
+    "year": 2007,
+    "perfumer": "François Demachy",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "40ml",
+        "price": 105
+      },
+      {
+        "size": "125ml",
+        "price": 210
+      },
+      {
+        "size": "250ml",
+        "price": 330
       }
     ],
     "available": false
@@ -6213,6 +6544,36 @@
     "available": false
   },
   {
+    "name": "Stronger With You Oud",
+    "brand": "Giorgio Armani",
+    "family": "Woody Oud",
+    "description": "Bergamot and nutmeg igniting a dark core of oud, leather and amber — the strong one stripped back to raw, smoldering wood.",
+    "ingredients": [
+      "Bergamot",
+      "Nutmeg",
+      "Saffron",
+      "Oud",
+      "Cedar",
+      "Amber",
+      "Leather",
+      "Musk"
+    ],
+    "year": 2022,
+    "perfumer": "Cecile Matton",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 110
+      },
+      {
+        "size": "100ml",
+        "price": 155
+      }
+    ],
+    "available": false
+  },
+  {
     "name": "Armani Prive Oud Royal",
     "brand": "Giorgio Armani",
     "family": "Woody Oud",
@@ -6242,6 +6603,66 @@
       {
         "size": "125ml",
         "price": 140
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Vert Malachite",
+    "brand": "Giorgio Armani",
+    "family": "Green Floral",
+    "description": "Tuberose and lily held in dew-soaked greens and violet leaf, finished with amber-sandalwood warmth — the malachite jewel of the Armani Privé collection.",
+    "ingredients": [
+      "Green Notes",
+      "Tuberose",
+      "Gardenia",
+      "Lily",
+      "Jasmine",
+      "Violet Leaf",
+      "Amber",
+      "Sandalwood"
+    ],
+    "year": 2019,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 215
+      },
+      {
+        "size": "100ml",
+        "price": 310
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Bleu Turquoise",
+    "brand": "Giorgio Armani",
+    "family": "Amber Spicy",
+    "description": "Aurélien Guichard's salt-swept Armani Privé, ylang-ylang and Indian jasmine over nagarmotha, drying into vanilla, green moss and sandy incense — a turquoise sea on warm rock.",
+    "ingredients": [
+      "Ylang-Ylang",
+      "Indian Jasmine",
+      "Nagarmotha",
+      "Vanilla",
+      "Green Moss",
+      "Sandalwood",
+      "Incense",
+      "Sea Salt"
+    ],
+    "year": 2018,
+    "perfumer": "Aurélien Guichard",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 215
+      },
+      {
+        "size": "100ml",
+        "price": 310
       }
     ],
     "available": false
@@ -6300,6 +6721,41 @@
     ],
     "year": 2020,
     "perfumer": "Carlos Benaim",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 85
+      },
+      {
+        "size": "75ml",
+        "price": 110
+      },
+      {
+        "size": "125ml",
+        "price": 140
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Emporio Armani Diamonds",
+    "brand": "Giorgio Armani",
+    "family": "Floral Fruity",
+    "description": "Lychee and raspberry facet-cut over freesia, muguet and rose, sealed with vanilla, patchouli, cedar and vetiver — femininity cut like a gem.",
+    "ingredients": [
+      "Lychee",
+      "Raspberry",
+      "Freesia",
+      "Muguet",
+      "Rose",
+      "Vanilla",
+      "Patchouli",
+      "Cedar",
+      "Vetiver"
+    ],
+    "year": 2007,
+    "perfumer": "Thierry Wasser",
     "concentration": "EDP",
     "sizes": [
       {
@@ -6504,6 +6960,36 @@
       {
         "size": "200ml",
         "price": 115
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Vanille Rouge",
+    "brand": "Versace",
+    "family": "Oriental Vanilla",
+    "description": "Atelier Versace's haute couture vanilla — pink pepper and saffron over orange blossom and jasmine, drenched in vanilla, amber and sandalwood.",
+    "ingredients": [
+      "Pink Pepper",
+      "Saffron",
+      "Orange Blossom",
+      "Jasmine",
+      "Vanilla",
+      "Amber",
+      "Sandalwood",
+      "Musk"
+    ],
+    "year": 2019,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 92
+      },
+      {
+        "size": "100ml",
+        "price": 135
       }
     ],
     "available": false
@@ -6735,6 +7221,36 @@
     ],
     "year": 2023,
     "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 79
+      },
+      {
+        "size": "100ml",
+        "price": 115
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Gentleman Réserve Privée",
+    "brand": "Givenchy",
+    "family": "Amber Woody",
+    "description": "A gentleman at the bar — pear and cardamom warmed by chestnut, rum and patchouli over amber and vanilla, the cosiest Givenchy statement.",
+    "ingredients": [
+      "Pear",
+      "Cardamom",
+      "Chestnut",
+      "Rum",
+      "Patchouli",
+      "Amber",
+      "Vanilla",
+      "Cedar"
+    ],
+    "year": 2018,
+    "perfumer": "Olivier Cresp",
     "concentration": "EDP",
     "sizes": [
       {
@@ -7297,6 +7813,70 @@
     "available": true
   },
   {
+    "name": "1 Million Royale",
+    "brand": "Paco Rabanne",
+    "family": "Spicy Woody",
+    "description": "The royal flanker of 1 Million — bergamot and black pepper cut with saffron and cinnamon over amber, cedar and musk.",
+    "ingredients": [
+      "Bergamot",
+      "Black Pepper",
+      "Saffron",
+      "Rose",
+      "Cinnamon",
+      "Amber",
+      "Cedar",
+      "Musk",
+      "Vanilla"
+    ],
+    "year": 2022,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 72
+      },
+      {
+        "size": "50ml",
+        "price": 96
+      },
+      {
+        "size": "80ml",
+        "price": 120
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Invictus Victory Absolu",
+    "brand": "Paco Rabanne",
+    "family": "Amber Woody",
+    "description": "Black pepper and mandarin ignite smoked incense amber, dried by patchouli and sandalwood — victory at maximum intensity.",
+    "ingredients": [
+      "Black Pepper",
+      "Mandarin",
+      "Juniper Berry",
+      "Grey Amber",
+      "Olibanum",
+      "Patchouli",
+      "Sandalwood"
+    ],
+    "year": 2023,
+    "perfumer": "Unknown",
+    "concentration": "Parfum Intense",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 110
+      },
+      {
+        "size": "100ml",
+        "price": 150
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "Black XS L'Exces",
     "brand": "Paco Rabanne",
     "family": "Floral Woody Musk",
@@ -7526,6 +8106,39 @@
     "available": true
   },
   {
+    "name": "Scandale by Night",
+    "brand": "Jean Paul Gaultier",
+    "family": "Floral Amber",
+    "description": "Creamy tuberose and powdery iris veiled in cashmeran and vanilla — Scandal's leopard prowling into the small hours.",
+    "ingredients": [
+      "Tuberose",
+      "Iris",
+      "Jasmine",
+      "Orange Blossom",
+      "Cashmeran",
+      "Sandalwood",
+      "Vanilla"
+    ],
+    "year": 2020,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 78
+      },
+      {
+        "size": "50ml",
+        "price": 104
+      },
+      {
+        "size": "80ml",
+        "price": 130
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "La Belle",
     "brand": "Jean Paul Gaultier",
     "family": "Floral Gourmand",
@@ -7539,6 +8152,40 @@
       "Woody Notes"
     ],
     "year": 2019,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 78
+      },
+      {
+        "size": "50ml",
+        "price": 104
+      },
+      {
+        "size": "80ml",
+        "price": 130
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Le Beau Paradise Garden",
+    "brand": "Jean Paul Gaultier",
+    "family": "Woody Aromatic",
+    "description": "The sun-drenched Le Beau — bergamot and coconut water drifting over lavender and iris into tonka, musk and vetiver, paradise bottled.",
+    "ingredients": [
+      "Bergamot",
+      "Coconut Water",
+      "Lavender",
+      "Iris",
+      "Tonka Bean",
+      "Musk",
+      "Vetiver",
+      "Cedar"
+    ],
+    "year": 2022,
     "perfumer": "Unknown",
     "concentration": "EDP",
     "sizes": [
@@ -8330,6 +8977,61 @@
     "available": true
   },
   {
+    "name": "Musc Noir",
+    "brand": "Narciso Rodriguez",
+    "family": "Floral Musk",
+    "description": "Blackcurrant and plum open over orange blossom and tuberose, melting into the house's signature musk with a vanilla glow.",
+    "ingredients": [
+      "Black Currant",
+      "Plum",
+      "Orange Blossom",
+      "Tuberose",
+      "Musk",
+      "Vanilla"
+    ],
+    "year": 2020,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 92
+      },
+      {
+        "size": "90ml",
+        "price": 125
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Narciso Eau de Parfum Radiante",
+    "brand": "Narciso Rodriguez",
+    "family": "Amber Floral",
+    "description": "Sunlit white florals glowing over the house signature musk, amber and warm woods — the radiant 2025 evolution of the iconic narciso cube.",
+    "ingredients": [
+      "White Florals",
+      "Orange Blossom",
+      "Musk",
+      "Amber",
+      "Woody Notes"
+    ],
+    "year": 2025,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 85
+      },
+      {
+        "size": "90ml",
+        "price": 110
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "Homme Red King",
     "brand": "Joop!",
     "family": "Fruity Fresh",
@@ -8354,6 +9056,33 @@
       {
         "size": "100ml",
         "price": 48
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Bombshell",
+    "brand": "Victoria's Secret",
+    "family": "Floral Fruity",
+    "description": "The glittering VS signature — purple passion fruit and pink peony over vanilla orchid, Hollywood gloss bottled as a scent.",
+    "ingredients": [
+      "Passion Fruit",
+      "Peony",
+      "Vanilla Orchid",
+      "Pink Pepper",
+      "Musk"
+    ],
+    "year": 2010,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 68
+      },
+      {
+        "size": "100ml",
+        "price": 98
       }
     ],
     "available": true
@@ -8446,6 +9175,39 @@
       "Amber"
     ],
     "year": 2007,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 155
+      },
+      {
+        "size": "50ml",
+        "price": 245
+      },
+      {
+        "size": "100ml",
+        "price": 375
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Oud Wood Intense",
+    "brand": "Tom Ford",
+    "family": "Woody Oud",
+    "description": "The iconic oud intensified — angelica, ginger and juniper wrapped around dark oud and cypress, castoreum adding primal animalic heat.",
+    "ingredients": [
+      "Angelica",
+      "Ginger",
+      "Juniper",
+      "Oud",
+      "Cypress",
+      "Castoreum",
+      "Woody Notes"
+    ],
+    "year": 2017,
     "perfumer": "",
     "concentration": "EDP",
     "sizes": [
@@ -8858,6 +9620,74 @@
       {
         "size": "100ml",
         "price": 215
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Oud Minerale",
+    "brand": "Tom Ford",
+    "family": "Woody Aquatic",
+    "description": "Dark oud surfacing from a salt-blasted shoreline — brine, minerals and smoked driftwood, the ocean floor in a Private Blend.",
+    "ingredients": [
+      "Sea Salt",
+      "Sea Spray",
+      "Mineral Notes",
+      "Oud",
+      "Amber",
+      "Saffron",
+      "Cedar"
+    ],
+    "year": 2017,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 155
+      },
+      {
+        "size": "50ml",
+        "price": 245
+      },
+      {
+        "size": "100ml",
+        "price": 375
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Velvet Orchid",
+    "brand": "Tom Ford",
+    "family": "Amber Floral",
+    "description": "Black orchid steeped in honeyed rum and jasmine, plush vanilla and amber making everything velvet — Orchid's warm, indulgent sister.",
+    "ingredients": [
+      "Black Orchid",
+      "Honey",
+      "Rum",
+      "Jasmine",
+      "Vanilla",
+      "Sandalwood",
+      "Amber",
+      "Myrrh",
+      "Incense"
+    ],
+    "year": 2014,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 155
+      },
+      {
+        "size": "50ml",
+        "price": 245
+      },
+      {
+        "size": "100ml",
+        "price": 375
       }
     ],
     "available": true
@@ -9519,6 +10349,41 @@
     "available": false
   },
   {
+    "name": "L'Impératrice 3",
+    "brand": "Dolce & Gabbana",
+    "family": "Floral Fruity",
+    "description": "The third D&G woman — juicy watermelon, kiwi and lychee over pink cyclamen and rose, a sparkling watercolour floral.",
+    "ingredients": [
+      "Watermelon",
+      "Kiwi",
+      "Pink Cyclamen",
+      "Lychee",
+      "Heliotrope",
+      "Rose",
+      "Musk",
+      "Cedar",
+      "Sandalwood"
+    ],
+    "year": 2009,
+    "perfumer": "Unknown",
+    "concentration": "EDT",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 72
+      },
+      {
+        "size": "100ml",
+        "price": 99
+      },
+      {
+        "size": "150ml",
+        "price": 120
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "Boss Bottled",
     "brand": "Hugo Boss",
     "family": "Warm Spicy",
@@ -9726,6 +10591,38 @@
       }
     ],
     "available": false
+  },
+  {
+    "name": "Boss Bottled Unlimited",
+    "brand": "Hugo Boss",
+    "family": "Aromatic Citrus",
+    "description": "Boss Bottled with its limits removed — zesty lime and ginger over vetiver and cedar, an energetic, effervescent edition.",
+    "ingredients": [
+      "Lime",
+      "Ginger",
+      "Cardamom",
+      "Black Pepper",
+      "Vetiver",
+      "Cedar"
+    ],
+    "year": 2021,
+    "perfumer": "Unknown",
+    "concentration": "EDT",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 65
+      },
+      {
+        "size": "100ml",
+        "price": 89
+      },
+      {
+        "size": "200ml",
+        "price": 105
+      }
+    ],
+    "available": true
   },
   {
     "name": "CK One",
@@ -10212,6 +11109,67 @@
     "available": false
   },
   {
+    "name": "Idylle",
+    "brand": "Guerlain",
+    "family": "Green Floral",
+    "description": "Grasse jasmine and lily of the valley over dewy greens and a musky-vetiver base — Thierry Wasser's luminous, sky-gazing floral.",
+    "ingredients": [
+      "Bergamot",
+      "Jasmine",
+      "Lily of the Valley",
+      "Peony",
+      "Freesia",
+      "Rose",
+      "Lily",
+      "Patchouli",
+      "White Musk",
+      "Vetiver"
+    ],
+    "year": 2010,
+    "perfumer": "Thierry Wasser",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 99
+      },
+      {
+        "size": "100ml",
+        "price": 145
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Oud Nude",
+    "brand": "Guerlain",
+    "family": "Woody Ambery",
+    "description": "Delphine Jelk sweet-woody L'Art & La Matière oud, raspberry and almond over cedar, rose and Bourbon vanilla — an oud worn unclothed.",
+    "ingredients": [
+      "Raspberry",
+      "Almond",
+      "Cedar",
+      "Rose",
+      "Oud",
+      "Bourbon Vanilla",
+      "Amber"
+    ],
+    "year": 2022,
+    "perfumer": "Delphine Jelk",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 120
+      },
+      {
+        "size": "100ml",
+        "price": 170
+      }
+    ],
+    "available": false
+  },
+  {
     "name": "London",
     "brand": "Burberry",
     "family": "Oriental Spicy",
@@ -10679,6 +11637,32 @@
       {
         "size": "125ml",
         "price": 130
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "1881 Pour Homme",
+    "brand": "Carven",
+    "family": "Woody Aromatic",
+    "description": "The classic Carven fougère — lavender and clary sage over cinnamon, geranium and vetiver with sandalwood, musk and amber.",
+    "ingredients": [
+      "Lavender",
+      "Clary Sage",
+      "Cinnamon",
+      "Geranium",
+      "Vetiver",
+      "Sandalwood",
+      "Musk",
+      "Amber"
+    ],
+    "year": 1985,
+    "perfumer": "Unknown",
+    "concentration": "EDT",
+    "sizes": [
+      {
+        "size": "100ml",
+        "price": 55
       }
     ],
     "available": false
@@ -12308,6 +13292,35 @@
     "available": false
   },
   {
+    "name": "Alien Goddess",
+    "brand": "Mugler",
+    "family": "Amber Floral",
+    "description": "Bergamot and coconut water dissolving into frangipani and jasmine sambac over cashmeran and warm benzoin — the sun-drenched goddess.",
+    "ingredients": [
+      "Bergamot",
+      "Coconut Water",
+      "Frangipani",
+      "Jasmine Sambac",
+      "Cashmeran",
+      "Amber",
+      "Benzoin"
+    ],
+    "year": 2021,
+    "perfumer": "Quentin Bisch",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 99
+      },
+      {
+        "size": "100ml",
+        "price": 145
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "Pure Malt",
     "brand": "Mugler",
     "family": "Woody Whisky",
@@ -12321,6 +13334,36 @@
       "Scottish Whisky"
     ],
     "year": 2009,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 79
+      },
+      {
+        "size": "100ml",
+        "price": 115
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "A*Men Fantasm",
+    "brand": "Mugler",
+    "family": "Amber Gourmand",
+    "description": "The revived A*Men — citrus and bergamot over dark chocolate and clary sage, grounded in the signature patchouli of the line.",
+    "ingredients": [
+      "Bergamot",
+      "Citrus",
+      "Dark Chocolate",
+      "Clary Sage",
+      "Patchouli",
+      "Coffee",
+      "Vanilla",
+      "Musk"
+    ],
+    "year": 2024,
     "perfumer": "",
     "concentration": "EDP",
     "sizes": [
@@ -12630,6 +13673,38 @@
     "available": false
   },
   {
+    "name": "Valentino Donna",
+    "brand": "Valentino",
+    "family": "Floral Chypre",
+    "description": "Bergamot and calabrian mandarin lifted by iris, tuberose and rose over vanilla, patchouli and soft leather — Roman femininity distilled to a single gesture.",
+    "ingredients": [
+      "Bergamot",
+      "Mandarin",
+      "Black Currant",
+      "Iris",
+      "Rose",
+      "Tuberose",
+      "Jasmine",
+      "Vanilla",
+      "Leather",
+      "Patchouli"
+    ],
+    "year": 2015,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 95
+      },
+      {
+        "size": "100ml",
+        "price": 140
+      }
+    ],
+    "available": true
+  },
+  {
     "name": "Fierce",
     "brand": "Abercrombie & Fitch",
     "family": "Aromatic Woody",
@@ -12833,6 +13908,33 @@
       "Vanilla",
       "Musk",
       "Sandalwood"
+    ],
+    "year": 2023,
+    "perfumer": "Unknown",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "100ml",
+        "price": 32
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Yara Tous",
+    "brand": "Lattafa",
+    "family": "Fruity Floral",
+    "description": "The tropical Yara — mango, coconut and passionfruit over jasmine, orange blossom and heliotrope with vanilla, musk and cashmeran.",
+    "ingredients": [
+      "Mango",
+      "Coconut",
+      "Passionfruit",
+      "Jasmine",
+      "Orange Blossom",
+      "Heliotrope",
+      "Vanilla",
+      "Musk",
+      "Cashmeran"
     ],
     "year": 2023,
     "perfumer": "Unknown",
@@ -14404,6 +15506,103 @@
     "available": false
   },
   {
+    "name": "La Nuit Trésor Fleur de Nuit",
+    "brand": "Lancôme",
+    "family": "Oriental Floral",
+    "description": "Damask rose dipped in midnight dew, blooming over tuberose, jasmine and mirabilis with a macchiato-whipped cream and patchouli base — Trésor reinvented as a moonlight garden.",
+    "ingredients": [
+      "Damask Rose",
+      "Tuberose",
+      "Jasmine",
+      "Mirabilis",
+      "Whipped Cream",
+      "Macchiato",
+      "Patchouli"
+    ],
+    "year": 2023,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 72
+      },
+      {
+        "size": "50ml",
+        "price": 99
+      },
+      {
+        "size": "100ml",
+        "price": 145
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "La Nuit Trésor Vanille Noire",
+    "brand": "Lancôme",
+    "family": "Oriental Vanilla",
+    "description": "Honeyed Damask rose absolute sheathed in leathery Bourbon vanilla and oud smoke, the darkest, most ambered chapter of the Trésor night.",
+    "ingredients": [
+      "Damask Rose",
+      "Honey",
+      "Bourbon Vanilla",
+      "Oud",
+      "Leather",
+      "Amber"
+    ],
+    "year": 2025,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 72
+      },
+      {
+        "size": "50ml",
+        "price": 99
+      },
+      {
+        "size": "100ml",
+        "price": 145
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "La Vie Est Belle Vanille Nude",
+    "brand": "Lancôme",
+    "family": "Sweet Gourmand",
+    "description": "The iconic iris-praline gourmand stripped to bare vanilla skin, Tahitian vanilla and white musk over a gossamer amber glow.",
+    "ingredients": [
+      "Iris",
+      "Praline",
+      "Tahitian Vanilla",
+      "White Musk",
+      "Amber",
+      "Patchouli"
+    ],
+    "year": 2019,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "30ml",
+        "price": 72
+      },
+      {
+        "size": "50ml",
+        "price": 99
+      },
+      {
+        "size": "100ml",
+        "price": 145
+      }
+    ],
+    "available": false
+  },
+  {
     "name": "Midnight Rose",
     "brand": "Lancome",
     "family": "Floral Fruity",
@@ -14967,6 +16166,35 @@
       }
     ],
     "available": false
+  },
+  {
+    "name": "Luminous Night",
+    "brand": "Bvlgari",
+    "family": "Amber Woody",
+    "description": "Le Gemme's amethyst jewel — olibanum and saffron igniting over iris, cacao, sandalwood and ambergris, a nocturne etched in gold.",
+    "ingredients": [
+      "Olibanum",
+      "Saffron",
+      "Iris",
+      "Cacao",
+      "Sandalwood",
+      "Ambergris",
+      "Tonka Bean"
+    ],
+    "year": 2014,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 175
+      },
+      {
+        "size": "100ml",
+        "price": 260
+      }
+    ],
+    "available": true
   },
   {
     "name": "Solo Loewe",
@@ -15883,6 +17111,35 @@
     "available": false
   },
   {
+    "name": "Chairman",
+    "brand": "Yves de Sistelle",
+    "family": "Woody Spicy",
+    "description": "A sweet woody power play from the French house, green freshness melting into vanilla, cedar and warm spices — leadership bottled for the boardroom.",
+    "ingredients": [
+      "Citrus",
+      "Green Notes",
+      "Spices",
+      "Cedar",
+      "Vanilla",
+      "Wood",
+      "Musk"
+    ],
+    "year": 2010,
+    "perfumer": "",
+    "concentration": "EDT",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 32
+      },
+      {
+        "size": "100ml",
+        "price": 49
+      }
+    ],
+    "available": false
+  },
+  {
     "name": "Shaghaf Oud",
     "brand": "Swiss Arabian",
     "family": "Oriental Oud",
@@ -15997,6 +17254,58 @@
       "Cedar"
     ],
     "year": 2017,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "75ml",
+        "price": 49
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Mudhila",
+    "brand": "Swiss Arabian",
+    "family": "Amber Oriental",
+    "description": "Cumin and bergamot sharpened with heliotrope, unfolding into jasmine and bitter almond before settling on amber, vanilla and sandalwood — the house signature Gulf warmth.",
+    "ingredients": [
+      "Cumin",
+      "Bergamot",
+      "Heliotrope",
+      "Jasmine",
+      "Bitter Almond",
+      "Lavender",
+      "Amber",
+      "Vanilla",
+      "Sandalwood"
+    ],
+    "year": 2015,
+    "perfumer": "",
+    "concentration": "EDP",
+    "sizes": [
+      {
+        "size": "75ml",
+        "price": 49
+      }
+    ],
+    "available": false
+  },
+  {
+    "name": "Kalimat",
+    "brand": "Swiss Arabian",
+    "family": "Amber Oriental",
+    "description": "Words made of scent — saffron and rose folding into sweet oud, amber and musk, a fragrant language spoken in the golden tones of Gulf perfumery.",
+    "ingredients": [
+      "Saffron",
+      "Rose",
+      "Oud",
+      "Amber",
+      "Vanilla",
+      "Musk",
+      "Sandalwood"
+    ],
+    "year": 2016,
     "perfumer": "",
     "concentration": "EDP",
     "sizes": [
@@ -20981,6 +22290,37 @@
       "Musk"
     ],
     "year": 2024,
+    "perfumer": "Unknown",
+    "concentration": "Eau de Parfum",
+    "sizes": [
+      {
+        "size": "50ml",
+        "price": 95
+      },
+      {
+        "size": "100ml",
+        "price": 145
+      }
+    ],
+    "available": true
+  },
+  {
+    "name": "Eden Juicy Apple",
+    "brand": "Kayali",
+    "family": "Fruity Floral",
+    "description": "The scent of the forbidden fruit — crisp red apple and blackcurrant over jasmine and rose with a soft vanilla-amber bite, Eden's juiciest temptation.",
+    "ingredients": [
+      "Red Apple",
+      "Black Currant",
+      "Bergamot",
+      "Jasmine",
+      "Peony",
+      "Rose",
+      "Vanilla",
+      "Amber",
+      "Musk"
+    ],
+    "year": 2023,
     "perfumer": "Unknown",
     "concentration": "Eau de Parfum",
     "sizes": [

@@ -1729,6 +1729,176 @@ async function insertSampleProducts() {
             category: 'affordable',
             mood_indicators: JSON.stringify(['fresh', 'masculine', 'vibrant']),
             seasonal_indicators: JSON.stringify(['spring', 'summer'])
+        },
+        {
+            id: 'parfums-de-marly-althair',
+            name: 'Althair',
+            brand: 'Parfums de Marly',
+            description: 'A warm amber gourmand of Italian bergamot, lavender and lily of the valley over vanilla, guaiac wood and tonka bean.',
+            price: 260.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['warm', 'elegant', 'addictive']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'chanel-allure-homme-sport',
+            name: 'Allure Homme Sport',
+            brand: 'Chanel',
+            description: 'A fresh sporty woody scent with orange, sea notes, aldehydes, pepper, tonka bean and white musk.',
+            price: 130.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['fresh', 'energetic', 'sporty']),
+            seasonal_indicators: JSON.stringify(['spring', 'summer'])
+        },
+        {
+            id: 'chanel-bleu-de-chanel',
+            name: 'Bleu de Chanel',
+            brand: 'Chanel',
+            description: 'A refined blue woody aromatic with grapefruit, lemon, mint, ginger, incense and sandalwood.',
+            price: 140.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['sophisticated', 'fresh', 'versatile']),
+            seasonal_indicators: JSON.stringify(['spring', 'summer', 'fall'])
+        },
+        {
+            id: 'louis-vuitton-imagination',
+            name: 'Imagination',
+            brand: 'Louis Vuitton',
+            description: 'A sparkling citrus aromatic with bergamot, citron, ginger, black tea, ambroxan and warm woods.',
+            price: 280.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['fresh', 'refined', 'clean']),
+            seasonal_indicators: JSON.stringify(['spring', 'summer'])
+        },
+        {
+            id: 'ralph-lauren-polo-blue',
+            name: 'Polo Blue',
+            brand: 'Ralph Lauren',
+            description: 'A crisp aquatic aromatic with melon, cucumber, sage, geranium, suede, musk and wood notes.',
+            price: 95.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['fresh', 'clean', 'casual']),
+            seasonal_indicators: JSON.stringify(['spring', 'summer'])
+        },
+        {
+            id: 'armani-acqua-di-gio-profondo',
+            name: 'Acqua di Giò Profondo',
+            brand: 'Giorgio Armani',
+            description: 'A deep aquatic aromatic with marine notes, bergamot, mandarin, rosemary, cypress and patchouli.',
+            price: 120.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['fresh', 'intense', 'aquatic']),
+            seasonal_indicators: JSON.stringify(['spring', 'summer'])
+        },
+        {
+            id: 'dior-sauvage-elixir',
+            name: 'Sauvage Elixir',
+            brand: 'Dior',
+            description: 'An intense aromatic fougere with grapefruit, cinnamon, nutmeg, lavender, sandalwood, licorice and tonka bean.',
+            price: 160.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['bold', 'intense', 'powerful']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'hugo-boss-bottled',
+            name: 'Boss Bottled',
+            brand: 'Hugo Boss',
+            description: 'A warm oriental woody with apple, plum, cinnamon, mahogany, vanilla and sandalwood.',
+            price: 85.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['masculine', 'classic', 'elegant']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'bvlgari-luminous-night',
+            name: 'Luminous Night',
+            brand: 'Bvlgari',
+            description: 'A sparkling citrus woody with neroli, white tobacco, warm spices, amber and vetiver.',
+            price: 130.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['bright', 'elegant', 'warm']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'valentino-donna',
+            name: 'Valentino Donna',
+            brand: 'Valentino',
+            description: 'An elegant floral amber with rose, iris, bergamot, orange blossom, vanilla, patchouli and leather.',
+            price: 110.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['feminine', 'elegant', 'sensual']),
+            seasonal_indicators: JSON.stringify(['spring', 'fall'])
+        },
+        {
+            id: 'paco-rabanne-olympea',
+            name: 'Olympéa',
+            brand: 'Paco Rabanne',
+            description: 'A sensual salty vanilla floral with mandarin, jasmine, salt flower, vanilla and cashmeran.',
+            price: 100.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['sensual', 'glamorous', 'warm']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'viktor-rolf-flowerbomb',
+            name: 'Flowerbomb',
+            brand: 'Viktor & Rolf',
+            description: 'An explosive floral bouquet of jasmine, rose, freesia, orchid and patchouli over warm amber.',
+            price: 130.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['feminine', 'romantic', 'bold']),
+            seasonal_indicators: JSON.stringify(['spring', 'fall'])
+        },
+        {
+            id: 'kilian-love-dont-be-shy',
+            name: 'Love Don\'t Be Shy',
+            brand: 'Kilian',
+            description: 'A sugary oriental of orange blossom, neroli, rose, marshmallow, caramel and vanilla musk.',
+            price: 250.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['sweet', 'romantic', 'addictive']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'bdk-gris-charnel',
+            name: 'Gris Charnel',
+            brand: 'BDK Parfums',
+            description: 'A creamy spicy woody with cardamom, fig, sandalwood, iris, tonka bean and vanilla.',
+            price: 180.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['elegant', 'creamy', 'sophisticated']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'lattafa-kingdom',
+            name: 'Kingdom',
+            brand: 'Lattafa',
+            description: 'A bold oriental with saffron, lavender, tobacco, amber and vanilla for an addictive warm drydown.',
+            price: 40.00,
+            category: 'affordable',
+            mood_indicators: JSON.stringify(['bold', 'warm', 'oriental']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'bvlgari-man-in-black',
+            name: 'Man in Black',
+            brand: 'Bvlgari',
+            description: 'A rich rum leather fragrance with spices, tuberose, tonka bean and benzoin.',
+            price: 120.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['mysterious', 'sensual', 'elegant']),
+            seasonal_indicators: JSON.stringify(['fall', 'winter'])
+        },
+        {
+            id: 'mugler-alien-goddess',
+            name: 'Alien Goddess',
+            brand: 'Mugler',
+            description: 'A sun-drenched amber floral with bergamot, coconut water, frangipani, jasmine sambac and warm benzoin.',
+            price: 110.00,
+            category: 'luxury',
+            mood_indicators: JSON.stringify(['radiant', 'feminine', 'warm']),
+            seasonal_indicators: JSON.stringify(['spring', 'summer'])
         }
     ];
 

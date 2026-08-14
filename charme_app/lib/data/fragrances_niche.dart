@@ -684,6 +684,19 @@ final List<Fragrance> nicheFragrances = [
     available: false,
   ),
 
+  Fragrance(
+    name: 'Velvet Fantasy',
+    brand: 'Montale',
+    family: 'Floral Oriental',
+    description: 'Sun-warmed fruits and citruses tumbling into violet and rose, dusted with white musk, incense and amber — Montale plush velveteen daydream.',
+    ingredients: ['Fruity Notes', 'Citruses', 'Solar Notes', 'Violet', 'Rose', 'White Musk', 'Incense', 'Amber'],
+    year: 2020,
+    perfumer: '',
+    concentration: 'EDP',
+    sizes: {'50ml': 120.00, '100ml': 175.00},
+    available: false,
+  ),
+
 
   // ═══════════════════════════════════════════
   // ATELIER COLOGNE
@@ -876,6 +889,18 @@ final List<Fragrance> nicheFragrances = [
     sizes: {'50ml': 220.00},
     available: false,
   ),
+  Fragrance(
+    name: 'Megamare',
+    brand: 'Orto Parisi',
+    family: 'Aquatic Woody',
+    description: 'An oceanic bomb of salt and ambergris that smells like the open sea in a thunderstorm — Gualtieri\'s most colossal aquatic.',
+    ingredients: ['Sea Salt', 'Marine Notes', 'Ambergris', 'Amber', 'Woody Notes'],
+    year: 2019,
+    perfumer: 'Alessandro Gualtieri',
+    concentration: 'Extrait',
+    sizes: {'50ml': 220.00},
+    available: true,
+  ),
 
 
   Fragrance(
@@ -898,6 +923,18 @@ final List<Fragrance> nicheFragrances = [
     ingredients: ['Tropical Fruits', 'Green Apple', 'Violet', 'Bergamot', 'Caramel', 'Balsamic Notes', 'Vanilla', 'Rose', 'Geranium', 'Leather', 'Oud', 'Cashmere Wood', 'Amber', 'Guaiac Wood', 'Sandalwood', 'Moss', 'Musk'],
     year: 2024,
     perfumer: 'Patrick Müller',
+    concentration: 'EDP',
+    sizes: {'50ml': 130.00, '100ml': 180.00},
+    available: false,
+  ),
+  Fragrance(
+    name: 'Dahab',
+    brand: 'Kajal',
+    family: 'Fruity Amber',
+    description: 'Kajal\'s golden amber — mandarin and jasmine glazed with honey and caramel over vanilla, oud and sandalwood, Cairo gilded at dusk.',
+    ingredients: ['Mandarin', 'Saffron', 'Jasmine', 'Honey', 'Caramel', 'Vanilla', 'Oud', 'Sandalwood', 'Amber', 'Musk'],
+    year: 2015,
+    perfumer: '',
     concentration: 'EDP',
     sizes: {'50ml': 130.00, '100ml': 180.00},
     available: false,
@@ -1129,6 +1166,18 @@ final List<Fragrance> nicheFragrances = [
     sizes: {'50ml': 165.00, '100ml': 230.00},
     available: true,
   ),
+  Fragrance(
+    name: 'Opera',
+    brand: 'Sospiro',
+    family: 'Oriental Spicy',
+    description: 'A grand floriental overture — saffron and rose soaring over amber with vanilla, sandalwood and musk, the sister house at full crescendo.',
+    ingredients: ['Saffron', 'Rose', 'Nutmeg', 'Amber', 'Vanilla', 'Sandalwood', 'Musk'],
+    year: 2015,
+    perfumer: 'Chris Maurice',
+    concentration: 'EDP',
+    sizes: {'50ml': 165.00, '100ml': 230.00},
+    available: true,
+  ),
   // GISADA
   Fragrance(
     name: 'Ambassador',
@@ -1198,6 +1247,22 @@ final List<Fragrance> nicheFragrances = [
     perfumer: 'Rosendo Mateu',
     concentration: 'Extrait de Parfum',
     sizes: {'100ml': 240.00},
+    available: true,
+  ),
+
+  // ═══════════════════════════════════════════
+  // BDK PARFUMS
+  // ═══════════════════════════════════════════
+  Fragrance(
+    name: 'Gris Charnel',
+    brand: 'BDK Parfums',
+    family: 'Woody Spicy',
+    description: 'A cashmere-and-tea embrace, fig and black currant unfurling over sandalwood, iris and tonka — the scent of a silk scarf in autumn rain.',
+    ingredients: ['Bergamot', 'Cardamom', 'Fig', 'Black Currant', 'Tea', 'Iris', 'Sandalwood', 'Tonka Bean', 'Vetiver'],
+    year: 2019,
+    perfumer: 'Mathilde Bijaoui',
+    concentration: 'EDP',
+    sizes: {'50ml': 155.00, '100ml': 220.00},
     available: true,
   ),
 ];
