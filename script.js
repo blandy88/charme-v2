@@ -2778,25 +2778,15 @@ function updateColors() {
       e.stopPropagation();
 
       const selectedLang = this.getAttribute("data-lang");
-      const selectedCode = this.getAttribute("data-code");
-
-      // Update current language display
-      const selectedFlagSvg = this.querySelector(".flag svg").cloneNode(true);
-      selectedFlagSvg.setAttribute("width", "20");
-      selectedFlagSvg.setAttribute("height", "14");
-
-      currentLang.querySelector(".flag").innerHTML = "";
-      currentLang.querySelector(".flag").appendChild(selectedFlagSvg);
-      currentLang.querySelector(".lang-code").textContent = selectedCode;
-
-      // Update HTML lang attribute
-      document.documentElement.setAttribute("lang", selectedLang);
 
       // Close dropdown
       languageSelector.classList.remove("active");
       languageDropdown.classList.remove("active");
 
-      // You can add language switching logic here
+      // Apply the language (updates flag, <html lang>, page text, persistence)
+      if (window.I18N) {
+        I18N.applyLanguage(selectedLang);
+      }
       console.log("Language changed to:", selectedLang);
     });
   });
