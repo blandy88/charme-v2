@@ -758,76 +758,65 @@ class IngredientFragranceFinder {
     resultsGrid.innerHTML = matches.map((match, index) => {
       const safeImage = this.escapeHtml(this.fragranceImage(match.profile, match.fragrance));
       const safeName = this.escapeHtml(match.fragrance);
+      const brand = match.profile.brand ? `by ${match.profile.brand}` : "";
+      const matchedIngredients = match.matchedIngredients || [];
+      const pills = matchedIngredients
+        .slice(0, 5)
+        .map(
+          (ingredient) => `
+            <span class="ingredient-pill matched">
+              <span class="ingredient-name">${this.escapeHtml(ingredient)}</span>
+              <span class="match-indicator">✓</span>
+            </span>
+          `
+        )
+        .join("");
+      const morePills =
+        matchedIngredients.length > 5
+          ? `<span class="ingredient-pill more">+${matchedIngredients.length - 5}</span>`
+          : "";
+      const description = match.profile.description
+        ? `<div class="result-description"><p>${match.profile.description}</p></div>`
+        : "";
+      const notes =
+        pills || morePills
+          ? `<div class="result-ingredients">
+              <h5>Compatible notes</h5>
+              <div class="ingredient-pills">${pills}${morePills}</div>
+            </div>`
+          : "";
       return `
-        <div class="result-card" data-fragrance="${match.fragrance}" style="animation-delay: ${index * 100}ms">
+        <div class="result-card" data-fragrance="${match.fragrance}" style="animation-delay: ${Math.min(index, 12) * 40}ms">
           <div class="result-card-header">
             <div class="result-card-image">
               <img class="fragrance-match-image" src="${safeImage}" alt="${safeName} bottle" loading="lazy" decoding="async">
             </div>
             <div class="result-info">
               <div class="result-header-top">
-                <h4 class="result-name">${match.fragrance}</h4>
+                <h4 class="result-name">${safeName}</h4>
                 <div class="result-badges">
                   <div class="result-match-badge">
                     <svg class="match-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
-                    ${match.percentage}% Match
-                  </div>
-                  <div class="availability-badge ${match.profile.available ? "available" : "not-available"}">
-                    ${match.profile.available ? "✓ Available" : "✗ Not Available"}
+                    ${match.percentage}%
                   </div>
                 </div>
               </div>
-              <p class="result-brand">by ${match.profile.brand}</p>
-              <div class="match-quality">
-                <div class="quality-bar"><div class="quality-fill" style="width: ${match.percentage}%"></div></div>
-                <span class="quality-text">${match.percentage >= 90 ? "Perfect Match" : match.percentage >= 75 ? "Excellent Match" : match.percentage >= 60 ? "Good Match" : "Fair Match"}</span>
-              </div>
+              ${brand ? `<p class="result-brand">${brand}</p>` : ""}
             </div>
           </div>
-          <div class="result-description"><p>${match.profile.description}</p></div>
-          <div class="result-ingredients">
-            <h5>
-              <svg class="ingredients-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="3"/>
-                <circle cx="6" cy="6" r="2"/>
-                <circle cx="18" cy="6" r="2"/>
-                <circle cx="6" cy="18" r="2"/>
-                <circle cx="18" cy="18" r="2"/>
-              </svg>
-              Ingredients Breakdown
-            </h5>
-            <div class="ingredient-pills">
-              ${match.profile.ingredients.map((ingredient) => {
-                const icon = window.NoteImageResolver
-                  ? `<img class="note-real-image" src="${window.NoteImageResolver.imageFor(ingredient)}" alt="${ingredient}" loading="lazy" decoding="async">`
-                  : this.ingredientIcons[ingredient] || "";
-                const isMatched = match.matchedIngredients.includes(ingredient);
-                return `
-                  <span class="ingredient-pill ${isMatched ? "matched" : ""}">
-                    <span class="ingredient-icon">${icon}</span>
-                    <span class="ingredient-name">${ingredient}</span>
-                    ${isMatched ? '<span class="match-indicator">✓</span>' : ""}
-                  </span>
-                `;
-              }).join("")}
-            </div>
-            <div class="ingredient-stats">
-              <div class="stat-item"><span class="stat-number">${match.matchedIngredients.length}</span><span class="stat-label">Matched</span></div>
-              <div class="stat-item"><span class="stat-number">${match.profile.ingredients.length}</span><span class="stat-label">Total</span></div>
-              <div class="stat-item"><span class="stat-number">${Math.round((match.matchedIngredients.length / match.profile.ingredients.length) * 100)}%</span><span class="stat-label">Coverage</span></div>
-            </div>
-          </div>
+          ${description}
+          ${notes}
           <div class="result-actions">
             <button class="view-fragrance-btn primary" data-fragrance="${match.fragrance}">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>
               </svg>
-              View Details
+              View
             </button>
-            <button class="favorite-btn" data-fragrance="${match.fragrance}">
+            <button class="favorite-btn" data-fragrance="${match.fragrance}" title="Add to favourites">
               <div class="favorite-icon">
                 <svg class="heart-outline" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -836,9 +825,8 @@ class IngredientFragranceFinder {
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
               </div>
-              <span class="favorite-text">ADD TO FAVOURITES</span>
             </button>
-            <button class="share-btn" data-fragrance="${match.fragrance}">
+            <button class="share-btn" data-fragrance="${match.fragrance}" title="Share">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="18" cy="5" r="3"/>
                 <circle cx="6" cy="12" r="3"/>

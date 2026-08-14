@@ -247,7 +247,30 @@ class FragranceAPIService {
       this.make("Madawi", "Arabian Oud", "Floral Oriental", "women", "", ["turkish rose", "jasmine", "vanilla", "musk", "amber", "sandalwood", "oud"], 2016, "Unknown", "Turkish rose and jasmine cascading over vanilla-oud warmth, a bridal shower of petals on warm Arabian stone."),
     ];
 
-    return Object.fromEntries(fragrances.map((fragrance) => [fragrance.name, fragrance]));
+    const database = Object.fromEntries(fragrances.map((fragrance) => [fragrance.name, fragrance]));
+
+    const catalog = (typeof window !== "undefined" && window.FRAGRANCE_CATALOG_DATA) || [];
+    catalog.forEach((entry) => {
+      if (!entry || !entry.name || database[entry.name]) return;
+      database[entry.name] = {
+        name: entry.name,
+        brand: entry.brand || "",
+        family: entry.family || "",
+        audience: entry.audience || "",
+        image: entry.image || "",
+        description: entry.description || "",
+        ingredients: entry.ingredients || [],
+        year: entry.year || "",
+        perfumer: entry.perfumer || "",
+        concentration: entry.concentration || "",
+        sizes: (entry.sizes || [])
+          .map((size) => (typeof size === "string" ? size : size && size.size))
+          .filter(Boolean),
+        available: entry.available !== false,
+      };
+    });
+
+    return database;
   }
 
   make(name, brand, family, audience, image, ingredients, year, perfumer, description) {
