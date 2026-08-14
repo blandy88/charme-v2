@@ -503,7 +503,7 @@ body {
     left: 0;
     width: 100%;
     height: var(--marquee-height);
-    background: transparent;
+    background: #000000;
     color: var(--color-gold);
     border-bottom: none;
     z-index: var(--z-marquee);
