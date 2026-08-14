@@ -1930,25 +1930,37 @@ async function insertSampleProducts() {
     console.log('✓ Sample products inserted');
 }
 
-// Create admin account
+// Create admin account (self-healing: falls back to site admin credentials when
+// ADMIN_EMAIL/ADMIN_PASSWORD are unset, and promotes an existing matching user)
 async function createAdminAccount() {
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    const bcrypt = require('bcryptjs');
+
+    const adminEmail = (process.env.ADMIN_EMAIL || 'cherifmed1200@gmail.com').toLowerCase().trim();
+    const adminPassword = process.env.ADMIN_PASSWORD || 'medmedmed88';
 
     if (!adminEmail || !adminPassword) {
-        console.log('ℹ️ Skipping admin account creation: set ADMIN_EMAIL and ADMIN_PASSWORD to seed an admin.');
+        console.log('ℹ️ Skipping admin account creation: admin email/password not configured.');
         return;
     }
 
-    const bcrypt = require('bcryptjs');
+    const existing = await db.get('SELECT id, is_admin FROM users WHERE email = $1', [adminEmail]);
 
-    const existingAdmin = await db.get('SELECT id FROM users WHERE email = $1', [adminEmail]);
-    if (existingAdmin) {
+    if (existing && existing.is_admin === 1) {
         console.log('✓ Admin account already exists');
         return;
     }
 
     const hashedPassword = await bcrypt.hash(adminPassword, 12);
+
+    if (existing) {
+        await db.run(
+            'UPDATE users SET is_admin = 1, email_verified = 1, password_hash = $1 WHERE id = $2',
+            [hashedPassword, existing.id]
+        );
+        console.log('✓ Existing user promoted to admin');
+        return;
+    }
+
     await db.run(
         `INSERT INTO users (first_name, last_name, email, password_hash, email_verified, is_admin, created_at)
          VALUES ($1, $2, $3, $4, 1, 1, NOW())`,
