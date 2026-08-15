@@ -32,7 +32,7 @@
     width: min(100%, 420px) !important;
     max-width: 420px !important;
     max-height: 480px !important;
-    height: auto !important;
+    height: 480px !important;
     object-fit: contain !important;
     justify-self: center !important;
     align-self: center !important;
@@ -239,6 +239,7 @@
     .perfume-top-row > [class$="-product-section"] img[class$="-image"],
     .perfume-top-row > [class$="-product-section"] img[class*="-image"] {
         max-width: min(300px, 86vw) !important;
+        max-height: 400px !important;
     }
 
     .perfume-top-row .note-image-icon {

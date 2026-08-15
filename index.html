@@ -14,7 +14,7 @@
         <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" /></noscript>
 
         <!-- Stylesheets -->
-        <link rel="stylesheet" href="styles.css?v=20260825" />
+        <link rel="stylesheet" href="styles.css?v=20260849" />
         <!-- Perfume profile CSS: loaded non-render-blocking via media trick -->
         
         
@@ -75,13 +75,13 @@
         
         
         
-        <link rel="stylesheet" href="css/fragrance-layout-normalize.css?v=20260814" />
+        <link rel="stylesheet" href="css/fragrance-layout-normalize.css?v=20260850" />
         <link rel="stylesheet" href="css/combined-profiles.css?v=20260814" media="print" onload="this.media='all'" />
 
         <!-- Scripts (deferred for performance) -->
-        <script src="js/fragrance-api-service.js?v=20260817" defer></script>
+        <script src="js/fragrance-api-service.js?v=20260818" defer></script>
         <script src="js/ai-fragrance-finder.js?v=20260814" defer></script>
-        <script src="js/note-image-resolver.js?v=20260814" defer></script>
+        <script src="js/note-image-resolver.js?v=20260815" defer></script>
         <script src="js/ingredient-finder.js?v=20260817" defer></script>
         <script src="js/smooth-scroll.js?v=20260814" defer></script>
         <script src="js/fragrance-catalog-data.js?v=20260810" defer></script>
@@ -165,6 +165,17 @@
         
         
     
+        <script>
+            (function () {
+                try {
+                    var t = localStorage.getItem("charme-theme");
+                    if (t !== "light" && t !== "night") t = "night";
+                    document.documentElement.setAttribute("data-theme", t);
+                } catch (e) {
+                    document.documentElement.setAttribute("data-theme", "night");
+                }
+            })();
+        </script>
     </head>
     <body>
         <!-- Top Marquee Announcement -->
@@ -289,6 +300,103 @@
                     </div>
                 </div>
                 <div class="nav-right">
+                    <!-- Theme Toggle -->
+                    <button
+                        class="theme-toggle"
+                        id="themeToggle"
+                        type="button"
+                        aria-label="Toggle light / night theme"
+                        title="Toggle light / night theme"
+                    >
+                        <svg
+                            class="theme-icon theme-icon-sun"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M12 2v2"></path>
+                            <path d="M12 20v2"></path>
+                            <path d="m4.93 4.93 1.41 1.41"></path>
+                            <path d="m17.66 17.66 1.41 1.41"></path>
+                            <path d="M2 12h2"></path>
+                            <path d="M20 12h2"></path>
+                            <path d="m6.34 17.66-1.41 1.41"></path>
+                            <path d="m19.07 4.93-1.41 1.41"></path>
+                        </svg>
+                        <svg
+                            class="theme-icon theme-icon-moon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                        </svg>
+                    </button>
+                    <script>
+                        (function () {
+                            function applyTheme(theme, persist) {
+                                document.documentElement.setAttribute(
+                                    "data-theme",
+                                    theme
+                                );
+                                if (persist) {
+                                    try {
+                                        localStorage.setItem(
+                                            "charme-theme",
+                                            theme
+                                        );
+                                    } catch (e) {}
+                                }
+                                try {
+                                    if (
+                                        typeof window.updateScrollBackgroundAndTheme ===
+                                        "function"
+                                    ) {
+                                        window.updateScrollBackgroundAndTheme();
+                                    }
+                                } catch (e) {}
+                                try {
+                                    if (window.themeManager) {
+                                        window.themeManager.lastAppliedTheme = null;
+                                    }
+                                } catch (e) {}
+                            }
+                            var btn = document.getElementById("themeToggle");
+                            if (btn) {
+                                btn.addEventListener("click", function () {
+                                    var next =
+                                        document.documentElement.getAttribute(
+                                            "data-theme"
+                                        ) === "light"
+                                            ? "night"
+                                            : "light";
+                                    applyTheme(next, true);
+                                    btn.blur();
+                                });
+                            }
+                            window.addEventListener("storage", function (e) {
+                                if (e.key === "charme-theme" && e.newValue) {
+                                    document.documentElement.setAttribute(
+                                        "data-theme",
+                                        e.newValue
+                                    );
+                                    try {
+                                        if (
+                                            typeof window.updateScrollBackgroundAndTheme ===
+                                            "function"
+                                        ) {
+                                            window.updateScrollBackgroundAndTheme();
+                                        }
+                                    } catch (err) {}
+                                }
+                            });
+                        })();
+                    </script>
                     <!-- News Icon -->
                     <div
                         class="navbar-news-icon"
@@ -4179,12 +4287,21 @@
                 <!-- Hero content removed — full-bleed image background -->
             </section>
 
+            <!-- Perfume Grid View (Grid mode — all fragrances) -->
+            <div class="perfume-grid-view" id="perfumeGridView" aria-hidden="true">
+                <div class="perfume-grid-header">
+                    <h2 class="perfume-grid-title">All Fragrances</h2>
+                    <span class="perfume-grid-count" id="perfumeGridCount"></span>
+                </div>
+                <div class="perfume-grid" id="perfumeGrid"></div>
+            </div>
+
             <!-- ========== Aventus Absolu ========== -->
 <section class="content aventusabsolu-section" id="aventusabsolu">
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="aventusabsolu.png" alt="Aventus Absolu Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.106624.jpg" alt="Aventus Absolu Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Creed</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Aventus Absolu</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">135</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -4211,7 +4328,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="preciousoud.svg" alt="Oud Precieux Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.77460.jpg" alt="Oud Precieux Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Creed</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Oud Precieux</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">120</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -4242,7 +4359,7 @@
                     <!-- Eros Image and Product Info -->
                     <div class="versaceeros-product-section">
                         <img
-                            src="versace-eros.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.16657.jpg"
                             alt="Eros Perfume"
                             class="versaceeros-image"
                          loading="lazy" decoding="async"/>
@@ -4648,7 +4765,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="hypnoticamber.png" alt="Hypnotic Amber Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.101316.jpg" alt="Hypnotic Amber Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Viktor & Rolf</h1><h2 class="brand-location">AMSTERDAM</h2><h3 class="product-name">Hypnotic Amber</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">110</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -4676,7 +4793,7 @@
                     <div class="perfume-top-row">
                     <!-- Product Section -->
                     <div class="bleudechanel-product-section">
-                        <img src="bleudechanel.png" alt="Bleu de Chanel" class="bleudechanel-image"  loading="lazy" decoding="async"/>
+                        <img src="https://fimgs.net/mdimg/perfume/375x500.9099.jpg" alt="Bleu de Chanel" class="bleudechanel-image"  loading="lazy" decoding="async"/>
                         <div class="product-info-section">
                             <div class="product-header-row">
                                 <div class="product-info">
@@ -5135,7 +5252,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="amberoud.svg" alt="Amber Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.14206.jpg" alt="Amber Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Tom Ford</h1><h2 class="brand-location">NEW YORK</h2><h3 class="product-name">Amber Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">140</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5162,7 +5279,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="goldenoud.png" alt="Golden Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.64278.jpg" alt="Golden Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Maison Francis Kurkdjian</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Golden Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">150</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5189,7 +5306,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="smokeroyaloud.svg" alt="Smoke & Royal Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.12317.jpg" alt="Smoke & Royal Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Creed</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Smoke & Royal Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">145</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5216,7 +5333,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="arabianoud.png" alt="Arabian Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.74285.jpg" alt="Arabian Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Amouage</h1><h2 class="brand-location">MUSCAT</h2><h3 class="product-name">Arabian Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">130</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5243,7 +5360,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="muskrose.png" alt="Musk Rose Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.109276.jpg" alt="Musk Rose Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Byredo</h1><h2 class="brand-location">STOCKHOLM</h2><h3 class="product-name">Musk Rose</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">100</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5270,7 +5387,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="tabacoroyal.png" alt="Tabac Royal Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.11905.jpg" alt="Tabac Royal Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Santa Maria Novella</h1><h2 class="brand-location">FLORENCE</h2><h3 class="product-name">Tabac Royal</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">115</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5297,7 +5414,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="mysteriousoud.png" alt="Mysterious Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.50940.jpg" alt="Mysterious Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Amouage</h1><h2 class="brand-location">MUSCAT</h2><h3 class="product-name">Mysterious Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">125</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5324,7 +5441,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="heavenlyoud.png" alt="Heavenly Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.131374.jpg" alt="Heavenly Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Roja Parfums</h1><h2 class="brand-location">LONDON</h2><h3 class="product-name">Heavenly Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">155</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5351,7 +5468,7 @@
 <div class="assadelixir-main-container assadelixir-theme">
 <div class="perfume-top-row">
 <div class="assadelixir-product-section">
-<img src="lattafa-assad-elixir.png" alt="Assad Elixir Perfume" class="assadelixir-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.117616.jpg" alt="Assad Elixir Perfume" class="assadelixir-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Lattafa</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Assad Elixir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5378,7 +5495,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="luxuryoud.png" alt="Luxury Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.77482.jpg" alt="Luxury Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Dior</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Luxury Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">148</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5405,7 +5522,7 @@
 <div class="phantominred-main-container phantominred-theme">
 <div class="perfume-top-row">
 <div class="phantominred-product-section">
-<img src="initio-phantom-in-red.png" alt="Phantom in Red Perfume" class="phantominred-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.120953.jpg" alt="Phantom in Red Perfume" class="phantominred-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Initio</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Phantom in Red</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5432,7 +5549,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="charmedoud.svg" alt="Charmed Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.16216.jpg" alt="Charmed Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Parfumerie Charme</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Charmed Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">105</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5463,7 +5580,7 @@
                     <!-- Bad Boy Image and Product Info -->
                     <div class="chbadboy-product-section">
                         <img
-                            src="carolina-herrera-bad-boy.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.55449.jpg"
                             alt="Bad Boy Perfume"
                             class="chbadboy-image"
                          loading="lazy" decoding="async"/>
@@ -5730,7 +5847,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="emperorsoud.svg" alt="Emperor's Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.99137.jpg" alt="Emperor's Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Parfums de Marly</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Emperor's Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">160</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5757,7 +5874,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="majesticoud.svg" alt="Majestic Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.27348.jpg" alt="Majestic Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Tom Ford</h1><h2 class="brand-location">NEW YORK</h2><h3 class="product-name">Majestic Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">138</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -5788,7 +5905,7 @@
                     <!-- Gentleman EDP Image and Product Info -->
                     <div class="gentleman-product-section">
                         <img
-                            src="givenchy-gentleman.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.48476.jpg"
                             alt="Gentleman EDP Perfume"
                             class="gentleman-image"
                          loading="lazy" decoding="async"/>
@@ -6055,7 +6172,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="radiantoud.svg" alt="Radiant Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.100725.jpg" alt="Radiant Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Creed</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Radiant Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">142</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6082,7 +6199,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="sensualoud.svg" alt="Sensual Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.38414.jpg" alt="Sensual Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Guerlain</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Sensual Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">122</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6109,7 +6226,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="timelessoud.svg" alt="Timeless Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.47739.jpg" alt="Timeless Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Chanel</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Timeless Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">150</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6140,7 +6257,7 @@
                     <!-- Guilty Pour Homme Image and Product Info -->
                     <div class="gucciguilty-product-section">
                         <img
-                            src="gucci-guilty.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.11037.jpg"
                             alt="Guilty Pour Homme Perfume"
                             class="gucciguilty-image"
                          loading="lazy" decoding="async"/>
@@ -6406,7 +6523,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="twilightoud.svg" alt="Twilight Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.10757.jpg" alt="Twilight Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Byredo</h1><h2 class="brand-location">STOCKHOLM</h2><h3 class="product-name">Twilight Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">108</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6433,7 +6550,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="velvetoud.svg" alt="Velvet Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.60262.jpg" alt="Velvet Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Tom Ford</h1><h2 class="brand-location">NEW YORK</h2><h3 class="product-name">Velvet Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">132</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6460,7 +6577,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="moonlightoud.svg" alt="Moonlight Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.125753.jpg" alt="Moonlight Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Amouage</h1><h2 class="brand-location">MUSCAT</h2><h3 class="product-name">Moonlight Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">128</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6487,7 +6604,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="midnightoud.svg" alt="Midnight Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.66534.jpg" alt="Midnight Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Initio</h1><h2 class="brand-location">DUBAI</h2><h3 class="product-name">Midnight Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">155</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6518,7 +6635,7 @@
                     <!-- Invictus Image and Product Info -->
                     <div class="invictus-product-section">
                         <img
-                            src="paco-rabanne-invictus.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.18471.jpg"
                             alt="Invictus Perfume"
                             class="invictus-image"
                          loading="lazy" decoding="async"/>
@@ -6924,7 +7041,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="sultanoud.svg" alt="Sultan Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.71108.jpg" alt="Sultan Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Amouage</h1><h2 class="brand-location">MUSCAT</h2><h3 class="product-name">Sultan Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">168</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6951,7 +7068,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="regaloud.svg" alt="Regal Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.104806.jpg" alt="Regal Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Roja Parfums</h1><h2 class="brand-location">LONDON</h2><h3 class="product-name">Regal Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">158</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -6982,7 +7099,7 @@
                     <!-- Homme Intense Image and Product Info -->
                     <div class="diorhomme-product-section">
                         <img
-                            src="dior-homme-intense.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.13016.jpg"
                             alt="Homme Intense Perfume"
                             class="diorhomme-image"
                          loading="lazy" decoding="async"/>
@@ -7249,7 +7366,7 @@
 <div class="lightblue-main-container lightblue-theme">
 <div class="perfume-top-row">
 <div class="lightblue-product-section">
-<img src="dg-light-blue.png" alt="Light Blue Perfume" class="lightblue-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.1068.jpg" alt="Light Blue Perfume" class="lightblue-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Dolce & Gabbana</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Light Blue</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -7280,7 +7397,7 @@
                     <!-- Y Eau de Parfum Image and Product Info -->
                     <div class="yvsl-product-section">
                         <img
-                            src="ysl-y-edp.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.50757.jpg"
                             alt="Y Eau de Parfum Perfume"
                             class="yvsl-image"
                          loading="lazy" decoding="async"/>
@@ -7690,7 +7807,7 @@
                     <!-- Déclaration d'un Soir Image and Product Info -->
                     <div class="declarationcartier-product-section">
                         <img
-                            src="cartier-declaration.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.15462.jpg"
                             alt="Déclaration d'un Soir Perfume"
                             class="declarationcartier-image"
                          loading="lazy" decoding="async"/>
@@ -7961,7 +8078,7 @@
                     <!-- K by Dolce & Gabbana Image and Product Info -->
                     <div class="kbyDG-product-section">
                         <img
-                            src="k-by-dg.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.56358.jpg"
                             alt="K by Dolce & Gabbana Perfume"
                             class="kbyDG-image"
                          loading="lazy" decoding="async"/>
@@ -8232,7 +8349,7 @@
                     <!-- The One EDP Image and Product Info -->
                     <div class="dy-product-section">
                         <img
-                            src="dg-the-one-edp.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.31909.jpg"
                             alt="The One EDP Perfume"
                             class="dy-image"
                          loading="lazy" decoding="async"/>
@@ -8634,7 +8751,7 @@
      
 <section class="content">
                 <img
-                    src="layton.png"
+                    src="https://fimgs.net/mdimg/perfume/375x500.39314.jpg"
                     alt="Layton Perfume"
                     class="layton-image"
                  decoding="async"/>
@@ -9286,8 +9403,8 @@
                             <div class="price-indicators">
                                 <div class="price-scale">
                                     <div class="price-labels">
-                                        <span>$$$$$</span>
                                         <span>$$$</span>
+                                        <span>$$</span>
                                         <span>$</span>
                                     </div>
                                 </div>
@@ -9673,7 +9790,7 @@
                 <div class="haltane-section-container">
                     <!-- Haltane Image -->
                     <img
-                        src="haltane.png"
+                        src="https://fimgs.net/mdimg/perfume/375x500.70776.jpg"
                         alt="Haltane Perfume"
                         class="haltane-image"
                      loading="lazy" decoding="async"/>
@@ -10428,8 +10545,8 @@
                             <div class="haltane-price-indicators">
                                 <div class="haltane-price-scale">
                                     <div class="haltane-price-labels">
-                                        <span>$$$$$</span>
                                         <span>$$$</span>
+                                        <span>$$</span>
                                         <span>$</span>
                                     </div>
                                 </div>
@@ -10872,7 +10989,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="bosselixir.png" alt="Boss Elixir Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.84074.jpg" alt="Boss Elixir Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Hugo Boss</h1><h2 class="brand-location">GERMANY</h2><h3 class="product-name">Boss Elixir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">95</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Bold • Spicy • Magnetic</div></div>
@@ -10897,7 +11014,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="coolwater.png" alt="Cool Water Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.508.jpg" alt="Cool Water Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Davidoff</h1><h2 class="brand-location">SWITZERLAND</h2><h3 class="product-name">Cool Water</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">45</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Fresh • Aquatic • Crisp</div></div>
@@ -10922,7 +11039,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="milliongold.png" alt="1 Million Gold Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.95641.jpg" alt="1 Million Gold Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Paco Rabanne</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">1 Million Gold</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">90</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Daring • Golden • Radiant</div></div>
@@ -10947,7 +11064,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="fahrenheit.png" alt="Fahrenheit Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.228.jpg" alt="Fahrenheit Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Dior</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Fahrenheit</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">95</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Iconic • Leathery • Green</div></div>
@@ -10972,7 +11089,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="lacosteblue.svg" alt="Lacoste Bleu Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.132382.jpg" alt="Lacoste Bleu Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Lacoste</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Lacoste Bleu</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">55</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Crisp • Sporty • Elegant</div></div>
@@ -10997,7 +11114,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="cerruti1881.png" alt="Cerruti 1881 Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.327.jpg" alt="Cerruti 1881 Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Cerruti</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Cerruti 1881</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Timeless • Refined • Woody</div></div>
@@ -11022,7 +11139,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="ckone.png" alt="CK One Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.276.jpg" alt="CK One Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Calvin Klein</h1><h2 class="brand-location">NEW YORK</h2><h3 class="product-name">CK One</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">40</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Unisex • Fresh • Effortless</div></div>
@@ -11047,7 +11164,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="kirke.svg" alt="Kirkè Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.32172.jpg" alt="Kirkè Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Tiziana Terenzi</h1><h2 class="brand-location">ITALY</h2><h3 class="product-name">Kirkè</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">120</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Fruity • Rum • Passionate</div></div>
@@ -11072,7 +11189,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="velvetbdk.svg" alt="Velvet Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.68119.jpg" alt="Velvet Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">BDK Parfums</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Velvet</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">110</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Powdery • Plush • Intimate</div></div>
@@ -11097,7 +11214,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="amenfantasm.png" alt="A*Men Fantasm Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.93266.jpg" alt="A*Men Fantasm Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Mugler</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">A*Men Fantasm</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">85</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Gourmand • Dark • Magnetic</div></div>
@@ -11122,7 +11239,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="tuxedo.png" alt="Tuxedo Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.32269.jpg" alt="Tuxedo Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Yves Saint Laurent</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Tuxedo</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">115</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Elegant • Chic • Nightly</div></div>
@@ -11147,7 +11264,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="onemillionroyale.png" alt="1 Million Royal Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.79159.jpg" alt="1 Million Royal Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Paco Rabanne</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">1 Million Royal</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">95</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Rich • Leathery • Sovereign</div></div>
@@ -11172,7 +11289,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="yintensely.png" alt="Y Intensely Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.79243.jpg" alt="Y Intensely Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Yves Saint Laurent</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Y Intensely</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">95</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Modern • Woody • Intense</div></div>
@@ -11197,7 +11314,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="ymenelixir.png" alt="Y Elixir Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.90024.jpg" alt="Y Elixir Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Yves Saint Laurent</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Y Elixir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">110</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Amber • Aromatic • Rich</div></div>
@@ -11222,7 +11339,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="bossintense.png" alt="Boss Intense Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.388.jpg" alt="Boss Intense Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Hugo Boss</h1><h2 class="brand-location">GERMANY</h2><h3 class="product-name">Boss Intense</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">90</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Powerful • Spicy • Warm</div></div>
@@ -11247,7 +11364,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="kouros.png" alt="Kouros Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.735.jpg" alt="Kouros Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Yves Saint Laurent</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Kouros</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">85</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Classic • Bold • Leathery</div></div>
@@ -11272,7 +11389,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="bleuelectrique.png" alt="Bleu Electrique Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.67997.jpg" alt="Bleu Electrique Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Azzaro</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Bleu Electrique</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">85</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Electric • Fresh • Magnetic</div></div>
@@ -11297,7 +11414,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="purexs.png" alt="Pure XS Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.46038.jpg" alt="Pure XS Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Paco Rabanne</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Pure XS</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">85</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Bold • Gourmand • Seductive</div></div>
@@ -11322,7 +11439,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="onemillionelixir.png" alt="1 Million Elixir Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.71708.jpg" alt="1 Million Elixir Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Paco Rabanne</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">1 Million Elixir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">100</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Honeyed • Leather • Regal</div></div>
@@ -11347,7 +11464,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="clubdenuit.png" alt="Club de Nuit Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.27687.jpg" alt="Club de Nuit Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Armaf</h1><h2 class="brand-location">DUBAI</h2><h3 class="product-name">Club de Nuit</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">60</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Smoky • Fruity • Powerful</div></div>
@@ -11372,7 +11489,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="strongerwithyousandalwood.png" alt="Stronger With You Sandalwood Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.102519.jpg" alt="Stronger With You Sandalwood Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Giorgio Armani</h1><h2 class="brand-location">MILAN</h2><h3 class="product-name">Stronger With You Sandalwood</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">100</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Creamy • Warm • Cosy</div></div>
@@ -11397,7 +11514,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="pineapple.png" alt="Pineapple Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.59231.jpg" alt="Pineapple Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Dolce & Gabbana</h1><h2 class="brand-location">MILAN</h2><h3 class="product-name">Pineapple</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">80</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Juicy • Tropical • Radiant</div></div>
@@ -11428,7 +11545,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="dylanbleuintense.svg" alt="Dylan Bleu Intense Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.40031.jpg" alt="Dylan Bleu Intense Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Versace</h1><h2 class="brand-location">ITALY</h2><h3 class="product-name">Dylan Bleu Intense</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">95</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Fresh • Aquatic • Intense</div></div>
@@ -11452,7 +11569,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="nowade.svg" alt="Nowade Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.49753.jpg" alt="Nowade Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Louis Vuitton</h1><h2 class="brand-location">FRANCE</h2><h3 class="product-name">Nowade</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">170</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Leathery • Woody • Refined</div></div>
@@ -11476,7 +11593,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="legendmontblanc.svg" alt="Legend Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.11784.jpg" alt="Legend Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Montblanc</h1><h2 class="brand-location">GERMANY</h2><h3 class="product-name">Legend</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">75</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Aromatic • Fresh • Woody</div></div>
@@ -11500,7 +11617,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="azzarochrome.svg" alt="Chrome Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.788.jpg" alt="Chrome Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Azzaro</h1><h2 class="brand-location">FRANCE</h2><h3 class="product-name">Chrome</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">60</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Aquatic • Fresh • Clean</div></div>
@@ -11524,7 +11641,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="ombrenomade.svg" alt="Ombre Nomade Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.49755.jpg" alt="Ombre Nomade Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Louis Vuitton</h1><h2 class="brand-location">FRANCE</h2><h3 class="product-name">Ombre Nomade</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">175</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Oud • Smoky • Luxurious</div></div>
@@ -11548,7 +11665,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="silvermountain.png" alt="Silver Mountain Water Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.472.jpg" alt="Silver Mountain Water Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Creed</h1><h2 class="brand-location">FRANCE</h2><h3 class="product-name">Silver Mountain Water</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">150</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Alpine • Fresh • Mineral</div></div>
@@ -11572,7 +11689,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="jagwar.svg" alt="Jagwar Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.6810.jpg" alt="Jagwar Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Jaguar</h1><h2 class="brand-location">UNITED KINGDOM</h2><h3 class="product-name">Jagwar</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">55</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Green • Woody • Classic</div></div>
@@ -11596,7 +11713,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="strongerwithyououd.svg" alt="Stronger With You Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.76171.jpg" alt="Stronger With You Oud Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Giorgio Armani</h1><h2 class="brand-location">ITALY</h2><h3 class="product-name">Stronger With You Oud</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">110</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Oud • Amber • Intense</div></div>
@@ -11628,7 +11745,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="delinaexclusif.svg" alt="Delina Exclusif Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.50370.jpg" alt="Delina Exclusif Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Parfums de Marly</h1><h2 class="brand-location">FRANCE</h2><h3 class="product-name">Delina Exclusif</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">155</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Rose • Fruity • Powdery</div></div>
@@ -11652,7 +11769,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="versacevanillerouge.svg" alt="Vanille Rouge Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.57701.jpg" alt="Vanille Rouge Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Versace</h1><h2 class="brand-location">ITALY</h2><h3 class="product-name">Vanille Rouge</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">105</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Vanilla • Warm • Sensual</div></div>
@@ -11676,7 +11793,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="narcoticdelight.svg" alt="Narcotic Delight Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.89368.jpg" alt="Narcotic Delight Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Initio</h1><h2 class="brand-location">UNITED ARAB EMIRATES</h2><h3 class="product-name">Narcotic Delight</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">160</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Creamy • Opulent • Addictive</div></div>
@@ -11700,7 +11817,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="lamar.svg" alt="Lamar Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.62571.jpg" alt="Lamar Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Kajal</h1><h2 class="brand-location">UNITED ARAB EMIRATES</h2><h3 class="product-name">Lamar</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">130</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Citrus • Amber • Fresh</div></div>
@@ -11724,7 +11841,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="dired.svg" alt="Diesel Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.7542.jpg" alt="Diesel Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Diesel</h1><h2 class="brand-location">ITALY</h2><h3 class="product-name">Diesel</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">60</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Urban • Woody • Bold</div></div>
@@ -11748,7 +11865,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="themoon.svg" alt="The Moon Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.35973.jpg" alt="The Moon Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Memo Paris</h1><h2 class="brand-location">FRANCE</h2><h3 class="product-name">The Moon</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">175</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Leathery • Spicy • Sensual</div></div>
@@ -11772,7 +11889,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="sospiroopera.svg" alt="Opera Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.26282.jpg" alt="Opera Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Sospiro</h1><h2 class="brand-location">ITALY</h2><h3 class="product-name">Opera</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">155</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Oud • Rose • Majestic</div></div>
@@ -11796,7 +11913,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="queenofsilk.svg" alt="Queen of Silk Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.89643.jpg" alt="Queen of Silk Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Creed</h1><h2 class="brand-location">FRANCE</h2><h3 class="product-name">Queen of Silk</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">165</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Floral • Fruity • Elegant</div></div>
@@ -11820,7 +11937,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="orza.svg" alt="Orza Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.61873.jpg" alt="Orza Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Tiziana Terenzi</h1><h2 class="brand-location">ITALY</h2><h3 class="product-name">Orza</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">135</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Spicy • Amber • Golden</div></div>
@@ -11844,7 +11961,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="noirkogane.svg" alt="Noir Kogane Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.88628.jpg" alt="Noir Kogane Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Giorgio Armani</h1><h2 class="brand-location">ITALY</h2><h3 class="product-name">Noir Kogane</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">150</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Oud • Dark • Precious</div></div>
@@ -11868,7 +11985,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="grisdior.svg" alt="Gris Dior Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.48387.jpg" alt="Gris Dior Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Dior</h1><h2 class="brand-location">FRANCE</h2><h3 class="product-name">Gris Dior</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">140</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Rose • Woody • Sophisticated</div></div>
@@ -11892,7 +12009,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="kajaldahab.svg" alt="Dahab Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.32266.jpg" alt="Dahab Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Kajal</h1><h2 class="brand-location">UNITED ARAB EMIRATES</h2><h3 class="product-name">Dahab</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">120</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Amber • Spicy • Golden</div></div>
@@ -11915,7 +12032,7 @@
 
 <section class="content pegasus-section" id="pegasus">
                 <img
-                    src="pegasus.png"
+                    src="https://fimgs.net/mdimg/perfume/375x500.16938.jpg"
                     alt="Pegasus Perfume"
                     class="pegasus-image"
                  loading="lazy" decoding="async"/>
@@ -13183,7 +13300,7 @@
                     <!-- Greenly Image and Product Info -->
                     <div class="greenly-product-section">
                         <img
-                            src="GREENLEY.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.62101.jpg"
                             alt="Greenly Perfume"
                             class="greenly-image"
                          loading="lazy" decoding="async"/>
@@ -14050,8 +14167,8 @@
                             <div class="greenly-price-indicators">
                                 <div class="greenly-price-scale">
                                     <div class="greenly-price-labels">
-                                        <span>$$$$$</span>
                                         <span>$$$</span>
+                                        <span>$$</span>
                                         <span>$</span>
                                     </div>
                                 </div>
@@ -14499,7 +14616,7 @@
                     <!-- Baccarat Rouge 540 Image and Product Info -->
                     <div class="baccaratrouge-product-section">
                         <img
-                            src="baccarat-rouge-540.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.33519.jpg"
                             alt="Baccarat Rouge 540 Perfume"
                             class="baccaratrouge-image"
                          loading="lazy" decoding="async"/>
@@ -14909,7 +15026,7 @@
                     <!-- Black Orchid Image and Product Info -->
                     <div class="blackorchid-product-section">
                         <img
-                            src="black-orchid.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.1018.jpg"
                             alt="Black Orchid Perfume"
                             class="blackorchid-image"
                          loading="lazy" decoding="async"/>
@@ -15326,7 +15443,7 @@
                     <!-- Aventus Image and Product Info -->
                     <div class="aventus-product-section">
                         <img
-                            src="aventus.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.9828.jpg"
                             alt="Aventus Perfume"
                             class="aventus-image"
                          loading="lazy" decoding="async"/>
@@ -15757,7 +15874,7 @@
                     <div class="perfume-top-row">
                     <!-- Product Section -->
                     <div class="sauvage-product-section">
-                        <img src="sauvage.png" alt="Sauvage" class="sauvage-image"  loading="lazy" decoding="async"/>
+                        <img src="https://fimgs.net/mdimg/perfume/375x500.31861.jpg" alt="Sauvage" class="sauvage-image"  loading="lazy" decoding="async"/>
                         <div class="product-info-section">
                             <div class="product-header-row">
                                 <div class="product-info">
@@ -16209,7 +16326,7 @@
                     <div class="perfume-top-row">
                     <!-- Product Section -->
                     <div class="tobaccovanille-product-section">
-                        <img src="tobaccovanille.png" alt="Tobacco Vanille" class="tobaccovanille-image"  loading="lazy" decoding="async"/>
+                        <img src="https://fimgs.net/mdimg/perfume/375x500.1825.jpg" alt="Tobacco Vanille" class="tobaccovanille-image"  loading="lazy" decoding="async"/>
                         <div class="product-info-section">
                             <div class="product-header-row">
                                 <div class="product-info">
@@ -16652,7 +16769,7 @@
                     <div class="perfume-top-row">
                     <!-- Product Section -->
                     <div class="oudwood-product-section">
-                        <img src="oudwood.png" alt="Oud Wood" class="oudwood-image"  loading="lazy" decoding="async"/>
+                        <img src="https://fimgs.net/mdimg/perfume/375x500.1826.jpg" alt="Oud Wood" class="oudwood-image"  loading="lazy" decoding="async"/>
                         <div class="product-info-section">
                             <div class="product-header-row">
                                 <div class="product-info">
@@ -17088,7 +17205,7 @@
                     <div class="perfume-top-row">
                     <!-- Product Section -->
                     <div class="lanuit-product-section">
-                        <img src="lanuit.png" alt="La Nuit de L'Homme" class="lanuit-image"  loading="lazy" decoding="async"/>
+                        <img src="https://fimgs.net/mdimg/perfume/375x500.5521.jpg" alt="La Nuit de L'Homme" class="lanuit-image"  loading="lazy" decoding="async"/>
                         <div class="product-info-section">
                             <div class="product-header-row">
                                 <div class="product-info">
@@ -17533,7 +17650,7 @@
                     <div class="perfume-top-row">
                     <!-- Product Section -->
                     <div class="lostcherry-product-section">
-                        <img src="lostcherry.png" alt="Lost Cherry" class="lostcherry-image"  loading="lazy" decoding="async"/>
+                        <img src="https://fimgs.net/mdimg/perfume/375x500.51411.jpg" alt="Lost Cherry" class="lostcherry-image"  loading="lazy" decoding="async"/>
                         <div class="product-info-section">
                             <div class="product-header-row">
                                 <div class="product-info">
@@ -17986,7 +18103,7 @@
                     <!-- Acqua di Giò Profumo Image and Product Info -->
                     <div class="aquadigio-product-section">
                         <img
-                            src="acqua-di-gio-profumo.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.29727.jpg"
                             alt="Acqua di Giò Profumo Perfume"
                             class="aquadigio-image"
                          loading="lazy" decoding="async"/>
@@ -18403,7 +18520,7 @@
                     <!-- Ultra Male Image and Product Info -->
                     <div class="jpgultramale-product-section">
                         <img
-                            src="jpg-ultra-male.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.30947.jpg"
                             alt="Ultra Male Perfume"
                             class="jpgultramale-image"
                          loading="lazy" decoding="async"/>
@@ -18817,7 +18934,7 @@
                     <!-- Uomo Born in Roma Image and Product Info -->
                     <div class="valentinouomo-product-section">
                         <img
-                            src="valentino-uomo.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.55963.jpg"
                             alt="Uomo Born in Roma Perfume"
                             class="valentinouomo-image"
                          loading="lazy" decoding="async"/>
@@ -19228,7 +19345,7 @@
                     <!-- Spicebomb Extreme Image and Product Info -->
                     <div class="spicebomb-product-section">
                         <img
-                            src="spicebomb-extreme.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.30499.jpg"
                             alt="Spicebomb Extreme Perfume"
                             class="spicebomb-image"
                          loading="lazy" decoding="async"/>
@@ -19639,7 +19756,7 @@
                     <!-- Explorer Image and Product Info -->
                     <div class="explorer-product-section">
                         <img
-                            src="montblanc-explorer.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.52002.jpg"
                             alt="Explorer Perfume"
                             class="explorer-image"
                          loading="lazy" decoding="async"/>
@@ -20050,7 +20167,7 @@
                     <!-- Man in Black Image and Product Info -->
                     <div class="blv-product-section">
                         <img
-                            src="bvlgari-man-in-black.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.26358.jpg"
                             alt="Man in Black Perfume"
                             class="blv-image"
                          loading="lazy" decoding="async"/>
@@ -20464,7 +20581,7 @@
                     <!-- Allure Homme Sport Image and Product Info -->
                     <div class="allure-product-section">
                         <img
-                            src="chanel-allure-sport.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.607.jpg"
                             alt="Allure Homme Sport Perfume"
                             class="allure-image"
                          loading="lazy" decoding="async"/>
@@ -20736,7 +20853,7 @@
                     <!-- Tuscan Leather Image and Product Info -->
                     <div class="tuscanleather-product-section">
                         <img
-                            src="tom-ford-tuscan-leather.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.1849.jpg"
                             alt="Tuscan Leather Perfume"
                             class="tuscanleather-image"
                          loading="lazy" decoding="async"/>
@@ -21008,7 +21125,7 @@
                     <!-- Armani Code Absolu Image and Product Info -->
                     <div class="armanicode-product-section">
                         <img
-                            src="armani-code-absolu.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.53106.jpg"
                             alt="Armani Code Absolu Perfume"
                             class="armanicode-image"
                          loading="lazy" decoding="async"/>
@@ -21279,7 +21396,7 @@
                     <!-- L'Homme Idéal EDP Image and Product Info -->
                     <div class="lhommeideal-product-section">
                         <img
-                            src="guerlain-lhomme-ideal.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.37735.jpg"
                             alt="L'Homme Idéal EDP Perfume"
                             class="lhommeideal-image"
                          loading="lazy" decoding="async"/>
@@ -21551,7 +21668,7 @@
                     <!-- Terre d'Hermès Image and Product Info -->
                     <div class="terredhermes-product-section">
                         <img
-                            src="terre-dhermes.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.17.jpg"
                             alt="Terre d'Hermès Perfume"
                             class="terredhermes-image"
                          loading="lazy" decoding="async"/>
@@ -21826,7 +21943,7 @@
                     <!-- The Most Wanted Image and Product Info -->
                     <div class="wantedbynight-product-section">
                         <img
-                            src="azzaro-most-wanted.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.66826.jpg"
                             alt="The Most Wanted Perfume"
                             class="wantedbynight-image"
                          loading="lazy" decoding="async"/>
@@ -22101,7 +22218,7 @@
                     <!-- L'Eau d'Issey Pour Homme Image and Product Info -->
                     <div class="leaudissey-product-section">
                         <img
-                            src="issey-miyake-pour-homme.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.721.jpg"
                             alt="L'Eau d'Issey Pour Homme Perfume"
                             class="leaudissey-image"
                          loading="lazy" decoding="async"/>
@@ -22376,7 +22493,7 @@
                     <!-- Libre EDP Image and Product Info -->
                     <div class="ysllibre-product-section">
                         <img
-                            src="ysl-libre.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.56077.jpg"
                             alt="Libre EDP Perfume"
                             class="ysllibre-image"
                          loading="lazy" decoding="async"/>
@@ -22648,7 +22765,7 @@
                     <!-- By the Fireplace Image and Product Info -->
                     <div class="fireplace-product-section">
                         <img
-                            src="margiela-fireplace.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.31623.jpg"
                             alt="By the Fireplace Perfume"
                             class="fireplace-image"
                          loading="lazy" decoding="async"/>
@@ -22920,7 +23037,7 @@
                     <!-- Luna Rossa Carbon Image and Product Info -->
                     <div class="pradacarbon-product-section">
                         <img
-                            src="prada-luna-rossa-carbon.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.43402.jpg"
                             alt="Luna Rossa Carbon Perfume"
                             class="pradacarbon-image"
                          loading="lazy" decoding="async"/>
@@ -23190,7 +23307,7 @@
                     <!-- Hero EDP Image and Product Info -->
                     <div class="burberryhero-product-section">
                         <img
-                            src="burberry-hero.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.75182.jpg"
                             alt="Hero EDP Perfume"
                             class="burberryhero-image"
                          loading="lazy" decoding="async"/>
@@ -23462,7 +23579,7 @@
                     <!-- For Him Bleu Noir Image and Product Info -->
                     <div class="narcisoforhim-product-section">
                         <img
-                            src="narciso-bleu-noir.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.31247.jpg"
                             alt="For Him Bleu Noir Perfume"
                             class="narcisoforhim-image"
                          loading="lazy" decoding="async"/>
@@ -23734,7 +23851,7 @@
                     <!-- Eternity for Men Image and Product Info -->
                     <div class="cketernity-product-section">
                         <img
-                            src="ck-eternity.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.258.jpg"
                             alt="Eternity for Men Perfume"
                             class="cketernity-image"
                          loading="lazy" decoding="async"/>
@@ -24009,7 +24126,7 @@
                     <!-- Born in Roma Donna Image and Product Info -->
                     <div class="valentinodonna-product-section">
                         <img
-                            src="valentino-donna.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.55805.jpg"
                             alt="Born in Roma Donna Perfume"
                             class="valentinodonna-image"
                          loading="lazy" decoding="async"/>
@@ -24280,7 +24397,7 @@
                     <!-- Green Irish Tweed Image and Product Info -->
                     <div class="greenirish-product-section">
                         <img
-                            src="creed-green-irish-tweed.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.474.jpg"
                             alt="Green Irish Tweed Perfume"
                             class="greenirish-image"
                          loading="lazy" decoding="async"/>
@@ -24552,7 +24669,7 @@
                     <!-- Égoïste Platinum Image and Product Info -->
                     <div class="egoiste-product-section">
                         <img
-                            src="chanel-egoiste.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.614.jpg"
                             alt="Égoïste Platinum Perfume"
                             class="egoiste-image"
                          loading="lazy" decoding="async"/>
@@ -24824,7 +24941,7 @@
                     <!-- A*Men Pure Havane Image and Product Info -->
                     <div class="amenpure-product-section">
                         <img
-                            src="mugler-pure-havane.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.11444.jpg"
                             alt="A*Men Pure Havane Perfume"
                             class="amenpure-image"
                          loading="lazy" decoding="async"/>
@@ -25099,7 +25216,7 @@
                     <!-- La Yuqawam Image and Product Info -->
                     <div class="laween-product-section">
                         <img
-                            src="rasasi-la-yuqawam.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.19668.jpg"
                             alt="La Yuqawam Perfume"
                             class="laween-image"
                          loading="lazy" decoding="async"/>
@@ -25371,7 +25488,7 @@
                     <!-- Cedrat Boisé Image and Product Info -->
                     <div class="cedarsmancera-product-section">
                         <img
-                            src="mancera-cedrat-boise.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.15211.jpg"
                             alt="Cedrat Boisé Perfume"
                             class="cedarsmancera-image"
                          loading="lazy" decoding="async"/>
@@ -25642,7 +25759,7 @@
                     <!-- Reflection Man Image and Product Info -->
                     <div class="reflectionman-product-section">
                         <img
-                            src="amouage-reflection-man.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.920.jpg"
                             alt="Reflection Man Perfume"
                             class="reflectionman-image"
                          loading="lazy" decoding="async"/>
@@ -25914,7 +26031,7 @@
                     <!-- Sedley Image and Product Info -->
                     <div class="sedley-product-section">
                         <img
-                            src="pdm-sedley.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.56273.jpg"
                             alt="Sedley Perfume"
                             class="sedley-image"
                          loading="lazy" decoding="async"/>
@@ -26186,7 +26303,7 @@
                     <!-- Side Effect Image and Product Info -->
                     <div class="sideeffect-product-section">
                         <img
-                            src="initio-side-effect.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.42260.jpg"
                             alt="Side Effect Perfume"
                             class="sideeffect-image"
                          loading="lazy" decoding="async"/>
@@ -26458,7 +26575,7 @@
                     <!-- Naxos Image and Product Info -->
                     <div class="naxos-product-section">
                         <img
-                            src="xerjoff-naxos.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.30529.jpg"
                             alt="Naxos Perfume"
                             class="naxos-image"
                          loading="lazy" decoding="async"/>
@@ -26730,7 +26847,7 @@
                     <!-- Grand Soir Image and Product Info -->
                     <div class="grandSoir-product-section">
                         <img
-                            src="mfk-grand-soir.png"
+                            src="https://fimgs.net/mdimg/perfume/375x500.40816.jpg"
                             alt="Grand Soir Perfume"
                             class="grandSoir-image"
                          loading="lazy" decoding="async"/>
@@ -26996,7 +27113,7 @@
                 <div class="balayage-main-container balayage-theme">
                     <div class="perfume-top-row">
                         <div class="balayage-product-section">
-                            <img src="balayage.png" alt="Balayage Perfume" class="balayage-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.21279.jpg" alt="Balayage Perfume" class="balayage-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row">
                                     <div class="product-info">
@@ -27134,7 +27251,7 @@
                 <div class="valayaexclusive-main-container valayaexclusive-theme">
                     <div class="perfume-top-row">
                         <div class="valayaexclusive-product-section">
-                            <img src="valaya-exclusive.png" alt="Valaya Exclusive Perfume" class="valayaexclusive-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.102806.jpg" alt="Valaya Exclusive Perfume" class="valayaexclusive-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row">
                                     <div class="product-info">
@@ -27183,7 +27300,7 @@
                 <div class="1millionnight-main-container 1millionnight-theme">
                     <div class="perfume-top-row">
                         <div class="1millionnight-product-section">
-                            <img src="1-million-night.png" alt="1 Million Night Perfume" class="1millionnight-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.125545.jpg" alt="1 Million Night Perfume" class="1millionnight-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">PACO RABANNE</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">1 Million Night</h3></div></div>
                                 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27209,7 +27326,7 @@
                 <div class="freedommuskmatcha-main-container freedommuskmatcha-theme">
                     <div class="perfume-top-row">
                         <div class="freedommuskmatcha-product-section">
-                            <img src="freedom-musk-matcha.png" alt="Freedom Musk Matcha Perfume" class="freedommuskmatcha-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.118623.jpg" alt="Freedom Musk Matcha Perfume" class="freedommuskmatcha-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">KAYALI</h1><h2 class="brand-location">DUBAI</h2><h3 class="product-name">Freedom Musk Matcha</h3></div></div>
                                 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">40</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27235,7 +27352,7 @@
                 <div class="torrino21-main-container torrino21-theme">
                     <div class="perfume-top-row">
                         <div class="torrino21-product-section">
-                            <img src="xerjoff-torrino-21.png" alt="Torino21 Perfume" class="torrino21-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.70424.jpg" alt="Torino21 Perfume" class="torrino21-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">XERJOFF</h1><h2 class="brand-location">TURIN</h2><h3 class="product-name">Torino21</h3></div></div>
                                 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">55</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27261,7 +27378,7 @@
                 <div class="kayalimarshmallow-main-container kayalimarshmallow-theme">
                     <div class="perfume-top-row">
                         <div class="kayalimarshmallow-product-section">
-                            <img src="kayali-marshmallow.png" alt="Kayali Marshmallow Perfume" class="kayalimarshmallow-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.99254.jpg" alt="Kayali Marshmallow Perfume" class="kayalimarshmallow-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">KAYALI</h1><h2 class="brand-location">DUBAI</h2><h3 class="product-name">Marshmallow</h3></div></div>
                                 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">38</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27287,7 +27404,7 @@
                 <div class="aquaallegoriaflorabloom-main-container aquaallegoriaflorabloom-theme">
                     <div class="perfume-top-row">
                         <div class="aquaallegoriaflorabloom-product-section">
-                            <img src="aqua-allegoria-florabloom.png" alt="Aqua Allegoria Florabloom Forte Perfume" class="aquaallegoriaflorabloom-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.89855.jpg" alt="Aqua Allegoria Florabloom Forte Perfume" class="aquaallegoriaflorabloom-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">GUERLAIN</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Aqua Allegoria Florabloom Forte</h3></div></div>
                                 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">42</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27313,7 +27430,7 @@
                 <div class="angelnova-main-container angelnova-theme">
                     <div class="perfume-top-row">
                         <div class="angelnova-product-section">
-                            <img src="angel-nova.png" alt="Angel Nova Perfume" class="angelnova-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.61519.jpg" alt="Angel Nova Perfume" class="angelnova-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">MUGLER</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Angel Nova</h3></div></div>
                                 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">45</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27339,7 +27456,7 @@
                 <div class="aquadigioelixir-main-container aquadigioelixir-theme">
                     <div class="perfume-top-row">
                         <div class="aquadigioelixir-product-section">
-                            <img src="aqua-di-gio-elixir.png" alt="Acqua di Gio Elixir Perfume" class="aquadigioelixir-image"  loading="lazy" decoding="async"/>
+                            <img src="https://fimgs.net/mdimg/perfume/375x500.101438.jpg" alt="Acqua di Gio Elixir Perfume" class="aquadigioelixir-image"  loading="lazy" decoding="async"/>
                             <div class="product-info-section">
                                 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">GIORGIO ARMANI</h1><h2 class="brand-location">MILANO</h2><h3 class="product-name">Acqua di Gio Elixir</h3></div></div>
                                 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27365,7 +27482,7 @@
 <div class="pacificchill-main-container pacificchill-theme">
 <div class="perfume-top-row">
 <div class="pacificchill-product-section">
-<img src="armani-pacific-chill.png" alt="Pacific Chill Perfume" class="pacificchill-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.81423.jpg" alt="Pacific Chill Perfume" class="pacificchill-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Armani Privé</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Pacific Chill</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27391,7 +27508,7 @@
 <div class="freedommusk-main-container freedommusk-theme">
 <div class="perfume-top-row">
 <div class="freedommusk-product-section">
-<img src="kayali-freedom-musk.png" alt="Freedom Musk Perfume" class="freedommusk-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.118621.jpg" alt="Freedom Musk Perfume" class="freedommusk-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Kayali</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Freedom Musk</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27418,7 +27535,7 @@
 <div class="fameinlove-main-container fameinlove-theme">
 <div class="perfume-top-row">
 <div class="fameinlove-product-section">
-<img src="paco-rabanne-fame-in-love.png" alt="Fame in Love Perfume" class="fameinlove-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.120952.jpg" alt="Fame in Love Perfume" class="fameinlove-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Paco Rabanne</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Fame in Love</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27444,7 +27561,7 @@
 <div class="umoextradose-main-container umoextradose-theme">
 <div class="perfume-top-row">
 <div class="umoextradose-product-section">
-<img src="kerosene-umo-extradose.png" alt="Umo Extradose Perfume" class="umoextradose-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.101383.jpg" alt="Umo Extradose Perfume" class="umoextradose-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Kerosene</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Umo Extradose</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27470,7 +27587,7 @@
 <div class="donnaextradose-main-container donnaextradose-theme">
 <div class="perfume-top-row">
 <div class="donnaextradose-product-section">
-<img src="kerosene-donna-extradose.png" alt="Donna Extradose Perfume" class="donnaextradose-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.101384.jpg" alt="Donna Extradose Perfume" class="donnaextradose-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Kerosene</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Donna Extradose</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27496,7 +27613,7 @@
 <div class="edarchic-main-container edarchic-theme">
 <div class="perfume-top-row">
 <div class="edarchic-product-section">
-<img src="narciso-cedar-chic.png" alt="Cedar Chic Perfume" class="edarchic-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.109989.jpg" alt="Cedar Chic Perfume" class="edarchic-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Narciso Rodriguez</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Cedar Chic</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27522,7 +27639,7 @@
 <div class="limperatrice3-main-container limperatrice3-theme">
 <div class="perfume-top-row">
 <div class="limperatrice3-product-section">
-<img src="dg-limperatrice-3.png" alt="L'Impératrice 3 Perfume" class="limperatrice3-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.6086.jpg" alt="L'Impératrice 3 Perfume" class="limperatrice3-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Dolce & Gabbana</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">L'Impératrice 3</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27548,7 +27665,7 @@
 <div class="eaudusoir-main-container eaudusoir-theme">
 <div class="perfume-top-row">
 <div class="eaudusoir-product-section">
-<img src="sisley-eau-du-soir.png" alt="Eau du Soir Perfume" class="eaudusoir-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.1002.jpg" alt="Eau du Soir Perfume" class="eaudusoir-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Sisley</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Eau du Soir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27574,7 +27691,7 @@
 <div class="guidance46-main-container guidance46-theme">
 <div class="perfume-top-row">
 <div class="guidance46-product-section">
-<img src="amouage-guidance-46.png" alt="Guidance 46 Perfume" class="guidance46-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.94033.jpg" alt="Guidance 46 Perfume" class="guidance46-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Amouage</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Guidance 46</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27600,7 +27717,7 @@
 <div class="hermajesty-main-container hermajesty-theme">
 <div class="perfume-top-row">
 <div class="hermajesty-product-section">
-<img src="kilian-her-majesty.png" alt="Her Majesty Perfume" class="hermajesty-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.121840.jpg" alt="Her Majesty Perfume" class="hermajesty-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Kilian</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Her Majesty</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27626,7 +27743,7 @@
 <div class="sipassioneredmusc-main-container sipassioneredmusc-theme">
 <div class="perfume-top-row">
 <div class="sipassioneredmusc-product-section">
-<img src="armani-si-passione-red-musk.png" alt="Si Passione Red Musk Perfume" class="sipassioneredmusc-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.103518.jpg" alt="Si Passione Red Musk Perfume" class="sipassioneredmusc-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Armani</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Si Passione Red Musk</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27652,7 +27769,7 @@
 <div class="narcisobleunoir-main-container narcisobleunoir-theme">
 <div class="perfume-top-row">
 <div class="narcisobleunoir-product-section">
-<img src="narciso-bleu-noir.png" alt="Narciso Bleu Noir Perfume" class="narcisobleunoir-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.31247.jpg" alt="Narciso Bleu Noir Perfume" class="narcisobleunoir-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Narciso Rodriguez</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Narciso Bleu Noir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27678,7 +27795,7 @@
 <div class="vanillapowder-main-container vanillapowder-theme">
 <div class="perfume-top-row">
 <div class="vanillapowder-product-section">
-<img src="matiere-premiere-vanilla-powder.png" alt="Vanilla Powder Perfume" class="vanillapowder-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.84933.jpg" alt="Vanilla Powder Perfume" class="vanillapowder-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Matiere Premiere</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Vanilla Powder</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27704,7 +27821,7 @@
 <div class="labelleparadise-main-container labelleparadise-theme">
 <div class="perfume-top-row">
 <div class="labelleparadise-product-section">
-<img src="lolita-lempicka-la-belle-paradise.png" alt="La Belle Paradise Perfume" class="labelleparadise-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.88873.jpg" alt="La Belle Paradise Perfume" class="labelleparadise-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Lolita Lempicka</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">La Belle Paradise</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27730,7 +27847,7 @@
 <div class="sipassionneintense-main-container sipassionneintense-theme">
 <div class="perfume-top-row">
 <div class="sipassionneintense-product-section">
-<img src="armani-si-passione-intense.png" alt="Si Passione Intense Perfume" class="sipassionneintense-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.58737.jpg" alt="Si Passione Intense Perfume" class="sipassionneintense-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Armani</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Si Passione Intense</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27756,7 +27873,7 @@
 <div class="stellaritimes-main-container stellaritimes-theme">
 <div class="perfume-top-row">
 <div class="stellaritimes-product-section">
-<img src="armani-prive-stellaris.png" alt="Stellaris Times Perfume" class="stellaritimes-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.68356.jpg" alt="Stellaris Times Perfume" class="stellaritimes-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Armani Privé</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Stellaris Times</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27782,7 +27899,7 @@
 <div class="nauticavoyage-main-container nauticavoyage-theme">
 <div class="perfume-top-row">
 <div class="nauticavoyage-product-section">
-<img src="nautica-voyage.png" alt="Nautica Voyage Perfume" class="nauticavoyage-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.913.jpg" alt="Nautica Voyage Perfume" class="nauticavoyage-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Nautica</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Nautica Voyage</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27808,7 +27925,7 @@
 <div class="elves-main-container elves-theme">
 <div class="perfume-top-row">
 <div class="elves-product-section">
-<img src="spirit-of-dubai-elves.png" alt="Elves Perfume" class="elves-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.104087.jpg" alt="Elves Perfume" class="elves-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Spirit of Dubai</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Elves</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27834,7 +27951,7 @@
 <div class="roseamira-main-container roseamira-theme">
 <div class="perfume-top-row">
 <div class="roseamira-product-section">
-<img src="artisan-parfumeur-rose-amira.png" alt="Rose Amira Perfume" class="roseamira-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.90836.jpg" alt="Rose Amira Perfume" class="roseamira-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">L'Artisan Parfumeur</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Rose Amira</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27860,7 +27977,7 @@
 <div class="40knots-main-container 40knots-theme">
 <div class="perfume-top-row">
 <div class="40knots-product-section">
-<img src="xerjoff-40-knots.png" alt="40 Knots Perfume" class="40knots-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.16445.jpg" alt="40 Knots Perfume" class="40knots-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Xerjoff</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">40 Knots</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27886,7 +28003,7 @@
 <div class="powerofyou-main-container powerofyou-theme">
 <div class="perfume-top-row">
 <div class="powerofyou-product-section">
-<img src="ch-power-of-you.png" alt="Power of You Perfume" class="powerofyou-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.121870.jpg" alt="Power of You Perfume" class="powerofyou-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Carolina Herrera</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Power of You</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27913,7 +28030,7 @@
 <div class="valentinapoudre-main-container valentinapoudre-theme">
 <div class="perfume-top-row">
 <div class="valentinapoudre-product-section">
-<img src="valentino-valentina-poudre.png" alt="Valentina Poudre Perfume" class="valentinapoudre-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.34936.jpg" alt="Valentina Poudre Perfume" class="valentinapoudre-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Valentino</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Valentina Poudre</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27939,7 +28056,7 @@
 <div class="valentinaabsolue-main-container valentinaabsolue-theme">
 <div class="perfume-top-row">
 <div class="valentinaabsolue-product-section">
-<img src="valentino-valentina-absolue.png" alt="Valentina Absolue Perfume" class="valentinaabsolue-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.15514.jpg" alt="Valentina Absolue Perfume" class="valentinaabsolue-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Valentino</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Valentina Absolue</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27965,7 +28082,7 @@
 <div class="fantasmagoria-main-container fantasmagoria-theme">
 <div class="perfume-top-row">
 <div class="fantasmagoria-product-section">
-<img src="lattafa-fantasmagoria.png" alt="Fantasmagoria Perfume" class="fantasmagoria-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.116625.jpg" alt="Fantasmagoria Perfume" class="fantasmagoria-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Lattafa</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Fantasmagoria</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -27991,7 +28108,7 @@
 <div class="supremebouquet-main-container supremebouquet-theme">
 <div class="perfume-top-row">
 <div class="supremebouquet-product-section">
-<img src="yves-rocher-supreme-bouquet.png" alt="Suprême Bouquet Perfume" class="supremebouquet-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.18369.jpg" alt="Suprême Bouquet Perfume" class="supremebouquet-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Yves Rocher</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Suprême Bouquet</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28017,7 +28134,7 @@
 <div class="rosestar-main-container rosestar-theme">
 <div class="perfume-top-row">
 <div class="rosestar-product-section">
-<img src="dior-rose-star.png" alt="Rose Star Perfume" class="rosestar-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.106146.jpg" alt="Rose Star Perfume" class="rosestar-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Dior</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Rose Star</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28043,7 +28160,7 @@
 <div class="oudvoyager-main-container oudvoyager-theme">
 <div class="perfume-top-row">
 <div class="oudvoyager-product-section">
-<img src="tom-ford-oud-voyager.png" alt="Oud Voyager Perfume" class="oudvoyager-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.111206.jpg" alt="Oud Voyager Perfume" class="oudvoyager-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Tom Ford</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Oud Voyager</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28070,7 +28187,7 @@
 <div class="flowerbombextreme-main-container flowerbombextreme-theme">
 <div class="perfume-top-row">
 <div class="flowerbombextreme-product-section">
-<img src="viktor-rolf-flowerbomb-extreme.png" alt="Flowerbomb Extrême Perfume" class="flowerbombextreme-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.19330.jpg" alt="Flowerbomb Extrême Perfume" class="flowerbombextreme-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Viktor & Rolf</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Flowerbomb Extrême</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28096,7 +28213,7 @@
 <div class="santalroyal-main-container santalroyal-theme">
 <div class="perfume-top-row">
 <div class="santalroyal-product-section">
-<img src="guerlain-santal-royal.png" alt="Santal Royal Perfume" class="santalroyal-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.38808.jpg" alt="Santal Royal Perfume" class="santalroyal-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Guerlain</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Santal Royal</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28122,7 +28239,7 @@
 <div class="terroni-main-container terroni-theme">
 <div class="perfume-top-row">
 <div class="terroni-product-section">
-<img src="orto-parisi-terroni.png" alt="Terroni Perfume" class="terroni-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.45475.jpg" alt="Terroni Perfume" class="terroni-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Orto Parisi</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Terroni</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28148,7 +28265,7 @@
 <div class="oudroyal-main-container oudroyal-theme">
 <div class="perfume-top-row">
 <div class="oudroyal-product-section">
-<img src="guerlain-oud-royal.png" alt="Oud Royal Perfume" class="oudroyal-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.10884.jpg" alt="Oud Royal Perfume" class="oudroyal-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Guerlain</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Oud Royal</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28174,7 +28291,7 @@
 <div class="noirextreme-main-container noirextreme-theme">
 <div class="perfume-top-row">
 <div class="noirextreme-product-section">
-<img src="tom-ford-noir-extreme.png" alt="Noir Extreme Perfume" class="noirextreme-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.29675.jpg" alt="Noir Extreme Perfume" class="noirextreme-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Tom Ford</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Noir Extreme</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28200,7 +28317,7 @@
 <div class="guiltyelixirfemme-main-container guiltyelixirfemme-theme">
 <div class="perfume-top-row">
 <div class="guiltyelixirfemme-product-section">
-<img src="paco-rabanne-guilty-elixir-femme.png" alt="Guilty Elixir Femme Perfume" class="guiltyelixirfemme-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.84546.jpg" alt="Guilty Elixir Femme Perfume" class="guiltyelixirfemme-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Paco Rabanne</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Guilty Elixir Femme</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28226,7 +28343,7 @@
 <div class="rosendomateu5-main-container rosendomateu5-theme">
 <div class="perfume-top-row">
 <div class="rosendomateu5-product-section">
-<img src="rosendo-mateu-no5.png" alt="Rosendo Mateu Nº5 Perfume" class="rosendomateu5-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.46115.jpg" alt="Rosendo Mateu Nº5 Perfume" class="rosendomateu5-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Rosendo Mateu</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Rosendo Mateu Nº5</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28252,7 +28369,7 @@
 <div class="lessablesroses-main-container lessablesroses-theme">
 <div class="perfume-top-row">
 <div class="lessablesroses-product-section">
-<img src="maison-crivelli-les-sables-roses.png" alt="Les Sables Roses Perfume" class="lessablesroses-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.55040.jpg" alt="Les Sables Roses Perfume" class="lessablesroses-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Maison Crivelli</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Les Sables Roses</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28278,7 +28395,7 @@
 <div class="wantedelixir-main-container wantedelixir-theme">
 <div class="perfume-top-row">
 <div class="wantedelixir-product-section">
-<img src="azzaro-wanted-elixir.png" alt="Wanted Elixir Perfume" class="wantedelixir-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.102882.jpg" alt="Wanted Elixir Perfume" class="wantedelixir-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Azzaro</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Wanted Elixir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28304,7 +28421,7 @@
 <div class="ambassador-main-container ambassador-theme">
 <div class="perfume-top-row">
 <div class="ambassador-product-section">
-<img src="gisada-ambassador.png" alt="Ambassador Perfume" class="ambassador-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.58226.jpg" alt="Ambassador Perfume" class="ambassador-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Gisada</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Ambassador</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28330,7 +28447,7 @@
 <div class="labomba-main-container labomba-theme">
 <div class="perfume-top-row">
 <div class="labomba-product-section">
-<img src="jpg-la-bomba.png" alt="La Bomba Perfume" class="labomba-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.105931.jpg" alt="La Bomba Perfume" class="labomba-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Jean Paul Gaultier</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">La Bomba</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28356,7 +28473,7 @@
 <div class="ambresamar-main-container ambresamar-theme">
 <div class="perfume-top-row">
 <div class="ambresamar-product-section">
-<img src="maison-crivelli-ambre-samar.png" alt="Ambre Samar Perfume" class="ambresamar-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.105007.jpg" alt="Ambre Samar Perfume" class="ambresamar-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Maison Crivelli</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Ambre Samar</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28382,7 +28499,7 @@
 <div class="myrrhetonka-main-container myrrhetonka-theme">
 <div class="perfume-top-row">
 <div class="myrrhetonka-product-section">
-<img src="jo-malone-myrrh-tonka.png" alt="Myrrh & Tonka Perfume" class="myrrhetonka-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.42027.jpg" alt="Myrrh & Tonka Perfume" class="myrrhetonka-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Jo Malone</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Myrrh & Tonka</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28408,7 +28525,7 @@
 <div class="chanel5-main-container chanel5-theme">
 <div class="perfume-top-row">
 <div class="chanel5-product-section">
-<img src="chanel-no5.png" alt="Chanel N°5 Perfume" class="chanel5-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.40069.jpg" alt="Chanel N°5 Perfume" class="chanel5-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Chanel</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Chanel N°5</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28434,7 +28551,7 @@
 <div class="ganymede-main-container ganymede-theme">
 <div class="perfume-top-row">
 <div class="ganymede-product-section">
-<img src="marc-antoine-barrois-ganymede.png" alt="Ganymède Perfume" class="ganymede-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.54720.jpg" alt="Ganymède Perfume" class="ganymede-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Marc-Antoine Barrois</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Ganymède</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28460,7 +28577,7 @@
 <div class="crushonme-main-container crushonme-theme">
 <div class="perfume-top-row">
 <div class="crushonme-product-section">
-<img src="dg-crush-on-me.png" alt="Crush on Me Perfume" class="crushonme-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.66082.jpg" alt="Crush on Me Perfume" class="crushonme-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Dolce & Gabbana</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Crush on Me</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28486,7 +28603,7 @@
 <div class="armanicodeparfum-main-container armanicodeparfum-theme">
 <div class="perfume-top-row">
 <div class="armanicodeparfum-product-section">
-<img src="armani-code-parfum.png" alt="Armani Code Parfum Perfume" class="armanicodeparfum-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.75126.jpg" alt="Armani Code Parfum Perfume" class="armanicodeparfum-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Armani</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Armani Code Parfum</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28512,7 +28629,7 @@
 <div class="hudsonvalley-main-container hudsonvalley-theme">
 <div class="perfume-top-row">
 <div class="hudsonvalley-product-section">
-<img src="gisada-hudson-valley.png" alt="Hudson Valley Perfume" class="hudsonvalley-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.80052.jpg" alt="Hudson Valley Perfume" class="hudsonvalley-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Gisada</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Hudson Valley</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28538,7 +28655,7 @@
 <div class="blackopium-main-container blackopium-theme">
 <div class="perfume-top-row">
 <div class="blackopium-product-section">
-<img src="ysl-black-opium.png" alt="Black Opium Perfume" class="blackopium-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.25324.jpg" alt="Black Opium Perfume" class="blackopium-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">YSL</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Black Opium</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28564,7 +28681,7 @@
 <div class="vanillacandyrocksugar-main-container vanillacandyrocksugar-theme">
 <div class="perfume-top-row">
 <div class="vanillacandyrocksugar-product-section">
-<img src="kayali-vanilla-candy-rock-sugar.png" alt="Vanilla Candy Rock Sugar Perfume" class="vanillacandyrocksugar-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.92258.jpg" alt="Vanilla Candy Rock Sugar Perfume" class="vanillacandyrocksugar-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Kayali</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Vanilla Candy Rock Sugar</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28590,7 +28707,7 @@
 <div class="monparis-main-container monparis-theme">
 <div class="perfume-top-row">
 <div class="monparis-product-section">
-<img src="ysl-mon-paris.png" alt="Mon Paris Perfume" class="monparis-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.38914.jpg" alt="Mon Paris Perfume" class="monparis-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">YSL</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Mon Paris</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28616,7 +28733,7 @@
 <div class="flowerbykenzo-main-container flowerbykenzo-theme">
 <div class="perfume-top-row">
 <div class="flowerbykenzo-product-section">
-<img src="kenzo-flower.png" alt="Flower by Kenzo Perfume" class="flowerbykenzo-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.72.jpg" alt="Flower by Kenzo Perfume" class="flowerbykenzo-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Kenzo</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Flower by Kenzo</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28642,7 +28759,7 @@
 <div class="narciso-main-container narciso-theme">
 <div class="perfume-top-row">
 <div class="narciso-product-section">
-<img src="narciso-rodriguez-narciso.png" alt="Narciso Perfume" class="narciso-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.26127.jpg" alt="Narciso Perfume" class="narciso-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Narciso Rodriguez</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Narciso</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28668,7 +28785,7 @@
 <div class="cristalnoir-main-container cristalnoir-theme">
 <div class="perfume-top-row">
 <div class="cristalnoir-product-section">
-<img src="raghba-cristal-noir.png" alt="Cristal Noir Perfume" class="cristalnoir-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.631.jpg" alt="Cristal Noir Perfume" class="cristalnoir-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Raghba</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Cristal Noir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28694,7 +28811,7 @@
 <div class="tresorlanuit-main-container tresorlanuit-theme">
 <div class="perfume-top-row">
 <div class="tresorlanuit-product-section">
-<img src="lancome-tresor-la-nuit.png" alt="Trésor la Nuit Perfume" class="tresorlanuit-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.29157.jpg" alt="Trésor la Nuit Perfume" class="tresorlanuit-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Lancôme</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Trésor la Nuit</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28720,7 +28837,7 @@
 <div class="manifestoelixir-main-container manifestoelixir-theme">
 <div class="perfume-top-row">
 <div class="manifestoelixir-product-section">
-<img src="narciso-manifesto-elixir.png" alt="Manifesto Elixir Perfume" class="manifestoelixir-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.18785.jpg" alt="Manifesto Elixir Perfume" class="manifestoelixir-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Narciso Rodriguez</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Manifesto Elixir</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28746,7 +28863,7 @@
 <div class="alien-main-container alien-theme">
 <div class="perfume-top-row">
 <div class="alien-product-section">
-<img src="mugler-alien.png" alt="Alien Perfume" class="alien-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.707.jpg" alt="Alien Perfume" class="alien-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Mugler</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Alien</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28772,7 +28889,7 @@
 <div class="eliesaabinwhite-main-container eliesaabinwhite-theme">
 <div class="perfume-top-row">
 <div class="eliesaabinwhite-product-section">
-<img src="elie-saab-in-white.png" alt="Elie Saab In White Perfume" class="eliesaabinwhite-image"  loading="lazy" decoding="async"/>
+<img src="https://fimgs.net/mdimg/perfume/375x500.48058.jpg" alt="Elie Saab In White Perfume" class="eliesaabinwhite-image"  loading="lazy" decoding="async"/>
 <div class="product-info-section">
 <div class="product-header-row"><div class="product-info"><h1 class="brand-name">Elie Saab</h1><h2 class="brand-location">PARIS</h2><h3 class="product-name">Elie Saab In White</h3></div></div>
 <div class="product-price-container"><div class="price-badge"><div class="price-ornament top-left"></div><div class="price-ornament top-right"></div><div class="price-ornament bottom-left"></div><div class="price-ornament bottom-right"></div><div class="price-shimmer"></div><div class="product-price"><span class="price-currency">50</span><span class="price-unit">dt</span></div><div class="price-glow"></div></div><div class="price-subtitle">Premium Collection</div></div>
@@ -28950,8 +29067,14 @@
             </div>
         </button>
 
+        <!-- Perfume view mode toggle -->
+        <div class="perfume-mode-toggle" id="perfumeModeToggle" role="group" aria-label="Perfume display mode">
+            <button type="button" class="perfume-mode-btn active" data-mode="details" aria-pressed="true">Details</button>
+            <button type="button" class="perfume-mode-btn" data-mode="grid" aria-pressed="false">Grid</button>
+        </div>
+
         <script src="js/i18n.js?v=20260817" defer></script>
-        <script src="script.js?v=20260817" defer></script>
+        <script src="script.js?v=20260829" defer></script>
 
         <script>
             // Quality selector functionality

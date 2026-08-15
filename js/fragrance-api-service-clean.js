@@ -177,7 +177,7 @@ class FragranceAPIService {
         ingredients: ["praline", "vanilla", "oud", "amber", "saffron"],
         year: 2021,
         perfumer: "Mathieu Nardin",
-        image: "haltane.png",
+        image: "https://fimgs.net/mdimg/perfume/375x500.70776.jpg",
       },
       Pegasus: {
         brand: "Parfums de Marly",

@@ -367,9 +367,9 @@ html {
     text-rendering: auto; /* FIX: optimizeLegibility causes severe relayout lag */
 }
 
-body {
-    background-color: #060606;
-    color: rgba(245, 243, 240, 0.88);
+ body {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
     font-family: 'DM Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     line-height: 1.7;
     letter-spacing: 0.015em;
@@ -388,7 +388,10 @@ body {
 }
 
 /* Global CSS variables */
-:root {
+ :root {
+    /* Theme hero backgrounds (night = default, light = classic) */
+    --hero-bg: url('hero-bg-night.jpg');
+
     /* Brand colors — refined gold palette */
     --color-gold: #c9a94e;
     --color-gold-light: #dfc573;
@@ -3963,7 +3966,7 @@ body.has-marquee .navbar {
     overflow: hidden;
     background:
         radial-gradient(120% 100% at 50% -10%, rgba(201, 169, 78, 0.10), transparent 50%),
-        url('hero-bg.jpg') center center / cover no-repeat #0a0908;
+        var(--hero-bg) center 10% / cover no-repeat var(--color-surface);
 }
 
 /* Additional blur overlay for bottom-focused effect - only composites when blur active */
@@ -23273,4 +23276,1049 @@ body.fragrance-detail-open {
 }
 .news-item {
     border-left: 3px solid var(--news-accent, rgba(201,169,78,0.35));
+}
+
+/* =====================================================================
+   LIGHT / NIGHT THEME SYSTEM
+   html[data-theme="light"] = full light UI + classic hero
+   html[data-theme="night"] (default) = current dark luxury theme + night hero
+   ===================================================================== */
+
+/* ---- Theme toggle button (navbar) ---- */
+.theme-toggle {
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+    margin-right: 15px;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+    opacity: 0.85;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+    opacity: 1;
+}
+.theme-toggle .theme-icon {
+    width: 20px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.3s ease;
+    stroke-width: 1.8;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+.theme-toggle:hover .theme-icon {
+    color: var(--color-gold);
+    transform: scale(1.05) rotate(8deg);
+}
+html[data-theme="night"] .theme-icon-moon { display: none; }
+html[data-theme="night"] .theme-icon-sun { display: block; }
+html[data-theme="light"] .theme-icon-sun { display: none; }
+html[data-theme="light"] .theme-icon-moon { display: block; }
+
+/* ---- Light theme ---- */
+html[data-theme="light"] {
+    --hero-bg: url('hero-bg.jpg');
+
+    --color-surface: #f6f5f1;
+    --color-surface-raised: #ffffff;
+    --color-surface-overlay: #ffffff;
+    --color-surface-card: #ffffff;
+    --color-border: rgba(24, 22, 18, 0.10);
+    --color-border-hover: rgba(24, 22, 18, 0.18);
+    --color-border-gold: rgba(166, 139, 60, 0.30);
+    --color-text-primary: rgba(28, 25, 22, 0.92);
+    --color-text-secondary: rgba(28, 25, 22, 0.62);
+    --color-text-muted: rgba(28, 25, 22, 0.42);
+
+    --pegasus-transition-color: #eceae5;
+
+    --shadow-sm: 0 1px 3px rgba(28, 25, 22, 0.08);
+    --shadow-md: 0 4px 16px rgba(28, 25, 22, 0.08), 0 1px 4px rgba(28, 25, 22, 0.05);
+    --shadow-lg: 0 16px 48px rgba(28, 25, 22, 0.12), 0 4px 16px rgba(28, 25, 22, 0.08);
+    --shadow-xl: 0 32px 72px rgba(28, 25, 22, 0.16), 0 12px 32px rgba(28, 25, 22, 0.10);
+    --shadow-gold: 0 4px 24px rgba(166, 139, 60, 0.18);
+    --shadow-gold-lg: 0 8px 40px rgba(166, 139, 60, 0.22), 0 2px 12px rgba(166, 139, 60, 0.10);
+    --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+    --nav-hair: rgba(24, 22, 18, 0.10);
+    --nav-hair-strong: rgba(24, 22, 18, 0.16);
+    --nav-ink: rgba(28, 25, 22, 0.72);
+    --nav-ink-strong: rgba(24, 21, 18, 0.94);
+    --nav-ink-mute: rgba(28, 25, 22, 0.45);
+}
+
+html[data-theme="light"] body {
+    background-color: var(--color-surface) !important;
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] ::selection {
+    background: rgba(201, 169, 78, 0.35);
+    color: #1c1b19;
+}
+
+/* Hero overlay blending */
+html[data-theme="light"] .hero::before {
+    background: linear-gradient(to top, rgba(244, 242, 237, 0.85) 0%, transparent 100%);
+}
+
+/* Navbar */
+html[data-theme="light"] .navbar {
+    background: rgba(255, 255, 255, 0.82);
+}
+html[data-theme="light"] body.top-shell-scrolled .navbar {
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom-color: var(--nav-hair-strong);
+    box-shadow: 0 12px 30px -18px rgba(28, 25, 22, 0.22);
+}
+html[data-theme="light"] .nav-link:hover {
+    background: rgba(28, 25, 22, 0.05);
+}
+html[data-theme="light"] .navbar-news-icon:hover,
+html[data-theme="light"] .navbar-notification-container:hover,
+html[data-theme="light"] .navbar-cart-icon:hover,
+html[data-theme="light"] .ingredient-finder-icon:hover {
+    background: rgba(28, 25, 22, 0.06);
+}
+html[data-theme="light"] .user-profile.admin-user .user-name {
+    color: #8a6d1f !important;
+}
+html[data-theme="light"] .user-profile.admin-user {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(246, 245, 241, 0.96)) !important;
+    border-color: rgba(212, 175, 55, 0.5) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), 0 0 8px rgba(212, 175, 55, 0.15) !important;
+}
+html[data-theme="light"] .user-profile.admin-user:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(212, 175, 55, 0.7) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 0 12px rgba(212, 175, 55, 0.22) !important;
+}
+html[data-theme="light"] .current-lang {
+    background: rgba(28, 25, 22, 0.06);
+    border-color: rgba(28, 25, 22, 0.18);
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] .navbar-news-icon .news-icon,
+html[data-theme="light"] .navbar-notification-icon .notification-icon,
+html[data-theme="light"] .navbar-cart-icon .cart-icon,
+html[data-theme="light"] .ingredient-finder-icon svg {
+    color: rgba(28, 25, 22, 0.8);
+}
+html[data-theme="light"] .theme-toggle .theme-icon {
+    color: rgba(28, 25, 22, 0.8);
+    filter: none;
+}
+html[data-theme="light"] .theme-toggle:hover {
+    background: rgba(28, 25, 22, 0.06);
+}
+html[data-theme="light"] .theme-toggle:hover .theme-icon {
+    color: var(--color-gold);
+}
+
+/* Quick search shell */
+html[data-theme="light"] .search-tabs {
+    background: rgba(28, 25, 22, 0.04);
+    border-color: var(--nav-hair);
+}
+html[data-theme="light"] .quick-search-bar {
+    background: rgba(28, 25, 22, 0.045);
+    border-color: var(--nav-hair);
+}
+html[data-theme="light"] .quick-search-bar:hover {
+    background: rgba(28, 25, 22, 0.06);
+}
+html[data-theme="light"] .quick-search-bar:focus-within {
+    background: rgba(255, 255, 255, 0.95);
+}
+html[data-theme="light"] #quickSearchInput {
+    color: rgba(28, 25, 22, 0.92) !important;
+}
+html[data-theme="light"] #quickSearchInput::placeholder {
+    color: rgba(28, 25, 22, 0.45) !important;
+}
+html[data-theme="light"] #quickSearchInput:focus::placeholder {
+    color: rgba(28, 25, 22, 0.35) !important;
+}
+html[data-theme="light"] .quick-search-bar .search-icon {
+    color: rgba(28, 25, 22, 0.45) !important;
+}
+html[data-theme="light"] .quick-search-bar:focus-within .search-icon {
+    color: rgba(28, 25, 22, 0.8) !important;
+}
+html[data-theme="light"] .search-gender-indicators .gender-badge {
+    border-color: #f6f5f1;
+}
+
+/* Dropdowns */
+html[data-theme="light"] .quick-search-dropdown {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: var(--color-border-gold);
+    box-shadow: var(--shadow-xl), 0 0 0 1px rgba(28, 25, 22, 0.05);
+}
+html[data-theme="light"] .notification-dropdown {
+    background: rgba(255, 255, 255, 0.99);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-xl);
+}
+html[data-theme="light"] .ai-finder-dropdown {
+    background: rgba(255, 255, 255, 0.99);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-xl);
+}
+html[data-theme="light"] .user-dropdown {
+    background: rgba(255, 255, 255, 0.99);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-xl);
+}
+html[data-theme="light"] .language-dropdown {
+    background: rgba(255, 255, 255, 0.99);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Dropdown inner legibility */
+html[data-theme="light"] .quick-search-dropdown,
+html[data-theme="light"] .notification-dropdown,
+html[data-theme="light"] .ai-finder-dropdown,
+html[data-theme="light"] .user-dropdown,
+html[data-theme="light"] .language-dropdown {
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] .quick-search-dropdown p,
+html[data-theme="light"] .quick-search-dropdown span,
+html[data-theme="light"] .quick-search-dropdown a,
+html[data-theme="light"] .quick-search-dropdown h3,
+html[data-theme="light"] .quick-search-dropdown h4,
+html[data-theme="light"] .quick-search-dropdown small,
+html[data-theme="light"] .notification-dropdown p,
+html[data-theme="light"] .notification-dropdown span,
+html[data-theme="light"] .notification-dropdown a,
+html[data-theme="light"] .notification-dropdown h3,
+html[data-theme="light"] .notification-dropdown h4,
+html[data-theme="light"] .notification-dropdown small,
+html[data-theme="light"] .ai-finder-dropdown p,
+html[data-theme="light"] .ai-finder-dropdown span,
+html[data-theme="light"] .ai-finder-dropdown a,
+html[data-theme="light"] .ai-finder-dropdown h3,
+html[data-theme="light"] .ai-finder-dropdown h4,
+html[data-theme="light"] .ai-finder-dropdown small,
+html[data-theme="light"] .ai-finder-dropdown button,
+html[data-theme="light"] .user-dropdown p,
+html[data-theme="light"] .user-dropdown span,
+html[data-theme="light"] .user-dropdown a,
+html[data-theme="light"] .user-dropdown h3,
+html[data-theme="light"] .user-dropdown h4,
+html[data-theme="light"] .language-dropdown a,
+html[data-theme="light"] .language-dropdown span {
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] .dropdown-item {
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] .dropdown-item:hover {
+    background: rgba(201, 169, 78, 0.14);
+    color: #4a3d10;
+}
+html[data-theme="light"] .dropdown-item.danger {
+    color: #b32020 !important;
+}
+html[data-theme="light"] .lang-option {
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] .lang-option:hover {
+    background: rgba(201, 169, 78, 0.14);
+}
+html[data-theme="light"] .quick-search-dropdown .search-suggestion {
+    border-bottom-color: var(--color-border);
+}
+html[data-theme="light"] .quick-search-dropdown .search-suggestion:hover,
+html[data-theme="light"] .quick-search-dropdown .search-result-item:hover {
+    background: rgba(201, 169, 78, 0.12);
+}
+
+/* Ingredient finder modal */
+html[data-theme="light"] .ingredient-modal-content {
+    background: rgba(250, 249, 246, 0.99);
+    border-color: rgba(166, 139, 60, 0.25);
+    box-shadow: 0 50px 100px rgba(28, 25, 22, 0.22);
+}
+html[data-theme="light"] .ingredient-modal-header {
+    background: rgba(201, 169, 78, 0.05);
+    border-bottom-color: var(--color-border);
+}
+html[data-theme="light"] .ingredient-modal-title h2 {
+    color: #1c1b19;
+}
+html[data-theme="light"] .ingredient-modal-subtitle {
+    color: var(--color-text-secondary);
+}
+html[data-theme="light"] .ingredient-modal-close {
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+html[data-theme="light"] .ingredient-modal-close:hover {
+    background: rgba(28, 25, 22, 0.06);
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] .ingredient-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(166, 139, 60, 0.4);
+}
+
+html[data-theme="light"] .ingredient-category {
+    background: rgba(28, 25, 22, 0.03);
+    border-color: var(--color-border);
+}
+html[data-theme="light"] .ingredient-category:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(166, 139, 60, 0.35);
+}
+html[data-theme="light"] .category-header {
+    border-bottom-color: var(--color-border);
+}
+html[data-theme="light"] .category-header h3 {
+    color: #1c1b19;
+}
+html[data-theme="light"] .category-header p {
+    color: var(--color-text-muted);
+}
+html[data-theme="light"] .enhanced-ingredient-tag {
+    background: rgba(28, 25, 22, 0.05);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+html[data-theme="light"] .enhanced-ingredient-tag:hover {
+    background: rgba(201, 169, 78, 0.14);
+    border-color: rgba(166, 139, 60, 0.5);
+    color: #4a3d10;
+}
+html[data-theme="light"] .enhanced-ingredient-tag.selected,
+html[data-theme="light"] .ingredient-tag.selected {
+    background: rgba(201, 169, 78, 0.22);
+    border-color: rgba(166, 139, 60, 0.55);
+    color: #4a3d10;
+}
+
+html[data-theme="light"] #enhancedIngredientSearch {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(166, 139, 60, 0.3);
+    color: #1c1b19;
+}
+html[data-theme="light"] #enhancedIngredientSearch::placeholder {
+    color: rgba(28, 25, 22, 0.4);
+}
+html[data-theme="light"] #enhancedIngredientSearch:focus {
+    background: #ffffff;
+    border-color: rgba(166, 139, 60, 0.55);
+    box-shadow: 0 0 0 3px rgba(201, 169, 78, 0.18);
+}
+html[data-theme="light"] .search-input-icon {
+    color: rgba(166, 139, 60, 0.85);
+}
+
+/* Results */
+html[data-theme="light"] .results-header {
+    border-bottom-color: var(--color-border);
+}
+html[data-theme="light"] .results-title h3 {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .results-title p,
+html[data-theme="light"] #resultsSubtitle {
+    color: var(--color-text-secondary);
+}
+html[data-theme="light"] .back-to-search-btn {
+    background: rgba(28, 25, 22, 0.05);
+    border-color: var(--color-border);
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"] .back-to-search-btn:hover {
+    background: rgba(201, 169, 78, 0.15);
+    border-color: rgba(166, 139, 60, 0.45);
+    color: #4a3d10 !important;
+}
+html[data-theme="light"] .result-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f3f1ec 100%);
+    border-color: rgba(28, 25, 22, 0.10);
+    box-shadow: var(--shadow-sm);
+}
+html[data-theme="light"] .result-card:hover {
+    background: linear-gradient(180deg, #ffffff 0%, #faf8f3 100%);
+    border-color: rgba(166, 139, 60, 0.45);
+    box-shadow: 0 18px 40px rgba(28, 25, 22, 0.14), 0 0 26px rgba(166, 139, 60, 0.08);
+}
+html[data-theme="light"] .result-card-image {
+    background: radial-gradient(circle at 32% 22%, rgba(212, 175, 55, 0.22) 0%, rgba(28, 25, 22, 0.05) 68%);
+}
+html[data-theme="light"] .result-name {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .result-brand {
+    color: var(--color-text-muted) !important;
+}
+html[data-theme="light"] .result-match-badge {
+    background: rgba(201, 169, 78, 0.18);
+    border-color: rgba(166, 139, 60, 0.45);
+    color: #6b5418 !important;
+}
+html[data-theme="light"] .result-description p {
+    color: var(--color-text-secondary) !important;
+}
+html[data-theme="light"] .result-card .ingredients-label,
+html[data-theme="light"] .ingredients-label {
+    color: var(--color-text-muted) !important;
+}
+html[data-theme="light"] .ingredient-pill {
+    background: rgba(28, 25, 22, 0.05);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary) !important;
+}
+html[data-theme="light"] .ingredient-pill.matched {
+    background: rgba(74, 222, 128, 0.16);
+    border-color: rgba(74, 222, 128, 0.4);
+    color: #14532d !important;
+}
+html[data-theme="light"] .ingredient-pill.more {
+    background: rgba(28, 25, 22, 0.04);
+    border-color: var(--color-border);
+    color: var(--color-text-muted) !important;
+}
+html[data-theme="light"] .view-fragrance-btn {
+    background: rgba(201, 169, 78, 0.16);
+    border-color: rgba(166, 139, 60, 0.5);
+    color: #6b5418 !important;
+}
+html[data-theme="light"] .view-fragrance-btn:hover {
+    background: rgba(201, 169, 78, 0.24);
+    border-color: rgba(166, 139, 60, 0.7);
+    color: #4a3d10 !important;
+}
+html[data-theme="light"] .ingredient-results-section .favorite-btn,
+html[data-theme="light"] .ingredient-results-section .share-btn {
+    background: rgba(28, 25, 22, 0.05);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary) !important;
+}
+html[data-theme="light"] .ingredient-results-section .favorite-btn:hover,
+html[data-theme="light"] .ingredient-results-section .share-btn:hover {
+    background: rgba(201, 169, 78, 0.16);
+    border-color: rgba(166, 139, 60, 0.5);
+    color: #6b5418 !important;
+}
+html[data-theme="light"] .ingredient-results-section .favorite-btn.active {
+    color: #d9252b !important;
+}
+
+/* Generic modals (profile, settings, favorites, photo editor, admin) */
+html[data-theme="light"] .modal-content,
+html[data-theme="light"] .search-modal-content,
+html[data-theme="light"] .photo-editor-content,
+html[data-theme="light"] .admin-modal-content {
+    background: #fbfaf7;
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-xl);
+}
+html[data-theme="light"] .modal-header,
+html[data-theme="light"] .admin-modal-header {
+    background: rgba(201, 169, 78, 0.05);
+    border-bottom-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] .modal-header h2,
+html[data-theme="light"] .modal-header h3,
+html[data-theme="light"] .admin-modal-header h2,
+html[data-theme="light"] .admin-modal-header h3 {
+    color: #1c1b19;
+}
+html[data-theme="light"] .modal-body,
+html[data-theme="light"] .admin-modal-body,
+html[data-theme="light"] .admin-stats,
+html[data-theme="light"] .admin-section {
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] .modal-close,
+html[data-theme="light"] .admin-close-btn {
+    background: rgba(28, 25, 22, 0.05);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+html[data-theme="light"] .modal-close:hover,
+html[data-theme="light"] .admin-close-btn:hover {
+    background: rgba(201, 169, 78, 0.16);
+    color: #6b5418;
+}
+html[data-theme="light"] .modal-body p,
+html[data-theme="light"] .modal-body span,
+html[data-theme="light"] .modal-body small,
+html[data-theme="light"] .modal-body label,
+html[data-theme="light"] .modal-body h4,
+html[data-theme="light"] .modal-body li,
+html[data-theme="light"] .admin-modal-content p,
+html[data-theme="light"] .admin-modal-content span,
+html[data-theme="light"] .admin-modal-content small,
+html[data-theme="light"] .admin-modal-content label,
+html[data-theme="light"] .admin-modal-content h4,
+html[data-theme="light"] .admin-modal-content li,
+html[data-theme="light"] .settings-section label {
+    color: var(--color-text-primary);
+}
+
+/* Forms inside modals & settings */
+html[data-theme="light"] .modal-content input,
+html[data-theme="light"] .modal-content select,
+html[data-theme="light"] .modal-content textarea,
+html[data-theme="light"] .admin-modal-content input,
+html[data-theme="light"] .admin-modal-content select,
+html[data-theme="light"] .admin-modal-content textarea,
+html[data-theme="light"] .settings-section input,
+html[data-theme="light"] .settings-section select {
+    background: #ffffff;
+    border-color: var(--color-border);
+    color: #1c1b19;
+}
+html[data-theme="light"] .modal-content input::placeholder,
+html[data-theme="light"] .admin-modal-content input::placeholder {
+    color: rgba(28, 25, 22, 0.4);
+}
+
+/* Footer */
+html[data-theme="light"] .site-footer {
+    background: #eceae5;
+    border-top-color: rgba(166, 139, 60, 0.2);
+}
+
+/* Search modal */
+html[data-theme="light"] .search-header h2 {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .search-close {
+    color: rgba(28, 25, 22, 0.7) !important;
+    border-color: var(--color-border);
+}
+html[data-theme="light"] .search-close:hover {
+    background: rgba(28, 25, 22, 0.06);
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] #searchInput {
+    background: #ffffff;
+    border-color: var(--color-border);
+    color: #1c1b19;
+}
+html[data-theme="light"] #searchInput::placeholder {
+    color: rgba(28, 25, 22, 0.4);
+}
+html[data-theme="light"] .search-icon-input svg {
+    color: rgba(166, 139, 60, 0.9);
+}
+html[data-theme="light"] .search-modal-content .suggestion-tag {
+    background: rgba(28, 25, 22, 0.05);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary) !important;
+}
+html[data-theme="light"] .search-modal-content .suggestion-tag:hover {
+    background: rgba(201, 169, 78, 0.14);
+    color: #4a3d10 !important;
+}
+html[data-theme="light"] .search-modal-content .search-suggestions h3,
+html[data-theme="light"] .search-modal-content .search-results h3 {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .search-modal-content .search-result-item {
+    background: rgba(28, 25, 22, 0.03);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+/* Product sections (elves / versace / chbadboy / gentleman / ... white-text sections on light body).
+   combined-profiles.css uses per-brand !important colors on these, so we must use !important too. */
+html[data-theme="light"] [class$="-product-section"] {
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] [class$="-product-section"] .brand-name,
+html[data-theme="light"] [class$="-product-section"] .product-name,
+html[data-theme="light"] [class$="-product-section"] .product-info-section,
+html[data-theme="light"] [class$="-product-section"] .product-actions-buttons,
+html[data-theme="light"] [class$="-product-section"] .favorite-btn-middle-container,
+html[data-theme="light"] [class$="-product-section"] .cart-btn-container,
+html[data-theme="light"] [class$="-product-section"] .quality-selector-container,
+html[data-theme="light"] [class$="-product-section"] .quality-header,
+html[data-theme="light"] [class$="-product-section"] .quality-title,
+html[data-theme="light"] [class$="-product-section"] .quality-subtitle,
+html[data-theme="light"] [class$="-product-section"] .quality-option,
+html[data-theme="light"] [class$="-product-section"] .quality-label,
+html[data-theme="light"] [class$="-product-section"] .quality-name,
+html[data-theme="light"] [class$="-product-section"] .quality-description,
+html[data-theme="light"] [class$="-product-section"] .quality-details,
+html[data-theme="light"] [class$="-product-section"] .add-to-cart-btn,
+html[data-theme="light"] [class$="-product-section"] .cart-icon,
+html[data-theme="light"] [class$="-product-section"] .cart-text,
+html[data-theme="light"] [class$="-product-section"] .perfume-top-row,
+html[data-theme="light"] [class$="-product-section"] .selection-indicator,
+html[data-theme="light"] [class$="-product-section"] strong,
+html[data-theme="light"] [class$="-product-section"] p,
+html[data-theme="light"] [class$="-product-section"] [class*="indicator-label"],
+html[data-theme="light"] [class$="-product-section"] [class*="indicator-icon"],
+html[data-theme="light"] [class$="-product-section"] [class*="indicator-bar"] {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"] [class$="-product-section"] .product-price,
+html[data-theme="light"] [class$="-product-section"] .product-price-container,
+html[data-theme="light"] [class$="-product-section"] .price-currency,
+html[data-theme="light"] [class$="-product-section"] .price-unit,
+html[data-theme="light"] [class$="-product-section"] .price-badge {
+    color: #8a6d1f !important;
+}
+html[data-theme="light"] [class$="-product-section"] [class*="indicator-item"] {
+    color: var(--color-text-secondary) !important;
+}
+html[data-theme="light"] [class$="-product-section"] .price-ornament,
+html[data-theme="light"] [class$="-product-section"] .quality-ornament {
+    color: rgba(28, 25, 22, 0.4) !important;
+}
+html[data-theme="light"] [class$="-product-section"] .add-to-cart-btn,
+html[data-theme="light"] [class$="-product-section"] .favorite-btn,
+html[data-theme="light"] [class$="-product-section"] .quality-badge {
+    border-color: rgba(28, 25, 22, 0.28) !important;
+}
+html[data-theme="light"] [class$="-product-section"] .add-to-cart-btn:hover {
+    border-color: rgba(166, 139, 60, 0.6) !important;
+}
+
+/* Fragrance profile panels (radar / tiers / crystal notes / metrics / indicators /
+   reddit reviews / star ratings / reviews form). These live in [class*="main-container"]
+   wrappers which sit directly on the body surface (no art background), so in light mode
+   their white text must become dark. haltane/pegasus art sections do NOT use this scope. */
+html[data-theme="light"] [class*="main-container"] {
+    color: var(--color-text-primary);
+}
+html[data-theme="light"] [class*="main-container"] [class*="profile-card"],
+html[data-theme="light"] [class*="main-container"] [class*="profiles-container"],
+html[data-theme="light"] [class*="main-container"] [class*="scent-profile"],
+html[data-theme="light"] [class*="main-container"] [class*="radar-"],
+html[data-theme="light"] [class*="main-container"] [class*="crystal-"],
+html[data-theme="light"] [class*="main-container"] [class*="tier-"],
+html[data-theme="light"] [class*="main-container"] [class*="metric-"],
+html[data-theme="light"] [class*="main-container"] [class*="indicator-"],
+html[data-theme="light"] [class*="main-container"] [class*="engagement-"],
+html[data-theme="light"] [class*="main-container"] [class*="reddit-"],
+html[data-theme="light"] [class*="main-container"] [class*="perfume-rating"],
+html[data-theme="light"] [class*="main-container"] [class*="rating-indicators"],
+html[data-theme="light"] [class*="main-container"] [class*="mood-indicators"],
+html[data-theme="light"] [class*="main-container"] [class*="seasonal-indicators"],
+html[data-theme="light"] [class*="main-container"] [class*="reviews-"],
+html[data-theme="light"] [class*="main-container"] [class*="add-review"],
+html[data-theme="light"] [class*="main-container"] [class*="review-form"],
+html[data-theme="light"] [class*="main-container"] [class*="review-rating"],
+html[data-theme="light"] [class*="main-container"] [class*="star-rating"],
+html[data-theme="light"] [class*="main-container"] [class*="star-input"],
+html[data-theme="light"] [class*="main-container"] [class*="review-textarea"],
+html[data-theme="light"] [class*="main-container"] [class*="character-count"],
+html[data-theme="light"] [class*="main-container"] [class*="review-btn"],
+html[data-theme="light"] [class*="main-container"] [class*="user-avatar-small"],
+html[data-theme="light"] [class*="main-container"] [class*="fragrance-description"],
+html[data-theme="light"] [class*="main-container"] [class*="ingredients"],
+html[data-theme="light"] [class*="main-container"] [class*="note-item"],
+html[data-theme="light"] [class*="main-container"] [class*="note-name"],
+html[data-theme="light"] [class*="main-container"] [class*="note-icon"],
+html[data-theme="light"] [class*="main-container"] [class*="rating-label"],
+html[data-theme="light"] [class*="main-container"] [class*="rating-count"],
+html[data-theme="light"] [class*="main-container"] [class*="subreddit"],
+html[data-theme="light"] [class*="main-container"] [class*="post-info"],
+html[data-theme="light"] [class*="main-container"] [class*="quality-"],
+html[data-theme="light"] [class*="main-container"] [class*="character-count"],
+html[data-theme="light"] [class*="main-container"] .perfume-top-row,
+html[data-theme="light"] [class*="main-container"] h1,
+html[data-theme="light"] [class*="main-container"] h2,
+html[data-theme="light"] [class*="main-container"] h3,
+html[data-theme="light"] [class*="main-container"] h4,
+html[data-theme="light"] [class*="main-container"] h5,
+html[data-theme="light"] [class*="main-container"] h6,
+html[data-theme="light"] [class*="main-container"] .label-name,
+html[data-theme="light"] [class*="main-container"] .profile-title {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"] [class*="main-container"] [class*="indicator-item"],
+html[data-theme="light"] [class*="main-container"] [class*="engagement-count"],
+html[data-theme="light"] [class*="main-container"] [class*="post-time"] {
+    color: var(--color-text-secondary) !important;
+}
+html[data-theme="light"] [class*="main-container"] [class*="metric-bar"] {
+    background: rgba(28, 25, 22, 0.08) !important;
+}
+html[data-theme="light"] [class*="main-container"] [class*="review-textarea"] {
+    background: #ffffff !important;
+    color: #1c1b19 !important;
+    border-color: rgba(166, 139, 60, 0.35) !important;
+}
+html[data-theme="light"] [class*="main-container"] [class*="review-textarea"]::placeholder {
+    color: rgba(28, 25, 22, 0.4);
+}
+html[data-theme="light"] [class*="main-container"] [class*="review-btn"] {
+    color: var(--color-text-secondary) !important;
+    border-color: rgba(28, 25, 22, 0.25) !important;
+}
+html[data-theme="light"] [class*="main-container"] [class*="star-input"] {
+    color: #c9a94e !important;
+}
+html[data-theme="light"] [class*="main-container"] [class*="star-input"].filled {
+    color: #8a6d1f !important;
+}
+
+/* Additional ratings / perfume rating breakdown blocks. These sit directly on the
+   body surface inside each <section class="content ...-section"> wrapper.
+   haltane's wrapper is plain "content" (excluded); pegasus has no matching classes. */
+html[data-theme="light"] [class$="-section"] [class*="additional-ratings"],
+html[data-theme="light"] [class$="-section"] [class*="rating-category"],
+html[data-theme="light"] [class$="-section"] [class*="category-header"],
+html[data-theme="light"] [class$="-section"] [class*="category-title"],
+html[data-theme="light"] [class$="-section"] [class*="category-icon"],
+html[data-theme="light"] [class$="-section"] [class*="rating-row"],
+html[data-theme="light"] [class$="-section"] [class*="rating-item"],
+html[data-theme="light"] [class$="-section"] [class*="rating-label"],
+html[data-theme="light"] [class$="-section"] [class*="rating-count"],
+html[data-theme="light"] [class$="-section"] [class*="no-vote"],
+html[data-theme="light"] [class$="-section"] [class*="rating-score"],
+html[data-theme="light"] [class$="-section"] [class*="votes"],
+html[data-theme="light"] [class$="-section"] .perfume-top-row,
+html[data-theme="light"] [class$="-section"] [class*="quality-"],
+html[data-theme="light"] [class$="-section"] [class*="subreddit"],
+html[data-theme="light"] [class$="-section"] [class*="no-vote"],
+html[data-theme="light"] [class$="-section"] [class*="reviews-"],
+html[data-theme="light"] [class$="-section"] [class*="review-"],
+html[data-theme="light"] [class$="-section"] [class*="character-count"] {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"] [class$="-section"] [class*="rating-bar"],
+html[data-theme="light"] [class$="-section"] [class*="votes-bar"] {
+    background: rgba(28, 25, 22, 0.08) !important;
+}
+
+/* Top featured product cards use generic .perfume-rating + standalone quality
+   selectors (not under -main-container / -product-section). They sit on the
+   light body too, so darken their text in light mode. */
+html[data-theme="light"] .perfume-rating [class*="rating-"],
+html[data-theme="light"] .perfume-rating [class*="category-"],
+html[data-theme="light"] .perfume-rating [class*="no-vote"],
+html[data-theme="light"] .perfume-rating [class*="reviews-"],
+html[data-theme="light"] .perfume-rating [class*="review-"],
+html[data-theme="light"] .perfume-rating [class*="character-count"],
+html[data-theme="light"] .perfume-rating [class*="star-"],
+html[data-theme="light"] .perfume-rating [class*="user-avatar"],
+html[data-theme="light"] [class*="quality-selector"] [class*="quality-"] {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"] [class*="reviews-empty"] h1,
+html[data-theme="light"] [class*="reviews-empty"] h2,
+html[data-theme="light"] [class*="reviews-empty"] h3,
+html[data-theme="light"] [class*="reviews-empty"] h4,
+html[data-theme="light"] [class*="reviews-empty"] h5,
+html[data-theme="light"] [class*="reviews-empty"] p,
+html[data-theme="light"] [class*="reviews-empty"] span,
+html[data-theme="light"] [class*="character-count"] span,
+html[data-theme="light"] .perfume-rating [class*="rating-bar"] {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"] .perfume-rating [class*="rating-bar"] {
+    background: rgba(28, 25, 22, 0.08) !important;
+}
+html[data-theme="light"] .perfume-rating [class*="review-textarea"] {
+    background: #ffffff !important;
+    color: #1c1b19 !important;
+    border-color: rgba(166, 139, 60, 0.35) !important;
+}
+html[data-theme="light"] .perfume-rating [class*="review-textarea"]::placeholder {
+    color: rgba(28, 25, 22, 0.4);
+}
+html[data-theme="light"] .perfume-rating [class*="star-input"] {
+    color: #c9a94e !important;
+}
+
+/* Final sweep — combined-profiles.css brand rules (e.g.
+   ".greenly-main-container .quality-option[data-quality] input[type=radio]:checked
+   + .quality-label .quality-name") use very high specificity + !important.
+   Boost specificity with :not() chains so light mode always wins. */
+html[data-theme="light"]:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .quality-name:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .quality-description:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .quality-badge:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .selection-indicator:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .price-subtitle:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .price-ornament:not(#b):not(#b) {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"]:not(#b):not(#b) section.content:not(#b):not(#b) [class*="no-vote"]:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) section.content:not(#b):not(#b) [class*="category-"]:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) section.content:not(#b):not(#b) [class*="rating-"]:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) section.content:not(#b):not(#b) [class*="votes"]:not(#b):not(#b) {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"]:not(#b):not(#b) section.content:not(#b):not(#b) [class*="haltane-perfume-rating"]:not(#b):not(#b) [class*="review-"]:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) section.content:not(#b):not(#b) [class*="haltane-perfume-rating"]:not(#b):not(#b) [class*="reviews-"]:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) section.content:not(#b):not(#b) [class*="haltane-perfume-rating"]:not(#b):not(#b) [class*="character-count"]:not(#b):not(#b) {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) strong:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) b:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) em:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) p:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="vote-count"]:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="label-value"]:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="post-dot"]:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="wave-value"]:not(#b):not(#b) {
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"]:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="score"]:not(#b):not(#b) {
+    color: #8a6d1f !important;
+}
+html[data-theme="light"]:not(#b):not(#b) .ingredient-modal:not(#b):not(#b) .results-title:not(#b):not(#b) p:not(#b):not(#b) {
+    color: var(--color-text-primary) !important;
+}
+
+/* The auth modal keeps its dark card in light mode — keep it dark but ensure
+   inherited body text (title, labels) stays light so it stays readable. */
+html[data-theme="light"]:not(#b):not(#b) .auth-modal:not(#b):not(#b) .auth-modal-content:not(#b):not(#b) #authTitle:not(#b):not(#b),
+html[data-theme="light"]:not(#b):not(#b) .auth-modal:not(#b):not(#b) .auth-modal-content:not(#b):not(#b) label:not(#b):not(#b) {
+    color: rgba(245, 245, 245, 0.95) !important;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   PERFUME GRID VIEW · TWO-MODE TOGGLE (Details | Grid)
+   Grid mode hides the stacked detail sections and shows all
+   fragrances as a responsive card grid.
+   ═════════════════════════════════════════════════════════════ */
+
+/* Floating toggle pill */
+.perfume-mode-toggle {
+    position: fixed !important;
+    right: 24px !important;
+    bottom: 88px !important;
+    z-index: calc(var(--z-sticky) + 10) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 5px !important;
+    border-radius: var(--radius-full) !important;
+    background: var(--color-surface-overlay) !important;
+    border: 1px solid var(--color-border-gold) !important;
+    box-shadow: var(--shadow-lg) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    opacity: 0 !important;
+    transform: translateY(14px) !important;
+    transition:
+        opacity 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow var(--transition-normal) !important;
+}
+
+.perfume-mode-toggle.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.perfume-mode-toggle:hover {
+    box-shadow: var(--shadow-gold-lg) !important;
+}
+
+.perfume-mode-btn {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    border: none !important;
+    background: transparent !important;
+    color: var(--color-text-secondary) !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    padding: 9px 20px !important;
+    border-radius: var(--radius-full) !important;
+    cursor: pointer !important;
+    transition:
+        background var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast) !important;
+}
+
+.perfume-mode-btn:hover {
+    color: var(--color-text-primary) !important;
+}
+
+.perfume-mode-btn:active {
+    transform: scale(0.96) !important;
+}
+
+.perfume-mode-btn.active {
+    background: var(--color-gold) !important;
+    color: #0a0908 !important;
+    box-shadow: 0 4px 18px rgba(201, 169, 78, 0.35) !important;
+}
+
+/* Grid view container — hidden by default, shown in grid mode */
+.perfume-grid-view {
+    display: none !important;
+    max-width: var(--content-max-width) !important;
+    margin: 0 auto !important;
+    padding: 64px 40px 140px !important;
+}
+
+body.perfume-grid-mode .perfume-grid-view {
+    display: block !important;
+}
+
+/* Hide stacked detail sections in grid mode (keep hero visible) */
+body.perfume-grid-mode section.content {
+    display: none !important;
+}
+
+body.perfume-grid-mode section.hero {
+    display: block !important;
+}
+
+.perfume-grid-header {
+    display: flex !important;
+    align-items: baseline !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 36px !important;
+}
+
+.perfume-grid-title {
+    margin: 0 !important;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Georgia', serif !important;
+    font-size: clamp(30px, 3.2vw, 46px) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
+    color: var(--color-text-primary) !important;
+}
+
+.perfume-grid-count {
+    font-size: 12px !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: var(--color-text-muted) !important;
+}
+
+.perfume-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
+    gap: 22px !important;
+}
+
+.perfume-grid-card {
+    display: flex !important;
+    flex-direction: column !important;
+    background: var(--color-surface-card) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    cursor: pointer !important;
+    box-shadow: var(--shadow-sm) !important;
+    opacity: 0 !important;
+    transform: translateY(18px) !important;
+    transition:
+        transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow var(--transition-normal),
+        border-color var(--transition-normal),
+        opacity 300ms ease !important;
+}
+
+body.perfume-grid-mode .perfume-grid-card.entered {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.perfume-grid-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: var(--shadow-lg) !important;
+    border-color: var(--color-border-gold) !important;
+}
+
+.perfume-grid-media {
+    position: relative !important;
+    aspect-ratio: 3 / 4 !important;
+    background:
+        radial-gradient(120% 90% at 50% 0%, rgba(201, 169, 78, 0.12), transparent 60%),
+        var(--color-surface-raised) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+}
+
+.perfume-grid-media img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.perfume-grid-card:hover .perfume-grid-media img {
+    transform: scale(1.06) !important;
+}
+
+.perfume-grid-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    padding: 16px 16px 18px !important;
+}
+
+.perfume-grid-brand {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: var(--color-gold) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.perfume-grid-name {
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Georgia', serif !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: var(--color-text-primary) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.perfume-grid-price {
+    margin-top: 6px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: var(--color-champagne) !important;
+}
+
+.perfume-grid-price .perfume-grid-unit {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    margin-left: 2px !important;
+    color: var(--color-text-secondary) !important;
+}
+
+/* Light theme overrides */
+html[data-theme="light"] .perfume-mode-toggle {
+    border-color: rgba(166, 139, 60, 0.35) !important;
+}
+
+html[data-theme="light"] .perfume-mode-btn.active {
+    color: #1c1b19 !important;
+}
+
+html[data-theme="light"] .perfume-grid-media {
+    background:
+        radial-gradient(120% 90% at 50% 0%, rgba(166, 139, 60, 0.10), transparent 60%),
+        #ffffff !important;
 }

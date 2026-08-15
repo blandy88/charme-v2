@@ -590,7 +590,7 @@ const IMAGE_EXT = /\.(png|jpe?g)$/i;
 
 function resolveImageSource(reqPath) {
   // Full-resolution hero background — bypass the 800px-wide image optimizer
-  if (reqPath.toLowerCase() === "/hero-bg.jpg") return null;
+  if (reqPath.toLowerCase() === "/hero-bg.jpg" || reqPath.toLowerCase() === "/hero-bg-night.jpg") return null;
   // Root-level perfume bottle images (e.g. /layton.png)
   if (reqPath.startsWith("/") && IMAGE_EXT.test(reqPath) && reqPath.indexOf("/", 1) === -1) {
     const file = reqPath.slice(1).toLowerCase();

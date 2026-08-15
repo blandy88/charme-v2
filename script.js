@@ -2143,6 +2143,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function forceBodyTheme(theme) {
     if (!theme) return;
+    if (document.documentElement.getAttribute("data-theme") === "light") {
+      theme = "light";
+    }
     const alreadyApplied = document.body.classList.contains(`theme-${theme}`) &&
       window.themeManager?.currentTheme === theme;
     if (alreadyApplied) return;
@@ -2391,7 +2394,10 @@ function getScrollBackgroundColor(scrollTop, windowHeight) {
 
 function updateScrollBackgroundAndTheme() {
   const scrollTop = window._globalScrollTop !== undefined ? window._globalScrollTop : (window.pageYOffset || document.documentElement.scrollTop);
-  const backgroundColor = getScrollBackgroundColor(scrollTop, window.innerHeight);
+  let backgroundColor = getScrollBackgroundColor(scrollTop, window.innerHeight);
+  if (document.documentElement.getAttribute("data-theme") === "light") {
+    backgroundColor = "#f6f5f1";
+  }
   if (_lastAppliedBackgroundColor !== backgroundColor) {
     body.style.backgroundColor = backgroundColor;
     _lastAppliedBackgroundColor = backgroundColor;
@@ -2500,6 +2506,9 @@ function updateColors() {
     }
 
     // Apply the color (avoid redundant style writes)
+    if (document.documentElement.getAttribute("data-theme") === "light") {
+      backgroundColor = "#f6f5f1";
+    }
     if (_lastAppliedBackgroundColor !== backgroundColor) {
       body.style.backgroundColor = backgroundColor;
       _lastAppliedBackgroundColor = backgroundColor;
@@ -2538,6 +2547,12 @@ function updateColors() {
     } else {
       // Background is soft green - text should be black for good contrast
       textColor = "#000000";
+    }
+
+    // In light mode, always keep the scroll-applied text dark regardless of
+    // the scroll zone the designer painted for the night theme.
+    if (document.documentElement.getAttribute("data-theme") === "light") {
+      textColor = "rgba(28, 25, 22, 0.92)";
     }
 
     // Keep perfume rating section visible - remove problematic opacity manipulation
@@ -11806,7 +11821,7 @@ class FavoritesManager {
         price: "40dt",
         description:
           "Modern oud fragrance with bergamot, saffron, and cedar notes",
-        image: "haltane.png",
+        image: "https://fimgs.net/mdimg/perfume/375x500.70776.jpg",
         topNotes: ["Bergamot", "Clary Sage", "Cardamom"],
         middleNotes: ["Saffron", "Lavender", "Praline"],
         baseNotes: ["Oud", "Cedar", "Musk"],
@@ -13079,7 +13094,7 @@ class CartManager {
   getProductDetails(productId) {
     const products = {
       layton: { name: "Layton", brand: "Parfums de Marly", image: "layton.png" },
-      haltane: { name: "Haltane", brand: "Parfums de Marly", image: "haltane.png" },
+      haltane: { name: "Haltane", brand: "Parfums de Marly", image: "https://fimgs.net/mdimg/perfume/375x500.70776.jpg" },
       pegasus: { name: "Pegasus", brand: "Parfums de Marly", image: "pegasus.png" },
       greenly: { name: "Greenly", brand: "Parfums de Marly", image: "GREENLEY.png" },
       baccaratrouge: { name: "Baccarat Rouge 540", brand: "Maison Francis Kurkdjian", image: "baccarat-rouge-540.png" },
@@ -13131,9 +13146,9 @@ class CartManager {
       sideeffect: { name: "Side Effect", brand: "Initio", image: "initio-side-effect.png" },
       naxos: { name: "Naxos", brand: "Xerjoff", image: "xerjoff-naxos.png" },
       grandSoir: { name: "Grand Soir", brand: "Maison Francis Kurkdjian", image: "mfk-grand-soir.png" },
-      balayage: { name: "Balayage", brand: "Sospiro", image: "balayage.png" },
+      balayage: { name: "Balayage", brand: "Sospiro", image: "https://fimgs.net/mdimg/perfume/375x500.21279.jpg" },
       valayaexclusive: { name: "Valaya Exclusive", brand: "Parfums de Marly", image: "valaya-exclusive.png" },
-      "1millionnight": { name: "1 Million Night", brand: "Paco Rabanne", image: "1-million-night.png" },
+      "1millionnight": { name: "1 Million Night", brand: "Paco Rabanne", image: "https://fimgs.net/mdimg/perfume/375x500.125545.jpg" },
       freedommuskmatcha: { name: "Freedom Musk Matcha", brand: "Kayali", image: "freedom-musk-matcha.png" },
       torrino21: { name: "Torino21", brand: "Xerjoff", image: "xerjoff-torrino-21.png" },
       kayalimarshmallow: { name: "Marshmallow", brand: "Kayali", image: "kayali-marshmallow.png" },
@@ -19370,7 +19385,7 @@ class ProfileModalManager {
         name: 'Haltane',
         brand: 'Parfums de Marly',
         price: '$190',
-        image: 'haltane.png'
+        image: 'https://fimgs.net/mdimg/perfume/375x500.70776.jpg'
       },
       pegasus: {
         name: 'Pegasus',
@@ -19528,9 +19543,9 @@ class ProfileModalManager {
       sideeffect: { name: 'Side Effect', brand: 'Initio', price: '$60', image: 'initio-side-effect.png' },
       naxos: { name: 'Naxos', brand: 'Xerjoff', price: '$65', image: 'xerjoff-naxos.png' },
       grandSoir: { name: 'Grand Soir', brand: 'Maison Francis Kurkdjian', price: '$65', image: 'mfk-grand-soir.png' },
-      balayage: { name: 'Balayage', brand: 'Sospiro', price: '$55', image: 'balayage.png' },
+      balayage: { name: 'Balayage', brand: 'Sospiro', price: '$55', image: 'https://fimgs.net/mdimg/perfume/375x500.21279.jpg' },
       valayaexclusive: { name: 'Valaya Exclusive', brand: 'Parfums de Marly', price: '$60', image: 'valaya-exclusive.png' },
-      "1millionnight": { name: '1 Million Night', brand: 'Paco Rabanne', price: '$50', image: '1-million-night.png' },
+      "1millionnight": { name: '1 Million Night', brand: 'Paco Rabanne', price: '$50', image: 'https://fimgs.net/mdimg/perfume/375x500.125545.jpg' },
       freedommuskmatcha: { name: 'Freedom Musk Matcha', brand: 'Kayali', price: '$40', image: 'freedom-musk-matcha.png' },
       torrino21: { name: 'Torino21', brand: 'Xerjoff', price: '$55', image: 'xerjoff-torrino-21.png' },
       kayalimarshmallow: { name: 'Marshmallow', brand: 'Kayali', price: '$38', image: 'kayali-marshmallow.png' },
@@ -20296,4 +20311,157 @@ window.testClickOnElement = function() {
 
   new MutationObserver(decorate).observe(tbody, { childList: true });
   decorate();
+})();
+
+// ═════════════════════════════════════════════════════════════
+// PERFUME GRID VIEW · TWO-MODE TOGGLE (Details | Grid)
+//   Builds a responsive grid of every fragrance from the existing
+//   DOM sections, and toggles between the stacked detail view and
+//   the grid. Mode is persisted in localStorage.
+// ═════════════════════════════════════════════════════════════
+(function () {
+  const STORAGE_KEY = "charme-perfume-mode";
+  const toggle = document.getElementById("perfumeModeToggle");
+  const gridView = document.getElementById("perfumeGridView");
+  if (!toggle || !gridView) return;
+
+  let built = false;
+
+  function buildGrid() {
+    if (built) return;
+    built = true;
+
+    const sections = Array.from(
+      document.querySelectorAll("section.content")
+    ).filter((s) => s.querySelector(".product-name") && s.id);
+
+    const fragrances = sections.map((s) => {
+      const id = s.id;
+      const imgEl = s.querySelector(".perfume-top-row img[src], img[src]");
+      const src = imgEl ? imgEl.getAttribute("src") : "";
+      const g = (sel) => {
+        const el = s.querySelector(sel);
+        return el ? el.textContent.trim() : "";
+      };
+      return {
+        id,
+        img: src,
+        brand: g(".brand-name"),
+        name: g(".product-name"),
+        price: g(".price-currency"),
+        unit: g(".price-unit") || "dt",
+        audience: s.getAttribute("data-audience") || "",
+      };
+    });
+
+    const esc = (v) =>
+      String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+    const cards = fragrances
+      .map((f) => {
+        const price = f.price
+          ? `<span class="perfume-grid-price">${esc(f.price)}<span class="perfume-grid-unit">${esc(f.unit)}</span></span>`
+          : "";
+        return `
+          <a class="perfume-grid-card" href="#${esc(f.id)}" data-target="${esc(f.id)}" data-audience="${esc(f.audience)}">
+            <div class="perfume-grid-media">
+              <img src="${esc(f.img)}" alt="${esc(f.name)}" loading="lazy" decoding="async">
+            </div>
+            <div class="perfume-grid-info">
+              <span class="perfume-grid-brand">${esc(f.brand)}</span>
+              <span class="perfume-grid-name">${esc(f.name)}</span>
+              ${price}
+            </div>
+          </a>`;
+      })
+      .join("");
+
+    gridView.querySelector(".perfume-grid").innerHTML = cards;
+
+    const countEl = document.getElementById("perfumeGridCount");
+    if (countEl) countEl.textContent = `${fragrances.length} fragrances`;
+
+    // Staggered entrance when entering grid mode
+    const cardEls = gridView.querySelectorAll(".perfume-grid-card");
+    cardEls.forEach((card, i) => {
+      setTimeout(() => card.classList.add("entered"), 40 + i * 18);
+    });
+
+    // Card click → back to Details mode + scroll to that fragrance section
+    gridView.addEventListener("click", (e) => {
+      const card = e.target.closest(".perfume-grid-card");
+      if (!card) return;
+      e.preventDefault();
+      setMode("details", true);
+      const target = document.getElementById(card.getAttribute("data-target"));
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 120);
+      }
+    });
+  }
+
+  function setMode(mode, opts) {
+    const { persist = true, scroll = false } = opts || {};
+    const isGrid = mode === "grid";
+    document.body.classList.toggle("perfume-grid-mode", isGrid);
+    document.body.classList.toggle("perfume-grid-view-open", isGrid);
+
+    if (isGrid) {
+      buildGrid();
+      gridView.setAttribute("aria-hidden", "false");
+    } else {
+      gridView.setAttribute("aria-hidden", "true");
+    }
+
+    toggle.querySelectorAll(".perfume-mode-btn").forEach((btn) => {
+      const active = btn.getAttribute("data-mode") === mode;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+
+    if (persist) {
+      try {
+        localStorage.setItem(STORAGE_KEY, mode);
+      } catch (err) {}
+    }
+
+    if (scroll && mode === "grid") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  function currentMode() {
+    return document.body.classList.contains("perfume-grid-mode")
+      ? "grid"
+      : "details";
+  }
+
+  toggle.addEventListener("click", (e) => {
+    const btn = e.target.closest(".perfume-mode-btn");
+    if (!btn) return;
+    const mode = btn.getAttribute("data-mode");
+    if (mode === currentMode()) return;
+    setMode(mode, { scroll: true });
+  });
+
+  // Reveal the pill after mount
+  requestAnimationFrame(() => toggle.classList.add("visible"));
+
+  // Restore persisted mode
+  let saved = "details";
+  try {
+    saved = localStorage.getItem(STORAGE_KEY) || "details";
+  } catch (err) {}
+  if (saved === "grid") {
+    // Wait for layout; build and apply without scrolling
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => {
+        setMode("grid", { persist: false, scroll: false });
+      });
+    } else {
+      setMode("grid", { persist: false, scroll: false });
+    }
+  }
 })();
