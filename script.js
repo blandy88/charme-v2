@@ -1,14 +1,16 @@
 
 // Backend origin. When served by the Express server itself (local dev on
-// localhost/127.0.0.1), API calls stay on the same origin. When this static
-// site is hosted away from the backend (e.g. GitHub Pages), the /api and
-// /uploads URLs are rewritten to the Render origin below so auth, API calls
-// and avatar images keep working.
+// localhost/127.0.0.1, or the Render service), API calls stay on the same
+// origin. When this static site is hosted away from the backend (e.g. GitHub
+// Pages), the /api and /uploads URLs are rewritten to the Render origin below
+// so auth, API calls and avatar images keep working.
 const _isLocalHost =
   /^(localhost|127\.0\.0\.1|\[::1\]|::1)$/i.test(window.location.hostname);
-window.CHARME_API_ORIGIN = _isLocalHost
+const _isRenderHost =
+  /(^|\.)onrender\.com$/i.test(window.location.hostname);
+window.CHARME_API_ORIGIN = _isLocalHost || _isRenderHost
   ? window.location.origin
-  : "https://parfumerie-charme-4dw8.onrender.com";
+  : "https://parfumerie-charme.onrender.com";
 (function () {
   if (window.location.origin === window.CHARME_API_ORIGIN) return;
   const nativeFetch = window.fetch.bind(window);
