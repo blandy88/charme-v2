@@ -172,7 +172,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastTs          = performance.now();
     let rafPending      = false;
     let resizeTimer     = 0;
-    let marqueeDismissed = false;
 
     // ---- helpers -------------------------------------------------
     function readScrollY() {
@@ -191,15 +190,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // Measured height keeps the hide transform pixel-perfect on any viewport
       const h = navbarEl.offsetHeight + (marqueeIsVisible() ? marqueeBar.offsetHeight : 0);
       document.documentElement.style.setProperty("--nav-h", h + "px");
-    }
-
-    // Announcement bar shows only at the very top; first scroll dismisses it permanently.
-    function dismissMarquee() {
-      if (marqueeDismissed || !marqueeBar) return;
-      marqueeDismissed = true;
-      marqueeBar.style.display = "none";
-      document.body.classList.remove("has-marquee");
-      writeChromeHeightVar();
     }
 
     function setHidden(next) {
@@ -245,8 +235,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const dt  = Math.max(1, now - lastTs);
       const v   = Math.abs(dy) / dt; // px per ms
 
-      // Announcement bar is dismissed for good once the page is scrolled past the top.
-      if (y > SCROLL_TOP_ZONE) dismissMarquee();
+      // The marquee hides with the navbar while scrolled down and
+      // returns when the user scrolls back to the very top. Only the
+      // close button (×) dismisses it permanently.
 
       // Background/hairline state (used by .top-shell-scrolled CSS)
       document.body.classList.toggle("top-shell-scrolled", y > SCROLL_TOP_ZONE);
