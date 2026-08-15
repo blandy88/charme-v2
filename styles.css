@@ -24699,8 +24699,6 @@ body.perfume-grid-mode section.hero {
     transform: translateY(18px) !important;
     transition:
         transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow var(--transition-normal),
-        border-color var(--transition-normal),
         opacity 300ms ease !important;
 }
 
@@ -24711,8 +24709,6 @@ body.perfume-grid-mode .perfume-grid-card.entered {
 
 .perfume-grid-card:hover {
     transform: translateY(-6px) !important;
-    box-shadow: var(--shadow-lg) !important;
-    border-color: var(--color-border-gold) !important;
 }
 
 .perfume-grid-media {
@@ -24794,4 +24790,302 @@ html[data-theme="light"] .perfume-grid-media {
     background:
         radial-gradient(120% 90% at 50% 0%, rgba(166, 139, 60, 0.10), transparent 60%),
         #ffffff !important;
+}
+
+/* =====================================================================
+   CLEAN WHITE PERFUME SECTIONS (details mode) — NO GLOW, NO SCROLL
+   BACKGROUND TRANSITION.
+   The scroll-driven body background transition is disabled in script.js.
+   Every perfume <section class="content"> now sits on a solid white
+   background in BOTH themes, with the same dark-text treatment light mode
+   already applies (colors are hardcoded because --color-text-primary is
+   white in the night theme). Grid mode keeps its dark cards on the static
+   black page background.
+   ===================================================================== */
+
+/* Solid white background for every perfume section (both themes) */
+section.content {
+    background: #ffffff !important;
+    transition: none !important;
+}
+
+/* --- Kill the glow / pulse effects on the perfume layouts --- */
+section.content [class*="glow"] {
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    opacity: 0 !important;
+    animation: none !important;
+}
+
+/* Remove colored glow shadows on badges / indicators / profile cards */
+section.content [class$="-product-section"] .quality-badge,
+section.content [class$="-product-section"] .selection-indicator,
+section.content [class$="-product-section"] .selection-indicator::before,
+section.content [class$="-product-section"] .selection-indicator::after,
+section.content [class$="-product-section"] .price-badge,
+section.content [class$="-product-section"] [class*="price-ornament"],
+section.content [class$="-profiles-container"] [class*="profile-card"],
+section.content [class$="-profiles-container"] [class$="-profile-card"] {
+    box-shadow: none !important;
+}
+
+/* Remove colored drop-shadow glow behind perfume bottle images */
+section.content [class$="-product-section"] [class*="-image"],
+section.content .pegasus-section [class*="-image"],
+section.content .haltane-section-container [class*="-image"] {
+    filter: none !important;
+}
+
+/* --- Dark text on white sections (both themes) --- */
+section.content,
+section.content [class*="main-container"],
+section.content [class$="-product-section"] {
+    color: rgba(28, 25, 22, 0.92) !important;
+    text-shadow: none !important;
+}
+
+section.content [class$="-product-section"] .brand-name,
+section.content [class$="-product-section"] .product-name,
+section.content [class$="-product-section"] .product-info-section,
+section.content [class$="-product-section"] .product-actions-buttons,
+section.content [class$="-product-section"] .favorite-btn-middle-container,
+section.content [class$="-product-section"] .cart-btn-container,
+section.content [class$="-product-section"] .quality-selector-container,
+section.content [class$="-product-section"] .quality-header,
+section.content [class$="-product-section"] .quality-title,
+section.content [class$="-product-section"] .quality-subtitle,
+section.content [class$="-product-section"] .quality-option,
+section.content [class$="-product-section"] .quality-label,
+section.content [class$="-product-section"] .quality-name,
+section.content [class$="-product-section"] .quality-description,
+section.content [class$="-product-section"] .quality-details,
+section.content [class$="-product-section"] .add-to-cart-btn,
+section.content [class$="-product-section"] .cart-icon,
+section.content [class$="-product-section"] .cart-text,
+section.content [class$="-product-section"] .perfume-top-row,
+section.content [class$="-product-section"] .selection-indicator,
+section.content [class$="-product-section"] strong,
+section.content [class$="-product-section"] p,
+section.content [class$="-product-section"] [class*="indicator-label"],
+section.content [class$="-product-section"] [class*="indicator-icon"],
+section.content [class$="-product-section"] [class*="indicator-bar"] {
+    color: rgba(28, 25, 22, 0.92) !important;
+    text-shadow: none !important;
+}
+
+section.content [class$="-product-section"] .product-price,
+section.content [class$="-product-section"] .product-price-container,
+section.content [class$="-product-section"] .price-currency,
+section.content [class$="-product-section"] .price-unit,
+section.content [class$="-product-section"] .price-badge {
+    color: #8a6d1f !important;
+    text-shadow: none !important;
+}
+
+section.content [class$="-product-section"] [class*="indicator-item"] {
+    color: rgba(28, 25, 22, 0.62) !important;
+}
+
+section.content [class$="-product-section"] .price-ornament,
+section.content [class$="-product-section"] .quality-ornament {
+    color: rgba(28, 25, 22, 0.4) !important;
+}
+
+section.content [class$="-product-section"] .add-to-cart-btn,
+section.content [class$="-product-section"] .favorite-btn,
+section.content [class$="-product-section"] .quality-badge {
+    border-color: rgba(28, 25, 22, 0.28) !important;
+}
+
+section.content [class$="-product-section"] .add-to-cart-btn:hover {
+    border-color: rgba(166, 139, 60, 0.6) !important;
+}
+
+/* Fragrance profile panels (radar / tiers / crystal / metrics / indicators /
+   reddit reviews / star ratings / reviews form) inside main-container */
+section.content [class*="main-container"] [class*="profile-card"],
+section.content [class*="main-container"] [class*="profiles-container"],
+section.content [class*="main-container"] [class*="scent-profile"],
+section.content [class*="main-container"] [class*="radar-"],
+section.content [class*="main-container"] [class*="crystal-"],
+section.content [class*="main-container"] [class*="tier-"],
+section.content [class*="main-container"] [class*="metric-"],
+section.content [class*="main-container"] [class*="indicator-"],
+section.content [class*="main-container"] [class*="engagement-"],
+section.content [class*="main-container"] [class*="reddit-"],
+section.content [class*="main-container"] [class*="perfume-rating"],
+section.content [class*="main-container"] [class*="rating-indicators"],
+section.content [class*="main-container"] [class*="mood-indicators"],
+section.content [class*="main-container"] [class*="seasonal-indicators"],
+section.content [class*="main-container"] [class*="reviews-"],
+section.content [class*="main-container"] [class*="add-review"],
+section.content [class*="main-container"] [class*="review-form"],
+section.content [class*="main-container"] [class*="review-rating"],
+section.content [class*="main-container"] [class*="star-rating"],
+section.content [class*="main-container"] [class*="star-input"],
+section.content [class*="main-container"] [class*="review-textarea"],
+section.content [class*="main-container"] [class*="character-count"],
+section.content [class*="main-container"] [class*="review-btn"],
+section.content [class*="main-container"] [class*="user-avatar-small"],
+section.content [class*="main-container"] [class*="fragrance-description"],
+section.content [class*="main-container"] [class*="ingredients"],
+section.content [class*="main-container"] [class*="note-item"],
+section.content [class*="main-container"] [class*="note-name"],
+section.content [class*="main-container"] [class*="note-icon"],
+section.content [class*="main-container"] [class*="rating-label"],
+section.content [class*="main-container"] [class*="rating-count"],
+section.content [class*="main-container"] [class*="subreddit"],
+section.content [class*="main-container"] [class*="post-info"],
+section.content [class*="main-container"] [class*="quality-"],
+section.content [class*="main-container"] .perfume-top-row,
+section.content [class*="main-container"] h1,
+section.content [class*="main-container"] h2,
+section.content [class*="main-container"] h3,
+section.content [class*="main-container"] h4,
+section.content [class*="main-container"] h5,
+section.content [class*="main-container"] h6,
+section.content [class*="main-container"] .label-name,
+section.content [class*="main-container"] .profile-title {
+    color: rgba(28, 25, 22, 0.92) !important;
+    text-shadow: none !important;
+}
+
+section.content [class*="main-container"] [class*="indicator-item"],
+section.content [class*="main-container"] [class*="engagement-count"],
+section.content [class*="main-container"] [class*="post-time"] {
+    color: rgba(28, 25, 22, 0.62) !important;
+}
+
+section.content [class*="main-container"] [class*="metric-bar"] {
+    background: rgba(28, 25, 22, 0.08) !important;
+}
+
+section.content [class*="main-container"] [class*="review-textarea"] {
+    background: #ffffff !important;
+    color: #1c1b19 !important;
+    border-color: rgba(166, 139, 60, 0.35) !important;
+}
+
+section.content [class*="main-container"] [class*="review-btn"] {
+    color: rgba(28, 25, 22, 0.62) !important;
+    border-color: rgba(28, 25, 22, 0.25) !important;
+}
+
+section.content [class*="main-container"] [class*="star-input"] {
+    color: #c9a94e !important;
+}
+
+section.content [class*="main-container"] [class*="star-input"].filled {
+    color: #8a6d1f !important;
+}
+
+/* Additional ratings / perfume rating breakdown blocks on the section surface */
+section.content [class$="-section"] [class*="additional-ratings"],
+section.content [class$="-section"] [class*="rating-category"],
+section.content [class$="-section"] [class*="category-header"],
+section.content [class$="-section"] [class*="category-title"],
+section.content [class$="-section"] [class*="category-icon"],
+section.content [class$="-section"] [class*="rating-row"],
+section.content [class$="-section"] [class*="rating-item"],
+section.content [class$="-section"] [class*="rating-label"],
+section.content [class$="-section"] [class*="rating-count"],
+section.content [class$="-section"] [class*="no-vote"],
+section.content [class$="-section"] [class*="rating-score"],
+section.content [class$="-section"] [class*="votes"],
+section.content [class$="-section"] .perfume-top-row,
+section.content [class$="-section"] [class*="quality-"],
+section.content [class$="-section"] [class*="subreddit"],
+section.content [class$="-section"] [class*="reviews-"],
+section.content [class$="-section"] [class*="review-"],
+section.content [class$="-section"] [class*="character-count"] {
+    color: rgba(28, 25, 22, 0.92) !important;
+}
+
+section.content [class$="-section"] [class*="rating-bar"],
+section.content [class$="-section"] [class*="votes-bar"] {
+    background: rgba(28, 25, 22, 0.08) !important;
+}
+
+/* Top featured product cards use generic .perfume-rating + quality selectors */
+section.content .perfume-rating [class*="rating-"],
+section.content .perfume-rating [class*="category-"],
+section.content .perfume-rating [class*="no-vote"],
+section.content .perfume-rating [class*="reviews-"],
+section.content .perfume-rating [class*="review-"],
+section.content .perfume-rating [class*="character-count"],
+section.content .perfume-rating [class*="star-"],
+section.content .perfume-rating [class*="user-avatar"],
+section.content [class*="quality-selector"] [class*="quality-"] {
+    color: rgba(28, 25, 22, 0.92) !important;
+}
+
+section.content [class*="reviews-empty"] h1,
+section.content [class*="reviews-empty"] h2,
+section.content [class*="reviews-empty"] h3,
+section.content [class*="reviews-empty"] h4,
+section.content [class*="reviews-empty"] h5,
+section.content [class*="reviews-empty"] p,
+section.content [class*="reviews-empty"] span,
+section.content [class*="character-count"] span,
+section.content .perfume-rating [class*="rating-bar"] {
+    color: rgba(28, 25, 22, 0.92) !important;
+}
+
+section.content .perfume-rating [class*="rating-bar"] {
+    background: rgba(28, 25, 22, 0.08) !important;
+}
+
+section.content .perfume-rating [class*="review-textarea"] {
+    background: #ffffff !important;
+    color: #1c1b19 !important;
+    border-color: rgba(166, 139, 60, 0.35) !important;
+}
+
+section.content .perfume-rating [class*="star-input"] {
+    color: #c9a94e !important;
+}
+
+/* Final sweep — combined-profiles.css brand rules use very high specificity +
+   !important. Boost specificity with :not() chains so the white-section text
+   always wins, in both themes. */
+section.content:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .quality-name:not(#b):not(#b),
+section.content:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .quality-description:not(#b):not(#b),
+section.content:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .quality-badge:not(#b):not(#b),
+section.content:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .selection-indicator:not(#b):not(#b),
+section.content:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .price-subtitle:not(#b):not(#b),
+section.content:not(#b):not(#b) [class$="-product-section"]:not(#b):not(#b) .price-ornament:not(#b):not(#b) {
+    color: rgba(28, 25, 22, 0.92) !important;
+    text-shadow: none !important;
+}
+
+section.content:not(#b):not(#b) [class*="no-vote"]:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="category-"]:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="rating-"]:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="votes"]:not(#b):not(#b) {
+    color: rgba(28, 25, 22, 0.92) !important;
+}
+
+section.content:not(#b):not(#b) [class*="haltane-perfume-rating"]:not(#b):not(#b) [class*="review-"]:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="haltane-perfume-rating"]:not(#b):not(#b) [class*="reviews-"]:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="haltane-perfume-rating"]:not(#b):not(#b) [class*="character-count"]:not(#b):not(#b) {
+    color: rgba(28, 25, 22, 0.92) !important;
+}
+
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) strong:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) b:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) em:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) p:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="vote-count"]:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="label-value"]:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="post-dot"]:not(#b):not(#b),
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="wave-value"]:not(#b):not(#b) {
+    color: rgba(28, 25, 22, 0.92) !important;
+    text-shadow: none !important;
+}
+
+section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class*="score"]:not(#b):not(#b) {
+    color: #8a6d1f !important;
+    text-shadow: none !important;
 }

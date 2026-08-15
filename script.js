@@ -2385,12 +2385,18 @@ function getScrollBackgroundColor(scrollTop, windowHeight) {
   return _bgBreakpoints.length > 0 ? _lookupSectionBgColor(scrollTop, _bgBreakpoints) : "#f0f8f0";
 }
 
-function updateScrollBackgroundAndTheme() {
-  const scrollTop = window._globalScrollTop !== undefined ? window._globalScrollTop : (window.pageYOffset || document.documentElement.scrollTop);
-  let backgroundColor = getScrollBackgroundColor(scrollTop, window.innerHeight);
+function getStaticBackgroundColor() {
+  // The scroll-driven background transition is disabled. Every perfume section
+  // now sits on a solid color: white in details mode, black in grid mode (night
+  // theme). Light theme always keeps the same beige body color.
   if (document.documentElement.getAttribute("data-theme") === "light") {
-    backgroundColor = "#f6f5f1";
+    return "#f6f5f1";
   }
+  return document.body.classList.contains("perfume-grid-mode") ? "#000000" : "#ffffff";
+}
+
+function updateScrollBackgroundAndTheme() {
+  const backgroundColor = getStaticBackgroundColor();
   if (_lastAppliedBackgroundColor !== backgroundColor) {
     body.style.backgroundColor = backgroundColor;
     _lastAppliedBackgroundColor = backgroundColor;
@@ -2445,63 +2451,11 @@ function updateColors() {
     const softGreenTransitionEnd =
       softGreenTransitionStart + softGreenTransitionRange;
 
-    // Background transitions: black -> cream -> pegasus (red/black) -> vibrant green
-    let backgroundColor;
-    const pegasusTransitionColor = _pegasusTransitionColor;
-    if (scrollTop < creamTransitionStart) {
-      // Before emoji rating section - stay black
-      backgroundColor = "#000000";
-    } else if (scrollTop < creamTransitionEnd) {
-      // In cream transition zone - fade from black to cream
-      const rawProgress =
-        (scrollTop - creamTransitionStart) / creamTransitionRange;
-      // Apply slower easing curve for smoother, more gradual fade
-      const easedProgress = Math.pow(rawProgress, 0.7); // Slower than linear
-      backgroundColor = interpolateColor("#000000", "#f5f0e6", easedProgress);
-    } else if (scrollTop < greyTransitionStart) {
-      // Between cream and pegasus transition - stay cream
-      backgroundColor = "#f5f0e6";
-    } else if (scrollTop < greyTransitionEnd) {
-      // In pegasus transition zone - fade from cream to configured red/black
-      const rawProgress =
-        (scrollTop - greyTransitionStart) / greyTransitionRange;
-      const easedProgress = Math.pow(rawProgress, 0.6); // Smooth easing
-      backgroundColor = interpolateColor(
-        "#f5f0e6",
-        pegasusTransitionColor,
-        easedProgress,
-      );
-    } else if (scrollTop < softGreenTransitionStart) {
-      // Between pegasus and soft green transition - stay on pegasus color
-      backgroundColor = pegasusTransitionColor;
-    } else if (scrollTop < softGreenTransitionEnd) {
-      // In transition zone - fade from pegasus color to light grey
-      const rawProgress =
-        (scrollTop - softGreenTransitionStart) / softGreenTransitionRange;
-      const easedProgress = Math.pow(rawProgress, 0.5); // Gentle easing
-      // Fade to light green instead of pure white
-      backgroundColor = interpolateColor(
-        pegasusTransitionColor,
-        "#f0f8f0",
-        easedProgress,
-      );
-        } else {
-      // Past Greenly - use data-driven transition table
-      // Build breakpoint table lazily (only when cache is invalidated)
-      if (!_bgBreakpoints) {
-        _bgBreakpoints = _buildBgBreakpoints(windowHeight);
-      }
-      if (_bgBreakpoints.length > 0) {
-        backgroundColor = _lookupSectionBgColor(scrollTop, _bgBreakpoints);
-      } else {
-        backgroundColor = "#f0f8f0";
-      }
-    }
+    // Static page background: white in details mode, black in grid mode (night
+    // theme). Light theme always uses the same beige body color.
+    const backgroundColor = getStaticBackgroundColor();
 
     // Apply the color (avoid redundant style writes)
-    if (document.documentElement.getAttribute("data-theme") === "light") {
-      backgroundColor = "#f6f5f1";
-    }
     if (_lastAppliedBackgroundColor !== backgroundColor) {
       body.style.backgroundColor = backgroundColor;
       _lastAppliedBackgroundColor = backgroundColor;
@@ -2523,28 +2477,14 @@ function updateColors() {
       if (el.style.transform && el.style.transform !== "none") el.style.transform = "none";
     });
 
-    // Progressive text color transition based on background
+    // Static text color: dark on white sections (light + night details), white
+    // on the black grid background.
     let textColor;
-    if (scrollTop < creamTransitionStart) {
-      // Background is black - keep text white
-      textColor = "#ffffff";
-    } else if (scrollTop < creamTransitionEnd) {
-      // In cream transition zone - fade text from white to black
-      const rawProgress =
-        (scrollTop - creamTransitionStart) / creamTransitionRange;
-      const easedProgress = Math.pow(rawProgress, 0.7); // Same easing as background
-      textColor = interpolateColor("#ffffff", "#000000", easedProgress);
-    } else if (scrollTop < softGreenTransitionEnd) {
-      // Background is cream, grey, or transitioning to soft green - text should be black
-      textColor = "#000000";
-    } else {
-      // Background is soft green - text should be black for good contrast
-      textColor = "#000000";
-    }
-
-    // In light mode, always keep the scroll-applied text dark regardless of
-    // the scroll zone the designer painted for the night theme.
     if (document.documentElement.getAttribute("data-theme") === "light") {
+      textColor = "rgba(28, 25, 22, 0.92)";
+    } else if (document.body.classList.contains("perfume-grid-mode")) {
+      textColor = "#ffffff";
+    } else {
       textColor = "rgba(28, 25, 22, 0.92)";
     }
 
@@ -20423,6 +20363,10 @@ window.testClickOnElement = function() {
     if (scroll && mode === "grid") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    // Refresh the static page background for the active mode (white sections
+    // in details mode, black page in grid mode).
+    updateScrollBackgroundAndTheme();
   }
 
   function currentMode() {
