@@ -23787,6 +23787,479 @@ html[data-theme="light"] .admin-modal-content input::placeholder {
     color: rgba(28, 25, 22, 0.4);
 }
 
+/* ═════════════════════════════════════════════════════════════
+   LIGHT THEME · WINDOWS (fidelity / admin / news / cart / verification / ban)
+   Dark base rules for these shells use `!important`, so every
+   override here MUST use `!important` + the html[data-theme] prefix
+   (higher specificity) to actually win.
+   ═════════════════════════════════════════════════════════════ */
+
+/* ---- Window shells ---- */
+html[data-theme="light"] .loyalty-shell {
+    background: linear-gradient(180deg, #fbfaf7 0%, #f4f1ea 100%) !important;
+    border-color: rgba(166, 139, 60, 0.30) !important;
+    box-shadow: 0 30px 80px rgba(24, 22, 18, 0.18) !important;
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"] .modal .modal-content,
+html[data-theme="light"] .profile-modal .modal-content,
+html[data-theme="light"] .favorites-modal .modal-content,
+html[data-theme="light"] .settings-modal .modal-content,
+html[data-theme="light"] .admin-modal-content,
+html[data-theme="light"] .news-modal-content,
+html[data-theme="light"] #verificationModal .modal-content,
+html[data-theme="light"] #banModal .modal-content {
+    background: #fbfaf7 !important;
+    border-color: rgba(166, 139, 60, 0.25) !important;
+    box-shadow: 0 24px 48px rgba(24, 22, 18, 0.18) !important;
+    color: var(--color-text-primary) !important;
+}
+html[data-theme="light"] #verificationModal .modal-overlay,
+html[data-theme="light"] #banModal .modal-overlay,
+html[data-theme="light"] .admin-modal {
+    background: rgba(24, 22, 18, 0.55) !important;
+}
+html[data-theme="light"] .profile-modal.admin-profile .modal-content {
+    background: #fbfaf7 !important;
+    border-color: rgba(166, 139, 60, 0.25) !important;
+}
+html[data-theme="light"] .profile-modal.admin-profile .modal-header {
+    background: rgba(201, 169, 78, 0.05) !important;
+    border-bottom-color: rgba(166, 139, 60, 0.15) !important;
+}
+
+/* ---- Headers ---- */
+html[data-theme="light"] .loyalty-header,
+html[data-theme="light"] .news-modal-header {
+    background: rgba(201, 169, 78, 0.05) !important;
+    border-bottom-color: rgba(166, 139, 60, 0.25) !important;
+}
+html[data-theme="light"] .loyalty-header__eyebrow,
+html[data-theme="light"] .loyalty-panel__eyebrow,
+html[data-theme="light"] .loyalty-field__label {
+    color: rgba(139, 112, 44, 0.9) !important;
+}
+html[data-theme="light"] .loyalty-header h2,
+html[data-theme="light"] .loyalty-panel h3,
+html[data-theme="light"] .loyalty-stat h3,
+html[data-theme="light"] .loyalty-empty__title,
+html[data-theme="light"] .news-modal-title,
+html[data-theme="light"] .admin-modal-header h2,
+html[data-theme="light"] .admin-section h3 {
+    color: #6b5418 !important;
+}
+html[data-theme="light"] .news-modal-title {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .loyalty-panel__meta {
+    color: rgba(28, 25, 22, 0.6) !important;
+}
+html[data-theme="light"] .loyalty-field__label em {
+    color: rgba(28, 25, 22, 0.5) !important;
+}
+
+/* ---- Close buttons ---- */
+html[data-theme="light"] .modal-close,
+html[data-theme="light"] .admin-close-btn,
+html[data-theme="light"] .loyalty-close,
+html[data-theme="light"] .news-modal-close {
+    background: transparent !important;
+    border-color: rgba(24, 22, 18, 0.15) !important;
+    color: rgba(28, 25, 22, 0.55) !important;
+}
+html[data-theme="light"] .modal-close:hover,
+html[data-theme="light"] .admin-close-btn:hover,
+html[data-theme="light"] .loyalty-close:hover,
+html[data-theme="light"] .news-modal-close:hover {
+    background: rgba(201, 169, 78, 0.12) !important;
+    border-color: rgba(166, 139, 60, 0.45) !important;
+    color: #6b5418 !important;
+}
+html[data-theme="light"] #verificationModal .modal-close,
+html[data-theme="light"] #banModal .modal-close {
+    background: rgba(28, 25, 22, 0.05) !important;
+    border-color: rgba(24, 22, 18, 0.20) !important;
+    color: rgba(28, 25, 22, 0.6) !important;
+}
+html[data-theme="light"] #verificationModal .modal-close:hover,
+html[data-theme="light"] #banModal .modal-close:hover {
+    background: rgba(201, 169, 78, 0.15) !important;
+    border-color: rgba(166, 139, 60, 0.5) !important;
+    color: #6b5418 !important;
+    box-shadow: 0 0 12px rgba(166, 139, 60, 0.30) !important;
+}
+
+/* ---- Loyalty stats / panels / fields ---- */
+html[data-theme="light"] .loyalty-stat {
+    background: #ffffff !important;
+    border-color: rgba(166, 139, 60, 0.25) !important;
+}
+html[data-theme="light"] .loyalty-stat--accent {
+    background: linear-gradient(180deg, rgba(201, 169, 78, 0.10), rgba(201, 169, 78, 0.02)) !important;
+    border-color: rgba(166, 139, 60, 0.45) !important;
+}
+html[data-theme="light"] .loyalty-stat p {
+    color: rgba(28, 25, 22, 0.65) !important;
+}
+html[data-theme="light"] .loyalty-panel {
+    background: #ffffff !important;
+    border-color: rgba(166, 139, 60, 0.20) !important;
+}
+html[data-theme="light"] .loyalty-hint {
+    color: rgba(28, 25, 22, 0.55) !important;
+}
+
+/* ---- Loyalty select + submit ---- */
+html[data-theme="light"] .loyalty-modal .loyalty-select {
+    background: #ffffff !important;
+    border-color: rgba(166, 139, 60, 0.35) !important;
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .loyalty-modal .loyalty-select::placeholder {
+    color: rgba(28, 25, 22, 0.35) !important;
+}
+html[data-theme="light"] .loyalty-modal .loyalty-select:focus {
+    background: #ffffff !important;
+    border-color: var(--color-gold) !important;
+    box-shadow: 0 0 0 3px rgba(201, 169, 78, 0.15) !important;
+}
+html[data-theme="light"] .loyalty-modal select.loyalty-select option {
+    background: #ffffff !important;
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .loyalty-submit {
+    background: linear-gradient(180deg, rgba(201, 169, 78, 0.18), rgba(201, 169, 78, 0.08)) !important;
+    color: #6b5418 !important;
+    border-color: rgba(166, 139, 60, 0.5) !important;
+}
+html[data-theme="light"] .loyalty-submit:hover {
+    background: var(--color-gold) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(166, 139, 60, 0.35) !important;
+}
+
+/* ---- Loyalty table ---- */
+html[data-theme="light"] .loyalty-table-wrap {
+    background: #ffffff !important;
+    border-color: rgba(166, 139, 60, 0.15) !important;
+}
+html[data-theme="light"] .loyalty-table thead th {
+    background: linear-gradient(180deg, rgba(201, 169, 78, 0.10), rgba(201, 169, 78, 0.04)) !important;
+    color: #6b5418 !important;
+    border-bottom-color: rgba(166, 139, 60, 0.30) !important;
+}
+html[data-theme="light"] .loyalty-table tbody td {
+    color: #1c1b19 !important;
+    border-bottom-color: rgba(24, 22, 18, 0.08) !important;
+}
+html[data-theme="light"] .loyalty-table tbody tr:hover {
+    background: rgba(201, 169, 78, 0.06) !important;
+}
+html[data-theme="light"] .loyalty-table td:nth-child(3) {
+    color: #6b5418 !important;
+}
+html[data-theme="light"] .loyalty-table .loyalty-progress {
+    background: rgba(24, 22, 18, 0.07) !important;
+    border-color: rgba(166, 139, 60, 0.25) !important;
+}
+html[data-theme="light"] .loyalty-table .btn-loyalty-add {
+    background: rgba(166, 139, 60, 0.12) !important;
+    color: #6b5418 !important;
+    border-color: rgba(166, 139, 60, 0.35) !important;
+}
+html[data-theme="light"] .loyalty-table .btn-loyalty-redeem {
+    background: rgba(40, 167, 69, 0.12) !important;
+    color: #1f8a3c !important;
+    border-color: rgba(31, 138, 60, 0.35) !important;
+}
+html[data-theme="light"] .loyalty-table .btn-loyalty-modify {
+    background: rgba(13, 110, 253, 0.12) !important;
+    color: #1a5fc9 !important;
+    border-color: rgba(26, 95, 201, 0.30) !important;
+}
+html[data-theme="light"] .loyalty-table .btn-loyalty-delete {
+    background: rgba(220, 53, 69, 0.12) !important;
+    color: #c0392b !important;
+    border-color: rgba(192, 57, 43, 0.30) !important;
+}
+html[data-theme="light"] .loyalty-table .btn-small:hover:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(24, 22, 18, 0.18) !important;
+}
+
+/* ---- Loyalty empty state ---- */
+html[data-theme="light"] .loyalty-empty {
+    color: rgba(28, 25, 22, 0.55) !important;
+}
+html[data-theme="light"] .loyalty-empty__text {
+    color: rgba(28, 25, 22, 0.5) !important;
+}
+
+/* ---- Admin inner components ---- */
+html[data-theme="light"] .stat-card {
+    background: #ffffff !important;
+    border-color: rgba(166, 139, 60, 0.20) !important;
+}
+html[data-theme="light"] .stat-card p {
+    color: rgba(28, 25, 22, 0.65) !important;
+}
+html[data-theme="light"] .users-table-container {
+    background: #ffffff !important;
+    border-color: rgba(24, 22, 18, 0.10) !important;
+}
+html[data-theme="light"] .users-table th,
+html[data-theme="light"] .users-table td {
+    border-bottom-color: rgba(24, 22, 18, 0.08) !important;
+}
+html[data-theme="light"] .users-table th {
+    background: rgba(201, 169, 78, 0.10) !important;
+    color: #6b5418 !important;
+}
+html[data-theme="light"] .users-table td {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .user-status.active {
+    background: rgba(40, 167, 69, 0.12) !important;
+    color: #1f8a3c !important;
+    border-color: rgba(31, 138, 60, 0.30) !important;
+}
+html[data-theme="light"] .user-status.banned {
+    background: rgba(220, 53, 69, 0.12) !important;
+    color: #c0392b !important;
+    border-color: rgba(192, 57, 43, 0.30) !important;
+}
+html[data-theme="light"] .user-status.admin {
+    background: rgba(166, 139, 60, 0.12) !important;
+    color: #6b5418 !important;
+    border-color: rgba(166, 139, 60, 0.30) !important;
+}
+html[data-theme="light"] .btn-ban,
+html[data-theme="light"] .btn-danger {
+    background: rgba(220, 53, 69, 0.10) !important;
+    color: #c0392b !important;
+}
+html[data-theme="light"] .btn-ban:hover,
+html[data-theme="light"] .btn-danger:hover {
+    background: rgba(220, 53, 69, 0.18) !important;
+}
+html[data-theme="light"] .btn-unban {
+    background: rgba(40, 167, 69, 0.10) !important;
+    color: #1f8a3c !important;
+}
+html[data-theme="light"] .btn-unban:hover {
+    background: rgba(40, 167, 69, 0.18) !important;
+}
+html[data-theme="light"] .btn-loyalty-add {
+    background: rgba(166, 139, 60, 0.12) !important;
+    color: #6b5418 !important;
+}
+html[data-theme="light"] .btn-loyalty-add:hover {
+    background: rgba(166, 139, 60, 0.22) !important;
+}
+html[data-theme="light"] .btn-loyalty-redeem {
+    background: rgba(40, 167, 69, 0.10) !important;
+    color: #1f8a3c !important;
+}
+html[data-theme="light"] .btn-loyalty-redeem:hover:not(:disabled) {
+    background: rgba(40, 167, 69, 0.18) !important;
+}
+html[data-theme="light"] .btn-loyalty-modify {
+    background: rgba(13, 110, 253, 0.10) !important;
+    color: #1a5fc9 !important;
+}
+html[data-theme="light"] .btn-loyalty-modify:hover {
+    background: rgba(13, 110, 253, 0.18) !important;
+}
+html[data-theme="light"] .btn-loyalty-delete {
+    background: rgba(220, 53, 69, 0.10) !important;
+    color: #c0392b !important;
+}
+html[data-theme="light"] .btn-loyalty-delete:hover {
+    background: rgba(220, 53, 69, 0.18) !important;
+}
+
+/* ---- News admin (list inside admin window) ---- */
+html[data-theme="light"] .news-admin-section__hint {
+    color: rgba(28, 25, 22, 0.55) !important;
+}
+html[data-theme="light"] .news-admin-item {
+    background: #ffffff !important;
+    border-color: rgba(166, 139, 60, 0.15) !important;
+}
+html[data-theme="light"] .news-admin-item__title {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .news-admin-item__date {
+    color: rgba(28, 25, 22, 0.5) !important;
+}
+html[data-theme="light"] .news-admin-empty {
+    color: rgba(28, 25, 22, 0.5) !important;
+}
+
+/* ---- News composer ---- */
+html[data-theme="light"] .news-composer-label {
+    color: rgba(28, 25, 22, 0.55) !important;
+}
+html[data-theme="light"] .news-template-card {
+    background: #ffffff !important;
+    border-color: rgba(24, 22, 18, 0.12) !important;
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .news-template-card:hover {
+    border-color: rgba(166, 139, 60, 0.45) !important;
+    background: rgba(201, 169, 78, 0.05) !important;
+}
+html[data-theme="light"] .news-template-card.is-active {
+    border-color: rgba(166, 139, 60, 0.7) !important;
+    background: linear-gradient(180deg, rgba(201, 169, 78, 0.14), rgba(201, 169, 78, 0.03)) !important;
+    color: #4a3d10 !important;
+}
+html[data-theme="light"] .news-template-card__desc {
+    color: rgba(28, 25, 22, 0.5) !important;
+}
+html[data-theme="light"] .news-composer-preview-card {
+    border-color: color-mix(in srgb, var(--news-accent) 45%, transparent) !important;
+    background: #ffffff !important;
+}
+html[data-theme="light"] .news-preview-title {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .news-preview-content {
+    color: rgba(28, 25, 22, 0.65) !important;
+}
+html[data-theme="light"] .news-composer-cancel {
+    background: transparent !important;
+    border-color: rgba(24, 22, 18, 0.25) !important;
+    color: rgba(28, 25, 22, 0.65) !important;
+}
+html[data-theme="light"] .news-composer-publish {
+    background: rgba(166, 139, 60, 0.12) !important;
+    color: #6b5418 !important;
+    border-color: rgba(166, 139, 60, 0.4) !important;
+}
+
+/* ---- Public news modal ---- */
+html[data-theme="light"] .news-item {
+    background: #ffffff !important;
+    border-color: rgba(24, 22, 18, 0.08) !important;
+}
+html[data-theme="light"] .news-item:hover {
+    background: rgba(201, 169, 78, 0.04) !important;
+    border-color: rgba(166, 139, 60, 0.20) !important;
+}
+html[data-theme="light"] .news-item-title {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .news-item-date {
+    color: rgba(28, 25, 22, 0.45) !important;
+}
+html[data-theme="light"] .news-item-content {
+    color: rgba(28, 25, 22, 0.65) !important;
+}
+html[data-theme="light"] .news-item-badge.update {
+    color: rgba(28, 25, 22, 0.55) !important;
+    border-color: rgba(24, 22, 18, 0.20) !important;
+}
+html[data-theme="light"] .news-empty {
+    color: rgba(28, 25, 22, 0.5) !important;
+}
+
+/* ---- Cart modal ---- */
+html[data-theme="light"] .empty-cart {
+    color: rgba(28, 25, 22, 0.55) !important;
+}
+html[data-theme="light"] .empty-cart h3 {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .empty-cart svg {
+    color: rgba(28, 25, 22, 0.35) !important;
+}
+html[data-theme="light"] .cart-item-brand,
+html[data-theme="light"] .cart-item-quality {
+    color: rgba(28, 25, 22, 0.45) !important;
+}
+html[data-theme="light"] .cart-summary {
+    border-top-color: rgba(24, 22, 18, 0.08) !important;
+}
+html[data-theme="light"] .total-row {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .total-row.total-final {
+    color: #6b5418 !important;
+    border-top-color: rgba(166, 139, 60, 0.25) !important;
+}
+
+/* ---- Verification / ban modal ---- */
+html[data-theme="light"] .verification-message {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .verification-code-input input {
+    background: #ffffff !important;
+    border-color: rgba(166, 139, 60, 0.4) !important;
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .verification-code-input input:focus {
+    border-color: var(--color-gold) !important;
+    box-shadow: 0 0 20px rgba(166, 139, 60, 0.30) !important;
+}
+html[data-theme="light"] .verification-info {
+    color: rgba(28, 25, 22, 0.6) !important;
+}
+
+/* ---- Modal buttons (btn-secondary is white-on-translucent-white by default) ---- */
+html[data-theme="light"] .modal .btn-secondary,
+html[data-theme="light"] .admin-modal-content .btn-secondary,
+html[data-theme="light"] .loyalty-modal .btn-secondary,
+html[data-theme="light"] #banModal .btn-secondary {
+    background: transparent !important;
+    border: 1px solid rgba(24, 22, 18, 0.25) !important;
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .modal .btn-secondary:hover,
+html[data-theme="light"] .admin-modal-content .btn-secondary:hover,
+html[data-theme="light"] .loyalty-modal .btn-secondary:hover,
+html[data-theme="light"] #banModal .btn-secondary:hover {
+    background: rgba(28, 25, 22, 0.06) !important;
+    border-color: rgba(166, 139, 60, 0.5) !important;
+    color: #6b5418 !important;
+}
+html[data-theme="light"] .modal .btn-danger,
+html[data-theme="light"] #banModal .btn-danger {
+    color: #c0392b !important;
+}
+
+/* ---- Settings modal text ---- */
+html[data-theme="light"] .settings-section h3 {
+    color: #1c1b19 !important;
+    border-bottom-color: rgba(24, 22, 18, 0.08) !important;
+}
+html[data-theme="light"] .setting-text,
+html[data-theme="light"] .setting-label {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .setting-description {
+    color: rgba(28, 25, 22, 0.6) !important;
+}
+html[data-theme="light"] .settings-actions {
+    border-top-color: rgba(24, 22, 18, 0.08) !important;
+}
+
+/* ---- Profile modal (generated sections) ---- */
+html[data-theme="light"] .profile-section-title,
+html[data-theme="light"] .profile-name,
+html[data-theme="light"] .profile-info,
+html[data-theme="light"] .fragrance-name {
+    color: #1c1b19 !important;
+}
+html[data-theme="light"] .fragrance-brand,
+html[data-theme="light"] .profile-empty,
+html[data-theme="light"] .profile-stats-label {
+    color: rgba(28, 25, 22, 0.6) !important;
+}
+html[data-theme="light"] .fragrance-card {
+    background: #ffffff !important;
+    border-color: rgba(24, 22, 18, 0.10) !important;
+}
+
 /* Footer */
 html[data-theme="light"] .site-footer {
     background: #eceae5;
