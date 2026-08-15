@@ -3969,7 +3969,6 @@ body.has-marquee .navbar {
         var(--hero-bg) center 10% / cover no-repeat var(--color-surface);
 }
 
-/* Google Maps card overlaid on the left of the hero background image */
 /* Google Maps card + contact card overlaid on the left of the hero background image */
 .hero-contact-stack {
     position: absolute;
@@ -3995,113 +3994,202 @@ body.has-marquee .navbar {
 }
 
 /* ---- Contact the store card ---- */
-.hero-contact-card {
+.contact-card-wrap {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: contactCardIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+}
+
+.contact-card {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 14px;
-    width: 100%;
-    padding: 12px 14px;
-    background: rgba(9, 9, 9, 0.58);
-    -webkit-backdrop-filter: blur(16px) saturate(1.25);
-    backdrop-filter: blur(16px) saturate(1.25);
-    border: 1px solid rgba(201, 169, 78, 0.28);
-    border-radius: 14px;
+    gap: 16px;
+    padding: 14px 18px 14px 14px;
+    border-radius: 20px;
+    overflow: hidden;
+
+    /* glassmorphism over the hero photo */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     box-shadow:
-        0 14px 34px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        0 20px 45px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.35s ease;
 }
 
-.hero-contact-card:hover {
+/* gold → green gradient hairline border */
+.contact-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.55), rgba(255, 255, 255, 0.08) 40%, rgba(37, 211, 102, 0.35));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* light-sweep sheen on hover */
+.contact-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+}
+
+.contact-card:hover::after {
+    left: 130%;
+}
+
+.contact-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(201, 169, 78, 0.5);
     box-shadow:
-        0 20px 44px rgba(0, 0, 0, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        0 26px 60px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-.contact-card-avatar {
+/* --- Avatar with WhatsApp-green ring + online dot --- */
+.contact-card__avatar {
+    position: relative;
+    flex: 0 0 auto;
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: #25d366;
+    padding: 2px;
+    background: conic-gradient(from 180deg, #25d366, rgba(37, 211, 102, 0.15), #25d366);
     box-shadow:
-        0 0 0 2px rgba(37, 211, 102, 0.3),
-        0 6px 14px rgba(0, 0, 0, 0.3);
+        0 0 0 1px rgba(37, 211, 102, 0.35),
+        0 6px 18px rgba(37, 211, 102, 0.25);
 }
 
-.contact-card-whatsapp-img {
+.contact-card__avatar img {
+    display: block;
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
-    display: block;
 }
 
-.contact-card-body {
+.contact-card__status {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #25d366;
+    border: 2px solid rgba(12, 10, 16, 0.9);
+    box-shadow: 0 0 8px rgba(37, 211, 102, 0.8);
+}
+
+/* --- Label + phone number --- */
+.contact-card__info {
     display: flex;
     flex-direction: column;
     gap: 2px;
     min-width: 0;
-    flex: 1;
 }
 
-.contact-card-label {
-    font-size: 10px;
+.contact-card__label {
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #dfc573;
+    color: #d4af37; /* gold */
 }
 
-.contact-card-phone {
+.contact-card__phone {
     font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: 0.05em;
-    color: #f5f3f0;
+    letter-spacing: 0.04em;
+    color: #fff;
     text-decoration: none;
     white-space: nowrap;
+    transition: color 0.25s ease;
 }
 
-.contact-card-phone:hover {
-    color: #dfc573;
+.contact-card__phone:hover {
+    color: #f3e3b3;
 }
 
-.contact-card-action {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    flex-shrink: 0;
-    display: flex;
+/* --- WhatsApp CTA button --- */
+.contact-card__cta {
+    margin-left: auto;
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    color: #fff;
+    gap: 8px;
+    padding: 11px 18px;
+    border-radius: 999px;
     background: linear-gradient(135deg, #2ee06f, #1ebd5a);
-    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.contact-card-action:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 10px 22px rgba(37, 211, 102, 0.45);
-}
-
-html[data-theme="light"] .hero-contact-card {
-    background: rgba(255, 255, 255, 0.72);
-    border-color: rgba(166, 139, 60, 0.35);
+    color: #062b16;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
     box-shadow:
-        0 16px 38px rgba(28, 25, 22, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        0 8px 22px rgba(37, 211, 102, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
 }
 
-html[data-theme="light"] .hero-contact-card:hover {
-    border-color: rgba(166, 139, 60, 0.55);
+.contact-card__cta svg {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+}
+
+.contact-card__cta:hover {
+    transform: translateY(-2px) scale(1.03);
+    filter: brightness(1.06);
     box-shadow:
-        0 22px 46px rgba(28, 25, 22, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        0 12px 30px rgba(37, 211, 102, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.contact-card__cta:active {
+    transform: translateY(0) scale(0.98);
+}
+
+@keyframes contactCardIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Light mode (night/day toggle sets html[data-theme]) */
+html[data-theme="light"] .contact-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+    border-color: rgba(0, 0, 0, 0.06);
+    box-shadow:
+        0 18px 40px rgba(60, 45, 15, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+html[data-theme="light"] .contact-card__phone {
+    color: #1c1a15;
+}
+
+html[data-theme="light"] .contact-card__phone:hover {
+    color: #8a6d1f;
 }
 
 html[data-theme="light"] .hero-map {
@@ -4109,18 +4197,6 @@ html[data-theme="light"] .hero-map {
     box-shadow:
         0 16px 38px rgba(28, 25, 22, 0.22),
         0 4px 12px rgba(28, 25, 22, 0.12);
-}
-
-html[data-theme="light"] .contact-card-label {
-    color: #a68b3c;
-}
-
-html[data-theme="light"] .contact-card-phone {
-    color: #1c1917;
-}
-
-html[data-theme="light"] .contact-card-phone:hover {
-    color: #a68b3c;
 }
 
 @media (max-width: 1024px) {
@@ -4144,6 +4220,19 @@ html[data-theme="light"] .contact-card-phone:hover {
     }
 }
 
+/* Phone layout: stack gracefully on narrow screens */
+@media (max-width: 640px) {
+    .contact-card {
+        flex-wrap: wrap;
+        padding: 14px;
+    }
+    .contact-card__cta {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 @media (max-width: 480px) {
     .hero-contact-stack {
         width: min(280px, 90vw);
@@ -4151,11 +4240,11 @@ html[data-theme="light"] .contact-card-phone:hover {
     .hero-map {
         height: 180px;
     }
-    .contact-card-avatar {
+    .contact-card__avatar {
         width: 42px;
         height: 42px;
     }
-    .contact-card-phone {
+    .contact-card__phone {
         font-size: 19px;
     }
 }
