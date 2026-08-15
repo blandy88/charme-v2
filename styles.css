@@ -24809,6 +24809,18 @@ section.content {
     transition: none !important;
 }
 
+/* Remove the "User Reviews & Comments" block from every perfume section
+   (details mode). Hidden via CSS so the review JS keeps working. */
+section.content .reviews-section {
+    display: none !important;
+}
+
+/* Horizontal divider line cutting each perfume section (details mode).
+   The *-transition-section spacers (200px gaps) are skipped. */
+section.content:not([class*="-transition-section"]) {
+    border-bottom: 1px solid rgba(201, 169, 78, 0.25) !important;
+}
+
 /* --- Kill the glow / pulse effects on the perfume layouts --- */
 section.content [class*="glow"] {
     background: transparent !important;
