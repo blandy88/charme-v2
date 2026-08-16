@@ -25,6 +25,37 @@ window.CHARME_API_ORIGIN = _isLocalHost || _isRenderHost
   };
 })();
 
+// Details mode pricing: bottle sizes + quality tiers.
+const DETAILS_SIZES = [10, 30, 50, 100];
+const DETAILS_TOP_PRICES = { 10: 10, 30: 25, 50: 35, 100: 65 };
+
+// Stable deterministic value in [0, 1) for a string. Used to keep each
+// product's "identical quality" random price stable across visits.
+function detailsSeededValue(seedStr) {
+  let h = 2166136261;
+  for (let i = 0; i < seedStr.length; i++) {
+    h ^= seedStr.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  h = h >>> 0;
+  return (h % 1000) / 1000;
+}
+
+// Identical quality price: stable random base for 50 ml scaled by size.
+function detailsIdenticalPrice(productId, size) {
+  const base =
+    Math.round((40 + detailsSeededValue("identical:" + productId) * 55) / 5) * 5;
+  const scale = DETAILS_TOP_PRICES[size] / DETAILS_TOP_PRICES[50];
+  return Math.max(5, Math.round((base * scale) / 5) * 5);
+}
+
+// Combined price for a product / quality tier / bottle size.
+function detailsPriceFor(productId, quality, size) {
+  const s = DETAILS_SIZES.indexOf(Number(size)) !== -1 ? Number(size) : 50;
+  if (quality === "top") return DETAILS_TOP_PRICES[s];
+  return detailsIdenticalPrice(productId, s);
+}
+
 // Caches element zero-state to prevent layout thrashing
 const _parallaxZeroState = new WeakSet();
   function resetParallaxElement(element, transformString) {
@@ -3070,61 +3101,115 @@ function updateColors() {
     pegasusFragranceNotes.style.setProperty("transition", "none", "important");
   }
 
-  // Quality Selector Functionality
+  // Quality Selector + Size Selector Functionality
   function initializeQualitySelectors() {
-    // Handle all quality selectors
-    const qualitySelectors = document.querySelectorAll(".quality-selector");
-
-    qualitySelectors.forEach((selector) => {
-      const qualityOptions = selector.querySelectorAll(".quality-option");
+    document.querySelectorAll(".quality-selector-container").forEach((container) => {
       const productInfoSection =
-        selector.closest(".product-info-section") ||
-        selector.closest(".product-info") ||
-        selector.closest(".content");
+        container.closest(".product-info-section") ||
+        container.closest(".product-info") ||
+        container.closest(".content");
+
+      const cartButton = productInfoSection
+        ? productInfoSection.querySelector(".add-to-cart-btn[data-product]")
+        : container.querySelector(".add-to-cart-btn[data-product]");
+      const productId = cartButton ? cartButton.getAttribute("data-product") : null;
+      if (!productId) return;
 
       const priceContainer = productInfoSection
         ? productInfoSection.querySelector(".product-price-container")
         : null;
-      const priceBadge = priceContainer
-        ? priceContainer.querySelector(".price-badge")
-        : null;
+      const priceBadge = priceContainer ? priceContainer.querySelector(".price-badge") : null;
       const priceAmount = priceBadge ? priceBadge.querySelector(".price-amount") : null;
-      const priceCurrency = priceBadge
-        ? priceBadge.querySelector(".price-currency")
-        : null;
+      const priceCurrency = priceBadge ? priceBadge.querySelector(".price-currency") : null;
       const priceElement = priceAmount || priceCurrency;
 
-      const cartButton = productInfoSection
-        ? productInfoSection.querySelector('.add-to-cart-btn[data-product]')
-        : selector.closest(".content")?.querySelector('.add-to-cart-btn[data-product]');
+      const qualityOptions = container.querySelector(".quality-options");
+      if (!qualityOptions) return;
 
-      if (!priceElement) return;
+      const radioName = productId + "-quality";
+      const buildOption = (value, name, description, price) =>
+        '<div class="quality-option" data-quality="' + value + '" data-price="' + price + '">' +
+        '<input type="radio" id="' + productId + '-' + value + '-quality" name="' + radioName + '" value="' + value + '"' + (value === "top" ? " checked" : "") + ">" +
+        '<label for="' + productId + '-' + value + '-quality" class="quality-label">' +
+        '<div class="quality-badge">' +
+        '<div class="quality-ornament top-left"></div>' +
+        '<div class="quality-ornament top-right"></div>' +
+        '<div class="quality-ornament bottom-left"></div>' +
+        '<div class="quality-ornament bottom-right"></div>' +
+        '<div class="quality-shimmer"></div>' +
+        '<div class="quality-content">' +
+        '<div class="quality-name">' + name + "</div>" +
+        '<div class="quality-description">' + description + "</div>" +
+        "</div>" +
+        '<div class="quality-glow"></div>' +
+        '<div class="selection-indicator"></div>' +
+        "</div>" +
+        "</label>" +
+        "</div>";
 
-      qualityOptions.forEach((option) => {
-        option.addEventListener("click", function () {
-          // Remove active class from all options in this selector
-          qualityOptions.forEach((opt) => opt.classList.remove("active"));
+      // Replace options: Top Quality (fixed) + Identical Quality (stable random)
+      qualityOptions.innerHTML =
+        buildOption("top", "Top Quality", "35 dt / 50 ml", 35) +
+        buildOption("identical", "Identical Quality", "Price varies", detailsIdenticalPrice(productId, 50));
 
-          // Add active class to clicked option
-          this.classList.add("active");
+      // Insert the size selector (once) after the quality options
+      let sizeSelector = container.querySelector(".size-selector-container");
+      if (!sizeSelector) {
+        sizeSelector = document.createElement("div");
+        sizeSelector.className = "size-selector-container";
+        sizeSelector.innerHTML =
+          '<div class="size-header">' +
+          '<h4 class="size-title">Select Size</h4>' +
+          '<div class="size-subtitle">Choose Your Bottle</div>' +
+          "</div>" +
+          '<div class="size-options">' +
+          DETAILS_SIZES.map((s) =>
+            '<button type="button" class="size-option' + (s === 50 ? " active" : "") + '" data-size="' + s + '">' + s + " ml</button>",
+          ).join("") +
+          "</div>";
+        container.appendChild(sizeSelector);
+      }
 
-          // Get the new price from data attribute
-          const newPrice = this.getAttribute("data-price");
+      let selectedQuality = "top";
+      let selectedSize = 50;
 
-          const radio = this.querySelector('input[type="radio"]');
-          if (radio) radio.checked = true;
+      const syncPrice = () => {
+        const price = detailsPriceFor(productId, selectedQuality, selectedSize);
+        if (priceElement) priceElement.textContent = price;
+        if (cartButton) {
+          cartButton.setAttribute("data-price", price);
+          cartButton.setAttribute("data-size", selectedSize);
+        }
+      };
 
-          if (newPrice && priceElement) {
-            // Animate price change
-            animatePriceChange(priceElement, newPrice);
+      qualityOptions.addEventListener("click", (e) => {
+        const optionEl = e.target.closest(".quality-option");
+        if (!optionEl) return;
+        qualityOptions.querySelectorAll(".quality-option").forEach((o) => o.classList.remove("active"));
+        optionEl.classList.add("active");
+        const radio = optionEl.querySelector('input[type="radio"]');
+        if (radio) radio.checked = true;
+        selectedQuality = optionEl.getAttribute("data-quality") || "top";
+        const price = detailsPriceFor(productId, selectedQuality, selectedSize);
+        syncPrice();
+        if (priceElement) animatePriceChange(priceElement, price);
+      });
 
-            // Keep cart price in sync with the selected option
-            if (cartButton) {
-              cartButton.setAttribute("data-price", newPrice);
-            }
-          }
+      sizeSelector.querySelectorAll(".size-option").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          sizeSelector.querySelectorAll(".size-option").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          selectedSize = parseInt(btn.getAttribute("data-size"), 10) || 50;
+          const price = detailsPriceFor(productId, selectedQuality, selectedSize);
+          syncPrice();
+          if (priceElement) animatePriceChange(priceElement, price);
         });
       });
+
+      // Default: Top Quality / 50 ml
+      const defaultOption = qualityOptions.querySelector('.quality-option[data-quality="top"]');
+      if (defaultOption) defaultOption.classList.add("active");
+      syncPrice();
     });
   }
 
@@ -3159,6 +3244,206 @@ function updateColors() {
 
   // Initialize quality selectors
   initializeQualitySelectors();
+
+  // "Also reminds of" — similar fragrances (researched, details mode only)
+  const SIMILAR_FRAGRANCES = {
+    "aventusabsolu": ["aventus", "explorer", "clubdenuit", "cedarsmancera"],
+    "preciousoud": ["baccaratrouge"],
+    "versaceeros": ["jpgultramale", "yvsl", "terredhermes", "sauvage"],
+    "hypnoticamber": ["lanuit", "yvsl"],
+    "bleudechanel": ["sauvage", "yvsl", "pradacarbon"],
+    "amberoud": ["oudwood", "blackorchid", "tobaccovanille", "tuscanleather"],
+    "goldenoud": ["ombrenomade", "oudwood"],
+    "smokeroyaloud": ["oudwood"],
+    "arabianoud": ["oudwood", "aventus", "terredhermes", "tobaccovanille"],
+    "tabacoroyal": ["tobaccovanille", "oudwood", "blackorchid"],
+    "mysteriousoud": ["oudwood", "smokeroyaloud", "grandSoir"],
+    "assadelixir": ["sauvage", "clubdenuit"],
+    "phantominred": ["sideeffect"],
+    "chbadboy": ["sauvage", "jpgultramale", "lanuit", "yvsl"],
+    "majesticoud": ["oudwood"],
+    "gentleman": ["diorhomme"],
+    "timelessoud": ["oudwood"],
+    "gucciguilty": ["sauvage", "bleudechanel"],
+    "diorhomme": ["gentleman"],
+    "bosselixir": ["grandSoir", "terredhermes"],
+    "coolwater": ["greenirish"],
+    "amenfantasm": ["amenpure"],
+    "tuxedo": ["aventus", "diorhomme", "greenirish"],
+    "onemillionroyale": ["onemillionelixir", "jpgultramale"],
+    "clubdenuit": ["aventus", "explorer", "cedarsmancera"],
+    "strongerwithyousandalwood": ["milliongold"],
+    "pineapple": ["limperatrice3"],
+    "dylanbleuintense": ["bleudechanel", "aquadigio", "sauvage", "yvsl"],
+    "orza": ["kirke"],
+    "noirkogane": ["tuscanleather"],
+    "grisdior": ["chanel5", "oudwood", "ysllibre"],
+    "kajaldahab": ["kirke"],
+    "pegasus": ["reflectionman"],
+    "blackorchid": ["blackopium", "valentinodonna"],
+    "aventus": ["explorer", "clubdenuit", "cedarsmancera", "aventusabsolu"],
+    "allure": ["bleudechanel", "pradacarbon"],
+    "armanicode": ["armanicodeparfum"],
+    "amenpure": ["lhommeideal"],
+    "burberryhero": ["jpgultramale", "kbyDG"],
+    "cedarsmancera": ["aventus"],
+    "cketernity": ["egoiste"],
+    "reflectionman": ["naxos"],
+    "sedley": ["torrino21"],
+    "torrino21": ["sedley"],
+    "sideeffect": ["narcoticdelight"],
+    "naxos": ["amenpure"],
+    "aquadigioelixir": ["aquadigio"],
+    "edarchic": ["valayaexclusive"],
+    "vanillapowder": ["cristalnoir", "fantasmagoria"],
+    "elves": ["stellaritimes", "grisdior"],
+    "fantasmagoria": ["pegasus", "vanillapowder"],
+    "stellaritimes": ["elves"],
+    "hermajesty": ["aventus"],
+    "guidance46": ["delinaexclusif"],
+    "sipassioneredmusc": ["sipassionneintense"],
+    "narcisobleunoir": ["bleudechanel", "declarationcartier"],
+    "nauticavoyage": ["coolwater", "ckone"],
+    "supremebouquet": ["alien", "blackorchid", "cristalnoir", "tobaccovanille"],
+    "rosestar": ["delinaexclusif"],
+    "oudvoyager": ["oudwood", "blackorchid", "noirextreme", "declarationcartier"],
+    "flowerbombextreme": ["blackorchid", "blackopium", "cristalnoir", "alien"],
+    "santalroyal": ["oudwood", "blackorchid", "tobaccovanille", "terredhermes"],
+    "terroni": ["oudwood", "aventus", "terredhermes", "tobaccovanille"],
+    "oudroyal": ["oudwood", "blackorchid", "tobaccovanille", "grandSoir"],
+    "noirextreme": ["blackorchid", "tobaccovanille", "spicebomb", "naxos"],
+    "guiltyelixirfemme": ["blackopium", "blackorchid"],
+    "rosendomateu5": ["grandSoir", "blackorchid", "tobaccovanille", "naxos"],
+    "lessablesroses": ["ombrenomade", "grandSoir", "stellaritimes", "naxos"],
+    "wantedelixir": ["yvsl", "spicebomb", "wantedbynight", "naxos"],
+    "ambassador": ["sauvage", "yvsl", "terredhermes", "dy"],
+    "labomba": ["alien", "blackopium", "ysllibre", "angelnova"],
+    "ambresamar": ["tobaccovanille", "grandSoir", "blackorchid", "fireplace"],
+    "myrrhetonka": ["tobaccovanille", "oudwood", "grandSoir", "fireplace"],
+    "chanel5": ["blackorchid", "blackopium", "alien"],
+    "ganymede": ["baccaratrouge", "oudwood", "terredhermes", "aventus"],
+    "crushonme": ["aventus", "reflectionman", "naxos", "sideeffect"],
+    "armanicodeparfum": ["diorhomme", "lanuit", "armanicode"],
+    "blackopium": ["flowerbombextreme", "blackorchid", "tresorlanuit", "fireplace"],
+    "vanillacandyrocksugar": ["kayalimarshmallow"],
+    "monparis": ["sipassionneintense", "valentinodonna", "flowerbombextreme", "tresorlanuit"],
+    "cristalnoir": ["blackorchid", "alien"],
+    "tresorlanuit": ["monparis", "sipassionneintense", "blackopium", "alien"],
+    "manifestoelixir": ["flowerbombextreme", "alien"],
+    "alien": ["blackorchid", "cristalnoir", "tresorlanuit", "blackopium"],
+    "eliesaabinwhite": ["ysllibre", "valentinodonna"],
+    "velvetoud": ["oudwood", "smokeroyaloud", "baccaratrouge"],
+    "twilightoud": ["oudwood"],
+    "midnightoud": ["oudwood", "baccaratrouge"],
+    "regaloud": ["oudwood"],
+    "milliongold": ["explorer"],
+    "cerruti1881": ["flowerbykenzo"],
+    "ckone": ["coolwater", "leaudissey"],
+    "kirke": ["kajaldahab"],
+    "lightblue": ["aquadigio", "leaudissey", "coolwater", "bleudechanel"],
+    "yvsl": ["sauvage", "bleudechanel", "dylanbleuintense", "explorer"],
+    "kbyDG": ["dylanbleuintense", "sauvage", "yvsl"],
+    "dy": ["spicebomb", "lanuit", "1millionnight"],
+    "declarationcartier": ["terredhermes", "narcisobleunoir", "leaudissey"],
+    "invictus": ["sauvage", "explorer"],
+    "yintensely": ["bleudechanel", "pradacarbon", "sauvage"],
+    "ymenelixir": ["lanuit", "sauvage"],
+    "kouros": ["fahrenheit", "egoiste", "aventus"],
+    "bleuelectrique": ["lanuit"],
+    "purexs": ["jpgultramale", "milliongold", "invictus"],
+    "onemillionelixir": ["versaceeros", "jpgultramale", "strongerwithyousandalwood"],
+    "nowade": ["ombrenomade", "tuscanleather"],
+    "legendmontblanc": ["bleudechanel", "invictus", "spicebomb"],
+    "azzarochrome": ["ckone", "coolwater"],
+    "ombrenomade": ["tuscanleather", "oudwood"],
+    "silvermountain": ["ckone"],
+    "jagwar": ["coolwater"],
+    "strongerwithyououd": ["oudwood", "spicebomb", "naxos"],
+    "delinaexclusif": ["baccaratrouge", "queenofsilk"],
+    "versacevanillerouge": ["baccaratrouge", "delinaexclusif"],
+    "narcoticdelight": ["spicebomb"],
+    "lamar": ["delinaexclusif", "baccaratrouge"],
+    "sauvage": ["bleudechanel", "pradacarbon"],
+    "tobaccovanille": ["spicebomb", "sideeffect", "fireplace", "noirextreme"],
+    "lanuit": ["dy", "spicebomb", "diorhomme", "dylanbleuintense"],
+    "lostcherry": ["narcoticdelight", "guidance46"],
+    "aquadigio": ["aquadigioelixir", "dylanbleuintense", "bleudechanel", "sauvage"],
+    "jpgultramale": ["invictus", "versaceeros", "wantedbynight", "spicebomb"],
+    "valentinouomo": ["invictus", "dy", "versaceeros", "yvsl"],
+    "spicebomb": ["tobaccovanille", "noirextreme", "wantedbynight", "blv"],
+    "explorer": ["aventus", "clubdenuit"],
+    "blv": ["spicebomb", "noirextreme", "lanuit", "diorhomme"],
+    "tuscanleather": ["laween"],
+    "lhommeideal": ["pegasus", "reflectionman", "terredhermes", "lanuit"],
+    "wantedbynight": ["strongerwithyousandalwood", "spicebomb", "noirextreme", "fahrenheit"],
+    "leaudissey": ["coolwater", "aquadigio", "azzarochrome", "dylanbleuintense"],
+    "pradacarbon": ["sauvage"],
+    "narcisoforhim": ["bleudechanel", "terredhermes", "diorhomme", "lanuit"],
+    "valentinodonna": ["blackopium", "monparis", "ysllibre"],
+    "greenirish": ["coolwater", "silvermountain"],
+    "egoiste": ["greenirish", "legendmontblanc", "cketernity", "leaudissey"],
+    "laween": ["tuscanleather"],
+    "queenofsilk": ["delinaexclusif", "grandSoir", "alien", "lostcherry"],
+  };
+
+  function initializeSimilarFragrances() {
+    const sections = Array.from(document.querySelectorAll("section.content[id]"));
+    sections.forEach((section) => {
+      const similarIds = SIMILAR_FRAGRANCES[section.id];
+      if (!similarIds || !similarIds.length) return;
+      if (section.querySelector(".similar-fragrances-container")) return;
+
+      const cards = similarIds
+        .map((targetId) => {
+          const target = document.getElementById(targetId);
+          if (!target) return "";
+          const imgEl = target.querySelector(".perfume-top-row img[src], img[src]");
+          const img = imgEl ? imgEl.getAttribute("src") : "";
+          const nameEl = target.querySelector(".product-name");
+          const name = nameEl ? nameEl.textContent.trim() : targetId;
+          const brandEl = target.querySelector(".brand-name");
+          const brand = brandEl ? brandEl.textContent.trim() : "";
+          return (
+            '<button type="button" class="similar-fragrance-card" data-target="' + targetId + '">' +
+            '<div class="similar-fragrance-media">' +
+            (img ? '<img src="' + img + '" alt="' + name + '" loading="lazy" decoding="async">' : "") +
+            "</div>" +
+            '<div class="similar-fragrance-info">' +
+            (brand ? '<span class="similar-fragrance-brand">' + brand + "</span>" : "") +
+            '<span class="similar-fragrance-name">' + name + "</span>" +
+            "</div>" +
+            "</button>"
+          );
+        })
+        .join("");
+
+      const block = document.createElement("div");
+      block.className = "similar-fragrances-container";
+      block.innerHTML =
+        '<div class="similar-fragrances-header">' +
+        '<h4 class="similar-fragrances-title">Also reminds of</h4>' +
+        '<div class="similar-fragrances-subtitle">Perfumes with a similar scent profile</div>' +
+        "</div>" +
+        '<div class="similar-fragrances-grid">' + cards + "</div>";
+      section.appendChild(block);
+    });
+
+    document.addEventListener("click", (e) => {
+      const card = e.target.closest(".similar-fragrance-card");
+      if (!card) return;
+      const targetId = card.getAttribute("data-target");
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      const detailsBtn = document.querySelector('.perfume-mode-btn[data-mode="details"]');
+      if (detailsBtn && document.body.classList.contains("perfume-grid-mode")) {
+        detailsBtn.click();
+      }
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+    });
+  }
+  initializeSimilarFragrances();
 
   // Brand Image Parallax Effect (First in sequence)
   if (brandImage) {
@@ -12819,26 +13104,29 @@ class CartManager {
     console.log(`âœ… Cart switched successfully. New cart:`, this.cart);
   }
 
-  addToCart(productId, _price, quality = "top") {
-    console.log("ðŸ›’ Adding to cart:", productId, quality);
+  addToCart(productId, _price, quality = "top", size = 50) {
+    console.log("Adding to cart:", productId, quality, size);
 
     const product = this.getProductDetails(productId);
     if (!product) {
-      console.error("âŒ Product not found:", productId);
+      console.error("Product not found:", productId);
       return;
     }
 
-    // Get the actual price based on quality and product
-    const actualPrice = this.getQualityPrice(productId, quality);
+    // Get the actual price based on quality, size and product
+    const actualPrice = this.getQualityPrice(productId, quality, size);
 
     // Check if item already exists in cart
     const existingItem = this.cart.find(
-      (item) => item.productId === productId && item.quality === quality,
+      (item) =>
+        item.productId === productId &&
+        item.quality === quality &&
+        (item.size || 50) === size,
     );
 
     if (existingItem) {
       existingItem.quantity += 1;
-      console.log("ðŸ“ˆ Updated quantity for existing item:", existingItem);
+      console.log("Updated quantity for existing item:", existingItem);
     } else {
       const newItem = {
         productId,
@@ -12846,49 +13134,52 @@ class CartManager {
         brand: product.brand,
         price: actualPrice,
         quality,
+        size,
         quantity: 1,
         image: product.image,
       };
       this.cart.push(newItem);
-      console.log("âœ… Added new item to cart:", newItem);
+      console.log("Added new item to cart:", newItem);
     }
 
     this.saveCart();
-    console.log("ðŸ’¾ Cart saved. Total items:", this.cart.length);
+    console.log("Cart saved. Total items:", this.cart.length);
     this.showNotification(
-      `${product.name} (${quality} quality) added to cart!`,
+      `${product.name} (${quality} quality, ${size} ml) added to cart!`,
       "success",
     );
     this.updateCartButton(productId, true);
   }
 
-  getQualityPrice(productId, quality) {
-    const basePrices = {
-      layton: { top: 35, identical: 50 },
-      haltane: { top: 40, identical: 55 },
-      pegasus: { top: 45, identical: 60 },
-    };
-
-    return basePrices[productId]?.[quality] || basePrices[productId]?.top || 35;
+  getQualityPrice(productId, quality, size) {
+    return detailsPriceFor(productId, quality, size || 50);
   }
 
-  removeFromCart(productId, quality = "top") {
+  removeFromCart(productId, quality = "top", size = 50) {
     this.cart = this.cart.filter(
-      (item) => !(item.productId === productId && item.quality === quality),
+      (item) =>
+        !(
+          item.productId === productId &&
+          item.quality === quality &&
+          (item.size || 50) === size
+        ),
     );
     this.saveCart();
     this.renderCartItems();
     this.updateCartButton(productId, false);
   }
 
-  updateQuantity(productId, quality, newQuantity) {
+  updateQuantity(productId, quality, size, newQuantity) {
     const item = this.cart.find(
-      (item) => item.productId === productId && item.quality === quality,
+      (item) =>
+        item.productId === productId &&
+        item.quality === quality &&
+        (item.size || 50) === size,
     );
 
     if (item) {
       if (newQuantity <= 0) {
-        this.removeFromCart(productId, quality);
+        this.removeFromCart(productId, quality, size);
       } else {
         item.quantity = newQuantity;
         this.saveCart();
@@ -13106,18 +13397,22 @@ class CartManager {
             `input[name="${productId}-quality"]:checked`,
           ) || document.querySelector(`input[name="quality"]:checked`);
         const quality = qualitySelector ? qualitySelector.value : "top";
+        const size = parseInt(button.getAttribute("data-size"), 10) || 50;
 
         // Check if item is already in cart
         const existingItem = this.cart.find(
-          (item) => item.productId === productId && item.quality === quality,
+          (item) =>
+            item.productId === productId &&
+            item.quality === quality &&
+            (item.size || 50) === size,
         );
 
         if (existingItem) {
           // Remove from cart (toggle off)
-          this.removeFromCart(productId, quality);
+          this.removeFromCart(productId, quality, size);
         } else {
           // Add to cart (toggle on)
-          this.addToCart(productId, price, quality);
+          this.addToCart(productId, price, quality, size);
         }
       }
     });
@@ -13230,15 +13525,15 @@ class CartManager {
                     <div class="cart-item-details">
                         <div class="cart-item-name">${item.name}</div>
                         <div class="cart-item-brand">${item.brand}</div>
-                        <div class="cart-item-quality">${item.quality} Quality</div>
+                        <div class="cart-item-quality">${item.quality} Quality • ${item.size || 50} ml</div>
                     </div>
                     <div class="cart-item-price">${item.price} dt</div>
                     <div class="cart-item-quantity">
-                        <button class="quantity-btn" onclick="window.cartManager.updateQuantity('${item.productId}', '${item.quality}', ${item.quantity - 1})">-</button>
+                        <button class="quantity-btn" onclick="window.cartManager.updateQuantity('${item.productId}', '${item.quality}', ${item.size || 50}, ${item.quantity - 1})">-</button>
                         <span class="quantity-display">${item.quantity}</span>
-                        <button class="quantity-btn" onclick="window.cartManager.updateQuantity('${item.productId}', '${item.quality}', ${item.quantity + 1})">+</button>
+                        <button class="quantity-btn" onclick="window.cartManager.updateQuantity('${item.productId}', '${item.quality}', ${item.size || 50}, ${item.quantity + 1})">+</button>
                     </div>
-                    <button class="remove-item-btn" onclick="window.cartManager.removeFromCart('${item.productId}', '${item.quality}')" title="Remove item">
+                    <button class="remove-item-btn" onclick="window.cartManager.removeFromCart('${item.productId}', '${item.quality}', ${item.size || 50})" title="Remove item">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
