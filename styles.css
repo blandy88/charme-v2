@@ -25019,6 +25019,63 @@ body.perfume-grid-mode .perfume-grid-card.entered {
     display: none !important;
 }
 
+/* ── Grid mode stock badge ── */
+.perfume-grid-stock {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 3px 8px !important;
+    border-radius: 4px !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3px !important;
+    white-space: nowrap !important;
+    z-index: 2 !important;
+    font-family: inherit !important;
+}
+
+.perfume-grid-stock.in-stock {
+    background: rgba(34, 197, 94, 0.15) !important;
+    color: #22c55e !important;
+    border: 1px solid rgba(34, 197, 94, 0.25) !important;
+}
+
+.perfume-grid-stock.out-of-stock {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.25) !important;
+}
+
+/* ── Details mode stock badge ── */
+.perfume-stock-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.4px !important;
+    white-space: nowrap !important;
+    margin-bottom: 8px !important;
+    font-family: inherit !important;
+}
+
+.perfume-stock-badge.in-stock {
+    background: rgba(34, 197, 94, 0.12) !important;
+    color: #22c55e !important;
+}
+
+.perfume-stock-badge.out-of-stock {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #ef4444 !important;
+}
+
 .perfume-grid-info {
     display: flex !important;
     flex-direction: column !important;

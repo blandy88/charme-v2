@@ -20621,6 +20621,10 @@ window.testClickOnElement = function() {
         }
       });
 
+      // Determine stock status: data-stock="out" → out of stock, else in stock
+      const stockAttr = s.getAttribute("data-stock");
+      const inStock = stockAttr !== "out";
+
       return {
         id,
         img: src,
@@ -20631,6 +20635,7 @@ window.testClickOnElement = function() {
         seasons: seasons.join(","),
         qualities: qualities.join(","),
         notes: notes.join(","),
+        inStock,
       };
     });
 
@@ -20639,10 +20644,16 @@ window.testClickOnElement = function() {
         const price = f.price
           ? `<span class="perfume-grid-price">${esc(f.price)}<span class="perfume-grid-unit">${esc(f.unit)}</span></span>`
           : "";
+        const lang = (document.documentElement.lang || "en").slice(0, 2);
+        const stockLabel = f.inStock
+          ? (lang === "fr" ? "En stock" : "In stock")
+          : (lang === "fr" ? "Rupture de stock" : "Out of stock");
+        const stockClass = f.inStock ? "in-stock" : "out-of-stock";
         return `
           <a class="perfume-grid-card" href="#${esc(f.id)}" data-target="${esc(f.id)}" data-seasons="${esc(f.seasons)}" data-quality="${esc(f.qualities)}" data-notes="${esc(f.notes)}">
             <div class="perfume-grid-media">
               <img src="${esc(f.img)}" alt="${esc(f.name)}" loading="lazy" decoding="async">
+              <span class="perfume-grid-stock ${stockClass}">${esc(stockLabel)}</span>
             </div>
             <div class="perfume-grid-info">
               <span class="perfume-grid-brand">${esc(f.brand)}</span>
@@ -20852,6 +20863,38 @@ window.testClickOnElement = function() {
     }
   }
 
+  // ── Add stock badges to details-mode sections (runs once) ──
+  let detailsStockBadgesAdded = false;
+  function addDetailsStockBadges() {
+    if (detailsStockBadgesAdded) return;
+    detailsStockBadgesAdded = true;
+    const lang = (document.documentElement.lang || "en").slice(0, 2);
+    document.querySelectorAll("section.content").forEach((s) => {
+      const productName = s.querySelector(".product-name");
+      if (!productName) return;
+      if (s.querySelector(".perfume-stock-badge")) return;
+      if (!s.id) {
+        const slug = productName.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+        if (slug) s.id = slug;
+        else return;
+      }
+      const stockAttr = s.getAttribute("data-stock");
+      const inStock = stockAttr !== "out";
+      const label = inStock
+        ? (lang === "fr" ? "En stock" : "In stock")
+        : (lang === "fr" ? "Rupture de stock" : "Out of stock");
+      const cls = inStock ? "in-stock" : "out-of-stock";
+      const badge = document.createElement("span");
+      badge.className = `perfume-stock-badge ${cls}`;
+      badge.textContent = label;
+      // Insert after product-name's closest container (works for both elves and legacy layouts)
+      const anchor = s.querySelector(".product-info, .product-title");
+      if (anchor) {
+        anchor.parentNode.insertBefore(badge, anchor.nextSibling);
+      }
+    });
+  }
+
   function setMode(mode, opts) {
     const { persist = true, scroll = false } = opts || {};
     const isGrid = mode === "grid";
@@ -20863,6 +20906,7 @@ window.testClickOnElement = function() {
       gridView.setAttribute("aria-hidden", "false");
     } else {
       gridView.setAttribute("aria-hidden", "true");
+      addDetailsStockBadges();
     }
 
     toggle.querySelectorAll(".perfume-mode-btn").forEach((btn) => {
@@ -20916,6 +20960,13 @@ window.testClickOnElement = function() {
       });
     } else {
       setMode("grid", { persist: false, scroll: false });
+    }
+  } else {
+    // Default details mode — add stock badges now
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => addDetailsStockBadges());
+    } else {
+      addDetailsStockBadges();
     }
   }
 })();
