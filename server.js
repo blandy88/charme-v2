@@ -402,6 +402,25 @@ console.log("🔄 Checking for required database migrations...");
       },
     );
 
+    // 📝 GUEST NOTES: anonymous feedback left by visitors (no auth required)
+    console.log("🔄 Setting up guest_notes table...");
+    db.run(
+      `
+        CREATE TABLE IF NOT EXISTS guest_notes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            message TEXT NOT NULL,
+            author_name TEXT DEFAULT 'Anonymous',
+            ip_address TEXT,
+            is_read INTEGER NOT NULL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `,
+      (createErr) => {
+        if (createErr) console.error("❌ Error creating guest_notes table:", createErr);
+        else console.log("✅ Created guest_notes table");
+      },
+    );
+
     // 🔧 ENHANCED: Create indexes for better performance
     console.log("🔄 Creating database indexes for better performance...");
 
@@ -2663,6 +2682,107 @@ app.delete(
       res.json({ success: true, message: "Actualité supprimée" });
     } catch (error) {
       console.error("Error deleting news:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+// ─── GUEST NOTES: public submit + admin read/delete ───────────────────
+const notesLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many notes, please try again later." },
+});
+
+app.post("/api/notes", notesLimiter, (req, res) => {
+  const { message, authorName } = req.body;
+  if (!message || typeof message !== "string" || message.trim().length === 0) {
+    return res.status(400).json({ error: "Message is required." });
+  }
+  const cleanMsg = sanitizeHtml(message.trim().slice(0, 1000));
+  const cleanName = sanitizeHtml((authorName || "Anonymous").trim().slice(0, 100));
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "";
+  db.run(
+    "INSERT INTO guest_notes (message, author_name, ip_address) VALUES (?, ?, ?)",
+    [cleanMsg, cleanName, ip],
+    function (err) {
+      if (err) {
+        console.error("Error saving note:", err);
+        return res.status(500).json({ error: "Failed to save note." });
+      }
+      res.json({ success: true, id: this.lastID });
+    },
+  );
+});
+
+app.get(
+  "/api/admin/notes",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const notes = await new Promise((resolve, reject) => {
+        db.all(
+          "SELECT * FROM guest_notes ORDER BY created_at DESC, id DESC",
+          (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows);
+          },
+        );
+      });
+      res.json({ success: true, notes });
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+app.put(
+  "/api/admin/notes/:id/read",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      await new Promise((resolve, reject) => {
+        db.run(
+          "UPDATE guest_notes SET is_read = 1 WHERE id = ?",
+          [req.params.id],
+          function (err) {
+            if (err) reject(err);
+            else resolve(this);
+          },
+        );
+      });
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error marking note as read:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+app.delete(
+  "/api/admin/notes/:id",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      await new Promise((resolve, reject) => {
+        db.run(
+          "DELETE FROM guest_notes WHERE id = ?",
+          [req.params.id],
+          function (err) {
+            if (err) reject(err);
+            else resolve(this);
+          },
+        );
+      });
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting note:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   },

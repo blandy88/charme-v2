@@ -10884,6 +10884,9 @@ async function openAdminDashboard() {
 
   // Load news & notifications
   await loadAdminNews();
+
+  // Load guest notes
+  if (typeof window.loadAdminNotes === "function") window.loadAdminNotes();
 }
 
 async function loadUsersData() {
@@ -20969,4 +20972,121 @@ window.testClickOnElement = function() {
       addDetailsStockBadges();
     }
   }
+
+  // ── Doodle Feedback Form ──
+  const doodleForm = document.getElementById("doodleFeedbackForm");
+  if (doodleForm) {
+    doodleForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const textarea = doodleForm.querySelector(".doodle-textarea");
+      const btn = doodleForm.querySelector(".doodle-btn");
+      const msg = textarea.value.trim();
+      if (!msg) return;
+      btn.disabled = true;
+      btn.textContent = "…";
+      try {
+        const resp = await fetch("/api/notes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg }),
+        });
+        const data = await resp.json();
+        if (data.success) {
+          btn.textContent = "Sent!";
+          btn.style.backgroundColor = "#06d6a0";
+          textarea.value = "";
+          setTimeout(() => {
+            btn.textContent = "Send ✦";
+            btn.style.backgroundColor = "";
+            btn.disabled = false;
+          }, 2500);
+        } else {
+          btn.textContent = "Error";
+          btn.style.backgroundColor = "#ff6b6b";
+          setTimeout(() => {
+            btn.textContent = "Send ✦";
+            btn.style.backgroundColor = "";
+            btn.disabled = false;
+          }, 2500);
+        }
+      } catch (err) {
+        btn.textContent = "Error";
+        setTimeout(() => {
+          btn.textContent = "Send ✦";
+          btn.disabled = false;
+        }, 2500);
+      }
+    });
+  }
+
+  // ── Admin Notes Panel ──
+  const adminNotesList = document.getElementById("adminNotesList");
+  const adminNotesBadge = document.getElementById("adminNotesBadge");
+  async function loadAdminNotes() {
+    const token = localStorage.getItem("token");
+    if (!token || !adminNotesList) return;
+    try {
+      const resp = await fetch("/api/admin/notes", {
+        headers: { Authorization: "Bearer " + token },
+      });
+      const data = await resp.json();
+      if (!data.success) return;
+      const notes = data.notes || [];
+      if (adminNotesBadge) {
+        const unread = notes.filter((n) => !n.is_read).length;
+        adminNotesBadge.textContent = unread;
+        adminNotesBadge.style.display = unread > 0 ? "inline-flex" : "none";
+      }
+      if (notes.length === 0) {
+        adminNotesList.innerHTML = '<p class="news-admin-empty">No notes yet.</p>';
+        return;
+      }
+      adminNotesList.innerHTML = notes
+        .map(
+          (n) => `
+        <div class="news-admin-item ${n.is_read ? "" : "note-unread"}" data-note-id="${n.id}">
+          <div class="news-admin-item__header">
+            <strong>${escapeHtml(n.author_name || "Anonymous")}</strong>
+            <span class="news-admin-item__date">${new Date(n.created_at).toLocaleString()}</span>
+          </div>
+          <p class="news-admin-item__content">${escapeHtml(n.message)}</p>
+          <div class="news-admin-item__actions">
+            ${!n.is_read ? `<button class="btn-small note-mark-read" data-id="${n.id}">Mark read</button>` : ""}
+            <button class="btn-small note-delete" data-id="${n.id}">Delete</button>
+          </div>
+        </div>`,
+        )
+        .join("");
+      adminNotesList.querySelectorAll(".note-mark-read").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          await fetch("/api/admin/notes/" + btn.dataset.id + "/read", {
+            method: "PUT",
+            headers: { Authorization: "Bearer " + token },
+          });
+          loadAdminNotes();
+        });
+      });
+      adminNotesList.querySelectorAll(".note-delete").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          if (!confirm("Delete this note?")) return;
+          await fetch("/api/admin/notes/" + btn.dataset.id, {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + token },
+          });
+          loadAdminNotes();
+        });
+      });
+    } catch (err) {
+      console.error("Error loading notes:", err);
+    }
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // Expose for admin panel open hook
+  window.loadAdminNotes = loadAdminNotes;
 })();

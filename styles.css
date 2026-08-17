@@ -26132,3 +26132,48 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
         display: none !important;
     }
 }
+
+/* ═══════════════════════════════════════════════════════
+   Admin Notes Section
+   ═══════════════════════════════════════════════════════ */
+.admin-notes-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: #ff6b6b;
+    border-radius: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.note-unread {
+    border-left: 3px solid var(--color-gold, #c9a94e);
+    background: rgba(201, 169, 78, 0.05);
+}
+
+.note-unread .news-admin-item__content {
+    font-weight: 600;
+}
+
+.note-mark-read {
+    background: var(--color-gold, #c9a94e) !important;
+    color: #000 !important;
+    border: none !important;
+}
+
+.note-delete {
+    background: #ff6b6b !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.note-mark-read:hover,
+.note-delete:hover {
+    opacity: 0.85;
+}
