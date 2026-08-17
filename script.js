@@ -20563,6 +20563,16 @@ window.testClickOnElement = function() {
       document.querySelectorAll("section.content")
     ).filter((s) => s.querySelector(".product-name") && s.id);
 
+    const esc = (v) =>
+      String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+    const allSeasons = new Set();
+    const allQualities = new Set();
+    const allNotes = new Set();
+    const seasonCounts = {};
+    const qualityCounts = {};
+    const noteCounts = {};
+
     const fragrances = sections.map((s) => {
       const id = s.id;
       const imgEl = s.querySelector(".perfume-top-row img[src], img[src]");
@@ -20571,6 +20581,46 @@ window.testClickOnElement = function() {
         const el = s.querySelector(sel);
         return el ? el.textContent.trim() : "";
       };
+
+      // Extract seasons from active seasonal indicators
+      const seasons = [];
+      s.querySelectorAll(".elves-seasonal-indicators .elves-indicator-item").forEach((item) => {
+        if (item.classList.contains("active")) {
+          const label = item.querySelector(".elves-indicator-label");
+          if (label) {
+            const season = label.textContent.trim().toLowerCase();
+            seasons.push(season);
+            allSeasons.add(season);
+            seasonCounts[season] = (seasonCounts[season] || 0) + 1;
+          }
+        }
+      });
+
+      // Extract quality options
+      const qualities = [];
+      s.querySelectorAll(".quality-option[data-quality]").forEach((opt) => {
+        const q = opt.getAttribute("data-quality");
+        if (q) {
+          qualities.push(q);
+          allQualities.add(q);
+          qualityCounts[q] = (qualityCounts[q] || 0) + 1;
+        }
+      });
+
+      // Extract notes from crystal-name elements (covers all conventions)
+      const notes = [];
+      const noteEls = s.querySelectorAll(
+        ".elves-crystal-name, .versaceeros-crystal-name, .card-name, .chip-name, .note-name, .label-name"
+      );
+      noteEls.forEach((el) => {
+        const n = el.textContent.trim().toLowerCase();
+        if (n && !notes.includes(n)) {
+          notes.push(n);
+          allNotes.add(n);
+          noteCounts[n] = (noteCounts[n] || 0) + 1;
+        }
+      });
+
       return {
         id,
         img: src,
@@ -20578,12 +20628,11 @@ window.testClickOnElement = function() {
         name: g(".product-name"),
         price: g(".price-currency"),
         unit: g(".price-unit") || "dt",
-        audience: s.getAttribute("data-audience") || "",
+        seasons: seasons.join(","),
+        qualities: qualities.join(","),
+        notes: notes.join(","),
       };
     });
-
-    const esc = (v) =>
-      String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
     const cards = fragrances
       .map((f) => {
@@ -20591,7 +20640,7 @@ window.testClickOnElement = function() {
           ? `<span class="perfume-grid-price">${esc(f.price)}<span class="perfume-grid-unit">${esc(f.unit)}</span></span>`
           : "";
         return `
-          <a class="perfume-grid-card" href="#${esc(f.id)}" data-target="${esc(f.id)}" data-audience="${esc(f.audience)}">
+          <a class="perfume-grid-card" href="#${esc(f.id)}" data-target="${esc(f.id)}" data-seasons="${esc(f.seasons)}" data-quality="${esc(f.qualities)}" data-notes="${esc(f.notes)}">
             <div class="perfume-grid-media">
               <img src="${esc(f.img)}" alt="${esc(f.name)}" loading="lazy" decoding="async">
             </div>
@@ -20609,6 +20658,9 @@ window.testClickOnElement = function() {
     const countEl = document.getElementById("perfumeGridCount");
     if (countEl) countEl.textContent = `${fragrances.length} fragrances`;
 
+    // ── Build filter sidebar ──
+    initGridFilters(allSeasons, allQualities, allNotes, seasonCounts, qualityCounts, noteCounts, fragrances.length);
+
     // Staggered entrance when entering grid mode
     const cardEls = gridView.querySelectorAll(".perfume-grid-card");
     cardEls.forEach((card, i) => {
@@ -20619,6 +20671,7 @@ window.testClickOnElement = function() {
     gridView.addEventListener("click", (e) => {
       const card = e.target.closest(".perfume-grid-card");
       if (!card) return;
+      if (e.target.closest(".perfume-grid-sidebar")) return;
       e.preventDefault();
       setMode("details", true);
       const target = document.getElementById(card.getAttribute("data-target"));
@@ -20628,6 +20681,175 @@ window.testClickOnElement = function() {
         }, 120);
       }
     });
+  }
+
+  // ── Grid filter logic ──
+  function initGridFilters(allSeasons, allQualities, allNotes, seasonCounts, qualityCounts, noteCounts, total) {
+    const sidebar = document.getElementById("perfumeGridSidebar");
+    if (!sidebar) return;
+
+    const seasonContainer = document.getElementById("gridFilterSeason");
+    const qualityContainer = document.getElementById("gridFilterQuality");
+    const notesContainer = document.getElementById("gridFilterNotes");
+    const noteSearch = document.getElementById("gridFilterNoteSearch");
+    const clearBtn = document.getElementById("gridFilterClear");
+    const countEl = document.getElementById("perfumeGridCount");
+
+    const ICON_SVG = {
+      snowflake: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 20-1.25-2.5L6 18"/><path d="M10 4 8.75 6.5 6 6"/><path d="m14 20 1.25-2.5L18 18"/><path d="m14 4 1.25 2.5L18 6"/><path d="m17 21-3-6h-4"/><path d="m17 3-3 6 1.5 3"/><path d="M2 12h6.5L10 9"/><path d="m20 10-1.5 2 1.5 2"/><path d="M22 12h-6.5L14 15"/><path d="m4 10 1.5 2L4 14"/><path d="m7 21 3-6-1.5-3"/><path d="m7 3 3 6h4"/></svg>`,
+      flower: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1"/><circle cx="12" cy="8" r="2"/><path d="M12 10v12"/><path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z"/><path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z"/></svg>`,
+      sun: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
+      leaf: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`,
+      droplets: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></svg>`,
+      wind: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/></svg>`,
+      flask: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>`,
+      star: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>`,
+      copy: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`,
+      tag: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>`
+    };
+    const seasonLabels = { winter: [ICON_SVG.snowflake, "Hiver"], spring: [ICON_SVG.flower, "Printemps"], summer: [ICON_SVG.sun, "Été"], fall: [ICON_SVG.leaf, "Automne"] };
+    const qualityLabels = { edp: [ICON_SVG.droplets, "EDP"], edt: [ICON_SVG.wind, "EDT"], parfum: [ICON_SVG.flask, "Parfum"], top: [ICON_SVG.star, "Top"], identical: [ICON_SVG.copy, "Identique"] };
+
+    const selectedSeasons = new Set();
+    const selectedQualities = new Set();
+    const selectedNotes = new Set();
+
+    // Build season chips
+    ["winter", "spring", "summer", "fall"].forEach((s) => {
+      if (!allSeasons.has(s)) return;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "grid-filter-chip";
+      btn.dataset.value = s;
+      const [icon, label] = seasonLabels[s] || [null, s];
+      btn.innerHTML = `<span class="chip-icon">${icon || ""}</span><span class="chip-label">${label}</span><span class="chip-count">${seasonCounts[s]}</span>`;
+      btn.addEventListener("click", () => {
+        if (selectedSeasons.has(s)) {
+          selectedSeasons.delete(s);
+          btn.classList.remove("active");
+        } else {
+          selectedSeasons.add(s);
+          btn.classList.add("active");
+        }
+        applyFilters();
+      });
+      seasonContainer.appendChild(btn);
+    });
+
+    // Build quality chips
+    ["edp", "edt", "parfum", "top", "identical"].forEach((q) => {
+      if (!allQualities.has(q)) return;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "grid-filter-chip";
+      btn.dataset.value = q;
+      const [icon, label] = qualityLabels[q] || [null, q];
+      btn.innerHTML = `<span class="chip-icon">${icon || ""}</span><span class="chip-label">${label}</span><span class="chip-count">${qualityCounts[q]}</span>`;
+      btn.addEventListener("click", () => {
+        if (selectedQualities.has(q)) {
+          selectedQualities.delete(q);
+          btn.classList.remove("active");
+        } else {
+          selectedQualities.add(q);
+          btn.classList.add("active");
+        }
+        applyFilters();
+      });
+      qualityContainer.appendChild(btn);
+    });
+
+    // Build note chips (sorted by frequency, top 40 shown by default)
+    const sortedNotes = Object.entries(noteCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 40);
+
+    function renderNoteChips(filter) {
+      notesContainer.innerHTML = "";
+      const lowerFilter = (filter || "").toLowerCase();
+      const items = lowerFilter
+        ? Object.entries(noteCounts)
+            .filter(([n]) => n.includes(lowerFilter))
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 40)
+        : sortedNotes;
+
+      items.forEach(([note, count]) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "grid-filter-chip" + (selectedNotes.has(note) ? " active" : "");
+        btn.dataset.value = note;
+        btn.innerHTML = `<span class="chip-icon">${ICON_SVG.tag}</span><span class="chip-label">${note}</span><span class="chip-count">${count}</span>`;
+        btn.addEventListener("click", () => {
+          if (selectedNotes.has(note)) {
+            selectedNotes.delete(note);
+            btn.classList.remove("active");
+          } else {
+            selectedNotes.add(note);
+            btn.classList.add("active");
+          }
+          applyFilters();
+        });
+        notesContainer.appendChild(btn);
+      });
+    }
+
+    renderNoteChips("");
+    if (noteSearch) {
+      noteSearch.addEventListener("input", () => {
+        renderNoteChips(noteSearch.value);
+      });
+    }
+
+    // Clear all
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        selectedSeasons.clear();
+        selectedQualities.clear();
+        selectedNotes.clear();
+        sidebar.querySelectorAll(".grid-filter-chip.active").forEach((c) => c.classList.remove("active"));
+        if (noteSearch) noteSearch.value = "";
+        renderNoteChips("");
+        applyFilters();
+      });
+    }
+
+    function applyFilters() {
+      const cards = gridView.querySelectorAll(".perfume-grid-card");
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const cSeasons = (card.getAttribute("data-seasons") || "").split(",").filter(Boolean);
+        const cQualities = (card.getAttribute("data-quality") || "").split(",").filter(Boolean);
+        const cNotes = (card.getAttribute("data-notes") || "").split(",").filter(Boolean);
+
+        let show = true;
+
+        // OR within season group: card must have at least one of the selected seasons
+        if (selectedSeasons.size > 0) {
+          if (!cSeasons.some((s) => selectedSeasons.has(s))) show = false;
+        }
+
+        // OR within quality group: card must have at least one of the selected qualities
+        if (selectedQualities.size > 0) {
+          if (!cQualities.some((q) => selectedQualities.has(q))) show = false;
+        }
+
+        // AND for notes: card must have ALL selected notes
+        if (selectedNotes.size > 0) {
+          if (![...selectedNotes].every((n) => cNotes.includes(n))) show = false;
+        }
+
+        card.classList.toggle("filtered-out", !show);
+        if (show) visible++;
+      });
+
+      // Update count
+      if (countEl) countEl.textContent = visible === total ? `${total} fragrances` : `${visible} / ${total} fragrances`;
+
+      // Show/hide clear button
+      const hasFilters = selectedSeasons.size > 0 || selectedQualities.size > 0 || selectedNotes.size > 0;
+      if (clearBtn) clearBtn.style.display = hasFilters ? "block" : "none";
+    }
   }
 
   function setMode(mode, opts) {

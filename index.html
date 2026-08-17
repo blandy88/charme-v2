@@ -14,7 +14,7 @@
         <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" /></noscript>
 
         <!-- Stylesheets -->
-        <link rel="stylesheet" href="styles.css?v=20260826" />
+        <link rel="stylesheet" href="styles.css?v=20260817c" />
         <!-- Perfume profile CSS: loaded non-render-blocking via media trick -->
         
         
@@ -4286,15 +4286,17 @@
             <section class="hero">
                 <!-- Hero content removed — full-bleed image background -->
                 <div class="hero-contact-stack">
-                    <iframe
-                        class="hero-map"
-                        src="https://www.google.com/maps?q=36.843530,11.095981&z=15&output=embed"
-                        style="border: 0"
-                        loading="lazy"
-                        allowfullscreen
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="Find us on Google Maps"
-                    ></iframe>
+                    <a href="https://www.google.com/maps?q=36.843530,11.095981&z=15" target="_blank" rel="noopener noreferrer" class="hero-map-link">
+                        <iframe
+                            class="hero-map"
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=11.088%2C36.838%2C11.104%2C36.849&layer=mapnik&marker=36.843530%2C11.095981"
+                            style="border: 0"
+                            loading="lazy"
+                            allowfullscreen
+                            title="Find us on OpenStreetMap"
+                        ></iframe>
+                        <span class="hero-map-overlay">📍 Ouvrir dans Google Maps</span>
+                    </a>
                     <div class="contact-card-wrap">
                         <div class="contact-card">
                             <div class="contact-card__avatar">
@@ -4331,11 +4333,35 @@
 
             <!-- Perfume Grid View (Grid mode — all fragrances) -->
             <div class="perfume-grid-view" id="perfumeGridView" aria-hidden="true">
-                <div class="perfume-grid-header">
-                    <h2 class="perfume-grid-title">All Fragrances</h2>
-                    <span class="perfume-grid-count" id="perfumeGridCount"></span>
+                <div class="perfume-grid-layout">
+                    <aside class="perfume-grid-sidebar" id="perfumeGridSidebar">
+                        <div class="grid-filter-header">
+                            <span class="grid-filter-icon">⚙</span>
+                            <span>Filtres</span>
+                        </div>
+                        <div class="grid-filter-group">
+                            <h4 class="grid-filter-title" id="gridFilterSeasonTitle">Saison <span class="grid-filter-count" id="gridFilterSeasonCount"></span></h4>
+                            <div class="grid-filter-chips" id="gridFilterSeason"></div>
+                        </div>
+                        <div class="grid-filter-group">
+                            <h4 class="grid-filter-title" id="gridFilterQualityTitle">Qualité <span class="grid-filter-count" id="gridFilterQualityCount"></span></h4>
+                            <div class="grid-filter-chips" id="gridFilterQuality"></div>
+                        </div>
+                        <div class="grid-filter-group">
+                            <h4 class="grid-filter-title" id="gridFilterNotesTitle">Notes <span class="grid-filter-count" id="gridFilterNotesCount"></span></h4>
+                            <input type="text" class="grid-filter-search" id="gridFilterNoteSearch" placeholder="Rechercher une note...">
+                            <div class="grid-filter-chips grid-filter-chips-scroll" id="gridFilterNotes"></div>
+                        </div>
+                        <button class="grid-filter-clear" id="gridFilterClear" style="display:none">✕ Effacer tout</button>
+                    </aside>
+                    <div class="perfume-grid-main">
+                        <div class="perfume-grid-header">
+                            <h2 class="perfume-grid-title">All Fragrances</h2>
+                            <span class="perfume-grid-count" id="perfumeGridCount"></span>
+                        </div>
+                        <div class="perfume-grid" id="perfumeGrid"></div>
+                    </div>
                 </div>
-                <div class="perfume-grid" id="perfumeGrid"></div>
             </div>
 
             <!-- ========== Aventus Absolu ========== -->
@@ -29108,7 +29134,7 @@
         </div>
 
         <script src="js/i18n.js?v=20260817" defer></script>
-        <script src="script.js?v=20260902" defer></script>
+        <script src="script.js?v=20260817c" defer></script>
 
         <script>
             // Quality selector functionality
