@@ -503,6 +503,7 @@ const helmetOptions =
             connectSrc: ["'self'"],
             objectSrc: ["'none'"],
             baseUri: ["'self'"],
+            frameSrc: ["'self'", "https://www.openstreetmap.org", "https://openstreetmap.org"],
             frameAncestors: ["'none'"],
           },
         },
