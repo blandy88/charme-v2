@@ -10736,6 +10736,107 @@ function initializeNewsAdmin() {
     openNewsComposer();
   });
 
+  // ── Guest Notes Panel ──
+  const guestNotesBtn = document.getElementById("guestNotesBtn");
+  const guestNotesModal = document.getElementById("guestNotesModal");
+  const guestNotesClose = document.getElementById("guestNotesClose");
+  const guestNotesOverlay = document.getElementById("guestNotesOverlay");
+
+  function openGuestNotes() {
+    if (!guestNotesModal) return;
+    guestNotesModal.style.position = "fixed";
+    guestNotesModal.style.top = "0";
+    guestNotesModal.style.left = "0";
+    guestNotesModal.style.width = "100vw";
+    guestNotesModal.style.height = "100vh";
+    guestNotesModal.style.zIndex = "100002";
+    guestNotesModal.style.display = "flex";
+    guestNotesModal.style.alignItems = "center";
+    guestNotesModal.style.justifyContent = "center";
+    guestNotesModal.style.background = "rgba(0, 0, 0, 0.9)";
+    guestNotesModal.style.backdropFilter = "blur(15px)";
+    guestNotesModal.classList.add("show");
+    guestNotesModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    loadGuestNotes();
+  }
+
+  function closeGuestNotes() {
+    if (!guestNotesModal) return;
+    guestNotesModal.style.display = "none";
+    guestNotesModal.classList.remove("show");
+    guestNotesModal.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  guestNotesBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    openGuestNotes();
+  });
+  guestNotesClose?.addEventListener("click", closeGuestNotes);
+  guestNotesOverlay?.addEventListener("click", closeGuestNotes);
+
+  async function loadGuestNotes() {
+    const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const list = document.getElementById("guestNotesList");
+    const badge = document.getElementById("guestNotesBadge");
+    if (!token || !list) return;
+    try {
+      const resp = await fetch("/api/admin/notes", {
+        headers: { Authorization: "Bearer " + token },
+      });
+      const data = await resp.json();
+      if (!data.success) return;
+      const notes = data.notes || [];
+      if (badge) {
+        const unread = notes.filter((n) => !n.is_read).length;
+        badge.textContent = unread;
+        badge.style.display = unread > 0 ? "inline-flex" : "none";
+      }
+      if (notes.length === 0) {
+        list.innerHTML = '<p class="news-admin-empty">No notes yet.</p>';
+        return;
+      }
+      list.innerHTML = notes
+        .map(
+          (n) => `
+        <div class="news-admin-item ${n.is_read ? "" : "note-unread"}" data-note-id="${n.id}">
+          <div class="news-admin-item__header">
+            <strong>${escapeHtml(n.author_name || "Anonymous")}</strong>
+            <span class="news-admin-item__date">${new Date(n.created_at).toLocaleString()}</span>
+          </div>
+          <p class="news-admin-item__content">${escapeHtml(n.message)}</p>
+          <div class="news-admin-item__actions">
+            ${!n.is_read ? `<button class="btn-small note-mark-read" data-id="${n.id}">Mark read</button>` : ""}
+            <button class="btn-small note-delete" data-id="${n.id}">Delete</button>
+          </div>
+        </div>`,
+        )
+        .join("");
+      list.querySelectorAll(".note-mark-read").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          await fetch("/api/admin/notes/" + btn.dataset.id + "/read", {
+            method: "PUT",
+            headers: { Authorization: "Bearer " + token },
+          });
+          loadGuestNotes();
+        });
+      });
+      list.querySelectorAll(".note-delete").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          if (!confirm("Delete this note?")) return;
+          await fetch("/api/admin/notes/" + btn.dataset.id, {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + token },
+          });
+          loadGuestNotes();
+        });
+      });
+    } catch (err) {
+      console.error("Error loading notes:", err);
+    }
+  }
+
   const newBtn = document.getElementById("newsAdminNewBtn");
   newBtn?.addEventListener("click", openNewsComposer);
 
@@ -10769,14 +10870,21 @@ function initializeNewsAdmin() {
   // Show/hide the admin dropdown item alongside the other admin links
   const observer = new MutationObserver(() => {
     const adminDashboard = document.getElementById("adminDashboard");
+    const guestNotesBtn = document.getElementById("guestNotesBtn");
     if (newsAdminBtn && adminDashboard) {
       newsAdminBtn.style.display = adminDashboard.style.display;
+    }
+    if (guestNotesBtn && adminDashboard) {
+      guestNotesBtn.style.display = adminDashboard.style.display;
     }
   });
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
   const adminDashboard = document.getElementById("adminDashboard");
   if (newsAdminBtn && adminDashboard) {
     newsAdminBtn.style.display = adminDashboard.style.display;
+  }
+  if (guestNotesBtn && adminDashboard) {
+    guestNotesBtn.style.display = adminDashboard.style.display;
   }
 }
 
@@ -10884,9 +10992,6 @@ async function openAdminDashboard() {
 
   // Load news & notifications
   await loadAdminNews();
-
-  // Load guest notes
-  if (typeof window.loadAdminNotes === "function") window.loadAdminNotes();
 }
 
 async function loadUsersData() {
@@ -21018,75 +21123,4 @@ window.testClickOnElement = function() {
       }
     });
   }
-
-  // ── Admin Notes Panel ──
-  const adminNotesList = document.getElementById("adminNotesList");
-  const adminNotesBadge = document.getElementById("adminNotesBadge");
-  async function loadAdminNotes() {
-    const token = localStorage.getItem("token");
-    if (!token || !adminNotesList) return;
-    try {
-      const resp = await fetch("/api/admin/notes", {
-        headers: { Authorization: "Bearer " + token },
-      });
-      const data = await resp.json();
-      if (!data.success) return;
-      const notes = data.notes || [];
-      if (adminNotesBadge) {
-        const unread = notes.filter((n) => !n.is_read).length;
-        adminNotesBadge.textContent = unread;
-        adminNotesBadge.style.display = unread > 0 ? "inline-flex" : "none";
-      }
-      if (notes.length === 0) {
-        adminNotesList.innerHTML = '<p class="news-admin-empty">No notes yet.</p>';
-        return;
-      }
-      adminNotesList.innerHTML = notes
-        .map(
-          (n) => `
-        <div class="news-admin-item ${n.is_read ? "" : "note-unread"}" data-note-id="${n.id}">
-          <div class="news-admin-item__header">
-            <strong>${escapeHtml(n.author_name || "Anonymous")}</strong>
-            <span class="news-admin-item__date">${new Date(n.created_at).toLocaleString()}</span>
-          </div>
-          <p class="news-admin-item__content">${escapeHtml(n.message)}</p>
-          <div class="news-admin-item__actions">
-            ${!n.is_read ? `<button class="btn-small note-mark-read" data-id="${n.id}">Mark read</button>` : ""}
-            <button class="btn-small note-delete" data-id="${n.id}">Delete</button>
-          </div>
-        </div>`,
-        )
-        .join("");
-      adminNotesList.querySelectorAll(".note-mark-read").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          await fetch("/api/admin/notes/" + btn.dataset.id + "/read", {
-            method: "PUT",
-            headers: { Authorization: "Bearer " + token },
-          });
-          loadAdminNotes();
-        });
-      });
-      adminNotesList.querySelectorAll(".note-delete").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          if (!confirm("Delete this note?")) return;
-          await fetch("/api/admin/notes/" + btn.dataset.id, {
-            method: "DELETE",
-            headers: { Authorization: "Bearer " + token },
-          });
-          loadAdminNotes();
-        });
-      });
-    } catch (err) {
-      console.error("Error loading notes:", err);
-    }
-  }
-
-  function escapeHtml(str) {
-    const d = document.createElement("div");
-    d.textContent = str;
-    return d.innerHTML;
-  }
-
-  // Expose for admin panel open hook
-  window.loadAdminNotes = loadAdminNotes;
 })();

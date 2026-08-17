@@ -1084,6 +1084,28 @@
                                         </svg>
                                         News &amp; Notifications
                                     </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="guestNotesBtn"
+                                        style="display: none"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                            <polyline points="14 2 14 8 20 8"/>
+                                            <line x1="16" y1="13" x2="8" y2="13"/>
+                                            <line x1="16" y1="17" x2="8" y2="17"/>
+                                            <polyline points="10 9 9 9 8 9"/>
+                                        </svg>
+                                        Guest Notes
+                                        <span class="admin-notes-badge" id="guestNotesBadge" style="display:none">0</span>
+                                    </div>
                                     <div class="dropdown-divider"></div>
                                     <div class="dropdown-item" id="logoutBtn">
                                         <svg
@@ -3807,18 +3829,28 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="admin-section notes-admin-section">
-                        <div class="news-admin-section__head">
-                            <h3>Guest Notes <span class="admin-notes-badge" id="adminNotesBadge" style="display:none">0</span></h3>
-                        </div>
-                        <p class="news-admin-section__hint">
-                            Messages laissés par les visiteurs via le formulaire « Leave a Note ».
-                        </p>
-                        <div class="users-table-container">
-                            <div class="news-admin-list" id="adminNotesList">
-                                <p class="news-admin-empty">No notes yet.</p>
-                            </div>
+        <!-- Guest Notes Modal -->
+        <div id="guestNotesModal" class="admin-modal guest-notes-modal hidden">
+            <div class="modal-overlay" id="guestNotesOverlay"></div>
+            <div class="admin-modal-content guest-notes-shell">
+                <div class="admin-modal-header guest-notes-header">
+                    <div>
+                        <span class="loyalty-header__eyebrow">Feedback</span>
+                        <h2>Guest Notes</h2>
+                    </div>
+                    <button class="admin-close-btn guest-notes-close" id="guestNotesClose" aria-label="Fermer">&times;</button>
+                </div>
+                <div class="modal-body guest-notes-body">
+                    <p class="news-admin-section__hint">
+                        Messages laissés par les visiteurs via le formulaire « Leave a Note ».
+                    </p>
+                    <div class="users-table-container">
+                        <div class="news-admin-list" id="guestNotesList">
+                            <p class="news-admin-empty">No notes yet.</p>
                         </div>
                     </div>
                 </div>

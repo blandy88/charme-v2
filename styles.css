@@ -26177,3 +26177,48 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 .note-delete:hover {
     opacity: 0.85;
 }
+
+/* ═══════════════════════════════════════════════════════
+   Guest Notes Modal (standalone, profile dropdown)
+   ═══════════════════════════════════════════════════════ */
+.guest-notes-shell {
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+}
+
+.guest-notes-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.guest-notes-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.guest-notes-close {
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.guest-notes-body {
+    padding: 16px 20px;
+    overflow-y: auto;
+    max-height: calc(80vh - 80px);
+}
+
+#guestNotesBadge {
+    margin-left: 8px;
+    font-size: 11px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+}
