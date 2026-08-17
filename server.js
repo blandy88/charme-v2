@@ -3922,6 +3922,16 @@ app.use((req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+
+  // Keep-alive: self-ping every 10 min so Render free tier doesn't sleep
+  const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+  if (SELF_URL.startsWith("http")) {
+    setInterval(() => {
+      fetch(SELF_URL)
+        .then(() => console.log("🔁 Keep-alive ping sent"))
+        .catch(() => {});
+    }, 10 * 60 * 1000); // every 10 minutes
+  }
 });
 
 // Graceful shutdown
