@@ -25665,7 +25665,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 .grid-filter-count {
     font-weight: 400 !important;
     font-size: 10px !important;
-    color: var(--color-accent) !important;
+    color: var(--color-gold) !important;
 }
 
 .grid-filter-chips {
@@ -25696,13 +25696,13 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 
 .grid-filter-chip:hover {
-    border-color: var(--color-accent) !important;
+    border-color: var(--color-gold) !important;
     color: var(--color-text-primary) !important;
 }
 
 .grid-filter-chip.active {
-    background: var(--color-accent) !important;
-    border-color: var(--color-accent) !important;
+    background: var(--color-gold) !important;
+    border-color: var(--color-gold) !important;
     color: #fff !important;
     font-weight: 500 !important;
 }
@@ -25753,7 +25753,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 
 .grid-filter-search:focus {
-    border-color: var(--color-accent) !important;
+    border-color: var(--color-gold) !important;
 }
 
 .grid-filter-search::placeholder {
