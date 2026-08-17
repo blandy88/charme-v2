@@ -25913,8 +25913,8 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     align-items: center;
     justify-content: center;
     position: absolute !important;
-    top: 60px;
-    right: clamp(12px, 2vw, 30px);
+    top: 80px;
+    right: clamp(30px, 4vw, 60px);
     z-index: 10;
     box-sizing: border-box;
 }
