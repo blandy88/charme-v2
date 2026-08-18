@@ -2430,7 +2430,7 @@ function getStaticBackgroundColor() {
 function updateScrollBackgroundAndTheme() {
   const backgroundColor = getStaticBackgroundColor();
   if (_lastAppliedBackgroundColor !== backgroundColor) {
-    body.style.backgroundColor = backgroundColor;
+    document.body.style.backgroundColor = backgroundColor;
     _lastAppliedBackgroundColor = backgroundColor;
   }
   forceBodyTheme(themeFromBackgroundColor(backgroundColor));
@@ -2489,7 +2489,7 @@ function updateColors() {
 
     // Apply the color (avoid redundant style writes)
     if (_lastAppliedBackgroundColor !== backgroundColor) {
-      body.style.backgroundColor = backgroundColor;
+    document.body.style.backgroundColor = backgroundColor;
       _lastAppliedBackgroundColor = backgroundColor;
     }
 
@@ -6923,6 +6923,11 @@ function initializeAuth() {
     const loyaltyCardBtn = document.getElementById("loyaltyCardBtn");
     if (loyaltyCardBtn) {
       loyaltyCardBtn.style.display = effectiveIsAdmin ? "block" : "none";
+    }
+
+    const guestNotesBtn = document.getElementById("guestNotesBtn");
+    if (guestNotesBtn) {
+      guestNotesBtn.style.display = effectiveIsAdmin ? "block" : "none";
     }
 
     console.log("ðŸ‘¤ User styling applied for:", userData.email);
@@ -20977,8 +20982,11 @@ window.testClickOnElement = function() {
       addDetailsStockBadges();
     }
   }
+})();
 
-  // ── Doodle Feedback Form ──
+// ── Doodle Feedback Form + Guest Notes Panel ──
+// Placed OUTSIDE the mode-toggle IIFE so an error there can't kill these listeners.
+(function () {
   const doodleForm = document.getElementById("doodleFeedbackForm");
   if (doodleForm) {
     doodleForm.addEventListener("submit", async (e) => {
