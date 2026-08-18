@@ -197,6 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Tunables
     const SCROLL_TOP_ZONE     = 8;    // px — always show near the top
+    const RESIZE_DEBOUNCE_MS  = 150;  // ms — debounce resize handler
 
     let isHidden        = false;
     let lastY           = readScrollY();
