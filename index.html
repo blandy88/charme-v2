@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +14,7 @@
         <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" /></noscript>
 
         <!-- Stylesheets -->
-        <link rel="stylesheet" href="styles.css?v=20260818d" />
+        <link rel="stylesheet" href="styles.css?v=20260818e" />
         <!-- Perfume profile CSS: loaded non-render-blocking via media trick -->
         
         
@@ -184,6 +184,7 @@
             id="topMarquee"
             role="region"
             aria-label="Announcement"
+            data-i18n-aria="Announcement"
         >
             <div class="marquee-track" aria-hidden="true">
                 <div class="marquee-content">
@@ -203,6 +204,7 @@
                 class="marquee-close"
                 id="closeTopMarquee"
                 aria-label="Close announcement"
+                data-i18n-aria="Close announcement"
             >
                 ×
             </button>
@@ -239,7 +241,7 @@
                                 Profiles
                             </button>
                             </div>
-                            <div class="search-icon" aria-label="Search fragrances">
+                            <div class="search-icon" aria-label="Search fragrances" data-i18n-aria="Search fragrances">
                                 <svg
                                     viewBox="0 0 24 24"
                                     fill="none"
@@ -307,6 +309,8 @@
                         type="button"
                         aria-label="Toggle light / night theme"
                         title="Toggle light / night theme"
+                        data-i18n-aria="Toggle light / night theme"
+                        data-i18n-title="Toggle light / night theme"
                     >
                         <svg
                             class="theme-icon theme-icon-sun"
@@ -484,6 +488,7 @@
                                     class="notification-mark-all-read"
                                     id="markAllReadBtn"
                                     title="Mark all as read"
+                                    data-i18n-title="Mark all as read"
                                 >
                                     <svg
                                         viewBox="0 0 24 24"
@@ -877,7 +882,7 @@
 
                     <!-- Ingredient-Based AI Fragrance Finder -->
                     <div class="ingredient-finder" id="ingredientFinder">
-                        <div class="ingredient-finder-icon" id="ingredientFinderIcon" title="Search by Ingredients">
+                        <div class="ingredient-finder-icon" id="ingredientFinderIcon" title="Search by Ingredients" data-i18n-title="Search by Ingredients">
                             <svg class="molecule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M9 3H15M10 9H14M6 21H18C19.1046 21 20 20.1046 20 19V18.1333C20 17.603 19.7893 17.0944 19.4142 16.7192L15.5858 12.8908C15.2107 12.5156 15 12.007 15 11.4767V5C15 3.89543 14.1046 3 13 3H11C9.89543 3 9 3.89543 9 5V11.4767C9 12.007 8.78929 12.5156 8.41421 12.8908L4.58579 16.7192C4.21071 17.0944 4 17.603 4 18.1333V19C4 20.1046 4.89543 21 6 21Z"></path>
                             </svg>
@@ -914,6 +919,7 @@
                                     id="userAvatar"
                                     src=""
                                     alt="User Avatar"
+                                    data-i18n-alt="User Avatar"
                                  loading="lazy" decoding="async"/>
                                 <span class="user-name" id="userName"></span>
                                 <div class="user-dropdown" id="userDropdown">
@@ -4394,6 +4400,7 @@
                                 target="_blank"
                                 rel="noopener"
                                 aria-label="Chat with the store on WhatsApp"
+                                data-i18n-aria="Chat with the store on WhatsApp"
                             >
                                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z"/>
@@ -29077,6 +29084,7 @@
             id="floatingSearch"
             class="floating-search"
             aria-label="Search fragrances"
+            data-i18n-aria="Search fragrances"
         >
             <svg
                 class="floating-search-icon"
@@ -29100,6 +29108,7 @@
                 rel="noopener noreferrer"
                 class="social-link"
                 aria-label="Follow us on Facebook"
+                data-i18n-aria="Follow us on Facebook"
             >
                 <svg
                     class="social-icon"
@@ -29117,6 +29126,7 @@
                 rel="noopener noreferrer"
                 class="social-link"
                 aria-label="Follow us on Instagram"
+                data-i18n-aria="Follow us on Instagram"
             >
                 <svg
                     class="social-icon"
@@ -29165,7 +29175,7 @@
         </footer>
 
         <!-- Back to Top Button -->
-        <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <button id="backToTop" class="back-to-top" aria-label="Back to top" data-i18n-aria="Back to top">
             <svg
                 class="back-to-top-icon"
                 viewBox="0 0 24 24"
@@ -29202,13 +29212,13 @@
         </button>
 
         <!-- Perfume view mode toggle -->
-        <div class="perfume-mode-toggle" id="perfumeModeToggle" role="group" aria-label="Perfume display mode">
+        <div class="perfume-mode-toggle" id="perfumeModeToggle" role="group" aria-label="Perfume display mode" data-i18n-aria="Perfume display mode">
             <button type="button" class="perfume-mode-btn active" data-mode="details" aria-pressed="true">Details</button>
             <button type="button" class="perfume-mode-btn" data-mode="grid" aria-pressed="false">Grid</button>
         </div>
 
         <script src="js/i18n.js?v=20260817" defer></script>
-        <script src="script.js?v=20260818d" defer></script>
+        <script src="script.js?v=20260818e" defer></script>
 
         <script>
             // Quality selector functionality
