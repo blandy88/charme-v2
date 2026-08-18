@@ -21033,6 +21033,7 @@ window.testClickOnElement = function() {
   }
 
   // ── Guest Notes Panel ──
+  const escapeHtml = window.escapeHTML || function (v) { return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); };
   const guestNotesBtn = document.getElementById("guestNotesBtn");
   const guestNotesModal = document.getElementById("guestNotesModal");
   const guestNotesClose = document.getElementById("guestNotesClose");
