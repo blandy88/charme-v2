@@ -718,11 +718,17 @@ app.use((req, res, next) => {
   const normalizedPath = req.path.toLowerCase();
   const staticFile = allowedStaticFiles.get(normalizedPath);
   if (staticFile) {
-    const isHtml = staticFile.toLowerCase().endsWith(".html");
-    res.setHeader(
-      "Cache-Control",
-      isHtml ? "no-cache, must-revalidate" : "public, max-age=604800",
-    );
+    const ext = path.extname(staticFile).toLowerCase();
+    const isHtml = ext === ".html";
+    const isJS = ext === ".js";
+    const isCSS = ext === ".css";
+    // HTML, JS, CSS: always revalidate so cache-bust works across all visitors.
+    // Images: long cache since they don't change.
+    if (isHtml || isJS || isCSS) {
+      res.setHeader("Cache-Control", "no-cache, must-revalidate");
+    } else {
+      res.setHeader("Cache-Control", "public, max-age=604800");
+    }
     return res.sendFile(path.join(__dirname, staticFile));
   }
 
