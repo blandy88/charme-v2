@@ -11259,6 +11259,33 @@ function initializeLoyaltyModal() {
     applySearch();
     searchInput?.focus();
   });
+
+  // Loyalty Edit Modal wiring
+  const loyaltyEditClose = document.getElementById("loyaltyEditClose");
+  const loyaltyEditOverlay = document.getElementById("loyaltyEditOverlay");
+  const loyaltyEditCancelBtn = document.getElementById("loyaltyEditCancelBtn");
+  const loyaltyEditSaveBtn = document.getElementById("loyaltyEditSaveBtn");
+
+  loyaltyEditClose?.addEventListener("click", closeLoyaltyEditModal);
+  loyaltyEditOverlay?.addEventListener("click", closeLoyaltyEditModal);
+  loyaltyEditCancelBtn?.addEventListener("click", closeLoyaltyEditModal);
+  loyaltyEditSaveBtn?.addEventListener("click", saveLoyaltyEdit);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const editModal = document.getElementById("loyaltyEditModal");
+      if (editModal && !editModal.classList.contains("hidden")) {
+        closeLoyaltyEditModal();
+      }
+    }
+    if (e.key === "Enter") {
+      const editModal = document.getElementById("loyaltyEditModal");
+      if (editModal && !editModal.classList.contains("hidden")) {
+        e.preventDefault();
+        saveLoyaltyEdit();
+      }
+    }
+  });
 }
 
 async function openLoyaltyModal() {
@@ -11517,16 +11544,47 @@ async function createManualLoyaltyCard() {
 
 async function updateLoyaltyPoints(cardId, name) {
   const card = loyaltyCards.find((c) => c.cardId === cardId);
-  const current = card ? card.points : 0;
-  const raw = window.prompt(
-    `Nouveau nombre de points pour ${name} ?`,
-    String(current),
-  );
-  if (raw === null) return;
+  if (!card) return;
 
-  const pts = Number.parseInt(raw, 10);
-  if (!Number.isInteger(pts) || pts < 0) {
-    showNotification("Veuillez entrer un nombre de points valide", "error");
+  const cardIdInput = document.getElementById("loyaltyEditCardId");
+  const nameInput = document.getElementById("loyaltyEditName");
+  const cardNumberInput = document.getElementById("loyaltyEditCardNumber");
+  const pointsInput = document.getElementById("loyaltyEditPoints");
+
+  cardIdInput.value = cardId;
+  nameInput.value = card.name || "";
+  cardNumberInput.value = card.cardNumber || "";
+  pointsInput.value = card.points ?? 0;
+
+  const modal = document.getElementById("loyaltyEditModal");
+  modal.classList.remove("hidden");
+  modal.style.setProperty("display", "flex", "important");
+
+  nameInput.focus();
+}
+
+function closeLoyaltyEditModal() {
+  const modal = document.getElementById("loyaltyEditModal");
+  modal.classList.add("hidden");
+  modal.style.removeProperty("display");
+}
+
+async function saveLoyaltyEdit() {
+  const cardId = Number(document.getElementById("loyaltyEditCardId").value);
+  const name = document.getElementById("loyaltyEditName").value.trim();
+  const cardNumber = document.getElementById("loyaltyEditCardNumber").value.trim();
+  const pointsStr = document.getElementById("loyaltyEditPoints").value;
+
+  if (!name) {
+    showNotification("Le nom est requis", "error");
+    document.getElementById("loyaltyEditName").focus();
+    return;
+  }
+
+  const pts = Number.parseInt(pointsStr, 10);
+  if (!Number.isInteger(pts) || pts < 0 || pts > 10000) {
+    showNotification("Points invalides (0–10 000)", "error");
+    document.getElementById("loyaltyEditPoints").focus();
     return;
   }
 
@@ -11539,19 +11597,20 @@ async function updateLoyaltyPoints(cardId, name) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ cardId, points: pts }),
+      body: JSON.stringify({ cardId, name, cardNumber: cardNumber || undefined, points: pts }),
     });
     const data = await response.json();
 
     if (data.success) {
-      showNotification(data.message, "success");
+      showNotification(data.message || "Carte mise à jour", "success");
+      closeLoyaltyEditModal();
       await loadLoyaltyData();
     } else {
-      showNotification(data.error || "Failed to update points", "error");
+      showNotification(data.error || "Erreur lors de la mise à jour", "error");
     }
   } catch (error) {
-    console.error("Error updating loyalty points:", error);
-    showNotification("Error updating loyalty points", "error");
+    console.error("Error updating loyalty card:", error);
+    showNotification("Erreur lors de la mise à jour", "error");
   }
 }
 

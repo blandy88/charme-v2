@@ -4106,6 +4106,38 @@
             </div>
         </div>
 
+        <!-- Loyalty Card Edit Modal -->
+        <div id="loyaltyEditModal" class="modal hidden">
+            <div class="modal-overlay" id="loyaltyEditOverlay"></div>
+            <div class="modal-content loyalty-edit-content">
+                <div class="modal-header">
+                    <h2>Modifier la carte</h2>
+                    <button class="modal-close" id="loyaltyEditClose">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="loyaltyEditCardId" />
+                    <div class="form-group">
+                        <label for="loyaltyEditName">Nom du client</label>
+                        <input type="text" id="loyaltyEditName" placeholder="Nom complet" maxlength="80" />
+                    </div>
+                    <div class="form-group">
+                        <label for="loyaltyEditCardNumber">Numéro de carte</label>
+                        <input type="text" id="loyaltyEditCardNumber" placeholder="Ex. CH-00123" maxlength="30" />
+                    </div>
+                    <div class="form-group">
+                        <label for="loyaltyEditPoints">Points</label>
+                        <input type="number" id="loyaltyEditPoints" min="0" max="10000" step="1" />
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" id="loyaltyEditCancelBtn">Annuler</button>
+                    <button class="btn-primary" id="loyaltyEditSaveBtn">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Authentication Modal -->
         <div id="authModal" class="auth-modal hidden">
             <div class="auth-modal-content">

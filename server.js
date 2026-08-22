@@ -2474,23 +2474,80 @@ app.post("/api/admin/loyalty/create", authenticateToken, requireAdmin, async (re
 
 app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const { cardId, points } = req.body;
+    const { cardId, points, name, cardNumber } = req.body;
     if (!cardId) return res.status(400).json({ error: "Card ID is required" });
-
-    const pts = Math.floor(Number(points));
-    if (!Number.isInteger(pts) || pts < 0 || pts > 10000) {
-      return res.status(400).json({ error: "Points must be an integer between 0 and 10000" });
-    }
 
     const card = await getLoyaltyCardById(cardId);
     if (!card) return res.status(404).json({ error: "Carte introuvable" });
 
-    const diff = pts - (card.points || 0);
+    const updates = [];
+    const params = [];
+
+    // Update points if provided
+    if (points !== undefined) {
+      const pts = Math.floor(Number(points));
+      if (!Number.isInteger(pts) || pts < 0 || pts > 10000) {
+        return res.status(400).json({ error: "Points must be an integer between 0 and 10000" });
+      }
+      const diff = pts - (card.points || 0);
+      updates.push("points = ?");
+      params.push(pts);
+
+      if (diff !== 0) {
+        await logLoyaltyTransaction(
+          card.id,
+          card.user_id,
+          diff,
+          "earn",
+          diff > 0 ? `Modification : +${diff} point(s)` : `Modification : ${diff} point(s)`,
+        );
+      }
+    }
+
+    // Update holder_name if provided
+    if (name !== undefined) {
+      const trimmed = String(name).trim();
+      if (!trimmed) {
+        return res.status(400).json({ error: "Le nom ne peut pas être vide" });
+      }
+      if (trimmed.length > 80) {
+        return res.status(400).json({ error: "Le nom ne peut pas dépasser 80 caractères" });
+      }
+      updates.push("holder_name = ?");
+      params.push(trimmed);
+    }
+
+    // Update card_number if provided
+    if (cardNumber !== undefined) {
+      const trimmed = String(cardNumber).trim();
+      if (trimmed && trimmed !== card.card_number) {
+        // Check uniqueness
+        const exists = await new Promise((resolve, reject) => {
+          db.get(
+            "SELECT 1 AS found FROM loyalty_cards WHERE card_number = ? AND id != ?",
+            [trimmed, card.id],
+            (err, row) => (err ? reject(err) : resolve(row)),
+          );
+        });
+        if (exists) {
+          return res.status(400).json({ error: "Ce numéro de carte est déjà utilisé" });
+        }
+      }
+      updates.push("card_number = ?");
+      params.push(trimmed || null);
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: "Aucun champ à modifier" });
+    }
+
+    updates.push("updated_at = datetime('now')");
+    params.push(card.id);
 
     await new Promise((resolve, reject) => {
       db.run(
-        "UPDATE loyalty_cards SET points = ?, updated_at = datetime('now') WHERE id = ?",
-        [pts, card.id],
+        `UPDATE loyalty_cards SET ${updates.join(", ")} WHERE id = ?`,
+        params,
         function (err) {
           if (err) reject(err);
           else resolve();
@@ -2498,28 +2555,23 @@ app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req
       );
     });
 
-    if (diff !== 0) {
-      await logLoyaltyTransaction(
-        card.id,
-        card.user_id,
-        diff,
-        "earn",
-        diff > 0 ? `Modification : +${diff} point(s)` : `Modification : ${diff} point(s)`,
-      );
-    }
+    // Re-fetch the updated card
+    const updatedCard = await getLoyaltyCardById(cardId);
 
     res.json({
       success: true,
-      message: "Points mis à jour",
+      message: "Carte mise à jour",
       card: {
-        cardId: card.id,
-        userId: card.user_id,
-        points: pts,
-        eligible: pts >= LOYALTY_REWARD_THRESHOLD,
+        cardId: updatedCard.id,
+        userId: updatedCard.user_id,
+        name: updatedCard.holder_name || "",
+        cardNumber: updatedCard.card_number || null,
+        points: updatedCard.points || 0,
+        eligible: (updatedCard.points || 0) >= LOYALTY_REWARD_THRESHOLD,
       },
     });
   } catch (error) {
-    console.error("Update loyalty points error:", error);
+    console.error("Update loyalty card error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
