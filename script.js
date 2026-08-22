@@ -11559,6 +11559,7 @@ async function updateLoyaltyPoints(cardId, name) {
   const modal = document.getElementById("loyaltyEditModal");
   modal.classList.remove("hidden");
   modal.style.setProperty("display", "flex", "important");
+  modal.style.setProperty("z-index", "100005", "important");
 
   nameInput.focus();
 }
@@ -11567,6 +11568,7 @@ function closeLoyaltyEditModal() {
   const modal = document.getElementById("loyaltyEditModal");
   modal.classList.add("hidden");
   modal.style.removeProperty("display");
+  modal.style.removeProperty("z-index");
 }
 
 async function saveLoyaltyEdit() {
