@@ -985,6 +985,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const safeAudience = escapeHtml(formatAudienceLabel(fragrance.audience));
     const safeDescription = escapeHtml(fragrance.description || "A catalog fragrance profile with curated notes and style details.");
     const safeImage = window.safeAttribute(productImageForFragrance(fragrance));
+    const fragUrl = "https://www.fragrantica.com/search?query=" + encodeURIComponent([fragrance.brand, fragrance.name].filter(Boolean).join(" ").trim());
+    const lang = (document.documentElement.lang || "en").slice(0, 2);
+    const fragLabel = lang === "fr" ? "Voir sur Fragrantica" : "See on Fragrantica";
 
     content.innerHTML = `
       <div class="fragrance-detail-hero">
@@ -1010,6 +1013,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <section class="fragrance-detail-extra">
         <div><strong>Availability</strong><span>${fragrance.available ? "Available in shop" : "Catalog reference"}</span></div>
         <div><strong>Perfumer</strong><span>${escapeHtml(fragrance.perfumer || fragrance.brand || "Unknown")}</span></div>
+        <div class="fragrance-detail-fragrantica"><strong>Reference</strong><a class="fragrantica-btn" href="${fragUrl}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(fragLabel)}"><img src="images/fragrantica-icon.png" alt="" width="16" height="16"><span>${escapeHtml(fragLabel)}</span></a></div>
       </section>
     `;
 
@@ -21046,6 +21050,12 @@ window.testClickOnElement = function() {
 
   let built = false;
 
+  // Fragrantica search URL builder (shared by grid cards + section buttons)
+  function fragranticaSearchUrl(brand, name) {
+    const q = [brand, name].filter(Boolean).join(" ").trim();
+    return "https://www.fragrantica.com/search?query=" + encodeURIComponent(q);
+  }
+
   function buildGrid() {
     if (built) return;
     built = true;
@@ -21140,11 +21150,16 @@ window.testClickOnElement = function() {
           ? (lang === "fr" ? "En stock" : "In stock")
           : (lang === "fr" ? "Rupture de stock" : "Out of stock");
         const stockClass = f.inStock ? "in-stock" : "out-of-stock";
+        const fragUrl = fragranticaSearchUrl(f.brand, f.name);
+        const fragLabel = lang === "fr" ? "Voir sur Fragrantica" : "See on Fragrantica";
         return `
           <a class="perfume-grid-card" href="#${esc(f.id)}" data-target="${esc(f.id)}" data-seasons="${esc(f.seasons)}" data-quality="${esc(f.qualities)}" data-notes="${esc(f.notes)}">
             <div class="perfume-grid-media">
               <img src="${esc(f.img)}" alt="${esc(f.name)}" loading="lazy" decoding="async">
               <span class="perfume-grid-stock ${stockClass}">${esc(stockLabel)}</span>
+              <button type="button" class="perfume-grid-fragrantica" data-url="${esc(fragUrl)}" aria-label="${esc(fragLabel)} — ${esc(f.name)}" title="${esc(fragLabel)}">
+                <img src="images/fragrantica-icon.png" alt="" width="18" height="18" loading="lazy">
+              </button>
             </div>
             <div class="perfume-grid-info">
               <span class="perfume-grid-brand">${esc(f.brand)}</span>
@@ -21171,6 +21186,13 @@ window.testClickOnElement = function() {
 
     // Card click → back to Details mode + scroll to that fragrance section
     gridView.addEventListener("click", (e) => {
+      const fragBtn = e.target.closest(".perfume-grid-fragrantica");
+      if (fragBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (fragBtn.dataset.url) window.open(fragBtn.dataset.url, "_blank", "noopener");
+        return;
+      }
       const card = e.target.closest(".perfume-grid-card");
       if (!card) return;
       if (e.target.closest(".perfume-grid-sidebar")) return;
@@ -21386,6 +21408,33 @@ window.testClickOnElement = function() {
     });
   }
 
+  // ── Add "See on Fragrantica" buttons to details-mode sections (runs once) ──
+  let fragranticaButtonsAdded = false;
+  function addFragranticaButtons() {
+    if (fragranticaButtonsAdded) return;
+    fragranticaButtonsAdded = true;
+    const lang = (document.documentElement.lang || "en").slice(0, 2);
+    const label = lang === "fr" ? "Voir sur Fragrantica" : "See on Fragrantica";
+    document.querySelectorAll("section.content").forEach((s) => {
+      const nameEl = s.querySelector(".product-name");
+      if (!nameEl) return;
+      if (s.querySelector(".product-actions-buttons .fragrantica-btn")) return;
+      const actions = s.querySelector(".product-actions-buttons");
+      if (!actions) return;
+      const brandEl = s.querySelector(".brand-name");
+      const name = nameEl.textContent.trim();
+      const link = document.createElement("a");
+      link.className = "fragrantica-btn";
+      link.href = fragranticaSearchUrl(brandEl ? brandEl.textContent.trim() : "", name);
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.setAttribute("aria-label", `${label} — ${name}`);
+      link.title = label;
+      link.innerHTML = `<img src="images/fragrantica-icon.png" alt="" width="16" height="16" loading="lazy"><span>${label}</span>`;
+      actions.appendChild(link);
+    });
+  }
+
   function setMode(mode, opts) {
     const { persist = true, scroll = false } = opts || {};
     const isGrid = mode === "grid";
@@ -21398,6 +21447,7 @@ window.testClickOnElement = function() {
     } else {
       gridView.setAttribute("aria-hidden", "true");
       addDetailsStockBadges();
+      addFragranticaButtons();
     }
 
     toggle.querySelectorAll(".perfume-mode-btn").forEach((btn) => {
@@ -21455,9 +21505,13 @@ window.testClickOnElement = function() {
   } else {
     // Default details mode — add stock badges now
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => addDetailsStockBadges());
+      document.addEventListener("DOMContentLoaded", () => {
+        addDetailsStockBadges();
+        addFragranticaButtons();
+      });
     } else {
       addDetailsStockBadges();
+      addFragranticaButtons();
     }
   }
 })();

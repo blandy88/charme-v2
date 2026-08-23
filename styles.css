@@ -25430,6 +25430,112 @@ body.perfume-grid-mode .perfume-grid-card.entered {
     color: #ef4444 !important;
 }
 
+/* ── See on Fragrantica buttons ── */
+.fragrantica-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 10px 20px !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(201, 169, 78, 0.45) !important;
+    background: linear-gradient(135deg, rgba(201, 169, 78, 0.14), rgba(201, 169, 78, 0.04)) !important;
+    color: #c9a94e !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    font-family: inherit !important;
+    transition:
+        background 250ms ease,
+        color 250ms ease,
+        transform 200ms ease,
+        box-shadow 250ms ease,
+        border-color 250ms ease !important;
+}
+
+.fragrantica-btn img {
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+    pointer-events: none !important;
+}
+
+.fragrantica-btn:hover,
+.fragrantica-btn:focus-visible {
+    background: #c9a94e !important;
+    color: #0a0a0a !important;
+    border-color: #c9a94e !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 22px rgba(201, 169, 78, 0.35) !important;
+    text-decoration: none !important;
+}
+
+html[data-theme="light"] .fragrantica-btn {
+    background: linear-gradient(135deg, rgba(201, 169, 78, 0.18), rgba(201, 169, 78, 0.06)) !important;
+    color: #8a7434 !important;
+    border-color: rgba(138, 116, 52, 0.45) !important;
+}
+
+html[data-theme="light"] .fragrantica-btn:hover,
+html[data-theme="light"] .fragrantica-btn:focus-visible {
+    background: #c9a94e !important;
+    color: #ffffff !important;
+}
+
+/* Compact variant inside the fragrance detail modal rows */
+.fragrance-detail-fragrantica {
+    align-items: center !important;
+}
+
+.fragrance-detail-fragrantica .fragrantica-btn {
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+}
+
+/* ── Grid mode Fragrantica chip (icon button on card media) ── */
+.perfume-grid-fragrantica {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    z-index: 3 !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(10, 10, 10, 0.72) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    cursor: pointer !important;
+    transition:
+        transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        border-color 200ms ease,
+        box-shadow 200ms ease !important;
+}
+
+.perfume-grid-fragrantica img {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    pointer-events: none !important;
+}
+
+.perfume-grid-fragrantica:hover,
+.perfume-grid-fragrantica:focus-visible {
+    transform: scale(1.15) !important;
+    border-color: #c9a94e !important;
+    box-shadow: 0 0 0 3px rgba(201, 169, 78, 0.35) !important;
+}
+
 .perfume-grid-info {
     display: flex !important;
     flex-direction: column !important;
