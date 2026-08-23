@@ -985,7 +985,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const safeAudience = escapeHtml(formatAudienceLabel(fragrance.audience));
     const safeDescription = escapeHtml(fragrance.description || "A catalog fragrance profile with curated notes and style details.");
     const safeImage = window.safeAttribute(productImageForFragrance(fragrance));
-    const fragUrl = "https://www.fragrantica.com/search?query=" + encodeURIComponent([fragrance.brand, fragrance.name].filter(Boolean).join(" ").trim());
+    const fragUrl = "https://www.fragrantica.com/search/?query=" + encodeURIComponent([fragrance.brand, fragrance.name].filter(Boolean).join(" ").trim());
     const lang = (document.documentElement.lang || "en").slice(0, 2);
     const fragLabel = lang === "fr" ? "Voir sur Fragrantica" : "See on Fragrantica";
 
@@ -21053,7 +21053,7 @@ window.testClickOnElement = function() {
   // Fragrantica search URL builder (shared by grid cards + section buttons)
   function fragranticaSearchUrl(brand, name) {
     const q = [brand, name].filter(Boolean).join(" ").trim();
-    return "https://www.fragrantica.com/search?query=" + encodeURIComponent(q);
+    return "https://www.fragrantica.com/search/?query=" + encodeURIComponent(q);
   }
 
   function buildGrid() {
