@@ -1013,7 +1013,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <section class="fragrance-detail-extra">
         <div><strong>Availability</strong><span>${fragrance.available ? "Available in shop" : "Catalog reference"}</span></div>
         <div><strong>Perfumer</strong><span>${escapeHtml(fragrance.perfumer || fragrance.brand || "Unknown")}</span></div>
-        <div class="fragrance-detail-fragrantica"><strong>Reference</strong><a class="fragrantica-btn" href="${fragUrl}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(fragLabel)}"><img src="images/fragrantica-icon.png" alt="" width="16" height="16"><span>${escapeHtml(fragLabel)}</span></a></div>
+        <div class="fragrance-detail-fragrantica"><strong>Reference</strong><a class="fragrantica-btn" href="${fragUrl}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(fragLabel)}"><img src="fragrantica-icon.png" alt="" width="16" height="16"><span>${escapeHtml(fragLabel)}</span></a></div>
       </section>
     `;
 
@@ -21158,7 +21158,7 @@ window.testClickOnElement = function() {
               <img src="${esc(f.img)}" alt="${esc(f.name)}" loading="lazy" decoding="async">
               <span class="perfume-grid-stock ${stockClass}">${esc(stockLabel)}</span>
               <button type="button" class="perfume-grid-fragrantica" data-url="${esc(fragUrl)}" aria-label="${esc(fragLabel)} — ${esc(f.name)}" title="${esc(fragLabel)}">
-                <img src="images/fragrantica-icon.png" alt="" width="18" height="18" loading="lazy">
+                <img src="fragrantica-icon.png" alt="" width="18" height="18" loading="lazy">
               </button>
             </div>
             <div class="perfume-grid-info">
@@ -21430,7 +21430,7 @@ window.testClickOnElement = function() {
       link.rel = "noopener noreferrer";
       link.setAttribute("aria-label", `${label} — ${name}`);
       link.title = label;
-      link.innerHTML = `<img src="images/fragrantica-icon.png" alt="" width="16" height="16" loading="lazy"><span>${label}</span>`;
+      link.innerHTML = `<img src="fragrantica-icon.png" alt="" width="16" height="16" loading="lazy"><span>${label}</span>`;
       actions.appendChild(link);
     });
   }
