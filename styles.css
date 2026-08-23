@@ -12810,6 +12810,97 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     box-shadow: 0 4px 12px rgba(201, 169, 110, 0.3) !important;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   👤 CUSTOMER PROFILE MODAL (dark theme)
+   ═══════════════════════════════════════════════════════════ */
+
+#customerProfileModal .modal-overlay { background: rgba(0,0,0,0.85) !important; backdrop-filter: blur(12px) !important; }
+.customer-profile-content { max-width: 860px !important; width: 95vw !important; max-height: 90vh !important; border-radius: 12px !important; background: #111 !important; border: 1px solid rgba(201,169,110,0.2) !important; display: flex !important; flex-direction: column !important; }
+.customer-profile-content .modal-header { display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 20px 24px !important; border-bottom: 1px solid rgba(201,169,110,0.15) !important; }
+.customer-profile-content .modal-header h2 { font-family: var(--font-heading, 'Playfair Display') !important; color: var(--color-gold, #C9A96E) !important; font-size: 1.2rem !important; margin: 0 !important; }
+.customer-profile-content .modal-close { background: none !important; border: none !important; color: rgba(255,255,255,0.5) !important; cursor: pointer !important; padding: 4px !important; }
+.customer-profile-content .modal-close:hover { color: var(--color-gold, #C9A96E) !important; }
+.customer-profile-body { overflow-y: auto !important; padding: 24px !important; flex: 1 !important; }
+.customer-profile-loading { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; padding: 40px !important; color: rgba(255,255,255,0.6) !important; }
+
+/* Header card */
+.cp-header { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 20px !important; padding: 20px !important; background: rgba(201,169,110,0.06) !important; border-radius: 10px !important; border: 1px solid rgba(201,169,110,0.12) !important; }
+.cp-header-info { display: flex !important; align-items: center !important; gap: 16px !important; }
+.cp-avatar { width: 52px !important; height: 52px !important; border-radius: 50% !important; background: linear-gradient(135deg, var(--color-gold, #C9A96E), #8B6914) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1.4rem !important; font-weight: 700 !important; color: #fff !important; flex-shrink: 0 !important; }
+.cp-name { font-size: 1.15rem !important; font-weight: 600 !important; color: #fff !important; margin-bottom: 4px !important; }
+.cp-meta { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; font-size: 0.8rem !important; color: rgba(255,255,255,0.5) !important; }
+.cp-card-num { font-family: var(--font-mono) !important; letter-spacing: 1px !important; }
+.cp-points-badge { text-align: center !important; padding: 12px 18px !important; background: rgba(201,169,110,0.08) !important; border-radius: 10px !important; border: 1px solid rgba(201,169,110,0.15) !important; min-width: 80px !important; }
+.cp-points-badge.eligible { border-color: var(--color-gold, #C9A96E) !important; background: rgba(201,169,110,0.15) !important; }
+.cp-points-value { display: block !important; font-size: 1.6rem !important; font-weight: 700 !important; color: var(--color-gold, #C9A96E) !important; }
+.cp-points-label { font-size: 0.7rem !important; text-transform: uppercase !important; letter-spacing: 1px !important; color: rgba(255,255,255,0.4) !important; }
+
+/* Stats row */
+.cp-stats { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 12px !important; margin-bottom: 24px !important; }
+.cp-stat-card { padding: 14px !important; background: rgba(255,255,255,0.03) !important; border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.06) !important; text-align: center !important; }
+.cp-stat-value { font-size: 1rem !important; font-weight: 600 !important; color: #fff !important; margin-bottom: 2px !important; min-height: 24px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+.cp-stat-label { font-size: 0.7rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255,255,255,0.4) !important; }
+
+/* Sections */
+.cp-section { margin-bottom: 24px !important; }
+.cp-section h3 { font-size: 0.85rem !important; text-transform: uppercase !important; letter-spacing: 1px !important; color: var(--color-gold, #C9A96E) !important; margin-bottom: 12px !important; font-family: var(--font-heading, 'Playfair Display') !important; }
+.cp-section-head { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 12px !important; }
+.cp-section-head h3 { margin-bottom: 0 !important; }
+
+/* Family bars */
+.cp-family-row { display: flex !important; align-items: center !important; gap: 12px !important; margin-bottom: 8px !important; }
+.cp-family-name { width: 100px !important; font-size: 0.8rem !important; color: rgba(255,255,255,0.7) !important; text-align: right !important; flex-shrink: 0 !important; }
+.cp-family-bar-track { flex: 1 !important; height: 8px !important; background: rgba(255,255,255,0.06) !important; border-radius: 4px !important; overflow: hidden !important; }
+.cp-family-bar-fill { height: 100% !important; border-radius: 4px !important; transition: width 0.6s ease !important; }
+.cp-family-count { width: 60px !important; font-size: 0.75rem !important; color: rgba(255,255,255,0.5) !important; flex-shrink: 0 !important; }
+
+/* Brand tags */
+.cp-brand-tags { display: flex !important; flex-wrap: wrap !important; gap: 8px !important; }
+.cp-brand-tag { padding: 5px 12px !important; background: rgba(201,169,110,0.08) !important; border: 1px solid rgba(201,169,110,0.15) !important; border-radius: 20px !important; font-size: 0.8rem !important; color: rgba(255,255,255,0.7) !important; }
+.cp-brand-tag small { color: rgba(201,169,110,0.6) !important; margin-left: 4px !important; }
+
+/* Suggestions */
+.cp-suggestion-grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important; gap: 10px !important; }
+.cp-suggestion-card { padding: 12px !important; background: rgba(201,169,110,0.04) !important; border: 1px solid rgba(201,169,110,0.1) !important; border-radius: 8px !important; cursor: default !important; transition: border-color 0.2s !important; }
+.cp-suggestion-card:hover { border-color: rgba(201,169,110,0.3) !important; }
+.cp-sug-name { font-size: 0.85rem !important; font-weight: 600 !important; color: #fff !important; margin-bottom: 2px !important; }
+.cp-sug-brand { font-size: 0.75rem !important; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px !important; }
+.cp-sug-meta { display: flex !important; gap: 6px !important; }
+.cp-sug-family, .cp-sug-audience { font-size: 0.65rem !important; padding: 2px 6px !important; border-radius: 4px !important; background: rgba(201,169,110,0.1) !important; color: rgba(255,255,255,0.5) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+
+/* Purchase table */
+.cp-purchase-table-wrap { overflow-x: auto !important; }
+.cp-purchase-table { width: 100% !important; border-collapse: collapse !important; font-size: 0.8rem !important; }
+.cp-purchase-table th { text-align: left !important; padding: 8px 10px !important; font-size: 0.7rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255,255,255,0.4) !important; border-bottom: 1px solid rgba(255,255,255,0.08) !important; }
+.cp-purchase-table td { padding: 8px 10px !important; color: rgba(255,255,255,0.7) !important; border-bottom: 1px solid rgba(255,255,255,0.04) !important; }
+.cp-p-name { color: #fff !important; font-weight: 500 !important; }
+.cp-p-price { font-family: var(--font-mono) !important; color: var(--color-gold, #C9A96E) !important; }
+.cp-family-dot { display: inline-block !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; margin-right: 6px !important; vertical-align: middle !important; }
+.cp-p-delete { background: none !important; border: none !important; color: rgba(255,255,255,0.3) !important; cursor: pointer !important; padding: 4px !important; border-radius: 4px !important; }
+.cp-p-delete:hover { color: #e74c3c !important; background: rgba(231,76,60,0.1) !important; }
+.cp-empty-purchases { text-align: center !important; padding: 30px !important; color: rgba(255,255,255,0.4) !important; font-size: 0.85rem !important; }
+
+/* ─── Record Purchase Modal ─── */
+.rp-client-name { color: var(--color-gold, #C9A96E) !important; font-weight: 600 !important; margin-bottom: 16px !important; font-size: 0.9rem !important; }
+.rp-field-row { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+
+/* ─── Profile button in loyalty table ─── */
+.btn-loyalty-profile { background: rgba(201,169,110,0.15) !important; color: var(--color-gold, #C9A96E) !important; border: 1px solid rgba(201,169,110,0.3) !important; }
+.btn-loyalty-profile:hover { background: rgba(201,169,110,0.25) !important; border-color: var(--color-gold, #C9A96E) !important; }
+
+/* ─── Record Purchase Modal dark theme (extends edit modal) ─── */
+#recordPurchaseModal .modal-content { max-width: 520px !important; }
+#recordPurchaseModal .form-group select,
+#recordPurchaseModal .form-group textarea { width: 100% !important; padding: 10px 12px !important; background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(255,255,255,0.12) !important; border-radius: 6px !important; color: #fff !important; font-family: inherit !important; font-size: 0.85rem !important; }
+#recordPurchaseModal .form-group select:focus,
+#recordPurchaseModal .form-group textarea:focus { border-color: var(--color-gold, #C9A96E) !important; box-shadow: 0 0 0 3px rgba(201,169,110,0.12) !important; outline: none !important; }
+#recordPurchaseModal .form-group select option { background: #1a1a1a !important; color: #fff !important; }
+
+/* ─── Profile avatar letter (search results) ─── */
+.profile-avatar-letter { width: 40px !important; height: 40px !important; border-radius: 50% !important; background: linear-gradient(135deg, var(--color-gold, #C9A96E), #8B6914) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1rem !important; font-weight: 700 !important; color: #fff !important; }
+.profile-suggestion.loyalty-profile { border-left: 3px solid var(--color-gold, #C9A96E) !important; }
+.profile-suggestion.loyalty-profile .profile-badge.loyalty { background: rgba(201,169,110,0.15) !important; color: var(--color-gold, #C9A96E) !important; }
+
 @keyframes adminModalAppear {
     0% {
         opacity: 0;
@@ -24231,7 +24322,8 @@ html[data-theme="light"] .settings-modal .modal-content,
 html[data-theme="light"] .admin-modal-content,
 html[data-theme="light"] .news-modal-content,
 html[data-theme="light"] #verificationModal .modal-content,
-html[data-theme="light"] #banModal .modal-content {
+html[data-theme="light"] #banModal .modal-content,
+html[data-theme="light"] .customer-profile-content {
     background: #fbfaf7 !important;
     border-color: rgba(166, 139, 60, 0.25) !important;
     box-shadow: 0 24px 48px rgba(24, 22, 18, 0.18) !important;
@@ -24292,9 +24384,29 @@ html[data-theme="light"] #loyaltyEditModal .btn-primary {
     border-color: rgba(166, 139, 60, 0.5) !important;
     color: #fff !important;
 }
+/* ═══════ Record Purchase Modal — Light Theme ═══════ */
+html[data-theme="light"] #recordPurchaseModal .modal-content { background: #fbfaf7 !important; border-color: rgba(166, 139, 60, 0.3) !important; color: var(--color-text-primary) !important; }
+html[data-theme="light"] #recordPurchaseModal .modal-header h2 { color: #1a1510 !important; }
+html[data-theme="light"] #recordPurchaseModal .modal-close { color: rgba(0,0,0,0.4) !important; }
+html[data-theme="light"] #recordPurchaseModal .form-group label { color: rgba(0,0,0,0.55) !important; }
+html[data-theme="light"] #recordPurchaseModal .form-group input,
+html[data-theme="light"] #recordPurchaseModal .form-group select,
+html[data-theme="light"] #recordPurchaseModal .form-group textarea { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.12) !important; color: #1a1510 !important; }
+html[data-theme="light"] #recordPurchaseModal .form-group input:focus,
+html[data-theme="light"] #recordPurchaseModal .form-group select:focus,
+html[data-theme="light"] #recordPurchaseModal .form-group textarea:focus { border-color: rgba(166,139,60,0.6) !important; box-shadow: 0 0 0 3px rgba(166,139,60,0.12) !important; }
+html[data-theme="light"] #recordPurchaseModal .form-group input::placeholder,
+html[data-theme="light"] #recordPurchaseModal .form-group textarea::placeholder { color: rgba(0,0,0,0.3) !important; }
+html[data-theme="light"] #recordPurchaseModal .modal-actions { border-top-color: rgba(0,0,0,0.08) !important; }
+html[data-theme="light"] #recordPurchaseModal .btn-secondary { background: rgba(0,0,0,0.06) !important; border-color: rgba(0,0,0,0.12) !important; color: rgba(0,0,0,0.65) !important; }
+html[data-theme="light"] #recordPurchaseModal .btn-secondary:hover { background: rgba(0,0,0,0.1) !important; color: rgba(0,0,0,0.85) !important; }
+html[data-theme="light"] #recordPurchaseModal .btn-primary { background: linear-gradient(135deg, rgba(166,139,60,0.9), rgba(150,125,50,0.9)) !important; border-color: rgba(166,139,60,0.5) !important; color: #fff !important; }
+html[data-theme="light"] .rp-client-name { color: #8B6914 !important; }
 html[data-theme="light"] #verificationModal .modal-overlay,
 html[data-theme="light"] #banModal .modal-overlay,
 html[data-theme="light"] #loyaltyEditModal .modal-overlay,
+html[data-theme="light"] #customerProfileModal .modal-overlay,
+html[data-theme="light"] #recordPurchaseModal .modal-overlay,
 html[data-theme="light"] .admin-modal {
     background: rgba(24, 22, 18, 0.55) !important;
 }
@@ -24306,6 +24418,49 @@ html[data-theme="light"] .profile-modal.admin-profile .modal-header {
     background: rgba(201, 169, 78, 0.05) !important;
     border-bottom-color: rgba(166, 139, 60, 0.15) !important;
 }
+
+/* ═══════ Customer Profile — Light Theme ═══════ */
+html[data-theme="light"] .customer-profile-content { background: #fbfaf7 !important; border-color: rgba(166, 139, 60, 0.3) !important; color: var(--color-text-primary) !important; }
+html[data-theme="light"] .customer-profile-content .modal-header h2 { color: #1a1510 !important; }
+html[data-theme="light"] .customer-profile-content .modal-close { color: rgba(0,0,0,0.4) !important; }
+html[data-theme="light"] .customer-profile-content .modal-close:hover { color: #8B6914 !important; }
+html[data-theme="light"] .customer-profile-body { color: var(--color-text-primary) !important; }
+html[data-theme="light"] .customer-profile-loading { color: rgba(0,0,0,0.5) !important; }
+html[data-theme="light"] .cp-header { background: rgba(201,169,78,0.04) !important; border-color: rgba(166,139,60,0.15) !important; }
+html[data-theme="light"] .cp-avatar { background: linear-gradient(135deg, #8B6914, #C9A96E) !important; }
+html[data-theme="light"] .cp-name { color: #1a1510 !important; }
+html[data-theme="light"] .cp-meta { color: rgba(0,0,0,0.45) !important; }
+html[data-theme="light"] .cp-points-badge { background: rgba(201,169,78,0.05) !important; border-color: rgba(166,139,60,0.15) !important; }
+html[data-theme="light"] .cp-points-badge.eligible { background: rgba(201,169,78,0.1) !important; border-color: #8B6914 !important; }
+html[data-theme="light"] .cp-points-value { color: #8B6914 !important; }
+html[data-theme="light"] .cp-points-label { color: rgba(0,0,0,0.35) !important; }
+html[data-theme="light"] .cp-stat-card { background: rgba(0,0,0,0.02) !important; border-color: rgba(0,0,0,0.06) !important; }
+html[data-theme="light"] .cp-stat-value { color: #1a1510 !important; }
+html[data-theme="light"] .cp-stat-label { color: rgba(0,0,0,0.4) !important; }
+html[data-theme="light"] .cp-section h3 { color: #8B6914 !important; }
+html[data-theme="light"] .cp-family-name { color: rgba(0,0,0,0.6) !important; }
+html[data-theme="light"] .cp-family-bar-track { background: rgba(0,0,0,0.06) !important; }
+html[data-theme="light"] .cp-family-count { color: rgba(0,0,0,0.4) !important; }
+html[data-theme="light"] .cp-brand-tag { background: rgba(201,169,78,0.06) !important; border-color: rgba(166,139,60,0.15) !important; color: rgba(0,0,0,0.6) !important; }
+html[data-theme="light"] .cp-brand-tag small { color: rgba(139,105,20,0.5) !important; }
+html[data-theme="light"] .cp-suggestion-card { background: rgba(201,169,78,0.03) !important; border-color: rgba(166,139,60,0.12) !important; }
+html[data-theme="light"] .cp-suggestion-card:hover { border-color: rgba(166,139,60,0.35) !important; }
+html[data-theme="light"] .cp-sug-name { color: #1a1510 !important; }
+html[data-theme="light"] .cp-sug-brand { color: rgba(0,0,0,0.45) !important; }
+html[data-theme="light"] .cp-sug-family, html[data-theme="light"] .cp-sug-audience { background: rgba(0,0,0,0.05) !important; color: rgba(0,0,0,0.5) !important; }
+html[data-theme="light"] .cp-purchase-table th { color: rgba(0,0,0,0.4) !important; border-bottom-color: rgba(0,0,0,0.08) !important; }
+html[data-theme="light"] .cp-purchase-table td { color: rgba(0,0,0,0.65) !important; border-bottom-color: rgba(0,0,0,0.05) !important; }
+html[data-theme="light"] .cp-p-name { color: #1a1510 !important; }
+html[data-theme="light"] .cp-p-price { color: #8B6914 !important; }
+html[data-theme="light"] .cp-p-delete { color: rgba(0,0,0,0.25) !important; }
+html[data-theme="light"] .cp-p-delete:hover { color: #c0392b !important; background: rgba(192,57,43,0.08) !important; }
+html[data-theme="light"] .cp-empty-purchases { color: rgba(0,0,0,0.4) !important; }
+html[data-theme="light"] .rp-client-name { color: #8B6914 !important; }
+html[data-theme="light"] .btn-loyalty-profile { background: rgba(201,169,78,0.1) !important; color: #8B6914 !important; border-color: rgba(166,139,60,0.25) !important; }
+html[data-theme="light"] .btn-loyalty-profile:hover { background: rgba(201,169,78,0.18) !important; }
+html[data-theme="light"] .profile-avatar-letter { background: linear-gradient(135deg, #8B6914, #C9A96E) !important; }
+html[data-theme="light"] .profile-suggestion.loyalty-profile { border-left-color: #8B6914 !important; }
+html[data-theme="light"] .profile-suggestion.loyalty-profile .profile-badge.loyalty { background: rgba(201,169,78,0.12) !important; color: #8B6914 !important; }
 
 /* ---- Headers ---- */
 html[data-theme="light"] .loyalty-header,

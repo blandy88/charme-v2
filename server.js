@@ -421,6 +421,47 @@ console.log("🔄 Checking for required database migrations...");
       },
     );
 
+    // 🛍️ CUSTOMER PURCHASES: tracks what each loyalty card holder bought
+    console.log("🔄 Setting up customer_purchases table...");
+    db.run(
+      `
+        CREATE TABLE IF NOT EXISTS customer_purchases (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            card_id INTEGER NOT NULL,
+            perfume_name TEXT NOT NULL,
+            brand TEXT,
+            fragrance_family TEXT,
+            audience TEXT,
+            purchase_price REAL,
+            purchase_date TEXT,
+            notes TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (card_id) REFERENCES loyalty_cards(id) ON DELETE CASCADE
+        )
+      `,
+      (createErr) => {
+        if (createErr) console.error("❌ Error creating customer_purchases table:", createErr);
+        else console.log("✅ Created customer_purchases table");
+      },
+    );
+
+    // Indexes for customer_purchases
+    db.run(
+      "CREATE INDEX IF NOT EXISTS idx_customer_purchases_card_id ON customer_purchases(card_id)",
+      (err) => {
+        if (err) console.error("❌ Error creating customer_purchases index:", err);
+        else console.log("✅ Created customer_purchases index");
+      },
+    );
+
+    db.run(
+      "CREATE INDEX IF NOT EXISTS idx_customer_purchases_family ON customer_purchases(fragrance_family)",
+      (err) => {
+        if (err) console.error("❌ Error creating customer_purchases family index:", err);
+        else console.log("✅ Created customer_purchases family index");
+      },
+    );
+
     // 🔧 ENHANCED: Create indexes for better performance
     console.log("🔄 Creating database indexes for better performance...");
 
@@ -2608,6 +2649,255 @@ app.delete("/api/admin/loyalty/delete", authenticateToken, requireAdmin, async (
     res.json({ success: true, message: "Carte supprimée" });
   } catch (error) {
     console.error("Delete loyalty card error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 🛍️ CUSTOMER PURCHASES — record a purchase for a loyalty card
+app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { cardId, perfumeName, brand, fragranceFamily, audience, purchasePrice, purchaseDate, notes } = req.body;
+    if (!cardId) return res.status(400).json({ error: "cardId requis" });
+    if (!perfumeName || !String(perfumeName).trim()) return res.status(400).json({ error: "Le nom du parfum est requis" });
+
+    const card = await getLoyaltyCardById(cardId);
+    if (!card) return res.status(404).json({ error: "Carte introuvable" });
+
+    const trimmedName = String(perfumeName).trim();
+    if (trimmedName.length > 150) return res.status(400).json({ error: "Le nom ne peut pas dépasser 150 caractères" });
+
+    const validFamilies = ["Woody", "Floral", "Oriental", "Fresh", "Citrus", "Gourmand", "Aromatic", "Chypre", "Aldehyde", "Fougère", "Other"];
+    const family = fragranceFamily ? String(fragranceFamily).trim() : null;
+    if (family && !validFamilies.includes(family)) {
+      return res.status(400).json({ error: `Famille invalide. Valeurs: ${validFamilies.join(", ")}` });
+    }
+
+    const validAudiences = ["men", "women", "unisex"];
+    const aud = audience ? String(audience).trim() : null;
+    if (aud && !validAudiences.includes(aud)) {
+      return res.status(400).json({ error: `Audience invalide. Valeurs: ${validAudiences.join(", ")}` });
+    }
+
+    const price = purchasePrice !== undefined && purchasePrice !== null ? Number(purchasePrice) : null;
+    if (price !== null && (isNaN(price) || price < 0)) {
+      return res.status(400).json({ error: "Le prix doit être un nombre positif" });
+    }
+
+    const date = purchaseDate ? String(purchaseDate).trim() : new Date().toISOString().slice(0, 10);
+    const trimmedBrand = brand ? String(brand).trim().slice(0, 100) : null;
+    const trimmedNotes = notes ? String(notes).trim().slice(0, 500) : null;
+
+    const purchaseId = await new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO customer_purchases (card_id, perfume_name, brand, fragrance_family, audience, purchase_price, purchase_date, notes)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [card.id, trimmedName, trimmedBrand, family, aud, price, date, trimmedNotes],
+        function (err) {
+          if (err) reject(err);
+          else resolve(this.lastID);
+        },
+      );
+    });
+
+    // Auto-award 1 loyalty point per purchase
+    await new Promise((resolve, reject) => {
+      db.run(
+        "UPDATE loyalty_cards SET points = points + 1, updated_at = datetime('now') WHERE id = ?",
+        [card.id],
+        function (err) { if (err) reject(err); else resolve(); },
+      );
+    });
+    await logLoyaltyTransaction(card.id, card.user_id, 1, "earn", `Achat: ${trimmedName}`);
+
+    res.json({ success: true, purchaseId, message: "Achat enregistré (+1 point)" });
+  } catch (error) {
+    console.error("Create purchase error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 🛍️ CUSTOMER PURCHASES — delete a purchase
+app.delete("/api/admin/loyalty/purchases/:id", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const purchaseId = Number(req.params.id);
+    if (!purchaseId) return res.status(400).json({ error: "ID invalide" });
+
+    const purchase = await new Promise((resolve, reject) => {
+      db.get("SELECT * FROM customer_purchases WHERE id = ?", [purchaseId], (err, row) => {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
+    if (!purchase) return res.status(404).json({ error: "Achat introuvable" });
+
+    await new Promise((resolve, reject) => {
+      db.run("DELETE FROM customer_purchases WHERE id = ?", [purchaseId], function (err) {
+        if (err) reject(err); else resolve();
+      });
+    });
+
+    res.json({ success: true, message: "Achat supprimé" });
+  } catch (error) {
+    console.error("Delete purchase error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 👤 CUSTOMER PROFILE — full profile with purchase history + preferences + suggestions
+app.get("/api/admin/loyalty/profiles/:cardId", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const cardId = Number(req.params.cardId);
+    if (!cardId) return res.status(400).json({ error: "ID invalide" });
+
+    const card = await getLoyaltyCardById(cardId);
+    if (!card) return res.status(404).json({ error: "Carte introuvable" });
+
+    // Fetch all purchases for this card
+    const purchases = await new Promise((resolve, reject) => {
+      db.all(
+        "SELECT * FROM customer_purchases WHERE card_id = ? ORDER BY purchase_date DESC, id DESC",
+        [card.id],
+        (err, rows) => (err ? reject(err) : resolve(rows || [])),
+      );
+    });
+
+    // Compute fragrance family breakdown
+    const familyCount = {};
+    purchases.forEach((p) => {
+      const f = p.fragrance_family || "Non spécifié";
+      familyCount[f] = (familyCount[f] || 0) + 1;
+    });
+    const totalPurchases = purchases.length;
+    const preferences = Object.entries(familyCount)
+      .map(([family, count]) => ({ family, count, percentage: totalPurchases > 0 ? Math.round((count / totalPurchases) * 100) : 0 }))
+      .sort((a, b) => b.count - a.count);
+
+    // Audience breakdown
+    const audienceCount = {};
+    purchases.forEach((p) => {
+      const a = p.audience || "Non spécifié";
+      audienceCount[a] = (audienceCount[a] || 0) + 1;
+    });
+
+    // Brands bought
+    const brandCount = {};
+    purchases.forEach((p) => {
+      const b = p.brand || "Inconnu";
+      brandCount[b] = (brandCount[b] || 0) + 1;
+    });
+    const topBrands = Object.entries(brandCount)
+      .map(([brand, count]) => ({ brand, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
+    // Suggestions: other perfumes from preferred families this customer hasn't bought
+    const purchasedNames = purchases.map((p) => p.perfume_name.toLowerCase());
+    const topFamilies = preferences.slice(0, 3).map((p) => p.family).filter((f) => f !== "Non spécifié");
+    let suggestions = [];
+    if (topFamilies.length > 0) {
+      const familyPlaceholders = topFamilies.map(() => "?").join(",");
+      const namePlaceholders = purchasedNames.length > 0 ? purchasedNames.map(() => "?").join(",") : "''";
+      const otherPurchases = await new Promise((resolve, reject) => {
+        db.all(
+          `SELECT perfume_name, brand, fragrance_family, audience, COUNT(*) AS freq
+           FROM customer_purchases
+           WHERE fragrance_family IN (${familyPlaceholders})
+             AND LOWER(perfume_name) NOT IN (${namePlaceholders})
+           GROUP BY LOWER(perfume_name)
+           ORDER BY freq DESC
+           LIMIT 6`,
+          [...topFamilies, ...purchasedNames],
+          (err, rows) => (err ? reject(err) : resolve(rows || [])),
+        );
+      });
+      suggestions = otherPurchases;
+    }
+
+    // Total spent
+    const totalSpent = purchases.reduce((sum, p) => sum + (p.purchase_price || 0), 0);
+
+    // Count redeemed rewards
+    const rewardsCount = await new Promise((resolve, reject) => {
+      db.get(
+        "SELECT COUNT(*) AS total FROM loyalty_transactions WHERE card_id = ? AND type = 'redeem'",
+        [card.id],
+        (err, row) => (err ? reject(err) : resolve(row ? row.total : 0)),
+      );
+    });
+
+    res.json({
+      card: {
+        cardId: card.id,
+        userId: card.user_id,
+        name: card.holder_name || "",
+        email: card.holder_email || null,
+        phone: card.holder_phone || null,
+        cardNumber: card.card_number || null,
+        points: card.points || 0,
+        rewards: rewardsCount,
+        createdAt: card.created_at,
+      },
+      purchases,
+      preferences,
+      audienceBreakdown: audienceCount,
+      topBrands,
+      suggestions,
+      stats: {
+        totalPurchases,
+        totalSpent: Math.round(totalSpent * 100) / 100,
+        topFamily: preferences[0]?.family || null,
+        favoriteBrand: topBrands[0]?.brand || null,
+      },
+    });
+  } catch (error) {
+    console.error("Get profile error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 🔍 SEARCH LOYALTY PROFILES — for navbar search
+app.get("/api/search/loyalty-profiles", authenticateToken, async (req, res) => {
+  try {
+    const query = String(req.query.q || "").trim();
+    if (query.length < 2 || query.length > 100) return res.json([]);
+
+    const searchTerm = `%${query.toLowerCase()}%`;
+    const rows = await new Promise((resolve, reject) => {
+      db.all(
+        `SELECT c.id AS card_id, c.holder_name, c.holder_phone, c.holder_email, c.card_number,
+                c.points, c.created_at,
+                (SELECT COUNT(*) FROM customer_purchases cp WHERE cp.card_id = c.id) AS purchase_count,
+                (SELECT COUNT(*) FROM loyalty_transactions lt WHERE lt.card_id = c.id AND lt.type = 'redeem') AS rewards
+         FROM loyalty_cards c
+         WHERE LOWER(c.holder_name) LIKE ?
+            OR LOWER(c.holder_phone) LIKE ?
+            OR LOWER(c.card_number) LIKE ?
+            OR LOWER(c.holder_email) LIKE ?
+         ORDER BY
+           CASE
+             WHEN LOWER(c.holder_name) = LOWER(?) THEN 1
+             WHEN LOWER(c.holder_name) LIKE ? THEN 2
+             ELSE 3
+           END
+         LIMIT 10`,
+        [searchTerm, searchTerm, searchTerm, searchTerm, query, `${query.toLowerCase()}%`],
+        (err, rows) => (err ? reject(err) : resolve(rows || [])),
+      );
+    });
+
+    res.json(rows.map((r) => ({
+      cardId: r.card_id,
+      name: (r.holder_name || "").trim(),
+      phone: (r.holder_phone || "").trim() || null,
+      email: (r.holder_email || "").trim() || null,
+      cardNumber: r.card_number || null,
+      points: r.points || 0,
+      purchaseCount: r.purchase_count || 0,
+      rewards: r.rewards || 0,
+      memberSince: r.created_at,
+    })));
+  } catch (error) {
+    console.error("Search loyalty profiles error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

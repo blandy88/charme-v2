@@ -1601,17 +1601,52 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("🔍 Searching profiles with query:", query);
       const token = window.getAuthToken();
       if (!token) return [];
-      const response = await fetch(
-        `/api/search/users?q=${encodeURIComponent(query)}`,
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      console.log("📡 API Response status:", response.status);
 
-      if (!response.ok) throw new Error("Search failed");
+      // Search both users AND loyalty card holders in parallel
+      const [usersRes, loyaltyRes] = await Promise.all([
+        fetch(`/api/search/users?q=${encodeURIComponent(query)}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }).catch(() => ({ ok: false, json: () => [] })),
+        fetch(`/api/search/loyalty-profiles?q=${encodeURIComponent(query)}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }).catch(() => ({ ok: false, json: () => [] })),
+      ]);
 
-      const profiles = await response.json();
-      console.log("👥 Profiles received:", profiles.length, profiles);
-      return profiles;
+      const users = usersRes.ok ? await usersRes.json() : [];
+      const loyalty = loyaltyRes.ok ? await loyaltyRes.json() : [];
+
+      // Merge: loyalty profiles get priority, users fill remaining
+      const merged = [];
+      const seenNames = new Set();
+
+      loyalty.forEach((p) => {
+        const key = (p.name || "").toLowerCase();
+        if (key && !seenNames.has(key)) {
+          seenNames.add(key);
+          merged.push({
+            id: `loyalty-${p.cardId}`,
+            cardId: p.cardId,
+            display_name: p.name,
+            member_since: p.memberSince,
+            is_loyalty: true,
+            badge: "Client",
+            points: p.points,
+            purchaseCount: p.purchaseCount,
+            phone: p.phone,
+            cardNumber: p.cardNumber,
+          });
+        }
+      });
+
+      users.forEach((u) => {
+        const key = (u.display_name || "").toLowerCase();
+        if (!seenNames.has(key)) {
+          seenNames.add(key);
+          merged.push({ ...u, is_loyalty: false });
+        }
+      });
+
+      return merged;
     } catch (error) {
       console.error("❌ Error searching profiles:", error);
       return [];
@@ -1663,43 +1698,46 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("🏗️ Building HTML for profiles...");
       const suggestionsHTML = profiles
         .map((profile) => {
-          // Ensure display_name exists
           const displayName =
             profile.display_name ||
             `${profile.first_name || ""} ${profile.last_name || ""}`.trim() ||
             "Member";
           const safeDisplayName = window.escapeHTML(displayName);
-          const avatarUrl = window.safeAttribute(
-            window.normalizeAvatarSrc(profile.avatar_url),
-          );
-          const safeBadge = window.escapeHTML(
-            profile.badge || (profile.is_admin ? "Admin" : "Member"),
-          );
+          const safeBadge = window.escapeHTML(profile.badge || "Member");
           const safeId = window.safeAttribute(profile.id);
+          const isLoyalty = profile.is_loyalty;
+          const typeClass = isLoyalty ? "loyalty-profile" : "user-profile";
+          const avatarLetter = (displayName || "U")[0].toUpperCase();
+
+          let metaHtml = "";
+          if (isLoyalty) {
+            metaHtml = `
+              <span class="profile-badge loyalty">${safeBadge}</span>
+              ${profile.points !== undefined ? `<span class="member-since">${profile.points} pts</span>` : ""}
+              ${profile.purchaseCount ? `<span class="member-since">${profile.purchaseCount} achat${profile.purchaseCount > 1 ? "s" : ""}</span>` : ""}
+            `;
+          } else {
+            metaHtml = `
+              <span class="profile-badge ${profile.is_admin ? "admin" : "member"}">${safeBadge}</span>
+              ${profile.member_since ? `<span class="member-since">Membre depuis ${new Date(profile.member_since).getFullYear()}</span>` : ""}
+            `;
+          }
 
           const html = `
-        <div class="search-suggestion profile-suggestion" data-user-id="${safeId}">
+        <div class="search-suggestion profile-suggestion ${typeClass}" data-user-id="${safeId}" data-is-loyalty="${isLoyalty}" data-card-id="${profile.cardId || ""}">
           <div class="profile-suggestion-content">
             <div class="profile-avatar">
-              <img src="${avatarUrl}" alt="${safeDisplayName}" onerror="this.src='default.jpg'" loading="lazy">
-              ${profile.level && profile.level > 1 ? `<div class="level-badge">${profile.level}</div>` : ""}
+              <div class="profile-avatar-letter">${avatarLetter}</div>
             </div>
             <div class="profile-info">
               <div class="profile-name">${safeDisplayName}</div>
               <div class="profile-meta">
-                <span class="profile-badge ${profile.is_admin ? "admin" : "member"}">${safeBadge}</span>
-                ${profile.member_since ? `<span class="member-since">Member since ${new Date(profile.member_since).getFullYear()}</span>` : ""}
+                ${metaHtml}
               </div>
             </div>
           </div>
         </div>
       `;
-          console.log(
-            "🔨 Generated HTML for profile:",
-            displayName,
-            "HTML preview:",
-            html.substring(0, 150) + "...",
-          );
           return html;
         })
         .join("");
@@ -1728,23 +1766,19 @@ document.addEventListener("DOMContentLoaded", function () {
           
           const userId = this.dataset.userId;
           const displayName = this.querySelector(".profile-name").textContent;
+          const isLoyalty = this.dataset.isLoyalty === "true";
+          const cardId = Number(this.dataset.cardId) || 0;
           
-          console.log("👤 Profile suggestion clicked:", userId, displayName);
+          console.log("👤 Profile suggestion clicked:", userId, displayName, isLoyalty ? "(loyalty)" : "(user)");
           
-          // Close search dropdown
           hideDropdown();
+          quickSearchInput.value = "";
           
-          // Open profile modal if available
-          if (window.profileModal && window.profileModal.showProfileModal) {
-            console.log("🔍 Opening profile modal for:", displayName);
-            
-            // Hide the search dropdown first
-            quickSearchInput.value = "";
-            
-            // Open the profile modal with the user's data
+          if (isLoyalty && cardId) {
+            openCustomerProfile(cardId, displayName);
+          } else if (window.profileModal && window.profileModal.showProfileModal) {
             window.profileModal.showProfileModal(userId, displayName);
           } else {
-            console.warn("⚠️ Profile modal not available, falling back to input value");
             quickSearchInput.value = displayName;
           }
         });
@@ -5236,6 +5270,9 @@ function updateColors() {
 
   // Initialize Carte Fidélité modal
   initializeLoyaltyModal();
+
+  // Initialize Customer Profile modal
+  initializeCustomerProfileModal();
 
   // Initialize News & Notifications (admin + public managers)
   initializeNewsAdmin();
@@ -11474,6 +11511,13 @@ function renderLoyaltyModalTable() {
     );
     actions.appendChild(deleteBtn);
 
+    const profileBtn = document.createElement("button");
+    profileBtn.className = "btn-small btn-loyalty-profile";
+    profileBtn.textContent = "Profil";
+    profileBtn.title = "Voir le profil client";
+    profileBtn.addEventListener("click", () => openCustomerProfile(card.cardId, card.name));
+    actions.appendChild(profileBtn);
+
     actionsCell.appendChild(actions);
     row.append(
       nameCell,
@@ -11651,6 +11695,349 @@ async function deleteLoyaltyCard(cardId, name) {
     console.error("Error deleting loyalty card:", error);
     showNotification("Error deleting loyalty card", "error");
   }
+}
+
+// ═══════════════════════════════════════════════════════════
+// 👤 CUSTOMER PROFILE SYSTEM
+// ═══════════════════════════════════════════════════════════
+
+let currentProfileCardId = null;
+
+function openCustomerProfile(cardId, clientName) {
+  currentProfileCardId = cardId;
+  const modal = document.getElementById("customerProfileModal");
+  const content = document.getElementById("customerProfileContent");
+  const loading = document.getElementById("customerProfileLoading");
+  const title = document.getElementById("customerProfileTitle");
+
+  title.textContent = `Profil — ${clientName}`;
+  content.style.display = "none";
+  loading.style.display = "flex";
+
+  modal.style.setProperty("z-index", "100006", "important");
+  modal.classList.remove("hidden");
+  modal.style.setProperty("display", "flex", "important");
+  document.body.style.overflow = "hidden";
+
+  loadCustomerProfile(cardId);
+}
+
+function closeCustomerProfile() {
+  const modal = document.getElementById("customerProfileModal");
+  modal.classList.add("hidden");
+  modal.style.removeProperty("display");
+  modal.style.removeProperty("z-index");
+  currentProfileCardId = null;
+}
+
+async function loadCustomerProfile(cardId) {
+  const content = document.getElementById("customerProfileContent");
+  const loading = document.getElementById("customerProfileLoading");
+
+  try {
+    const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const response = await fetch(`/api/admin/loyalty/profiles/${cardId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) throw new Error("Failed to load profile");
+    const data = await response.json();
+
+    renderProfileHeader(data.card);
+    renderProfileStats(data.stats);
+    renderProfilePreferences(data.preferences);
+    renderProfileBrands(data.topBrands);
+    renderProfileSuggestions(data.suggestions);
+    renderProfilePurchases(data.purchases, cardId);
+
+    loading.style.display = "none";
+    content.style.display = "block";
+  } catch (error) {
+    console.error("Error loading profile:", error);
+    loading.innerHTML = `<p style="color:var(--color-error,#e74c3c);">Erreur de chargement</p>`;
+  }
+}
+
+function renderProfileHeader(card) {
+  const el = document.getElementById("cpHeader");
+  el.innerHTML = `
+    <div class="cp-header-info">
+      <div class="cp-avatar">${window.escapeHTML((card.name || "C")[0].toUpperCase())}</div>
+      <div>
+        <div class="cp-name">${window.escapeHTML(card.name)}</div>
+        <div class="cp-meta">
+          ${card.cardNumber ? `<span class="cp-card-num">${window.escapeHTML(card.cardNumber)}</span>` : ""}
+          ${card.phone ? `<span class="cp-phone">${window.escapeHTML(card.phone)}</span>` : ""}
+          ${card.email ? `<span class="cp-email">${window.escapeHTML(card.email)}</span>` : ""}
+        </div>
+      </div>
+    </div>
+    <div class="cp-points-badge ${card.points >= 5 ? "eligible" : ""}">
+      <span class="cp-points-value">${card.points}</span>
+      <span class="cp-points-label">points</span>
+    </div>
+  `;
+}
+
+function renderProfileStats(stats) {
+  const el = document.getElementById("cpStats");
+  el.innerHTML = `
+    <div class="cp-stat-card">
+      <div class="cp-stat-value">${stats.totalPurchases}</div>
+      <div class="cp-stat-label">Achats</div>
+    </div>
+    <div class="cp-stat-card">
+      <div class="cp-stat-value">${stats.totalSpent > 0 ? stats.totalSpent.toFixed(2) + " €" : "—"}</div>
+      <div class="cp-stat-label">Total dépensé</div>
+    </div>
+    <div class="cp-stat-card">
+      <div class="cp-stat-value">${stats.topFamily || "—"}</div>
+      <div class="cp-stat-label">Famille préférée</div>
+    </div>
+    <div class="cp-stat-card">
+      <div class="cp-stat-value">${stats.favoriteBrand || "—"}</div>
+      <div class="cp-stat-label">Marque favorie</div>
+    </div>
+  `;
+}
+
+function renderProfilePreferences(prefs) {
+  const section = document.getElementById("cpPreferences");
+  const container = document.getElementById("cpFamilyBars");
+  if (!prefs || prefs.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "block";
+  const familyColors = {
+    "Woisy": "#8B6914", "Woody": "#8B6914", "Floral": "#E75480", "Oriental": "#D4A017",
+    "Fresh": "#00BCD4", "Citrus": "#FFC107", "Gourmand": "#E07C24", "Aromatic": "#4CAF50",
+    "Chypre": "#9C27B0", "Aldehyde": "#B0BEC5", "Fougère": "#607D8B", "Other": "#78909C",
+    "Non spécifié": "#555"
+  };
+  container.innerHTML = prefs.map((p) => {
+    const color = familyColors[p.family] || "#888";
+    return `
+      <div class="cp-family-row">
+        <span class="cp-family-name">${window.escapeHTML(p.family)}</span>
+        <div class="cp-family-bar-track">
+          <div class="cp-family-bar-fill" style="width:${p.percentage}%;background:${color};"></div>
+        </div>
+        <span class="cp-family-count">${p.count} (${p.percentage}%)</span>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderProfileBrands(brands) {
+  const section = document.getElementById("cpBrands");
+  const container = document.getElementById("cpBrandTags");
+  if (!brands || brands.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "block";
+  container.innerHTML = brands.map((b) =>
+    `<span class="cp-brand-tag">${window.escapeHTML(b.brand)} <small>×${b.count}</small></span>`
+  ).join("");
+}
+
+function renderProfileSuggestions(suggestions) {
+  const section = document.getElementById("cpSuggestions");
+  const grid = document.getElementById("cpSuggestionGrid");
+  if (!suggestions || suggestions.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "block";
+  grid.innerHTML = suggestions.map((s) => {
+    const audienceLabel = s.audience === "men" ? "Homme" : s.audience === "women" ? "Femme" : "Mixte";
+    return `
+      <div class="cp-suggestion-card">
+        <div class="cp-sug-name">${window.escapeHTML(s.name)}</div>
+        <div class="cp-sug-brand">${window.escapeHTML(s.brand || "")}</div>
+        <div class="cp-sug-meta">
+          <span class="cp-sug-family">${window.escapeHTML(s.fragrance_family || "")}</span>
+          <span class="cp-sug-audience">${audienceLabel}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderProfilePurchases(purchases, cardId) {
+  const container = document.getElementById("cpPurchaseList");
+  if (!purchases || purchases.length === 0) {
+    container.innerHTML = `<div class="cp-empty-purchases">Aucun achat enregistré. Ajoutez le premier achat de ce client !</div>`;
+    return;
+  }
+
+  const familyColors = {
+    "Woody": "#8B6914", "Floral": "#E75480", "Oriental": "#D4A017",
+    "Fresh": "#00BCD4", "Citrus": "#FFC107", "Gourmand": "#E07C24", "Aromatic": "#4CAF50",
+    "Chypre": "#9C27B0", "Aldehyde": "#B0BEC5", "Fougère": "#607D8B", "Other": "#78909C"
+  };
+
+  container.innerHTML = `
+    <div class="cp-purchase-table-wrap">
+      <table class="cp-purchase-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Parfum</th>
+            <th>Marque</th>
+            <th>Famille</th>
+            <th>Prix</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${purchases.map((p) => {
+            const color = familyColors[p.fragrance_family] || "#888";
+            return `
+              <tr>
+                <td class="cp-p-date">${window.escapeHTML(p.purchase_date || "—")}</td>
+                <td class="cp-p-name">${window.escapeHTML(p.perfume_name)}</td>
+                <td>${window.escapeHTML(p.brand || "—")}</td>
+                <td><span class="cp-family-dot" style="background:${color};"></span>${window.escapeHTML(p.fragrance_family || "—")}</td>
+                <td class="cp-p-price">${p.purchase_price != null ? p.purchase_price.toFixed(2) + " €" : "—"}</td>
+                <td>
+                  <button class="cp-p-delete" data-purchase-id="${p.id}" title="Supprimer">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  container.querySelectorAll(".cp-p-delete").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const purchaseId = btn.dataset.purchaseId;
+      if (!confirm("Supprimer cet achat ?")) return;
+      try {
+        const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+        const res = await fetch(`/api/admin/loyalty/purchases/${purchaseId}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (data.success) {
+          showNotification("Achat supprimé", "success");
+          loadCustomerProfile(cardId);
+          loadLoyaltyData();
+        } else {
+          showNotification(data.error || "Erreur", "error");
+        }
+      } catch (err) {
+        showNotification("Erreur lors de la suppression", "error");
+      }
+    });
+  });
+}
+
+// ─── Record Purchase Modal ───
+
+function openRecordPurchaseModal(cardId, clientName) {
+  document.getElementById("rpCardId").value = cardId;
+  document.getElementById("rpClientName").textContent = clientName;
+  document.getElementById("rpPerfumeName").value = "";
+  document.getElementById("rpBrand").value = "";
+  document.getElementById("rpFamily").value = "";
+  document.getElementById("rpAudience").value = "";
+  document.getElementById("rpPrice").value = "";
+  document.getElementById("rpDate").value = new Date().toISOString().slice(0, 10);
+  document.getElementById("rpNotes").value = "";
+
+  const modal = document.getElementById("recordPurchaseModal");
+  modal.style.setProperty("z-index", "100007", "important");
+  modal.classList.remove("hidden");
+  modal.style.setProperty("display", "flex", "important");
+  setTimeout(() => document.getElementById("rpPerfumeName").focus(), 100);
+}
+
+function closeRecordPurchaseModal() {
+  const modal = document.getElementById("recordPurchaseModal");
+  modal.classList.add("hidden");
+  modal.style.removeProperty("display");
+  modal.style.removeProperty("z-index");
+}
+
+async function saveRecordPurchase() {
+  const cardId = Number(document.getElementById("rpCardId").value);
+  const perfumeName = document.getElementById("rpPerfumeName").value.trim();
+  const brand = document.getElementById("rpBrand").value.trim();
+  const fragranceFamily = document.getElementById("rpFamily").value;
+  const audience = document.getElementById("rpAudience").value;
+  const purchasePrice = document.getElementById("rpPrice").value;
+  const purchaseDate = document.getElementById("rpDate").value;
+  const notes = document.getElementById("rpNotes").value.trim();
+
+  if (!perfumeName) {
+    showNotification("Le nom du parfum est requis", "error");
+    document.getElementById("rpPerfumeName").focus();
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const body = { cardId, perfumeName, brand: brand || undefined, fragranceFamily: fragranceFamily || undefined, audience: audience || undefined, notes: notes || undefined };
+    if (purchasePrice) body.purchasePrice = Number(purchasePrice);
+    if (purchaseDate) body.purchaseDate = purchaseDate;
+
+    const res = await fetch("/api/admin/loyalty/purchases", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      showNotification(data.message || "Achat enregistré", "success");
+      closeRecordPurchaseModal();
+      loadCustomerProfile(cardId);
+      loadLoyaltyData();
+    } else {
+      showNotification(data.error || "Erreur", "error");
+    }
+  } catch (err) {
+    console.error("Error recording purchase:", err);
+    showNotification("Erreur lors de l'enregistrement", "error");
+  }
+}
+
+// ─── Profile Modal Event Wiring ───
+
+function initializeCustomerProfileModal() {
+  document.getElementById("customerProfileClose")?.addEventListener("click", closeCustomerProfile);
+  document.getElementById("customerProfileOverlay")?.addEventListener("click", closeCustomerProfile);
+  document.getElementById("rpCancelBtn")?.addEventListener("click", closeRecordPurchaseModal);
+  document.getElementById("rpSaveBtn")?.addEventListener("click", saveRecordPurchase);
+  document.getElementById("recordPurchaseClose")?.addEventListener("click", closeRecordPurchaseModal);
+  document.getElementById("recordPurchaseOverlay")?.addEventListener("click", closeRecordPurchaseModal);
+
+  document.getElementById("cpAddPurchaseBtn")?.addEventListener("click", () => {
+    if (!currentProfileCardId) return;
+    const card = loyaltyCards.find((c) => c.cardId === currentProfileCardId);
+    const name = card ? card.name : "";
+    openRecordPurchaseModal(currentProfileCardId, name);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const rpModal = document.getElementById("recordPurchaseModal");
+      if (rpModal && !rpModal.classList.contains("hidden")) {
+        closeRecordPurchaseModal();
+        return;
+      }
+      const cpModal = document.getElementById("customerProfileModal");
+      if (cpModal && !cpModal.classList.contains("hidden")) {
+        closeCustomerProfile();
+      }
+    }
+  });
 }
 
 function showBanModal(userId, userName) {
