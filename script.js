@@ -11549,11 +11549,13 @@ async function updateLoyaltyPoints(cardId, name) {
   const cardIdInput = document.getElementById("loyaltyEditCardId");
   const nameInput = document.getElementById("loyaltyEditName");
   const cardNumberInput = document.getElementById("loyaltyEditCardNumber");
+  const phoneInput = document.getElementById("loyaltyEditPhone");
   const pointsInput = document.getElementById("loyaltyEditPoints");
 
   cardIdInput.value = cardId;
   nameInput.value = card.name || "";
   cardNumberInput.value = card.cardNumber || "";
+  phoneInput.value = card.phone || "";
   pointsInput.value = card.points ?? 0;
 
   const modal = document.getElementById("loyaltyEditModal");
@@ -11575,6 +11577,7 @@ async function saveLoyaltyEdit() {
   const cardId = Number(document.getElementById("loyaltyEditCardId").value);
   const name = document.getElementById("loyaltyEditName").value.trim();
   const cardNumber = document.getElementById("loyaltyEditCardNumber").value.trim();
+  const phone = document.getElementById("loyaltyEditPhone").value.trim();
   const pointsStr = document.getElementById("loyaltyEditPoints").value;
 
   if (!name) {
@@ -11599,7 +11602,7 @@ async function saveLoyaltyEdit() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ cardId, name, cardNumber: cardNumber || undefined, points: pts }),
+      body: JSON.stringify({ cardId, name, cardNumber: cardNumber || undefined, phone: phone || undefined, points: pts }),
     });
     const data = await response.json();
 

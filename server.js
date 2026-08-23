@@ -2474,7 +2474,7 @@ app.post("/api/admin/loyalty/create", authenticateToken, requireAdmin, async (re
 
 app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const { cardId, points, name, cardNumber } = req.body;
+    const { cardId, points, name, cardNumber, phone } = req.body;
     if (!cardId) return res.status(400).json({ error: "Card ID is required" });
 
     const card = await getLoyaltyCardById(cardId);
@@ -2534,6 +2534,16 @@ app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req
         }
       }
       updates.push("card_number = ?");
+      params.push(trimmed || null);
+    }
+
+    // Update holder_phone if provided
+    if (phone !== undefined) {
+      const trimmed = String(phone).trim();
+      if (trimmed.length > 30) {
+        return res.status(400).json({ error: "Le téléphone ne peut pas dépasser 30 caractères" });
+      }
+      updates.push("holder_phone = ?");
       params.push(trimmed || null);
     }
 
