@@ -985,7 +985,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const safeAudience = escapeHtml(formatAudienceLabel(fragrance.audience));
     const safeDescription = escapeHtml(fragrance.description || "A catalog fragrance profile with curated notes and style details.");
     const safeImage = window.safeAttribute(productImageForFragrance(fragrance));
-    const fragUrl = "https://www.fragrantica.com/search/?query=" + encodeURIComponent([fragrance.brand, fragrance.name].filter(Boolean).join(" ").trim());
+    const fragUrl = (window.fragranticaUrlFor
+      ? window.fragranticaUrlFor(fragrance.brand, fragrance.name)
+      : "https://www.fragrantica.com/search/?query=" + encodeURIComponent([fragrance.brand, fragrance.name].filter(Boolean).join(" ").trim()));
     const lang = (document.documentElement.lang || "en").slice(0, 2);
     const fragLabel = lang === "fr" ? "Voir sur Fragrantica" : "See on Fragrantica";
 
@@ -21050,11 +21052,8 @@ window.testClickOnElement = function() {
 
   let built = false;
 
-  // Fragrantica search URL builder (shared by grid cards + section buttons)
-  function fragranticaSearchUrl(brand, name) {
-    const q = [brand, name].filter(Boolean).join(" ").trim();
-    return "https://www.fragrantica.com/search/?query=" + encodeURIComponent(q);
-  }
+  // Fragrantica URL resolver: direct perfume page when mapped (js/fragrantica-urls.js),
+  // otherwise falls back to a search URL. Provided by window.fragranticaUrlFor.
 
   function buildGrid() {
     if (built) return;
@@ -21150,7 +21149,7 @@ window.testClickOnElement = function() {
           ? (lang === "fr" ? "En stock" : "In stock")
           : (lang === "fr" ? "Rupture de stock" : "Out of stock");
         const stockClass = f.inStock ? "in-stock" : "out-of-stock";
-        const fragUrl = fragranticaSearchUrl(f.brand, f.name);
+        const fragUrl = window.fragranticaUrlFor(f.brand, f.name);
         const fragLabel = lang === "fr" ? "Voir sur Fragrantica" : "See on Fragrantica";
         return `
           <a class="perfume-grid-card" href="#${esc(f.id)}" data-target="${esc(f.id)}" data-seasons="${esc(f.seasons)}" data-quality="${esc(f.qualities)}" data-notes="${esc(f.notes)}">
@@ -21425,7 +21424,7 @@ window.testClickOnElement = function() {
       const name = nameEl.textContent.trim();
       const link = document.createElement("a");
       link.className = "fragrantica-btn";
-      link.href = fragranticaSearchUrl(brandEl ? brandEl.textContent.trim() : "", name);
+      link.href = window.fragranticaUrlFor(brandEl ? brandEl.textContent.trim() : "", name);
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.setAttribute("aria-label", `${label} — ${name}`);
