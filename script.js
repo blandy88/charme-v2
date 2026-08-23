@@ -1036,14 +1036,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const previousFilter = element.style.filter;
 
     element.style.transition = "box-shadow 0.35s ease, filter 0.35s ease";
-    element.style.boxShadow = "0 0 0 2px rgba(201, 169, 78, 0.5), 0 18px 60px rgba(201, 169, 78, 0.18)";
-    element.style.filter = "brightness(1.06)";
+    element.style.boxShadow = "0 0 0 3px rgba(201, 169, 78, 0.75), 0 18px 60px rgba(201, 169, 78, 0.28)";
+    element.style.filter = "brightness(1.08)";
 
     setTimeout(() => {
       element.style.transition = previousTransition;
       element.style.boxShadow = previousBoxShadow;
       element.style.filter = previousFilter;
-    }, 1800);
+    }, 3000);
   }
 
   function scrollToSearchTarget(element) {
@@ -1054,9 +1054,36 @@ document.addEventListener("DOMContentLoaded", function () {
       ? marquee.getBoundingClientRect().height
       : 0;
     const offset = navbarHeight + marqueeHeight + 14;
-    const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
-    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-    setTimeout(() => highlightSearchTarget(element), 450);
+    const top = Math.max(0, element.getBoundingClientRect().top + window.pageYOffset - offset);
+    const distance = Math.abs(top - window.pageYOffset);
+
+    // Long jumps: scroll instantly so feedback is immediate.
+    // Smooth-scrolling tens of thousands of pixels takes seconds and looks broken.
+    const behavior = distance > 2500 ? "auto" : "smooth";
+    window.scrollTo({ top, behavior });
+
+    // Fire the highlight once scrolling has actually settled (not on a fixed timer,
+    // which expired before arrival on long pages).
+    const waitForSettle = () => {
+      let lastY = window.pageYOffset;
+      let stableFrames = 0;
+      const check = () => {
+        const y = window.pageYOffset;
+        if (Math.abs(y - lastY) < 2) {
+          stableFrames += 1;
+          if (stableFrames >= 3) {
+            highlightSearchTarget(element);
+            return;
+          }
+        } else {
+          stableFrames = 0;
+        }
+        lastY = y;
+        requestAnimationFrame(check);
+      };
+      requestAnimationFrame(check);
+    };
+    setTimeout(waitForSettle, 120);
   }
 
   function navigateToFragranceSearchResult(fragrance, sourceElement = null) {
