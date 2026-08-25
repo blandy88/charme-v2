@@ -27,7 +27,9 @@ window.CHARME_API_ORIGIN = _isLocalHost || _isRenderHost
 
 // Details mode pricing: bottle sizes + quality tiers.
 const DETAILS_SIZES = [10, 30, 50, 100];
+const DETAILS_STANDARD_PRICES = { 10: 5, 30: 15, 50: 25, 100: 50 };
 const DETAILS_TOP_PRICES = { 10: 10, 30: 25, 50: 35, 100: 65 };
+const DETAILS_EXTRA_PRICES = { 10: 13, 30: 38, 50: 50, 100: 100 };
 
 // Stable deterministic value in [0, 1) for a string. Used to keep each
 // product's "identical quality" random price stable across visits.
@@ -51,8 +53,10 @@ function detailsIdenticalPrice(productId, size) {
 
 // Combined price for a product / quality tier / bottle size.
 function detailsPriceFor(productId, quality, size) {
-  const s = DETAILS_SIZES.indexOf(Number(size)) !== -1 ? Number(size) : 50;
+  var s = DETAILS_SIZES.indexOf(Number(size)) !== -1 ? Number(size) : 50;
+  if (quality === "standard") return DETAILS_STANDARD_PRICES[s];
   if (quality === "top") return DETAILS_TOP_PRICES[s];
+  if (quality === "extra") return DETAILS_EXTRA_PRICES[s];
   return detailsIdenticalPrice(productId, s);
 }
 
@@ -3198,7 +3202,7 @@ function updateColors() {
       const radioName = productId + "-quality";
       const buildOption = (value, name, description, price) =>
         '<div class="quality-option" data-quality="' + value + '" data-price="' + price + '">' +
-        '<input type="radio" id="' + productId + '-' + value + '-quality" name="' + radioName + '" value="' + value + '"' + (value === "top" ? " checked" : "") + ">" +
+        '<input type="radio" id="' + productId + '-' + value + '-quality" name="' + radioName + '" value="' + value + '"' + (value === "standard" ? " checked" : "") + ">" +
         '<label for="' + productId + '-' + value + '-quality" class="quality-label">' +
         '<div class="quality-badge">' +
         '<div class="quality-ornament top-left"></div>' +
@@ -3216,9 +3220,11 @@ function updateColors() {
         "</label>" +
         "</div>";
 
-      // Replace options: Top Quality (fixed) + Identical Quality (stable random)
+      // Replace options: 4 quality tiers (all Extrait de Parfum)
       qualityOptions.innerHTML =
+        buildOption("standard", "Standard Quality", "25 dt / 50 ml", 25) +
         buildOption("top", "Top Quality", "35 dt / 50 ml", 35) +
+        buildOption("extra", "Extra Quality", "50 dt / 50 ml", 50) +
         buildOption("identical", "Identical Quality", "Price varies", detailsIdenticalPrice(productId, 50));
 
       // Insert the size selector (once) after the quality options
@@ -3276,7 +3282,7 @@ function updateColors() {
       });
 
       // Default: Top Quality / 50 ml
-      const defaultOption = qualityOptions.querySelector('.quality-option[data-quality="top"]');
+      const defaultOption = qualityOptions.querySelector('.quality-option[data-quality="standard"]');
       if (defaultOption) defaultOption.classList.add("active");
       syncPrice();
     });
@@ -21238,7 +21244,7 @@ window.testClickOnElement = function() {
       tag: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>`
     };
     const seasonLabels = { winter: [ICON_SVG.snowflake, "Hiver"], spring: [ICON_SVG.flower, "Printemps"], summer: [ICON_SVG.sun, "Été"], fall: [ICON_SVG.leaf, "Automne"] };
-    const qualityLabels = { edp: [ICON_SVG.droplets, "EDP"], edt: [ICON_SVG.wind, "EDT"], parfum: [ICON_SVG.flask, "Parfum"], top: [ICON_SVG.star, "Top"], identical: [ICON_SVG.copy, "Identique"] };
+    const qualityLabels = { standard: [ICON_SVG.droplets, "Standard"], top: [ICON_SVG.star, "Supérieure"], extra: [ICON_SVG.flask, "Extra"], identical: [ICON_SVG.copy, "Identique"] };
 
     const selectedSeasons = new Set();
     const selectedQualities = new Set();
@@ -21267,7 +21273,7 @@ window.testClickOnElement = function() {
     });
 
     // Build quality chips
-    ["edp", "edt", "parfum", "top", "identical"].forEach((q) => {
+    ["standard", "top", "extra", "identical"].forEach((q) => {
       if (!allQualities.has(q)) return;
       const btn = document.createElement("button");
       btn.type = "button";
