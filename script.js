@@ -21859,8 +21859,7 @@ window.testClickOnElement = function() {
     wrap.setAttribute("data-family", family);
     wrap.setAttribute("data-gender", gender);
     wrap.innerHTML =
-      '<img class="bottle-render__template" src="' + tpl.src + '" alt="Bottle template" loading="lazy" decoding="async"' + tplImgAttrs + ">" +
-      '<img class="bottle-render__real" src="' + img.getAttribute("src") + '" alt="' + escapeHtml(name) + '" loading="lazy" decoding="async">' +
+      '<img class="bottle-render__template" src="' + tpl.src + '" alt="Bottle template" decoding="async" fetchpriority="high"' + tplImgAttrs + ">" +
       '<div class="bottle-render__sticker" style="' + stickerStyle + '">' +
         '<div class="bottle-render__name">' + escapeHtml(name) + "</div>" +
         '<div class="bottle-render__meta">' +
@@ -21869,7 +21868,21 @@ window.testClickOnElement = function() {
         "</div>" +
       "</div>";
 
+    // Insert the render into the section, replacing the original image.
     img.replaceWith(wrap);
+    // Now move the original perfume image (detached) into the render as the
+    // real-photo layer. We strip the original product-image class (e.g.
+    // "phantominred-image") so that fragrance-layout-normalize.css's
+    // `img[class$="-image"]` rule doesn't force opacity:1 on it and the
+    // parallax scripts don't animate the hover layer. The src is already
+    // correct from note-image-resolver hydration.
+    var origClasses = Array.from(img.classList).filter(function (c) {
+      return c !== "bottle-render__real" && c.endsWith("-image");
+    });
+    origClasses.forEach(function (c) { img.classList.remove(c); });
+    img.classList.add("bottle-render__real");
+    wrap.insertBefore(img, wrap.querySelector(".bottle-render__sticker"));
+
     section.dataset.bottleRendered = "1";
   }
 

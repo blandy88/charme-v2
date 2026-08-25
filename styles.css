@@ -26726,11 +26726,11 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 .bottle-render__real {
   position: absolute;
   inset: 0;
-  opacity: 0;
+  opacity: 0 !important;
 }
 
-.bottle-render:hover .bottle-render__real { opacity: 1; }
-.bottle-render:hover .bottle-render__template { opacity: 0; }
+.bottle-render:hover .bottle-render__real { opacity: 1 !important; }
+.bottle-render:hover .bottle-render__template { opacity: 0 !important; }
 .bottle-render__sticker {
   transition: opacity 0.4s ease;
 }
