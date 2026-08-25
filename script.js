@@ -52,12 +52,10 @@ function detailsIdenticalPrice(productId, size) {
 }
 
 // Combined price for a product / quality tier / bottle size.
+// All tiers share the same size-based price.
 function detailsPriceFor(productId, quality, size) {
   var s = DETAILS_SIZES.indexOf(Number(size)) !== -1 ? Number(size) : 50;
-  if (quality === "standard") return DETAILS_STANDARD_PRICES[s];
-  if (quality === "top") return DETAILS_TOP_PRICES[s];
-  if (quality === "extra") return DETAILS_EXTRA_PRICES[s];
-  return detailsIdenticalPrice(productId, s);
+  return DETAILS_TOP_PRICES[s];
 }
 
 // Caches element zero-state to prevent layout thrashing
@@ -3222,10 +3220,10 @@ function updateColors() {
 
       // Replace options: 4 quality tiers (all Extrait de Parfum)
       qualityOptions.innerHTML =
-        buildOption("standard", "Standard Quality", "25 dt / 50 ml", 25) +
+        buildOption("standard", "Standard Quality", "35 dt / 50 ml", 35) +
         buildOption("top", "Top Quality", "35 dt / 50 ml", 35) +
-        buildOption("extra", "Extra Quality", "50 dt / 50 ml", 50) +
-        buildOption("identical", "Identical Quality", "Price varies", detailsIdenticalPrice(productId, 50));
+        buildOption("extra", "Extra Quality", "35 dt / 50 ml", 35) +
+        buildOption("identical", "Identical Quality", "35 dt / 50 ml", 35);
 
       // Insert the size selector (once) after the quality options
       let sizeSelector = container.querySelector(".size-selector-container");
