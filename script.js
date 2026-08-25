@@ -2502,6 +2502,7 @@ function updateScrollBackgroundAndTheme() {
   }
   forceBodyTheme(themeFromBackgroundColor(backgroundColor));
 }
+window.updateScrollBackgroundAndTheme = updateScrollBackgroundAndTheme;
 // --------------------------------
 
 function updateColors() {
@@ -21136,6 +21137,9 @@ window.testClickOnElement = function() {
         qualities: qualities.join(","),
         notes: notes.join(","),
         inStock,
+        renderHTML: s.querySelector(".bottle-render")
+          ? s.querySelector(".bottle-render").outerHTML
+          : null,
       };
     });
 
@@ -21151,10 +21155,13 @@ window.testClickOnElement = function() {
         const stockClass = f.inStock ? "in-stock" : "out-of-stock";
         const fragUrl = window.fragranticaUrlFor(f.brand, f.name);
         const fragLabel = lang === "fr" ? "Voir sur Fragrantica" : "See on Fragrantica";
+        const mediaInner = f.renderHTML
+          ? `<div class="perfume-grid-bottle">${f.renderHTML}</div>`
+          : `<img src="${esc(f.img)}" alt="${esc(f.name)}" loading="lazy" decoding="async">`;
         return `
           <a class="perfume-grid-card" href="#${esc(f.id)}" data-target="${esc(f.id)}" data-seasons="${esc(f.seasons)}" data-quality="${esc(f.qualities)}" data-notes="${esc(f.notes)}">
             <div class="perfume-grid-media">
-              <img src="${esc(f.img)}" alt="${esc(f.name)}" loading="lazy" decoding="async">
+              ${mediaInner}
               <span class="perfume-grid-stock ${stockClass}">${esc(stockLabel)}</span>
               <button type="button" class="perfume-grid-fragrantica" data-url="${esc(fragUrl)}" aria-label="${esc(fragLabel)} — ${esc(f.name)}" title="${esc(fragLabel)}">
                 <img src="fragrantica-icon.png" alt="" width="18" height="18" loading="lazy">
@@ -21466,8 +21473,14 @@ window.testClickOnElement = function() {
     }
 
     // Refresh the static page background for the active mode (white sections
-    // in details mode, black page in grid mode).
-    updateScrollBackgroundAndTheme();
+    // in details mode, black page in grid mode). The theme helper is defined
+    // inside a DOMContentLoaded callback, so defer until it exists — calling
+    // it synchronously during startup would abort the rest of the script.
+    setTimeout(() => {
+      if (typeof window.updateScrollBackgroundAndTheme === "function") {
+        window.updateScrollBackgroundAndTheme();
+      }
+    }, 0);
   }
 
   function currentMode() {
@@ -21487,19 +21500,40 @@ window.testClickOnElement = function() {
   // Reveal the pill after mount
   requestAnimationFrame(() => toggle.classList.add("visible"));
 
+  // Bottle-render module enhances product images after this IIFE registers.
+  // When it finishes, rebuild the grid so cards include labeled bottles.
+  document.addEventListener("bottleRendersReady", () => {
+    if (document.body.classList.contains("perfume-grid-mode")) {
+      buildGrid();
+    }
+  });
+
   // Restore persisted mode
   let saved = "details";
   try {
     saved = localStorage.getItem(STORAGE_KEY) || "details";
   } catch (err) {}
   if (saved === "grid") {
+    const applyGrid = () => setMode("grid", { persist: false, scroll: false });
+    const start = () => {
+      // The bottle-render module may enhance sections after this IIFE runs.
+      // Wait for its renders before building cards so they include labeled
+      // bottles; fall back shortly after if the module never loads.
+      if (document.querySelector(".bottle-render")) {
+        applyGrid();
+      } else {
+        document.addEventListener("bottleRendersReady", applyGrid, { once: true });
+        setTimeout(() => {
+          document.removeEventListener("bottleRendersReady", applyGrid);
+          if (!document.querySelector(".perfume-grid-card")) applyGrid();
+        }, 1500);
+      }
+    };
     // Wait for layout; build and apply without scrolling
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => {
-        setMode("grid", { persist: false, scroll: false });
-      });
+      document.addEventListener("DOMContentLoaded", start);
     } else {
-      setMode("grid", { persist: false, scroll: false });
+      start();
     }
   } else {
     // Default details mode — add stock badges now
@@ -21670,5 +21704,183 @@ window.testClickOnElement = function() {
     } catch (err) {
       list.innerHTML = '<p class="news-admin-empty">Error loading notes.</p>';
     }
+  }
+})();
+/* ===== Bottle Template Renders for Men's Fragrances ===== */
+(function () {
+  "use strict";
+
+  var TEMPLATES = {
+    warm: {
+      src: "bottle-template-2k.png", ratio: "1125 / 1446",
+      sticker: [37.69, 64.73, 26.31, 9.96]
+    },
+    fresh: {
+      src: "bottle-template-fresh.jpg", ratio: "1792 / 2400",
+      sticker: [37.69, 64.73, 26.31, 9.96]
+    },
+    freshF: {
+      src: "bottle-template-fresh-femme.jpg", ratio: "1792 / 2400",
+      sticker: [39.60, 64.16, 25.14, 9.62]
+    },
+    winterF: {
+      src: "bottle-template-winter-femme.jpg", ratio: "1792 / 2400",
+      sticker: [37.60, 64.38, 26.65, 9.66]
+    }
+  };
+
+  var GENDER_LABELS = { homme: "Homme", femme: "Femme", mixte: "Mixte" };
+
+  /* id -> [gender, family]: gender homme|femme|mixte, family fresh|winter */
+  var PRODUCTS = {
+    /* ── Homme · fresh ── */
+    sauvage: ["homme", "fresh"], bleudechanel: ["homme", "fresh"], bleuelectrique: ["homme", "fresh"],
+    allure: ["homme", "fresh"], aquadigio: ["homme", "fresh"], aquadigioelixir: ["homme", "fresh"],
+    aventus: ["homme", "fresh"], aventusabsolu: ["homme", "fresh"], greenly: ["homme", "fresh"],
+    greenirish: ["homme", "fresh"], silvermountain: ["homme", "fresh"], yvsl: ["homme", "fresh"],
+    yintensely: ["homme", "fresh"], ymenelixir: ["homme", "fresh"], invictus: ["homme", "fresh"],
+    versaceeros: ["homme", "fresh"], cketernity: ["homme", "fresh"], coolwater: ["homme", "fresh"],
+    nauticavoyage: ["homme", "fresh"], leaudissey: ["homme", "fresh"], pradacarbon: ["homme", "fresh"],
+    sedley: ["homme", "fresh"], terredhermes: ["homme", "fresh"], torrino21: ["homme", "fresh"],
+    explorer: ["homme", "fresh"], burberryhero: ["homme", "fresh"], egoiste: ["homme", "fresh"],
+    gucciguilty: ["homme", "fresh"], legendmontblanc: ["homme", "fresh"], azzarochrome: ["homme", "fresh"],
+    lacosteblue: ["homme", "fresh"], dylanbleuintense: ["homme", "fresh"], clubdenuit: ["homme", "fresh"],
+    kouros: ["homme", "fresh"], pacificchill: ["homme", "fresh"], cerruti1881: ["homme", "fresh"],
+    cedarsmancera: ["homme", "fresh"], amenfantasm: ["homme", "fresh"], jagwar: ["homme", "fresh"],
+    ganymede: ["homme", "fresh"], phantominred: ["homme", "fresh"], kbyDG: ["homme", "fresh"],
+
+    /* ── Homme · warm ── */
+    amberoud: ["homme", "warm"], arabianoud: ["homme", "warm"], charmedoud: ["homme", "warm"],
+    emperorsoud: ["homme", "warm"], goldenoud: ["homme", "warm"], heavenlyoud: ["homme", "warm"],
+    luxuryoud: ["homme", "warm"], majesticoud: ["homme", "warm"], midnightoud: ["homme", "warm"],
+    moonlightoud: ["homme", "warm"], mysteriousoud: ["homme", "warm"], oudroyal: ["homme", "warm"],
+    oudvoyager: ["homme", "warm"], preciousoud: ["homme", "warm"], radiantoud: ["homme", "warm"],
+    regaloud: ["homme", "warm"], sensualoud: ["homme", "warm"], smokeroyaloud: ["homme", "warm"],
+    sultanoud: ["homme", "warm"], timelessoud: ["homme", "warm"], twilightoud: ["homme", "warm"],
+    velvetoud: ["homme", "warm"], assadelixir: ["homme", "warm"], tabacoroyal: ["homme", "warm"],
+    strongerwithyououd: ["homme", "warm"], strongerwithyousandalwood: ["homme", "warm"],
+    "1millionnight": ["homme", "warm"], milliongold: ["homme", "warm"], onemillionelixir: ["homme", "warm"],
+    onemillionroyale: ["homme", "warm"], purexs: ["homme", "warm"], jpgultramale: ["homme", "warm"],
+    spicebomb: ["homme", "warm"], tobaccovanille: ["homme", "warm"], oudwood: ["homme", "warm"],
+    lostcherry: ["homme", "warm"], lanuit: ["homme", "warm"], laween: ["homme", "warm"],
+    tuscanleather: ["homme", "warm"], noirextreme: ["homme", "warm"], armanicode: ["homme", "warm"],
+    armanicodeparfum: ["homme", "warm"], blv: ["homme", "warm"], bosselixir: ["homme", "warm"],
+    bossintense: ["homme", "warm"], diorhomme: ["homme", "warm"], dired: ["homme", "warm"],
+    gentleman: ["homme", "warm"], lhommeideal: ["homme", "warm"], wantedbynight: ["homme", "warm"],
+    wantedelixir: ["homme", "warm"], chbadboy: ["homme", "warm"], powerofyou: ["homme", "warm"],
+    valentinouomo: ["homme", "warm"], umoextradose: ["homme", "warm"], fahrenheit: ["homme", "warm"],
+    terroni: ["homme", "warm"], tuxedo: ["homme", "warm"], santalroyal: ["homme", "warm"],
+    narcisobleunoir: ["homme", "warm"], narcisoforhim: ["homme", "warm"], amenpure: ["homme", "warm"],
+    declarationcartier: ["homme", "warm"], reflectionman: ["homme", "warm"], sideeffect: ["homme", "warm"],
+    naxos: ["homme", "warm"], ambassador: ["homme", "warm"], hudsonvalley: ["homme", "warm"],
+    myrrhetonka: ["homme", "warm"], pegasus: ["homme", "warm"], layton: ["homme", "warm"],
+
+    /* ── Femme ── */
+    lightblue: ["femme", "fresh"], freedommuskmatcha: ["femme", "fresh"], freedommusk: ["femme", "fresh"],
+    aquaallegoriaflorabloom: ["femme", "fresh"], angelnova: ["femme", "fresh"], fameinlove: ["femme", "fresh"],
+    limperatrice3: ["femme", "fresh"], labomba: ["femme", "fresh"],
+    delinaexclusif: ["femme", "winter"], queenofsilk: ["femme", "winter"], kayalimarshmallow: ["femme", "winter"],
+    donnaextradose: ["femme", "winter"], edarchic: ["femme", "winter"], eaudusoir: ["femme", "winter"],
+    hermajesty: ["femme", "winter"], sipassioneredmusc: ["femme", "winter"], labelleparadise: ["femme", "winter"],
+    sipassionneintense: ["femme", "winter"], roseamira: ["femme", "winter"], valentinapoudre: ["femme", "winter"],
+    valentinaabsolue: ["femme", "winter"], supremebouquet: ["femme", "winter"], rosestar: ["femme", "winter"],
+    flowerbombextreme: ["femme", "winter"], guiltyelixirfemme: ["femme", "winter"], chanel5: ["femme", "winter"],
+    crushonme: ["femme", "winter"], blackopium: ["femme", "winter"], vanillacandyrocksugar: ["femme", "winter"],
+    monparis: ["femme", "winter"], flowerbykenzo: ["femme", "winter"], narciso: ["femme", "winter"],
+    tresorlanuit: ["femme", "winter"], manifestoelixir: ["femme", "winter"], alien: ["femme", "winter"],
+    eliesaabinwhite: ["femme", "winter"], blackorchid: ["femme", "winter"], ysllibre: ["femme", "winter"],
+    valentinodonna: ["femme", "winter"], valayaexclusive: ["femme", "winter"], hypnoticamber: ["femme", "winter"],
+    dy: ["femme", "winter"],
+
+    /* ── Mixte ── */
+    ckone: ["mixte", "fresh"], pineapple: ["mixte", "fresh"], nowade: ["mixte", "fresh"],
+    grisdior: ["mixte", "fresh"], stellaritimes: ["mixte", "fresh"], "40knots": ["mixte", "fresh"],
+    muskrose: ["mixte", "winter"], kirke: ["mixte", "winter"], velvetbdk: ["mixte", "winter"],
+    ombrenomade: ["mixte", "winter"], versacevanillerouge: ["mixte", "winter"], narcoticdelight: ["mixte", "winter"],
+    lamar: ["mixte", "winter"], themoon: ["mixte", "winter"], sospiroopera: ["mixte", "winter"],
+    orza: ["mixte", "winter"], noirkogane: ["mixte", "winter"], kajaldahab: ["mixte", "winter"],
+    balayage: ["mixte", "winter"], vanillapowder: ["mixte", "winter"], elves: ["mixte", "winter"],
+    fantasmagoria: ["mixte", "winter"], rosendomateu5: ["mixte", "winter"], lessablesroses: ["mixte", "winter"],
+    ambresamar: ["mixte", "winter"], cristalnoir: ["mixte", "winter"], baccaratrouge: ["mixte", "winter"],
+    fireplace: ["mixte", "winter"], grandSoir: ["mixte", "winter"], guidance46: ["mixte", "winter"]
+  };
+
+  function findProductImage(section) {
+    return (
+      section.querySelector('[class*="-product-section"] > img') ||
+      section.querySelector(".perfume-top-row img") ||
+      section.querySelector("img")
+    );
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function enhance(id) {
+    var section = document.getElementById(id);
+    if (!section || section.dataset.bottleRendered) return;
+    var product = PRODUCTS[id];
+    if (!product) return;
+    var gender = product[0];
+    var family = product[1];
+    var tplKey = gender === "homme" ? family : (family === "fresh" ? "freshF" : "winterF");
+    var tpl = TEMPLATES[tplKey];
+    if (!tpl) return;
+    var img = findProductImage(section);
+    if (!img) return;
+
+    var info =
+      section.querySelector(".product-info-section") ||
+      section.querySelector(".product-info");
+    var name =
+      (info && info.querySelector(".product-name") && info.querySelector(".product-name").textContent.trim()) ||
+      img.getAttribute("alt") || id;
+    var brand =
+      (info && info.querySelector(".brand-name") && info.querySelector(".brand-name").textContent.trim()) ||
+      "";
+
+    var stickerStyle =
+      "left:" + tpl.sticker[0] + "%;top:" + tpl.sticker[1] +
+      "%;width:" + tpl.sticker[2] + "%;height:" + tpl.sticker[3] + "%;";
+
+    var tplImgAttrs = "";
+    if (tpl.imgStyle) {
+      var s = "";
+      for (var k in tpl.imgStyle) { s += k + ":" + tpl.imgStyle[k] + ";"; }
+      tplImgAttrs = ' style="' + s + '"';
+    }
+
+    var wrap = document.createElement("div");
+    wrap.className = "bottle-render bottle-render--" + tplKey;
+    wrap.style.aspectRatio = tpl.ratio;
+    wrap.setAttribute("data-family", family);
+    wrap.setAttribute("data-gender", gender);
+    wrap.innerHTML =
+      '<img class="bottle-render__template" src="' + tpl.src + '" alt="Bottle template" loading="lazy" decoding="async"' + tplImgAttrs + ">" +
+      '<img class="bottle-render__real" src="' + img.getAttribute("src") + '" alt="' + escapeHtml(name) + '" loading="lazy" decoding="async">' +
+      '<div class="bottle-render__sticker" style="' + stickerStyle + '">' +
+        '<div class="bottle-render__name">' + escapeHtml(name) + "</div>" +
+        '<div class="bottle-render__meta">' +
+          '<span class="bottle-render__house">' + escapeHtml(brand) + "</span>" +
+          '<span class="bottle-render__gender">' + GENDER_LABELS[gender] + "</span>" +
+        "</div>" +
+      "</div>";
+
+    img.replaceWith(wrap);
+    section.dataset.bottleRendered = "1";
+  }
+
+  function boot() {
+    Object.keys(PRODUCTS).forEach(function (id) { enhance(id); });
+    document.dispatchEvent(new CustomEvent("bottleRendersReady"));
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
   }
 })();

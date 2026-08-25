@@ -26701,3 +26701,99 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     height: 18px;
     padding: 0 5px;
 }
+
+/* ===== Bottle Template Renders (men's fragrances) ===== */
+.bottle-render {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  container-type: inline-size;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.bottle-render__template,
+.bottle-render__real {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #fff;
+  transition: opacity 0.4s ease;
+}
+
+.bottle-render__real {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.bottle-render:hover .bottle-render__real { opacity: 1; }
+.bottle-render:hover .bottle-render__template { opacity: 0; }
+.bottle-render__sticker {
+  transition: opacity 0.4s ease;
+}
+.bottle-render:hover .bottle-render__sticker { opacity: 0; }
+
+/* Sticker zone — same relative coords for both templates */
+.bottle-render__sticker {
+  position: absolute;
+  left: 37.69%;
+  top: 64.73%;
+  width: 26.31%;
+  height: 9.96%;
+  pointer-events: none;
+}
+
+.bottle-render__name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  text-align: center;
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(5px, 2.7cqi, 34px);
+  line-height: 1.1;
+  color: #1a1510;
+}
+
+.bottle-render__meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: "Inter", "DM Sans", system-ui, sans-serif;
+  font-weight: 500;
+  font-size: clamp(3px, 1.4cqi, 18px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #2a2520;
+  line-height: 1.1;
+}
+
+/* Bottle renders inside the all-fragrances grid */
+.perfume-grid-media .perfume-grid-bottle {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.perfume-grid-media .perfume-grid-bottle .bottle-render {
+    height: 100% !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+}
+
+/* Prevent the grid hover zoom from distorting bottle layers */
+.perfume-grid-media .bottle-render img {
+    transform: none !important;
+    transition: opacity 0.4s ease !important;
+}
