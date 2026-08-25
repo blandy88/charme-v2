@@ -21515,9 +21515,9 @@ window.testClickOnElement = function() {
   });
 
   // Restore persisted mode
-  let saved = "details";
+  let saved = "grid";
   try {
-    saved = localStorage.getItem(STORAGE_KEY) || "details";
+    saved = localStorage.getItem(STORAGE_KEY) || "grid";
   } catch (err) {}
   if (saved === "grid") {
     const applyGrid = () => setMode("grid", { persist: false, scroll: false });
