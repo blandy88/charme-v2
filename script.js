@@ -21901,3 +21901,59 @@ window.testClickOnElement = function() {
     boot();
   }
 })();
+
+/* ── Social media popups (Facebook / Instagram) ── */
+(function () {
+  var SOCIAL_DATA = {
+    facebook: {
+      handle: "Parfumerie Charme",
+      url: "https://www.facebook.com/profile.php?id=61550961672675",
+      cta: "Suivre sur Facebook"
+    },
+    instagram: {
+      handle: "@charmebeautysenteurs",
+      url: "https://www.instagram.com/charmebeautysenteurs/",
+      cta: "Suivre sur Instagram"
+    }
+  };
+
+  var popup = document.getElementById("socialPopup");
+  if (!popup) return;
+
+  var handleEl = document.getElementById("socialPopupHandle");
+  var linkEl = document.getElementById("socialPopupLink");
+  var ctaText = document.getElementById("socialPopupCtaText");
+  var ringEl = popup.querySelector(".social-popup__ring");
+
+  function openSocial(platform) {
+    var d = SOCIAL_DATA[platform];
+    if (!d) return;
+    handleEl.textContent = d.handle;
+    linkEl.href = d.url;
+    linkEl.setAttribute("data-platform", platform);
+    ctaText.textContent = d.cta;
+    ringEl.setAttribute("data-platform", platform);
+    popup.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeSocial() {
+    popup.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  document.querySelectorAll(".hero-social-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      openSocial(btn.getAttribute("data-social"));
+    });
+  });
+
+  popup.querySelector(".social-popup__close").addEventListener("click", closeSocial);
+  popup.querySelector(".social-popup__backdrop").addEventListener("click", closeSocial);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && popup.getAttribute("aria-hidden") === "false") {
+      closeSocial();
+    }
+  });
+})();
