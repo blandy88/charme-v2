@@ -133,19 +133,57 @@ class AIFragranceFinder {
   }
   
   init() {
-    this.loadCatalog();
     this.createModal();
     this.bindEvents();
+    // Wait for bottle renders to exist before loading catalog
+    if (document.querySelector('.bottle-render')) {
+      this.loadCatalog();
+    } else {
+      document.addEventListener('bottleRendersReady', () => this.loadCatalog(), { once: true });
+      // Fallback: load after timeout if event never fires
+      setTimeout(() => {
+        if (!this.catalog.length) this.loadCatalog();
+      }, 3000);
+    }
   }
   
   loadCatalog() {
+    let source = [];
     if (window.FRAGRANCE_CATALOG_DATA) {
-      this.catalog = window.FRAGRANCE_CATALOG_DATA;
+      source = window.FRAGRANCE_CATALOG_DATA;
     } else if (window.FRAGRANCE_CATALOG) {
-      this.catalog = window.FRAGRANCE_CATALOG;
-    } else {
-      this.catalog = [];
+      source = window.FRAGRANCE_CATALOG;
     }
+    
+    // Build lookup of perfume names that have DOM sections with images
+    const sections = document.querySelectorAll('[id]');
+    const nameToSection = {};
+    for (const sec of sections) {
+      const nameEl = sec.querySelector('.product-name');
+      if (nameEl) {
+        const n = nameEl.textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (n) nameToSection[n] = sec;
+      }
+    }
+    
+    // Filter catalog to only perfumes with sections (have images)
+    this.catalog = source.filter(p => {
+      const key = p.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return nameToSection[key];
+    });
+    
+    // Build name→image cache for fast lookup
+    this.imageCache = {};
+    for (const p of this.catalog) {
+      const key = p.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const sec = nameToSection[key];
+      const img = sec.querySelector('.bottle-render__real') ||
+                  sec.querySelector('.bottle-render__template') ||
+                  sec.querySelector('img');
+      this.imageCache[p.name] = img ? img.src : null;
+    }
+    
+    console.log(`Scent Profiler: ${this.catalog.length} perfumes with images loaded`);
   }
   
   createModal() {
@@ -506,6 +544,7 @@ class AIFragranceFinder {
       } else {
         score += 2.5;
       }
+
       
       // Clamp to meaningful range
       const matchPct = Math.min(97, Math.max(18, Math.round(score)));
@@ -537,7 +576,7 @@ class AIFragranceFinder {
       return `
         <div class="sp-result-card" data-perfume="${perfume.name.toLowerCase()}" style="--delay: ${i * 0.1}s">
           <div class="sp-result-image">
-            ${image ? `<img src="${image}" alt="${perfume.name}">` : `<div class="sp-result-placeholder">${perfume.name.charAt(0)}</div>`}
+            ${image ? `<img src="${image}" alt="${perfume.name}">` : `<div class="sp-result-placeholder"><span>${perfume.name.split(' ').map(w => w[0]).join('').substring(0, 3)}</span><small>${perfume.brand}</small></div>`}
             <div class="sp-result-badge">${r.matchPct}% Match</div>
           </div>
           <div class="sp-result-info">
@@ -551,32 +590,31 @@ class AIFragranceFinder {
   }
   
   getPerfumeImage(name) {
-    const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const possibleImages = [
-      `images/${cleanName}.jpg`,
-      `images/${cleanName}.png`,
-      `images/${cleanName}.webp`,
-      `images/bottle-${cleanName}.jpg`,
-      `images/bottle-${cleanName}.png`
-    ];
-    return possibleImages[0] || null;
+    return this.imageCache[name] || null;
   }
   
   scrollToPerfume(card) {
     const perfumeName = card.dataset.perfume;
-    const section = document.querySelector(`[data-fragrance="${perfumeName}"]`) ||
-                    document.querySelector(`.${perfumeName}-section`);
+    const sections = document.querySelectorAll('[id]');
+    let target = null;
+    for (const section of sections) {
+      const nameEl = section.querySelector('.product-name');
+      if (nameEl && nameEl.textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '') === perfumeName.replace(/[^a-z0-9]/g, '')) {
+        target = section;
+        break;
+      }
+    }
     
-    if (section) {
+    if (target) {
       this.close();
       setTimeout(() => {
-        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        section.style.transition = 'all 0.5s ease';
-        section.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.3)';
-        section.style.transform = 'scale(1.02)';
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.transition = 'all 0.5s ease';
+        target.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.3)';
+        target.style.transform = 'scale(1.02)';
         setTimeout(() => {
-          section.style.boxShadow = '';
-          section.style.transform = '';
+          target.style.boxShadow = '';
+          target.style.transform = '';
         }, 2000);
       }, 300);
     }

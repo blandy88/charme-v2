@@ -16127,10 +16127,24 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2520 50%, #1a1a1a 100%);
     font-family: 'Cormorant Garamond', serif;
-    font-size: 48px;
+}
+.sp-result-placeholder span {
+    font-size: 32px;
+    font-weight: 700;
+    color: rgba(201, 169, 78, 0.35);
+    letter-spacing: 4px;
+}
+.sp-result-placeholder small {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
     color: rgba(201, 169, 78, 0.2);
 }
 
