@@ -405,87 +405,97 @@ class AIFragranceFinder {
       const desc = (perfume.description || '').toLowerCase();
       const allText = notes.join(' ') + ' ' + name + ' ' + desc;
       
-      // 40% — Note matching
-      let noteScore = 0;
+      // 40% — Note matching (weighted: more matches = exponentially better)
+      let noteHits = 0;
+      const matchedNoteNames = [];
       preferredNotes.forEach(pref => {
-        const noteMatches = notes.some(n => n.includes(pref) || pref.includes(n));
-        if (noteMatches) noteScore += 1;
+        if (notes.some(n => n.includes(pref) || pref.includes(n))) {
+          noteHits++;
+          matchedNoteNames.push(pref);
+        }
       });
-      const noteMatchPct = preferredNotes.length > 0 ? noteScore / preferredNotes.length : 0;
-      score += noteMatchPct * 40;
+      const noteRatio = preferredNotes.length > 0 ? noteHits / preferredNotes.length : 0;
+      // Exponential weighting: 1/3 = 0.5, 2/3 = 0.85, 3/3 = 1.0
+      const noteScore = Math.pow(noteRatio, 0.6);
+      score += noteScore * 40;
       
-      // 25% — Family matching
+      // 25% — Family matching (strict field match + ingredient hints)
       let familyScore = 0;
+      const pf = (perfume.family || '').toLowerCase();
+      const familyMap = {
+        oriental: ['amber', 'oriental', 'vanilla', 'spicy warm', 'woody oriental'],
+        woody: ['woody', 'wood', 'oud', 'vetiver'],
+        floral: ['floral', 'rose', 'jasmine'],
+        fresh: ['fresh', 'citrus', 'aquatic', 'aromatic'],
+        sweet: ['sweet', 'gourmand', 'vanilla']
+      };
       if (family !== 'any') {
-        const perfumeFamily = (perfume.family || '').toLowerCase();
-        if (perfumeFamily.includes(family)) {
+        if (pf.includes(family)) {
           familyScore = 1;
-        } else if (family === 'oriental' && (allText.includes('amber') || allText.includes('vanilla') || allText.includes('oriental'))) {
-          familyScore = 0.7;
-        } else if (family === 'sweet' && (allText.includes('vanilla') || allText.includes('praline') || allText.includes('caramel'))) {
-          familyScore = 0.7;
-        } else if (family === 'woody' && (allText.includes('wood') || allText.includes('cedar') || allText.includes('sandalwood'))) {
-          familyScore = 0.7;
-        } else if (family === 'floral' && (allText.includes('floral') || allText.includes('rose') || allText.includes('jasmine'))) {
-          familyScore = 0.7;
-        } else if (family === 'fresh' && (allText.includes('fresh') || allText.includes('citrus') || allText.includes('aquatic'))) {
-          familyScore = 0.7;
+        } else {
+          const hints = familyMap[family] || [];
+          const hintMatch = hints.some(h => pf.includes(h) || allText.includes(h));
+          familyScore = hintMatch ? 0.5 : 0;
         }
       } else {
-        familyScore = 0.5;
+        familyScore = 0.4;
       }
       score += familyScore * 25;
       
-      // 15% — Season matching
+      // 15% — Season matching (use family field as primary signal)
       let seasonScore = 0;
       if (season !== 'any') {
-        const isWinter = allText.includes('winter') || allText.includes('warm') || allText.includes('spicy') || allText.includes('oriental') || allText.includes('woody');
-        const isSummer = allText.includes('summer') || allText.includes('fresh') || allText.includes('light') || allText.includes('aquatic');
-        const isAutumn = allText.includes('autumn') || allText.includes('fall') || allText.includes('cozy') || allText.includes('comfort');
-        const isSpring = allText.includes('spring') || allText.includes('light') || allText.includes('fresh') || allText.includes('floral');
+        const warmSeasons = ['winter', 'autumn'];
+        const coolSeasons = ['summer', 'spring'];
+        const isWarmPerfume = pf.includes('woody') || pf.includes('oriental') || pf.includes('amber') || pf.includes('warm') || pf.includes('sweet');
+        const isCoolPerfume = pf.includes('fresh') || pf.includes('citrus') || pf.includes('aquatic') || pf.includes('aromatic');
+        const isLightPerfume = pf.includes('fresh') || pf.includes('floral');
         
-        if (season === 'winter' && isWinter) seasonScore = 1;
-        else if (season === 'summer' && isSummer) seasonScore = 1;
-        else if (season === 'autumn' && (isAutumn || isWinter)) seasonScore = 0.8;
-        else if (season === 'spring' && (isSpring || isSummer)) seasonScore = 0.8;
-        else seasonScore = 0.3;
+        if (warmSeasons.includes(season) && isWarmPerfume) seasonScore = 1;
+        else if (coolSeasons.includes(season) && isCoolPerfume) seasonScore = 1;
+        else if (season === 'autumn' && isWarmPerfume) seasonScore = 0.8;
+        else if (season === 'spring' && isLightPerfume) seasonScore = 0.7;
+        else if (season === 'spring' && isCoolPerfume) seasonScore = 0.5;
+        else seasonScore = 0.15;
       } else {
-        seasonScore = 0.5;
+        seasonScore = 0.4;
       }
       score += seasonScore * 15;
       
       // 10% — Gender matching
       let genderScore = 0;
-      const perfumeGender = (perfume.gender || '').toLowerCase();
-      const perfumeAudience = (perfume.audience || '').toLowerCase();
+      const pg = (perfume.gender || '').toLowerCase();
+      const pa = (perfume.audience || '').toLowerCase();
       if (gender === 'any' || gender === 'mixte') {
-        genderScore = 0.8;
-      } else if (perfumeGender.includes(gender) || perfumeAudience.includes(gender)) {
+        genderScore = 0.6;
+      } else if (pg.includes(gender) || pa.includes(gender)) {
         genderScore = 1;
-      } else if (perfumeGender.includes('mixte') || perfumeAudience.includes('mixte') || perfumeGender.includes('unisex')) {
-        genderScore = 0.7;
+      } else if (pg.includes('mixte') || pa.includes('mixte')) {
+        genderScore = 0.5;
       } else {
-        genderScore = 0.2;
+        genderScore = 0;
       }
       score += genderScore * 10;
       
-      // 10% — Dislike exclusion
+      // 10% — Dislike exclusion (strong penalty)
       let dislikeScore = 1;
       if (!dislikes.includes('none')) {
         dislikes.forEach(dislike => {
-          if (allText.includes(dislike)) {
-            dislikeScore -= 0.3;
-          }
+          if (allText.includes(dislike)) dislikeScore -= 0.4;
         });
         dislikeScore = Math.max(0, dislikeScore);
       }
       score += dislikeScore * 10;
       
+      // Normalize to 0-100 with meaningful spread
+      const matchPct = Math.min(98, Math.max(20, Math.round(score)));
+      
       return {
         perfume,
-        score: Math.round(score),
+        score,
         notes,
-        matchPct: Math.round(score)
+        matchedNoteNames,
+        matchPct
       };
     });
     
