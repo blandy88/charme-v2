@@ -554,15 +554,20 @@ class AIFragranceFinder {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initScentProfiler);
+} else {
+  initScentProfiler();
+}
+
+function initScentProfiler() {
   try {
-    if (!(window.aiFragranceFinder instanceof AIFragranceFinder)) {
+    if (!(window.scentProfiler instanceof AIFragranceFinder)) {
       window.scentProfiler = new AIFragranceFinder();
-      window.aiFragranceFinder = window.scentProfiler;
     }
   } catch (e) {
     console.error('Error creating Scent Profiler:', e);
   }
-});
+}
 
 window.AIFragranceFinder = AIFragranceFinder;
