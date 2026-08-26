@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "#quickSearchDropdown.show",
           ".language-dropdown.active",
           ".notification-dropdown.show",
-          ".ai-finder-dropdown.show",
+          "#scent-profiler-modal:not(.hidden)",
           ".ingredient-modal.show",
           ".auth-modal.show",
           ".modal.show",
