@@ -572,6 +572,7 @@
     "[class$='-note-item']",
     ".crystal-card",
     "[class$='-crystal-card']",
+    ".elves-crystal-card",
     "[class*='-noir-card']",
     "[class*='-heritage-tag']",
     ".chip",
