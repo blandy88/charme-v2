@@ -21942,7 +21942,7 @@ window.testClickOnElement = function() {
     document.body.style.overflow = "";
   }
 
-  document.querySelectorAll(".hero-social-btn").forEach(function (btn) {
+  document.querySelectorAll(".hero-social-pill").forEach(function (btn) {
     btn.addEventListener("click", function () {
       openSocial(btn.getAttribute("data-social"));
     });

@@ -4199,72 +4199,114 @@ html[data-theme="light"] .hero-map {
         0 4px 12px rgba(28, 25, 22, 0.12);
 }
 
-/* ── Hero social row ── */
+/* ── Hero social row — branded pill buttons ── */
 .hero-social-row {
     display: flex;
-    gap: 10px;
-    padding: 0 4px;
+    flex-direction: column;
+    gap: 8px;
     opacity: 0;
     transform: translateY(16px);
     animation: contactCardIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
 }
-.hero-social-btn {
-    position: relative;
+.hero-social-pill {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #fff;
     border: none;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: rgba(255, 255, 255, 0.7);
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
 }
-.hero-social-btn svg {
-    width: 18px;
-    height: 18px;
+.hero-social-pill::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.35s ease;
 }
-.hero-social-btn:hover {
-    transform: translateY(-2px) scale(1.08);
-    color: #fff;
+.hero-social-pill:hover {
+    transform: translateY(-2px) scale(1.02);
 }
-.hero-social-btn[data-social="facebook"]:hover {
-    background: rgba(24, 119, 242, 0.25);
-    border-color: rgba(24, 119, 242, 0.4);
-    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.3);
+.hero-social-pill:active {
+    transform: translateY(0) scale(0.98);
 }
-.hero-social-btn[data-social="instagram"]:hover {
-    background: linear-gradient(135deg, rgba(225, 48, 108, 0.25), rgba(131, 58, 180, 0.25));
-    border-color: rgba(225, 48, 108, 0.4);
-    box-shadow: 0 6px 20px rgba(225, 48, 108, 0.25);
+
+/* Facebook */
+.hero-social-pill--facebook {
+    background: #1877F2;
+    box-shadow: 0 4px 16px rgba(24, 119, 242, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
 }
-.hero-social-btn:active {
-    transform: translateY(0) scale(0.95);
+.hero-social-pill--facebook::before {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
 }
-html[data-theme="light"] .hero-social-btn {
-    background: rgba(0, 0, 0, 0.04);
-    border-color: rgba(0, 0, 0, 0.08);
-    color: rgba(0, 0, 0, 0.5);
+.hero-social-pill--facebook:hover {
+    box-shadow: 0 8px 28px rgba(24, 119, 242, 0.45), inset 0 1px 0 rgba(255,255,255,0.2);
 }
-html[data-theme="light"] .hero-social-btn:hover {
-    color: #fff;
+.hero-social-pill--facebook:hover::before {
+    opacity: 1;
 }
-html[data-theme="light"] .hero-social-btn[data-social="facebook"]:hover {
-    background: rgba(24, 119, 242, 0.9);
-    border-color: rgba(24, 119, 242, 0.9);
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.35);
+
+/* Instagram */
+.hero-social-pill--instagram {
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    box-shadow: 0 4px 16px rgba(225, 48, 108, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
 }
-html[data-theme="light"] .hero-social-btn[data-social="instagram"]:hover {
-    background: linear-gradient(135deg, #e1306c, #833ab4);
-    border-color: transparent;
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(225, 48, 108, 0.35);
+.hero-social-pill--instagram::before {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+}
+.hero-social-pill--instagram:hover {
+    box-shadow: 0 8px 28px rgba(225, 48, 108, 0.45), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.hero-social-pill--instagram:hover::before {
+    opacity: 1;
+}
+
+.hero-social-pill__icon {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+.hero-social-pill__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+}
+.hero-social-pill__label {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    opacity: 0.75;
+    line-height: 1.2;
+}
+.hero-social-pill__platform {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+}
+
+/* Light mode pills */
+html[data-theme="light"] .hero-social-pill--facebook {
+    box-shadow: 0 4px 16px rgba(24, 119, 242, 0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+html[data-theme="light"] .hero-social-pill--facebook:hover {
+    box-shadow: 0 8px 28px rgba(24, 119, 242, 0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+html[data-theme="light"] .hero-social-pill--instagram {
+    box-shadow: 0 4px 16px rgba(225, 48, 108, 0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+html[data-theme="light"] .hero-social-pill--instagram:hover {
+    box-shadow: 0 8px 28px rgba(225, 48, 108, 0.4), inset 0 1px 0 rgba(255,255,255,0.25);
 }
 
 /* ── Social popup ── */
