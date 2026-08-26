@@ -556,8 +556,9 @@ class AIFragranceFinder {
 
 document.addEventListener('DOMContentLoaded', () => {
   try {
-    if (typeof window.aiFragranceFinder === 'undefined') {
-      window.aiFragranceFinder = new AIFragranceFinder();
+    if (!(window.aiFragranceFinder instanceof AIFragranceFinder)) {
+      window.scentProfiler = new AIFragranceFinder();
+      window.aiFragranceFinder = window.scentProfiler;
     }
   } catch (e) {
     console.error('Error creating Scent Profiler:', e);
