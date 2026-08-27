@@ -21887,6 +21887,16 @@ window.testClickOnElement = function() {
     img.classList.add("bottle-render__real");
     wrap.insertBefore(img, wrap.querySelector(".bottle-render__sticker"));
 
+    // Add a small always-visible thumbnail of the real fragrance photo in the
+    // bottom-right corner of the template bottle.
+    var thumb = document.createElement("img");
+    thumb.className = "bottle-render__thumb";
+    thumb.src = img.getAttribute("src");
+    thumb.alt = name;
+    thumb.loading = "lazy";
+    thumb.decoding = "async";
+    img.after(thumb);
+
     section.dataset.bottleRendered = "1";
   }
 

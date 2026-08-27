@@ -27008,6 +27008,28 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 .bottle-render:hover .bottle-render__sticker { opacity: 0; }
 
+/* Small always-visible real-fragrance thumbnail, bottom-right of template */
+.bottle-render__thumb {
+  position: absolute;
+  right: 3.5cqi;
+  bottom: 3.5cqi;
+  width: 22cqi;
+  max-width: 34%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.65);
+  opacity: 1;
+  transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+  background: #fff;
+}
+.bottle-render:hover .bottle-render__thumb {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
 /* Sticker zone — same relative coords for both templates */
 .bottle-render__sticker {
   position: absolute;
