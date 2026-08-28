@@ -27011,14 +27011,13 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 /* Small always-visible real-fragrance thumbnail, bottom-right of template */
 .bottle-render__thumb {
   position: absolute;
-  right: 3.5cqi;
-  bottom: 3.5cqi;
-  width: 22cqi;
-  max-width: 34%;
+  right: 4cqi;
+  bottom: 4cqi;
+  width: 17cqi;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.65);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.9);
   opacity: 1;
   transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
   pointer-events: none;
@@ -27071,17 +27070,24 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 
 /* Bottle renders inside the all-fragrances grid */
+/* Cards that contain a bottle render: let the render define its own size so
+   the tile hugs the bottle (minimal height) instead of stretching to 3/4. */
+.perfume-grid-media:has(.perfume-grid-bottle) {
+    aspect-ratio: auto !important;
+    padding: 10px 12px !important;
+}
+
 .perfume-grid-media .perfume-grid-bottle {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 }
 
 .perfume-grid-media .perfume-grid-bottle .bottle-render {
-    height: 100% !important;
-    width: auto !important;
+    width: 100% !important;
+    height: auto !important;
     max-width: 100% !important;
     margin-inline: auto !important;
 }
