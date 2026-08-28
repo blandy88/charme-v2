@@ -2807,7 +2807,7 @@ app.get("/api/admin/loyalty/profiles/:cardId", authenticateToken, requireAdmin, 
            FROM customer_purchases
            WHERE fragrance_family IN (${familyPlaceholders})
              AND LOWER(perfume_name) NOT IN (${namePlaceholders})
-           GROUP BY LOWER(perfume_name)
+           GROUP BY perfume_name, brand, fragrance_family, audience
            ORDER BY freq DESC
            LIMIT 6`,
           [...topFamilies, ...purchasedNames],
