@@ -11786,7 +11786,9 @@ async function loadCustomerProfile(cardId) {
     renderProfilePreferences(data.preferences);
     renderProfileBrands(data.topBrands);
     renderProfileSimilar(data.purchases);
-    renderProfileSuggestions(data.suggestions);
+    const similarGrid = document.getElementById("cpSimilarGrid");
+    const hasSimilar = similarGrid && similarGrid.childElementCount > 0;
+    renderProfileSuggestions(data.suggestions, { fallbackOnly: hasSimilar });
     renderProfilePurchases(data.purchases, cardId);
 
     loading.style.display = "none";
@@ -11835,7 +11837,7 @@ function renderProfileStats(stats) {
     </div>
     <div class="cp-stat-card">
       <div class="cp-stat-value">${stats.favoriteBrand || "—"}</div>
-      <div class="cp-stat-label">Marque favorie</div>
+      <div class="cp-stat-label">Marque favorite</div>
     </div>
   `;
 }
@@ -11881,10 +11883,11 @@ function renderProfileBrands(brands) {
   ).join("");
 }
 
-function renderProfileSuggestions(suggestions) {
+function renderProfileSuggestions(suggestions, opts) {
   const section = document.getElementById("cpSuggestions");
   const grid = document.getElementById("cpSuggestionGrid");
-  if (!suggestions || suggestions.length === 0) {
+  const fallbackOnly = opts && opts.fallbackOnly;
+  if (!suggestions || suggestions.length === 0 || fallbackOnly) {
     section.style.display = "none";
     return;
   }
@@ -11926,18 +11929,46 @@ function cpBuildCatalogMap() {
 }
 
 const CP_FAMILY_TRAITS = {
-  "Woody": ["confiant", "intemporel", "élégant"],
-  "Floral": ["romantique", "raffiné", "sensible"],
-  "Oriental": ["mystérieux", "charismatique", "sensuel"],
-  "Fresh": ["dynamique", "sportif", "pétillant"],
-  "Citrus": ["optimiste", "rayonnant", "vif"],
-  "Gourmand": ["chaleureux", "gourmand", "attachant"],
-  "Aromatic": ["classique", "structuré", "sûr de lui"],
-  "Chypre": ["sophistiqué", "audacieux", "intemporel"],
-  "Aldehyde": ["glamour", "élégant", "raffiné"],
-  "Fougère": ["classique", "viril", "élégant"],
-  "Other": ["éclectique", "curieux", "singulier"],
+  "Woody": { m: ["confiant", "intemporel", "élégant"], f: ["confiante", "intemporelle", "élégante"], p: ["confiants", "intemporels", "élégants"] },
+  "Floral": { m: ["romantique", "raffiné", "sensible"], f: ["romantique", "raffinée", "sensible"], p: ["romantiques", "raffinés", "sensibles"] },
+  "Oriental": { m: ["mystérieux", "charismatique", "sensuel"], f: ["mystérieuse", "charismatique", "sensuelle"], p: ["mystérieux", "charismatiques", "sensuels"] },
+  "Fresh": { m: ["dynamique", "sportif", "pétillant"], f: ["dynamique", "sportive", "pétillante"], p: ["dynamiques", "sportifs", "pétillants"] },
+  "Citrus": { m: ["optimiste", "rayonnant", "vif"], f: ["optimiste", "rayonnante", "vive"], p: ["optimistes", "rayonnants", "vifs"] },
+  "Gourmand": { m: ["chaleureux", "gourmand", "attachant"], f: ["chaleureuse", "gourmande", "attachante"], p: ["chaleureux", "gourmands", "attachants"] },
+  "Aromatic": { m: ["classique", "structuré", "sûr de lui"], f: ["classique", "structurée", "sûre d'elle"], p: ["classiques", "structurés", "sûrs d'eux"] },
+  "Chypre": { m: ["sophistiqué", "audacieux", "intemporel"], f: ["sophistiquée", "audacieuse", "intemporelle"], p: ["sophistiqués", "audacieux", "intemporels"] },
+  "Aldehyde": { m: ["glamour", "élégant", "raffiné"], f: ["glamour", "élégante", "raffinée"], p: ["glamour", "élégants", "raffinés"] },
+  "Fougère": { m: ["classique", "viril", "élégant"], f: ["classique", "élégante", "racée"], p: ["classiques", "virils", "élégants"] },
+  "Other": { m: ["éclectique", "curieux", "singulier"], f: ["éclectique", "curieuse", "singulière"], p: ["éclectiques", "curieux", "singuliers"] },
 };
+
+function cpInferGender(purchases) {
+  const counts = { men: 0, women: 0 };
+  (purchases || []).forEach((p) => {
+    if (p.audience === "men") counts.men += 1;
+    else if (p.audience === "women") counts.women += 1;
+  });
+  if (counts.women > counts.men && counts.women > 0) return "women";
+  if (counts.men > counts.women && counts.men > 0) return "men";
+  return null;
+}
+
+function cpNoteCounts(purchases, catalogMap) {
+  const noteCount = {};
+  (purchases || []).forEach((p) => {
+    const cat = catalogMap[cpNormalizeName(p.perfume_name)];
+    if (cat && Array.isArray(cat.ingredients)) {
+      cat.ingredients.forEach((n) => {
+        const key = String(n).trim();
+        if (key) noteCount[key] = (noteCount[key] || 0) + 1;
+      });
+    }
+  });
+  return Object.entries(noteCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([n]) => n);
+}
 
 function renderProfilePersonality(data) {
   const section = document.getElementById("cpPersonality");
@@ -11956,56 +11987,54 @@ function renderProfilePersonality(data) {
   const firstName = (data.card && data.card.name) ? String(data.card.name).trim().split(/\s+/)[0] : "Client";
 
   const topFamily = stats.topFamily || (prefs[0] && prefs[0].family) || null;
-  const topFamilyPct = prefs.find((p) => p.family === topFamily)?.percentage || null;
-  const traits = topFamily ? (CP_FAMILY_TRAITS[topFamily] || []) : [];
+  const topFamilyPct = prefs.find((p) => p.family === topFamily)?.percentage ?? null;
+  const gender = cpInferGender(purchases);
+  const traits = topFamily ? (CP_FAMILY_TRAITS[topFamily] || CP_FAMILY_TRAITS["Other"]) : null;
 
-  const noteCount = {};
-  purchases.forEach((p) => {
-    const cat = catalogMap[cpNormalizeName(p.perfume_name)];
-    if (cat && Array.isArray(cat.ingredients)) {
-      cat.ingredients.forEach((n) => {
-        const key = String(n).toLowerCase();
-        noteCount[key] = (noteCount[key] || 0) + 1;
-      });
-    }
-  });
-  const topNotes = Object.entries(noteCount)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([n]) => n);
-
+  const topNotes = cpNoteCounts(purchases, catalogMap);
   const brands = (data.topBrands || []).slice(0, 3).map((b) => b.brand);
-  const boughtNames = purchases.slice(0, 5).map((p) => p.perfume_name);
+  const lastPurchase = purchases[0]; // purchases are newest-first from the server
 
   let html = "";
-  if (topFamily || topNotes.length) {
-    const traitChips = traits.map((t) => `<span class="cp-trait-chip">${window.escapeHTML(t)}</span>`).join("");
-    html += `<div class="cp-personality-tagline">
-        ${window.escapeHTML(firstName)} est un(e) client(e) ${traits.length ? traits.slice(0, 2).join(" et ") : "passionné(e)"}.
-      </div>
-      ${traitChips ? `<div class="cp-trait-chips">${traitChips}</div>` : ""}`;
+
+  // Tagline — describes taste so it stays correct for any gender.
+  const familyLabel = topFamily ? ` la famille <strong>${window.escapeHTML(topFamily)}</strong>${topFamilyPct != null ? ` (${topFamilyPct}%)` : ""}` : "";
+  let open, close;
+  if (gender === "women") { open = `${window.escapeHTML(firstName)} est une cliente`; close = familyLabel ? `, fidèle à${familyLabel}.` : "."; }
+  else if (gender === "men") { open = `${window.escapeHTML(firstName)} est un client`; close = familyLabel ? `, fidèle à${familyLabel}.` : "."; }
+  else { open = `${window.escapeHTML(firstName)} aime les parfums`; close = familyLabel ? `, fidèle à${familyLabel}.` : "."; }
+  if (traits) {
+    const taglineTraits = gender === "women" ? traits.f : gender === "men" ? traits.m : traits.p;
+    html += `<div class="cp-personality-tagline">${open} ${taglineTraits.slice(0, 2).join(" et ")}${close}</div>`;
+  } else {
+    html += `<div class="cp-personality-tagline">${open}${close}</div>`;
+  }
+  if (traits) {
+    const chips = gender === "women" ? traits.f : traits.m;
+    html += `<div class="cp-trait-chips">${chips.map((t) => `<span class="cp-trait-chip">${window.escapeHTML(t)}</span>`).join("")}</div>`;
   }
 
   const facts = [];
   if (stats.totalPurchases) facts.push(`<strong>${stats.totalPurchases}</strong> parfum${stats.totalPurchases > 1 ? "s" : ""} acheté${stats.totalPurchases > 1 ? "s" : ""}`);
   if (stats.totalSpent > 0) facts.push(`<strong>${stats.totalSpent.toFixed(2)} €</strong> dépensés`);
-  if (topFamily) facts.push(`famille préférée : <strong>${window.escapeHTML(topFamily)}</strong>${topFamilyPct != null ? ` (${topFamilyPct}%)` : ""}`);
   if (brands.length) facts.push(`marque${brands.length > 1 ? "s" : ""} favorite${brands.length > 1 ? "s" : ""} : <strong>${window.escapeHTML(brands.join(", "))}</strong>`);
   if (facts.length) html += `<p class="cp-personality-facts">${facts.join(" · ")}</p>`;
 
   if (topNotes.length) {
-    html += `<p class="cp-personality-notes">Profils olfactifs récurrents : ${topNotes.map((n) => `<span class="cp-note-tag">${window.escapeHTML(n)}</span>`).join(" ")}</p>`;
+    html += `<p class="cp-personality-notes">Notes de prédilection : ${topNotes.map((n) => `<span class="cp-note-tag">${window.escapeHTML(n)}</span>`).join(" ")}</p>`;
   }
 
-  if (boughtNames.length) {
-    html += `<p class="cp-personality-boughts">Achats récents : ${boughtNames.map((n) => window.escapeHTML(n)).join(", ")}.</p>`;
+  // A factual, real client description derived from their purchases.
+  const recentNames = purchases.slice(0, 2).map((p) => p.perfume_name);
+  const descBits = [];
+  if (topFamily) descBits.push(`sa signature olfactive reste ${topFamily.toLowerCase()}.`);
+  const catLast = lastPurchase ? catalogMap[cpNormalizeName(lastPurchase.perfume_name)] : null;
+  if (catLast) {
+    descBits.push(`Son achat le plus récent, <strong>${window.escapeHTML(catLast.name)}</strong> (${window.escapeHTML(catLast.brand || "")}), s'articule autour de ${catLast.ingredients.slice(0, 3).map((i) => window.escapeHTML(String(i).toLowerCase())).join(", ")}.`);
+  } else if (recentNames.length) {
+    descBits.push(`Ses derniers achats : ${recentNames.map((n) => window.escapeHTML(n)).join(", ")}.`);
   }
-
-  const firstBought = purchases[0];
-  const catOfFirst = catalogMap[cpNormalizeName(firstBought.perfume_name)];
-  if (catOfFirst && catOfFirst.description) {
-    html += `<p class="cp-personality-desc"><em>${window.escapeHTML(catOfFirst.description)}</em> — ${window.escapeHTML(catOfFirst.name)}, ${window.escapeHTML(catOfFirst.brand || "")}.</p>`;
-  }
+  if (descBits.length) html += `<p class="cp-personality-desc">${window.escapeHTML(firstName)} construit sa collection parfumée par affinité de famille — ${descBits.join(" ")}</p>`;
 
   if (!html) {
     section.style.display = "none";
@@ -12016,6 +12045,16 @@ function renderProfilePersonality(data) {
 }
 
 // ─── Similar fragrances (real recommendations from the catalog) ───
+
+function cpNoteSimilarity(aNotes, bNotes) {
+  const A = new Set(aNotes);
+  const B = new Set(bNotes);
+  if (A.size === 0 && B.size === 0) return 0;
+  let shared = 0;
+  A.forEach((n) => { if (B.has(n)) shared += 1; });
+  const union = new Set([...A, ...B]).size;
+  return union ? shared / union : 0;
+}
 
 function renderProfileSimilar(purchases) {
   const section = document.getElementById("cpSimilar");
@@ -12040,17 +12079,20 @@ function renderProfileSimilar(purchases) {
     if (!key || boughtKeys.has(key)) return;
     const fNotes = (f.ingredients || []).map((n) => String(n).toLowerCase());
     const fFam = rpFamilyFromCatalogFamily(f.family);
-    let score = 0;
+    let bestSim = 0;
     boughtEntries.forEach((b) => {
-      if (rpFamilyFromCatalogFamily(b.family) === fFam) score += 3;
+      const bFam = rpFamilyFromCatalogFamily(b.family);
       const bNotes = (b.ingredients || []).map((n) => String(n).toLowerCase());
-      const shared = bNotes.filter((n) => fNotes.includes(n));
-      score += shared.length * 2;
+      const famHit = fFam === bFam ? 1 : 0;
+      const noteSim = cpNoteSimilarity(bNotes, fNotes);
+      const sim = famHit * 0.55 + noteSim * 0.45;
+      if (sim > bestSim) bestSim = sim;
     });
-    if (score > 0) scored.push({ f, score });
+    const pct = Math.round(bestSim * 100);
+    if (pct >= 16) scored.push({ f, pct });
   });
 
-  scored.sort((a, b) => b.score - a.score);
+  scored.sort((a, b) => b.pct - a.pct);
   const top = scored.slice(0, 8);
   if (top.length === 0) {
     section.style.display = "none";
@@ -12059,15 +12101,15 @@ function renderProfileSimilar(purchases) {
 
   section.style.display = "block";
   grid.innerHTML = top
-    .map(({ f, score }) => {
-      const size = Array.isArray(f.sizes) && f.sizes.length ? ` · ${window.escapeHTML(f.sizes[0].size || "")} ${f.sizes[0].price != null ? "· " + f.sizes[0].price + " €" : ""}` : "";
+    .map(({ f, pct }) => {
+      const size = Array.isArray(f.sizes) && f.sizes.length ? `${window.escapeHTML(f.sizes[0].size || "")}${f.sizes[0].price != null ? ` · ${f.sizes[0].price} €` : ""}` : "";
       return `
       <div class="cp-suggestion-card" title="${window.escapeHTML(f.description || f.family || "")}">
         <div class="cp-sug-name">${window.escapeHTML(f.name)}</div>
         <div class="cp-sug-brand">${window.escapeHTML(f.brand || "")}</div>
         <div class="cp-sug-meta">
           <span class="cp-sug-family">${window.escapeHTML(f.family || "")}</span>
-          <span class="cp-sug-audience">${Math.round(score)}% sim.</span>
+          <span class="cp-sug-audience">${pct}% sim.</span>
         </div>
         ${size ? `<div class="cp-sug-size">${size}</div>` : ""}
       </div>
