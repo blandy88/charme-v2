@@ -14,7 +14,7 @@
         <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" /></noscript>
 
         <!-- Stylesheets -->
-        <link rel="stylesheet" href="styles.css?v=20260826g" />
+        <link rel="stylesheet" href="styles.css?v=20260827a" />
         <!-- Perfume profile CSS: loaded non-render-blocking via media trick -->
         
         
@@ -3899,6 +3899,11 @@
                         <div class="cp-header" id="cpHeader"></div>
                         <!-- Stats row -->
                         <div class="cp-stats" id="cpStats"></div>
+                        <!-- Personality profile -->
+                        <div class="cp-section" id="cpPersonality" style="display:none;">
+                            <h3>Personnalité & Description</h3>
+                            <div class="cp-personality" id="cpPersonalityBody"></div>
+                        </div>
                         <!-- Preferences chart -->
                         <div class="cp-section" id="cpPreferences" style="display:none;">
                             <h3>Préférences</h3>
@@ -3908,6 +3913,11 @@
                         <div class="cp-section" id="cpBrands" style="display:none;">
                             <h3>Marques favorites</h3>
                             <div class="cp-brand-tags" id="cpBrandTags"></div>
+                        </div>
+                        <!-- Similar fragrances (from catalog) -->
+                        <div class="cp-section" id="cpSimilar" style="display:none;">
+                            <h3>Fragrances similaires recommandées</h3>
+                            <div class="cp-suggestion-grid" id="cpSimilarGrid"></div>
                         </div>
                         <!-- Suggestions -->
                         <div class="cp-section" id="cpSuggestions" style="display:none;">
@@ -3939,14 +3949,19 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="rpCardId" />
+                    <input type="hidden" id="rpCatalogFragranceIndex" value="-1" />
                     <p class="rp-client-name" id="rpClientName"></p>
                     <div class="form-group">
-                        <label for="rpPerfumeName">Nom du parfum <em>*</em></label>
-                        <input type="text" id="rpPerfumeName" placeholder="Ex. Aventus" maxlength="150" />
+                        <label for="rpPerfumeName">Parfum acheté <em>*</em></label>
+                        <div class="rp-catalog-wrap">
+                            <input type="text" id="rpPerfumeName" placeholder="Rechercher dans le catalogue..." maxlength="150" autocomplete="off" />
+                            <div class="rp-catalog-dropdown" id="rpCatalogDropdown" style="display:none;"></div>
+                        </div>
+                        <div class="rp-catalog-hint" id="rpCatalogHint"></div>
                     </div>
                     <div class="form-group">
                         <label for="rpBrand">Marque</label>
-                        <input type="text" id="rpBrand" placeholder="Ex. Creed" maxlength="100" />
+                        <input type="text" id="rpBrand" placeholder="Auto-rempli depuis le catalogue" maxlength="100" />
                     </div>
                     <div class="rp-field-row">
                         <div class="form-group">
@@ -3993,7 +4008,7 @@
                 </div>
                 <div class="modal-actions">
                     <button class="btn-secondary" id="rpCancelBtn">Annuler</button>
-                    <button class="btn-primary" id="rpSaveBtn">Enregistrer (+1 pt)</button>
+                    <button class="btn-primary" id="rpSaveBtn">Enregistrer</button>
                 </div>
             </div>
         </div>
@@ -29145,7 +29160,7 @@
 
         <script src="js/i18n.js?v=20260817" defer></script>
         <script src="js/fragrantica-urls.js?v=20260820e" defer></script>
-        <script src="script.js?v=20260826d" defer></script>
+        <script src="script.js?v=20260827a" defer></script>
 
         <script>
             // Quality selector functionality

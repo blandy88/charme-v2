@@ -2656,7 +2656,7 @@ app.delete("/api/admin/loyalty/delete", authenticateToken, requireAdmin, async (
 // 🛍️ CUSTOMER PURCHASES — record a purchase for a loyalty card
 app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const { cardId, perfumeName, brand, fragranceFamily, audience, purchasePrice, purchaseDate, notes } = req.body;
+    const { cardId, perfumeName, brand, fragranceFamily, audience, purchasePrice, purchaseDate, notes, awardPoints } = req.body;
     if (!cardId) return res.status(400).json({ error: "cardId requis" });
     if (!perfumeName || !String(perfumeName).trim()) return res.status(400).json({ error: "Le nom du parfum est requis" });
 
@@ -2699,17 +2699,21 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
       );
     });
 
-    // Auto-award 1 loyalty point per purchase
-    await new Promise((resolve, reject) => {
-      db.run(
-        "UPDATE loyalty_cards SET points = points + 1, updated_at = datetime('now') WHERE id = ?",
-        [card.id],
-        function (err) { if (err) reject(err); else resolve(); },
-      );
-    });
-    await logLoyaltyTransaction(card.id, card.user_id, 1, "earn", `Achat: ${trimmedName}`);
+    // Optionally award loyalty points (recorded purchase ≠ reward). The
+    // "Ajouter un achat" flow intentionally does NOT award points.
+    const award = awardPoints === true;
+    if (award) {
+      await new Promise((resolve, reject) => {
+        db.run(
+          "UPDATE loyalty_cards SET points = points + 1, updated_at = datetime('now') WHERE id = ?",
+          [card.id],
+          function (err) { if (err) reject(err); else resolve(); },
+        );
+      });
+      await logLoyaltyTransaction(card.id, card.user_id, 1, "earn", `Achat: ${trimmedName}`);
+    }
 
-    res.json({ success: true, purchaseId, message: "Achat enregistré (+1 point)" });
+    res.json({ success: true, purchaseId, message: "Achat enregistré" });
   } catch (error) {
     console.error("Create purchase error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -2810,7 +2814,13 @@ app.get("/api/admin/loyalty/profiles/:cardId", authenticateToken, requireAdmin, 
           (err, rows) => (err ? reject(err) : resolve(rows || [])),
         );
       });
-      suggestions = otherPurchases;
+      suggestions = otherPurchases.map((r) => ({
+        name: r.perfume_name,
+        brand: r.brand,
+        fragrance_family: r.fragrance_family,
+        audience: r.audience,
+        freq: r.freq,
+      }));
     }
 
     // Total spent

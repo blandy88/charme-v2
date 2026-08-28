@@ -11782,8 +11782,10 @@ async function loadCustomerProfile(cardId) {
 
     renderProfileHeader(data.card);
     renderProfileStats(data.stats);
+    renderProfilePersonality(data);
     renderProfilePreferences(data.preferences);
     renderProfileBrands(data.topBrands);
+    renderProfileSimilar(data.purchases);
     renderProfileSuggestions(data.suggestions);
     renderProfilePurchases(data.purchases, cardId);
 
@@ -11902,6 +11904,178 @@ function renderProfileSuggestions(suggestions) {
   }).join("");
 }
 
+// ─── Personality & Description (computed from the real catalog + purchases) ───
+
+function cpNormalizeName(s) {
+  return String(s || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "");
+}
+
+function cpBuildCatalogMap() {
+  const source = (typeof window !== "undefined" && window.FRAGRANCE_CATALOG_DATA) || [];
+  const map = {};
+  source.forEach((f) => {
+    if (!f || !f.name) return;
+    const k = cpNormalizeName(f.name);
+    if (k && !map[k]) map[k] = f;
+  });
+  return map;
+}
+
+const CP_FAMILY_TRAITS = {
+  "Woody": ["confiant", "intemporel", "élégant"],
+  "Floral": ["romantique", "raffiné", "sensible"],
+  "Oriental": ["mystérieux", "charismatique", "sensuel"],
+  "Fresh": ["dynamique", "sportif", "pétillant"],
+  "Citrus": ["optimiste", "rayonnant", "vif"],
+  "Gourmand": ["chaleureux", "gourmand", "attachant"],
+  "Aromatic": ["classique", "structuré", "sûr de lui"],
+  "Chypre": ["sophistiqué", "audacieux", "intemporel"],
+  "Aldehyde": ["glamour", "élégant", "raffiné"],
+  "Fougère": ["classique", "viril", "élégant"],
+  "Other": ["éclectique", "curieux", "singulier"],
+};
+
+function renderProfilePersonality(data) {
+  const section = document.getElementById("cpPersonality");
+  const body = document.getElementById("cpPersonalityBody");
+  if (!section || !body) return;
+
+  const purchases = (data.purchases || []).filter((p) => p && p.perfume_name);
+  const prefs = data.preferences || [];
+  const stats = data.stats || {};
+  if (purchases.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+
+  const catalogMap = cpBuildCatalogMap();
+  const firstName = (data.card && data.card.name) ? String(data.card.name).trim().split(/\s+/)[0] : "Client";
+
+  const topFamily = stats.topFamily || (prefs[0] && prefs[0].family) || null;
+  const topFamilyPct = prefs.find((p) => p.family === topFamily)?.percentage || null;
+  const traits = topFamily ? (CP_FAMILY_TRAITS[topFamily] || []) : [];
+
+  const noteCount = {};
+  purchases.forEach((p) => {
+    const cat = catalogMap[cpNormalizeName(p.perfume_name)];
+    if (cat && Array.isArray(cat.ingredients)) {
+      cat.ingredients.forEach((n) => {
+        const key = String(n).toLowerCase();
+        noteCount[key] = (noteCount[key] || 0) + 1;
+      });
+    }
+  });
+  const topNotes = Object.entries(noteCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([n]) => n);
+
+  const brands = (data.topBrands || []).slice(0, 3).map((b) => b.brand);
+  const boughtNames = purchases.slice(0, 5).map((p) => p.perfume_name);
+
+  let html = "";
+  if (topFamily || topNotes.length) {
+    const traitChips = traits.map((t) => `<span class="cp-trait-chip">${window.escapeHTML(t)}</span>`).join("");
+    html += `<div class="cp-personality-tagline">
+        ${window.escapeHTML(firstName)} est un(e) client(e) ${traits.length ? traits.slice(0, 2).join(" et ") : "passionné(e)"}.
+      </div>
+      ${traitChips ? `<div class="cp-trait-chips">${traitChips}</div>` : ""}`;
+  }
+
+  const facts = [];
+  if (stats.totalPurchases) facts.push(`<strong>${stats.totalPurchases}</strong> parfum${stats.totalPurchases > 1 ? "s" : ""} acheté${stats.totalPurchases > 1 ? "s" : ""}`);
+  if (stats.totalSpent > 0) facts.push(`<strong>${stats.totalSpent.toFixed(2)} €</strong> dépensés`);
+  if (topFamily) facts.push(`famille préférée : <strong>${window.escapeHTML(topFamily)}</strong>${topFamilyPct != null ? ` (${topFamilyPct}%)` : ""}`);
+  if (brands.length) facts.push(`marque${brands.length > 1 ? "s" : ""} favorite${brands.length > 1 ? "s" : ""} : <strong>${window.escapeHTML(brands.join(", "))}</strong>`);
+  if (facts.length) html += `<p class="cp-personality-facts">${facts.join(" · ")}</p>`;
+
+  if (topNotes.length) {
+    html += `<p class="cp-personality-notes">Profils olfactifs récurrents : ${topNotes.map((n) => `<span class="cp-note-tag">${window.escapeHTML(n)}</span>`).join(" ")}</p>`;
+  }
+
+  if (boughtNames.length) {
+    html += `<p class="cp-personality-boughts">Achats récents : ${boughtNames.map((n) => window.escapeHTML(n)).join(", ")}.</p>`;
+  }
+
+  const firstBought = purchases[0];
+  const catOfFirst = catalogMap[cpNormalizeName(firstBought.perfume_name)];
+  if (catOfFirst && catOfFirst.description) {
+    html += `<p class="cp-personality-desc"><em>${window.escapeHTML(catOfFirst.description)}</em> — ${window.escapeHTML(catOfFirst.name)}, ${window.escapeHTML(catOfFirst.brand || "")}.</p>`;
+  }
+
+  if (!html) {
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "block";
+  body.innerHTML = html;
+}
+
+// ─── Similar fragrances (real recommendations from the catalog) ───
+
+function renderProfileSimilar(purchases) {
+  const section = document.getElementById("cpSimilar");
+  const grid = document.getElementById("cpSimilarGrid");
+  if (!section || !grid) return;
+
+  const source = (typeof window !== "undefined" && window.FRAGRANCE_CATALOG_DATA) || [];
+  const catalogMap = cpBuildCatalogMap();
+  const boughtKeys = new Set((purchases || []).map((p) => cpNormalizeName(p && p.perfume_name)).filter(Boolean));
+  const boughtEntries = (purchases || [])
+    .map((p) => catalogMap[cpNormalizeName(p.perfume_name)])
+    .filter(Boolean);
+
+  if (boughtEntries.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+
+  const scored = [];
+  source.forEach((f) => {
+    const key = cpNormalizeName(f.name);
+    if (!key || boughtKeys.has(key)) return;
+    const fNotes = (f.ingredients || []).map((n) => String(n).toLowerCase());
+    const fFam = rpFamilyFromCatalogFamily(f.family);
+    let score = 0;
+    boughtEntries.forEach((b) => {
+      if (rpFamilyFromCatalogFamily(b.family) === fFam) score += 3;
+      const bNotes = (b.ingredients || []).map((n) => String(n).toLowerCase());
+      const shared = bNotes.filter((n) => fNotes.includes(n));
+      score += shared.length * 2;
+    });
+    if (score > 0) scored.push({ f, score });
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  const top = scored.slice(0, 8);
+  if (top.length === 0) {
+    section.style.display = "none";
+    return;
+  }
+
+  section.style.display = "block";
+  grid.innerHTML = top
+    .map(({ f, score }) => {
+      const size = Array.isArray(f.sizes) && f.sizes.length ? ` · ${window.escapeHTML(f.sizes[0].size || "")} ${f.sizes[0].price != null ? "· " + f.sizes[0].price + " €" : ""}` : "";
+      return `
+      <div class="cp-suggestion-card" title="${window.escapeHTML(f.description || f.family || "")}">
+        <div class="cp-sug-name">${window.escapeHTML(f.name)}</div>
+        <div class="cp-sug-brand">${window.escapeHTML(f.brand || "")}</div>
+        <div class="cp-sug-meta">
+          <span class="cp-sug-family">${window.escapeHTML(f.family || "")}</span>
+          <span class="cp-sug-audience">${Math.round(score)}% sim.</span>
+        </div>
+        ${size ? `<div class="cp-sug-size">${size}</div>` : ""}
+      </div>
+    `;
+    })
+    .join("");
+}
+
 function renderProfilePurchases(purchases, cardId) {
   const container = document.getElementById("cpPurchaseList");
   if (!purchases || purchases.length === 0) {
@@ -11978,16 +12152,105 @@ function renderProfilePurchases(purchases, cardId) {
 
 // ─── Record Purchase Modal ───
 
+let rpCatalogIndex = null;
+
+function getRpCatalogIndex() {
+  if (rpCatalogIndex) return rpCatalogIndex;
+  const source =
+    (typeof window !== "undefined" && window.FRAGRANCE_CATALOG_DATA) || [];
+  rpCatalogIndex = source
+    .map((f) => {
+      const name = String(f.name || "").trim();
+      if (!name) return null;
+      return {
+        name,
+        brand: String(f.brand || "").trim(),
+        family: String(f.family || "").trim(),
+        description: String(f.description || "").trim(),
+        ingredients: Array.isArray(f.ingredients) ? f.ingredients.map((i) => String(i).trim().toLowerCase()) : [],
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name));
+  return rpCatalogIndex;
+}
+
+function rpFamilyFromCatalogFamily(family) {
+  const f = String(family || "").toLowerCase();
+  if (f.includes("wood")) return "Woody";
+  if (f.includes("floral")) return "Floral";
+  if (f.includes("orient")) return "Oriental";
+  if (f.includes("fresh") || f.includes("aquatic") || f.includes("marine")) return "Fresh";
+  if (f.includes("citrus") || f.includes("hesperide")) return "Citrus";
+  if (f.includes("gourmand")) return "Gourmand";
+  if (f.includes("aromatic")) return "Aromatic";
+  if (f.includes("chypre")) return "Chypre";
+  if (f.includes("aldehyde")) return "Aldehyde";
+  if (f.includes("foug")) return "Fougère";
+  return "Other";
+}
+
+function rpShowCatalogDropdown() {
+  const dd = document.getElementById("rpCatalogDropdown");
+  if (!dd) return;
+  const q = (document.getElementById("rpPerfumeName").value || "").trim().toLowerCase();
+  const list = getRpCatalogIndex();
+  if (q.length < 1) {
+    dd.style.display = "none";
+    return;
+  }
+  const matches = list
+    .filter((f) => f.name.toLowerCase().includes(q) || f.brand.toLowerCase().includes(q))
+    .slice(0, 12);
+  if (matches.length === 0) {
+    dd.innerHTML = `<div class="rp-catalog-item rp-catalog-empty">Aucun parfum trouvé dans le catalogue</div>`;
+    dd.style.display = "block";
+    return;
+  }
+  dd.innerHTML = matches
+    .map(
+      (f, i) => `
+      <button type="button" class="rp-catalog-item" data-idx="${i}" data-name="${window.escapeHTML(f.name)}" data-brand="${window.escapeHTML(f.brand)}" data-family="${window.escapeHTML(f.family)}">
+        <span class="rp-item-name">${window.escapeHTML(f.name)}</span>
+        <span class="rp-item-brand">${window.escapeHTML(f.brand)} · ${window.escapeHTML(f.family)}</span>
+      </button>`,
+    )
+    .join("");
+  dd._matches = matches;
+  dd.style.display = "block";
+  dd.querySelectorAll(".rp-catalog-item[data-idx]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.idx);
+      const match = dd._matches[idx];
+      if (!match) return;
+      document.getElementById("rpPerfumeName").value = match.name;
+      document.getElementById("rpCatalogFragranceIndex").value = String(idx);
+      const brandInput = document.getElementById("rpBrand");
+      if (brandInput) brandInput.value = match.brand;
+      const famSelect = document.getElementById("rpFamily");
+      if (famSelect) famSelect.value = rpFamilyFromCatalogFamily(match.family);
+      const hint = document.getElementById("rpCatalogHint");
+      if (hint) hint.textContent = match.description ? match.description : `Famille catalogue : ${match.family}`;
+      dd.style.display = "none";
+    });
+  });
+}
+
 function openRecordPurchaseModal(cardId, clientName) {
   document.getElementById("rpCardId").value = cardId;
   document.getElementById("rpClientName").textContent = clientName;
   document.getElementById("rpPerfumeName").value = "";
+  document.getElementById("rpCatalogFragranceIndex").value = "-1";
   document.getElementById("rpBrand").value = "";
   document.getElementById("rpFamily").value = "";
   document.getElementById("rpAudience").value = "";
   document.getElementById("rpPrice").value = "";
   document.getElementById("rpDate").value = new Date().toISOString().slice(0, 10);
   document.getElementById("rpNotes").value = "";
+  const hint = document.getElementById("rpCatalogHint");
+  if (hint) hint.textContent = "";
+  const dd = document.getElementById("rpCatalogDropdown");
+  if (dd) dd.style.display = "none";
 
   const modal = document.getElementById("recordPurchaseModal");
   modal.style.setProperty("z-index", "100007", "important");
@@ -12055,6 +12318,26 @@ function initializeCustomerProfileModal() {
   document.getElementById("rpSaveBtn")?.addEventListener("click", saveRecordPurchase);
   document.getElementById("recordPurchaseClose")?.addEventListener("click", closeRecordPurchaseModal);
   document.getElementById("recordPurchaseOverlay")?.addEventListener("click", closeRecordPurchaseModal);
+
+  const rpPerfumeInput = document.getElementById("rpPerfumeName");
+  if (rpPerfumeInput) {
+    rpPerfumeInput.addEventListener("input", rpShowCatalogDropdown);
+    rpPerfumeInput.addEventListener("focus", rpShowCatalogDropdown);
+    rpPerfumeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const dd = document.getElementById("rpCatalogDropdown");
+        if (dd) dd.style.display = "none";
+      }
+    });
+  }
+  document.addEventListener("click", (e) => {
+    const dd = document.getElementById("rpCatalogDropdown");
+    if (!dd) return;
+    const wrap = document.querySelector(".rp-catalog-wrap");
+    if (wrap && !wrap.contains(e.target) && !e.target.closest(".rp-catalog-item")) {
+      dd.style.display = "none";
+    }
+  });
 
   document.getElementById("cpAddPurchaseBtn")?.addEventListener("click", () => {
     if (!currentProfileCardId) return;

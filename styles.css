@@ -13140,6 +13140,31 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .cp-suggestion-grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important; gap: 10px !important; }
 .cp-suggestion-card { padding: 12px !important; background: rgba(201,169,110,0.04) !important; border: 1px solid rgba(201,169,110,0.1) !important; border-radius: 8px !important; cursor: default !important; transition: border-color 0.2s !important; }
 .cp-suggestion-card:hover { border-color: rgba(201,169,110,0.3) !important; }
+.cp-sug-size { margin-top: 6px !important; font-size: 0.72rem !important; color: rgba(201,169,110,0.75) !important; }
+
+/* Personality & Description (catalog-derived) */
+.cp-personality { display: flex !important; flex-direction: column !important; gap: 8px !important; }
+.cp-personality-tagline { font-size: 0.98rem !important; line-height: 1.5 !important; color: rgba(255,255,255,0.88) !important; font-family: var(--font-body, 'DM Sans', sans-serif) !important; }
+.cp-trait-chips { display: flex !important; flex-wrap: wrap !important; gap: 6px !important; }
+.cp-trait-chip { padding: 4px 11px !important; background: rgba(201,169,110,0.1) !important; border: 1px solid rgba(201,169,110,0.22) !important; border-radius: 20px !important; font-size: 0.78rem !important; color: rgba(201,169,110,0.95) !important; }
+.cp-personality-facts { font-size: 0.85rem !important; color: rgba(255,255,255,0.7) !important; line-height: 1.5 !important; }
+.cp-personality-facts strong { color: #C9A96E !important; }
+.cp-personality-notes { font-size: 0.82rem !important; color: rgba(255,255,255,0.65) !important; }
+.cp-note-tag { display: inline-block !important; margin: 2px 3px 2px 0 !important; padding: 2px 9px !important; background: rgba(255,255,255,0.06) !important; border-radius: 14px !important; font-size: 0.74rem !important; text-transform: capitalize !important; }
+.cp-personality-boughts { font-size: 0.8rem !important; color: rgba(255,255,255,0.55) !important; }
+.cp-personality-desc { font-size: 0.82rem !important; color: rgba(255,255,255,0.6) !important; line-height: 1.5 !important; border-left: 2px solid rgba(201,169,110,0.35) !important; padding-left: 10px !important; }
+
+/* Record-purchase catalog search */
+.rp-catalog-wrap { position: relative !important; }
+.rp-catalog-wrap input { width: 100% !important; }
+.rp-catalog-dropdown { position: absolute !important; top: 100% !important; left: 0 !important; right: 0 !important; z-index: 100009 !important; background: #1b1b1f !important; border: 1px solid rgba(201,169,110,0.3) !important; border-radius: 8px !important; max-height: 260px !important; overflow-y: auto !important; box-shadow: 0 12px 32px rgba(0,0,0,0.45) !important; }
+.rp-catalog-item { display: block !important; width: 100% !important; text-align: left !important; background: transparent !important; border: none !important; border-bottom: 1px solid rgba(255,255,255,0.06) !important; padding: 9px 12px !important; cursor: pointer !important; color: rgba(255,255,255,0.85) !important; transition: background 0.15s !important; }
+.rp-catalog-item:hover, .rp-catalog-item:focus { background: rgba(201,169,110,0.12) !important; outline: none !important; }
+.rp-catalog-item:last-child { border-bottom: none !important; }
+.rp-catalog-empty { cursor: default !important; color: rgba(255,255,255,0.45) !important; font-size: 0.82rem !important; }
+.rp-item-name { display: block !important; font-size: 0.9rem !important; font-weight: 600 !important; }
+.rp-item-brand { display: block !important; font-size: 0.72rem !important; color: rgba(255,255,255,0.5) !important; }
+.rp-catalog-hint { margin-top: 6px !important; font-size: 0.78rem !important; color: rgba(201,169,110,0.7) !important; line-height: 1.4 !important; }
 .cp-sug-name { font-size: 0.85rem !important; font-weight: 600 !important; color: #fff !important; margin-bottom: 2px !important; }
 .cp-sug-brand { font-size: 0.75rem !important; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px !important; }
 .cp-sug-meta { display: flex !important; gap: 6px !important; }
@@ -24736,6 +24761,21 @@ html[data-theme="light"] .cp-brand-tag { background: rgba(201,169,78,0.06) !impo
 html[data-theme="light"] .cp-brand-tag small { color: rgba(139,105,20,0.5) !important; }
 html[data-theme="light"] .cp-suggestion-card { background: rgba(201,169,78,0.03) !important; border-color: rgba(166,139,60,0.12) !important; }
 html[data-theme="light"] .cp-suggestion-card:hover { border-color: rgba(166,139,60,0.35) !important; }
+html[data-theme="light"] .cp-personality-tagline { color: rgba(0,0,0,0.78) !important; }
+html[data-theme="light"] .cp-trait-chip { background: rgba(201,169,78,0.1) !important; border-color: rgba(166,139,60,0.25) !important; color: #7a5d12 !important; }
+html[data-theme="light"] .cp-personality-facts { color: rgba(0,0,0,0.62) !important; }
+html[data-theme="light"] .cp-personality-facts strong { color: #8B6914 !important; }
+html[data-theme="light"] .cp-personality-notes { color: rgba(0,0,0,0.55) !important; }
+html[data-theme="light"] .cp-note-tag { background: rgba(0,0,0,0.05) !important; color: rgba(0,0,0,0.6) !important; }
+html[data-theme="light"] .cp-personality-boughts { color: rgba(0,0,0,0.5) !important; }
+html[data-theme="light"] .cp-personality-desc { color: rgba(0,0,0,0.55) !important; border-left-color: rgba(139,105,20,0.3) !important; }
+html[data-theme="light"] .rp-catalog-dropdown { background: #ffffff !important; border-color: rgba(166,139,60,0.35) !important; box-shadow: 0 12px 32px rgba(0,0,0,0.15) !important; }
+html[data-theme="light"] .rp-catalog-item { border-bottom-color: rgba(0,0,0,0.06) !important; color: rgba(0,0,0,0.8) !important; }
+html[data-theme="light"] .rp-catalog-item:hover { background: rgba(201,169,78,0.12) !important; }
+html[data-theme="light"] .rp-catalog-empty { color: rgba(0,0,0,0.45) !important; }
+html[data-theme="light"] .rp-item-brand { color: rgba(0,0,0,0.5) !important; }
+html[data-theme="light"] .rp-catalog-hint { color: #8B6914 !important; }
+html[data-theme="light"] .cp-sug-size { color: rgba(139,105,20,0.75) !important; }
 html[data-theme="light"] .cp-sug-name { color: #1a1510 !important; }
 html[data-theme="light"] .cp-sug-brand { color: rgba(0,0,0,0.45) !important; }
 html[data-theme="light"] .cp-sug-family, html[data-theme="light"] .cp-sug-audience { background: rgba(0,0,0,0.05) !important; color: rgba(0,0,0,0.5) !important; }
