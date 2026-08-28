@@ -27097,3 +27097,28 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     transform: none !important;
     transition: opacity 0.4s ease !important;
 }
+
+/* IMPORTANT: beat `.perfume-grid-media img { width:100%!important;
+   height:100%!important }` so the thumb stays small and doesn't cover
+   the whole bottle render inside a grid tile. */
+.perfume-grid-media .bottle-render .bottle-render__thumb {
+    width: 17cqi !important;
+    height: auto !important;
+    max-width: 30% !important;
+    max-height: 26% !important;
+    aspect-ratio: 4 / 5 !important;
+    right: 4cqi !important;
+    bottom: 4cqi !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.9) !important;
+    opacity: 1 !important;
+    transition: opacity 0.4s ease, transform 0.4s ease !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+    background: #fff !important;
+}
+.perfume-grid-media .bottle-render:hover .bottle-render__thumb {
+    opacity: 0 !important;
+}
