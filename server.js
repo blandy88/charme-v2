@@ -790,6 +790,13 @@ app.use(
   }),
 );
 app.use(
+  "/assets",
+  express.static(path.join(__dirname, "assets"), {
+    index: false,
+    maxAge: "7d",
+  }),
+);
+app.use(
   "/uploads/fragrances",
   express.static(path.join(__dirname, "uploads", "fragrances"), {
     index: false,
