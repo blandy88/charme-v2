@@ -11999,19 +11999,20 @@ function renderProfilePersonality(data) {
 
   // Tagline — describes taste so it stays correct for any gender.
   const familyLabel = topFamily ? ` la famille <strong>${window.escapeHTML(topFamily)}</strong>${topFamilyPct != null ? ` (${topFamilyPct}%)` : ""}` : "";
-  let open, close;
-  if (gender === "women") { open = `${window.escapeHTML(firstName)} est une cliente`; close = familyLabel ? `, fidèle à${familyLabel}.` : "."; }
-  else if (gender === "men") { open = `${window.escapeHTML(firstName)} est un client`; close = familyLabel ? `, fidèle à${familyLabel}.` : "."; }
-  else { open = `${window.escapeHTML(firstName)} aime les parfums`; close = familyLabel ? `, fidèle à${familyLabel}.` : "."; }
-  if (traits) {
-    const taglineTraits = gender === "women" ? traits.f : gender === "men" ? traits.m : traits.p;
-    html += `<div class="cp-personality-tagline">${open} ${taglineTraits.slice(0, 2).join(" et ")}${close}</div>`;
-  } else {
-    html += `<div class="cp-personality-tagline">${open}${close}</div>`;
-  }
+  let open = "";
+  if (gender === "women") open = `${window.escapeHTML(firstName)} est une cliente`;
+  else if (gender === "men") open = `${window.escapeHTML(firstName)} est un client`;
+  else open = `${window.escapeHTML(firstName)} aime les parfums`;
+  const close = familyLabel ? `, fidèle à${familyLabel}.` : ".";
+  html += `<div class="cp-personality-tagline">${open}${close}</div>`;
   if (traits) {
     const chips = gender === "women" ? traits.f : traits.m;
-    html += `<div class="cp-trait-chips">${chips.map((t) => `<span class="cp-trait-chip">${window.escapeHTML(t)}</span>`).join("")}</div>`;
+    html += `<div class="cp-trait-chips">${chips
+      .map((t) => {
+        const inner = (window.CP_TRAIT_ICONS && window.CP_TRAIT_ICONS[t]) || "";
+        return `<span class="cp-trait-chip">${inner ? `<svg viewBox="0 0 24 24" class="cp-trait-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>` : ""}<span>${window.escapeHTML(t)}</span></span>`;
+      })
+      .join("")}</div>`;
   }
 
   const facts = [];

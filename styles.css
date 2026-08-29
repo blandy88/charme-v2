@@ -13156,7 +13156,8 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .cp-personality-tagline { font-size: 1.06rem !important; line-height: 1.6 !important; color: #f4ecd9 !important; font-family: 'Cormorant Garamond', 'Playfair Display', serif !important; font-weight: 500 !important; }
 .cp-personality-tagline strong { color: var(--color-gold-light, #dfc573) !important; font-weight: 600 !important; }
 .cp-trait-chips { display: flex !important; flex-wrap: wrap !important; gap: 8px !important; }
-.cp-trait-chip { padding: 6px 16px !important; background: linear-gradient(135deg, rgba(201,169,78,0.1), rgba(201,169,78,0.04)) !important; border: 1px solid rgba(201,169,78,0.25) !important; border-radius: 999px !important; font-size: 0.8rem !important; color: #e9dcb8 !important; letter-spacing: 0.02em !important; }
+.cp-trait-chip { display: inline-flex !important; align-items: center !important; gap: 8px !important; padding: 6px 16px !important; background: linear-gradient(135deg, rgba(201,169,78,0.1), rgba(201,169,78,0.04)) !important; border: 1px solid rgba(201,169,78,0.25) !important; border-radius: 999px !important; font-size: 0.8rem !important; color: #e9dcb8 !important; letter-spacing: 0.02em !important; }
+.cp-trait-icon { width: 14px !important; height: 14px !important; flex-shrink: 0 !important; color: var(--color-gold, #C9A96E) !important; opacity: 0.9 !important; }
 .cp-personality-facts { font-size: 0.86rem !important; color: rgba(244,236,217,0.68) !important; line-height: 1.7 !important; }
 .cp-personality-facts strong { color: var(--color-gold-light, #dfc573) !important; font-weight: 600 !important; }
 .cp-personality-notes { font-size: 0.84rem !important; color: rgba(244,236,217,0.6) !important; line-height: 1.7 !important; }
