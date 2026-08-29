@@ -11851,10 +11851,10 @@ function renderProfilePreferences(prefs) {
   }
   section.style.display = "block";
   const familyColors = {
-    "Woisy": "#8B6914", "Woody": "#8B6914", "Floral": "#E75480", "Oriental": "#D4A017",
-    "Fresh": "#00BCD4", "Citrus": "#FFC107", "Gourmand": "#E07C24", "Aromatic": "#4CAF50",
-    "Chypre": "#9C27B0", "Aldehyde": "#B0BEC5", "Fougère": "#607D8B", "Other": "#78909C",
-    "Non spécifié": "#555"
+    "Woisy": "#8B6914", "Woody": "#c9a94e", "Floral": "#d2918c", "Oriental": "#b8863b",
+    "Fresh": "#7fa6a0", "Citrus": "#c8a24a", "Gourmand": "#c98a4b", "Aromatic": "#8a9a6e",
+    "Chypre": "#9d7b9e", "Aldehyde": "#a8b8c0", "Fougère": "#7a8a8a", "Other": "#8a8578",
+    "Non spécifié": "#6b6660"
   };
   container.innerHTML = prefs.map((p) => {
     const color = familyColors[p.family] || "#888";
@@ -12109,8 +12109,9 @@ function renderProfileSimilar(purchases) {
         <div class="cp-sug-brand">${window.escapeHTML(f.brand || "")}</div>
         <div class="cp-sug-meta">
           <span class="cp-sug-family">${window.escapeHTML(f.family || "")}</span>
-          <span class="cp-sug-audience">${pct}% sim.</span>
+          <span class="cp-sug-sim-label">${pct}% compat.</span>
         </div>
+        <div class="cp-sug-sim"><div class="cp-sug-sim-fill" style="width:${Math.max(8, pct)}%"></div></div>
         ${size ? `<div class="cp-sug-size">${size}</div>` : ""}
       </div>
     `;
