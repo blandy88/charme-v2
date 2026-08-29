@@ -14,7 +14,7 @@
         <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
 
         <!-- Stylesheets -->
-        <link rel="stylesheet" href="styles.css?v=20260829c" />
+        <link rel="stylesheet" href="styles.css?v=20260829d" />
         <!-- Perfume profile CSS: loaded non-render-blocking via media trick -->
         
         
@@ -3570,6 +3570,31 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="admin-section hours-admin-section">
+                        <div class="news-admin-section__head">
+                            <h3>Store Hours</h3>
+                            <button type="button" class="btn-small" id="hoursResetBtn">Reset</button>
+                        </div>
+                        <p class="news-admin-section__hint">
+                            Configurez les horaires d'ouverture affichés sur la page d'accueil.
+                        </p>
+                        <div class="hours-admin-grid" id="hoursAdminGrid"><!-- 7 day rows rendered by JS --></div>
+                        <div class="hours-admin-meta">
+                            <label class="hours-admin-field">
+                                <span>Footer timezone note</span>
+                                <input type="text" id="hoursTzInput" class="note-input" value="GMT+1 · Tunis Local Time" />
+                            </label>
+                            <label class="hours-admin-field">
+                                <span>Footer action note</span>
+                                <input type="text" id="hoursApptInput" class="note-input" value="Appointments on request" />
+                            </label>
+                        </div>
+                        <div class="hours-admin-actions">
+                            <button type="button" class="note-btn" id="hoursSaveBtn">Enregistrer</button>
+                            <span class="hours-admin-status" id="hoursAdminStatus"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4244,33 +4269,183 @@
         <div class="container">
             <section class="hero">
                 <!-- Doodle feedback widget -->
-                <div class="doodle-wrapper">
-                    <div class="doodle-header">
-                        <span class="doodle-mode-text doodle-title-text">Leave a Note ✎</span>
-                    </div>
-                    <div class="doodle-card-scene">
-                        <svg class="doodle-svg doodle-star" viewBox="0 0 24 24" fill="#ffd166" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <svg class="doodle-svg doodle-sparkle" viewBox="0 0 24 24" fill="#06d6a0" stroke="var(--ink)" stroke-width="1.5">
-                            <path d="M12 2 Q12 12 22 12 Q12 12 12 22 Q12 12 2 12 Q12 12 12 2 Z"></path>
-                        </svg>
-                        <svg class="doodle-svg doodle-swirl" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round">
-                            <path d="M3 12 C 3 5 10 5 16 5 C 20 5 21 9 18 12 C 15 15 10 13 12 9 C 14 5 22 9 21 16"></path>
-                        </svg>
-                        <div class="doodle-card-inner">
-                            <div class="doodle-card-front">
-                                <div class="doodle-title">Your Message</div>
-                                <form class="doodle-form" id="doodleFeedbackForm" action="">
-                                    <div class="doodle-input-wrapper">
-                                        <textarea class="doodle-input doodle-textarea" name="message" placeholder="Write us a note..." rows="4" required></textarea>
-                                    </div>
-                                    <button class="doodle-btn" type="submit">Send ✦</button>
-                                </form>
+                <div class="hero-info-stack">
+                <div class="note-card" id="noteCard">
+                    <form class="note-form" id="noteForm" novalidate>
+                        <div class="note-header">
+                            <div class="note-title-wrap">
+                                <h3 class="note-title">Leave a note</h3>
+                                <p class="note-subtitle">Direct message to our team.</p>
                             </div>
+                            <span class="note-status-dot" title="Actif"></span>
                         </div>
+
+                        <div class="note-field">
+                            <label for="noteContact" class="note-label">Votre contact</label>
+                            <input
+                                type="text"
+                                id="noteContact"
+                                class="note-input"
+                                placeholder="Numéro de téléphone ou e-mail"
+                                autocomplete="off"
+                            />
+                        </div>
+
+                        <div class="note-field">
+                            <div class="note-label-row">
+                                <label for="noteMessage" class="note-label">Votre message</label>
+                                <span class="note-counter" id="noteCounter">0/300</span>
+                            </div>
+                            <textarea
+                                id="noteMessage"
+                                class="note-textarea"
+                                placeholder="Écrivez-nous un mot..."
+                                rows="3"
+                                maxlength="300"
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="note-footer">
+                            <span class="note-shortcut"><kbd>⌘</kbd> + <kbd>↵</kbd></span>
+                            <button type="submit" class="note-btn" id="noteSubmitBtn">
+                                <span class="note-btn-text">Envoyer</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="note-receipt" id="noteReceipt" aria-hidden="true">
+                        <div class="receipt-check">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <h4 class="receipt-title">Note reçue</h4>
+                        <p class="receipt-desc">Nous examinerons votre message et reviendrons vers vous rapidement.</p>
+                        <button type="button" class="receipt-reset" id="noteResetBtn">Écrire une autre note</button>
                     </div>
                 </div>
+
+                <!-- Live Store Hours -->
+                <div class="hours-card" id="hoursCard">
+                    <div class="hours-header">
+                        <div class="hours-title-wrap">
+                            <h3 class="hours-title">Store Hours</h3>
+                            <span class="hours-clock" id="storeClock">00:00 Local</span>
+                        </div>
+                        <div class="status-pill" id="statusPill">
+                            <span class="status-dot"></span>
+                            <span class="status-text" id="statusText">Checking...</span>
+                        </div>
+                    </div>
+
+                    <div class="hours-table" id="hoursTable"><!-- rows by JS --></div>
+
+                    <div class="hours-footer">
+                        <span class="footer-note" id="hoursTzNote">GMT+1 · Tunis Local Time</span>
+                        <span class="footer-action" id="hoursApptNote">Appointments on request</span>
+                    </div>
+                </div>
+                <script>
+                (function () {
+                    var STORE_HOURS = null;
+                    var tableEl = document.getElementById("hoursTable");
+                    var statusPill = document.getElementById("statusPill");
+                    var statusText = document.getElementById("statusText");
+                    var clockEl = document.getElementById("storeClock");
+
+                    var DEFAULT_SCHEDULE = [
+                        { day: "Sunday",    open: null, close: null },
+                        { day: "Monday",    open: 9,    close: 19   },
+                        { day: "Tuesday",   open: 9,    close: 19   },
+                        { day: "Wednesday", open: 9,    close: 19   },
+                        { day: "Thursday",  open: 9,    close: 19   },
+                        { day: "Friday",    open: 9,    close: 19   },
+                        { day: "Saturday",  open: 10,   close: 18   }
+                    ];
+
+                    function pad(n) { return String(n).padStart(2, "0"); }
+
+                    function renderSchedule() {
+                        var config = STORE_HOURS || { schedule: DEFAULT_SCHEDULE };
+                        var schedule = (config.schedule && config.schedule.length === 7)
+                            ? config.schedule
+                            : DEFAULT_SCHEDULE;
+
+                        var tzNoteEl = document.getElementById("hoursTzNote");
+                        var apptEl = document.getElementById("hoursApptNote");
+                        if (tzNoteEl) tzNoteEl.textContent = config.timezone || "GMT+1 · Tunis Local Time";
+                        if (apptEl) apptEl.textContent = config.appointmentNote || "Appointments on request";
+
+                        var now = new Date();
+                        var currentDayIdx = now.getDay();
+                        var currentHour = now.getHours() + (now.getMinutes() / 60);
+
+                        var timeString = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+                        if (clockEl) clockEl.textContent = timeString + " Local";
+
+                        var todaySchedule = schedule[currentDayIdx];
+                        var isOpen = todaySchedule && todaySchedule.open !== null &&
+                            currentHour >= todaySchedule.open && currentHour < todaySchedule.close;
+
+                        if (isOpen) {
+                            if (statusPill) statusPill.className = "status-pill open";
+                            if (statusText) statusText.textContent = "Open until " + pad(todaySchedule.close) + ":00";
+                        } else {
+                            if (statusPill) statusPill.className = "status-pill closed";
+                            if (statusText) {
+                                if (todaySchedule && todaySchedule.open !== null && currentHour < todaySchedule.open) {
+                                    statusText.textContent = "Opens at " + pad(todaySchedule.open) + ":00";
+                                } else {
+                                    statusText.textContent = "Closed now";
+                                }
+                            }
+                        }
+
+                        if (!tableEl) return;
+                        tableEl.innerHTML = "";
+                        var displayOrder = [1, 2, 3, 4, 5, 6, 0];
+
+                        displayOrder.forEach(function (idx) {
+                            var item = schedule[idx];
+                            if (!item) return;
+                            var isToday = idx === currentDayIdx;
+                            var isClosed = item.open === null;
+
+                            var row = document.createElement("div");
+                            row.className = "hours-row" + (isToday ? " is-today" : "") + (isClosed ? " is-closed" : "");
+
+                            var formatTime = isClosed
+                                ? "Closed"
+                                : pad(item.open) + ":00 – " + pad(item.close) + ":00";
+
+                            row.innerHTML =
+                                ' <div class="hours-day-wrap">' +
+                                '   <span class="hours-day">' + item.day + "</span>" +
+                                (isToday ? '<span class="today-tag">Today</span>' : "") +
+                                " </div>" +
+                                ' <span class="hours-time">' + formatTime + "</span>";
+
+                            tableEl.appendChild(row);
+                        });
+                    }
+
+                    fetch("/api/store-hours", { cache: "no-store" })
+                        .then(function (r) { return r.json(); })
+                        .then(function (data) {
+                            if (data && data.success && data.config) {
+                                STORE_HOURS = data.config;
+                            }
+                        })
+                        .catch(function () {})
+                        .finally(function () {
+                            renderSchedule();
+                            setInterval(renderSchedule, 60000);
+                        });
+                })();
+                </script>
+                </div><!-- /hero-info-stack -->
+
                 <!-- Hero content removed — full-bleed image background -->
                 <div class="hero-contact-stack">
                     <div class="hero-map-face-wrap">
@@ -29182,7 +29357,7 @@
         <script src="js/i18n.js?v=20260817" defer></script>
         <script src="js/fragrantica-urls.js?v=20260820e" defer></script>
         <script src="js/cp-trait-icons.js?v=20260829a" defer></script>
-        <script src="script.js?v=20260829c" defer></script>
+        <script src="script.js?v=20260829d" defer></script>
 
         <script>
             // Quality selector functionality

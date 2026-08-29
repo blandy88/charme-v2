@@ -454,6 +454,48 @@ console.log("🔄 Checking for required database migrations...");
       },
     );
 
+    // 🕒 STORE SETTINGS: key/value store for configurable store data (store hours, notes, etc.)
+    console.log("🔄 Setting up store_settings table...");
+    db.run(
+      `
+        CREATE TABLE IF NOT EXISTS store_settings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            key TEXT UNIQUE NOT NULL,
+            value TEXT NOT NULL,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `,
+      (createErr) => {
+        if (createErr) console.error("❌ Error creating store_settings table:", createErr);
+        else {
+          console.log("✅ Created store_settings table");
+          // Migrate a legacy store_settings table that was created without an id column.
+          db.all("PRAGMA table_info(store_settings)", (mErr, cols) => {
+            if (mErr) return console.error("❌ Error inspecting store_settings:", mErr);
+            const hasId = Array.isArray(cols) && cols.some((c) => c && c.name === "id");
+            if (!hasId) {
+              console.log("🔄 Migrating store_settings to add id column...");
+              db.run('DROP TABLE IF EXISTS store_settings', (dErr) => {
+                if (dErr) return console.error("❌ Error dropping store_settings:", dErr);
+                db.run(
+                  `CREATE TABLE store_settings (
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      key TEXT UNIQUE NOT NULL,
+                      value TEXT NOT NULL,
+                      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                  )`,
+                  (c2Err) => {
+                    if (c2Err) console.error("❌ Error recreating store_settings:", c2Err);
+                    else console.log("✅ Recreated store_settings with id column");
+                  },
+                );
+              });
+            }
+          });
+        }
+      },
+    );
+
     db.run(
       "CREATE INDEX IF NOT EXISTS idx_customer_purchases_family ON customer_purchases(fragrance_family)",
       (err) => {
@@ -3091,6 +3133,117 @@ app.post("/api/notes", notesLimiter, (req, res) => {
     },
   );
 });
+
+// ================= STORE HOURS CONFIG =================
+const DEFAULT_STORE_HOURS = {
+  schedule: [
+    { day: "Sunday", open: null, close: null },
+    { day: "Monday", open: 9, close: 19 },
+    { day: "Tuesday", open: 9, close: 19 },
+    { day: "Wednesday", open: 9, close: 19 },
+    { day: "Thursday", open: 9, close: 19 },
+    { day: "Friday", open: 9, close: 19 },
+    { day: "Saturday", open: 10, close: 18 },
+  ],
+  timezone: "GMT+1 · Tunis Local Time",
+  appointmentNote: "Appointments on request",
+};
+
+const readStoreHours = () => {
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT value FROM store_settings WHERE key = 'store_hours'",
+      (err, row) => {
+        if (err) return reject(err);
+        try {
+          const parsed = row && row.value ? JSON.parse(row.value) : null;
+          resolve(parsed || DEFAULT_STORE_HOURS);
+        } catch (e) {
+          console.error("Error parsing store_hours:", e);
+          resolve(DEFAULT_STORE_HOURS);
+        }
+      },
+    );
+  });
+};
+
+const sanitizeHours = (body) => {
+  const raw = body && body.schedule;
+  if (!Array.isArray(raw) || raw.length !== 7) return null;
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const schedule = days.map((day, i) => {
+    const item = raw[i] || {};
+    const toInt = (v) => Number.isInteger(v) ? v : null;
+    let open = toInt(item.open);
+    let close = toInt(item.close);
+    if (open === null || close === null || open < 0 || open > 24 || close < 0 || close > 24) {
+      open = null;
+      close = null;
+    } else if (close <= open) {
+      open = null;
+      close = null;
+    }
+    return { day, open, close };
+  });
+  return {
+    schedule,
+    timezone: sanitizeHtml(String(body.timezone || DEFAULT_STORE_HOURS.timezone).trim().slice(0, 120)),
+    appointmentNote: sanitizeHtml(String(body.appointmentNote || DEFAULT_STORE_HOURS.appointmentNote).trim().slice(0, 120)),
+  };
+};
+
+app.get("/api/store-hours", async (req, res) => {
+  try {
+    const config = await readStoreHours();
+    res.json({ success: true, config });
+  } catch (error) {
+    console.error("Error fetching store hours:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get(
+  "/api/admin/store-hours",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const config = await readStoreHours();
+      res.json({ success: true, config });
+    } catch (error) {
+      console.error("Error fetching admin store hours:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+app.put(
+  "/api/admin/store-hours",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const config = sanitizeHours(req.body);
+      if (!config) {
+        return res.status(400).json({ error: "Invalid schedule. Expected 7 days." });
+      }
+      await new Promise((resolve, reject) => {
+        db.run(
+          "INSERT OR REPLACE INTO store_settings (key, value, updated_at) VALUES ('store_hours', ?, CURRENT_TIMESTAMP)",
+          [JSON.stringify(config)],
+          function (err) {
+            if (err) reject(err);
+            else resolve();
+          },
+        );
+      });
+      res.json({ success: true, config });
+    } catch (error) {
+      console.error("Error saving store hours:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
 
 app.get(
   "/api/admin/notes",

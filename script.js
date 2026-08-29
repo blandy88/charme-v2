@@ -10994,6 +10994,186 @@ async function openAdminDashboard() {
 
   // Load news & notifications
   await loadAdminNews();
+
+  // Load store hours editor
+  await loadAdminStoreHours();
+}
+
+const STORE_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+function getAdminToken() {
+  return localStorage.getItem("authToken") || sessionStorage.getItem("authToken") || "";
+}
+
+async function loadAdminStoreHours() {
+  try {
+    const resp = await fetch("/api/admin/store-hours", {
+      headers: { Authorization: `Bearer ${getAdminToken()}` },
+    });
+    if (!resp.ok) {
+      setHoursAdminStatus("Cannot load (auth required)", "err");
+      return;
+    }
+    const data = await resp.json();
+    const config = (data && data.config) || {};
+    const schedule = Array.isArray(config.schedule) && config.schedule.length === 7
+      ? config.schedule
+      : STORE_DAYS.map((day) => ({ day, open: null, close: null }));
+    renderHoursAdminForm(schedule);
+    const tzInput = document.getElementById("hoursTzInput");
+    const apptInput = document.getElementById("hoursApptInput");
+    if (tzInput) tzInput.value = config.timezone || "GMT+1 · Tunis Local Time";
+    if (apptInput) apptInput.value = config.appointmentNote || "Appointments on request";
+    setHoursAdminStatus("", "");
+  } catch (e) {
+    setHoursAdminStatus("Load error", "err");
+  }
+}
+
+function renderHoursAdminForm(schedule) {
+  const grid = document.getElementById("hoursAdminGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
+  schedule.forEach((item, idx) => {
+    const row = document.createElement("div");
+    row.className = "hours-admin-row";
+
+    const closed = item.open === null;
+
+    const day = document.createElement("span");
+    day.className = "hours-admin-day";
+    day.textContent = item.day;
+
+    const closedLabel = document.createElement("label");
+    closedLabel.className = "hours-admin-closed";
+    const closedCheck = document.createElement("input");
+    closedCheck.type = "checkbox";
+    closedCheck.checked = closed;
+    closedLabel.appendChild(closedCheck);
+    closedLabel.appendChild(document.createTextNode("Closed"));
+
+    const timeWrap = document.createElement("span");
+    timeWrap.className = "hours-admin-time";
+    if (closed) timeWrap.style.display = "none";
+
+    const openInput = document.createElement("input");
+    openInput.type = "time";
+    openInput.value = closed ? "09:00" : `${String(item.open).padStart(2, "0")}:00`;
+    const closeInput = document.createElement("input");
+    closeInput.type = "time";
+    closeInput.value = closed ? "19:00" : `${String(item.close).padStart(2, "0")}:00`;
+
+    timeWrap.appendChild(openInput);
+    timeWrap.appendChild(document.createTextNode("–"));
+    timeWrap.appendChild(closeInput);
+
+    closedCheck.addEventListener("change", () => {
+      timeWrap.style.display = closedCheck.checked ? "none" : "inline-flex";
+    });
+
+    row.appendChild(day);
+    row.appendChild(closedLabel);
+    row.appendChild(timeWrap);
+    grid.appendChild(row);
+  });
+
+  const saveBtn = document.getElementById("hoursSaveBtn");
+  if (saveBtn) {
+    saveBtn.onclick = () => saveAdminStoreHours();
+  }
+  const resetBtn = document.getElementById("hoursResetBtn");
+  if (resetBtn) {
+    resetBtn.onclick = async () => {
+      setHoursAdminStatus("Resetting...", "");
+      try {
+        const resp = await fetch("/api/admin/store-hours", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getAdminToken()}`,
+          },
+          body: JSON.stringify({
+            schedule: [
+              { open: null, close: null },
+              { open: 9, close: 19 },
+              { open: 9, close: 19 },
+              { open: 9, close: 19 },
+              { open: 9, close: 19 },
+              { open: 9, close: 19 },
+              { open: 10, close: 18 },
+            ],
+            timezone: "GMT+1 · Tunis Local Time",
+            appointmentNote: "Appointments on request",
+          }),
+        });
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          await loadAdminStoreHours();
+          setHoursAdminStatus("Reset to defaults", "ok");
+        } else {
+          setHoursAdminStatus("Reset failed", "err");
+        }
+      } catch (e) {
+        setHoursAdminStatus("Reset error", "err");
+      }
+    };
+  }
+}
+
+async function saveAdminStoreHours() {
+  const rows = Array.from(document.querySelectorAll("#hoursAdminGrid .hours-admin-row"));
+  const schedule = rows.map((row) => {
+    const closedCheck = row.querySelector(".hours-admin-closed input");
+    const openInput = row.querySelector(".hours-admin-time input[type=time]:nth-of-type(1)");
+    const closeInput = row.querySelector(".hours-admin-time input[type=time]:nth-of-type(2)");
+    if (closedCheck && closedCheck.checked) return { open: null, close: null };
+    const toHour = (t) => {
+      if (!t || !t.value) return null;
+      const parts = t.value.split(":");
+      const h = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) || 0;
+      return h + m / 60;
+    };
+    const open = toHour(openInput);
+    const close = toHour(closeInput);
+    if (open === null || close === null || close <= open) return { open: null, close: null };
+    return { open, close };
+  });
+
+  const tzInput = document.getElementById("hoursTzInput");
+  const apptInput = document.getElementById("hoursApptInput");
+
+  setHoursAdminStatus("Saving...", "");
+  try {
+    const resp = await fetch("/api/admin/store-hours", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAdminToken()}`,
+      },
+      body: JSON.stringify({
+        schedule,
+        timezone: tzInput ? tzInput.value : "",
+        appointmentNote: apptInput ? apptInput.value : "",
+      }),
+    });
+    const data = await resp.json();
+    if (resp.ok && data.success) {
+      setHoursAdminStatus("Saved", "ok");
+      setTimeout(() => setHoursAdminStatus("", ""), 2500);
+    } else {
+      setHoursAdminStatus(data.error || "Save failed", "err");
+    }
+  } catch (e) {
+    setHoursAdminStatus("Save error", "err");
+  }
+}
+
+function setHoursAdminStatus(text, kind) {
+  const el = document.getElementById("hoursAdminStatus");
+  if (!el) return;
+  el.textContent = text;
+  el.className = "hours-admin-status" + (kind === "ok" ? " ok" : kind === "err" ? " err" : "");
 }
 
 async function loadUsersData() {
@@ -21909,50 +22089,87 @@ window.testClickOnElement = function() {
 // ── Doodle Feedback Form + Guest Notes Panel ──
 // Placed OUTSIDE the mode-toggle IIFE so an error there can't kill these listeners.
 (function () {
-  const doodleForm = document.getElementById("doodleFeedbackForm");
-  if (doodleForm) {
-    doodleForm.addEventListener("submit", async (e) => {
+  const noteForm = document.getElementById("noteForm");
+  const noteReceipt = document.getElementById("noteReceipt");
+  const noteInput = document.getElementById("noteContact");
+  const textarea = document.getElementById("noteMessage");
+  const counter = document.getElementById("noteCounter");
+  const submitBtn = document.getElementById("noteSubmitBtn");
+  const resetBtn = document.getElementById("noteResetBtn");
+
+  const setBtnText = (t, disabled) => {
+    if (!submitBtn) return;
+    const label = submitBtn.querySelector(".note-btn-text");
+    if (label) label.textContent = t;
+    submitBtn.disabled = !!disabled;
+  };
+
+  function resetNoteForm() {
+    if (noteForm) noteForm.reset();
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.value = "";
+      if (counter) counter.textContent = "0/300";
+    }
+    if (noteReceipt) {
+      noteReceipt.classList.remove("visible");
+      noteReceipt.setAttribute("aria-hidden", "true");
+    }
+    if (noteForm) noteForm.style.display = "";
+    setBtnText("Envoyer", false);
+  }
+
+  if (textarea && counter) {
+    const updateCounter = () => {
+      counter.textContent = `${textarea.value.length}/300`;
+      textarea.style.height = "auto";
+      textarea.style.height = textarea.scrollHeight + "px";
+    };
+    textarea.addEventListener("input", updateCounter);
+
+    textarea.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        if (noteForm) noteForm.requestSubmit();
+      }
+    });
+  }
+
+  if (resetBtn) resetBtn.addEventListener("click", resetNoteForm);
+
+  if (noteForm) {
+    noteForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const textarea = doodleForm.querySelector(".doodle-textarea");
-      const btn = doodleForm.querySelector(".doodle-btn");
-      const msg = textarea.value.trim();
+      const msg = textarea ? textarea.value.trim() : "";
+      const contact = noteInput ? noteInput.value.trim() : "";
       if (!msg) return;
-      btn.disabled = true;
-      btn.textContent = "…";
+
+      setBtnText("Envoi...", true);
       try {
         const resp = await fetch("/api/notes", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: msg }),
+          body: JSON.stringify({ message: msg, authorName: contact || "Anonymous" }),
         });
         const data = await resp.json();
-        if (data.success) {
-          btn.textContent = "Sent!";
-          btn.style.backgroundColor = "#06d6a0";
-          textarea.value = "";
-          setTimeout(() => {
-            btn.textContent = "Send ✦";
-            btn.style.backgroundColor = "";
-            btn.disabled = false;
-          }, 2500);
+        if (data.success && resp.ok) {
+          if (noteForm) noteForm.style.display = "none";
+          if (noteReceipt) {
+            noteReceipt.classList.add("visible");
+            noteReceipt.setAttribute("aria-hidden", "false");
+          }
         } else {
-          btn.textContent = "Error";
-          btn.style.backgroundColor = "#ff6b6b";
-          setTimeout(() => {
-            btn.textContent = "Send ✦";
-            btn.style.backgroundColor = "";
-            btn.disabled = false;
-          }, 2500);
+          setBtnText("Erreur", false);
+          setTimeout(() => setBtnText("Envoyer", false), 2500);
         }
       } catch (err) {
-        btn.textContent = "Error";
-        setTimeout(() => {
-          btn.textContent = "Send ✦";
-          btn.disabled = false;
-        }, 2500);
+        setBtnText("Erreur", false);
+        setTimeout(() => setBtnText("Envoyer", false), 2500);
       }
     });
   }
+
+  window.resetNoteForm = resetNoteForm;
 
   // ── Guest Notes Panel ──
   const escapeHtml = window.escapeHTML || function (v) { return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); };
