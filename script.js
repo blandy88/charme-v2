@@ -7316,6 +7316,22 @@ window.testProfilePersistence = function (newName) {
   }, 500);
 };
 
+// Dynamic clipboard copy with spring flip transition (concierge island)
+function copyStoreNumber(text, btnElement) {
+  navigator.clipboard.writeText(text).then(() => {
+    const numberView = btnElement.querySelector(".number-view");
+    const copiedView = btnElement.querySelector(".copied-view");
+
+    numberView.classList.remove("active");
+    copiedView.classList.add("active");
+
+    setTimeout(() => {
+      copiedView.classList.remove("active");
+      numberView.classList.add("active");
+    }, 1800);
+  });
+}
+
 // Google Sign-In callback
 function handleCredentialResponse(response) {
   // Decode the JWT token (in production, verify this server-side)

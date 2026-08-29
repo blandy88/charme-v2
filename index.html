@@ -10,11 +10,11 @@
         <!-- Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-        <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" /></noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+        <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
 
         <!-- Stylesheets -->
-        <link rel="stylesheet" href="styles.css?v=20260829b" />
+        <link rel="stylesheet" href="styles.css?v=20260829c" />
         <!-- Perfume profile CSS: loaded non-render-blocking via media trick -->
         
         
@@ -4295,34 +4295,45 @@
                         <span class="hero-map-overlay">📍 Ouvrir dans Google Maps</span>
                     </a>
                     <div class="contact-card-wrap">
-                        <div class="contact-card">
-                            <div class="contact-card__avatar">
-                                <img
-                                    src="whatsapp-icon.jpg"
-                                    alt="WhatsApp"
-                                    width="48"
-                                    height="48"
-                                    loading="lazy"
-                                    decoding="async"
-                                />
-                                <span class="contact-card__status" aria-hidden="true"></span>
+                        <div class="concierge-island" id="conciergeIsland">
+                            <div class="island-brand">
+                                <div class="brand-avatar">
+                                    <span class="brand-monogram">C</span>
+                                </div>
+                                <div class="live-beacon" title="En ligne">
+                                    <span class="beacon-dot"></span>
+                                </div>
                             </div>
-                            <div class="contact-card__info">
-                                <span class="contact-card__label">Contact the store</span>
-                                <a class="contact-card__phone" href="tel:54786930">54 786 930</a>
+
+                            <div class="island-meta">
+                                <div class="meta-header">
+                                    <span class="meta-tag">Store Direct</span>
+                                    <span class="meta-separator">•</span>
+                                    <span class="meta-status">Réponse ~2 min</span>
+                                </div>
+                                <button class="morph-number-btn" id="morphPhoneBtn" onclick="copyStoreNumber('54 786 930', this)" aria-label="Copier le numéro">
+                                    <span class="number-view active">
+                                        <span class="number-text">54 786 930</span>
+                                        <svg class="number-copy-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    </span>
+                                    <span class="copied-view">
+                                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                        <span>Copié</span>
+                                    </span>
+                                </button>
                             </div>
-                            <a
-                                class="contact-card__cta"
-                                href="https://wa.me/21654786930"
-                                target="_blank"
-                                rel="noopener"
-                                aria-label="Chat with the store on WhatsApp"
-                                data-i18n-aria="Chat with the store on WhatsApp"
-                            >
-                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z"/>
-                                </svg>
-                                <span>WhatsApp</span>
+
+                            <div class="island-divider"></div>
+
+                            <a href="https://wa.me/21654786930?text=Hello!%20I%20have%20an%20inquiry%20regarding%20the%20store." target="_blank" rel="noopener noreferrer" class="island-wa-btn" aria-label="Discuter sur WhatsApp">
+                                <div class="btn-glow"></div>
+                                <div class="btn-inner">
+                                    <svg class="wa-symbol" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.771.79 2.796.791 3.182 0 5.768-2.587 5.768-5.766.001-3.181-2.585-5.777-5.768-5.777zm0-2c4.277 0 7.768 3.49 7.768 7.777 0 4.286-3.491 7.766-7.768 7.766-1.341 0-2.602-.345-3.702-.953L4 20l1.233-4.148C4.549 14.707 4.263 13.38 4.263 11.949c0-4.287 3.491-7.777 7.768-7.777z"/>
+                                    </svg>
+                                    <span class="btn-label">WhatsApp</span>
+                                    <svg class="btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </div>
                             </a>
                         </div>
                     </div>
@@ -29171,7 +29182,7 @@
         <script src="js/i18n.js?v=20260817" defer></script>
         <script src="js/fragrantica-urls.js?v=20260820e" defer></script>
         <script src="js/cp-trait-icons.js?v=20260829a" defer></script>
-        <script src="script.js?v=20260829a" defer></script>
+        <script src="script.js?v=20260829c" defer></script>
 
         <script>
             // Quality selector functionality
