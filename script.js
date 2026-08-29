@@ -1283,8 +1283,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  let dropdownHideTimer = null;
   function showDropdown() {
     if (quickSearchDropdown) {
+      if (dropdownHideTimer) {
+        clearTimeout(dropdownHideTimer);
+        dropdownHideTimer = null;
+      }
       quickSearchDropdown.style.display = "block";
       // Force reflow
       quickSearchDropdown.offsetHeight;
@@ -1295,7 +1300,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function hideDropdown() {
     if (quickSearchDropdown) {
       quickSearchDropdown.classList.remove("show");
-      setTimeout(() => {
+      if (dropdownHideTimer) clearTimeout(dropdownHideTimer);
+      dropdownHideTimer = setTimeout(() => {
         quickSearchDropdown.style.display = "none";
       }, 400);
     }
@@ -21137,6 +21143,10 @@ function addProfileClickHandlers() {
     suggestion.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
+
+      // Loyalty clients are handled by the scoped search handler via openCustomerProfile;
+      // do not route them through the user profile modal (their id is "loyalty-N", not a user id).
+      if (suggestion.classList.contains('loyalty-profile')) return;
 
       const userId = suggestion.getAttribute('data-user-id');
       const emailElement = suggestion.querySelector('.profile-email');
