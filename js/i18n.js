@@ -81,7 +81,7 @@
     "Scent Profile": "Profil olfactif",
     "Scent DNA": "ADN olfactif",
     "Premium": "Premium",
-    "dt": "dt",
+    "dt": "DT",
     "Free": "Offert",
     "out": "épuisé",
 
@@ -895,7 +895,7 @@
     "4-10+ hrs": "4-10 h et plus",
     "30min-2hr": "30 min - 2 h",
     "2hr+": "2 h et plus",
-    "0 dt": "0 pt",
+    "0 dt": "0 DT",
     "2.4k": "2,4 k",
     "2.8k": "2,8 k",
     "1.8k": "1,8 k",
@@ -1749,7 +1749,47 @@
     "Qty": "Qté",
     "Share fragrance": "Partager le parfum",
     "Close notification": "Fermer la notification",
-    "Similar fragrances": "Parfums similaires"
+    "Similar fragrances": "Parfums similaires",
+
+    /* ---- Store hours card (live) ---- */
+    "Store Hours": "Heures d'ouverture",
+    "Closed now": "Fermé pour le moment",
+    "Closed": "Fermé",
+    "Today": "Aujourd'hui",
+    "Appointments on request": "Sur rendez-vous",
+    "GMT+1 · Tunis Local Time": "GMT+1 · Heure de Tunis",
+    "Sunday": "Dimanche",
+    "Monday": "Lundi",
+    "Tuesday": "Mardi",
+    "Wednesday": "Mercredi",
+    "Thursday": "Jeudi",
+    "Friday": "Vendredi",
+    "Saturday": "Samedi",
+    "Checking...": "Vérification...",
+
+    /* ---- Admin store-hours editor ---- */
+    "Cannot load (auth required)": "Chargement impossible (authentification requise)",
+    "Resetting...": "Réinitialisation...",
+    "Reset to defaults": "Réinitialisation effectuée",
+    "Reset failed": "Échec de la réinitialisation",
+    "Reset error": "Erreur de réinitialisation",
+    "Load error": "Erreur de chargement",
+    "Reset": "Réinitialiser",
+    "Footer timezone note": "Note de fuseau horaire (pied de carte)",
+    "Footer action note": "Note d'action (pied de carte)",
+    "Saved": "Enregistré",
+    "Saving...": "Enregistrement...",
+    "Save failed": "Échec de l'enregistrement",
+    "Save error": "Erreur d'enregistrement",
+
+    /* ---- Note card ---- */
+    "Leave a note": "Laissez un message",
+    "Direct message to our team.": "Un message direct à notre équipe.",
+    "Send message": "Envoyer le message",
+
+    /* ---- Concierge / grid ---- */
+    "Store Direct": "Contact direct",
+    "All Fragrances": "Tous les parfums"
   };
 
   var frReverse = {};
@@ -1774,7 +1814,11 @@
   }
 
   function t(str) {
-    if (current === "fr" && Object.prototype.hasOwnProperty.call(FR, str)) return FR[str];
+    if (!str || typeof str !== "string") return str;
+    if (current === "en") return str;
+    if (PROTECTED[str]) return str;
+    var d = dictFor(current);
+    if (d && Object.prototype.hasOwnProperty.call(d, str)) return d[str];
     return str;
   }
 
@@ -1787,8 +1831,30 @@
   var SHARE_RE = /^Share your experience with (.+)$/;
   var REVIEW_FOR_RE = /^Sign in to write a review for (.+)\.$/;
   var REVIEW_SHARE_RE = /^Sign in to write a review and share your thoughts about (.+) with the community\.$/;
-  var LAUNCHED_RE = /^was\s+launched\s+in\s+(\d{4})\.\s+The\s+nose\s+behind\s+this\s+fragrance\s+is\s+(.+)$/;
-  var GENRE_RE = /^is a\s+(.+?)\s+fragrance for women and men\.$/;
+  var LAUNCHED_RE = /^was\s+launched\s+in\s+(\d{4})\.\s+The\s+nose\s+behind\s+this\s+fragrance\s+is\s+(.+?)\.?\s*$/;
+  /* prices are quoted in Tunisian dinar: "135 dt", "1 250 dt" */
+  var CURRENCY_RE = /^(\d[\d.,\u00a0\s]*)\s*dt$/i;
+  /* vote/like counts abbreviated on Reddit-style cards: "1.8k", "3,1k" */
+  var KNUM_RE = /^(\d+(?:[.,]\d+)?)\s*k$/i;
+  /* wear-time ranges: "10-12+ hours", "8-12 hours", "0-15 min", "4-8+ hrs" */
+  var DURATION_RE = /^(\d+\s*-\s*\d+\+?)\s*(hours?|hrs?|min)$/i;
+  /* sentence fragments split across spans: "and sweet", ", smooth", ", and warm" */
+  var FRAG_RE = /^(,\s*)?(?:and\s+)?([A-Za-z\u00c0-\u024f][A-Za-z\u00c0-\u024f'’-]*)$/;
+  /* option labels written as "Bleu de Chanel —" : name must survive, dash kept */
+  var NAME_DASH_RE = /^(.+?)\s*—\s*$/;
+  /* wear-time written compactly: "15min-4hrs", "30min-2hr", "2hr+" */
+  var MINHR_RE = /^(\d+)\s*min\s*-\s*(\d+)\s*hrs?$/i;
+  var HRPLUS_RE = /^(\d+)\s*hrs?\s*\+$/i;
+  /* paired comparative descriptors: "Deeper & warmer", "Fresh & bright" */
+  var AMP_PAIR_RE = /^([A-Za-z\u00c0-\u024f]+)\s*&\s*([A-Za-z\u00c0-\u024f]+)$/;
+  /* meter labels: "Fresh:", "Woody:" */
+  var COLON_RE = /^([A-Za-z\u00c0-\u024f][A-Za-z\u00c0-\u024f\s'-]*):$/;
+  /* Matches:  "is a Woody Fruity fragrance."                            (an|a)
+               "... fragrance for women and men."   / for women / for men
+               "... fragrance. It was launched in 2019."
+               "... fragrance. Launched in 2023."
+               "... fragrance. It was launched in 2015. The nose behind this fragrance is X." */
+  var GENRE_RE = /^is an?\s+(.+?)\s+fragrance(?:\s+for\s+(women and men|women|men))?\.(?:\s*(?:It\s+was\s+|It\s+)?[Ll]aunched in (\d{4})\.(?:\s*The\s+nose\s+behind\s+this\s+fragrance\s+is\s+(.+?)\.?)?)?\s*$/;
   var NOTE_LIST_RE = /^Top notes are (.+)$/;
   var EMAIL_CMT_RE = /^\ud83d\udcac\s*(\d+)\s+comments?$/;
   var BULLET_RE = /\s*\u2022\s*/;
@@ -1808,6 +1874,183 @@
     "Aromatic": "aromatique"
   };
 
+  /* Per-language template vocabulary used by the pattern matchers below. */
+  var GENRES_AR = {
+    "Oriental Floral": "زهري شرقي",
+    "Oriental Gourmand": "غورماند شرقي",
+    "Fresh Green": "أخضر منعش",
+    "Woody": "خشبي",
+    "Floral": "زهري",
+    "Fresh": "منعش",
+    "Sweet": "حلو",
+    "Fruity": "فاكهي",
+    "Aquatic": "مائي",
+    "Aromatic": "أروماتي"
+  };
+
+  function arNum(n) { return Number(String(n).replace(/[.,]/g, "")); }
+  function arPlural(n, forms) {
+    var v = arNum(n);
+    if (v === 1) return forms[0];
+    if (v === 2) return forms[1];
+    /* zero takes the plural in Arabic: "0 تعليقات" */
+    if (v === 0) return v + " " + forms[2];
+    if (v >= 3 && v <= 10) return v + " " + forms[2];
+    return v + " " + forms[3];
+  }
+
+  var LX = {
+    fr: {
+      count: function (n, unit) {
+        var L = { "comment": ["commentaire", "commentaires"], "review": ["avis", "avis"],
+                  "vote": ["vote", "votes"], "like": ["j'aime", "j'aime"],
+                  "follower": ["abonné", "abonnés"] }[unit];
+        if (!L) return n + " " + unit;
+        return n + " " + (arNum(n) > 1 ? L[1] : L[0]);
+      },
+      timeAgo: function (n, u) {
+        var L = { "day": ["jour", "jours"], "week": ["semaine", "semaines"],
+                  "month": ["mois", "mois"], "year": ["an", "ans"] }[u];
+        return "il y a " + n + " " + (arNum(n) > 1 ? L[1] : L[0]);
+      },
+      rating: function (n) { return n + " sur 5"; },
+      postedBy: function (u) { return "Publié par " + u; },
+      postedAgo: function (u, s) { return "Publié par " + u + " " + s; },
+      emailCmt: function (n) { return "\ud83d\udcac " + this.count(n, "comment"); },
+      shareExp: function (x) { return "Partagez votre expérience avec " + x; },
+      reviewFor: function (x) { return "Connectez-vous pour écrire un avis sur " + x + "."; },
+      reviewShare: function (x) { return "Connectez-vous pour écrire un avis et partager vos impressions sur " + x + " avec la communauté."; },
+      launched: function (y, n) { return "Lancé en " + y + ". Le nez derrière ce parfum est " + n + "."; },
+      genre: function (g) { return "est un parfum " + g + " pour femmes et hommes."; },
+      genres: GENRES,
+      noteHeads: { top: "notes de tête : ", middle: "notes de cœur : ", base: "notes de fond : " },
+      andWord: " et ", listSep: ", ", sectSep: " ; ", bullet: " \u2022 ",
+      inYear: function (y, g) { return "en " + y + ", ce chef-d'œuvre " + g + " continue de captiver les passionnés de parfum dans le monde entier."; },
+      openUntil: function (t) { return "Ouvert jusqu'à " + t; },
+      opensAt: function (t) { return "Ouvre à " + t; },
+      clockLocal: function (t) { return t + " Heure locale"; },
+      /* "Aventus is a Woody Fruity fragrance." -> generative, not enumerated */
+      isFragrance: function (fam, audience) {
+        var s = "est un parfum " + fam;
+        return s + (audience ? " " + audience : "") + ".";
+      },
+      launchedIn: function (y) { return " Lancé en " + y + "."; },
+      noseBehind: function (n) { return " Le nez derrière ce parfum est " + n + "."; },
+      wasLaunched: function (y) { return "Lancé en " + y + "."; },
+      audienceUnisex: "pour femmes et hommes",
+      audienceWomen: "pour femmes",
+      audienceMen: "pour hommes",
+      currency: "DT",
+      kNum: function (n) { return n.replace(".", ",") + " k"; },
+      duration: function (r, unit, plus) {
+        return unit === "min" ? r + " min" : r + (plus ? " h et plus" : " heures");
+      },
+      fragSep: ", ", fragSepAnd: ", et ", fragAnd: "et ",
+      minHour: function (a, b) { return a + " min - " + b + " h"; },
+      hrPlus: function (n) { return n + " h et plus"; },
+      colon: function (w) { return w + " :"; }
+    },
+    ar: {
+      count: function (n, unit) {
+        var F = { "comment": ["تعليق واحد", "تعليقان", "تعليقات", "تعليقًا"],
+                  "review": ["تقييم واحد", "تقييمان", "تقييمات", "تقييمًا"],
+                  "vote": ["صوت واحد", "صوتان", "أصوات", "صوتًا"],
+                  "like": ["إعجاب واحد", "إعجابان", "إعجابات", "إعجابًا"],
+                  "follower": ["متابع واحد", "متابعان", "متابعين", "متابعًا"] }[unit];
+        if (!F) return n + " " + unit;
+        return arPlural(n, F);
+      },
+      timeAgo: function (n, u) {
+        var F = { "day": ["يوم واحد", "يومين", "أيام", "يومًا"],
+                  "week": ["أسبوع واحد", "أسبوعين", "أسابيع", "أسبوعًا"],
+                  "month": ["شهر واحد", "شهرين", "أشهر", "شهرًا"],
+                  "year": ["سنة واحدة", "سنتين", "سنوات", "سنة"] }[u];
+        var v = arNum(n);
+        if (v === 1) return "قبل " + F[0];
+        if (v === 2) return "قبل " + F[1];
+        if (v >= 3 && v <= 10) return "قبل " + v + " " + F[2];
+        return "قبل " + v + " " + F[3];
+      },
+      rating: function (n) { return n + " من 5"; },
+      postedBy: function (u) { return "نشر بواسطة " + u; },
+      postedAgo: function (u, s) { return "نشر بواسطة " + u + " " + s; },
+      emailCmt: function (n) { return "\ud83d\udcac " + this.count(n, "comment"); },
+      shareExp: function (x) { return "شارك تجربتك مع " + x; },
+      reviewFor: function (x) { return "سجّل الدخول لكتابة تقييم عن " + x + "."; },
+      reviewShare: function (x) { return "سجّل الدخول لكتابة تقييم ومشاركة انطباعاتك عن " + x + " مع المجتمع."; },
+      launched: function (y, n) { return "تم إطلاقه في " + y + ". صانع هذا العطر هو " + n + "."; },
+      genre: function (g) { return "عطر " + g + " للنساء والرجال."; },
+      genres: GENRES_AR,
+      noteHeads: { top: "المقدمة: ", middle: "القلب: ", base: "القاعدة: " },
+      andWord: " و", listSep: "، ", sectSep: "؛ ", bullet: " \u2022 ",
+      inYear: function (y, g) { return "في " + y + "، لا تزال هذه التحفة " + g + " تأسر عشاق العطور حول العالم."; },
+      openUntil: function (t) { return "مفتوح حتى " + t; },
+      opensAt: function (t) { return "يفتح الساعة " + t; },
+      clockLocal: function (t) { return t + " بالتوقيت المحلي"; },
+      /* "Aventus is a Woody Fruity fragrance." -> generative, not enumerated */
+      isFragrance: function (fam, audience) {
+        return "عطر " + fam + (audience ? " " + audience : "") + ".";
+      },
+      launchedIn: function (y) { return " تم إطلاقه في " + y + "."; },
+      noseBehind: function (n) { return " صانع هذا العطر هو " + n + "."; },
+      wasLaunched: function (y) { return "تم إطلاقه في " + y + "."; },
+      audienceUnisex: "للنساء والرجال",
+      audienceWomen: "للنساء",
+      audienceMen: "للرجال",
+      currency: "د.ت",
+      kNum: function (n) { return n + " ألف"; },
+      duration: function (r, unit, plus) {
+        return unit === "min" ? r + " دقيقة" : r + (plus ? " ساعة وأكثر" : " ساعة");
+      },
+      fragSep: "، ", fragSepAnd: "، و", fragAnd: "و",
+      minHour: function (a, b) { return a + " دقيقة - " + b + " ساعة"; },
+      hrPlus: function (n) { return n + " ساعة وأكثر"; },
+      colon: function (w) { return w + ":"; }
+    }
+  };
+
+  /* ---- generative rules for perfume-description sentences ----------------
+     These sentences appear on all ~186 product sections. Enumerating every
+     family combination would be thousands of keys, so they are composed. */
+  var FAM_WORDS = {
+    fr: {
+      "aromatic": "aromatique", "fougere": "fougère", "fougère": "fougère",
+      "oriental": "oriental", "spicy": "épicé", "floral": "floral",
+      "citrus": "d'agrumes", "woody": "boisé", "aquatic": "aquatique",
+      "iris": "iris", "amber": "ambré", "green": "vert", "leather": "cuir",
+      "chypre": "chypre", "gourmand": "gourmand", "fresh": "frais",
+      "fruity": "fruité", "musk": "musqué", "musky": "musqué",
+      "powdery": "poudré", "vanilla": "vanillé", "oud": "oud",
+      "rose": "de rose", "tobacco": "de tabac", "sweet": "sucré"
+    },
+    ar: {
+      "aromatic": "أروماتي", "fougere": "فوجير", "fougère": "فوجير",
+      "oriental": "شرقي", "spicy": "حار", "floral": "زهري",
+      "citrus": "حمضيات", "woody": "خشبي", "aquatic": "مائي",
+      "iris": "زنبقي", "amber": "عنبري", "green": "أخضر", "leather": "جلدي",
+      "chypre": "شيبري", "gourmand": "جورماند", "fresh": "منعش",
+      "fruity": "فاكهي", "musk": "مسكي", "musky": "مسكي",
+      "powdery": "بودري", "vanilla": "فانيليا", "oud": "عودي",
+      "rose": "وردي", "tobacco": "تبغي", "sweet": "حلو"
+    }
+  };
+
+  var AUDIENCE_RE = /\s+for\s+(women and men|women|men)\b/i;
+
+  function translateFamilyWords(raw, L) {
+    if (!L) return null;
+    var table = FAM_WORDS[current];
+    var parts = raw.trim().split(/\s+/);
+    var out = [];
+    for (var i = 0; i < parts.length; i++) {
+      var w = parts[i].toLowerCase();
+      var mapped = table ? table[w] : null;
+      if (!mapped) return null;             /* unknown word -> let dictionary handle it */
+      out.push(mapped);
+    }
+    return out.join(" ");
+  }
+
   function translateTimeAgo(num, unit) {
     var labels = { "day": "jour", "week": "semaine", "month": "mois", "year": "an" };
     var label = labels[unit];
@@ -1815,31 +2058,31 @@
     return "il y a " + num + " " + label + (Number(num) > 1 ? "s" : "");
   }
 
-  function translateNoteList(listStr) {
+  function translateNoteList(listStr, L) {
     var sections = listStr.split(/;\s*/);
     var out = [];
     for (var i = 0; i < sections.length; i++) {
       var sec = sections[i];
       var head, body;
-      if (/^middle notes are /.test(sec)) { head = "notes de cœur : "; body = sec.replace(/^middle notes are /, ""); }
-      else if (/^base notes are /.test(sec)) { head = "notes de fond : "; body = sec.replace(/^base notes are /, ""); }
-      else { head = "notes de tête : "; body = sec.replace(/^Top notes are /, ""); }
+      if (/^middle notes are /.test(sec)) { head = L.noteHeads.middle; body = sec.replace(/^middle notes are /, ""); }
+      else if (/^base notes are /.test(sec)) { head = L.noteHeads.base; body = sec.replace(/^base notes are /, ""); }
+      else { head = L.noteHeads.top; body = sec.replace(/^Top notes are /, ""); }
       var items = body.split(/\s*,\s*/).map(function (x) { return x.trim(); }).filter(Boolean);
       var tr = [];
       for (var j = 0; j < items.length; j++) {
         var item = items[j];
         var parts = item.split(/\s+and\s+/i);
-        tr.push(parts.map(function (w) { return t(w); }).join(" et "));
+        tr.push(parts.map(function (w) { return t(w); }).join(L.andWord));
       }
-      var joined = tr.join(", ");
-      var lastComma = joined.lastIndexOf(", ");
-      if (lastComma !== -1) joined = joined.slice(0, lastComma) + " et " + joined.slice(lastComma + 2);
+      var joined = tr.join(L.listSep);
+      var lastSep = joined.lastIndexOf(L.listSep);
+      if (lastSep !== -1) joined = joined.slice(0, lastSep) + L.andWord + joined.slice(lastSep + L.listSep.length);
       out.push(head + joined);
     }
-    return out.join(" ; ");
+    return out.join(L.sectSep);
   }
 
-  function translateWordsPhrase(phrase) {
+  function translateWordsPhrase(phrase, L) {
     var words = phrase.split(/\s+/).filter(Boolean);
     var out = [];
     for (var i = 0; i < words.length; i++) {
@@ -1855,48 +2098,104 @@
     if (direct !== str) return direct;
 
     var m;
-    if (current === "fr") {
+    var L = LX[current];
+    if (L) {
       m = str.match(COUNT_RE);
-      if (m) {
-        var unit = m[2].replace(/s$/, "");
-        var label = { "comment": "commentaire", "review": "avis", "vote": "vote", "like": "j'aime", "follower": "abonné" }[unit];
-        return m[1] + " " + label + (Number(m[1].replace(/[.,]/g, "")) > 1 ? "s" : "");
-      }
+      if (m) return L.count(m[1], m[2].replace(/s$/, ""));
       m = str.match(TIME_RE);
-      if (m) return translateTimeAgo(m[1], m[2]);
+      if (m) return L.timeAgo(m[1], m[2]);
       m = str.match(RATING_RE);
-      if (m) return m[1] + " sur 5";
+      if (m) return L.rating(m[1]);
       m = str.match(POSTED_RE);
-      if (m) return "Publié par " + m[1];
+      if (m) return L.postedBy(m[1]);
       m = str.match(POSTED_AGO_RE);
-      if (m) return "Publié par " + m[1] + " " + translateTimeAgo(m[2], m[3]);
+      if (m) return L.postedAgo(m[1], L.timeAgo(m[2], m[3]));
       m = str.match(EMAIL_CMT_RE);
-      if (m) return "\ud83d\udcac " + m[1] + " commentaire" + (Number(m[1]) > 1 ? "s" : "");
+      if (m) return L.emailCmt(m[1]);
       m = str.match(SHARE_RE);
-      if (m) return "Partagez votre expérience avec " + m[1];
+      if (m) return L.shareExp(m[1]);
       m = str.match(REVIEW_FOR_RE);
-      if (m) return "Connectez-vous pour écrire un avis sur " + m[1] + ".";
+      if (m) return L.reviewFor(m[1]);
       m = str.match(REVIEW_SHARE_RE);
-      if (m) return "Connectez-vous pour écrire un avis et partager vos impressions sur " + m[1] + " avec la communauté.";
+      if (m) return L.reviewShare(m[1]);
       m = str.match(LAUNCHED_RE);
-      if (m) return "Lancé en " + m[1] + ". Le nez derrière ce parfum est " + m[2] + ".";
+      if (m) return L.launched(m[1], m[2]);
+      m = str.match(CURRENCY_RE);
+      if (m) return m[1].trim() + " " + L.currency;
+      m = str.match(KNUM_RE);
+      if (m) return L.kNum(m[1]);
+      m = str.match(DURATION_RE);
+      if (m) {
+        var plus = m[1].indexOf("+") !== -1;
+        return L.duration(m[1], m[2].toLowerCase().charAt(0) === "m" ? "min" : "hour", plus);
+      }
+      /* only treat as a fragment when there is a leading comma or "and" */
+      m = str.match(FRAG_RE);
+      if (m && (m[1] || /^and\s/i.test(str))) {
+        var tailWord = m[2];
+        var tw = t(tailWord);
+        if (tw === tailWord) tw = translateFamilyWords(tailWord, L);
+        if (tw && tw !== tailWord) {
+          if (m[1]) return (/^,\s*and\s/i.test(str) ? L.fragSepAnd : L.fragSep) + tw;
+          return L.fragAnd + tw;
+        }
+      }
+      m = str.match(MINHR_RE);
+      if (m) return L.minHour(m[1], m[2]);
+      m = str.match(HRPLUS_RE);
+      if (m) return L.hrPlus(m[1]);
+      m = str.match(AMP_PAIR_RE);
+      if (m) {
+        var w1 = t(m[1]); if (w1 === m[1]) w1 = translateFamilyWords(m[1], L);
+        var w2 = t(m[2]); if (w2 === m[2]) w2 = translateFamilyWords(m[2], L);
+        if (w1 && w2 && (w1 !== m[1] || w2 !== m[2])) return w1 + " & " + w2;
+      }
+      m = str.match(COLON_RE);
+      if (m) {
+        var lbl = t(m[1]);
+        if (lbl === m[1]) lbl = translateFamilyWords(m[1], L);
+        if (lbl && lbl !== m[1]) return L.colon(lbl);
+      }
+      m = str.match(NAME_DASH_RE);
+      if (m) return t(m[1]) + " —";
       m = str.match(GENRE_RE);
       if (m) {
         var genreKey = m[1].replace(/\s+/g, " ");
-        return "est un parfum " + (GENRES[genreKey] || genreKey) + " pour femmes et hommes.";
+        var lg = L.genres && L.genres[genreKey];
+        /* fall back to word-by-word composition so unseen families still work */
+        var fam = lg || translateFamilyWords(genreKey, L) || genreKey;
+        var aud = "";
+        if (m[2]) {
+          var audKey = m[2].toLowerCase();
+          aud = audKey === "women and men" ? L.audienceUnisex
+              : (audKey === "women" ? L.audienceWomen : L.audienceMen);
+        }
+        var sentence = L.isFragrance(fam, aud);
+        if (m[3]) sentence += L.launchedIn(m[3]);
+        if (m[4]) sentence += L.noseBehind(m[4]);
+        return sentence;
       }
       m = str.match(NOTE_LIST_RE);
-      if (m) return translateNoteList(str);
+      if (m) return translateNoteList(str, L);
       m = str.match(DASH_YEAR_RE);
       if (m) {
-        var wp = translateWordsPhrase(m[1]);
+        var wp = translateWordsPhrase(m[1], L);
         if (wp !== null) return wp + " — " + m[2];
       }
       m = str.match(IN_YEAR_RE);
       if (m) {
-        var genre = translateWordsPhrase(m[2]);
-        if (genre !== null) return "en " + m[1] + ", ce chef-d'œuvre " + genre.toLowerCase() + " continue de captiver les passionnés de parfum dans le monde entier.";
+        var genre2 = translateWordsPhrase(m[2], L);
+        if (genre2 !== null) return L.inYear(m[1], genre2.toLowerCase());
       }
+      var OPEN_UNTIL_RE = /^Open until (\d{2}:\d{2})$/;
+      m = str.match(OPEN_UNTIL_RE);
+      if (m) return L.openUntil(m[1]);
+      var OPENS_AT_RE = /^Opens at (\d{2}:\d{2})$/;
+      m = str.match(OPENS_AT_RE);
+      if (m) return L.opensAt(m[1]);
+      var CLOCK_LOCAL_RE = /^(\d{2}:\d{2}) Local$/;
+      m = str.match(CLOCK_LOCAL_RE);
+      if (m) return L.clockLocal(m[1]);
       if (str.indexOf("\u2022") !== -1) {
         var segs = str.split(BULLET_RE);
         var translated = true;
@@ -1905,11 +2204,11 @@
           var seg = segs[s].trim();
           if (!seg) { trs.push(""); continue; }
           var tSeg = t(seg);
-          if (tSeg === seg) tSeg = translateWordsPhrase(seg);
+          if (tSeg === seg) tSeg = translateWordsPhrase(seg, L);
           if (tSeg === null) { translated = false; break; }
           trs.push(tSeg);
         }
-        if (translated && trs.length) return trs.join(" \u2022 ");
+        if (translated && trs.length) return trs.join(L.bullet);
       }
     }
     return str;
@@ -1921,21 +2220,87 @@
 
   function applyToTextNode(node) {
     var raw = node.nodeValue;
+    var cached = originalText.get(node);
+    /* Always work from the pristine English source so switching fr -> ar
+     * (or ar -> fr) never translates an already-translated string. */
+    if (cached && cached !== raw) { raw = cached; node.nodeValue = cached; }
     var trimmed = raw.trim();
     if (!trimmed) return;
-    if (current === "en") {
-      var cached = originalText.get(node);
-      if (cached && cached !== raw) node.nodeValue = cached;
-      return;
-    }
+    if (current === "en") return;
     var key = norm(trimmed);
     var out = translateString(key);
     if (out !== key) {
-      originalText.set(node, node.nodeValue);
+      if (!cached) originalText.set(node, raw);
       node.nodeValue = raw.replace(trimmed, out);
     }
   }
 
+  /* =====================================================================
+   * MULTI-LANGUAGE EXTENSION
+   * Extra dictionaries and the "never translate" list live in
+   * js/i18n-dict.js so they can be regenerated without touching this file:
+   *   window.I18N_EXTRA   = { fr: {..}, ar: {..} }
+   *   window.I18N_PROTECT = ["Creed", "Aventus", ...]
+   * ===================================================================== */
+  var EXTRA = (typeof window !== "undefined" && window.I18N_EXTRA) || {};
+  var AR = EXTRA.ar || {};
+  (function () {
+    var fx = EXTRA.fr || {}, k;
+    for (k in fx) {
+      if (Object.prototype.hasOwnProperty.call(fx, k) && !Object.prototype.hasOwnProperty.call(FR, k)) FR[k] = fx[k];
+    }
+  })();
+
+  var PROTECTED = Object.create(null);
+  (function () {
+    var pl = (typeof window !== "undefined" && window.I18N_PROTECT) || [], i;
+    for (i = 0; i < pl.length; i++) PROTECTED[pl[i]] = 1;
+  })();
+
+  /* Text nodes reach the engine with whitespace collapsed, so dictionary keys
+     must be collapsed too - otherwise entries written across several source
+     lines (indented HTML) can never match. */
+  function normKey(k) { return String(k).replace(/\s+/gu, " ").trim(); }
+  function normalizeDict(d) {
+    var out = {}, k, nk;
+    for (k in d) {
+      if (!Object.prototype.hasOwnProperty.call(d, k)) continue;
+      nk = normKey(k);
+      if (!Object.prototype.hasOwnProperty.call(out, nk)) out[nk] = d[k];
+    }
+    return out;
+  }
+  function normalizeInPlace(d) {
+    var k, nk, add = {};
+    for (k in d) {
+      if (!Object.prototype.hasOwnProperty.call(d, k)) continue;
+      nk = normKey(k);
+      if (nk !== k) { add[nk] = d[k]; delete d[k]; }
+    }
+    for (k in add) if (Object.prototype.hasOwnProperty.call(add, k)) d[k] = add[k];
+    return d;
+  }
+  FR = normalizeDict(FR);
+  AR = normalizeDict(AR);
+  /* GENRES / GENRES_AR are captured by reference inside LX, so mutate in place */
+  normalizeInPlace(GENRES);
+  normalizeInPlace(GENRES_AR);
+  PROTECTED = (function (src) {
+    var out = Object.create(null), k;
+    for (k in src) {
+      if (!Object.prototype.hasOwnProperty.call(src, k)) continue;
+      out[normKey(k)] = 1;
+    }
+    return out;
+  })(PROTECTED);
+
+  var RTL_LANGS = { ar: 1, he: 1, fa: 1, ur: 1 };
+
+  function dictFor(lang) {
+    if (lang === "fr") return FR;
+    if (lang === "ar") return AR;
+    return null;
+  }
   var IGNORE_TAGS = { "SCRIPT": 1, "STYLE": 1, "NOSCRIPT": 1, "TEXTAREA": 1, "SVG": 1 };
 
   function walk(root) {
@@ -1997,27 +2362,44 @@
 
   function applyLanguage(lang) {
     if (SUPPORTED.indexOf(lang) === -1) lang = "en";
+    var previous = current;
     current = lang;
-    if (current === "fr") {
-      if (originalTitle === null) originalTitle = document.title;
-      document.title = translateString(document.title);
-    } else {
-      document.title = originalTitle || document.title;
-    }
+    if (originalTitle === null) originalTitle = document.title;
+    document.title = (lang === "en") ? originalTitle : translateString(originalTitle);
+    var htmlEl = document.documentElement;
+    htmlEl.classList.remove("lang-rtl", "lang-ltr");
+    if (RTL_LANGS[lang]) { htmlEl.setAttribute("dir", "rtl"); htmlEl.classList.add("lang-rtl"); }
+    else { htmlEl.setAttribute("dir", "ltr"); htmlEl.classList.add("lang-ltr"); }
     walk(document.body);
     updateSwitcher();
     setStored(lang);
-    document.dispatchEvent(new CustomEvent("charme:langchange", { detail: { lang: lang } }));
+    document.dispatchEvent(new CustomEvent("charme:langchange", { detail: { lang: lang, previous: previous } }));
   }
 
   var observerTimer = 0;
+  var pendingRoots = [];
   function startObserver() {
     if (typeof MutationObserver === "undefined") return;
-    var observer = new MutationObserver(function () {
+    var observer = new MutationObserver(function (records) {
       if (current === "en") return;
+      /* Collect only the nodes that were actually inserted. Re-walking the
+       * whole 22k-node document on every mutation was extremely expensive. */
+      for (var i = 0; i < records.length; i++) {
+        var added = records[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var nd = added[j];
+          if (nd.nodeType === 1 || nd.nodeType === 3) pendingRoots.push(nd);
+        }
+      }
       clearTimeout(observerTimer);
       observerTimer = setTimeout(function () {
-        walk(document.body);
+        var roots = pendingRoots;
+        pendingRoots = [];
+        for (var k = 0; k < roots.length; k++) {
+          var r = roots[k];
+          if (!r || !r.parentNode) continue;
+          if (r.nodeType === 3) applyToTextNode(r); else walk(r);
+        }
       }, 150);
     });
     observer.observe(document.body, { childList: true, subtree: true });
@@ -2038,6 +2420,13 @@
   window.I18N = {
     t: t,
     applyLanguage: applyLanguage,
-    getLang: function () { return current; }
+    getLang: function () { return current; },
+    /* QA helper: true when the term exists in the dictionary even if the
+       translation is identical to the English (e.g. "Eau de Parfum" in French) */
+    hasKey: function (s, lang) {
+      var d = dictFor(lang || current);
+      return !!(d && Object.prototype.hasOwnProperty.call(d, s));
+    },
+    isProtected: function (s) { return !!PROTECTED[s]; }
   };
 })();

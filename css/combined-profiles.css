@@ -27554,7 +27554,7 @@
    ============================================================================ */
 
 /* Main Container */
-.40knots-main-container {
+.xerjoff40knots-main-container {
     max-width: 1600px !important;
     margin: 0 auto !important;
     padding: 60px 30px !important;
@@ -27564,106 +27564,106 @@
     position: relative !important;
 }
 
-.40knots-theme {
+.xerjoff40knots-theme {
     color: rgba(255, 255, 255, 0.90) !important;
 }
 
-.40knots-theme .brand-name {
+.xerjoff40knots-theme .brand-name {
     color: rgba(255, 255, 255, 0.95) !important;
     font-family: 'Playfair Display', serif !important;
     letter-spacing: 3px !important;
     text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
 }
 
-.40knots-theme .brand-location {
+.xerjoff40knots-theme .brand-location {
     color: #5686B6 !important;
     letter-spacing: 5px !important;
     text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
 }
 
-.40knots-theme .product-name {
+.xerjoff40knots-theme .product-name {
     color: rgba(255, 255, 255, 0.95) !important;
     font-family: 'Playfair Display', serif !important;
     font-style: italic !important;
     text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important;
 }
 
-.40knots-theme .price-badge {
+.xerjoff40knots-theme .price-badge {
     background: linear-gradient(135deg, #1a4a7a, #d4b868) !important;
     border: 2px solid #1a4a7a !important;
 }
 
-.40knots-theme .price-glow {
+.xerjoff40knots-theme .price-glow {
     background: radial-gradient(circle, rgba(26,74,122,0.3) 0%, transparent 70%) !important;
 }
 
-.40knots-theme .quality-badge {
+.xerjoff40knots-theme .quality-badge {
     border: 1px solid rgba(26,74,122,0.3) !important;
     background: rgba(26,74,122,0.04) !important;
 }
 
-.40knots-theme .quality-name {
+.xerjoff40knots-theme .quality-name {
     color: rgba(255, 255, 255, 0.92) !important;
 }
 
-.40knots-theme .quality-description {
+.xerjoff40knots-theme .quality-description {
     color: rgba(255, 255, 255, 0.72) !important;
 }
 
-.40knots-theme .quality-option input:checked + .quality-label .quality-badge {
+.xerjoff40knots-theme .quality-option input:checked + .quality-label .quality-badge {
     border-color: #1a4a7a !important;
     background: rgba(26,74,122,0.08) !important;
     box-shadow: none !important;
 }
 
-.40knots-theme .quality-option input:checked + .quality-label .quality-name {
+.xerjoff40knots-theme .quality-option input:checked + .quality-label .quality-name {
     color: rgba(255, 255, 255, 0.96) !important;
     font-weight: 600 !important;
 }
 
-.40knots-theme .quality-option input:checked + .quality-label .quality-description {
+.xerjoff40knots-theme .quality-option input:checked + .quality-label .quality-description {
     color: #5686B6 !important;
 }
 
-.40knots-theme .selection-indicator {
+.xerjoff40knots-theme .selection-indicator {
     border-color: rgba(26,74,122,0.4) !important;
 }
 
-.40knots-theme .quality-option input:checked + .quality-label .selection-indicator {
+.xerjoff40knots-theme .quality-option input:checked + .quality-label .selection-indicator {
     border-color: #1a4a7a !important;
     background: rgba(26,74,122,0.1) !important;
     box-shadow: none !important;
 }
 
-.40knots-theme .quality-option input:checked + .quality-label .selection-indicator::after {
+.xerjoff40knots-theme .quality-option input:checked + .quality-label .selection-indicator::after {
     background: #1a4a7a !important;
     box-shadow: none !important;
 }
 
-.40knots-theme .quality-shimmer {
+.xerjoff40knots-theme .quality-shimmer {
     background: linear-gradient(90deg, transparent, rgba(26,74,122,0.1), transparent) !important;
 }
 
-.40knots-theme .quality-glow {
+.xerjoff40knots-theme .quality-glow {
     display: none !important;
 }
 
-.40knots-theme .quality-ornament {
+.xerjoff40knots-theme .quality-ornament {
     border-color: rgba(26,74,122,0.3) !important;
 }
 
-.40knots-theme .quality-option input:checked + .quality-label .quality-ornament {
+.xerjoff40knots-theme .quality-option input:checked + .quality-label .quality-ornament {
     border-color: #1a4a7a !important;
     box-shadow: none !important;
 }
 
-.40knots-theme .quality-title,
-.40knots-theme .quality-subtitle {
+.xerjoff40knots-theme .quality-title,
+.xerjoff40knots-theme .quality-subtitle {
     color: rgba(255, 255, 255, 0.80) !important;
 }
 
 /* Product Section */
-.40knots-product-section {
+.xerjoff40knots-product-section {
     display: flex !important;
     align-items: center !important;
     gap: 50px !important;
@@ -27671,7 +27671,7 @@
     justify-content: center !important;
 }
 
-.40knots-image {
+.xerjoff40knots-image {
     width: 320px !important;
     height: auto !important;
     max-height: 440px !important;
@@ -27680,13 +27680,13 @@
     transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease !important;
 }
 
-.40knots-image:hover {
+.xerjoff40knots-image:hover {
     transform: scale(1.05) translateY(-10px) !important;
     filter: drop-shadow(0 30px 60px rgba(26,74,122,0.35)) !important;
 }
 
 /* Profiles Container */
-.40knots-profiles-container {
+.xerjoff40knots-profiles-container {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 30px !important;
@@ -27694,7 +27694,7 @@
 }
 
 /* Profile Card - Glassmorphism */
-.40knots-profile-card {
+.xerjoff40knots-profile-card {
     background: rgba(255,255,255,0.06) !important;
     border: 1px solid rgba(26,74,122,0.2) !important;
     border-radius: 20px !important;
@@ -27702,46 +27702,46 @@
     box-shadow: 0 8px 32px rgba(26,74,122,0.1) !important;
 }
 
-.40knots-profile-card .profile-title {
+.xerjoff40knots-profile-card .profile-title {
     color: rgba(255, 255, 255, 0.95) !important;
     font-family: 'Playfair Display', serif !important;
 }
 
-.40knots-profile-card .profile-subtitle {
+.xerjoff40knots-profile-card .profile-subtitle {
     color: #5686B6 !important;
 }
 
 /* Radar Chart */
-.40knots-scent-profile { flex: 1 !important; min-width: 300px !important; }
-.40knots-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
-.40knots-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
-.40knots-radar-svg { width: 100% !important; height: 100% !important; }
-.40knots-radar-data { animation: 40knotsRadarPulse 3s ease-in-out infinite !important; }
+.xerjoff40knots-scent-profile { flex: 1 !important; min-width: 300px !important; }
+.xerjoff40knots-radar-section { display: flex !important; flex-direction: column !important; gap: 30px !important; }
+.xerjoff40knots-radar-container { position: relative !important; width: 100% !important; max-width: 320px !important; margin: 0 auto !important; aspect-ratio: 1 !important; }
+.xerjoff40knots-radar-svg { width: 100% !important; height: 100% !important; }
+.xerjoff40knots-radar-data { animation: xerjoff40knotsRadarPulse 3s ease-in-out infinite !important; }
 
-@keyframes 40knotsRadarPulse {
+@keyframes xerjoff40knotsRadarPulse {
     0%, 100% { opacity: 0.85; }
     50% { opacity: 1; }
 }
 
-.40knots-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
-.40knots-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
-.40knots-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
-.40knots-radar-label .label-value { font-size: 0.65rem !important; color: #5686B6 !important; font-weight: 500 !important; }
-.40knots-radar-label.pos-0 { top: 2%; left: 50%; }
-.40knots-radar-label.pos-1 { top: 28%; left: 96%; }
-.40knots-radar-label.pos-2 { top: 88%; left: 82%; }
-.40knots-radar-label.pos-3 { top: 88%; left: 18%; }
-.40knots-radar-label.pos-4 { top: 28%; left: 4%; }
+.xerjoff40knots-radar-labels { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; pointer-events: none !important; }
+.xerjoff40knots-radar-label { position: absolute !important; display: flex !important; flex-direction: column !important; align-items: center !important; transform: translate(-50%, -50%) !important; }
+.xerjoff40knots-radar-label .label-name { font-size: 0.75rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; }
+.xerjoff40knots-radar-label .label-value { font-size: 0.65rem !important; color: #5686B6 !important; font-weight: 500 !important; }
+.xerjoff40knots-radar-label.pos-0 { top: 2%; left: 50%; }
+.xerjoff40knots-radar-label.pos-1 { top: 28%; left: 96%; }
+.xerjoff40knots-radar-label.pos-2 { top: 88%; left: 82%; }
+.xerjoff40knots-radar-label.pos-3 { top: 88%; left: 18%; }
+.xerjoff40knots-radar-label.pos-4 { top: 28%; left: 4%; }
 
 /* Crystal Shard Notes */
-.40knots-ingredients { flex: 1 !important; min-width: 300px !important; }
-.40knots-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
-.40knots-note-tier { margin-bottom: 10px !important; }
-.40knots-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
-.40knots-tier-icon { font-size: 1rem !important; }
-.40knots-tier-time { font-size: 0.7rem !important; color: #5686B6 !important; font-weight: 400 !important; margin-left: auto !important; }
-.40knots-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
-.40knots-crystal-card {
+.xerjoff40knots-ingredients { flex: 1 !important; min-width: 300px !important; }
+.xerjoff40knots-crystal-notes { display: flex !important; flex-direction: column !important; gap: 25px !important; }
+.xerjoff40knots-note-tier { margin-bottom: 10px !important; }
+.xerjoff40knots-tier-label { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.85rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin-bottom: 12px !important; }
+.xerjoff40knots-tier-icon { font-size: 1rem !important; }
+.xerjoff40knots-tier-time { font-size: 0.7rem !important; color: #5686B6 !important; font-weight: 400 !important; margin-left: auto !important; }
+.xerjoff40knots-crystal-grid { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.xerjoff40knots-crystal-card {
     background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(26,74,122,0.06)) !important;
     border: 1px solid rgba(26,74,122,0.2) !important;
     border-radius: 16px !important;
@@ -27751,114 +27751,114 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease !important;
     position: relative !important; overflow: hidden !important;
 }
-.40knots-crystal-card::before {
+.xerjoff40knots-crystal-card::before {
     content: '' !important; position: absolute !important; top: -50% !important; left: -50% !important;
     width: 200% !important; height: 200% !important;
     background: linear-gradient(45deg, transparent 40%, rgba(26,74,122,0.08) 50%, transparent 60%) !important;
-    animation: 40knotsCrystalShimmer 4s ease-in-out infinite !important;
+    animation: xerjoff40knotsCrystalShimmer 4s ease-in-out infinite !important;
 }
-@keyframes 40knotsCrystalShimmer {
+@keyframes xerjoff40knotsCrystalShimmer {
     0% { transform: translateX(-100%) rotate(45deg); }
     100% { transform: translateX(100%) rotate(45deg); }
 }
-.40knots-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(26,74,122,0.2) !important; }
-.40knots-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
+.xerjoff40knots-crystal-card:hover { transform: translateY(-5px) scale(1.05) !important; box-shadow: 0 12px 30px rgba(26,74,122,0.2) !important; }
+.xerjoff40knots-crystal-name { font-size: 0.8rem !important; font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; position: relative !important; z-index: 1 !important; }
 
 /* Metrics */
-.40knots-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
-.40knots-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
-.40knots-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
-.40knots-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
-.40knots-fill { background: linear-gradient(90deg, #1a4a7a, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
-.40knots-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #5686B6 !important; min-width: 35px !important; text-align: right !important; }
+.xerjoff40knots-metrics { display: flex !important; flex-direction: column !important; gap: 16px !important; }
+.xerjoff40knots-metric-item { display: flex !important; align-items: center !important; gap: 12px !important; }
+.xerjoff40knots-metric-label { min-width: 80px !important; font-size: 0.8rem !important; font-weight: 500 !important; color: rgba(255, 255, 255, 0.80) !important; text-transform: capitalize !important; }
+.xerjoff40knots-metric-bar { flex: 1 !important; height: 6px !important; background: rgba(255,255,255,0.08) !important; border-radius: 10px !important; overflow: hidden !important; }
+.xerjoff40knots-fill { background: linear-gradient(90deg, #1a4a7a, #d4b868) !important; border-radius: 10px !important; height: 100% !important; transition: width 1s ease !important; }
+.xerjoff40knots-metric-value { font-size: 0.75rem !important; font-weight: 600 !important; color: #5686B6 !important; min-width: 35px !important; text-align: right !important; }
 
 /* Description */
-.40knots-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(26,74,122,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
-.40knots-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
+.xerjoff40knots-fragrance-description { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(26,74,122,0.15) !important; border-radius: 20px !important; padding: 35px !important; }
+.xerjoff40knots-fragrance-description .profile-title { color: rgba(255, 255, 255, 0.95) !important; }
 
 /* Reddit Review */
-.40knots-reddit-review-container { margin-top: 10px !important; }
-.40knots-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(26,74,122,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
-.40knots-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(26,74,122,0.1) !important; }
-.40knots-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
-.40knots-vote-btn { background: none !important; border: none !important; color: #5686B6 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
-.40knots-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
-.40knots-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
-.40knots-post-dot { color: #5686B6 !important; margin: 0 5px !important; }
-.40knots-post-info, .40knots-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
-.40knots-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
-.40knots-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
-.40knots-user-details { display: flex !important; flex-direction: column !important; }
-.40knots-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
-.40knots-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
-.40knots-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(26,74,122,0.1) !important; }
-.40knots-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
+.xerjoff40knots-reddit-review-container { margin-top: 10px !important; }
+.xerjoff40knots-reddit-card { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(26,74,122,0.2) !important; border-radius: 16px !important; padding: 25px !important; overflow: hidden !important; }
+.xerjoff40knots-reddit-header { display: flex !important; align-items: center !important; gap: 15px !important; margin-bottom: 15px !important; padding-bottom: 12px !important; border-bottom: 1px solid rgba(26,74,122,0.1) !important; }
+.xerjoff40knots-reddit-votes { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important; }
+.xerjoff40knots-vote-btn { background: none !important; border: none !important; color: #5686B6 !important; cursor: pointer !important; font-size: 0.8rem !important; padding: 2px !important; }
+.xerjoff40knots-vote-count { font-size: 0.85rem !important; font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; }
+.xerjoff40knots-subreddit { font-weight: 700 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.xerjoff40knots-post-dot { color: #5686B6 !important; margin: 0 5px !important; }
+.xerjoff40knots-post-info, .xerjoff40knots-post-time { color: rgba(255, 255, 255, 0.55) !important; font-size: 0.75rem !important; }
+.xerjoff40knots-user-avatar img { width: 36px !important; height: 36px !important; border-radius: 50% !important; }
+.xerjoff40knots-reddit-user { display: flex !important; align-items: center !important; gap: 10px !important; margin-bottom: 12px !important; }
+.xerjoff40knots-user-details { display: flex !important; flex-direction: column !important; }
+.xerjoff40knots-username { font-weight: 600 !important; color: rgba(255, 255, 255, 0.90) !important; font-size: 0.85rem !important; }
+.xerjoff40knots-reddit-text p { color: rgba(255, 255, 255, 0.80) !important; line-height: 1.7 !important; font-style: italic !important; }
+.xerjoff40knots-reddit-engagement { display: flex !important; gap: 20px !important; margin-top: 15px !important; padding-top: 12px !important; border-top: 1px solid rgba(26,74,122,0.1) !important; }
+.xerjoff40knots-engagement-item { display: flex !important; align-items: center !important; gap: 5px !important; font-size: 0.8rem !important; color: rgba(255, 255, 255, 0.55) !important; }
 
 /* Mood/Season Indicators */
-.40knots-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
-.40knots-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
-.40knots-mood-indicators, .40knots-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
-.40knots-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
-.40knots-indicator-item.active { opacity: 1 !important; }
-.40knots-indicator-icon { font-size: 1.3rem !important; }
-.40knots-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
-.40knots-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(26,74,122,0.2) !important; border-radius: 2px !important; }
-.40knots-indicator-item.active .40knots-indicator-bar { background: #1a4a7a !important; }
-.40knots-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
-.40knots-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
-.40knots-votes { font-weight: 600 !important; color: #5686B6 !important; }
-.40knots-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
-.40knots-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
+.xerjoff40knots-perfume-rating { padding: 30px 0 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.xerjoff40knots-rating-indicators { display: flex !important; gap: 30px !important; flex-wrap: wrap !important; margin-bottom: 25px !important; }
+.xerjoff40knots-mood-indicators, .xerjoff40knots-seasonal-indicators { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; }
+.xerjoff40knots-indicator-item { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; opacity: 0.4 !important; transition: opacity 0.3s ease !important; }
+.xerjoff40knots-indicator-item.active { opacity: 1 !important; }
+.xerjoff40knots-indicator-icon { font-size: 1.3rem !important; }
+.xerjoff40knots-indicator-label { font-size: 0.65rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; color: rgba(255, 255, 255, 0.68) !important; }
+.xerjoff40knots-indicator-bar { width: 30px !important; height: 3px !important; background: rgba(26,74,122,0.2) !important; border-radius: 2px !important; }
+.xerjoff40knots-indicator-item.active .xerjoff40knots-indicator-bar { background: #1a4a7a !important; }
+.xerjoff40knots-rating-title { font-size: 1rem !important; color: rgba(255, 255, 255, 0.92) !important; font-weight: 400 !important; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45) !important; }
+.xerjoff40knots-score { font-weight: 700 !important; color: rgba(255, 255, 255, 0.98) !important; font-size: 1.3rem !important; }
+.xerjoff40knots-votes { font-weight: 600 !important; color: #5686B6 !important; }
+.xerjoff40knots-perfume-description p { color: rgba(255, 255, 255, 0.82) !important; line-height: 1.7 !important; margin-top: 15px !important; }
+.xerjoff40knots-perfume-description strong { color: rgba(255, 255, 255, 0.95) !important; }
 
 /* Favourite & Cart Buttons */
-.40knots-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(26,74,122, 0.3) !important; background: transparent !important; }
-.40knots-theme .favorite-btn:hover { background: rgba(26,74,122, 0.08) !important; border-color: #1a4a7a !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(26,74,122, 0.2) !important; }
-.40knots-theme .favorite-btn .heart-outline, .40knots-theme .favorite-btn .heart-filled { color: #5686B6 !important; }
-.40knots-theme .favorite-btn.favorited { background: rgba(26,74,122, 0.06) !important; border-color: #1a4a7a !important; color: rgba(255, 255, 255, 0.95) !important; }
-.40knots-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(26,74,122, 0.3) !important; background: transparent !important; }
-.40knots-theme .add-to-cart-btn:hover { background: rgba(26,74,122, 0.08) !important; border-color: #1a4a7a !important; box-shadow: 0 4px 20px rgba(26,74,122, 0.2) !important; }
-.40knots-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
-.40knots-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
+.xerjoff40knots-theme .favorite-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(26,74,122, 0.3) !important; background: transparent !important; }
+.xerjoff40knots-theme .favorite-btn:hover { background: rgba(26,74,122, 0.08) !important; border-color: #1a4a7a !important; color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 4px 20px rgba(26,74,122, 0.2) !important; }
+.xerjoff40knots-theme .favorite-btn .heart-outline, .xerjoff40knots-theme .favorite-btn .heart-filled { color: #5686B6 !important; }
+.xerjoff40knots-theme .favorite-btn.favorited { background: rgba(26,74,122, 0.06) !important; border-color: #1a4a7a !important; color: rgba(255, 255, 255, 0.95) !important; }
+.xerjoff40knots-theme .add-to-cart-btn { color: rgba(255, 255, 255, 0.90) !important; border: 1px solid rgba(26,74,122, 0.3) !important; background: transparent !important; }
+.xerjoff40knots-theme .add-to-cart-btn:hover { background: rgba(26,74,122, 0.08) !important; border-color: #1a4a7a !important; box-shadow: 0 4px 20px rgba(26,74,122, 0.2) !important; }
+.xerjoff40knots-theme .add-to-cart-btn .cart-icon svg { color: rgba(255, 255, 255, 0.90) !important; stroke: rgba(255, 255, 255, 0.90) !important; }
+.xerjoff40knots-theme .add-to-cart-btn.added { border-color: rgba(229, 72, 77, 0.3) !important; color: #dc3545 !important; }
 
 /* Price Section */
-.40knots-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
-.40knots-theme .price-currency, .40knots-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
-.40knots-theme .price-subtitle { color: rgba(26,74,122, 0.5) !important; letter-spacing: 3px !important; }
-.40knots-theme .price-ornament { border-color: rgba(26,74,122, 0.35) !important; }
-.40knots-theme .price-badge:hover .price-ornament { border-color: #1a4a7a !important; }
+.xerjoff40knots-theme .product-price { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+.xerjoff40knots-theme .price-currency, .xerjoff40knots-theme .price-unit { color: rgba(255,255,255,0.85) !important; }
+.xerjoff40knots-theme .price-subtitle { color: rgba(26,74,122, 0.5) !important; letter-spacing: 3px !important; }
+.xerjoff40knots-theme .price-ornament { border-color: rgba(26,74,122, 0.35) !important; }
+.xerjoff40knots-theme .price-badge:hover .price-ornament { border-color: #1a4a7a !important; }
 
 /* Card Enhancements */
-.40knots-theme .product-actions-buttons { position: relative !important; }
-.40knots-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(26,74,122, 0.25), transparent) !important; }
+.xerjoff40knots-theme .product-actions-buttons { position: relative !important; }
+.xerjoff40knots-theme .product-actions-buttons::before { content: '' !important; position: absolute !important; top: -15px !important; left: 15% !important; right: 15% !important; height: 1px !important; background: linear-gradient(90deg, transparent, rgba(26,74,122, 0.25), transparent) !important; }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .40knots-product-section { flex-direction: column !important; text-align: center !important; }
-    .40knots-image { width: 250px !important; }
-    .40knots-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
-    .40knots-rating-row { flex-direction: column !important; }
+    .xerjoff40knots-product-section { flex-direction: column !important; text-align: center !important; }
+    .xerjoff40knots-image { width: 250px !important; }
+    .xerjoff40knots-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .xerjoff40knots-rating-row { flex-direction: column !important; }
 }
 /* Reviews Section */
-.40knots-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
-.40knots-theme .reviews-header, .40knots-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
-.40knots-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(26,74,122,0.15) !important; }
-.40knots-theme .signin-prompt-content h4, .40knots-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
-.40knots-theme .signin-prompt-btn { background: linear-gradient(135deg, #0D253D, #1a4a7a) !important; color: #0a0a0f !important; }
-.40knots-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(26,74,122,0.2) !important; color: rgba(255,255,255,0.90) !important; }
-.40knots-theme .submit-btn { background: linear-gradient(135deg, #0D253D, #1a4a7a) !important; color: #0a0a0f !important; }
+.xerjoff40knots-theme .reviews-section { color: rgba(255,255,255,0.85) !important; }
+.xerjoff40knots-theme .reviews-header, .xerjoff40knots-theme .reviews-title { color: rgba(255,255,255,0.90) !important; }
+.xerjoff40knots-theme .review-signin-prompt { background: rgba(255,255,255,0.05) !important; border-color: rgba(26,74,122,0.15) !important; }
+.xerjoff40knots-theme .signin-prompt-content h4, .xerjoff40knots-theme .signin-prompt-content p { color: rgba(255,255,255,0.85) !important; }
+.xerjoff40knots-theme .signin-prompt-btn { background: linear-gradient(135deg, #0D253D, #1a4a7a) !important; color: #0a0a0f !important; }
+.xerjoff40knots-theme .review-textarea { background: rgba(255,255,255,0.04) !important; border-color: rgba(26,74,122,0.2) !important; color: rgba(255,255,255,0.90) !important; }
+.xerjoff40knots-theme .submit-btn { background: linear-gradient(135deg, #0D253D, #1a4a7a) !important; color: #0a0a0f !important; }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .40knots-product-section { flex-direction: column !important; text-align: center !important; }
-    .40knots-image { width: 250px !important; }
-    .40knots-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
-    .40knots-rating-row { flex-direction: column !important; }
+    .xerjoff40knots-product-section { flex-direction: column !important; text-align: center !important; }
+    .xerjoff40knots-image { width: 250px !important; }
+    .xerjoff40knots-profiles-container { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+    .xerjoff40knots-rating-row { flex-direction: column !important; }
 }
 
 /* Mobile overflow fix */
 @media (max-width: 760px) {
-    .40knots-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
-    .40knots-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
+    .xerjoff40knots-profiles-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .xerjoff40knots-profiles-container > * { min-width: 280px !important; flex-shrink: 0 !important; }
 }
 /* ==== css/powerofyou-profile.css ==== */
 /* ============================================================================

@@ -420,7 +420,8 @@ html {
 
     /* Layout */
     --pegasus-transition-color: #171719;
-    --marquee-height: 24px;
+    /* Marquee bar removed — kept at 0 so every calc(--marquee-height + …) collapses safely. */
+    --marquee-height: 0px;
     --navbar-height: 72px;
     --content-max-width: 1400px;
 
@@ -499,83 +500,8 @@ html {
     --btn-remove-hover: #c82333;
 }
 
-/* Top marquee */
-.top-marquee {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--marquee-height);
-    background: #000000;
-    color: var(--color-gold);
-    border-bottom: none;
-    z-index: var(--z-marquee);
-    display: flex;
-    align-items: center;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    overflow: hidden;
-}
-
-.top-marquee .marquee-track {
-    display: flex;
-    gap: 0;
-    white-space: nowrap;
-    min-width: max-content;
-    animation: marquee-scroll var(--marquee-duration, 38s) linear infinite;
-    will-change: transform;
-    transition: opacity 0.3s ease;
-}
-
-.top-marquee .marquee-content {
-    padding: 0 34px;
-    letter-spacing: 0.1em;
-    font-size: 9px;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--color-gold);
-    transition: font-size 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    font-family: 'DM Sans', 'Inter', sans-serif;
-}
-
-.top-marquee .marquee-close,
-.top-marquee .marquee-close-btn {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(10, 10, 10, 0.72);
-    border: 1px solid rgba(201, 169, 78, 0.22);
-    color: rgba(245, 243, 240, 0.72);
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    opacity: 0.5;
-}
-
-.top-marquee .marquee-close:hover,
-.top-marquee .marquee-close-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-}
-
-@keyframes marquee-scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
-}
-
-body.has-marquee .navbar {
-    top: var(--marquee-height);
-}
+/* Top marquee removed from the layout. The --marquee-height variable is pinned to
+   0px at :root so existing calc() offsets degrade gracefully. */
 
 /* Navigation Bar */
 .navbar {
@@ -23458,7 +23384,7 @@ html {
   --nav-h: 64px;
 }
 
-body.has-marquee .navbar { top: var(--marquee-height); }
+/* marquee bar removed — navbar stays flush at top */
 
 /* Shell ------------------------------------------------- */
 .navbar {
@@ -23934,15 +23860,6 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
    SCROLL-HIDE — smooth, no jump, no flicker
    ========================================================= */
 
-/* Marquee always uses the same easing/duration as the nav */
-.top-marquee {
-  transition:
-    transform var(--nav-dur) var(--nav-ease),
-    opacity var(--nav-dur) var(--nav-ease),
-    filter var(--nav-dur) var(--nav-ease);
-  will-change: transform, opacity;
-}
-
 /* Hidden state — translate by measured height (JS writes --nav-h) */
 body.top-shell-hidden .navbar {
   transform: translate3d(0, calc(-1 * var(--nav-h)), 0);
@@ -23950,17 +23867,10 @@ body.top-shell-hidden .navbar {
   pointer-events: none;
   /* NOTE: no filter blur — that's what caused GPU flicker */
 }
-body.top-shell-hidden .top-marquee {
-  transform: translate3d(0, calc(-1 * var(--marquee-height)), 0);
-  opacity: 0;
-  pointer-events: none;
-}
 
 /* Any open surface or focus keeps chrome visible */
 body.top-shell-interacting .navbar,
-body.top-shell-interacting .top-marquee,
-.navbar:focus-within,
-.top-marquee:focus-within {
+.navbar:focus-within {
   transform: translate3d(0, 0, 0) !important;
   opacity: 1 !important;
   pointer-events: auto !important;

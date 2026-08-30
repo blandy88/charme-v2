@@ -792,6 +792,41 @@ const allowedStaticFiles = new Map([
   ...fs.readdirSync(__dirname).filter((file) => file.toLowerCase().endsWith(".svg")),
 ].map((file) => [`/${file.toLowerCase()}`, file]),
 );
+
+/* The whitelist above is a snapshot taken at boot, so any root-level asset
+   created after the process starts would silently 404 until the next restart.
+   Fall back to a live lookup for plain filenames sitting directly in the site
+   root. This mirrors the whitelist's intent: serve only image/favicon assets.
+   Names are strictly validated - no separators, no traversal, root level only,
+   and the extension must be a known public asset type. Anything else (package
+   .json, .env, server.js, ...) falls through untouched. */
+const ROOT_FILE_RE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+const ROOT_FILE_EXT = new Set([
+  ".svg",
+  ".ico",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".gif",
+  ".avif",
+]);
+function resolveRootFile(reqPath) {
+  const name = String(reqPath || "").replace(/^\/+/, "");
+  if (!ROOT_FILE_RE.test(name) || name.indexOf("..") !== -1) return null;
+  if (!ROOT_FILE_EXT.has(path.extname(name).toLowerCase())) return null;
+  const abs = path.join(__dirname, name);
+  if (path.dirname(abs) !== __dirname) return null;
+  let st;
+  try {
+    st = fs.statSync(abs);
+  } catch (err) {
+    return null;
+  }
+  if (!st.isFile()) return null;
+  return name;
+}
+
 app.use((req, res, next) => {
   if (req.path === "/") {
     res.setHeader("Cache-Control", "no-cache, must-revalidate");
@@ -799,7 +834,7 @@ app.use((req, res, next) => {
   }
 
   const normalizedPath = req.path.toLowerCase();
-  const staticFile = allowedStaticFiles.get(normalizedPath);
+  const staticFile = allowedStaticFiles.get(normalizedPath) || resolveRootFile(req.path);
   if (staticFile) {
     const ext = path.extname(staticFile).toLowerCase();
     const isHtml = ext === ".html";
@@ -3171,11 +3206,21 @@ const sanitizeHours = (body) => {
   const raw = body && body.schedule;
   if (!Array.isArray(raw) || raw.length !== 7) return null;
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  // Accept hour values as numbers (9, 9.5, 18.75) or "HH:MM" strings ("09:30").
+  const toHour = (v) => {
+    if (typeof v === "string" && /^\d{1,2}:\d{2}$/.test(v.trim())) {
+      const [h, m] = v.trim().split(":").map((n) => parseInt(n, 10));
+      return h + (Number.isFinite(m) ? m / 60 : 0);
+    }
+    const n = typeof v === "number" ? v : globalThis.parseFloat(String(v));
+    return Number.isFinite(n) ? n : null;
+  };
   const schedule = days.map((day, i) => {
     const item = raw[i] || {};
-    const toInt = (v) => Number.isInteger(v) ? v : null;
-    let open = toInt(item.open);
-    let close = toInt(item.close);
+    // Round to 4 decimals to avoid float artifacts (e.g. 10.300000000000001).
+    const norm = (n) => (n === null ? null : Math.round(n * 10000) / 10000);
+    let open = norm(toHour(item.open));
+    let close = norm(toHour(item.close));
     if (open === null || close === null || open < 0 || open > 24 || close < 0 || close > 24) {
       open = null;
       close = null;

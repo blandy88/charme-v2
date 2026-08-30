@@ -165,29 +165,11 @@ window.createSimpleAvatar = function (avatarSrc, altText = "User Avatar") {
 
 document.addEventListener("DOMContentLoaded", function () {
   const body = document.body;
-  // Marquee close handler
-  const closeTopMarquee = document.getElementById("closeTopMarquee");
-  const marqueeBar = document.getElementById("topMarquee");
-  const navbarEl = document.querySelector(".navbar");
-  if (marqueeBar && navbarEl) {
-    document.body.classList.add("has-marquee");
-    // navbarEl.style.top = "34px"; // Handled by CSS variable
-  }
+  // Marquee bar was removed; navbar now sits flush at the top.
   let topChromeController;
-  if (closeTopMarquee) {
-    closeTopMarquee.addEventListener("click", () => {
-      const bar = document.getElementById("topMarquee");
-      if (bar) {
-        bar.style.display = "none";
-        document.body.classList.remove("has-marquee");
-        topChromeController?.reveal();
-        // const nav = document.querySelector(".navbar");
-        // if (nav) nav.style.top = "0px"; // Handled by CSS
-      }
-    });
-  }
 
-  body.classList.remove("marquee-compact", "marquee-minimal");
+  body.classList.remove("has-marquee", "marquee-compact", "marquee-minimal");
+  const navbarEl = document.querySelector(".navbar");
   topChromeController = initTopChromeScrollBehavior();
   const navbar = document.querySelector(".navbar");
   let ticking = false;
@@ -195,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function initTopChromeScrollBehavior() {
     if (!navbarEl) return null;
 
-    const chromeElements = [navbarEl, marqueeBar].filter(Boolean);
+    const chromeElements = [navbarEl].filter(Boolean);
 
     // Tunables
     const SCROLL_TOP_ZONE     = 8;    // px — always show near the top
@@ -212,17 +194,9 @@ document.addEventListener("DOMContentLoaded", function () {
       return Math.max(0, window.pageYOffset || document.documentElement.scrollTop || 0);
     }
 
-    function marqueeIsVisible() {
-      return Boolean(
-        marqueeBar &&
-        document.body.classList.contains("has-marquee") &&
-        getComputedStyle(marqueeBar).display !== "none"
-      );
-    }
-
     function writeChromeHeightVar() {
       // Measured height keeps the hide transform pixel-perfect on any viewport
-      const h = navbarEl.offsetHeight + (marqueeIsVisible() ? marqueeBar.offsetHeight : 0);
+      const h = navbarEl.offsetHeight;
       document.documentElement.style.setProperty("--nav-h", h + "px");
     }
 
@@ -269,9 +243,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const dt  = Math.max(1, now - lastTs);
       const v   = Math.abs(dy) / dt; // px per ms
 
-      // The marquee hides with the navbar while scrolled down and
-      // returns when the user scrolls back to the very top. Only the
-      // close button (×) dismisses it permanently.
+      // The navbar hides while scrolling down and returns when the
+      // user scrolls back up or reaches the very top.
 
       // Background/hairline state (used by .top-shell-scrolled CSS)
       document.body.classList.toggle("top-shell-scrolled", y > SCROLL_TOP_ZONE);
@@ -319,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }, RESIZE_DEBOUNCE_MS);
     });
 
-    // Keep --nav-h correct if the marquee is added/removed at runtime
+    // Keep --nav-h correct if the top chrome changes at runtime
     const bodyObserver = new MutationObserver(() => writeChromeHeightVar());
     bodyObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
 
@@ -1056,12 +1029,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function scrollToSearchTarget(element) {
     const navbar = document.querySelector(".navbar");
-    const marquee = document.getElementById("topMarquee");
     const navbarHeight = navbar?.getBoundingClientRect().height || 0;
-    const marqueeHeight = marquee && getComputedStyle(marquee).display !== "none"
-      ? marquee.getBoundingClientRect().height
-      : 0;
-    const offset = navbarHeight + marqueeHeight + 14;
+    const offset = navbarHeight + 14;
     const top = Math.max(0, element.getBoundingClientRect().top + window.pageYOffset - offset);
     const distance = Math.abs(top - window.pageYOffset);
 
@@ -2402,7 +2371,7 @@ const _sectionColorMap = [
   ['grandSoir', '.grandSoir-section', '#140e04', '#120e04'],
   ['balayage', '.balayage-section', '#120e04', '#0a0814'],
   ['valayaexclusive', '.valayaexclusive-section', '#0a0814', '#0a1020'],
-  ['1millionnight', '.1millionnight-section', '#0a1020', '#1a0606'],
+  ['1millionnight', '.onemillionnight-section', '#0a1020', '#1a0606'],
   ['freedommuskmatcha', '.freedommuskmatcha-section', '#1a0606', '#0a1208'],
   ['torrino21', '.torrino21-section', '#0a1208', '#1a1404'],
   ['kayalimarshmallow', '.kayalimarshmallow-section', '#1a1404', '#140a12'],
@@ -5155,7 +5124,7 @@ function updateColors() {
     { id: 'grandSoir', imageClass: '.grandSoir-image', infoSelector: '.grandSoir-theme .product-info-section', scentClass: '.grandSoir-scent-profile', ingredientsClass: '.grandSoir-ingredients', descClass: '.grandSoir-fragrance-description', containerClass: '.grandSoir-main-container' },
     { id: 'balayage', imageClass: '.balayage-image', infoSelector: '.balayage-theme .product-info-section', scentClass: '.balayage-scent-profile', ingredientsClass: '.balayage-ingredients', descClass: '.balayage-fragrance-description', containerClass: '.balayage-main-container' },
     { id: 'valayaexclusive', imageClass: '.valayaexclusive-image', infoSelector: '.valayaexclusive-theme .product-info-section', scentClass: '.valayaexclusive-scent-profile', ingredientsClass: '.valayaexclusive-ingredients', descClass: '.valayaexclusive-fragrance-description', containerClass: '.valayaexclusive-main-container' },
-    { id: '1millionnight', imageClass: '[class*="1millionnight-image"]', infoSelector: '[class*="1millionnight-theme"] .product-info-section', scentClass: '[class*="1millionnight-scent-profile"]', ingredientsClass: '[class*="1millionnight-ingredients"]', descClass: '[class*="1millionnight-fragrance-description"]', containerClass: '[class*="1millionnight-main-container"]' },
+    { id: '1millionnight', imageClass: '[class*="onemillionnight-image"]', infoSelector: '[class*="onemillionnight-theme"] .product-info-section', scentClass: '[class*="onemillionnight-scent-profile"]', ingredientsClass: '[class*="onemillionnight-ingredients"]', descClass: '[class*="onemillionnight-fragrance-description"]', containerClass: '[class*="onemillionnight-main-container"]' },
     { id: 'freedommuskmatcha', imageClass: '.freedommuskmatcha-image', infoSelector: '.freedommuskmatcha-theme .product-info-section', scentClass: '.freedommuskmatcha-scent-profile', ingredientsClass: '.freedommuskmatcha-ingredients', descClass: '.freedommuskmatcha-fragrance-description', containerClass: '.freedommuskmatcha-main-container' },
     { id: 'torrino21', imageClass: '.torrino21-image', infoSelector: '.torrino21-theme .product-info-section', scentClass: '.torrino21-scent-profile', ingredientsClass: '.torrino21-ingredients', descClass: '.torrino21-fragrance-description', containerClass: '.torrino21-main-container' },
     { id: 'kayalimarshmallow', imageClass: '.kayalimarshmallow-image', infoSelector: '.kayalimarshmallow-theme .product-info-section', scentClass: '.kayalimarshmallow-scent-profile', ingredientsClass: '.kayalimarshmallow-ingredients', descClass: '.kayalimarshmallow-fragrance-description', containerClass: '.kayalimarshmallow-main-container' },
@@ -11056,12 +11025,19 @@ function renderHoursAdminForm(schedule) {
     timeWrap.className = "hours-admin-time";
     if (closed) timeWrap.style.display = "none";
 
+    const hourToTime = (h) => {
+      if (h === null || h === undefined || isNaN(h)) return "09:00";
+      const total = Math.round(h * 60);
+      const hh = Math.floor(total / 60);
+      const mm = total % 60;
+      return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+    };
     const openInput = document.createElement("input");
     openInput.type = "time";
-    openInput.value = closed ? "09:00" : `${String(item.open).padStart(2, "0")}:00`;
+    openInput.value = closed ? "09:00" : hourToTime(item.open);
     const closeInput = document.createElement("input");
     closeInput.type = "time";
-    closeInput.value = closed ? "19:00" : `${String(item.close).padStart(2, "0")}:00`;
+    closeInput.value = closed ? "19:00" : hourToTime(item.close);
 
     timeWrap.appendChild(openInput);
     timeWrap.appendChild(document.createTextNode("–"));

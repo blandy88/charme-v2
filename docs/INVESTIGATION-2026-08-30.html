@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Charme — Deep Site Investigation · 2026-08-30</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#5c6470; --line:#e3e6ea; --bg:#fbfbfc; --card:#ffffff;
+    --crit:#b3261e; --crit-bg:#fdecea; --high:#c2590b; --high-bg:#fdf0e3;
+    --med:#8a6d0b; --med-bg:#fdf8e3; --low:#3a6b35; --low-bg:#eef5ee;
+    --good:#1d6f5c; --good-bg:#eaf5f2; --accent:#2f4f6f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:56px 28px 96px}
+  header{border-bottom:3px solid var(--ink);padding-bottom:22px;margin-bottom:36px}
+  h1{font-size:30px;line-height:1.2;margin:0 0 10px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px}
+  h2{font-size:20px;margin:52px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line);letter-spacing:-.01em}
+  h3{font-size:16px;margin:28px 0 8px}
+  p{margin:10px 0}
+  code{font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f1f3f5;
+    padding:1px 5px;border-radius:4px;font-size:12.5px}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px;background:var(--card);
+    border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  th{background:#f5f6f8;text-align:left;padding:9px 12px;font-weight:600;font-size:12.5px;
+    text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid var(--line)}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .stat b{display:block;font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .stat span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .f{border:1px solid var(--line);border-left:4px solid var(--muted);background:var(--card);
+    border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0}
+  .f.crit{border-left-color:var(--crit)} .f.high{border-left-color:var(--high)}
+  .f.med{border-left-color:var(--med)}  .f.low{border-left-color:var(--low)}
+  .f.good{border-left-color:var(--good);background:var(--good-bg)}
+  .f h4{margin:0 0 6px;font-size:15px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.06em;
+    text-transform:uppercase;color:#fff;background:var(--muted)}
+  .tag.crit{background:var(--crit)} .tag.high{background:var(--high)}
+  .tag.med{background:var(--med)} .tag.low{background:var(--low)} .tag.good{background:var(--good)}
+  .tag.live{background:#111;box-shadow:0 0 0 3px rgba(17,17,17,.12)}
+  .ev{margin:8px 0 0;font-size:12.5px;color:var(--muted)}
+  .ev code{background:#f1f3f5}
+  ul{margin:8px 0;padding-left:22px} li{margin:5px 0}
+  .note{background:#f5f6f8;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:13.5px;color:var(--muted)}
+  ol.plan{counter-reset:s;list-style:none;padding:0}
+  ol.plan>li{counter-increment:s;position:relative;padding:12px 0 12px 46px;border-bottom:1px solid var(--line)}
+  ol.plan>li:before{content:counter(s);position:absolute;left:0;top:12px;width:28px;height:28px;
+    border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;
+    justify-content:center;font-size:13px;font-weight:600}
+  ol.plan>li.p0:before{background:var(--crit)} ol.plan>li.p1:before{background:var(--high)}
+  ol.plan>li.p2:before{background:var(--med)}
+  .fix{font-size:12.5px;color:var(--muted);display:block;margin-top:4px}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Charme — Deep Site Investigation</h1>
+  <div class="sub">
+    <strong>charmeperfume.me</strong> · repo <code>blandy88/charme-v2</code> · branch <code>main</code> @ <code>3400bde</code><br>
+    30 August 2026 · static frontend (GitHub Pages) + Express API (Render) · 153 commits, 2 contributors
+  </div>
+</header>
+
+<p>This is a full-stack audit: architecture, security, frontend performance, data integrity, asset
+management, and repository hygiene. Every finding below was reproduced against the actual code or
+the running server — items marked <span class="tag live">VERIFIED LIVE</span> were confirmed by
+HTTP request against <code>https://charmeperfume.me</code> or the local server on <code>:3000</code>.</p>
+
+<div class="grid">
+  <div class="stat"><b>8.03 MB</b><span>Page weight (raw)</span></div>
+  <div class="stat"><b>~77,000</b><span>DOM nodes</span></div>
+  <div class="stat"><b>185</b><span>Hardcoded products</span></div>
+  <div class="stat"><b>80 / 185</b><span>Products AI can find</span></div>
+  <div class="stat"><b>2.62 GiB</b><span>Repo on disk</span></div>
+  <div class="stat"><b>9</b><span>Findings: critical/high</span></div>
+</div>
+
+<h2>1. Confirmed on production — tested, not inferred</h2>
+
+<div class="f crit">
+  <h4>The hero artwork and the favicon are 404ing on the live site <span class="tag crit">Critical</span> <span class="tag live">Verified live</span></h4>
+  <p>Two assets that <code>index.html</code> explicitly references are missing from the deployed site.
+  Both fail on <code>charmeperfume.me</code> right now:</p>
+  <table>
+    <tr><th>Asset</th><th class="num">HTTP</th><th>Root cause</th></tr>
+    <tr><td><code>assets/map-face-characteristics.png</code> (296 KB)</td><td class="num">404</td>
+        <td>The deploy workflow never copies <code>assets/</code> into <code>_site/</code></td></tr>
+    <tr><td><code>favicon.ico</code></td><td class="num">404</td>
+        <td><code>.gitignore:113</code> ignores it, so it was never committed; the workflow's
+            <code>cp favicon.ico _site/ 2&gt;/dev/null || true</code> silently no-ops</td></tr>
+  </table>
+  <p class="ev">Evidence: <code>curl -I https://charmeperfume.me/assets/map-face-characteristics.png</code> → 404.
+  <code>.github/workflows/deploy-gh-pages.yml</code> copies <code>index.html, styles.css, script.js, js/, css/, images/</code>,
+  root images and <code>CNAME</code> — but not <code>assets/</code>. The <code>assets/</code> directory was
+  created on 29 Aug; the workflow was last edited 15 Aug. The last five commits' headline features
+  (hero face artwork, store-hours card) are therefore not live.</p>
+  <p><strong>Fix (two lines):</strong> add <code>cp -r assets _site/</code> to the workflow; delete
+  <code>favicon.ico</code> from <code>.gitignore</code> and <code>git add favicon.ico</code>.</p>
+</div>
+
+<div class="f crit">
+  <h4>Unauthenticated endpoint returns the admin's name and email <span class="tag crit">Critical</span> <span class="tag live">Verified live</span></h4>
+  <p><code>GET /api/dev/debug-user/1</code> requires <em>no</em> token and returns real user records.</p>
+  <p class="ev"><code>curl http://localhost:3000/api/dev/debug-user/1</code> →
+  <code>200 {"success":true,"user":{"id":1,"name":"Cherif Med","email":"cherifmed1200@gmail.com",...}}</code></p>
+  <p class="ev">These three routes are registered only when <code>NODE_ENV === "development"</code>
+  (<code>server.js:3330</code>), so Render (<code>NODE_ENV=production</code>) does not expose them.
+  But they are live in any dev environment, and <code>/api/dev/reset-rate-limit</code> wipes the
+  login rate limiter. <code>server.js:3331-3440</code>.</p>
+  <p><strong>Fix:</strong> delete the <code>/api/dev/*</code> block, or gate it behind
+  <code>requireAdmin</code> as well as <code>NODE_ENV</code>.</p>
+</div>
+
+<div class="f high">
+  <h4>The entire catalogue hotlinks a third-party CDN <span class="tag high">High</span> <span class="tag live">Verified live</span></h4>
+  <p>All 186 product bottle images are loaded directly from Fragrantica's image host
+  (<code>fimgs.net/mdimg/perfume/…</code>). Zero product images are hosted locally. All 12
+  spot-checked URLs return <code>200</code> today, so nothing is broken <em>yet</em>.</p>
+  <p>This is a structural dependency: if Fragrantica adds hotlink protection, rate-limits by
+  referrer, or reorganises URLs, all 186 product images break at once with no fallback. It also
+  carries copyright exposure for a commercial storefront.</p>
+  <p><strong>Fix:</strong> download and self-host the images (or license them), keep the local
+  <code>images/</code> copies as <code>onerror</code> fallback.</p>
+</div>
+
+<h2>2. Security</h2>
+
+<div class="f crit">
+  <h4>Any registered account can download all 503 loyalty customers <span class="tag crit">Critical</span></h4>
+  <p><code>GET /api/search/loyalty-profiles</code> is protected by <code>authenticateToken</code> only —
+  no <code>requireAdmin</code> — and returns name, phone, email, card number and points.</p>
+  <p class="ev">Verified: <code>server.js:2919</code> —
+  <code>app.get("/api/search/loyalty-profiles", authenticateToken, async (req,res)=>{</code>.
+  The query is a wildcard <code>LIKE '%q%'</code> over four columns and <code>q</code> only needs two
+  characters, so an attacker iterates 2–3 character prefixes to walk the entire customer file.</p>
+  <p><strong>Amplifier:</strong> <code>render.yaml:16</code> sets <code>ALLOW_UNVERIFIED_LOGIN=true</code>,
+  so "registered" means anyone with a throwaway email. This is a real personal-data exposure.</p>
+  <p><strong>Fix:</strong> add <code>requireAdmin</code>. Re-evaluate the unverified-login flag.</p>
+</div>
+
+<div class="f crit">
+  <h4>Admin credentials hardcoded in a tracked file, replayed on every deploy <span class="tag crit">Critical</span></h4>
+  <p class="ev"><code>scripts/init-database.js:1938-1939</code>:<br>
+  <code>const adminEmail = (process.env.ADMIN_EMAIL || 'cherifmed1200@gmail.com')…</code><br>
+  <code>const adminPassword = process.env.ADMIN_PASSWORD || 'medmedmed88';</code></p>
+  <p>Confirmed tracked by git. <code>render.yaml:8</code> runs
+  <code>startCommand: npm run init-db && npm start</code>, so this executes on <em>every</em> deploy
+  and cold start. If the env vars are unset, that account is created or promoted to admin.</p>
+  <p><strong>Fix:</strong> remove both fallbacks; fail loudly if unset. Rotate the password — it is
+  also present in plain text in <code>.env:18</code>.</p>
+</div>
+
+<div class="f high">
+  <h4>Rate limiting is effectively global, not per-client <span class="tag high">High</span></h4>
+  <p>No <code>app.set('trust proxy', …)</code> anywhere (0 matches in <code>server.js</code> /
+  <code>db.js</code>). Behind Render's load balancer every request appears to come from one address,
+  so the auth limiter is <strong>20 failed logins per 15 minutes for the entire site</strong> — one
+  attacker locks out all customers.</p>
+  <p><strong>Fix:</strong> <code>app.set('trust proxy', 1)</code> before the limiters, then re-tune.</p>
+</div>
+
+<div class="f high">
+  <h4>Boot-time migration can silently DROP the loyalty tables <span class="tag high">High</span></h4>
+  <p><code>server.js:369-378</code> — if <code>loyalty_cards</code> is missing a <code>holder_name</code>
+  column, the app runs <code>DROP TABLE IF EXISTS loyalty_transactions</code> then
+  <code>DROP TABLE IF EXISTS loyalty_cards</code> and recreates both. That deletes 503 customer
+  cards and 152 transactions, on process start, with no confirmation and no backup.</p>
+</div>
+
+<div class="f med">
+  <h4>Other confirmed issues</h4>
+  <ul>
+    <li><strong>Reviewer emails leak publicly.</strong> <code>/api/reviews/:fragrance</code> and
+      <code>/api/reviews/:id/replies</code> are unauthenticated and use <code>SELECT r.*</code>, which
+      returns the <code>user_email</code> column. <code>server.js:3455, 4076</code>.</li>
+    <li><strong>IDOR on profile read.</strong> <code>POST /api/user/profile-details</code> takes
+      <code>userId</code> from the request body with no ownership check. <code>server.js:1425</code>.</li>
+    <li><strong>Admin map exposed.</strong> <code>/api/search/users</code> and
+      <code>/api/stats/users</code> need only <code>authenticateToken</code>; the former returns
+      <code>is_admin</code> for every match. <code>server.js:1986, 2072</code>.</li>
+    <li><strong>Weak JWT secret guard.</strong> <code>server.js:36-53</code> rejects only two
+      placeholder patterns; the current <code>.env</code> value
+      <code>dev_test_secret_change_me_…</code> passes every check.</li>
+    <li><strong>DB TLS verification disabled.</strong> <code>db.js:208</code>
+      <code>ssl:{rejectUnauthorized:false}</code>.</li>
+    <li><strong>News <code>cta_url</code> unsanitised</strong> and assigned to <code>href</code>
+      client-side — a <code>javascript:</code> URL executes on click. <code>server.js:3025-3057</code>.</li>
+    <li><strong>No SIGTERM handler</strong> — Render sends SIGTERM on deploy, so the Postgres pool
+      never closes cleanly. <code>server.js:4476</code>.</li>
+  </ul>
+</div>
+
+<div class="f good">
+  <h4>Security that is genuinely done well <span class="tag good">Verified clean</span></h4>
+  <ul>
+    <li><strong>No SQL injection.</strong> Every user value is bound. The only dynamic SQL
+      (<code>server.js:2649, 2857</code>) interpolates server-controlled literals.</li>
+    <li><strong>Passwords correct.</strong> bcryptjs cost 12; both stored hashes are <code>$2…</code>,
+      60 chars. No plaintext, no SHA/MD5. Login returns an identical 401 for unknown user and
+      wrong password — no enumeration.</li>
+    <li><strong>No secrets in git history.</strong> All 153 commits searched: <code>.env</code>,
+      <code>login.json</code>, <code>reg.json</code> never committed; the Neon password never appears.</li>
+    <li><strong>Admin routes covered.</strong> All 16 <code>/api/admin/*</code> routes carry
+      <code>authenticateToken</code> + <code>requireAdmin</code>, and <code>requireAdmin</code>
+      re-reads <code>is_admin</code> from the DB per request.</li>
+    <li><strong>Uploads and static serving are tight.</strong> multer memory storage, 5 MB cap,
+      mimetype filter, sharp re-encode, server-generated filenames; root static files resolve through
+      a prebuilt allowlist <code>Map</code>, so no path traversal.</li>
+    <li><strong>Errors don't leak.</strong> Stack traces are logged server-side; clients get a
+      generic message. DOMPurify sanitises reviews, replies, notes and store-hours strings.</li>
+  </ul>
+</div>
+
+<h2>3. Frontend — performance and correctness</h2>
+
+<table>
+  <tr><th>Measure</th><th class="num">Value</th><th>Note</th></tr>
+  <tr><td><code>index.html</code></td><td class="num">3.62 MB</td><td>185 hardcoded perfume sections; 21.6% is indentation whitespace</td></tr>
+  <tr><td><code>css/combined-profiles.css</code></td><td class="num">2.19 MB</td><td>Exact concatenation of 117 near-identical per-perfume files</td></tr>
+  <tr><td><code>script.js</code></td><td class="num">847 KB</td><td>22,547 lines; 901 <code>console.log</code>; 105 KB duplicated lines</td></tr>
+  <tr><td><code>styles.css</code></td><td class="num">732 KB</td><td>2,959 <code>!important</code>; ~15% of classes unused</td></tr>
+  <tr><td>CSS actually loaded</td><td class="num">3 of 122</td><td>119 CSS files ship but are never referenced</td></tr>
+  <tr><td>Dead JS shipped</td><td class="num">0.76 MB</td><td><code>three.min.js</code> 636 KB + 4 orphan modules</td></tr>
+</table>
+
+<div class="f high">
+  <h4>The 117 per-perfume CSS files are one template emitted 117 times <span class="tag high">High</span></h4>
+  <p>Each file is ~18 KB of rules like
+  <code>.40knots-theme .product-name{color:rgba(255,255,255,.95)!important}</code>, differing only in
+  the prefix and 2–4 accent colours. Normalised diffing shows <strong>~90% identical</strong> content.
+  All 117 ship <em>and</em> the 2.19 MB concatenation ships. Realistic collapse:
+  <strong>2.19 MB → ~50 KB</strong> plus one accent-variable block per perfume.</p>
+</div>
+
+<div class="f high">
+  <h4>Two perfumes have silently broken theme CSS <span class="tag high">High</span></h4>
+  <ul>
+    <li><strong>40 Knots — entirely dead stylesheet.</strong>
+      <code>css/40knots-profile.css:10</code> declares <code>.40knots-main-container</code>. A CSS
+      class selector cannot begin with a digit, so the parser discards the rule. All 100+ selectors in
+      the 18 KB file are invalid — <em>the whole theme does nothing</em>. Verified in the file.</li>
+    <li><strong>1 Million Night — double-broken.</strong> The markup uses
+      <code>class="1millionnight-…"</code> (also digit-leading → invalid) while the generated file is
+      <code>css/onemillionnight-profile.css</code> defining <code>.onemillionnight-theme</code>.
+      Neither prefix can ever match.</li>
+  </ul>
+  <p class="ev">Verified: <code>grep -o '1millionnight[a-z-]*' index.html</code> returns
+  <code>1millionnight</code>…; <code>ls css/ | grep millionnight</code> returns only
+  <code>onemillionnight-profile.css</code>.</p>
+</div>
+
+<div class="f med">
+  <h4>Structural and accessibility defects</h4>
+  <ul>
+    <li><strong>186 <code>&lt;h1&gt;</code> elements</strong> (verified count) — one per product.
+      The document outline is meaningless for screen readers and SEO.</li>
+    <li><strong>188 <code>&lt;img src=""&gt;</code></strong> (verified) — one per product review form.
+      Invalid HTML; browsers resolve the empty URL against the document and can re-request the
+      3.8 MB page.</li>
+    <li><strong>~77,000 DOM nodes</strong> with no virtualisation — all 185 products are in the DOM
+      at once.</li>
+    <li><strong>i18n re-translates the whole document on every DOM mutation.</strong>
+      <code>js/i18n.js:2013</code> observes <code>document.body</code> subtree and re-walks every text
+      node against a 1,512-entry dictionary after each change — the single largest recurring
+      main-thread cost.</li>
+    <li><strong>Arabic is advertised but absent.</strong> <code>["en","fr","ar"]</code> is declared,
+      but only an EN→FR dictionary (1,421 keys) exists. No <code>dir="rtl"</code> anywhere.</li>
+    <li><strong>Three incompatible theme vocabularies</strong> — JS writes
+      <code>body.theme-dark/cream/light</code> (11 CSS rules total) while the real styling keys on
+      <code>html[data-theme="light"]</code> (634 rules).</li>
+    <li><strong>Dead parallax engine</strong> — <code>script.js:5216</code> performs 275
+      <code>querySelector</code> calls on every load, then <code>:5259</code> empties the result array.
+      Pure waste.</li>
+    <li><strong>Three parallel catalogue representations</strong> merged at runtime
+      (<code>script.js:415-470</code>): 185 HTML sections, 752-entry JSON, 227-entry JS class.</li>
+  </ul>
+</div>
+
+<h2>4. Data integrity</h2>
+
+<div class="f crit">
+  <h4>The AI Scent Profiler can only see 80 of your 185 products <span class="tag crit">Critical</span></h4>
+  <p><code>js/ai-fragrance-finder.js:168-174</code> filters the 752-entry catalogue against the literal
+  HTML <code>.product-name</code> text using order-sensitive, diacritic-sensitive matching. Result:
+  <strong>106 of 185 products (57%) can never be recommended</strong> by the feature you market as
+  "AI".</p>
+  <p class="ev">Affected include Aventus Absolu, Oud Precieux, Hypnotic Amber, Golden Oud,
+  Arabian Oud, Mysterious Oud, Heavenly Oud, Musk Rose, Tabac Royal, Assad Elixir.</p>
+</div>
+
+<div class="f high">
+  <h4>The <code>products</code> database table is a dead store <span class="tag high">High</span></h4>
+  <p><code>server.js</code> issues zero queries against <code>products</code> — no SELECT, INSERT or
+  UPDATE. The 153 rows were seeded once and never read. Only <strong>2 of 153</strong> product IDs
+  match anything in the HTML (Layton, Pegasus). The live catalogue comes entirely from
+  <code>index.html</code> and <code>js/fragrance-catalog-data.js</code>.</p>
+</div>
+
+<div class="f med">
+  <h4>Conflicting product data across sources</h4>
+  <table>
+    <tr><th>Product</th><th>Conflict</th></tr>
+    <tr><td>Pacific Chill</td><td>HTML says brand <em>Armani Privé</em>; catalogue/API/DB say <em>Louis Vuitton</em> (correct)</td></tr>
+    <tr><td>Cristal Noir</td><td>HTML says <em>Raghba</em>; API says <em>Versace</em> (correct)</td></tr>
+    <tr><td>Layton</td><td>Price 35 dt (HTML) / 259.99 (catalogue) / 195 (DB)</td></tr>
+    <tr><td>Pegasus</td><td>Price 45 dt / 259.99 / 180 — plus two different descriptions</td></tr>
+    <tr><td>1 Million Gold</td><td>Note lists are completely disjoint between HTML and catalogue — likely a different fragrance</td></tr>
+  </table>
+  <p>Totals: 18 brand conflicts, 34 ingredient-set conflicts, 101 price disagreements,
+  53 description disagreements.</p>
+</div>
+
+<h2>5. Repository hygiene</h2>
+
+<table>
+  <tr><th>Measure</th><th class="num">Value</th></tr>
+  <tr><td>Repo on disk</td><td class="num">2.62 GiB</td></tr>
+  <tr><td><code>.git</code> directory</td><td class="num">323 MiB</td></tr>
+  <tr><td><code>index.html</code> history alone</td><td class="num">278 MB (82 revisions)</td></tr>
+  <tr><td>Untracked debug artifacts</td><td class="num">97 files · 111 MB</td></tr>
+  <tr><td>Byte-identical page dumps</td><td class="num">25 files · 82 MB (6 unique)</td></tr>
+  <tr><td><code>charme_app/build/</code> (regenerable)</td><td class="num">962 MiB</td></tr>
+  <tr><td>Deploy artifact</td><td class="num">215 MB per push</td></tr>
+</table>
+
+<div class="f high">
+  <h4><code>CLAUDE.md</code> and <code>.windsurfrules</code> are not your project <span class="tag high">High</span></h4>
+  <p>Both files are <strong>byte-identical (same MD5, 20,427 B)</strong> and contain the Super Design
+  VS Code extension's system prompt: "You are superdesign, a senior frontend designer integrated into
+  VS Code", with instructions to write into <code>.superdesign/design_iterations</code>. The words
+  "charme" and "perfume" appear <strong>zero times</strong>. Every AI coding session in this repo
+  loads 20 KB of instructions for a different product — a plausible driver of the
+  <code>.superdesign/</code> directory being committed and of the artifact sprawl.</p>
+</div>
+
+<div class="f med">
+  <h4>Version control hazards</h4>
+  <ul>
+    <li><strong>Orphan branch.</strong> <code>gh-pages-fresh</code> and <code>v2/main</code> share a
+      root commit with no common ancestor to <code>main</code>. The <code>v2</code> remote points at
+      the <em>same URL</em> as <code>origin</code>, so <code>git merge v2/main</code> looks safe
+      ("1 ahead, 153 behind") but merges a disjoint history.</li>
+    <li><strong><code>gh-pages</code> branch is dead code.</strong> Pages deploys from the Actions
+      artifact, not the branch. It is 129 commits behind and read by nothing.</li>
+    <li><strong>Manual cache-busting is already wrong.</strong> 14 assets carry 9 different
+      <code>?v=</code> strings; <code>css/fragrance-layout-normalize.css?v=20260850</code> is not a
+      valid date. One commit (<code>fe4dbdb</code>) exists purely to fix a previous bump that failed
+      in production.</li>
+    <li><strong>Gitignored files are still tracked.</strong> <code>.playwright-mcp/</code> (498 MiB)
+      and <code>.superdesign/</code> are in <code>.gitignore</code> yet committed — ignore rules don't
+      apply to tracked files.</li>
+    <li><strong>151 MiB of loose objects</strong> never packed; <code>git gc</code> is overdue.</li>
+    <li><strong><code>opencode.json</code></strong> contains a Raspberry Pi facial-recognition
+      project's ignore list and hard-coded <code>C:\Users\cheri\</code> paths — breaks for your
+      second contributor.</li>
+  </ul>
+</div>
+
+<div class="f low">
+  <h4>Note on duplicate images <span class="tag low">Corrected</span></h4>
+  <p>36 groups of root images are byte-identical (24.7 MiB), confirmed by MD5 — e.g.
+  <code>aventus.png</code> ≡ <code>aventusabsolu.png</code>,
+  <code>fahrenheit.png</code> ≡ <code>terre-dhermes.png</code>,
+  <code>layton.png</code> ≡ <code>mysteriousoud.png</code>.</p>
+  <p><strong>But this is not a live "wrong bottle image" bug.</strong> In every group one copy is
+  referenced and the other is an orphan — the product images actually displayed come from
+  <code>fimgs.net</code>. This is repository bloat, not a customer-facing defect.</p>
+  <p>Real orphan waste: <strong>155 of 285 root images (65.9 MiB) are referenced by nothing</strong>
+  — and the workflow copies all of them into every deploy.</p>
+</div>
+
+<h2>6. Prioritised action plan</h2>
+
+<ol class="plan">
+  <li class="p0"><strong>Add <code>cp -r assets _site/</code> to the deploy workflow</strong>
+    <span class="fix">Un-ignore <code>favicon.ico</code> too. Your last five commits are invisible on production.</span></li>
+  <li class="p0"><strong>Put <code>requireAdmin</code> on <code>/api/search/loyalty-profiles</code></strong>
+    <span class="fix">And on <code>/api/search/users</code> + <code>/api/stats/users</code>. Any registered user can currently dump 503 customers' names, phones and emails.</span></li>
+  <li class="p0"><strong>Remove the hardcoded admin credential fallback</strong>
+    <span class="fix"><code>scripts/init-database.js:1938-1939</code>. Rotate the password; it is also plaintext in <code>.env</code>.</span></li>
+  <li class="p0"><strong>Delete or gate the <code>/api/dev/*</code> routes</strong>
+    <span class="fix"><code>server.js:3330-3440</code> — confirmed leaking the admin email with no token.</span></li>
+  <li class="p1"><strong>Fix the AI finder's catalogue matching</strong>
+    <span class="fix">Normalise diacritics and token order. 106 of 185 products are currently unrecommendable.</span></li>
+  <li class="p1"><strong>Add <code>app.set('trust proxy', 1)</code> and re-tune limiters</strong>
+    <span class="fix">Currently 20 failed logins per 15 min for the whole site.</span></li>
+  <li class="p1"><strong>Fix the two broken themes</strong>
+    <span class="fix">Rename <code>40knots</code> → e.g. <code>xerjoff40knots</code>; reconcile <code>1millionnight</code> / <code>onemillionnight</code>. Small diffs, two products render unstyled today.</span></li>
+  <li class="p1"><strong>Collapse the 117 per-perfume CSS files</strong>
+    <span class="fix">Shared rules once + one accent block per perfume: 2.19 MB → ~50 KB.</span></li>
+  <li class="p1"><strong>Self-host the product images</strong>
+    <span class="fix">186 images currently hotlinked from Fragrantica with no fallback.</span></li>
+  <li class="p2"><strong>Delete the dead code</strong>
+    <span class="fix"><code>three.min.js</code> (636 KB, never used), <code>bmi-calculator.js</code>, <code>advanced-marquee.js</code>, <code>fragrance-results.js</code>, <code>fragrance-api-service-clean.js</code>, the dead parallax block — ~0.9 MB and hundreds of load-time queries for near-zero risk.</span></li>
+  <li class="p2"><strong>Clean the repo</strong>
+    <span class="fix">Delete 97 untracked artifacts (111 MB) and <code>charme_app/build/</code> (962 MB); <code>git rm -r --cached .playwright-mcp .superdesign .serena .codemate</code>; <code>git gc</code>; remove the <code>v2</code> remote and the dead branches.</span></li>
+  <li class="p2"><strong>Replace <code>CLAUDE.md</code> / <code>.windsurfrules</code></strong>
+    <span class="fix">They are a VS Code extension's prompt with zero mentions of your project. Write a real project guide.</span></li>
+  <li class="p2"><strong>Automate cache-busting and add CI</strong>
+    <span class="fix">Inject <code>?v=$(git rev-parse --short HEAD)</code> in the workflow. Add a link-checker — it would have caught the <code>assets/</code> gap.</span></li>
+</ol>
+
+<div class="note">
+  <strong>Scope note.</strong> Findings were reproduced against the working tree at
+  <code>3400bde</code> and the running server. Production is in sync with HEAD
+  (<code>index.html</code> 3,765,637 B in both); the working tree differs only by CRLF expansion.
+  No repository files were modified during this audit.
+</div>
+
+<footer>
+  Deep investigation · 30 August 2026 · static analysis + live HTTP verification against
+  <code>charmeperfume.me</code> and <code>localhost:3000</code>.
+</footer>
+
+</div>
+</body>
+</html>
