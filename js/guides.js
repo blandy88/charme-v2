@@ -23,6 +23,25 @@
     return v[currentLang()] || v.en || "";
   }
 
+  /* Guides are admin-only: only reveal/run for administrator accounts */
+  function isAdminUser() {
+    try {
+      var u = null;
+      if (window.authStateManager && typeof window.authStateManager.getCurrentUser === "function") {
+        u = window.authStateManager.getCurrentUser();
+      } else if (typeof window.getCurrentUser === "function") {
+        u = window.getCurrentUser();
+      }
+      if (!u && window.localStorage) {
+        try { u = JSON.parse(window.localStorage.getItem("user") || "null"); } catch (e) {}
+      }
+      if (!u) return false;
+      return Boolean(u.is_admin || u.isAdmin);
+    } catch (e) {
+      return false;
+    }
+  }
+
   /* -------------------------------------------------------------- UI copy */
   var UI = {
     eyebrow: { en: "Parfumerie Charme", fr: "Parfumerie Charme", ar: "بارفومري شارم" },
@@ -60,10 +79,32 @@
 
   /* ------------------------------------------------------------- guides */
   /* sel = CSS selector, place = tooltip side, opt = skip silently if absent */
+
+  /* Custom gold line-icons (no emoji — keeps the luxury identity) */
+  var ICON = {
+    compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5 13.4 13.4 8.5 15.5 10.6 10.6Z"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>',
+    grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.4"/><rect x="13" y="4" width="7" height="7" rx="1.4"/><rect x="4" y="13" width="7" height="7" rx="1.4"/><rect x="13" y="13" width="7" height="7" rx="1.4"/></svg>',
+    bottle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4"/><path d="M11 3v3l-1.2 2.2V20a1.5 1.5 0 0 0 1.5 1.5h1.4A1.5 1.5 0 0 0 14.2 20V8.2L13 6V3"/><path d="M9.6 12h4.8"/></svg>',
+    bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>',
+    card: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><circle cx="7.5" cy="14.5" r="1.1"/></svg>',
+    sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l1.8 5.2L19 11l-5.2 1.8L12 18l-1.8-5.2L5 11l5.2-1.8L12 4Z"/><path d="M18 16.5l.8 2.2L21 19.5l-2.2.8L18 22.5"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9L12 3.5Z"/></svg>',
+    shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6l7-3Z"/><path d="M9.5 12l1.8 1.8L15 10"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>',
+    receipt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9.5 9h5M12 6.5v5"/></svg>',
+    idcard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 2-2.4 3-2.4s2.4.8 3 2.4"/><path d="M14.5 10h5M14.5 13.5h4"/></svg>',
+    bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v2.5"/></svg>',
+    note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14a1 1 0 0 1 1 1v11l-4 4H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 9h8M8 13h5"/></svg>',
+    droplet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/></svg>'
+  };
+
   var GUIDES = [
     {
       id: "navigation",
-      icon: "🧭",
+      icon: ICON.compass,
       title: { en: "Navigation & language", fr: "Navigation et langue", ar: "التنقل واللغة" },
       desc: {
         en: "Move around the site, switch theme, change language.",
@@ -127,7 +168,7 @@
 
     {
       id: "search",
-      icon: "🔎",
+      icon: ICON.search,
       title: { en: "Search & discovery", fr: "Recherche et découverte", ar: "البحث والاكتشاف" },
       desc: {
         en: "Find a fragrance fast, by name, gender or note.",
@@ -193,7 +234,7 @@
 
     {
       id: "browsing",
-      icon: "🗂️",
+      icon: ICON.grid,
       title: { en: "Browsing the collection", fr: "Parcourir la collection", ar: "تصفح المجموعة" },
       desc: {
         en: "Switch view modes and use the filter sidebar.",
@@ -261,7 +302,7 @@
 
     {
       id: "product",
-      icon: "🖤",
+      icon: ICON.bottle,
       title: { en: "Product actions", fr: "Actions produit", ar: "إجراءات المنتج" },
       desc: {
         en: "Save favourites, choose a size, add to cart.",
@@ -321,7 +362,7 @@
 
     {
       id: "cart",
-      icon: "🛍️",
+      icon: ICON.bag,
       title: { en: "Cart & checkout", fr: "Panier et commande", ar: "السلة والطلب" },
       desc: {
         en: "Review quantities and complete your order.",
@@ -377,7 +418,7 @@
 
     {
       id: "account",
-      icon: "👤",
+      icon: ICON.user,
       title: { en: "Account", fr: "Compte", ar: "الحساب" },
       desc: {
         en: "Sign in, register, edit your profile.",
@@ -455,7 +496,7 @@
 
     {
       id: "loyalty",
-      icon: "🎴",
+      icon: ICON.card,
       title: { en: "Loyalty card", fr: "Carte fidélité", ar: "بطاقة الولاء" },
       desc: {
         en: "Earn points and redeem a free fragrance.",
@@ -501,7 +542,7 @@
 
     {
       id: "profiler",
-      icon: "✨",
+      icon: ICON.sparkle,
       title: { en: "AI Scent Profiler", fr: "Profiler olfactif IA", ar: "محلل الروائح الذكي" },
       desc: {
         en: "Answer a few questions, get matched fragrances.",
@@ -520,7 +561,7 @@
           }
         },
         {
-          sel: "#spOptions",
+          sel: "#scent-profiler-modal",
           place: "top",
           opt: true,
           t: { en: "Answer the questions", fr: "Répondez aux questions", ar: "أجب عن الأسئلة" },
@@ -531,7 +572,7 @@
           }
         },
         {
-          sel: "#spProgressFill",
+          sel: "#scent-profiler-modal",
           place: "bottom",
           opt: true,
           t: { en: "Progress", fr: "Progression", ar: "التقدّم" },
@@ -542,7 +583,7 @@
           }
         },
         {
-          sel: "#spResults",
+          sel: "#scent-profiler-modal",
           place: "top",
           opt: true,
           t: { en: "Your matches", fr: "Vos résultats", ar: "نتائجك" },
@@ -557,7 +598,7 @@
 
     {
       id: "reviews",
-      icon: "⭐",
+      icon: ICON.star,
       title: { en: "Reviews", fr: "Avis", ar: "التقييمات" },
       desc: {
         en: "Rate a fragrance and share your experience.",
@@ -614,7 +655,7 @@
 
     {
       id: "admin",
-      icon: "⚙️",
+      icon: ICON.shield,
       title: { en: "Admin dashboard", fr: "Tableau de bord admin", ar: "لوحة الإدارة" },
       desc: {
         en: "Manage users, news, loyalty and store hours.",
@@ -680,6 +721,403 @@
             en: "Publish an announcement and it reaches every visitor through the navbar bell.",
             fr: "Publiez une annonce et elle atteindra chaque visiteur via la cloche de navigation.",
             ar: "انشر إعلاناً وسيصل إلى كل زائر عبر جرس الشريط العلوي."
+          }
+        }
+      ]
+    },
+
+    /* ---- Consult a client profile ---- */
+    {
+      id: "client-profiles",
+      icon: ICON.idcard,
+      title: { en: "Consult a client profile", fr: "Consulter un profil client", ar: "استشارة ملف عميل" },
+      desc: {
+        en: "Open any customer's profile from the admin dashboard to read their taste, history and tailored suggestions.",
+        fr: "Ouvrez le profil de n'importe quel client depuis le tableau de bord pour lire son goût, son historique et ses suggestions.",
+        ar: "افتح ملف أي عميل من لوحة التحكم لقراءة ذوقه وتاريخه واقتراحاته المخصّصة."
+      },
+      steps: [
+        {
+          sel: "#adminDashboard",
+          place: "left",
+          opt: true,
+          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          d: {
+            en: "Open the management console from the admin entry in your account menu.",
+            fr: "Ouvrez la console de gestion depuis l'entrée admin de votre menu compte.",
+            ar: "افتح وحدة الإدارة من خانة المشرف في قائمة حسابك."
+          }
+        },
+        {
+          sel: "#usersTableBody",
+          place: "top",
+          opt: true,
+          t: { en: "Users table", fr: "Table des utilisateurs", ar: "جدول المستخدمين" },
+          d: {
+            en: "Click any row to open that client's full profile.",
+            fr: "Cliquez sur une ligne pour ouvrir le profil complet de ce client.",
+            ar: "انقر أي صف لفتح ملف العميل الكامل."
+          }
+        },
+        {
+          sel: "#customerProfileModal",
+          place: "top",
+          opt: true,
+          t: { en: "Profile window", fr: "Fenêtre profil", ar: "نافذة الملف" },
+          d: {
+            en: "The profile opens here with the client's identity and avatar.",
+            fr: "Le profil s'ouvre ici avec l'identité et l'avatar du client.",
+            ar: "يُفتح الملف هنا بهوية العميل وصورته."
+          }
+        },
+        {
+          sel: "#cpHeader",
+          place: "top",
+          opt: true,
+          t: { en: "Identity", fr: "Identité", ar: "الهوية" },
+          d: {
+            en: "Name, avatar and quick facts about the client.",
+            fr: "Nom, avatar et informations rapides sur le client.",
+            ar: "الاسم والصورة وملخص سريع عن العميل."
+          }
+        },
+        {
+          sel: "#cpStats",
+          place: "top",
+          opt: true,
+          t: { en: "Stats", fr: "Statistiques", ar: "الإحصاءات" },
+          d: {
+            en: "Purchases, points and engagement at a glance.",
+            fr: "Achats, points et engagement en un coup d'œil.",
+            ar: "المشتريات والنقاط والتفاعل في لمحة."
+          }
+        },
+        {
+          sel: "#cpSuggestionGrid",
+          place: "top",
+          opt: true,
+          t: { en: "Tailored suggestions", fr: "Suggestions adaptées", ar: "اقتراحات مخصّصة" },
+          d: {
+            en: "Fragrances recommended from this client's taste profile.",
+            fr: "Parfums recommandés à partir du profil de goût du client.",
+            ar: "عطور موصى بها بناءً على ملف ذوق العميل."
+          }
+        },
+        {
+          sel: "#cpPurchaseList",
+          place: "top",
+          opt: true,
+          t: { en: "Purchase history", fr: "Historique d'achats", ar: "سجل المشتريات" },
+          d: {
+            en: "Every recorded achat for this client, newest first.",
+            fr: "Chaque achat enregistré pour ce client, du plus récent au plus ancien.",
+            ar: "كل عملية شراء مسجّلة لهذا العميل، الأحدث أولاً."
+          }
+        }
+      ]
+    },
+
+    /* ---- Record a purchase (achat) ---- */
+    {
+      id: "add-achat",
+      icon: ICON.receipt,
+      title: { en: "Record a purchase (achat)", fr: "Enregistrer un achat", ar: "تسجيل عملية شراء" },
+      desc: {
+        en: "Add a past or in-store purchase to a client's profile so their history and suggestions stay accurate.",
+        fr: "Ajoutez un achat passé ou en boutique au profil d'un client pour garder son historique et ses suggestions à jour.",
+        ar: "أضف عملية شراء سابقة أو في المتجر إلى ملف العميل لتبقى سجلاته واقتراحاته دقيقة."
+      },
+      steps: [
+        {
+          sel: "#adminDashboard",
+          place: "left",
+          opt: true,
+          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          d: {
+            en: "Open the management console.",
+            fr: "Ouvrez la console de gestion.",
+            ar: "افتح وحدة الإدارة."
+          }
+        },
+        {
+          sel: "#usersTableBody",
+          place: "top",
+          opt: true,
+          t: { en: "Open a client", fr: "Ouvrir un client", ar: "افتح ملف عميل" },
+          d: {
+            en: "Click a user row to open their profile.",
+            fr: "Cliquez une ligne utilisateur pour ouvrir son profil.",
+            ar: "انقر صف مستخدم لفتح ملفه."
+          }
+        },
+        {
+          sel: "#customerProfileModal",
+          place: "top",
+          opt: true,
+          t: { en: "Client profile", fr: "Profil client", ar: "ملف العميل" },
+          d: {
+            en: "You land on the client's profile.",
+            fr: "Vous arrivez sur le profil du client.",
+            ar: "تصل إلى ملف العميل."
+          }
+        },
+        {
+          sel: "#cpAddPurchaseBtn",
+          place: "top",
+          opt: true,
+          t: { en: "Add a purchase", fr: "Ajouter un achat", ar: "أضف شراءً" },
+          d: {
+            en: "Tap “+ Ajouter un achat” in the purchase section.",
+            fr: "Appuyez sur « + Ajouter un achat » dans la section achats.",
+            ar: "اضغط «+ إضافة شراء» في قسم المشتريات."
+          }
+        },
+        {
+          sel: "#recordPurchaseModal",
+          place: "top",
+          opt: true,
+          t: { en: "Record form", fr: "Formulaire", ar: "نموذج التسجيل" },
+          d: {
+            en: "A form opens to capture the purchase.",
+            fr: "Un formulaire s'ouvre pour saisir l'achat.",
+            ar: "يُفتح نموذج لتسجيل الشراء."
+          }
+        },
+        {
+          sel: "#rpPerfumeName",
+          place: "top",
+          opt: true,
+          t: { en: "Fragrance name", fr: "Nom du parfum", ar: "اسم العطر" },
+          d: {
+            en: "Start typing — the catalogue suggests matches as you go.",
+            fr: "Tapez — le catalogue propose des correspondances.",
+            ar: "ابدأ الكتابة — يقترح الكتالوج مطابقات."
+          }
+        },
+        {
+          sel: "#rpPrice",
+          place: "top",
+          opt: true,
+          t: { en: "Price", fr: "Prix", ar: "السعر" },
+          d: {
+            en: "Enter the amount paid.",
+            fr: "Saisissez le montant payé.",
+            ar: "أدخل المبلغ المدفوع."
+          }
+        },
+        {
+          sel: "#rpSaveBtn",
+          place: "top",
+          opt: true,
+          t: { en: "Save", fr: "Enregistrer", ar: "حفظ" },
+          d: {
+            en: "Save and the achat appears in the client's purchase history.",
+            fr: "Enregistrez et l'achat apparaît dans l'historique.",
+            ar: "احفظ فيظهر الشراء في سجل المشتريات."
+          }
+        }
+      ]
+    },
+
+    /* ---- Edit store hours ---- */
+    {
+      id: "store-hours",
+      icon: ICON.clock,
+      title: { en: "Edit store hours", fr: "Modifier les horaires", ar: "تعديل أوقات العمل" },
+      desc: {
+        en: "Set the opening and closing times shown on the homepage, plus the timezone and appointment note.",
+        fr: "Définissez les horaires affichés sur la page d'accueil, ainsi que le fuseau et la note de rendez-vous.",
+        ar: "حدد الأوقات المعروضة في الصفحة الرئيسية بالإضافة إلى المنطقة الزمنية وملاحظة المواعيد."
+      },
+      steps: [
+        {
+          sel: "#adminDashboard",
+          place: "left",
+          opt: true,
+          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          d: {
+            en: "Open the management console.",
+            fr: "Ouvrez la console de gestion.",
+            ar: "افتح وحدة الإدارة."
+          }
+        },
+        {
+          sel: "#hoursAdminGrid",
+          place: "top",
+          opt: true,
+          t: { en: "The 7-day grid", fr: "Grille des 7 jours", ar: "شبكة الأيام السبعة" },
+          d: {
+            en: "Tick “Closed” for a day off, or set opening and closing times for each weekday.",
+            fr: "Cochez « Fermé » pour un jour de repos, ou réglez les heures pour chaque jour.",
+            ar: "علّم «مغلق» لليوم المغلق، أو اضبط الأوقات لكل يوم."
+          }
+        },
+        {
+          sel: "#hoursTzInput",
+          place: "top",
+          opt: true,
+          t: { en: "Timezone note", fr: "Note de fuseau", ar: "ملاحظة المنطقة" },
+          d: {
+            en: "This line appears under the hours on the homepage footer.",
+            fr: "Cette ligne apparaît sous les horaires dans le pied de page.",
+            ar: "يظهر هذا السطر تحت الأوقات في تذييل الصفحة."
+          }
+        },
+        {
+          sel: "#hoursApptInput",
+          place: "top",
+          opt: true,
+          t: { en: "Appointment note", fr: "Note de rendez-vous", ar: "ملاحظة المواعيد" },
+          d: {
+            en: "e.g. “Appointments on request”.",
+            fr: "ex. « Rendez-vous sur demande ».",
+            ar: "مثلاً «المواعيد عند الطلب»."
+          }
+        },
+        {
+          sel: "#hoursSaveBtn",
+          place: "top",
+          opt: true,
+          t: { en: "Save", fr: "Enregistrer", ar: "حفظ" },
+          d: {
+            en: "Always press Save — the homepage card updates immediately.",
+            fr: "Appuyez toujours sur Enregistrer — la carte d'accueil se met à jour.",
+            ar: "اضغط حفظ دائماً — تتحدث بطاقة الصفحة الرئيسية."
+          },
+          hint: {
+            en: "Nothing is stored until you press this button.",
+            fr: "Rien n'est enregistré avant d'appuyer ici.",
+            ar: "لا يُحفظ شيء قبل الضغط على هذا الزر."
+          }
+        }
+      ]
+    },
+
+    /* ---- Publish news ---- */
+    {
+      id: "news",
+      icon: ICON.bell,
+      title: { en: "Publish news", fr: "Publier une actualité", ar: "نشر خبر" },
+      desc: {
+        en: "Send an announcement to every visitor through the navbar bell.",
+        fr: "Envoyez une annonce à chaque visiteur via la cloche de navigation.",
+        ar: "أرسل إعلاناً إلى كل زائر عبر جرس الشريط العلوي."
+      },
+      steps: [
+        {
+          sel: "#adminDashboard",
+          place: "left",
+          opt: true,
+          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          d: {
+            en: "Open the management console.",
+            fr: "Ouvrez la console de gestion.",
+            ar: "افتح وحدة الإدارة."
+          }
+        },
+        {
+          sel: "#newsAdminNewBtn",
+          place: "top",
+          opt: true,
+          t: { en: "New announcement", fr: "Nouvelle actualité", ar: "إعلان جديد" },
+          d: {
+            en: "Click “+ Nouvelle actualité” to compose a post.",
+            fr: "Cliquez « + Nouvelle actualité » pour composer.",
+            ar: "انقر «+ فعل جديد» لكتابة منشور."
+          }
+        },
+        {
+          sel: "#adminNewsList",
+          place: "top",
+          opt: true,
+          t: { en: "Published news", fr: "Actualités publiées", ar: "الأخبار المنشورة" },
+          d: {
+            en: "Your post appears here and in the navbar bell for all visitors.",
+            fr: "Votre post apparaît ici et dans la cloche pour tous.",
+            ar: "يظهر منشورك هنا وفي الجرس لكل الزوار."
+          }
+        }
+      ]
+    },
+
+    /* ---- Ban / unban ---- */
+    {
+      id: "ban",
+      icon: ICON.lock,
+      title: { en: "Ban or unban a user", fr: "Bannir ou rétablir", ar: "حظر أو إلغاء حظر" },
+      desc: {
+        en: "Suspend a misbehaving account from the users table, or restore it later.",
+        fr: "Suspendez un compte problématique depuis le tableau des utilisateurs, ou rétablissez-le plus tard.",
+        ar: "علّق حساباً مخالفاً من جدول المستخدمين أو أعد تفعيله لاحقاً."
+      },
+      steps: [
+        {
+          sel: "#adminDashboard",
+          place: "left",
+          opt: true,
+          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          d: {
+            en: "Open the management console.",
+            fr: "Ouvrez la console de gestion.",
+            ar: "افتح وحدة الإدارة."
+          }
+        },
+        {
+          sel: "#usersTableBody",
+          place: "top",
+          opt: true,
+          t: { en: "Users table", fr: "Table des utilisateurs", ar: "جدول المستخدمين" },
+          d: {
+            en: "Find the account in the user management list.",
+            fr: "Trouvez le compte dans la liste des utilisateurs.",
+            ar: "ابحث عن الحساب في قائمة المستخدمين."
+          }
+        },
+        {
+          sel: "#usersTableBody .btn-ban",
+          place: "top",
+          opt: true,
+          t: { en: "Ban / Unban", fr: "Bannir / Rétablir", ar: "حظر / إلغاء حظر" },
+          d: {
+            en: "Each row's Actions has a Ban (or Unban) button. Confirm and the status updates.",
+            fr: "Chaque ligne a un bouton Bannir (ou Rétablir). Confirmez pour mettre à jour.",
+            ar: "كل صف له زر حظر (أو إلغاء حظر). أكّد للتحديث."
+          }
+        }
+      ]
+    },
+
+    /* ---- Guest notes & feedback ---- */
+    {
+      id: "guest-notes",
+      icon: ICON.note,
+      title: { en: "Guest notes & feedback", fr: "Notes et retours", ar: "ملاحظات وآراء" },
+      desc: {
+        en: "Read the private notes and feedback left by visitors or staff.",
+        fr: "Lisez les notes privées et retours laissés par les visiteurs ou l'équipe.",
+        ar: "اقرأ الملاحظات والآراء التي تركها الزوار أو الفريق."
+      },
+      steps: [
+        {
+          sel: "#guestNotesBtn",
+          place: "left",
+          opt: true,
+          t: { en: "Guest notes", fr: "Notes invités", ar: "ملاحظات الضيوف" },
+          d: {
+            en: "Open the guest notes panel from your account menu.",
+            fr: "Ouvrez le panneau depuis votre menu compte.",
+            ar: "افتح اللوحة من قائمة حسابك."
+          }
+        },
+        {
+          sel: "#guestNotesModal",
+          place: "top",
+          opt: true,
+          t: { en: "Notes window", fr: "Fenêtre notes", ar: "نافذة الملاحظات" },
+          d: {
+            en: "All feedback and notes are gathered here for the team.",
+            fr: "Tous les retours et notes sont réunis ici.",
+            ar: "تُجمع كل الآراء والملاحظات هنا."
           }
         }
       ]
@@ -837,6 +1275,7 @@
   }
 
   function openLauncher() {
+    if (!isAdminUser()) return;
     renderLauncher();
     els.launcher.classList.add("is-open");
   }
@@ -847,6 +1286,7 @@
 
   /* ----------------------------------------------------------------- tour */
   function startTour(id) {
+    if (!isAdminUser()) return;
     var g = null;
     for (var i = 0; i < GUIDES.length; i++) if (GUIDES[i].id === id) g = GUIDES[i];
     if (!g) return;

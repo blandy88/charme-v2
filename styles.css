@@ -1528,6 +1528,11 @@ html {
     height: 16px;
 }
 
+/* Guides launcher is admin-only — revealed by script.js for admins only */
+#guidesBtn {
+    display: none;
+}
+
 .dropdown-divider {
     height: 1px;
     background: rgba(255, 255, 255, 0.1);

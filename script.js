@@ -6980,6 +6980,12 @@ function initializeAuth() {
       guestNotesBtn.style.display = effectiveIsAdmin ? "block" : "none";
     }
 
+    // Guides launcher is admin-only
+    const guidesBtn = document.getElementById("guidesBtn");
+    if (guidesBtn) {
+      guidesBtn.style.display = effectiveIsAdmin ? "flex" : "none";
+    }
+
     console.log("ðŸ‘¤ User styling applied for:", userData.email);
 
     // Avatar update handled by createSimpleAvatar
