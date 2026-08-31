@@ -435,7 +435,8 @@
             en: "Not signed in yet? This opens the sign-in panel.",
             fr: "Pas encore connecté ? Ceci ouvre le panneau de connexion.",
             ar: "لم تسجّل الدخول بعد؟ هذا يفتح لوحة الدخول."
-          }
+          },
+          onShow: function () { showDropdown('#userDropdown'); }
         },
         {
           sel: "#showSignup",
@@ -513,7 +514,8 @@
             en: "This entry appears once your account is linked to a loyalty card.",
             fr: "Cette entrée apparaît une fois votre compte lié à une carte fidélité.",
             ar: "يظهر هذا الخيار بعد ربط حسابك ببطاقة ولاء."
-          }
+          },
+          onShow: function () { showDropdown('#userDropdown'); }
         },
         {
           sel: "#loyaltySearchInput",
@@ -524,7 +526,8 @@
             en: "Search the loyalty list by name, email or phone number.",
             fr: "Recherchez dans la liste par nom, e-mail ou numéro de téléphone.",
             ar: "ابحث في القائمة بالاسم أو البريد أو رقم الهاتف."
-          }
+          },
+          onShow: function () { openLoyalty(); }
         },
         {
           sel: "#loyaltyCreateManualBtn",
@@ -535,7 +538,8 @@
             en: "Create a card manually for a client who doesn't have one yet.",
             fr: "Créez une carte manuellement pour un client qui n'en a pas encore.",
             ar: "أنشئ بطاقة يدوياً لعميل ليس لديه بطاقة بعد."
-          }
+          },
+          onShow: function () { openLoyalty(); }
         }
       ]
     },
@@ -681,7 +685,7 @@
       },
       steps: [
         {
-          sel: "#adminDashboard",
+          sel: "#adminModal",
           place: "left",
           opt: true,
           t: { en: "Open the dashboard", fr: "Ouvrir le tableau de bord", ar: "فتح لوحة التحكم" },
@@ -690,7 +694,7 @@
             fr: "Visible uniquement pour les comptes administrateurs. Elle ouvre la console de gestion.",
             ar: "تظهر لحسابات الإدارة فقط. تفتح لوحة التحكم."
           },
-          onShow: function () { openPanel("#adminDashboard"); }
+          onShow: function () { enterAdmin(); }
         },
         {
           sel: "#usersTableBody",
@@ -756,7 +760,7 @@
       },
       steps: [
         {
-          sel: "#adminDashboard",
+          sel: "#adminModal",
           place: "left",
           opt: true,
           t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
@@ -765,7 +769,7 @@
             fr: "Ouvrez la console de gestion depuis l'entrée admin de votre menu compte.",
             ar: "افتح وحدة الإدارة من خانة المشرف في قائمة حسابك."
           },
-          onShow: function () { openPanel("#adminDashboard"); }
+          onShow: function () { enterAdmin(); }
         },
         {
           sel: "#usersTableBody",
@@ -849,7 +853,7 @@
       },
       steps: [
         {
-          sel: "#adminDashboard",
+          sel: "#adminModal",
           place: "left",
           opt: true,
           t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
@@ -858,7 +862,7 @@
             fr: "Ouvrez la console de gestion.",
             ar: "افتح وحدة الإدارة."
           },
-          onShow: function () { openPanel("#adminDashboard"); }
+          onShow: function () { enterAdmin(); }
         },
         {
           sel: "#usersTableBody",
@@ -954,7 +958,7 @@
       },
       steps: [
         {
-          sel: "#adminDashboard",
+          sel: "#adminModal",
           place: "left",
           opt: true,
           t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
@@ -963,7 +967,7 @@
             fr: "Ouvrez la console de gestion.",
             ar: "افتح وحدة الإدارة."
           },
-          onShow: function () { openPanel("#adminDashboard"); }
+          onShow: function () { enterAdmin(); }
         },
         {
           sel: "#hoursAdminGrid",
@@ -1029,7 +1033,7 @@
       },
       steps: [
         {
-          sel: "#adminDashboard",
+          sel: "#adminModal",
           place: "left",
           opt: true,
           t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
@@ -1038,7 +1042,7 @@
             fr: "Ouvrez la console de gestion.",
             ar: "افتح وحدة الإدارة."
           },
-          onShow: function () { openPanel("#adminDashboard"); }
+          onShow: function () { enterAdmin(); }
         },
         {
           sel: "#newsAdminNewBtn",
@@ -1077,7 +1081,7 @@
       },
       steps: [
         {
-          sel: "#adminDashboard",
+          sel: "#adminModal",
           place: "left",
           opt: true,
           t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
@@ -1086,7 +1090,7 @@
             fr: "Ouvrez la console de gestion.",
             ar: "افتح وحدة الإدارة."
           },
-          onShow: function () { openPanel("#adminDashboard"); }
+          onShow: function () { enterAdmin(); }
         },
         {
           sel: "#usersTableBody",
@@ -1325,14 +1329,24 @@
     go(0);
   }
 
-  /* Re-hide any panels the guide opened (marked guide-was-hidden). */
+  /* Re-hide any panels the guide opened (marked guide-was-hidden).
+     Restores the exact previous visibility: if the panel was hidden by an
+     inline display:none we put it back; otherwise we re-add the .hidden class. */
   function cleanupOpenedPanels() {
     try {
       var opened = document.querySelectorAll(".guide-was-hidden");
       for (var i = 0; i < opened.length; i++) {
-        opened[i].classList.add("hidden");
-        opened[i].classList.remove("guide-was-hidden");
+        var el = opened[i];
+        if (el.dataset.guidePrevDisplay !== undefined) {
+          el.style.display = el.dataset.guidePrevDisplay;
+          try { delete el.dataset.guidePrevDisplay; } catch (e) { el.dataset.guidePrevDisplay = ""; }
+        } else {
+          el.classList.add("hidden");
+        }
+        el.classList.remove("guide-was-hidden");
       }
+      /* The app's openers lock background scroll; release it when the tour ends. */
+      document.body.style.overflow = "";
     } catch (e) {}
   }
 
@@ -1372,15 +1386,26 @@
     return el;
   }
 
-  /* Open a modal/panel identified by a CSS selector. Used by onShow hooks. */
+  /* Open a modal/panel identified by a CSS selector. Used by onShow hooks.
+     Handles BOTH ways the app hides things:
+       - the .hidden class (display:none !important)
+       - an inline style.display = "none" (admin dashboard, add-review containers)
+     We remember the previous inline value so cleanupOpenedPanels() can restore it. */
   function openPanel(sel) {
     try {
       var el = document.querySelector(sel);
       if (!el) return;
+      var changed = false;
       if (el.classList.contains("hidden")) {
         el.classList.remove("hidden");
-        el.classList.add("guide-was-hidden");
+        changed = true;
       }
+      if (el.style.display === "none") {
+        el.dataset.guidePrevDisplay = el.style.display;
+        el.style.display = "";
+        changed = true;
+      }
+      if (changed) el.classList.add("guide-was-hidden");
     } catch (e) {}
   }
 
@@ -1397,6 +1422,48 @@
       }
     } catch (e) {}
     return null;
+  }
+
+  /* Force-reveal a hover-controlled dropdown (e.g. #userDropdown is shown only on
+     .user-profile:hover). We set inline display:block and remember the previous value so
+     cleanup can restore the hover behaviour. */
+  function showDropdown(sel) {
+    try {
+      var el = document.querySelector(sel);
+      if (!el) return;
+      el.dataset.guidePrevDisplay = el.style.display || "";
+      el.style.display = "block";
+      el.classList.add("guide-was-hidden");
+    } catch (e) {}
+  }
+
+  /* Open the loyalty modal through the app's own opener, marking it so cleanup re-hides it. */
+  function openLoyalty() {
+    try {
+      var m = document.getElementById("loyaltyModal");
+      if (m) {
+        m.dataset.guidePrevDisplay = m.style.display || "";
+        m.classList.add("guide-was-hidden");
+      }
+      if (typeof window.openLoyaltyModal === "function") window.openLoyaltyModal();
+    } catch (e) {}
+  }
+
+  /* Open the admin console through the app's own opener. This reveals #adminModal and
+     loads the users/loyalty/news/store-hours data, so every inner step becomes visible. */
+  function enterAdmin() {
+    try {
+      var m = document.getElementById("adminModal");
+      if (m) {
+        m.dataset.guidePrevDisplay = m.style.display || "";
+        m.classList.add("guide-was-hidden");
+      }
+      if (typeof window.openAdminDashboard === "function") window.openAdminDashboard();
+      else {
+        var b = document.getElementById("adminDashboard");
+        if (b) b.click();
+      }
+    } catch (e) {}
   }
 
   function go(i) {
@@ -1420,7 +1487,13 @@
     if (!el && step.opt) {
       var next = i + 1;
       while (next < g.steps.length) {
-        if (resolve(g.steps[next]) || !g.steps[next].opt) break;
+        var cand = g.steps[next];
+        /* a later step may become visible only after its own onShow hook
+           (e.g. it opens a modal) — run it before testing resolvability. */
+        if (typeof cand.onShow === "function") {
+          try { cand.onShow(); } catch (e) {}
+        }
+        if (resolve(cand) || !cand.opt) break;
         next++;
       }
       if (next < g.steps.length) { state.index = next; go(next); return; }
