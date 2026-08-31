@@ -78,6 +78,7 @@
         
         
         <link rel="stylesheet" href="css/fragrance-layout-normalize.css?v=20260850" />
+        <link rel="stylesheet" href="css/guides.css?v=20260831a" />
         <link rel="stylesheet" href="css/combined-profiles.css?v=20260814" media="print" onload="this.media='all'" />
 
         <!-- Scripts (deferred for performance) -->
@@ -614,6 +615,30 @@
                                 </svg>
                                 <span>Sign In</span>
                             </button>
+                            <button
+                                class="login-btn guides-entry-btn"
+                                id="guidesBtnPublic"
+                                data-guide-open
+                                type="button"
+                                title="Guides"
+                            >
+                                <svg
+                                    class="login-icon"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
+                                    />
+                                    <path
+                                        d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                                    />
+                                    <path d="M9 7h7" />
+                                </svg>
+                                <span>Guides</span>
+                            </button>
                         </div>
                         <div
                             class="user-logged-in"
@@ -645,6 +670,26 @@
                                             <circle cx="12" cy="7" r="4" />
                                         </svg>
                                         Profile
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="guidesBtn"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
+                                            />
+                                            <path
+                                                d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                                            />
+                                            <path d="M9 7h7" />
+                                        </svg>
+                                        Guides
                                     </div>
                                     <div
                                         class="dropdown-item"
@@ -29331,6 +29376,7 @@
 
         <script src="js/i18n-dict.js?v=20260830a" defer></script>
         <script src="js/i18n.js?v=20260829e" defer></script>
+        <script src="js/guides.js?v=20260831a" defer></script>
         <script src="js/fragrantica-urls.js?v=20260820e" defer></script>
         <script src="js/cp-trait-icons.js?v=20260829a" defer></script>
         <script src="script.js?v=20260829e" defer></script>
