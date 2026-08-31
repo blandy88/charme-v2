@@ -558,32 +558,44 @@
             en: "Click the sparkle icon in the navbar to launch the Scent Profiler.",
             fr: "Cliquez sur l'icône étincelle dans la barre de navigation pour lancer le Profiler.",
             ar: "انقر أيقونة الوميض في الشريط العلوي لتشغيل المحلل."
+          },
+          onShow: function () { openPanel("#scent-profiler-modal"); }
+        },
+        {
+          sel: "#spWelcome",
+          place: "top",
+          opt: true,
+          t: { en: "Welcome screen", fr: "Écran d'accueil", ar: "شاشة الترحيب" },
+          d: {
+            en: "The profiler opens here. Press “Start Profiling” to begin the 8 questions.",
+            fr: "Le profiler s'ouvre ici. Appuyez sur « Start Profiling » pour commencer les 8 questions.",
+            ar: "يُفتح المحلل هنا. اضغط «ابدأ» لبدء الأسئلة الثمانية."
           }
         },
         {
-          sel: "#scent-profiler-modal",
+          sel: "#spQuestion",
           place: "top",
           opt: true,
           t: { en: "Answer the questions", fr: "Répondez aux questions", ar: "أجب عن الأسئلة" },
           d: {
-            en: "Pick the option that feels closest to you. You can always step back with the Back button.",
-            fr: "Choisissez l'option qui vous correspond le mieux. Vous pouvez revenir en arrière à tout moment.",
-            ar: "اختر الخيار الأقرب إليك. يمكنك الرجوع في أي وقت بزر الرجوع."
+            en: "Pick the option that feels closest to you. Use Back to revisit a previous answer.",
+            fr: "Choisissez l'option qui vous correspond. Utilisez Retour pour revoir une réponse précédente.",
+            ar: "اختر الخيار الأقرب إليك. استخدم رجوع لمراجعة إجابة سابقة."
           }
         },
         {
-          sel: "#scent-profiler-modal",
+          sel: "#spProgressFill",
           place: "bottom",
           opt: true,
-          t: { en: "Progress", fr: "Progression", ar: "التقدّم" },
+          t: { en: "Progress bar", fr: "Barre de progression", ar: "شريط التقدّم" },
           d: {
-            en: "This bar shows how many questions are left.",
-            fr: "Cette barre indique le nombre de questions restantes.",
-            ar: "هذا الشريط يوضح عدد الأسئلة المتبقية."
+            en: "This bar fills as you answer each question, showing how far along you are.",
+            fr: "Cette barre se remplit à chaque réponse, indiquant votre progression.",
+            ar: "يمتلئ هذا الشريط مع كل إجابة لبيان مدى تقدّمك."
           }
         },
         {
-          sel: "#scent-profiler-modal",
+          sel: "#spResults",
           place: "top",
           opt: true,
           t: { en: "Your matches", fr: "Vos résultats", ar: "نتائجك" },
@@ -607,29 +619,34 @@
       },
       steps: [
         {
-          sel: "#aventus-add-review",
+          sel: ".add-review-container",
           place: "top",
           opt: true,
           t: { en: "Write a review", fr: "Écrire un avis", ar: "كتابة تقييم" },
           d: {
-            en: "Every fragrance has its own review box. Click here to open yours.",
-            fr: "Chaque parfum possède sa propre zone d'avis. Cliquez ici pour ouvrir la vôtre.",
-            ar: "لكل عطر صندوق تقييم خاص. انقر هنا لفتح صندوقك."
+            en: "Every fragrance has its own review box. This is where you write yours — the box appears under each perfume.",
+            fr: "Chaque parfum possède sa propre zone d'avis. C'est ici que vous écrivez le vôtre — la zone apparaît sous chaque parfum.",
+            ar: "لكل عطر صندوق تقييم خاص. هنا تكتب تقييمك — يظهر الصندوق تحت كل عطر."
+          },
+          onShow: function () {
+            /* Reveal the first review container so the guide can highlight it. */
+            var c = document.querySelector(".add-review-container");
+            if (c && c.style.display === "none") { c.style.display = ""; c.classList.add("guide-was-hidden"); }
           }
         },
         {
-          sel: "#aventus-star-rating",
+          sel: ".star-rating, .star-rating-input",
           place: "top",
           opt: true,
           t: { en: "Star rating", fr: "Note en étoiles", ar: "التقييم بالنجوم" },
           d: {
-            en: "Choose from one to five stars.",
-            fr: "Choisissez de une à cinq étoiles.",
-            ar: "اختر من نجمة إلى خمس نجوم."
+            en: "Choose from one to five stars to rate the fragrance.",
+            fr: "Choisissez de une à cinq étoiles pour noter le parfum.",
+            ar: "اختر من نجمة إلى خمس نجوم لتقييم العطر."
           }
         },
         {
-          sel: "#aventus-review-text",
+          sel: ".review-textarea",
           place: "top",
           opt: true,
           t: { en: "Your words", fr: "Votre texte", ar: "نصّك" },
@@ -640,7 +657,7 @@
           }
         },
         {
-          sel: "#aventus-submit-review",
+          sel: ".submit-review-btn, .submit-btn",
           place: "top",
           opt: true,
           t: { en: "Publish", fr: "Publier", ar: "نشر" },
@@ -672,7 +689,8 @@
             en: "Visible only to administrator accounts. It opens the management console.",
             fr: "Visible uniquement pour les comptes administrateurs. Elle ouvre la console de gestion.",
             ar: "تظهر لحسابات الإدارة فقط. تفتح لوحة التحكم."
-          }
+          },
+          onShow: function () { openPanel("#adminDashboard"); }
         },
         {
           sel: "#usersTableBody",
@@ -746,7 +764,8 @@
             en: "Open the management console from the admin entry in your account menu.",
             fr: "Ouvrez la console de gestion depuis l'entrée admin de votre menu compte.",
             ar: "افتح وحدة الإدارة من خانة المشرف في قائمة حسابك."
-          }
+          },
+          onShow: function () { openPanel("#adminDashboard"); }
         },
         {
           sel: "#usersTableBody",
@@ -768,7 +787,8 @@
             en: "The profile opens here with the client's identity and avatar.",
             fr: "Le profil s'ouvre ici avec l'identité et l'avatar du client.",
             ar: "يُفتح الملف هنا بهوية العميل وصورته."
-          }
+          },
+          onShow: function () { openPanel("#customerProfileModal"); }
         },
         {
           sel: "#cpHeader",
@@ -837,7 +857,8 @@
             en: "Open the management console.",
             fr: "Ouvrez la console de gestion.",
             ar: "افتح وحدة الإدارة."
-          }
+          },
+          onShow: function () { openPanel("#adminDashboard"); }
         },
         {
           sel: "#usersTableBody",
@@ -859,7 +880,8 @@
             en: "You land on the client's profile.",
             fr: "Vous arrivez sur le profil du client.",
             ar: "تصل إلى ملف العميل."
-          }
+          },
+          onShow: function () { openPanel("#customerProfileModal"); }
         },
         {
           sel: "#cpAddPurchaseBtn",
@@ -881,7 +903,8 @@
             en: "A form opens to capture the purchase.",
             fr: "Un formulaire s'ouvre pour saisir l'achat.",
             ar: "يُفتح نموذج لتسجيل الشراء."
-          }
+          },
+          onShow: function () { openPanel("#recordPurchaseModal"); }
         },
         {
           sel: "#rpPerfumeName",
@@ -939,7 +962,8 @@
             en: "Open the management console.",
             fr: "Ouvrez la console de gestion.",
             ar: "افتح وحدة الإدارة."
-          }
+          },
+          onShow: function () { openPanel("#adminDashboard"); }
         },
         {
           sel: "#hoursAdminGrid",
@@ -1013,7 +1037,8 @@
             en: "Open the management console.",
             fr: "Ouvrez la console de gestion.",
             ar: "افتح وحدة الإدارة."
-          }
+          },
+          onShow: function () { openPanel("#adminDashboard"); }
         },
         {
           sel: "#newsAdminNewBtn",
@@ -1060,7 +1085,8 @@
             en: "Open the management console.",
             fr: "Ouvrez la console de gestion.",
             ar: "افتح وحدة الإدارة."
-          }
+          },
+          onShow: function () { openPanel("#adminDashboard"); }
         },
         {
           sel: "#usersTableBody",
@@ -1118,7 +1144,8 @@
             en: "All feedback and notes are gathered here for the team.",
             fr: "Tous les retours et notes sont réunis ici.",
             ar: "تُجمع كل الآراء والملاحظات هنا."
-          }
+          },
+          onShow: function () { openPanel("#guestNotesModal"); }
         }
       ]
     }
@@ -1298,6 +1325,17 @@
     go(0);
   }
 
+  /* Re-hide any panels the guide opened (marked guide-was-hidden). */
+  function cleanupOpenedPanels() {
+    try {
+      var opened = document.querySelectorAll(".guide-was-hidden");
+      for (var i = 0; i < opened.length; i++) {
+        opened[i].classList.add("hidden");
+        opened[i].classList.remove("guide-was-hidden");
+      }
+    } catch (e) {}
+  }
+
   function endTour() {
     if (!els) return;
     state.active = false;
@@ -1305,18 +1343,60 @@
     els.spotlight.classList.add("is-hidden");
     els.tip.classList.remove("is-visible");
     els.cursor.classList.remove("is-visible");
+    cleanupOpenedPanels();
   }
 
   function resolve(step) {
     if (!step.sel) return null;
+    /* If the selector matches multiple elements, pick the first visible one. */
     var el = null;
-    try { el = document.querySelector(step.sel); } catch (e) { return null; }
+    try {
+      var list = document.querySelectorAll(step.sel);
+      if (list.length === 0) return null;
+      for (var i = 0; i < list.length; i++) {
+        var r0 = list[i].getBoundingClientRect();
+        var cs0 = getComputedStyle(list[i]);
+        if (r0.width >= 2 && r0.height >= 2 && cs0.display !== "none" && cs0.visibility !== "hidden") {
+          el = list[i];
+          break;
+        }
+      }
+      /* fall back to first match even if hidden (so non-opt steps still get reported) */
+      if (!el) el = list[0];
+    } catch (e) { return null; }
     if (!el) return null;
     var r = el.getBoundingClientRect();
     var cs = getComputedStyle(el);
     if (!r || (r.width < 2 && r.height < 2)) return null;
     if (cs && (cs.visibility === "hidden" || cs.display === "none")) return null;
     return el;
+  }
+
+  /* Open a modal/panel identified by a CSS selector. Used by onShow hooks. */
+  function openPanel(sel) {
+    try {
+      var el = document.querySelector(sel);
+      if (!el) return;
+      if (el.classList.contains("hidden")) {
+        el.classList.remove("hidden");
+        el.classList.add("guide-was-hidden");
+      }
+    } catch (e) {}
+  }
+
+  /* Find the first visible element matching a selector (rect > 2px, not display:none). */
+  function firstVisible(sel) {
+    try {
+      var list = document.querySelectorAll(sel);
+      for (var i = 0; i < list.length; i++) {
+        var r = list[i].getBoundingClientRect();
+        var cs = getComputedStyle(list[i]);
+        if (r.width >= 2 && r.height >= 2 && cs.display !== "none" && cs.visibility !== "hidden") {
+          return list[i];
+        }
+      }
+    } catch (e) {}
+    return null;
   }
 
   function go(i) {
@@ -1327,6 +1407,13 @@
     if (i < 0) return;
 
     var step = g.steps[i];
+
+    /* Run an onShow hook BEFORE resolving — lets the guide open a panel/modal
+       so that its internal elements become visible for highlighting. */
+    if (typeof step.onShow === "function") {
+      try { step.onShow(); } catch (e) {}
+    }
+
     var el = resolve(step);
 
     /* skip steps whose target is not on screen right now */
@@ -1437,6 +1524,7 @@
     els.cursor.classList.remove("is-visible");
     document.documentElement.classList.remove("guide-active");
     state.active = false;
+    cleanupOpenedPanels();
     els.done.querySelector('[data-g="donetitle"]').textContent = pick(UI.doneTitle);
     els.done.querySelector('[data-g="donetext"]').textContent = pick(UI.doneText);
     els.btnDoneAll.textContent = pick(UI.allGuides);
