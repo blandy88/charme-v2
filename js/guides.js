@@ -24,22 +24,37 @@
   }
 
   /* Guides are admin-only: only reveal/run for administrator accounts */
+  /* Resolve the signed-in user from every source the app exposes, and accept
+     the first one that actually yields a user with admin rights.
+
+     IMPORTANT: the previous version used an if / else-if chain, so when
+     authStateManager.getCurrentUser() existed but returned null (auth not yet
+     hydrated) the code never fell through to window.getCurrentUser() or to
+     localStorage — and isAdminUser() wrongly returned false for real admins.
+     Now every source is tried, in priority order. */
   function isAdminUser() {
+    var candidates = [];
     try {
-      var u = null;
       if (window.authStateManager && typeof window.authStateManager.getCurrentUser === "function") {
-        u = window.authStateManager.getCurrentUser();
-      } else if (typeof window.getCurrentUser === "function") {
-        u = window.getCurrentUser();
+        candidates.push(window.authStateManager.getCurrentUser());
       }
-      if (!u && window.localStorage) {
-        try { u = JSON.parse(window.localStorage.getItem("user") || "null"); } catch (e) {}
+    } catch (e) {}
+    try {
+      if (typeof window.getCurrentUser === "function") candidates.push(window.getCurrentUser());
+    } catch (e) {}
+    try {
+      if (window.localStorage) {
+        candidates.push(JSON.parse(window.localStorage.getItem("user") || "null"));
       }
-      if (!u) return false;
-      return Boolean(u.is_admin || u.isAdmin);
-    } catch (e) {
-      return false;
+    } catch (e) {}
+    try { if (window.currentUser) candidates.push(window.currentUser); } catch (e) {}
+    try { if (window.user) candidates.push(window.user); } catch (e) {}
+
+    for (var i = 0; i < candidates.length; i++) {
+      var u = candidates[i];
+      if (u && (u.is_admin || u.isAdmin)) return true;
     }
+    return false;
   }
 
   /* -------------------------------------------------------------- UI copy */
@@ -211,6 +226,7 @@
         {
           sel: "#floatingSearch",
           place: "left",
+          onShow: function () { showFloatingSearch(); },
           t: { en: "Full search", fr: "Recherche complète", ar: "البحث الكامل" },
           d: {
             en: "This round button opens the full search panel with a wider results grid.",
@@ -222,6 +238,8 @@
           sel: "#showAllFragrancesBtn",
           place: "top",
           opt: true,
+          onShow: function () { openIngredientSearch(); },
+          onShow: function () { openIngredientSearch(); },
           t: { en: "Browse everything", fr: "Tout parcourir", ar: "تصفح الكل" },
           d: {
             en: "No query needed — open the entire catalogue at once.",
@@ -313,6 +331,7 @@
         {
           sel: ".favorite-btn",
           place: "top",
+          onShow: function () { ensureMode("details"); },
           t: { en: "Favourite", fr: "Favori", ar: "المفضلة" },
           d: {
             en: "Tap the heart to save a fragrance. Your list stays available from the account menu.",
@@ -329,6 +348,7 @@
           sel: ".quality-option",
           place: "top",
           opt: true,
+          onShow: function () { ensureMode("details"); },
           t: { en: "Choose a format", fr: "Choisir un format", ar: "اختر الحجم" },
           d: {
             en: "Pick the concentration or bottle size. The price updates to match your choice.",
@@ -339,6 +359,7 @@
         {
           sel: ".add-to-cart-btn",
           place: "top",
+          onShow: function () { ensureMode("details"); },
           t: { en: "Add to cart", fr: "Ajouter au panier", ar: "أضف إلى السلة" },
           d: {
             en: "Adds the selected format to your cart. The counter in the navbar updates right away.",
@@ -350,6 +371,7 @@
           sel: ".perfume-grid-fragrantica",
           place: "top",
           opt: true,
+          onShow: function () { ensureMode("details"); },
           t: { en: "Full data sheet", fr: "Fiche complète", ar: "البيانات الكاملة" },
           d: {
             en: "Opens the fragrance on Fragrantica for the complete community data sheet.",
@@ -384,6 +406,7 @@
           sel: ".cart-item-quantity",
           place: "top",
           opt: true,
+          onShow: function () { openCart(); },
           t: { en: "Adjust quantity", fr: "Ajuster la quantité", ar: "تعديل الكمية" },
           d: {
             en: "Use the minus and plus controls to change how many bottles you want. The totals recalculate instantly.",
@@ -395,6 +418,7 @@
           sel: "#checkoutBtn",
           place: "top",
           opt: true,
+          onShow: function () { openCart(); },
           t: { en: "Checkout", fr: "Commander", ar: "إتمام الطلب" },
           d: {
             en: "Happy with your selection? Continue here to confirm the order with the boutique.",
@@ -406,6 +430,7 @@
           sel: "#clearCartBtn",
           place: "top",
           opt: true,
+          onShow: function () { openCart(); },
           t: { en: "Empty the cart", fr: "Vider le panier", ar: "إفراغ السلة" },
           d: {
             en: "Removes everything from the cart in one go.",
@@ -463,6 +488,7 @@
           sel: "#userProfileLink",
           place: "left",
           opt: true,
+          onShow: function () { showDropdown('#userDropdown'); },
           t: { en: "Your profile", fr: "Votre profil", ar: "ملفك الشخصي" },
           d: {
             en: "Edit your name, phone, birthday and avatar photo. There's even a built-in cropper for your picture.",
@@ -474,6 +500,7 @@
           sel: "#userFavorites",
           place: "left",
           opt: true,
+          onShow: function () { showDropdown('#userDropdown'); },
           t: { en: "Favourites", fr: "Favoris", ar: "المفضلة" },
           d: {
             en: "Everything you hearted, gathered in one list.",
@@ -485,6 +512,7 @@
           sel: "#logoutBtn",
           place: "left",
           opt: true,
+          onShow: function () { showDropdown('#userDropdown'); },
           t: { en: "Sign out", fr: "Se déconnecter", ar: "تسجيل الخروج" },
           d: {
             en: "Signs you out of this device.",
@@ -569,6 +597,7 @@
           sel: "#spWelcome",
           place: "top",
           opt: true,
+          onShow: function () { profilerOpen(); },
           t: { en: "Welcome screen", fr: "Écran d'accueil", ar: "شاشة الترحيب" },
           d: {
             en: "The profiler opens here. Press “Start Profiling” to begin the 8 questions.",
@@ -580,6 +609,7 @@
           sel: "#spQuestion",
           place: "top",
           opt: true,
+          onShow: function () { profilerToQuestion(); },
           t: { en: "Answer the questions", fr: "Répondez aux questions", ar: "أجب عن الأسئلة" },
           d: {
             en: "Pick the option that feels closest to you. Use Back to revisit a previous answer.",
@@ -591,6 +621,7 @@
           sel: "#spProgressFill",
           place: "bottom",
           opt: true,
+          onShow: function () { profilerToQuestion(); },
           t: { en: "Progress bar", fr: "Barre de progression", ar: "شريط التقدّم" },
           d: {
             en: "This bar fills as you answer each question, showing how far along you are.",
@@ -602,6 +633,7 @@
           sel: "#spResults",
           place: "top",
           opt: true,
+          onShow: function () { profilerToResults(); },
           t: { en: "Your matches", fr: "Vos résultats", ar: "نتائجك" },
           d: {
             en: "At the end you get a shortlist matched to your answers — restart any time to try a different profile.",
@@ -633,15 +665,17 @@
             ar: "لكل عطر صندوق تقييم خاص. هنا تكتب تقييمك — يظهر الصندوق تحت كل عطر."
           },
           onShow: function () {
-            /* Reveal the first review container so the guide can highlight it. */
-            var c = document.querySelector(".add-review-container");
-            if (c && c.style.display === "none") { c.style.display = ""; c.classList.add("guide-was-hidden"); }
+            /* The container is hidden twice over: its .reviews-section parent is
+               display:none, and in grid mode the whole product section is too.
+               openReviewForm() switches to details mode and reveals both. */
+            openReviewForm();
           }
         },
         {
           sel: ".star-rating, .star-rating-input",
           place: "top",
           opt: true,
+          onShow: function () { openReviewForm(); },
           t: { en: "Star rating", fr: "Note en étoiles", ar: "التقييم بالنجوم" },
           d: {
             en: "Choose from one to five stars to rate the fragrance.",
@@ -653,6 +687,7 @@
           sel: ".review-textarea",
           place: "top",
           opt: true,
+          onShow: function () { openReviewForm(); },
           t: { en: "Your words", fr: "Votre texte", ar: "نصّك" },
           d: {
             en: "Describe longevity, projection and when you like to wear it. A character counter keeps you in bounds.",
@@ -664,6 +699,7 @@
           sel: ".submit-review-btn, .submit-btn",
           place: "top",
           opt: true,
+          onShow: function () { openReviewForm(); },
           t: { en: "Publish", fr: "Publier", ar: "نشر" },
           d: {
             en: "Post your review. You need to be signed in for it to appear.",
@@ -792,7 +828,7 @@
             fr: "Le profil s'ouvre ici avec l'identité et l'avatar du client.",
             ar: "يُفتح الملف هنا بهوية العميل وصورته."
           },
-          onShow: function () { openPanel("#customerProfileModal"); }
+          onShow: function () { openFirstClientProfile(); }
         },
         {
           sel: "#cpHeader",
@@ -885,12 +921,16 @@
             fr: "Vous arrivez sur le profil du client.",
             ar: "تصل إلى ملف العميل."
           },
-          onShow: function () { openPanel("#customerProfileModal"); }
+          onShow: function () { openFirstClientProfile(); }
         },
         {
           sel: "#cpAddPurchaseBtn",
           place: "top",
           opt: true,
+          onShow: function () {
+            var b = document.getElementById("cpAddPurchaseBtn");
+            if (b) { try { b.click(); } catch (e) {} }
+          },
           t: { en: "Add a purchase", fr: "Ajouter un achat", ar: "أضف شراءً" },
           d: {
             en: "Tap “+ Ajouter un achat” in the purchase section.",
@@ -1129,9 +1169,13 @@
       },
       steps: [
         {
-          sel: "#guestNotesBtn",
-          place: "left",
+          sel: "#guestNotesModal",
+          place: "top",
           opt: true,
+          onShow: function () {
+            var b = document.getElementById("guestNotesBtn");
+            if (b) { showEl(b); try { b.click(); } catch (e) {} }
+          },
           t: { en: "Guest notes", fr: "Notes invités", ar: "ملاحظات الضيوف" },
           d: {
             en: "Open the guest notes panel from your account menu.",
@@ -1140,9 +1184,13 @@
           }
         },
         {
-          sel: "#guestNotesModal",
+          sel: "#guestNotesList",
           place: "top",
           opt: true,
+          onShow: function () {
+            var b = document.getElementById("guestNotesBtn");
+            if (b) { try { b.click(); } catch (e) {} }
+          },
           t: { en: "Notes window", fr: "Fenêtre notes", ar: "نافذة الملاحظات" },
           d: {
             en: "All feedback and notes are gathered here for the team.",
@@ -1337,7 +1385,26 @@
       var opened = document.querySelectorAll(".guide-was-hidden");
       for (var i = 0; i < opened.length; i++) {
         var el = opened[i];
-        if (el.dataset.guidePrevDisplay !== undefined) {
+        if (el.dataset.guideVisSaved === "1") {
+          /* we snapshotted the full visibility state - put it back exactly */
+          if (el.dataset.guidePrevHidden === "1") el.classList.add("hidden");
+          else el.classList.remove("hidden");
+          el.style.display = el.dataset.guidePrevDisplay || "";
+          el.style.visibility = el.dataset.guidePrevVisibility || "";
+          el.style.opacity = el.dataset.guidePrevOpacity || "";
+          try {
+            delete el.dataset.guideVisSaved;
+            delete el.dataset.guidePrevHidden;
+            delete el.dataset.guidePrevDisplay;
+            delete el.dataset.guidePrevVisibility;
+          } catch (e) {
+            el.dataset.guideVisSaved = "";
+            el.dataset.guidePrevHidden = "";
+            el.dataset.guidePrevDisplay = "";
+            el.dataset.guidePrevVisibility = "";
+          }
+        } else if (el.dataset.guidePrevDisplay !== undefined) {
+          /* older-style bookkeeping: only the inline display was saved */
           el.style.display = el.dataset.guidePrevDisplay;
           try { delete el.dataset.guidePrevDisplay; } catch (e) { el.dataset.guidePrevDisplay = ""; }
         } else {
@@ -1345,6 +1412,15 @@
         }
         el.classList.remove("guide-was-hidden");
       }
+      /* Put the catalogue back into the mode the user had before the tour. */
+      if (modeBefore !== null) {
+        try {
+          var mb = document.querySelector('.perfume-mode-btn[data-mode="' + modeBefore + '"]');
+          if (mb) mb.click();
+        } catch (e) {}
+        modeBefore = null;
+      }
+
       /* The app's openers lock background scroll; release it when the tour ends. */
       document.body.style.overflow = "";
     } catch (e) {}
@@ -1425,15 +1501,19 @@
   }
 
   /* Force-reveal a hover-controlled dropdown (e.g. #userDropdown is shown only on
-     .user-profile:hover). We set inline display:block and remember the previous value so
-     cleanup can restore the hover behaviour. */
+     .user-profile:hover). The dropdown is hidden by VISIBILITY:hidden + opacity:0,
+     NOT display:none — so setting display:block does nothing. We snapshot its state
+     via rememberVis() then force visibility:visible and opacity:1 (with !important to
+     beat the app's rules). cleanupOpenedPanels() restores the exact previous state, so
+     the menu closes again once the tour ends. */
   function showDropdown(sel) {
     try {
       var el = document.querySelector(sel);
       if (!el) return;
-      el.dataset.guidePrevDisplay = el.style.display || "";
-      el.style.display = "block";
-      el.classList.add("guide-was-hidden");
+      rememberVis(el);
+      el.style.setProperty("visibility", "visible", "important");
+      el.style.setProperty("opacity", "1", "important");
+      if (!el.style.display || el.style.display === "none") el.style.display = "block";
     } catch (e) {}
   }
 
@@ -1446,6 +1526,23 @@
         m.classList.add("guide-was-hidden");
       }
       if (typeof window.openLoyaltyModal === "function") window.openLoyaltyModal();
+    } catch (e) {}
+  }
+
+  /* Open the first loyalty client's profile (the customer-profile modal). The
+     loyalty modal renders client cards with a .btn-loyalty-profile button that
+     calls openCustomerProfile(cardId); we click the first one once it exists. */
+  function openFirstClientProfile() {
+    try {
+      openLoyalty();
+      var tries = 0;
+      var iv = setInterval(function () {
+        tries++;
+        var btn = document.querySelector("#loyaltyModal .btn-loyalty-profile") ||
+                  document.querySelector(".btn-loyalty-profile");
+        if (btn) { try { btn.click(); } catch (e) {} clearInterval(iv); }
+        else if (tries > 40) clearInterval(iv);
+      }, 100);
     } catch (e) {}
   }
 
@@ -1466,6 +1563,237 @@
     } catch (e) {}
   }
 
+  /* -------------------------------------------------- visibility bookkeeping
+     The app hides things three different ways: the .hidden class, an inline
+     display:none, AND (for several panels) visibility:hidden. openPanel() only
+     handled the first two, so steps pointing at visibility:hidden panels could
+     never resolve. These helpers snapshot an element's visibility before we
+     touch it so cleanupOpenedPanels() can restore it exactly. */
+  function rememberVis(el) {
+    if (!el) return;
+    if (el.dataset.guideVisSaved === "1") return; /* snapshot only once */
+    el.dataset.guideVisSaved = "1";
+    el.dataset.guidePrevHidden = el.classList.contains("hidden") ? "1" : "0";
+    el.dataset.guidePrevDisplay = el.style.display || "";
+    el.dataset.guidePrevOpacity = el.style.opacity || "";
+    el.dataset.guidePrevVisibility = el.style.visibility || "";
+    el.classList.add("guide-was-hidden");
+  }
+
+  /* Make an element visible, remembering how to undo every change.
+     Removing .hidden / clearing an inline style is NOT always enough: several
+     panels (e.g. .reviews-section) are hidden by a plain CSS display:none rule,
+     and others (.floating-search, #ingredientModal) are hidden by an ANCESTOR
+     with visibility:hidden (visibility inherits, so the child stays hidden even
+     after we clear it on the child). We therefore also walk up the tree and
+     clear visibility:hidden on any ancestor. */
+  function showEl(el) {
+    if (!el) return;
+    rememberVis(el);
+    el.classList.remove("hidden");
+    if (el.style.display === "none") el.style.display = "";
+    if (el.style.visibility === "hidden") el.style.visibility = "";
+    /* clear visibility:hidden AND display:none on ancestors so the child can
+       actually paint. Several target trees hide an ancestor instead of the
+       element itself (e.g. a product section.content is display:none in grid
+       mode, so its .reviews-section / .add-review-container child would stay
+       0-sized even after we force those visible). We use !important so we beat
+       the app's own class-based display:none rules. */
+    try {
+      var p = el.parentElement;
+      while (p && p.nodeType === 1 && p !== document.body) {
+        var pcs = getComputedStyle(p);
+        if (pcs.visibility === "hidden") {
+          rememberVis(p);
+          p.style.setProperty("visibility", "visible", "important");
+        }
+        if (pcs.display === "none") {
+          rememberVis(p);
+          p.style.setProperty("display", "block", "important");
+        }
+        p = p.parentElement;
+      }
+    } catch (e) {}
+    var cs = null;
+    try { cs = getComputedStyle(el); } catch (e) {}
+    if (cs) {
+      if (cs.visibility === "hidden") el.style.setProperty("visibility", "visible", "important");
+      if (cs.display === "none") el.style.setProperty("display", "block", "important");
+    }
+  }
+
+  /* Hide an element, remembering how to undo it. */
+  function hideEl(el) {
+    if (!el) return;
+    rememberVis(el);
+    el.classList.add("hidden");
+  }
+
+  /* Reveal the first element matching a selector. */
+  function reveal(sel) {
+    try { showEl(document.querySelector(sel)); } catch (e) {}
+  }
+
+  /* The catalogue mode we switched away from, so the tour can put the site back
+     the way the user had it instead of stranding them in details mode. */
+  var modeBefore = null;
+
+  /* Switch the catalogue between "grid" and "details" mode.
+     In grid mode every section.content product page is display:none, so any step
+     pointing inside a product (favourite, format, add-to-cart, reviews) can never
+     resolve. Those steps must run in details mode; grid-only steps the reverse. */
+  function ensureMode(mode) {
+    try {
+      var isGrid = document.body.classList.contains("perfume-grid-mode");
+      if (isGrid === (mode === "grid")) return;
+      if (modeBefore === null) modeBefore = isGrid ? "grid" : "details";
+      var btn = document.querySelector('.perfume-mode-btn[data-mode="' + mode + '"]');
+      if (btn) btn.click();
+    } catch (e) {}
+  }
+
+  /* Open the cart so its summary (checkout / clear buttons, quantity controls)
+     is actually on screen. */
+  function openCart() {
+    try {
+      if (typeof window.openCart === "function") window.openCart();
+      else {
+        var icon = document.getElementById("navbarCartIcon");
+        if (icon) icon.click();
+      }
+      reveal("#cartModal");
+      reveal("#cartSummary");
+    } catch (e) {}
+  }
+
+  /* The floating search button is hidden via the .floating-search rule
+     (visibility:hidden; opacity:0) and only revealed by the app adding the
+     .visible class once the user scrolls. We add that class directly. */
+  function showFloatingSearch() {
+    var el = document.getElementById("floatingSearch");
+    if (el) {
+      el.classList.add("visible");
+      el.style.visibility = "visible";
+      el.style.opacity = "1";
+      reveal("#floatingSearch");
+    }
+  }
+
+  /* "Browse everything" lives inside the ingredient search modal, which the app
+     keeps visibility:hidden until it is opened. */
+  function openIngredientSearch() {
+    reveal("#ingredientModal");
+  }
+
+  /* Reviews: switch to details mode (product sections are display:none in grid
+     mode), open the first perfume's detail, then force its .reviews-section and
+     .add-review-container visible so the guide can highlight the review form. */
+  function openReviewForm() {
+    try {
+      ensureMode("details");
+      var card = document.querySelector(".perfume-grid-card");
+      if (card && card.getAttribute("data-target")) {
+        try { location.hash = "#" + card.getAttribute("data-target"); } catch (e) {}
+      }
+      /* .reviews-section is display:none by default (behind a tab); force it on. */
+      var sec = document.querySelector(".reviews-section");
+      showEl(sec);
+      var add = document.querySelector(".add-review-container");
+      showEl(add);
+      /* also reveal any parent of the form that might still be collapsed */
+      if (add && add.parentElement) showEl(add.parentElement);
+      /* activate a reviews tab if the product UI uses one */
+      var tab = document.querySelector('[data-tab="reviews"], .tab-reviews, .reviews-tab');
+      if (tab) { try { tab.click(); } catch (e) {} }
+    } catch (e) {}
+  }
+
+  /* Scent Profiler: the modal has three internal states (welcome -> question ->
+     results). Open it and advance to the state a step wants to highlight. */
+  function profilerOpen() {
+    try { openPanel("#scent-profiler-modal"); reveal("#scent-profiler-modal"); } catch (e) {}
+  }
+  function profilerToQuestion() {
+    try {
+      profilerOpen();
+      var q = document.getElementById("spQuestion");
+      if (q && q.classList.contains("hidden")) {
+        var start = document.getElementById("spStartBtn");
+        if (start) start.click();
+      }
+    } catch (e) {}
+  }
+  function profilerToResults() {
+    try {
+      profilerOpen();
+      var res = document.getElementById("spResults");
+      if (!res) return;
+      showEl(res);
+      hideEl(document.getElementById("spWelcome"));
+      hideEl(document.getElementById("spQuestion"));
+    } catch (e) {}
+  }
+
+  /* Poll resolve() for a short while — async panels (customer profile, record
+     purchase form, review form) only populate their inner elements after a
+     fetch, so a step that is unresolvable synchronously may become resolvable
+     a moment later. */
+  function pollResolve(step, cb, timeout) {
+    timeout = timeout || 2200;
+    var startT = Date.now();
+    (function tick() {
+      var el = null;
+      try { el = resolve(step); } catch (e) {}
+      if (el) { cb(el); return; }
+      if (Date.now() - startT > timeout) { cb(null); return; }
+      setTimeout(tick, 120);
+    })();
+  }
+
+  function showStep(i, step, el) {
+    var g = state.guide;
+    if (!g) return;
+    state.index = i;
+    renderTip(step, i, g, !!el);
+    if (el) {
+      try {
+        if (typeof el.scrollIntoView === "function") {
+          el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+        }
+      } catch (e) {}
+      state.lastRect = el;
+      /* let the smooth scroll settle before measuring */
+      setTimeout(function () { highlight(el); }, 260);
+    } else {
+      state.lastRect = null;
+      els.spotlight.classList.add("is-hidden");
+      els.cursor.classList.remove("is-visible");
+      centerTip();
+    }
+  }
+
+  /* Skip ahead to the first later step that resolves (running each candidate's
+     onShow first so it can open its panel). Async panels are poll-awaited. */
+  function skipToNext(i) {
+    var g = state.guide;
+    if (!g) { finish(); return; }
+    var next = i + 1;
+    (function advance() {
+      if (next >= g.steps.length) { finish(); return; }
+      var cand = g.steps[next];
+      if (typeof cand.onShow === "function") {
+        try { cand.onShow(); } catch (e) {}
+      }
+      var el = resolve(cand);
+      if (el) { go(next); return; }
+      pollResolve(cand, function (found) {
+        if (found) { go(next); return; }
+        next++;
+        advance();
+      });
+    })();
+  }
+
   function go(i) {
     var g = state.guide;
     if (!g) return;
@@ -1482,43 +1810,20 @@
     }
 
     var el = resolve(step);
+    if (el) { showStep(i, step, el); return; }
 
-    /* skip steps whose target is not on screen right now */
-    if (!el && step.opt) {
-      var next = i + 1;
-      while (next < g.steps.length) {
-        var cand = g.steps[next];
-        /* a later step may become visible only after its own onShow hook
-           (e.g. it opens a modal) — run it before testing resolvability. */
-        if (typeof cand.onShow === "function") {
-          try { cand.onShow(); } catch (e) {}
-        }
-        if (resolve(cand) || !cand.opt) break;
-        next++;
-      }
-      if (next < g.steps.length) { state.index = next; go(next); return; }
-      finish();
-      return;
-    }
-
-    state.index = i;
-    renderTip(step, i, g, !!el);
-
-    if (el) {
-      try {
-        if (typeof el.scrollIntoView === "function") {
-          el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
-        }
-      } catch (e) {}
-      state.lastRect = el;
-      /* let the smooth scroll settle before measuring */
-      setTimeout(function () { highlight(el); }, 260);
-    } else {
-      state.lastRect = null;
-      els.spotlight.classList.add("is-hidden");
-      els.cursor.classList.remove("is-visible");
+    /* Not resolvable yet. Show the tip immediately (centered) so the user sees
+       progress, then poll briefly — the target may appear once an async panel
+       (customer profile, record-purchase form, review form) finishes loading. */
+    renderTip(step, i, g, false);
+    centerTip();
+    pollResolve(step, function (found) {
+      if (found) { showStep(i, step, found); return; }
+      if (step.opt) { skipToNext(i); return; }
+      /* non-optional and still missing: leave the tip centered (missing target). */
+      renderTip(step, i, g, false);
       centerTip();
-    }
+    });
   }
 
   function highlight(el) {
@@ -1617,7 +1922,33 @@
     close: closeLauncher,
     start: startTour,
     stop: endTour,
-    isActive: function () { return state.active; }
+    isActive: function () { return state.active; },
+    isAdmin: function () { return isAdminUser(); },
+    currentStep: function () {
+      if (!state.guide) return null;
+      var s = state.guide.steps[state.index];
+      if (!s) return null;
+      return { sel: s.sel, opt: !!s.opt, title: (s.t && (s.t.en || s.t.fr || s.t.ar)) || null };
+    },
+    /* Diagnostic: for guide `id`, run each step's onShow (if any) then report
+       whether resolve() finds a visible element and its box. Does NOT start a
+       tour; restores panels/mode after each step. */
+    probe: function (id) {
+      var g = null;
+      for (var i = 0; i < GUIDES.length; i++) if (GUIDES[i].id === id) g = GUIDES[i];
+      if (!g) return [];
+      var out = [];
+      for (var i = 0; i < g.steps.length; i++) {
+        var step = g.steps[i];
+        if (typeof step.onShow === "function") { try { step.onShow(); } catch (e) {} }
+        var el = resolve(step);
+        var rect = null;
+        if (el) { var r = el.getBoundingClientRect(); rect = { w: Math.round(r.width), h: Math.round(r.height), x: Math.round(r.x), y: Math.round(r.y) }; }
+        out.push({ i: i, sel: step.sel, opt: !!step.opt, resolved: !!el, rect: rect });
+        cleanupOpenedPanels();
+      }
+      return out;
+    }
   };
 
   /* wire anything carrying data-guide-open / #guidesBtn */
