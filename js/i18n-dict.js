@@ -1383,7 +1383,7 @@
     "Lien du bouton": ["Button link", "رابط الزر"],
     "Publiez une actualité pour tous les utilisateurs : promotion, nouveau parfum, événement…": ["Publish an announcement for all users: promotion, new perfume, event…", "انشر خبرًا لجميع المستخدمين: عرض ترويجي، عطر جديد، فعالية…"],
     "Configurez les horaires d'ouverture affichés sur la page d'accueil.": ["Configure the opening hours shown on the home page.", "اضبط ساعات العمل المعروضة في الصفحة الرئيسية."],
-    "Messages laissés par les visiteurs via le formulaire « Leave a Note ».": ["Messages left by visitors via the \"Leave a Note\" form.", "الرسائل التي تركها الزوار عبر نموذج «اترك ملاحظة»."],
+    "Messages laissés par les visiteurs via le formulaire « Laisser un message ».": ["Messages left by visitors via the \"Leave a Note\" form.", "الرسائل التي تركها الزوار عبر نموذج «اترك ملاحظة»."],
     "— 5 points = 1 parfum offert": ["— 5 points = 1 free perfume", "— 5 نقاط = عطر مجاني"],
     "Éligibles · 6 pts": ["Eligible · 6 pts", "مؤهلون · 6 نقاط"],
     "Ajoutez un client et créez sa carte fidélité.": ["Add a customer and create their loyalty card.", "أضف عميلاً وأنشئ بطاقة الولاء الخاصة به."],

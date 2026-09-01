@@ -31,6 +31,19 @@
     "Search for any ingredient or note...": "Rechercher un ingrédient ou une note...",
     "My Favorites": "Mes favoris",
     "No favorites yet": "Aucun favori pour le moment",
+    "No Favorites Yet": "Aucun favori pour le moment",
+    "Choose Your Bottle": "Choisissez votre flacon",
+    "Select Size": "Sélectionnez la taille",
+    "Start Over": "Recommencer",
+    "Your Perfect Matches": "Vos correspondances parfaites",
+    "Answer 8 quick questions and discover fragrances that match your taste.": "Répondez à 8 questions rapides et découvrez les parfums qui correspondent à vos goûts.",
+    "Start adding your favorite perfumes to see them here!": "Commencez à ajouter vos parfums préférés pour les voir ici !",
+    "Based on your preferences, we recommend these fragrances:": "En fonction de vos préférences, nous vous recommandons ces parfums :",
+    "Open Test": "Ouvrir le test",
+    "A Fresh Green Escape": "Une évasion verte et fraîche",
+    "A Modern Oud Masterpiece": "Un chef-d'œuvre d'oud moderne",
+    "An Oriental Floral Masterpiece": "Un chef-d'œuvre oriental floral",
+    "An Oriental Gourmand Adventure": "Une aventure orientale gourmande",
     "No notifications": "Aucune notification",
     "Retry": "Réessayer",
     "Settings": "Paramètres",
@@ -1829,9 +1842,11 @@
   var PCT_RE = /^(\d+)\s*%$/;
   var POSTED_AGO_RE = /^Posted by\s+(u\/[\w]+)\s+(\d+)\s+(day|week|month|year)s?\s+ago$/;
   var SHARE_RE = /^Share your experience with (.+)$/;
+  var SHARE_FIRST_RE = /^Be the first to share your experience with (.+)!$/;
   var REVIEW_FOR_RE = /^Sign in to write a review for (.+)\.$/;
   var REVIEW_SHARE_RE = /^Sign in to write a review and share your thoughts about (.+) with the community\.$/;
   var LAUNCHED_RE = /^was\s+launched\s+in\s+(\d{4})\.\s+The\s+nose\s+behind\s+this\s+fragrance\s+is\s+(.+?)\.?\s*$/;
+  var LAUNCHED_NOTES_RE = /^was\s+launched\s+in\s+(\d{4})\.\s+The\s+nose\s+behind\s+this\s+fragrance\s+is\s+(.+?)\.\s+(Top notes are .+)$/;
   /* prices are quoted in Tunisian dinar: "135 dt", "1 250 dt" */
   var CURRENCY_RE = /^(\d[\d.,\u00a0\s]*)\s*dt$/i;
   /* vote/like counts abbreviated on Reddit-style cards: "1.8k", "3,1k" */
@@ -1918,9 +1933,14 @@
       postedAgo: function (u, s) { return "Publié par " + u + " " + s; },
       emailCmt: function (n) { return "\ud83d\udcac " + this.count(n, "comment"); },
       shareExp: function (x) { return "Partagez votre expérience avec " + x; },
+      shareFirst: function (x) { return "Soyez le premier à partager votre expérience avec " + x + " !"; },
       reviewFor: function (x) { return "Connectez-vous pour écrire un avis sur " + x + "."; },
       reviewShare: function (x) { return "Connectez-vous pour écrire un avis et partager vos impressions sur " + x + " avec la communauté."; },
-      launched: function (y, n) { return "Lancé en " + y + ". Le nez derrière ce parfum est " + n + "."; },
+      launched: function (y, n) { return "Lancé en " + y + ". Le nez derrière ce parfum est " + this.cleanNose(n) + "."; },
+      cleanNose: function (n) {
+        n = n.replace(/\.+$/, "").trim();
+        return n.replace(/\s+and\s+/i, " et ");
+      },
       genre: function (g) { return "est un parfum " + g + " pour femmes et hommes."; },
       genres: GENRES,
       noteHeads: { top: "notes de tête : ", middle: "notes de cœur : ", base: "notes de fond : " },
@@ -1976,9 +1996,14 @@
       postedAgo: function (u, s) { return "نشر بواسطة " + u + " " + s; },
       emailCmt: function (n) { return "\ud83d\udcac " + this.count(n, "comment"); },
       shareExp: function (x) { return "شارك تجربتك مع " + x; },
+      shareFirst: function (x) { return "كن أول من يشارك تجربته مع " + x + "!"; },
       reviewFor: function (x) { return "سجّل الدخول لكتابة تقييم عن " + x + "."; },
       reviewShare: function (x) { return "سجّل الدخول لكتابة تقييم ومشاركة انطباعاتك عن " + x + " مع المجتمع."; },
-      launched: function (y, n) { return "تم إطلاقه في " + y + ". صانع هذا العطر هو " + n + "."; },
+      launched: function (y, n) { return "تم إطلاقه في " + y + ". صانع هذا العطر هو " + this.cleanNose(n) + "."; },
+      cleanNose: function (n) {
+        n = n.replace(/\.+$/, "").trim();
+        return n.replace(/\s+and\s+/i, " و ");
+      },
       genre: function (g) { return "عطر " + g + " للنساء والرجال."; },
       genres: GENRES_AR,
       noteHeads: { top: "المقدمة: ", middle: "القلب: ", base: "القاعدة: " },
@@ -2114,10 +2139,14 @@
       if (m) return L.emailCmt(m[1]);
       m = str.match(SHARE_RE);
       if (m) return L.shareExp(m[1]);
+      m = str.match(SHARE_FIRST_RE);
+      if (m) return L.shareFirst(m[1]);
       m = str.match(REVIEW_FOR_RE);
       if (m) return L.reviewFor(m[1]);
       m = str.match(REVIEW_SHARE_RE);
       if (m) return L.reviewShare(m[1]);
+      m = str.match(LAUNCHED_NOTES_RE);
+      if (m) return L.launched(m[1], m[2]) + " " + translateNoteList(m[3], L);
       m = str.match(LAUNCHED_RE);
       if (m) return L.launched(m[1], m[2]);
       m = str.match(CURRENCY_RE);
