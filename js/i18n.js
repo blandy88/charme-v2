@@ -2275,8 +2275,42 @@
   var AR = EXTRA.ar || {};
   (function () {
     var fx = EXTRA.fr || {}, k;
+    var frValues = Object.create(null);
+    for (k in FR) {
+      if (!Object.prototype.hasOwnProperty.call(FR, k)) continue;
+      if (typeof FR[k] === "string") frValues[FR[k]] = 1;
+    }
+    /* i18n-dict's triple tables pair each UI string with its French + Arabic
+     * twins, but the KEYS may be either English or French source text. Adding a
+     * French key to FR would silently turn already-French text back into
+     * English in FR mode ("Carte Fidélité" -> "Loyalty Card"). Only merge keys
+     * whose source is English; French keys are mirrored instead so that English
+     * source (if ever injected) still translates to French. */
+    function looksFrench(s) {
+      if (!s) return false;
+      if (/[àâçéèêëîïôûùüœæ]/i.test(s)) return true;
+      if (/[dljcnq]’(?=[aàâeéèêiîïoôuùy])/i.test(s)) return true;
+      if (/[dljcnq]'(?=[aàâeéèêiîïoôuùy])/i.test(s)) return true;
+      var bare = s.replace(/^[^\p{L}\p{N}]+/u, "");
+      if (/^(le|la|les|des|un|une|du|au|aux|de|à|ce|cette|nos|vos)\s/i.test(bare)) return true;
+      if (/\b(pour|avec|vous|nous|sont|êtes|avez|mais|qui|que|dans|sur|tous|toutes|votre|notre|leur|leurs|du|de la)\b/i.test(bare)) return true;
+      if (/^N°\s/.test(bare)) return true;
+      if (frValues[s]) return true;
+      if (FRENCH_WORD_RE.test(bare)) return true;
+      return FRENCH_WORD_ANY_RE.test(bare);
+    }
+    var FRENCH_WORD_RE = /^(Annonce|Titre|Message|Envoyer|Enregistrer|Annuler|Haut|Gourmande|Gourmand|Aromatique|Choisir|Publi[ezé]|Parfums?|Nouveau|Nouvelle|Modifier|Client|Clients|Profil|Marques|Historique|Ajouter|Famille|Florale|Orientale|Agrume|Public|Cible|Suivre|Suivez|Bouton|Taille|Couleur|Ville|Adresse|Rechercher|Fermer|Continuer|Retour|Marque|Chargement|Laisser|Besoin|Demande|Livraison|Gratuit|Connecter|Optionnel|optionnel)\b/;
+    var FRENCH_WORD_ANY_RE = /\b(parfums?|cartes?|clients?|annonces?|actualit[ée]s?|horaires?|offerts?|offertes?|achet[ée]s?|[ée]mises?|publi[ée]s?|nouvelles?|nouveaux?|recommand[ée]s?|fidélit[ée]s?|livraisons?|gratuites?|disponibles?|premiers?|premi[èe]res?|personnalit[ée]|préf[ée]rences|olfactives?|florales?|orientales?|agrumes?|aldéhyd[ée]s?|bois[ée]es?|fraîches?|membres?|clients?|points?|pts|achats?|achat|familles?|histoires?|effacer|supprimer|tout|n°)\b/i;
     for (k in fx) {
-      if (Object.prototype.hasOwnProperty.call(fx, k) && !Object.prototype.hasOwnProperty.call(FR, k)) FR[k] = fx[k];
+      if (!Object.prototype.hasOwnProperty.call(fx, k)) continue;
+      if (Object.prototype.hasOwnProperty.call(FR, k)) continue;
+      var fr = fx[k];
+      if (typeof fr !== "string") { FR[k] = fr; continue; }
+      if (looksFrench(k)) {
+        if (!Object.prototype.hasOwnProperty.call(FR, fr)) FR[fr] = k;
+        continue;
+      }
+      FR[k] = fr;
     }
   })();
 
