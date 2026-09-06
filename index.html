@@ -84,7 +84,7 @@
         <!-- Scripts (deferred for performance) -->
         <script src="js/fragrance-api-service.js?v=20260818" defer></script>
         <script src="js/ai-fragrance-finder.js?v=20260826c" defer></script>
-        <script src="js/note-image-resolver.js?v=20260826c" defer></script>
+        <script src="js/note-image-resolver.js?v=20260826d" defer></script>
         <script src="js/ingredient-finder.js?v=20260817" defer></script>
         <script src="js/smooth-scroll.js?v=20260814" defer></script>
         <script src="js/fragrance-catalog-data.js?v=20260810" defer></script>
@@ -3730,19 +3730,19 @@
                     <div class="admin-stats loyalty-stats">
                         <div class="stat-card loyalty-stat">
                             <span class="loyalty-stat__icon" aria-hidden="true">◈</span>
-                            <h3 id="loyaltyTotalCards">0</h3>
+                            <h3 id="loyaltyTotalCards">—</h3>
                             <span class="loyalty-stat__rule"></span>
                             <p>Cartes émises</p>
                         </div>
                         <div class="stat-card loyalty-stat loyalty-stat--accent">
                             <span class="loyalty-stat__icon" aria-hidden="true">✦</span>
-                            <h3 id="loyaltyEligibleCards">0</h3>
+                            <h3 id="loyaltyEligibleCards">—</h3>
                             <span class="loyalty-stat__rule"></span>
                             <p>Éligibles · 6 pts</p>
                         </div>
                         <div class="stat-card loyalty-stat">
                             <span class="loyalty-stat__icon" aria-hidden="true">❦</span>
-                            <h3 id="loyaltyRewardsGiven">0</h3>
+                            <h3 id="loyaltyRewardsGiven">—</h3>
                             <span class="loyalty-stat__rule"></span>
                             <p>Parfums offerts</p>
                         </div>
@@ -4428,7 +4428,9 @@
                         });
                     }
 
-                    fetch("/api/store-hours", { cache: "no-store" })
+                    var hoursController = new AbortController();
+                    var hoursTimer = setTimeout(function () { hoursController.abort(); }, 8000);
+                    fetch("/api/store-hours", { cache: "no-store", signal: hoursController.signal })
                         .then(function (r) { return r.json(); })
                         .then(function (data) {
                             if (data && data.success && data.config) {
@@ -4437,6 +4439,7 @@
                         })
                         .catch(function () {})
                         .finally(function () {
+                            clearTimeout(hoursTimer);
                             renderSchedule();
                             setInterval(renderSchedule, 60000);
                         });
@@ -29355,7 +29358,7 @@
         <script src="js/guides.js?v=20260831d" defer></script>
         <script src="js/fragrantica-urls.js?v=20260820e" defer></script>
         <script src="js/cp-trait-icons.js?v=20260829a" defer></script>
-        <script src="script.js?v=20260901a" defer></script>
+        <script src="script.js?v=20260906a" defer></script>
 
         <script>
             // Quality selector functionality
@@ -29663,6 +29666,16 @@
 .audience-badge.audience-men { background: #c9a94e; }
 .audience-badge.audience-women { background: #d9a3b8; }
 .audience-badge.audience-unisex { background: #91a8c8; }
+.loyalty-spinner {
+    display: inline-block !important;
+    width: 26px !important;
+    height: 26px !important;
+    border: 3px solid rgba(255, 255, 255, 0.15) !important;
+    border-top-color: var(--color-gold, #c9a94e) !important;
+    border-radius: 50% !important;
+    animation: loyalty-spin 0.8s linear infinite !important;
+}
+@keyframes loyalty-spin { to { transform: rotate(360deg); } }
 </style>
 </body>
 </html>

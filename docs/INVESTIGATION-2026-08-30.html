@@ -152,14 +152,13 @@ HTTP request against <code>https://charmeperfume.me</code> or the local server o
 
 <div class="f crit">
   <h4>Admin credentials hardcoded in a tracked file, replayed on every deploy <span class="tag crit">Critical</span></h4>
-  <p class="ev"><code>scripts/init-database.js:1938-1939</code>:<br>
-  <code>const adminEmail = (process.env.ADMIN_EMAIL || 'cherifmed1200@gmail.com')…</code><br>
-  <code>const adminPassword = process.env.ADMIN_PASSWORD || 'medmedmed88';</code></p>
+  <p class="ev"><code>scripts/init-database.js:1938-1939</code> previously used hard-coded admin credential fallbacks.</p>
   <p>Confirmed tracked by git. <code>render.yaml:8</code> runs
-  <code>startCommand: npm run init-db && npm start</code>, so this executes on <em>every</em> deploy
-  and cold start. If the env vars are unset, that account is created or promoted to admin.</p>
-  <p><strong>Fix:</strong> remove both fallbacks; fail loudly if unset. Rotate the password — it is
-  also present in plain text in <code>.env:18</code>.</p>
+  <code>startCommand: npm run init-db && npm start</code>, so admin bootstrap must never
+  create or promote an account when its environment variables are absent.</p>
+  <p><strong>Status:</strong> the fallback has now been removed; the bootstrap skips admin creation
+  when <code>ADMIN_EMAIL</code>/<code>ADMIN_PASSWORD</code> are unset. Rotate the exposed password
+  and remove credential-bearing history separately.</p>
 </div>
 
 <div class="f high">

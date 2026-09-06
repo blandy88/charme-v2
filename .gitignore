@@ -39,6 +39,13 @@ build/
 .config/
 _pgbackup/
 _pginfo/
+.DS_Store
+*.bak
+*.mp4
+charme_app/
+site-audit-*.html
+_site_audit.cjs
+_server_smoke.log
 
 # Tooling & test artifacts
 .playwright-cli/

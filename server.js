@@ -301,13 +301,71 @@ console.log("🔄 Checking for required database migrations...");
 
     // 🎁 CARTE FIDÉLITÉ: loyalty cards + reward history
     console.log("🔄 Setting up loyalty cards tables...");
-    db.all("PRAGMA table_info(loyalty_cards)", (err, columns) => {
-      const hasHolderName =
-        !err && columns && columns.some((col) => col.name === "holder_name");
 
-      const createLoyaltyTables = () => {
-        db.run(
-          `
+    // Table creation and index creation are asynchronous in the SQLite fallback.
+    // Retry a missing-table index briefly so a fresh install does not permanently
+    // lose an optimization just because the CREATE TABLE callback was slower.
+    const createIndexWhenReady = (sql, label, retries = 20) => {
+      db.run(sql, (err) => {
+        if (!err) {
+          console.log(`✅ Created ${label} index`);
+          return;
+        }
+        if (/no such table/i.test(err.message || "") && retries > 0) {
+          return setTimeout(
+            () => createIndexWhenReady(sql, label, retries - 1),
+            100,
+          );
+        }
+        console.error(`❌ Error creating ${label} index:`, err);
+      });
+    };
+
+    // Create the tables first (no-op when they already exist), then inspect the
+    // actual schema from the CREATE TABLE callback. This avoids a fresh SQLite
+    // startup race where PRAGMA returned an empty/incomplete schema and the
+    // migration attempted to add columns that had just been created.
+    const ensureLoyaltyCardColumns = () => {
+      db.all("PRAGMA table_info(loyalty_cards)", (err, columns) => {
+        if (err) {
+          console.error("❌ Loyalty schema check failed:", err);
+          return;
+        }
+        const existing = {};
+        (columns || []).forEach((col) => {
+          existing[col.name] = true;
+        });
+        const expected = [
+          ["holder_name", "TEXT"],
+          ["holder_email", "TEXT"],
+          ["holder_phone", "TEXT"],
+          ["card_number", "TEXT"],
+        ];
+        const missing = expected.filter(([name]) => !existing[name]);
+        if (!missing.length) return;
+        console.log(
+          `🔄 Upgrading loyalty_cards schema (+${missing.map((m) => m[0]).join(", ")}) — data preserved`,
+        );
+        const addNext = (i) => {
+          if (i >= missing.length) return;
+          const [name, type] = missing[i];
+          db.run(
+            `ALTER TABLE loyalty_cards ADD COLUMN ${name} ${type}`,
+            (addErr) => {
+              if (addErr)
+                console.error(`❌ Error adding loyalty column ${name}:`, addErr);
+              else console.log(`✅ Added loyalty column ${name}`);
+              addNext(i + 1);
+            },
+          );
+        };
+        addNext(0);
+      });
+    };
+
+    const createLoyaltyTables = () => {
+      db.run(
+        `
             CREATE TABLE IF NOT EXISTS loyalty_cards (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER UNIQUE,
@@ -321,15 +379,18 @@ console.log("🔄 Checking for required database migrations...");
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         `,
-          (createErr) => {
-            if (createErr)
-              console.error("❌ Error creating loyalty_cards table:", createErr);
-            else console.log("✅ Created loyalty_cards table");
-          },
-        );
+        (createErr) => {
+          if (createErr) {
+            console.error("❌ Error creating loyalty_cards table:", createErr);
+            return;
+          }
+          console.log("✅ Created loyalty_cards table");
+          ensureLoyaltyCardColumns();
+        },
+      );
 
-        db.run(
-          `
+      db.run(
+        `
             CREATE TABLE IF NOT EXISTS loyalty_transactions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 card_id INTEGER NOT NULL,
@@ -342,41 +403,25 @@ console.log("🔄 Checking for required database migrations...");
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         `,
-          (createErr) => {
-            if (createErr)
-              console.error(
-                "❌ Error creating loyalty_transactions table:",
-                createErr,
-              );
-            else console.log("✅ Created loyalty_transactions table");
-          },
-        );
+        (createErr) => {
+          if (createErr)
+            console.error(
+              "❌ Error creating loyalty_transactions table:",
+              createErr,
+            );
+          else console.log("✅ Created loyalty_transactions table");
+        },
+      );
 
-        // Index for loyalty transactions table
-        db.run(
-          "CREATE INDEX IF NOT EXISTS idx_loyalty_transactions_card_id ON loyalty_transactions(card_id)",
-          (idxErr) => {
-            if (idxErr)
-              console.error(
-                "❌ Error creating loyalty_transactions index:",
-                idxErr,
-              );
-            else console.log("✅ Created loyalty_transactions index");
-          },
-        );
-      };
+      // The table may still be completing its asynchronous CREATE TABLE callback
+      // on a fresh SQLite database; the helper retries a missing-table error.
+      createIndexWhenReady(
+        "CREATE INDEX IF NOT EXISTS idx_loyalty_transactions_card_id ON loyalty_transactions(card_id)",
+        "loyalty_transactions",
+      );
+    };
 
-      if (hasHolderName) {
-        createLoyaltyTables();
-      } else {
-        console.log("🔄 Migrating loyalty tables to support manual cards...");
-        db.run("DROP TABLE IF EXISTS loyalty_transactions", () => {
-          db.run("DROP TABLE IF EXISTS loyalty_cards", () => {
-            createLoyaltyTables();
-          });
-        });
-      }
-    });
+    createLoyaltyTables();
 
     // 📰 NEWS & NOTIFICATIONS: published announcements (visible to all users)
     console.log("🔄 Setting up news table...");
@@ -445,13 +490,11 @@ console.log("🔄 Checking for required database migrations...");
       },
     );
 
-    // Indexes for customer_purchases
-    db.run(
+    // Indexes for customer_purchases. On a fresh SQLite database the table
+    // callback can complete after this migration block, so retry safely.
+    createIndexWhenReady(
       "CREATE INDEX IF NOT EXISTS idx_customer_purchases_card_id ON customer_purchases(card_id)",
-      (err) => {
-        if (err) console.error("❌ Error creating customer_purchases index:", err);
-        else console.log("✅ Created customer_purchases index");
-      },
+      "customer_purchases",
     );
 
     // 🕒 STORE SETTINGS: key/value store for configurable store data (store hours, notes, etc.)
@@ -496,57 +539,36 @@ console.log("🔄 Checking for required database migrations...");
       },
     );
 
-    db.run(
+    createIndexWhenReady(
       "CREATE INDEX IF NOT EXISTS idx_customer_purchases_family ON customer_purchases(fragrance_family)",
-      (err) => {
-        if (err) console.error("❌ Error creating customer_purchases family index:", err);
-        else console.log("✅ Created customer_purchases family index");
-      },
+      "customer_purchases family",
     );
 
     // 🔧 ENHANCED: Create indexes for better performance
     console.log("🔄 Creating database indexes for better performance...");
 
-    // Index for review_replies table
-    db.run(
+    // These CREATE INDEX calls can race CREATE TABLE on a fresh SQLite fallback
+    // database. Retry only the expected missing-table condition; other errors are
+    // surfaced immediately instead of being silently swallowed.
+    createIndexWhenReady(
       "CREATE INDEX IF NOT EXISTS idx_review_replies_review_id ON review_replies(review_id)",
-      (err) => {
-        if (err) console.error("❌ Error creating review_replies index:", err);
-        else console.log("✅ Created review_replies index");
-      },
+      "review_replies",
     );
-
-    db.run(
+    createIndexWhenReady(
       "CREATE INDEX IF NOT EXISTS idx_review_replies_user_id ON review_replies(user_id)",
-      (err) => {
-        if (err) console.error("❌ Error creating user_id index:", err);
-        else console.log("✅ Created user_id index");
-      },
+      "review_replies user_id",
     );
-
-    db.run(
+    createIndexWhenReady(
       "CREATE INDEX IF NOT EXISTS idx_review_replies_created_at ON review_replies(created_at)",
-      (err) => {
-        if (err) console.error("❌ Error creating created_at index:", err);
-        else console.log("✅ Created created_at index");
-      },
+      "review_replies created_at",
     );
-
-    // Index for reply_likes table
-    db.run(
+    createIndexWhenReady(
       "CREATE INDEX IF NOT EXISTS idx_reply_likes_reply_id ON reply_likes(reply_id)",
-      (err) => {
-        if (err) console.error("❌ Error creating reply_likes index:", err);
-        else console.log("✅ Created reply_likes index");
-      },
+      "reply_likes",
     );
-
-    db.run(
+    createIndexWhenReady(
       "CREATE INDEX IF NOT EXISTS idx_review_likes_review_id ON review_likes(review_id)",
-      (err) => {
-        if (err) console.error("❌ Error creating review_likes index:", err);
-        else console.log("✅ Created review_likes index");
-      },
+      "review_likes",
     );
 
     // 🔧 NEW: Add updated_at column to existing review_replies table if it doesn't exist
@@ -613,8 +635,18 @@ const helmetOptions =
     : { contentSecurityPolicy: false };
 app.use(helmet(helmetOptions));
 
-// Gzip/Brotli compression for HTML, CSS, JS and JSON responses
-app.use(compression({ threshold: 1024 }));
+// Gzip/Brotli compression for HTML, CSS, JS and JSON responses.
+// Prefer Brotli: it gives smaller payloads than gzip at similar cost.
+app.use(
+  compression({
+    threshold: 1024,
+    filter: (req, res) =>
+      /^(text\/|application\/(json|javascript|xml)|image\/svg\+xml)/.test(
+        (res.getHeader("Content-Type") || "") + "",
+      ),
+    brotli: { enabled: true, quality: 11 },
+  }),
+);
 
 if (ENV === "production") {
   app.use(
@@ -692,8 +724,15 @@ const IMAGE_SIZES = [
 const IMAGE_EXT = /\.(png|jpe?g)$/i;
 
 function resolveImageSource(reqPath) {
-  // Full-resolution hero background — bypass the 800px-wide image optimizer
-  if (reqPath.toLowerCase() === "/hero-bg.jpg" || reqPath.toLowerCase() === "/hero-bg-night.jpg") return null;
+  // Full-resolution hero background — resize + convert to WebP (1920px, no
+  // upscaling) instead of serving the ~2MB raw JPEG.
+  const lowerPath = reqPath.toLowerCase();
+  if (lowerPath === "/hero-bg.jpg") {
+    return { filePath: path.join(__dirname, "hero-bg.jpg"), width: 1920 };
+  }
+  if (lowerPath === "/hero-bg-night.jpg") {
+    return { filePath: path.join(__dirname, "hero-bg-night.jpg"), width: 1920 };
+  }
   // Root-level perfume bottle images (e.g. /layton.png)
   if (reqPath.startsWith("/") && IMAGE_EXT.test(reqPath) && reqPath.indexOf("/", 1) === -1) {
     const file = reqPath.slice(1).toLowerCase();
@@ -840,10 +879,19 @@ app.use((req, res, next) => {
     const isHtml = ext === ".html";
     const isJS = ext === ".js";
     const isCSS = ext === ".css";
-    // HTML, JS, CSS: always revalidate so cache-bust works across all visitors.
+    // Cache-busting version query (script.js?v=20260901a, styles.css?v=...) is
+    // the signal that this resource URL is content-addressed: any real change
+    // bumps the query, so browsers can keep it forever. Without the query we
+    // must revalidate.
+    const hasVersionQuery = /(^|&)v=[0-9A-Za-z-]+(&|$)/.test(
+      (req.url.split("?")[1] || "") + "&",
+    );
+    // HTML is always revalidated (it carries the version queries).
     // Images: long cache since they don't change.
-    if (isHtml || isJS || isCSS) {
+    if (isHtml || ((isJS || isCSS) && !hasVersionQuery)) {
       res.setHeader("Cache-Control", "no-cache, must-revalidate");
+    } else if (isJS || isCSS) {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     } else {
       res.setHeader("Cache-Control", "public, max-age=604800");
     }
@@ -910,8 +958,23 @@ const authLimiter = rateLimit({
   },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  skipSuccessfulRequests: true, // Don't count successful requests
+  skipSuccessfulRequests: true, // Keep successful logins from consuming the login budget
   skipFailedRequests: false, // Count failed requests
+});
+
+// Registration has a separate, stricter quota. The general auth limiter above intentionally
+// skips successful requests for login UX, but that would otherwise allow unlimited account
+// creation because a successful registration returns 201.
+const registrationLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  message: {
+    error: "Too many registration attempts. Please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: false,
+  skipFailedRequests: false,
 });
 
 const resendVerificationLimiter = rateLimit({
@@ -981,25 +1044,30 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ error: "Access token required" });
   }
 
-  jwt.verify(token, ACTIVE_JWT_SECRET, async (err, user) => {
-    if (err) {
-      return res.status(403).json({ error: "Invalid or expired token" });
-    }
-    try {
-      const dbUser = await getUserById(user.userId);
-      if (!dbUser) {
-        return res.status(401).json({ error: "User no longer exists" });
+  jwt.verify(
+    token,
+    ACTIVE_JWT_SECRET,
+    { algorithms: ["HS256"] },
+    async (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: "Invalid or expired token" });
       }
-      if (dbUser.is_banned) {
-        return res.status(403).json({ error: "Account is banned" });
+      try {
+        const dbUser = await getUserById(user.userId);
+        if (!dbUser) {
+          return res.status(401).json({ error: "User no longer exists" });
+        }
+        if (dbUser.is_banned) {
+          return res.status(403).json({ error: "Account is banned" });
+        }
+        req.user = { ...user, dbUser };
+        next();
+      } catch (error) {
+        console.error("Token user lookup error:", error);
+        res.status(500).json({ error: "Internal server error" });
       }
-      req.user = { ...user, dbUser };
-      next();
-    } catch (error) {
-      console.error("Token user lookup error:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
+    },
+  );
 };
 
 // Validation helpers
@@ -1024,7 +1092,7 @@ const validateName = (name) => {
 // XP and level system functions removed
 
 // Auth Routes
-app.post("/api/auth/register", async (req, res) => {
+app.post("/api/auth/register", registrationLimiter, async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
@@ -2783,9 +2851,9 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
       );
     });
 
-    // Optionally award loyalty points (recorded purchase ≠ reward). The
-    // "Ajouter un achat" flow intentionally does NOT award points.
-    const award = awardPoints === true;
+    // Award loyalty points on every recorded purchase (card rule:
+    // "5 points = 1 parfum offert"), unless the caller explicitly opts out.
+    const award = awardPoints !== false;
     if (award) {
       await new Promise((resolve, reject) => {
         db.run(
@@ -3487,11 +3555,15 @@ app.get("/api/reviews/:fragrance", (req, res) => {
   const { fragrance } = req.params;
 
   db.all(
-    `SELECT r.*, u.first_name, u.last_name, u.avatar_url, u.is_admin
+    `SELECT r.id, r.user_id, r.user_name, r.user_avatar,
+            u.is_admin AS is_admin, r.fragrance, r.rating, r.review_text,
+            r.likes, r.dislikes, r.created_at, r.updated_at,
+            u.first_name, u.last_name, u.avatar_url
          FROM reviews r
          LEFT JOIN users u ON r.user_id = u.id
          WHERE r.fragrance = ?
-         ORDER BY r.created_at DESC`,
+         ORDER BY r.created_at DESC
+         LIMIT 200`,
     [fragrance],
     (err, rows) => {
       if (err) {
@@ -3499,12 +3571,10 @@ app.get("/api/reviews/:fragrance", (req, res) => {
         return res.status(500).json({ error: "Failed to fetch reviews" });
       }
 
-      // Add level progress calculation for each review
-      const reviewsWithLevelData = rows.map((review) => {
-        return {
-          ...review,
-        };
-      });
+      // Add level progress calculation for each review. The explicit SELECT above is
+      // intentional: this public endpoint must never return reviewer email addresses
+      // (PII) or other private columns.
+      const reviewsWithLevelData = rows.map((review) => ({ ...review }));
 
       console.log(
         `✅ Fetched ${reviewsWithLevelData.length} reviews for ${fragrance}`,
@@ -3593,9 +3663,11 @@ app.post("/api/reviews", authenticateToken, (req, res) => {
             return res.status(500).json({ error: "Failed to save review" });
           }
 
-          // Get the inserted review
+          // Get the inserted review without returning the private email column.
           db.get(
-            "SELECT * FROM reviews WHERE id = ?",
+            `SELECT id, user_id, user_name, user_avatar, is_admin, fragrance,
+                    rating, review_text, likes, dislikes, created_at, updated_at
+             FROM reviews WHERE id = ?`,
             [this.lastID],
             async (err, review) => {
               if (err) {
@@ -4108,8 +4180,10 @@ app.get("/api/reviews/:reviewId/replies", (req, res) => {
     // Fetch replies with user data
     db.all(
       `
-            SELECT r.*,
-                   u.first_name, u.last_name, u.avatar_url, u.is_admin,
+            SELECT r.id, r.review_id, r.parent_reply_id, r.user_id,
+                   r.user_name, r.user_avatar, r.reply_text,
+                   r.created_at, r.updated_at,
+                   u.is_admin AS is_admin, u.first_name, u.last_name, u.avatar_url,
                    COALESCE(
                        (SELECT COUNT(*) FROM reply_likes WHERE reply_id = r.id AND like_type = 'like'), 0
                    ) as likes,
@@ -4129,7 +4203,8 @@ app.get("/api/reviews/:reviewId/replies", (req, res) => {
           return res.status(500).json({ error: "Failed to fetch replies" });
         }
 
-        // Ensure we have an array of replies
+        // The explicit SELECT above intentionally excludes replier email addresses
+        // (PII) from this public endpoint.
         const safeReplies = Array.isArray(replies) ? replies : [];
         
         console.log(
@@ -4263,9 +4338,12 @@ app.post("/api/reviews/:reviewId/replies", authenticateToken, (req, res) => {
             return res.status(500).json({ error: "Failed to save reply" });
           }
 
-          // Get the inserted reply
+          // Get the inserted reply without returning the private email column.
           db.get(
-            "SELECT * FROM review_replies WHERE id = ?",
+            `SELECT id, review_id, parent_reply_id, user_id, user_name,
+                    user_avatar, is_admin, reply_text, likes, dislikes,
+                    created_at, updated_at
+             FROM review_replies WHERE id = ?`,
             [this.lastID],
             async (err, reply) => {
               if (err) {

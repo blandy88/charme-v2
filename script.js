@@ -129,6 +129,54 @@ window.getAuthToken = function () {
   return localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
 };
 
+// Single-flight JSON fetch with timeout. Concurrent callers of the same
+// endpoint share one in-flight request; with cacheMs > 0 the result is also
+// briefly cached. This collapses the duplicate boot-time API calls
+// (news x3, profile x2, stats x2) into single requests.
+const _apiFlightMap = new Map();
+function apiFetchJson(path, options = {}, cacheMs = 0) {
+  const key = `${options.method || "GET"} ${path}`;
+  const existing = _apiFlightMap.get(key);
+  if (existing) return existing;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), options.timeoutMs || 12000);
+
+  const promise = (async () => {
+    try {
+      const response = await fetch(path, {
+        method: options.method || "GET",
+        headers: options.headers || {},
+        body: options.body,
+        signal: controller.signal,
+        cache: options.cache || "no-store",
+      });
+      const data = await response.json();
+      // Expose HTTP status to callers that need to branch on it (e.g. 401/403
+      // means the stored token is stale and should be ignored, not exploded).
+      data.__status = response.status;
+      data.__ok = response.ok;
+      return data;
+    } finally {
+      clearTimeout(timer);
+      _apiFlightMap.delete(key);
+    }
+  })();
+
+  if (cacheMs > 0) {
+    const wrapper = promise.then((data) => {
+      setTimeout(() => {
+        if (_apiFlightMap.get(key) === wrapper) _apiFlightMap.delete(key);
+      }, cacheMs);
+      return data;
+    });
+    _apiFlightMap.set(key, wrapper);
+    return wrapper;
+  }
+  _apiFlightMap.set(key, promise);
+  return promise;
+}
+
 window.normalizeAvatarSrc = function (src) {
   if (!src) return "default.jpg";
   if (src === "custom_uploaded" || src === "custom_avatar_uploaded") {
@@ -6826,6 +6874,33 @@ function initializeAuth() {
     // Initialize the auth state manager
     await window.authStateManager.initialize();
 
+    // 🛡 Validate the stored token BEFORE the boot-time API calls (profile,
+    // favorites, stats). A stale/revoked token otherwise triggers a burst of
+    // 403s and phantom errors on every refresh. Only a definitive 401/403
+    // signs the user out; timeouts / network errors are ignored so a bad
+    // connection never kicks a valid user out.
+    if (window.authStateManager.isLoggedIn()) {
+      const bootToken = window.getAuthToken();
+      if (bootToken) {
+        let verifyStatus = 0;
+        try {
+          const verify = await apiFetchJson(
+            "/api/auth/verify",
+            { headers: { Authorization: `Bearer ${bootToken}` }, timeoutMs: 8000 },
+            0,
+          );
+          verifyStatus = verify ? verify.__status : 0;
+        } catch (e) {
+          /* network/timeout: proceed without signing out */
+        }
+        if (verifyStatus === 401 || verifyStatus === 403) {
+          console.log("🔒 Stored token rejected — signing out stale session");
+          handleLogout();
+          return;
+        }
+      }
+    }
+
     // Check if user is logged in
     if (window.authStateManager.isLoggedIn()) {
       const user = window.authStateManager.getCurrentUser();
@@ -6884,11 +6959,15 @@ function initializeAuth() {
               localStorage.getItem("authToken") ||
               sessionStorage.getItem("authToken");
             if (token) {
-              const profRes = await fetch("/api/user/profile", {
-                headers: { Authorization: `Bearer ${token}` },
-              });
-              if (profRes.ok) {
-                const prof = await profRes.json();
+              const prof = await apiFetchJson(
+                "/api/user/profile",
+                {
+                  headers: { Authorization: `Bearer ${token}` },
+                  timeoutMs: 8000,
+                },
+                0,
+              );
+              if (prof && prof.__ok) {
                 level = prof?.user?.level ?? 1;
                 levelProgress = prof?.user?.levelProgress ?? 0;
                 // Initialize LevelState for real-time updates
@@ -8450,19 +8529,30 @@ async function setUserAvatarFromServer(avatarElement, location) {
       return;
     }
 
-    const response = await fetch("/api/user/profile", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+    const response_data = await apiFetchJson(
+      "/api/user/profile",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        timeoutMs: 8000,
       },
-    });
+      0,
+    );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch user data");
+    if (!response_data.__ok || !response_data.user) {
+      // Stale/rejected token: skip quietly (the 403 storm ends here) and fall
+      // back to the default avatar instead of throwing noise.
+      if (response_data.__status !== 200) {
+        console.warn(
+          `⚠️ ${location} avatar fetch failed (${response_data.__status})`,
+        );
+      }
+      avatarElement.src = "default.jpg";
+      return;
     }
-
-    const response_data = await response.json();
     const userData = response_data.user; // Extract user data from nested response
 
     console.log(
@@ -8620,19 +8710,30 @@ async function refreshUserDataFromServer() {
 
     console.log("ðŸ”„ Refreshing user data from server...");
 
-    const response = await fetch("/api/user/profile", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+    const response_data = await apiFetchJson(
+      "/api/user/profile",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        timeoutMs: 8000,
       },
-    });
+      0,
+    );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch user data");
+    if (!response_data.__ok || !response_data.user) {
+      // Stale/rejected token: skip quietly (the 403 storm ends here) and fall
+      // back to the default avatar instead of throwing noise.
+      if (response_data.__status !== 200) {
+        console.warn(
+          `⚠️ ${location} avatar fetch failed (${response_data.__status})`,
+        );
+      }
+      avatarElement.src = "default.jpg";
+      return;
     }
-
-    const response_data = await response.json();
     const userData = response_data.user; // Extract user data from nested response
     console.log("âœ… Fresh user data from server:", userData);
 
@@ -11263,29 +11364,106 @@ function renderUsersTable() {
 }
 
 // 🎁 Carte Fidélité (Loyalty Cards) Functions
-async function loadLoyaltyData() {
-  try {
-    const token =
-      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
-    const response = await fetch("/api/admin/loyalty", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
+let loyaltyLoading = false;
+let loyaltyLoadError = false;
+let loyaltyLoadPromise = null;
 
-    if (data.success) {
-      loyaltyCards = data.cards || [];
-      loyaltyTotalRewards = data.totalRewards || 0;
-      loyaltyUsersWithoutCards = data.usersWithoutCards || [];
-      renderLoyaltyTable();
-      renderLoyaltyModalTable();
-      updateLoyaltyModalStats();
-    } else {
-      showNotification("Failed to load loyalty cards", "error");
+function renderLoyaltyModalState(msg, opts = {}) {
+  const tbody = document.getElementById("loyaltyModalTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  const row = document.createElement("tr");
+  const cell = document.createElement("td");
+  cell.colSpan = 5;
+  cell.style.textAlign = "center";
+  cell.style.padding = "30px 0";
+  row.appendChild(cell);
+  if (opts.spinner) {
+    const spinner = document.createElement("span");
+    spinner.className = "loyalty-spinner";
+    spinner.setAttribute("aria-hidden", "true");
+    cell.appendChild(spinner);
+    const text = document.createElement("div");
+    text.textContent = msg;
+    text.style.marginTop = "12px";
+    text.style.color = "rgba(255, 255, 255, 0.7)";
+    text.style.fontSize = "0.92rem";
+    cell.appendChild(text);
+  } else {
+    const text = document.createElement("div");
+    text.textContent = msg;
+    text.style.color = "rgba(255, 255, 255, 0.7)";
+    text.style.fontSize = "0.92rem";
+    cell.appendChild(text);
+    if (opts.retry) {
+      const btn = document.createElement("button");
+      btn.className = "btn-small btn-loyalty-add";
+      btn.textContent = "Réessayer";
+      btn.style.marginTop = "14px";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        loadLoyaltyData(true);
+      });
+      cell.appendChild(btn);
     }
-  } catch (error) {
-    console.error("Error loading loyalty cards:", error);
-    showNotification("Error loading loyalty cards", "error");
   }
+  tbody.appendChild(row);
+}
+
+async function loadLoyaltyData(force = false) {
+  if (loyaltyLoading) return loyaltyLoadPromise;
+  loyaltyLoading = true;
+  if (!force && loyaltyCards.length === 0) {
+    renderLoyaltyModalState("Chargement des cartes…", { spinner: true });
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10000);
+
+  loyaltyLoadPromise = (async () => {
+    try {
+      const token =
+        localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+      const response = await fetch("/api/admin/loyalty", {
+        headers: { Authorization: `Bearer ${token}` },
+        signal: controller.signal,
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        loyaltyCards = data.cards || [];
+        loyaltyTotalRewards = data.totalRewards || 0;
+        loyaltyUsersWithoutCards = data.usersWithoutCards || [];
+        loyaltyLoadError = false;
+        renderLoyaltyTable();
+        renderLoyaltyModalTable();
+        updateLoyaltyModalStats();
+      } else {
+        loyaltyLoadError = true;
+        if (loyaltyCards.length === 0) {
+          renderLoyaltyModalState("Impossible de charger les cartes.", {
+            retry: true,
+          });
+        }
+        showNotification("Failed to load loyalty cards", "error");
+      }
+    } catch (error) {
+      console.error("Error loading loyalty cards:", error);
+      loyaltyLoadError = true;
+      if (loyaltyCards.length === 0) {
+        renderLoyaltyModalState("Impossible de charger les cartes.", {
+          retry: true,
+        });
+      }
+      showNotification("Error loading loyalty cards", "error");
+    } finally {
+      clearTimeout(timer);
+      loyaltyLoading = false;
+      loyaltyLoadPromise = null;
+    }
+  })();
+
+  return loyaltyLoadPromise;
 }
 
 function renderLoyaltyTable() {
@@ -14962,8 +15140,7 @@ class NotificationManager {
 
   async fetchNotifications() {
     try {
-      const response = await fetch("/api/news", { cache: "no-store" });
-      const data = await response.json();
+      const data = await apiFetchJson("/api/news", {}, 15000);
       if (!data.success) return [];
       return (data.news || []).map((item) => ({
         id: item.id,
@@ -15004,14 +15181,36 @@ class NotificationManager {
 
     const timeAgo = this.getTimeAgo(new Date(notification.time));
 
-    notificationItem.innerHTML = `
-            <div class="notification-item-header">
-                <h4 class="notification-item-title">${notification.title}</h4>
-                <span class="notification-item-time">${timeAgo}</span>
-            </div>
-            <p class="notification-item-content">${notification.content}</p>
-            <span class="notification-item-type ${notification.type}">${notification.type}</span>
-        `;
+    // SECURITY: build with textContent, NOT innerHTML. News title/content are authored in
+    // the admin console, so interpolating them into innerHTML would allow stored XSS that
+    // reaches every signed-in user (the feed is re-polled).
+    const header = document.createElement("div");
+    header.className = "notification-item-header";
+
+    const titleEl = document.createElement("h4");
+    titleEl.className = "notification-item-title";
+    titleEl.textContent = notification.title || "";
+
+    const timeEl = document.createElement("span");
+    timeEl.className = "notification-item-time";
+    timeEl.textContent = timeAgo;
+
+    header.appendChild(titleEl);
+    header.appendChild(timeEl);
+
+    const contentEl = document.createElement("p");
+    contentEl.className = "notification-item-content";
+    contentEl.textContent = notification.content || "";
+
+    const typeEl = document.createElement("span");
+    // Only allow a safe token into the class attribute (never raw user input).
+    const safeType = String(notification.type || "").replace(/[^a-zA-Z0-9_-]/g, "");
+    typeEl.className = "notification-item-type " + safeType;
+    typeEl.textContent = notification.type || "";
+
+    notificationItem.appendChild(header);
+    notificationItem.appendChild(contentEl);
+    notificationItem.appendChild(typeEl);
 
     // Mark as read when clicked
     notificationItem.addEventListener("click", () => {
@@ -15253,8 +15452,7 @@ class NewsManager {
 
   async fetchNews() {
     try {
-      const response = await fetch("/api/news", { cache: "no-store" });
-      const data = await response.json();
+      const data = await apiFetchJson("/api/news", {}, 15000);
       if (!data.success) return [];
       return (data.news || []).map((item) => ({
         id: item.id,
@@ -15375,8 +15573,7 @@ class NewsManager {
     // Show the badge if a news item is newer than the last check timestamp
     const lastCheck = parseInt(localStorage.getItem("lastNewsCheck") || "0", 10);
 
-    fetch("/api/news", { cache: "no-store" })
-      .then((r) => r.json())
+    apiFetchJson("/api/news", {}, 15000)
       .then((data) => {
         if (!data.success || !Array.isArray(data.news) || !data.news.length) return;
         const latest = new Date(data.news[0].created_at).getTime();
@@ -15479,16 +15676,16 @@ class UserStatsManager {
     try {
       const token = window.getAuthToken();
       if (!token) return null;
-      const response = await fetch("/api/stats/users", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const data = await apiFetchJson(
+        "/api/stats/users",
+        { headers: { Authorization: `Bearer ${token}` }, timeoutMs: 8000 },
+        10000,
+      );
 
-      if (!response.ok) {
-        console.log("ðŸ“Š Server request failed:", response.status);
+      if (!data.__ok) {
+        console.log("ðŸ“Š Server request failed:", data.__status);
         return null;
       }
-
-      const data = await response.json();
 
       if (data.success && data.stats) {
         const totalUsers = data.stats.totalUsers;
@@ -18082,8 +18279,9 @@ class ReviewsManager {
           userName: review.user_name,
           userAvatar:
             review.user_avatar || this.generateDefaultAvatar(review.user_name),
-          userEmail: review.user_email, // ðŸ‘‘ ADMIN FIX: Include user email
-          is_admin: review.is_admin, // ðŸ‘‘ ADMIN FIX: Include admin status
+          // Public review responses intentionally omit reviewer email (PII). Admin
+          // state remains available from the explicit `is_admin` response field.
+          is_admin: review.is_admin,
           rating: review.rating,
           text: review.review_text,
           date: review.created_at,
@@ -18275,7 +18473,7 @@ class ReviewsManager {
 
     // ðŸ‘‘ ADMIN ENHANCEMENT: Check if this review is from an admin user
     const isAdminReview = this.isAdminUser(
-      review.userEmail || review.user_email || review.userName || review.user_name,
+      review.userName || review.user_name,
       review,
     );
 
@@ -18283,8 +18481,6 @@ class ReviewsManager {
     console.log("ðŸ” Review debug for:", review.userName || review.user_name, {
       userName: review.userName,
       user_name: review.user_name,
-      userEmail: review.userEmail,
-      user_email: review.user_email,
       is_admin: review.is_admin,
       isAdminReview: isAdminReview,
       reviewId: review.id,
@@ -18901,16 +19097,17 @@ class ReviewsManager {
   }
 
   // Update user profile information in all existing reviews
-  updateUserProfileInReviews(userEmail, profileData) {
-    console.log(`ðŸ”„ Updating profile for ${userEmail} in all reviews...`);
+  updateUserProfileInReviews(userId, profileData) {
+    console.log(`Updating profile for user ${userId} in all reviews...`);
 
     let updatedCount = 0;
     let refreshNeeded = false;
 
-    // Update reviews in all fragrances
+    // Update reviews in all fragrances using the stable user id. Public review
+    // payloads no longer carry email addresses.
     Object.keys(this.reviews).forEach((fragrance) => {
       this.reviews[fragrance].forEach((review) => {
-        if (review.userId === userEmail) {
+        if (String(review.userId) === String(userId)) {
           // Update name if provided
           if (profileData.name && review.userName !== profileData.name) {
             console.log(
@@ -19065,17 +19262,18 @@ class ReviewsManager {
     replyItems.forEach((replyItem) => {
       // Check if this reply belongs to the current user
       const replyUserInfo = replyItem.querySelector(".reply-user-info");
-      const replyUserName = replyItem.querySelector(".reply-user-name");
+      const replyUserName = replyItem.querySelector(".reply-username");
       const replyAvatar = replyItem.querySelector(".reply-avatar img");
 
       if (replyUserName && replyAvatar) {
-        // Check if this is the current user's reply by comparing email or name
-        const replyEmail = replyItem.dataset.userEmail;
+        // Check if this is the current user's reply by stable user id. Public reply
+        // payloads intentionally do not include email addresses anymore.
+        const replyUserId = replyItem.dataset.userId;
         const currentReplyName = replyUserName.textContent.trim();
 
         // Update if this is the current user's reply
         if (
-          replyEmail === currentUser.email ||
+          (replyUserId && String(replyUserId) === String(currentUser.id)) ||
           (currentUser.name &&
             currentReplyName.includes(currentUser.name.split(" ")[0]))
         ) {
@@ -19122,7 +19320,7 @@ class ReviewsManager {
     // Update reviews in all fragrances
     Object.keys(this.reviews).forEach((fragrance) => {
       this.reviews[fragrance].forEach((review) => {
-        if (review.userId === currentUser.email) {
+        if (String(review.userId) === String(currentUser.id || currentUser.userId)) {
           reviewsFound++;
           let updated = false;
 
@@ -19547,7 +19745,7 @@ class ReviewsManager {
   // Create a single reply element
   createReplyElement(reply, reviewId) {
     const isAdminReply = this.isAdminUser(
-      reply.user_email || reply.userName,
+      reply.user_name || reply.userName,
       reply,
     );
     const adminBadgeHtml = isAdminReply
@@ -19571,12 +19769,12 @@ class ReviewsManager {
     }
 
     const safeReplyId = window.safeAttribute(reply.id);
-    const safeReplyEmail = window.safeAttribute(reply.user_email || "");
+    const safeReplyUserId = window.safeAttribute(reply.user_id);
     const safeReplyName = window.escapeHTML(reply.user_name || "Member");
     const safeAvatarSrc = window.safeAttribute(window.normalizeAvatarSrc(avatarSrc));
 
     return `
-            <div class="reply-item" data-reply-id="${safeReplyId}" data-user-email="${safeReplyEmail}">
+            <div class="reply-item" data-reply-id="${safeReplyId}" data-user-id="${safeReplyUserId}">
                 <div class="reply-header">
                     <div class="reply-user-info">
                         <div class="reply-avatar-container">
@@ -19867,8 +20065,7 @@ class ReviewsManager {
 
     // User can delete their own reply
     const isOwner =
-      reply.user_id === currentUser.userId ||
-      reply.user_email === currentUser.email;
+      String(reply.user_id) === String(currentUser.id || currentUser.userId);
 
     // Admin can delete any reply
     const isAdmin = this.isAdminUser(currentUser.email, currentUser);
@@ -21346,15 +21543,23 @@ function addProfileClickHandlers() {
     });
   }
 
-  // Find profile search suggestions and add click handlers
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'childList') {
-        // Look for profile suggestions in search results - using the correct selector from your code
-        const profileSuggestions = document.querySelectorAll('.search-suggestion.profile-suggestion[data-user-id]');
-        profileSuggestions.forEach(attachProfileHandler);
-      }
-    });
+  // Find profile search suggestions and add click handlers. Debounced so high-
+  // frequency mutations elsewhere in the document (bottle renders, news feed,
+  // avatars) don't force a full-document querySelectorAll on every batch.
+  let profileHandlerTimer = null;
+  const attachProfileSuggestions = () => {
+    document
+      .querySelectorAll(
+        '.search-suggestion.profile-suggestion[data-user-id]:not([data-ph-attached])',
+      )
+      .forEach((el) => {
+        el.setAttribute('data-ph-attached', '1');
+        attachProfileHandler(el);
+      });
+  };
+  const observer = new MutationObserver(() => {
+    clearTimeout(profileHandlerTimer);
+    profileHandlerTimer = setTimeout(attachProfileSuggestions, 150);
   });
 
   // Start observing
@@ -21364,10 +21569,7 @@ function addProfileClickHandlers() {
   });
 
   // Also add handlers to existing elements
-  setTimeout(() => {
-    const existingSuggestions = document.querySelectorAll('.search-suggestion.profile-suggestion[data-user-id]');
-    existingSuggestions.forEach(attachProfileHandler);
-  }, 1000);
+  setTimeout(attachProfileSuggestions, 1000);
 }
 
 // Initialize profile click handlers
@@ -22415,7 +22617,7 @@ window.testClickOnElement = function() {
     wrap.setAttribute("data-family", family);
     wrap.setAttribute("data-gender", gender);
     wrap.innerHTML =
-      '<img class="bottle-render__template" src="' + tpl.src + '" alt="Bottle template" decoding="async" fetchpriority="high"' + tplImgAttrs + ">" +
+      '<img class="bottle-render__template" src="' + tpl.src + '" alt="Bottle template" decoding="async" loading="lazy" fetchpriority="low"' + tplImgAttrs + ">" +
       '<div class="bottle-render__sticker" style="' + stickerStyle + '">' +
         '<div class="bottle-render__name">' + escapeHtml(name) + "</div>" +
         '<div class="bottle-render__meta">' +
@@ -22453,8 +22655,24 @@ window.testClickOnElement = function() {
   }
 
   function boot() {
-    Object.keys(PRODUCTS).forEach(function (id) { enhance(id); });
-    document.dispatchEvent(new CustomEvent("bottleRendersReady"));
+    // Build all bottle renders AFTER first paint, in small time-boxed chunks,
+    // so a cold refresh on a slow connection can paint critical content
+    // without the main thread being blocked by ~170 render/detach operations.
+    var ids = Object.keys(PRODUCTS);
+    var i = 0;
+    function step() {
+      var startedAt = performance.now();
+      while (i < ids.length && performance.now() - startedAt < 4) {
+        enhance(ids[i]);
+        i++;
+      }
+      if (i < ids.length) {
+        requestAnimationFrame(step);
+      } else {
+        document.dispatchEvent(new CustomEvent("bottleRendersReady"));
+      }
+    }
+    requestAnimationFrame(step);
   }
 
   if (document.readyState === "loading") {

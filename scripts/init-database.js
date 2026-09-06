@@ -84,6 +84,8 @@ async function createTables() {
                 user_id INTEGER NOT NULL,
                 user_name TEXT NOT NULL,
                 user_avatar TEXT,
+                user_email TEXT,
+                is_admin INTEGER DEFAULT 0,
                 fragrance TEXT NOT NULL,
                 rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
                 review_text TEXT NOT NULL,
@@ -1930,13 +1932,16 @@ async function insertSampleProducts() {
     console.log('✓ Sample products inserted');
 }
 
-// Create admin account (self-healing: falls back to site admin credentials when
-// ADMIN_EMAIL/ADMIN_PASSWORD are unset, and promotes an existing matching user)
+// Create or promote the explicitly configured admin account. Missing credentials
+// intentionally disable this bootstrap step; never invent a default account.
 async function createAdminAccount() {
     const bcrypt = require('bcryptjs');
 
-    const adminEmail = (process.env.ADMIN_EMAIL || 'cherifmed1200@gmail.com').toLowerCase().trim();
-    const adminPassword = process.env.ADMIN_PASSWORD || 'medmedmed88';
+    // SECURITY: no hardcoded credential fallbacks. If the env vars are not configured we
+    // skip admin creation entirely (and never promote an existing user), instead of
+    // silently creating/promoting a well-known account with a password committed to git.
+    const adminEmail = (process.env.ADMIN_EMAIL || '').toLowerCase().trim();
+    const adminPassword = process.env.ADMIN_PASSWORD || '';
 
     if (!adminEmail || !adminPassword) {
         console.log('ℹ️ Skipping admin account creation: admin email/password not configured.');

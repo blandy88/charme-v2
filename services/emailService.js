@@ -22,6 +22,11 @@ const createTransporter = () => {
         port: process.env.EMAIL_PORT,
         secure: Number(process.env.EMAIL_PORT) === 465,
         requireTLS: Number(process.env.EMAIL_PORT) !== 465,
+        // Bound SMTP waits so a provider outage cannot hold an auth request open
+        // indefinitely while registration/resend awaits sendVerificationEmail().
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 15000,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS,
