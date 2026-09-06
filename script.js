@@ -55,7 +55,47 @@ function detailsIdenticalPrice(productId, size) {
 // All tiers share the same size-based price.
 function detailsPriceFor(productId, quality, size) {
   var s = DETAILS_SIZES.indexOf(Number(size)) !== -1 ? Number(size) : 50;
+  var tier = String(quality || "top").toLowerCase();
+  if (tier === "standard") return DETAILS_STANDARD_PRICES[s];
+  if (tier === "extra") return DETAILS_EXTRA_PRICES[s];
+  if (tier === "identical") return detailsIdenticalPrice(productId, s);
   return DETAILS_TOP_PRICES[s];
+}
+
+// Resolve product metadata from the rendered DOM when a product is not part of
+// one of the legacy hard-coded maps. The catalogue contains 186 product buttons
+// but the old cart/favorites maps covered only a small subset, which made many
+// perfectly visible buttons appear clickable while doing nothing.
+function resolveProductDetailsFromDom(productId) {
+  const wanted = String(productId || "");
+  if (!wanted) return null;
+  let button = null;
+  document.querySelectorAll(".add-to-cart-btn[data-product], .favorite-btn[data-product]").forEach((candidate) => {
+    if (!button && candidate.getAttribute("data-product") === wanted) button = candidate;
+  });
+  if (!button) return null;
+
+  const root =
+    button.closest(".haltane-section-container") ||
+    button.closest("section.content") ||
+    button.closest(".content") ||
+    button.parentElement;
+  if (!root) return null;
+
+  const text = (selector) => (root.querySelector(selector)?.textContent || "").trim();
+  const image = root.querySelector("img[src]");
+  const priceText = button.getAttribute("data-price") || text(".price-currency");
+  const isCatalog = root.classList.contains("database-full-section") || wanted.indexOf("catalog-") === 0;
+  const parsedPrice = Number.parseFloat(String(priceText).replace(/[^0-9.,-]/g, "").replace(",", "."));
+
+  return {
+    name: text(".product-name") || wanted,
+    brand: text(".brand-name") || "Charme Collection",
+    description: text(".description-text, .product-description, .fragrance-description-text"),
+    image: image ? image.getAttribute("src") : "default.jpg",
+    sectionId: root.id || `${wanted}-section`,
+    ...(isCatalog && Number.isFinite(parsedPrice) ? { basePrice: parsedPrice } : {}),
+  };
 }
 
 // Caches element zero-state to prevent layout thrashing
@@ -3241,12 +3281,14 @@ function updateColors() {
         "</label>" +
         "</div>";
 
-      // Replace options: 4 quality tiers (all Extrait de Parfum)
+      // Replace options: 4 quality tiers (all Extrait de Parfum) sized at 50 ml
+      const priceFor = (tier) => detailsPriceFor(productId, tier, 50);
+      const labelFor = (tier) => `${priceFor(tier)} dt / 50 ml`;
       qualityOptions.innerHTML =
-        buildOption("standard", "Standard Quality", "35 dt / 50 ml", 35) +
-        buildOption("top", "Top Quality", "35 dt / 50 ml", 35) +
-        buildOption("extra", "Extra Quality", "35 dt / 50 ml", 35) +
-        buildOption("identical", "Identical Quality", "35 dt / 50 ml", 35);
+        buildOption("standard", "Standard Quality", labelFor("standard"), priceFor("standard")) +
+        buildOption("top", "Top Quality", labelFor("top"), priceFor("top")) +
+        buildOption("extra", "Extra Quality", labelFor("extra"), priceFor("extra")) +
+        buildOption("identical", "Identical Quality", labelFor("identical"), priceFor("identical"));
 
       // Insert the size selector (once) after the quality options
       let sizeSelector = container.querySelector(".size-selector-container");
@@ -13207,7 +13249,7 @@ class FavoritesManager {
       haltane: "Haltane",
       pegasus: "Pegasus",
     };
-    return names[productId] || productId;
+    return names[productId] || resolveProductDetailsFromDom(productId)?.name || productId;
   }
 
   getProductDetails(productId) {
@@ -13250,29 +13292,17 @@ class FavoritesManager {
       },
     };
 
-    const product = products[productId];
+    const product = products[productId] || resolveProductDetailsFromDom(productId);
     if (!product) {
-      // Return default product data if not found
-      console.warn(`Product not found: ${productId}, using default data`);
-      return {
-        name: this.getProductName(productId),
-        brand: "Parfums de Marly",
-        price: "35dt",
-        description: "Luxury fragrance",
-        image:
-          "https://images.unsplash.com/photo-1541643600914-78b084683601?w=300&h=300&fit=crop&crop=center",
-        topNotes: ["Bergamot", "Lavender", "Vanilla"],
-        middleNotes: ["Rose", "Jasmine", "Cedar"],
-        baseNotes: ["Musk", "Amber", "Sandalwood"],
-        sectionId: `${productId}-section`,
-      };
+      console.warn(`Product not found: ${productId}`);
+      return null;
     }
 
     // Ensure all required properties exist with defaults
     return {
       name: product.name || this.getProductName(productId),
       brand: product.brand || "Parfums de Marly",
-      price: product.price || "35dt",
+      price: product.price || product.basePrice || "35dt",
       description: product.description || "Luxury fragrance",
       image:
         product.image ||
@@ -14229,7 +14259,8 @@ class CartManager {
   }
 
   getCurrentUser() {
-    // Get current user from session storage or local storage (using correct key)
+    // Get current user from session storage or local storage (using correct key).
+    // Ignore malformed legacy data so one bad storage entry cannot break cart init.
     const sessionUser = sessionStorage.getItem("user");
     const localUser = localStorage.getItem("user");
     return sessionUser || localUser;
@@ -14238,8 +14269,12 @@ class CartManager {
   getUserCartKey() {
     const user = this.getCurrentUser();
     if (user) {
-      const userData = JSON.parse(user);
-      return `parfumerie_cart_${userData.email}`;
+      try {
+        const userData = JSON.parse(user);
+        if (userData && userData.email) return `parfumerie_cart_${userData.email}`;
+      } catch (error) {
+        console.warn("Invalid stored user data; using guest cart", error);
+      }
     }
     return "parfumerie_cart_guest";
   }
@@ -14247,9 +14282,14 @@ class CartManager {
   loadUserCart() {
     const user = this.getCurrentUser();
     if (user) {
-      const userData = JSON.parse(user);
-      this.currentUser = userData.email;
-      console.log(`ðŸ›’ Loading cart for user: ${this.currentUser}`);
+      try {
+        const userData = JSON.parse(user);
+        this.currentUser = userData.email || "guest";
+        console.log(`ðŸ›’ Loading cart for user: ${this.currentUser}`);
+      } catch (error) {
+        this.currentUser = "guest";
+        console.warn("Invalid stored user data; loading guest cart", error);
+      }
     } else {
       this.currentUser = "guest";
       console.log("ðŸ›’ Loading guest cart");
@@ -14261,9 +14301,15 @@ class CartManager {
   loadCart() {
     const cartKey = this.getUserCartKey();
     const savedCart = localStorage.getItem(cartKey);
-    const cart = savedCart ? JSON.parse(savedCart) : [];
-    console.log(`ðŸ“¦ Loaded cart for ${this.currentUser}:`, cart);
-    return cart;
+    if (!savedCart) return [];
+    try {
+      const parsed = JSON.parse(savedCart);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.warn(`Invalid cart data in ${cartKey}; resetting cart`, error);
+      localStorage.removeItem(cartKey);
+      return [];
+    }
   }
 
   saveCart() {
@@ -14298,9 +14344,9 @@ class CartManager {
   addToCart(productId, _price, quality = "top", size = 50) {
     console.log("Adding to cart:", productId, quality, size);
 
-    const product = this.getProductDetails(productId);
+        const product = this.getProductDetails(productId);
     if (!product) {
-      console.error("Product not found:", productId);
+      this.showNotification("This fragrance is not available yet.", "error");
       return;
     }
 
@@ -14343,6 +14389,12 @@ class CartManager {
   }
 
   getQualityPrice(productId, quality, size) {
+    const product = this.getProductDetails(productId);
+    if (product && Number.isFinite(Number(product.basePrice))) {
+      const selectedSize = Number(size) || 50;
+      const base = Number(product.basePrice);
+      return Math.max(1, Math.round(base * (selectedSize / 50)));
+    }
     return detailsPriceFor(productId, quality, size || 50);
   }
 
@@ -14569,9 +14621,24 @@ class CartManager {
       kayalimarshmallow: { name: "Marshmallow", brand: "Kayali", image: "kayali-marshmallow.png" },
       aquaallegoriaflorabloom: { name: "Florabloom Forte", brand: "Guerlain", image: "aqua-allegoria-florabloom.png" },
       angelnova: { name: "Angel Nova", brand: "Mugler", image: "angel-nova.png" },
-      aquadigioelixir: { name: "Acqua di Gio Elixir", brand: "Giorgio Armani", image: "aqua-di-gio-elixir.png" },
+      aquadigioelixir: { name: "Acqua di Gio Elixir", brand: "Giorgio Armani", image: "acqua-di-gio-elixir.png" },
     };
-    return products[productId];
+
+    const product = products[productId] || resolveProductDetailsFromDom(productId);
+    if (!product) {
+      console.warn(`Product not found: ${productId}`);
+      return null;
+    }
+
+    return {
+      name: product.name || productId,
+      brand: product.brand || "Charme Collection",
+      price: product.price || product.basePrice || "35dt",
+      description: product.description || "Luxury fragrance",
+      image: product.image || "default.jpg",
+      sectionId: product.sectionId || `${productId}-section`,
+      basePrice: product.basePrice,
+    };
   }
 
   initializeEventListeners() {

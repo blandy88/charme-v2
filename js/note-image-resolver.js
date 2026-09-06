@@ -1044,18 +1044,32 @@
   window.addEventListener("scroll", scheduleLateSectionThemeSync, { passive: true });
   window.addEventListener("resize", scheduleLateSectionThemeSync, { passive: true });
 
-  const homepageObserver = new MutationObserver((mutations) => {
-    let shouldHydrate = false;
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType !== Node.ELEMENT_NODE) return;
-        shouldHydrate = true;
-        hydrateFragranceImages(node);
-      });
+  let homepageCorrectionFrame = null;
+  function scheduleHomepageCorrections() {
+    if (homepageCorrectionFrame) return;
+    homepageCorrectionFrame = requestAnimationFrame(() => {
+      homepageCorrectionFrame = null;
+      applyHomepageFragranceCorrections();
+      scheduleLateSectionThemeSync();
     });
-    applyHomepageFragranceCorrections();
-    if (shouldHydrate) hydrateFragranceImages(document);
-    scheduleLateSectionThemeSync();
+  }
+
+  const homepageObserver = new MutationObserver((mutations) => {
+    const addedRoots = [];
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (node.nodeType !== Node.ELEMENT_NODE) continue;
+        if (!addedRoots.includes(node)) addedRoots.push(node);
+      }
+    }
+    if (addedRoots.length === 0) return;
+    if (addedRoots.length > 24) {
+      // Large bursts (initial render, grid mode): one pass instead of many.
+      hydrateFragranceImages(document);
+    } else {
+      addedRoots.forEach((root) => hydrateFragranceImages(root));
+    }
+    scheduleHomepageCorrections();
   });
 
   if (document.documentElement) {
