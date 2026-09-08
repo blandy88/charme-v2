@@ -20,24 +20,18 @@
     color: #f4f1ea !important;
     opacity: 1 !important;
     visibility: visible !important;
+    transform: translateY(0) !important;
     transition:
-        opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-        visibility 0.85s linear;
-    animation: brandLoaderAutoFade 0.85s ease 14s forwards;
+        opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.8s linear,
+        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .brand-loader--leave {
     opacity: 0 !important;
     visibility: hidden !important;
+    transform: translateY(-14px) !important;
     pointer-events: none !important;
-}
-
-/* Safety net: if JS never finishes (hung network), the curtain still parts. */
-@keyframes brandLoaderAutoFade {
-    to {
-        opacity: 0;
-        visibility: hidden;
-    }
 }
 
 .brand-loader__inner {
@@ -100,6 +94,17 @@
     letter-spacing: 0.44em !important;
     text-indent: 0.44em !important;
     margin-top: 4px !important;
+    animation: brandLoaderGlow 2.4s ease-in-out infinite !important;
+}
+
+@keyframes brandLoaderGlow {
+    0%,
+    100% {
+        text-shadow: 0 0 16px rgba(201, 162, 75, 0);
+    }
+    50% {
+        text-shadow: 0 0 26px rgba(201, 162, 75, 0.5);
+    }
 }
 
 .brand-loader__rule {
@@ -109,6 +114,31 @@
     position: relative;
     overflow: hidden;
     margin: 30px auto 0;
+}
+
+.brand-loader__rule::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 46%;
+    background: linear-gradient(
+        90deg,
+        rgba(201, 162, 75, 0) 0%,
+        rgba(201, 162, 75, 0.95) 50%,
+        rgba(201, 162, 75, 0) 100%
+    );
+    animation: brandLoaderSweep 1.5s ease-in-out 0.35s infinite;
+}
+
+@keyframes brandLoaderSweep {
+    0% {
+        left: -46%;
+    }
+    100% {
+        left: 100%;
+    }
 }
 
 .brand-loader__filler {
@@ -149,8 +179,34 @@
     .brand-loader__inner,
     .brand-loader__mark,
     .brand-loader__filler,
-    .brand-loader__city {
+    .brand-loader__city,
+    .brand-loader__name--gold,
+    .brand-loader__rule::after {
         animation-duration: 0.01ms;
         animation-iteration-count: 1;
+    }
+}
+
+/* Crossfade into the page as the curtain lifts */
+body.brandLoaderDone .navbar,
+body.brandLoaderDone .container,
+body.brandLoaderDone .top-vignette,
+body.brandLoaderDone .site-footer,
+body.brandLoaderDone .floating-menu,
+body.brandLoaderDone .floating-search,
+body.brandLoaderDone .social-links,
+body.brandLoaderDone .back-to-top,
+body.brandLoaderDone .perfume-mode-toggle {
+    animation: charmPageReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.08s backwards !important;
+}
+
+@keyframes charmPageReveal {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

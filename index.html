@@ -81,7 +81,7 @@
         <link rel="stylesheet" href="css/guides.css?v=20260831c" />
         <link rel="stylesheet" href="css/combined-profiles.css?v=20260814" media="print" onload="this.media='all'" />
         <link rel="stylesheet" href="css/auth-modal.css?v=20260907" />
-        <link rel="stylesheet" href="css/loader.css?v=20260908" />
+        <link rel="stylesheet" href="css/loader.css?v=20260908b" />
 
         <!-- Scripts (deferred for performance) -->
         <script src="js/fragrance-api-service.js?v=20260818" defer></script>
@@ -215,7 +215,14 @@
                 hidden = true;
                 var wait = Math.max(0, minShown - (Date.now() - started));
                 setTimeout(function () {
+                    loader.style.animation = "none";
                     loader.classList.add("brand-loader--leave");
+                    document.body.classList.add("brandLoaderDone");
+                    window.setTimeout(function () {
+                        if (loader.parentNode) {
+                            loader.parentNode.removeChild(loader);
+                        }
+                    }, 1100);
                 }, wait);
             }
             function onShow(e) {
@@ -230,7 +237,9 @@
             window.setTimeout(finish, maxWait);
             loader.addEventListener("transitionend", function (e) {
                 if (e.target !== loader) return;
-                loader.remove();
+                if (loader.parentNode) {
+                    loader.parentNode.removeChild(loader);
+                }
             });
             window.setTimeout(function () {
                 if (loader.parentNode) loader.remove();
