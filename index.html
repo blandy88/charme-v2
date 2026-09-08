@@ -254,9 +254,11 @@
                    (generous window so the real fade always plays first). */
                 window.setTimeout(function () {
                     if (loader.parentNode) {
+                        loader.style.transition = "none";
+                        loader.style.opacity = "0";
                         loader.parentNode.removeChild(loader);
                     }
-                }, 4200);
+                }, 3000);
             }
 
             function finish() {
