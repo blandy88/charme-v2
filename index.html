@@ -80,6 +80,8 @@
         <link rel="stylesheet" href="css/fragrance-layout-normalize.css?v=20260850" />
         <link rel="stylesheet" href="css/guides.css?v=20260831c" />
         <link rel="stylesheet" href="css/combined-profiles.css?v=20260814" media="print" onload="this.media='all'" />
+        <link rel="stylesheet" href="css/auth-modal.css?v=20260907" />
+        <link rel="stylesheet" href="css/loader.css?v=20260908" />
 
         <!-- Scripts (deferred for performance) -->
         <script src="js/fragrance-api-service.js?v=20260818" defer></script>
@@ -181,6 +183,60 @@
         </script>
     </head>
     <body>
+        <!-- Brand loading curtain: covers first paint, lifts once everything has loaded -->
+        <div
+            id="brandLoader"
+            class="brand-loader"
+            role="status"
+            aria-label="Chargement"
+        >
+            <div class="brand-loader__inner">
+                <div class="brand-loader__mark" aria-hidden="true">✦</div>
+                <div class="brand-loader__name">PARFUMERIE</div>
+                <div class="brand-loader__name brand-loader__name--gold">
+                    CHARME
+                </div>
+                <div class="brand-loader__rule" aria-hidden="true">
+                    <span class="brand-loader__filler"></span>
+                </div>
+                <div class="brand-loader__city">Maison de parfum · Tunis</div>
+            </div>
+        </div>
+        <script>
+        (function () {
+            var loader = document.getElementById("brandLoader");
+            if (!loader) return;
+            var started = Date.now();
+            var minShown = 1400;
+            var maxWait = 9000;
+            var hidden = false;
+            function finish() {
+                if (hidden) return;
+                hidden = true;
+                var wait = Math.max(0, minShown - (Date.now() - started));
+                setTimeout(function () {
+                    loader.classList.add("brand-loader--leave");
+                }, wait);
+            }
+            function onShow(e) {
+                if (e.persisted) finish();
+            }
+            if (document.readyState === "complete") {
+                finish();
+            } else {
+                window.addEventListener("load", finish);
+            }
+            window.addEventListener("pageshow", onShow);
+            window.setTimeout(finish, maxWait);
+            loader.addEventListener("transitionend", function (e) {
+                if (e.target !== loader) return;
+                loader.remove();
+            });
+            window.setTimeout(function () {
+                if (loader.parentNode) loader.remove();
+            }, maxWait + 1600);
+        })();
+        </script>
         <!-- Navigation Bar -->
         <nav class="navbar">
             <div class="nav-container">
@@ -4034,37 +4090,20 @@
         <div id="authModal" class="auth-modal hidden">
             <div class="auth-modal-content">
                 <div class="auth-header">
-                    <h2 id="authTitle">Welcome to Parfumerie Charme</h2>
+                    <span class="auth-eyebrow">Parfumerie Charme</span>
+                    <h2 id="authTitle">Welcome back</h2>
                     <button class="auth-close" id="authClose"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
                 </div>
 
                 <div class="auth-body">
                     <!-- Login Form -->
                     <div class="auth-form" id="loginForm">
-                        <div class="auth-welcome">
-                            <h3>Sign in to your account</h3>
-                            <p>
-                                Access your fragrance collection and
-                                personalized recommendations
-                            </p>
-                        </div>
+                        <p class="auth-subtitle">Your collection, orders and rewards &mdash; all in one place.</p>
 
-                        <!-- Google Sign In Button - Temporarily Disabled -->
-                        <div
-                            class="google-signin-container"
-                            style="display: none"
-                        >
+                        <!-- Google Sign In (disabled) -->
+                        <div class="google-signin-container" style="display: none">
                             <div class="google-signin-disabled">
-                                <p
-                                    style="
-                                        color: rgba(255, 255, 255, 0.6);
-                                        text-align: center;
-                                        font-size: 14px;
-                                        margin: 10px 0;
-                                    "
-                                >
-                                    Google Sign-In temporarily unavailable
-                                </p>
+                                <p style="color: rgba(255,255,255,0.6); text-align: center; font-size: 14px; margin: 10px 0;">Google Sign-In temporarily unavailable</p>
                             </div>
                         </div>
 
@@ -4073,31 +4112,18 @@
                         </div>
 
                         <!-- Error Display -->
-                        <div
-                            class="auth-error"
-                            id="loginError"
-                            style="display: none"
-                        ></div>
+                        <div class="auth-error" id="loginError" style="display: none"></div>
 
                         <!-- Email/Password Form -->
                         <form class="email-form" id="emailLoginForm">
                             <div class="form-group">
-                                <label for="loginEmail">Email Address</label>
-                                <input
-                                    type="email"
-                                    id="loginEmail"
-                                    name="email"
-                                    required
-                                />
+                                <label for="loginEmail">Email address</label>
+                                <input type="email" id="loginEmail" name="email" required autocomplete="email" />
                             </div>
-                            <div class="form-group">
+                            <div class="form-group password-field">
                                 <label for="loginPassword">Password</label>
-                                <input
-                                    type="password"
-                                    id="loginPassword"
-                                    name="password"
-                                    required
-                                />
+                                <input type="password" id="loginPassword" name="password" required autocomplete="current-password" />
+                                <button type="button" class="password-toggle" id="loginPasswordToggle">Show</button>
                             </div>
                             <div class="form-options">
                                 <label class="checkbox-container">
@@ -4105,50 +4131,24 @@
                                     <span class="checkmark"></span>
                                     Remember me
                                 </label>
-                                <a href="#" class="forgot-password"
-                                    >Forgot password?</a
-                                >
+                                <a href="#" class="forgot-password">Forgot password?</a>
                             </div>
-                            <button type="submit" class="auth-submit-btn">
-                                Sign In
-                            </button>
+                            <button type="submit" class="auth-submit-btn">Sign In</button>
                         </form>
 
                         <div class="auth-switch">
-                            <p>
-                                Don't have an account?
-                                <a href="#" id="showSignup">Create one</a>
-                            </p>
+                            <p>New to Charme? <a href="#" id="showSignup">Create an account</a></p>
                         </div>
                     </div>
 
                     <!-- Signup Form -->
-                    <div
-                        class="auth-form"
-                        id="signupForm"
-                        style="display: none"
-                    >
-                        <div class="auth-welcome">
-                            <h3>Create your account</h3>
-                            <p>Join our community of fragrance enthusiasts</p>
-                        </div>
+                    <div class="auth-form" id="signupForm" style="display: none">
+                        <p class="auth-subtitle">Join the Charme circle for member pricing and curated picks.</p>
 
-                        <!-- Google Sign Up Button - Temporarily Disabled -->
-                        <div
-                            class="google-signin-container"
-                            style="display: none"
-                        >
+                        <!-- Google Sign Up (disabled) -->
+                        <div class="google-signin-container" style="display: none">
                             <div class="google-signin-disabled">
-                                <p
-                                    style="
-                                        color: rgba(255, 255, 255, 0.6);
-                                        text-align: center;
-                                        font-size: 14px;
-                                        margin: 10px 0;
-                                    "
-                                >
-                                    Google Sign-In temporarily unavailable
-                                </p>
+                                <p style="color: rgba(255,255,255,0.6); text-align: center; font-size: 14px; margin: 10px 0;">Google Sign-In temporarily unavailable</p>
                             </div>
                         </div>
 
@@ -4157,106 +4157,81 @@
                         </div>
 
                         <!-- Error Display -->
-                        <div
-                            class="auth-error"
-                            id="signupError"
-                            style="display: none"
-                        ></div>
+                        <div class="auth-error" id="signupError" style="display: none"></div>
 
-                        <!-- Email/Password Signup Form -->
+                        <!-- Email/Password Signup -->
                         <form class="email-form" id="emailSignupForm">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="signupFirstName"
-                                        >First Name</label
-                                    >
-                                    <input
-                                        type="text"
-                                        id="signupFirstName"
-                                        name="firstName"
-                                        required
-                                    />
+                                    <label for="signupFirstName">First name</label>
+                                    <input type="text" id="signupFirstName" name="firstName" required autocomplete="given-name" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="signupLastName"
-                                        >Last Name</label
-                                    >
-                                    <input
-                                        type="text"
-                                        id="signupLastName"
-                                        name="lastName"
-                                        required
-                                    />
+                                    <label for="signupLastName">Last name</label>
+                                    <input type="text" id="signupLastName" name="lastName" required autocomplete="family-name" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="signupEmail">Email Address</label>
-                                <input
-                                    type="email"
-                                    id="signupEmail"
-                                    name="email"
-                                    required
-                                />
+                                <label for="signupEmail">Email address</label>
+                                <input type="email" id="signupEmail" name="email" required autocomplete="email" />
                             </div>
-                            <div class="form-group">
+                            <div class="form-group password-field">
                                 <label for="signupPassword">Password</label>
-                                <input
-                                    type="password"
-                                    id="signupPassword"
-                                    name="password"
-                                    required
-                                />
-                                <div class="password-requirements">
-                                    <small
-                                        >Password must be at least 8 characters
-                                        long</small
-                                    >
-                                </div>
+                                <input type="password" id="signupPassword" name="password" required autocomplete="new-password" />
+                                <button type="button" class="password-toggle" id="signupPasswordToggle">Show</button>
+                            </div>
+                            <div class="password-requirements">
+                                <small>Password must be at least 8 characters long</small>
                             </div>
                             <div class="form-group">
-                                <label for="confirmPassword"
-                                    >Confirm Password</label
-                                >
-                                <input
-                                    type="password"
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    required
-                                />
+                                <label for="confirmPassword">Confirm password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password" />
                             </div>
-                            <div class="form-options">
+                            <div class="form-options terms-row">
                                 <label class="checkbox-container">
-                                    <input
-                                        type="checkbox"
-                                        id="agreeTerms"
-                                        required
-                                    />
+                                    <input type="checkbox" id="agreeTerms" required />
                                     <span class="checkmark"></span>
-                                    I agree to the
-                                    <a href="#" target="_blank"
-                                        >Terms of Service</a
-                                    >
-                                    and
-                                    <a href="#" target="_blank"
-                                        >Privacy Policy</a
-                                    >
+                                    I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
                                 </label>
                             </div>
-                            <button type="submit" class="auth-submit-btn">
-                                Create Account
-                            </button>
+                            <button type="submit" class="auth-submit-btn">Create Account</button>
                         </form>
 
                         <div class="auth-switch">
-                            <p>
-                                Already have an account?
-                                <a href="#" id="showLogin">Sign in</a>
-                            </p>
+                            <p>Already have an account? <a href="#" id="showLogin">Sign in</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Password toggle (self-contained IIFE, no external deps) -->
+        <script>
+        (function() {
+            var pairs = [
+                { input: 'loginPassword', btn: 'loginPasswordToggle' },
+                { input: 'signupPassword', btn: 'signupPasswordToggle' }
+            ];
+            function init() {
+                pairs.forEach(function(p) {
+                    var inp = document.getElementById(p.input);
+                    var btn = document.getElementById(p.btn);
+                    if (inp && btn) {
+                        btn.addEventListener('click', function() {
+                            var pw = inp.type === 'password';
+                            inp.type = pw ? 'text' : 'password';
+                            btn.textContent = pw ? 'Hide' : 'Show';
+                        });
+                    }
+                });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+        </script>
 
         <div class="container">
             <section class="hero">
@@ -4318,133 +4293,6 @@
                     </div>
                 </div>
 
-                <!-- Live Store Hours -->
-                <div class="hours-card" id="hoursCard">
-                    <div class="hours-header">
-                        <div class="hours-title-wrap">
-                            <h3 class="hours-title">Store Hours</h3>
-                            <span class="hours-clock" id="storeClock">00:00 Local</span>
-                        </div>
-                        <div class="status-pill" id="statusPill">
-                            <span class="status-dot"></span>
-                            <span class="status-text" id="statusText">Checking...</span>
-                        </div>
-                    </div>
-
-                    <div class="hours-table" id="hoursTable"><!-- rows by JS --></div>
-
-                    <div class="hours-footer">
-                        <span class="footer-note" id="hoursTzNote">GMT+1 · Tunis Local Time</span>
-                        <span class="footer-action" id="hoursApptNote">Appointments on request</span>
-                    </div>
-                </div>
-                <script>
-                (function () {
-                    var STORE_HOURS = null;
-                    var tableEl = document.getElementById("hoursTable");
-                    var statusPill = document.getElementById("statusPill");
-                    var statusText = document.getElementById("statusText");
-                    var clockEl = document.getElementById("storeClock");
-
-                    var DEFAULT_SCHEDULE = [
-                        { day: "Sunday",    open: null, close: null },
-                        { day: "Monday",    open: 9,    close: 19   },
-                        { day: "Tuesday",   open: 9,    close: 19   },
-                        { day: "Wednesday", open: 9,    close: 19   },
-                        { day: "Thursday",  open: 9,    close: 19   },
-                        { day: "Friday",    open: 9,    close: 19   },
-                        { day: "Saturday",  open: 10,   close: 18   }
-                    ];
-
-                    function pad(n) { return String(n).padStart(2, "0"); }
-
-                    function hourToClock(h) {
-                        if (h === null || h === undefined || isNaN(h)) return "–";
-                        var total = Math.round(h * 60);
-                        return pad(Math.floor(total / 60)) + ":" + pad(total % 60);
-                    }
-
-                    function renderSchedule() {
-                        var config = STORE_HOURS || { schedule: DEFAULT_SCHEDULE };
-                        var schedule = (config.schedule && config.schedule.length === 7)
-                            ? config.schedule
-                            : DEFAULT_SCHEDULE;
-
-                        var tzNoteEl = document.getElementById("hoursTzNote");
-                        var apptEl = document.getElementById("hoursApptNote");
-                        if (tzNoteEl) tzNoteEl.textContent = config.timezone || "GMT+1 · Tunis Local Time";
-                        if (apptEl) apptEl.textContent = config.appointmentNote || "Appointments on request";
-
-                        var now = new Date();
-                        var currentDayIdx = now.getDay();
-                        var currentHour = now.getHours() + (now.getMinutes() / 60);
-
-                        var timeString = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
-                        if (clockEl) clockEl.textContent = timeString + " Local";
-
-                        var todaySchedule = schedule[currentDayIdx];
-                        var isOpen = todaySchedule && todaySchedule.open !== null &&
-                            currentHour >= todaySchedule.open && currentHour < todaySchedule.close;
-
-                        if (isOpen) {
-                            if (statusPill) statusPill.className = "status-pill open";
-                            if (statusText) statusText.textContent = "Open until " + hourToClock(todaySchedule.close);
-                        } else {
-                            if (statusPill) statusPill.className = "status-pill closed";
-                            if (statusText) {
-                                if (todaySchedule && todaySchedule.open !== null && currentHour < todaySchedule.open) {
-                                    statusText.textContent = "Opens at " + hourToClock(todaySchedule.open);
-                                } else {
-                                    statusText.textContent = "Closed now";
-                                }
-                            }
-                        }
-
-                        if (!tableEl) return;
-                        tableEl.innerHTML = "";
-                        var displayOrder = [1, 2, 3, 4, 5, 6, 0];
-
-                        displayOrder.forEach(function (idx) {
-                            var item = schedule[idx];
-                            if (!item) return;
-                            var isToday = idx === currentDayIdx;
-                            var isClosed = item.open === null;
-
-                            var row = document.createElement("div");
-                            row.className = "hours-row" + (isToday ? " is-today" : "") + (isClosed ? " is-closed" : "");
-
-                            var formatTime = isClosed
-                                ? "Closed"
-                                : hourToClock(item.open) + " – " + hourToClock(item.close);
-
-                            row.innerHTML =
-                                ' <div class="hours-day-wrap">' +
-                                '   <span class="hours-day">' + item.day + "</span>" +
-                                (isToday ? '<span class="today-tag">Today</span>' : "") +
-                                " </div>" +
-                                ' <span class="hours-time">' + formatTime + "</span>";
-
-                            tableEl.appendChild(row);
-                        });
-                    }
-
-                    var hoursController = new AbortController();
-                    var hoursTimer = setTimeout(function () { hoursController.abort(); }, 8000);
-                    fetch("/api/store-hours", { cache: "no-store", signal: hoursController.signal })
-                        .then(function (r) { return r.json(); })
-                        .then(function (data) {
-                            if (data && data.success && data.config) {
-                                STORE_HOURS = data.config;
-                            }
-                        })
-                        .catch(function () {})
-                        .finally(function () {
-                            clearTimeout(hoursTimer);
-                            renderSchedule();
-                            setInterval(renderSchedule, 60000);
-                        });
-                })();
-                </script>
                 </div><!-- /hero-info-stack -->
 
                 <!-- Hero content removed — full-bleed image background -->

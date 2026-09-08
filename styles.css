@@ -2513,9 +2513,7 @@ html {
 
 /* Apply single subtle animation to auth modal when shown */
 .auth-modal.show .auth-modal-content {
-    animation:
-        modalReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-        modalGlow 6s ease-in-out infinite 2s;
+    animation: modalReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Clean backdrop animation */

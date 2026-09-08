@@ -1,0 +1,542 @@
+/* ==========================================================================
+   PARFUMERIE CHARME  :  AUTH MODAL  -  "Maison Noire"
+   Refined dark luxury. Ink charcoal + warm ivory + one restrained gold accent.
+   Scoped strictly under the auth modal classes/ids so the rest of the site is
+   untouched. `!important` only where global theme rules (e.g. the heavy
+   `:not(#b)` light-mode selectors) could interfere.
+   ========================================================================== */
+
+/* ---------- Backdrop ---------- */
+.auth-modal {
+    background: rgba(5, 5, 8, 0.7) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    padding: 20px !important;
+}
+
+.auth-modal.show {
+    animation: charmeBackdropIn 300ms ease-out !important;
+}
+
+/* ---------- Card ---------- */
+.auth-modal .auth-modal-content {
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    background: #141419 !important;
+    background-image: linear-gradient(180deg, #141419 0%, #111114 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px !important;
+    box-shadow:
+        0 40px 80px rgba(0, 0, 0, 0.5),
+        0 2px 12px rgba(0, 0, 0, 0.35) !important;
+    padding: 40px 34px 32px !important;
+    position: relative !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(255, 255, 255, 0.14) transparent !important;
+}
+
+.auth-modal .auth-modal-content::-webkit-scrollbar {
+    width: 6px !important;
+}
+.auth-modal .auth-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.14) !important;
+    border-radius: 99px !important;
+}
+
+.auth-modal.show .auth-modal-content {
+    animation: charmeCardIn 240ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* ---------- Entrance keyframes (single entrance, no loop) ---------- */
+@keyframes charmeBackdropIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes charmeCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- Close button (floating top-right) ---------- */
+.auth-modal .auth-close {
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px !important;
+    width: 34px !important;
+    height: 34px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 50% !important;
+    color: rgba(244, 241, 234, 0.6) !important;
+    cursor: pointer !important;
+    transition: all 180ms ease !important;
+    z-index: 2 !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    font-size: 18px !important;
+}
+
+.auth-modal .auth-close:hover {
+    color: #e8c97d !important;
+    border-color: rgba(232, 201, 125, 0.35) !important;
+    background: rgba(201, 162, 75, 0.08) !important;
+}
+
+/* ---------- Header / wordmark eyebrow + title ---------- */
+.auth-modal .auth-header {
+    display: block !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin-bottom: 26px !important;
+    border-bottom: none !important;
+    background: transparent !important;
+}
+
+/* Small gold asterisk mark above the eyebrow */
+.auth-modal .auth-header::before {
+    content: "\2726" !important; /* tiny gold asterisk glyph */
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    right: auto !important;
+    left: auto !important;
+    top: auto !important;
+    color: #c9a24b !important;
+    font-size: 13px !important;
+    line-height: 1 !important;
+    margin-bottom: 10px !important;
+    letter-spacing: 0 !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.auth-modal .auth-header h2#authTitle {
+    margin: 0 !important;
+    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+    font-weight: 500 !important;
+    font-size: 29px !important;
+    line-height: 1.15 !important;
+    color: #f4f1ea !important;
+    letter-spacing: 0.015em !important;
+    text-transform: none !important;
+}
+
+/* Eyebrow wordmark line placed above everything (inside header, under the mark) */
+.auth-modal .auth-eyebrow {
+    display: block !important;
+    margin-top: 2px !important;
+    margin-bottom: 0 !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.32em !important;
+    text-transform: uppercase !important;
+    color: rgba(244, 241, 234, 0.4) !important;
+}
+
+/* ---------- Body ---------- */
+.auth-modal .auth-body {
+    padding: 0 !important;
+}
+
+/* Per-form intro subtitle */
+.auth-modal .auth-subtitle {
+    margin: 0 0 24px !important;
+    text-align: center !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: rgba(244, 241, 234, 0.55) !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    font-weight: 400 !important;
+}
+
+/* ---------- Hide legacy duplicate heading block ---------- */
+.auth-modal .auth-welcome {
+    display: none !important;
+}
+.auth-modal .google-signin-container {
+    display: none !important;
+}
+
+/* ---------- Error box ---------- */
+.auth-modal .auth-error {
+    display: none;
+    margin: 0 0 18px !important;
+    padding: 11px 14px !important;
+    border-radius: 10px !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 13.5px !important;
+    line-height: 1.45 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    font-weight: 500 !important;
+    background: rgba(190, 55, 55, 0.12) !important;
+    border: 1px solid rgba(235, 90, 90, 0.28) !important;
+    color: #f6b3b3 !important;
+    animation: charmeErrorIn 260ms ease-out !important;
+}
+
+.auth-modal .auth-error.success {
+    background: rgba(45, 160, 90, 0.12) !important;
+    border-color: rgba(85, 190, 120, 0.30) !important;
+    color: #a4e3bd !important;
+}
+
+.auth-modal .auth-error.warning {
+    background: rgba(200, 150, 40, 0.12) !important;
+    border-color: rgba(225, 178, 70, 0.32) !important;
+    color: #ecd393 !important;
+}
+
+@keyframes charmeErrorIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- Forms ---------- */
+.auth-modal .email-form {
+    display: block !important;
+}
+
+.auth-modal .form-row {
+    display: flex !important;
+    gap: 14px !important;
+    margin-bottom: 16px !important;
+}
+
+.auth-modal .form-group {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    margin-bottom: 16px !important;
+}
+
+.auth-modal .form-group label {
+    margin: 0 0 7px !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: rgba(244, 241, 234, 0.66) !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    line-height: 1.3 !important;
+}
+
+.auth-modal .form-group input {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 13px 14px !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 15px !important;
+    color: #f4f1ea !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-radius: 12px !important;
+    outline: none !important;
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        background 180ms ease !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    height: auto !important;
+    margin: 0 !important;
+    line-height: 1.4 !important;
+    box-shadow: none !important;
+}
+
+.auth-modal .form-group input::placeholder {
+    color: rgba(244, 241, 234, 0.32) !important;
+    font-size: 15px !important;
+    opacity: 1 !important;
+}
+
+.auth-modal .form-group input:focus {
+    border-color: rgba(201, 162, 75, 0.45) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.18) !important;
+}
+
+/* Password field wrapper (label + input + Show toggle) */
+.auth-modal .password-field {
+    position: relative !important;
+}
+
+.auth-modal .password-field input {
+    padding-right: 60px !important;
+}
+
+.auth-modal .password-toggle {
+    position: absolute !important;
+    top: 50% !important;
+    right: 12px !important;
+    transform: translateY(-50%) !important;
+    background: none !important;
+    border: none !important;
+    padding: 4px 2px !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    color: rgba(201, 162, 75, 0.7) !important;
+    cursor: pointer !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    transition: color 180ms ease !important;
+    line-height: 1 !important;
+}
+
+.auth-modal .password-toggle:hover {
+    color: #e8c97d !important;
+}
+
+/* Password hint */
+.auth-modal .password-requirements {
+    margin-top: 6px !important;
+}
+.auth-modal .password-requirements small {
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 12px !important;
+    color: rgba(244, 241, 234, 0.40) !important;
+    letter-spacing: 0 !important;
+}
+
+/* ---------- Utility row (remember me + forgot) ---------- */
+.auth-modal .form-options {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin: 18px 0 22px !important;
+    gap: 12px !important;
+}
+
+.auth-modal .checkbox-container {
+    display: inline-flex !important;
+    align-items: center !important;
+    position: relative !important;
+    cursor: pointer !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 13.5px !important;
+    color: rgba(244, 241, 234, 0.72) !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+.auth-modal .checkbox-container input[type="checkbox"] {
+    opacity: 0 !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+}
+
+.auth-modal .checkbox-container .checkmark {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 17px !important;
+    height: 17px !important;
+    flex: 0 0 auto !important;
+    margin-right: 9px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border-radius: 5px !important;
+    position: relative !important;
+    transition: all 180ms ease !important;
+}
+
+.auth-modal .checkbox-container input[type="checkbox"]:focus-visible + .checkmark {
+    box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.18) !important;
+    border-color: rgba(201, 162, 75, 0.5) !important;
+}
+
+.auth-modal .checkbox-container input[type="checkbox"]:checked + .checkmark {
+    background: #c9a24b !important;
+    border-color: #c9a24b !important;
+}
+
+.auth-modal .checkbox-container input[type="checkbox"]:checked + .checkmark::after {
+    content: "\2713" !important;
+    color: #141419 !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+}
+
+.auth-modal .forgot-password {
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    color: rgba(244, 241, 234, 0.5) !important;
+    text-decoration: none !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    transition: color 180ms ease !important;
+    white-space: nowrap !important;
+}
+
+.auth-modal .forgot-password:hover {
+    color: rgba(244, 241, 234, 0.92) !important;
+}
+
+/* Terms row for signup uses a wrapping checkbox */
+.auth-modal .form-options.terms-row {
+    align-items: flex-start !important;
+}
+.auth-modal .form-options.terms-row .checkbox-container {
+    align-items: flex-start !important;
+    font-size: 13px !important;
+}
+.auth-modal .form-options.terms-row .checkmark {
+    margin-top: 1px !important;
+}
+.auth-modal .form-options.terms-row a {
+    color: #c9a24b !important;
+    text-decoration: none !important;
+}
+.auth-modal .form-options.terms-row a:hover {
+    text-decoration: underline !important;
+}
+
+/* ---------- CTA ---------- */
+.auth-modal .auth-submit-btn {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 14px 18px !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #141419 !important;
+    background: #c9a24b !important;
+    border: 1px solid #c9a24b !important;
+    border-radius: 14px !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    margin: 0 !important;
+    line-height: 1.3 !important;
+    box-shadow: none !important;
+    transition:
+        background 180ms ease,
+        border-color 180ms ease,
+        transform 180ms ease !important;
+}
+
+.auth-modal .auth-submit-btn:hover {
+    background: #d8b25c !important;
+    border-color: #d8b25c !important;
+    transform: translateY(-1px) !important;
+}
+
+.auth-modal .auth-submit-btn:active {
+    transform: translateY(0) !important;
+    background: #b89440 !important;
+}
+
+.auth-modal .auth-submit-btn:focus-visible {
+    box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.25) !important;
+    outline: none !important;
+}
+
+/* ---------- Switch ---------- */
+.auth-modal .auth-switch {
+    margin-top: 22px !important;
+    text-align: center !important;
+    padding-top: 18px !important;
+    position: relative !important;
+}
+
+/* hairline rule above the switch */
+.auth-modal .auth-switch::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 10% !important;
+    right: 10% !important;
+    height: 1px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.auth-modal .auth-switch p {
+    margin: 0 !important;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 13.5px !important;
+    color: rgba(244, 241, 234, 0.5) !important;
+    letter-spacing: 0 !important;
+    line-height: 1.4 !important;
+}
+
+.auth-modal .auth-switch a {
+    color: #c9a24b !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: color 180ms ease !important;
+}
+
+.auth-modal .auth-switch a:hover {
+    color: #e8c97d !important;
+    text-decoration: underline !important;
+}
+
+/* ---------- Light mode: keep card dark, keep text ivory ----------
+   These use extra :not(#b) cycles to out-specificity the project's
+   heavy global light-mode rules (html[data-theme="light"]:not(#b)...). */
+html[data-theme="light"]:not(#b):not(#b):not(#b):not(#b):not(#b):not(#b) #authModal.auth-modal:not(#b) .auth-modal-content:not(#b) #authTitle:not(#b) {
+    color: #f4f1ea !important;
+}
+html[data-theme="light"]:not(#b):not(#b):not(#b):not(#b):not(#b):not(#b) #authModal.auth-modal:not(#b) .auth-modal-content:not(#b) label:not(#b) {
+    color: rgba(244, 241, 234, 0.66) !important;
+}
+
+/* ---------- Responsive ≤480px ---------- */
+@media (max-width: 480px) {
+    .auth-modal .auth-modal-content {
+        padding: 34px 20px 28px !important;
+        max-width: 100% !important;
+        border-radius: 14px !important;
+    }
+
+    .auth-modal .form-row {
+        flex-direction: column !important;
+        gap: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .auth-modal .auth-header h2#authTitle {
+        font-size: 26px !important;
+    }
+
+    .auth-modal .auth-modal-content {
+        max-height: 86vh !important;
+    }
+}

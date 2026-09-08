@@ -1,0 +1,156 @@
+/* ═══════════════════════════════════════════════════════════
+   BRAND LOADING CURTAIN — "Maison Noire"
+   A quiet, premium first-frame for Parfumerie Charme.
+   Shows on every full page load; lifts once everything is ready.
+   ═══════════════════════════════════════════════════════════ */
+
+.brand-loader {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: 2147483000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background:
+        radial-gradient(130% 100% at 50% 12%, rgba(201, 162, 75, 0.055), transparent 58%),
+        #0e0e12 !important;
+    color: #f4f1ea !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition:
+        opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.85s linear;
+    animation: brandLoaderAutoFade 0.85s ease 14s forwards;
+}
+
+.brand-loader--leave {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Safety net: if JS never finishes (hung network), the curtain still parts. */
+@keyframes brandLoaderAutoFade {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.brand-loader__inner {
+    text-align: center;
+    transform: translateY(14px);
+    opacity: 0;
+    animation: brandLoaderRise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+@keyframes brandLoaderRise {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.brand-loader__mark {
+    color: #c9a24b;
+    font-size: 20px;
+    line-height: 1;
+    margin: 0 auto 22px;
+    opacity: 0;
+    transform: scale(0.6) rotate(-18deg);
+    animation: brandLoaderSparkle 1.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s forwards;
+}
+
+@keyframes brandLoaderSparkle {
+    0% {
+        opacity: 0;
+        transform: scale(0.6) rotate(-18deg);
+    }
+    55% {
+        opacity: 1;
+        transform: scale(1.06) rotate(4deg);
+    }
+    100% {
+        opacity: 0.92;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.brand-loader__name {
+    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+    font-weight: 400 !important;
+    font-size: 19px !important;
+    letter-spacing: 0.52em !important;
+    text-indent: 0.52em !important;
+    color: rgba(244, 241, 234, 0.92) !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+}
+
+.brand-loader__name--gold {
+    color: #c9a24b !important;
+    font-size: 32px !important;
+    letter-spacing: 0.44em !important;
+    text-indent: 0.44em !important;
+    margin-top: 4px !important;
+}
+
+.brand-loader__rule {
+    width: 220px;
+    height: 1px;
+    background: rgba(244, 241, 234, 0.12);
+    position: relative;
+    overflow: hidden;
+    margin: 30px auto 0;
+}
+
+.brand-loader__filler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #c9a24b;
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: brandLoaderDraw 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+}
+
+@keyframes brandLoaderDraw {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.brand-loader__city {
+    margin-top: 22px;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 9px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.42em !important;
+    text-indent: 0.42em !important;
+    text-transform: uppercase !important;
+    color: rgba(244, 241, 234, 0.4) !important;
+    opacity: 0;
+    animation: brandLoaderRise 0.8s ease 0.95s forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .brand-loader__inner,
+    .brand-loader__mark,
+    .brand-loader__filler,
+    .brand-loader__city {
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+    }
+}
