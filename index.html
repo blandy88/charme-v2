@@ -81,7 +81,7 @@
         <link rel="stylesheet" href="css/guides.css?v=20260831c" />
         <link rel="stylesheet" href="css/combined-profiles.css?v=20260814" media="print" onload="this.media='all'" />
         <link rel="stylesheet" href="css/auth-modal.css?v=20260907" />
-        <link rel="stylesheet" href="css/loader.css?v=20260908b" />
+        <link rel="stylesheet" href="css/loader.css?v=20260908c" />
 
         <!-- Scripts (deferred for performance) -->
         <script src="js/fragrance-api-service.js?v=20260818" defer></script>
@@ -199,6 +199,7 @@
                 <div class="brand-loader__rule" aria-hidden="true">
                     <span class="brand-loader__filler"></span>
                 </div>
+                <div class="brand-loader__pct" aria-hidden="true">0%</div>
                 <div class="brand-loader__city">Maison de parfum · Tunis</div>
             </div>
         </div>
@@ -206,34 +207,80 @@
         (function () {
             var loader = document.getElementById("brandLoader");
             if (!loader) return;
+            var fill = document.querySelector(".brand-loader__filler");
+            var pct = document.querySelector(".brand-loader__pct");
             var started = Date.now();
-            var minShown = 1400;
-            var maxWait = 9000;
+            var minShown = 500;
+            var maxWait = 20000;
             var hidden = false;
+            var progress = 0;
+
+            /* Measure real load progress from actual resource completion.
+               Counts every stylesheet, script, font and image the browser
+               fetched; never reaches 100 - finish() is the only path to
+               100, and it runs only once the page has fully loaded. */
+            function refresh() {
+                if (hidden) return;
+                var rs = document.readyState;
+                var res = performance.getEntriesByType("resource");
+                var total = res.length;
+                var done = 0;
+                for (var i = 0; i < total; i++) {
+                    if (res[i].responseEnd > 0) done++;
+                }
+                var base = rs === "complete" ? 60 : rs === "interactive" ? 35 : 14;
+                var p = total > 0 ? base + (done / total) * (96 - base) : base;
+                p = Math.max(progress, Math.min(99, p));
+                progress = p;
+                if (fill) fill.style.transform = "scaleX(" + (p / 100) + ")";
+                if (pct) pct.textContent = Math.round(p) + "%";
+            }
+
+            var ticker = setInterval(refresh, 180);
+
+            function lift() {
+                if (fill) {
+                    fill.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+                    fill.style.transform = "scaleX(1)";
+                }
+                if (pct) pct.textContent = "100%";
+                /* Lift immediately: the fade runs on the compositor, so it
+                   stays smooth even while the freshly-loaded page initializes. */
+                loader.style.animation = "none";
+                loader.classList.add("brand-loader--leave");
+                document.body.classList.add("brandLoaderDone");
+                /* Bounded failsafe: the fade normally removes the curtain via
+                   transitionend; if the busy page delays it, remove here
+                   (generous window so the real fade always plays first). */
+                window.setTimeout(function () {
+                    if (loader.parentNode) {
+                        loader.parentNode.removeChild(loader);
+                    }
+                }, 4200);
+            }
+
             function finish() {
                 if (hidden) return;
                 hidden = true;
+                clearInterval(ticker);
                 var wait = Math.max(0, minShown - (Date.now() - started));
-                setTimeout(function () {
-                    loader.style.animation = "none";
-                    loader.classList.add("brand-loader--leave");
-                    document.body.classList.add("brandLoaderDone");
-                    window.setTimeout(function () {
-                        if (loader.parentNode) {
-                            loader.parentNode.removeChild(loader);
-                        }
-                    }, 1100);
-                }, wait);
+                setTimeout(lift, wait);
             }
-            function onShow(e) {
-                if (e.persisted) finish();
+
+            /* The curtain parts only once the whole site has loaded. */
+            function onLoad() {
+                refresh();
+                finish();
             }
             if (document.readyState === "complete") {
-                finish();
+                onLoad();
             } else {
-                window.addEventListener("load", finish);
+                window.addEventListener("load", onLoad);
             }
-            window.addEventListener("pageshow", onShow);
+            window.addEventListener("pageshow", function (e) {
+                if (e.persisted) finish();
+            });
+            /* Fail-safe: if the page hangs, never leave the curtain forever. */
             window.setTimeout(finish, maxWait);
             loader.addEventListener("transitionend", function (e) {
                 if (e.target !== loader) return;
@@ -242,7 +289,9 @@
                 }
             });
             window.setTimeout(function () {
-                if (loader.parentNode) loader.remove();
+                if (loader.parentNode) {
+                    loader.parentNode.removeChild(loader);
+                }
             }, maxWait + 1600);
         })();
         </script>

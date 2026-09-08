@@ -21,6 +21,7 @@
     opacity: 1 !important;
     visibility: visible !important;
     transform: translateY(0) !important;
+    will-change: opacity, transform;
     transition:
         opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
         visibility 0.8s linear,
@@ -150,16 +151,21 @@
     background: #c9a24b;
     transform: scaleX(0);
     transform-origin: left center;
-    animation: brandLoaderDraw 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
 }
 
-@keyframes brandLoaderDraw {
-    from {
-        transform: scaleX(0);
-    }
-    to {
-        transform: scaleX(1);
-    }
+.brand-loader__pct {
+    margin-top: 14px;
+    font-family: 'DM Sans', 'Inter', sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.4em !important;
+    text-indent: 0.4em !important;
+    font-variant-numeric: tabular-nums !important;
+    color: rgba(244, 241, 234, 0.45) !important;
+    opacity: 0;
+    animation: brandLoaderRise 0.8s ease 0.35s forwards;
 }
 
 .brand-loader__city {
@@ -178,12 +184,15 @@
 @media (prefers-reduced-motion: reduce) {
     .brand-loader__inner,
     .brand-loader__mark,
-    .brand-loader__filler,
     .brand-loader__city,
+    .brand-loader__pct,
     .brand-loader__name--gold,
     .brand-loader__rule::after {
         animation-duration: 0.01ms;
         animation-iteration-count: 1;
+    }
+    .brand-loader__filler {
+        transition-duration: 0.01ms;
     }
 }
 
