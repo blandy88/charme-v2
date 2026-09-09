@@ -1,0 +1,658 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+/* Base Reset & Variables */
+.charme-nav-trigger,
+.charme-auth-overlay,
+.charme-auth-overlay * {
+  box-sizing: border-box !important;
+}
+
+/* Navbar Trigger */
+.charme-nav-trigger {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background-color: transparent !important;
+  border: 1px solid #c9a94e !important;
+  border-radius: 1px !important;
+  padding: 10px 24px !important;
+  cursor: pointer !important;
+  color: #F5F3F0 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.charme-nav-trigger:hover {
+  background-color: #c9a94e !important;
+  border-color: #D4AF37 !important;
+  color: #0d0d0f !important;
+}
+
+.charme-nav-trigger:focus-visible {
+  outline: 1px solid #D4AF37 !important;
+  outline-offset: 2px !important;
+}
+
+.charme-nav-trigger svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.charme-nav-trigger-label {
+  display: inline-block !important;
+  line-height: 1 !important;
+}
+
+/* Modal Overlay */
+.charme-auth-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  background-color: rgba(13, 13, 15, 0.88) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  overflow-y: auto !important;
+}
+
+.charme-auth-overlay.hidden {
+  display: none !important;
+}
+
+.charme-view-pane.hidden {
+  display: none !important;
+}
+
+/* Modal Architectural Card */
+.charme-auth-card {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 460px !important;
+  background-color: #141416 !important;
+  background-image: linear-gradient(180deg, #1A1A1A 0%, #141416 100%) !important;
+  border: 1px solid rgba(201, 169, 78, 0.35) !important;
+  border-radius: 1px !important;
+  padding: 44px 40px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65) !important;
+}
+
+/* Close Button */
+.charme-auth-close {
+  position: absolute !important;
+  top: 20px !important;
+  right: 20px !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 1px !important;
+  color: #e8d5a3 !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  transition: color 0.2s ease, border-color 0.2s ease !important;
+}
+
+.charme-auth-close:hover {
+  color: #F5F3F0 !important;
+  border-color: rgba(201, 169, 78, 0.4) !important;
+}
+
+.charme-auth-close:focus-visible {
+  outline: 1px solid #c9a94e !important;
+  outline-offset: 1px !important;
+}
+
+/* Card Header */
+.charme-card-header {
+  text-align: center !important;
+  margin-bottom: 28px !important;
+}
+
+.charme-card-eyebrow {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: #c9a94e !important;
+  margin-bottom: 8px !important;
+}
+
+.charme-card-title {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 32px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.15 !important;
+  color: #F5F3F0 !important;
+  margin: 0 0 16px 0 !important;
+}
+
+.charme-header-separator {
+  width: 40px !important;
+  height: 1px !important;
+  background-color: #c9a94e !important;
+  margin: 0 auto !important;
+  opacity: 0.7 !important;
+}
+
+/* View Container (no !important on display: JS toggles panes via inline style) */
+.charme-view-pane {
+  display: flex;
+  flex-direction: column !important;
+}
+
+/* Error Slot */
+.charme-error-slot {
+  display: none !important;
+  margin-bottom: 20px !important;
+  padding: 10px 14px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.02em !important;
+  color: #e59a9a !important;
+  background-color: rgba(180, 50, 50, 0.08) !important;
+  border: 1px solid rgba(229, 154, 154, 0.3) !important;
+  border-radius: 1px !important;
+}
+
+.charme-error-slot:not(:empty) {
+  display: block !important;
+}
+
+/* Forms */
+.charme-form-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+}
+
+.charme-field-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+}
+
+.charme-field-unit {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.charme-form-label {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #e8d5a3 !important;
+}
+
+.charme-form-input {
+  width: 100% !important;
+  height: 42px !important;
+  padding: 0 12px !important;
+  background-color: #0d0d0f !important;
+  border: 1px solid rgba(201, 169, 78, 0.25) !important;
+  border-radius: 1px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+  color: #F5F3F0 !important;
+  transition: border-color 0.2s ease, background-color 0.2s ease !important;
+}
+
+.charme-form-input::placeholder {
+  color: rgba(245, 243, 240, 0.25) !important;
+  font-weight: 300 !important;
+}
+
+.charme-form-input:focus {
+  outline: none !important;
+  border-color: #D4AF37 !important;
+  background-color: #141416 !important;
+}
+
+/* Password Affix Shell */
+.charme-affix-shell {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.charme-affix-input {
+  padding-right: 56px !important;
+}
+
+.charme-affix-toggle {
+  position: absolute !important;
+  right: 1px !important;
+  top: 1px !important;
+  bottom: 1px !important;
+  width: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: transparent !important;
+  border: none !important;
+  color: #c9a94e !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  transition: color 0.2s ease !important;
+}
+
+.charme-affix-toggle:hover {
+  color: #e8d5a3 !important;
+}
+
+.charme-affix-toggle:focus-visible {
+  outline: 1px solid #c9a94e !important;
+}
+
+.charme-field-helper {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0.02em !important;
+  color: rgba(245, 243, 240, 0.45) !important;
+  margin-top: 2px !important;
+}
+
+/* Utility Row & Checkbox */
+.charme-utility-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin-top: 2px !important;
+}
+
+.charme-terms-row {
+  justify-content: flex-start !important;
+}
+
+.charme-control-indicator {
+  display: inline-flex !important;
+  align-items: flex-start !important;
+  gap: 9px !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+
+.charme-hidden-checkbox {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}
+
+.charme-box-mark {
+  width: 14px !important;
+  height: 14px !important;
+  flex-shrink: 0 !important;
+  margin-top: 2px !important;
+  border: 1px solid rgba(201, 169, 78, 0.4) !important;
+  border-radius: 1px !important;
+  background-color: #0d0d0f !important;
+  position: relative !important;
+  transition: border-color 0.2s ease, background-color 0.2s ease !important;
+}
+
+.charme-hidden-checkbox:checked + .charme-box-mark {
+  border-color: #c9a94e !important;
+  background-color: #c9a94e !important;
+}
+
+.charme-hidden-checkbox:checked + .charme-box-mark::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 4px !important;
+  width: 3px !important;
+  height: 6px !important;
+  border: solid #0d0d0f !important;
+  border-width: 0 1.5px 1.5px 0 !important;
+  transform: rotate(45deg) !important;
+}
+
+.charme-hidden-checkbox:focus-visible + .charme-box-mark {
+  outline: 1px solid #D4AF37 !important;
+  outline-offset: 1px !important;
+}
+
+.charme-control-text {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  color: rgba(245, 243, 240, 0.75) !important;
+}
+
+.charme-subtle-link,
+.charme-inline-anchor {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  color: #c9a94e !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid transparent !important;
+  transition: color 0.2s ease, border-color 0.2s ease !important;
+}
+
+.charme-subtle-link:hover,
+.charme-inline-anchor:hover {
+  color: #e8d5a3 !important;
+  border-bottom-color: #e8d5a3 !important;
+}
+
+.charme-subtle-link:focus-visible,
+.charme-inline-anchor:focus-visible {
+  outline: 1px solid #c9a94e !important;
+}
+
+/* Submit Action Button */
+.charme-submit-action {
+  width: 100% !important;
+  height: 44px !important;
+  margin-top: 6px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #c9a94e !important;
+  background-image: linear-gradient(180deg, #D4AF37 0%, #c9a94e 100%) !important;
+  border: 1px solid #D4AF37 !important;
+  border-radius: 1px !important;
+  color: #0d0d0f !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, opacity 0.2s ease !important;
+}
+
+.charme-submit-action:hover {
+  opacity: 0.92 !important;
+  background-color: #D4AF37 !important;
+}
+
+.charme-submit-action:focus-visible {
+  outline: 1px solid #F5F3F0 !important;
+  outline-offset: 2px !important;
+}
+
+.charme-submit-text {
+  display: inline-block !important;
+  line-height: 1 !important;
+}
+
+/* Card Footer / Mode Switch */
+.charme-card-footer {
+  margin-top: 24px !important;
+  padding-top: 18px !important;
+  border-top: 1px solid rgba(201, 169, 78, 0.15) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.charme-footer-prompt {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  color: rgba(245, 243, 240, 0.6) !important;
+}
+
+.charme-footer-switch {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  color: #e8d5a3 !important;
+  cursor: pointer !important;
+  border-bottom: 1px solid #c9a94e !important;
+  transition: color 0.2s ease, border-color 0.2s ease !important;
+}
+
+.charme-footer-switch:hover {
+  color: #F5F3F0 !important;
+  border-bottom-color: #F5F3F0 !important;
+}
+
+.charme-footer-switch:focus-visible {
+  outline: 1px solid #c9a94e !important;
+}
+
+/* Light Theme Overrides */
+html[data-theme="light"] .charme-nav-trigger {
+  border-color: #c9a94e !important;
+  color: #141416 !important;
+}
+
+html[data-theme="light"] .charme-nav-trigger:hover {
+  background-color: #c9a94e !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] .charme-auth-overlay {
+  background-color: rgba(245, 243, 240, 0.88) !important;
+}
+
+html[data-theme="light"] .charme-auth-card {
+  background-color: #FFFFFF !important;
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #FAF8F5 100%) !important;
+  border-color: rgba(201, 169, 78, 0.45) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="light"] .charme-auth-close {
+  color: #141416 !important;
+}
+
+html[data-theme="light"] .charme-auth-close:hover {
+  color: #c9a94e !important;
+  border-color: rgba(201, 169, 78, 0.5) !important;
+}
+
+html[data-theme="light"] .charme-card-title {
+  color: #141416 !important;
+}
+
+html[data-theme="light"] .charme-card-eyebrow {
+  color: #c9a94e !important;
+}
+
+html[data-theme="light"] .charme-form-label {
+  color: #635224 !important;
+}
+
+html[data-theme="light"] .charme-form-input {
+  background-color: #FAF8F5 !important;
+  border-color: rgba(201, 169, 78, 0.4) !important;
+  color: #141416 !important;
+}
+
+html[data-theme="light"] .charme-form-input::placeholder {
+  color: rgba(20, 20, 22, 0.35) !important;
+}
+
+html[data-theme="light"] .charme-form-input:focus {
+  background-color: #FFFFFF !important;
+  border-color: #c9a94e !important;
+}
+
+html[data-theme="light"] .charme-box-mark {
+  background-color: #FAF8F5 !important;
+  border-color: rgba(201, 169, 78, 0.5) !important;
+}
+
+html[data-theme="light"] .charme-hidden-checkbox:checked + .charme-box-mark {
+  background-color: #c9a94e !important;
+  border-color: #c9a94e !important;
+}
+
+html[data-theme="light"] .charme-hidden-checkbox:checked + .charme-box-mark::after {
+  border-color: #FFFFFF !important;
+}
+
+html[data-theme="light"] .charme-control-text {
+  color: #4a4845 !important;
+}
+
+html[data-theme="light"] .charme-field-helper {
+  color: rgba(20, 20, 22, 0.55) !important;
+}
+
+html[data-theme="light"] .charme-subtle-link,
+html[data-theme="light"] .charme-inline-anchor {
+  color: #8c7128 !important;
+}
+
+html[data-theme="light"] .charme-subtle-link:hover,
+html[data-theme="light"] .charme-inline-anchor:hover {
+  color: #141416 !important;
+  border-bottom-color: #141416 !important;
+}
+
+html[data-theme="light"] .charme-submit-action {
+  background-color: #c9a94e !important;
+  background-image: linear-gradient(180deg, #D4AF37 0%, #c9a94e 100%) !important;
+  color: #ffffff !important;
+  border-color: #c9a94e !important;
+}
+
+html[data-theme="light"] .charme-card-footer {
+  border-top-color: rgba(201, 169, 78, 0.25) !important;
+}
+
+html[data-theme="light"] .charme-footer-prompt {
+  color: #6a6864 !important;
+}
+
+html[data-theme="light"] .charme-footer-switch {
+  color: #8c7128 !important;
+  border-bottom-color: #8c7128 !important;
+}
+
+html[data-theme="light"] .charme-footer-switch:hover {
+  color: #141416 !important;
+  border-bottom-color: #141416 !important;
+}
+
+html[data-theme="light"] .charme-error-slot {
+  color: #992222 !important;
+  background-color: rgba(180, 50, 50, 0.05) !important;
+  border-color: rgba(180, 50, 50, 0.25) !important;
+}
+
+/* Mobile Pass (max-width: 640px) */
+@media (max-width: 640px) {
+  .charme-auth-overlay {
+    padding: 16px !important;
+    align-items: flex-end !important;
+  }
+
+  .charme-auth-card {
+    max-width: 100% !important;
+    padding: 34px 20px 24px 20px !important;
+  }
+
+  .charme-auth-close {
+    top: 14px !important;
+    right: 14px !important;
+  }
+
+  .charme-card-header {
+    margin-bottom: 22px !important;
+  }
+
+  .charme-card-title {
+    font-size: 26px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .charme-field-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .charme-form-stack {
+    gap: 16px !important;
+  }
+
+  .charme-form-input {
+    height: 44px !important;
+    font-size: 14px !important;
+  }
+
+  .charme-submit-action {
+    height: 46px !important;
+    font-size: 11px !important;
+  }
+
+  .charme-utility-row {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .charme-card-footer {
+    margin-top: 20px !important;
+    padding-top: 16px !important;
+  }
+}
+
+/* Local compat: app JS rewrites error nodes to class "auth-error <type>".
+   Mirror the slot design so errors keep the new look when shown. */
+#authModal .auth-error {
+  margin-bottom: 20px !important;
+  padding: 10px 14px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.02em !important;
+  color: #e59a9a !important;
+  background-color: rgba(180, 50, 50, 0.08) !important;
+  border: 1px solid rgba(229, 154, 154, 0.3) !important;
+  border-radius: 1px !important;
+}
+
+#authModal .auth-error.success {
+  color: #9ae5b8 !important;
+  background-color: rgba(50, 180, 90, 0.08) !important;
+  border-color: rgba(154, 229, 184, 0.3) !important;
+}
+
+html[data-theme="light"] #authModal .auth-error {
+  color: #992222 !important;
+  background-color: rgba(180, 50, 50, 0.05) !important;
+  border-color: rgba(180, 50, 50, 0.25) !important;
+}
