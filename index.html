@@ -16,7 +16,7 @@
         <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
 
         <!-- Stylesheets -->
-        <link rel="stylesheet" href="styles.css?v=20260901a" />
+        <link rel="stylesheet" href="styles.css?v=20260909e" />
         <!-- Perfume profile CSS: loaded non-render-blocking via media trick -->
         
         
@@ -78,9 +78,14 @@
         
         
         <link rel="stylesheet" href="css/fragrance-layout-normalize.css?v=20260850" />
-        <link rel="stylesheet" href="css/guides.css?v=20260831c" />
+        <link rel="stylesheet" href="css/guides.css?v=20260909b" />
         <link rel="stylesheet" href="css/combined-profiles.css?v=20260814" media="print" onload="this.media='all'" />
         <link rel="stylesheet" href="css/auth-modal.css?v=20260907" />
+        <link rel="stylesheet" href="css/charme-signin.css?v=20260909" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
         <link rel="stylesheet" href="css/loader.css?v=20260908c" />
 
         <!-- Scripts (deferred for performance) -->
@@ -521,164 +526,6 @@
                         >
                     </div>
 
-                    <!-- Notification Icon -->
-                    <div
-                        class="navbar-notification-container"
-                        id="navbarNotificationContainer"
-                    >
-                        <div
-                            class="navbar-notification-icon"
-                            id="navbarNotificationIcon"
-                            title="Notifications"
-                        >
-                            <svg
-                                class="notification-icon"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <path
-                                    d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
-                                />
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                            </svg>
-                            <span
-                                class="notification-badge"
-                                id="notificationBadge"
-                                style="display: none"
-                                >0</span
-                            >
-                        </div>
-
-                        <!-- Notification Dropdown -->
-                        <div
-                            class="notification-dropdown"
-                            id="notificationDropdown"
-                        >
-                            <div class="notification-dropdown-header">
-                                <h3 class="notification-dropdown-title">
-                                    <svg
-                                        class="notification-title-icon"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    >
-                                        <path
-                                            d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
-                                        />
-                                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                                    </svg>
-                                    Notifications
-                                </h3>
-                                <button
-                                    class="notification-mark-all-read"
-                                    id="markAllReadBtn"
-                                    title="Mark all as read"
-                                    data-i18n-title="Mark all as read"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    >
-                                        <polyline points="20,6 9,17 4,12" />
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div class="notification-dropdown-body">
-                                <div
-                                    class="notification-loading"
-                                    id="notificationLoading"
-                                >
-                                    <div
-                                        class="notification-loading-spinner"
-                                    ></div>
-                                    <p>Loading notifications...</p>
-                                </div>
-
-                                <div
-                                    class="notification-content"
-                                    id="notificationContent"
-                                    style="display: none"
-                                >
-                                    <div
-                                        class="notification-list"
-                                        id="notificationList"
-                                    >
-                                        <!-- Notification items will be loaded here -->
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="notification-empty"
-                                    id="notificationEmpty"
-                                    style="display: none"
-                                >
-                                    <div class="notification-empty-icon">
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                        >
-                                            <path
-                                                d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
-                                            />
-                                            <path
-                                                d="M13.73 21a2 2 0 0 1-3.46 0"
-                                            />
-                                        </svg>
-                                    </div>
-                                    <h4>No notifications</h4>
-                                    <p>You're all caught up!</p>
-                                </div>
-
-                                <div
-                                    class="notification-error"
-                                    id="notificationError"
-                                    style="display: none"
-                                >
-                                    <div class="notification-error-icon">
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                        >
-                                            <circle cx="12" cy="12" r="10" />
-                                            <line
-                                                x1="12"
-                                                y1="8"
-                                                x2="12"
-                                                y2="12"
-                                            />
-                                            <line
-                                                x1="12"
-                                                y1="16"
-                                                x2="12.01"
-                                                y2="16"
-                                            />
-                                        </svg>
-                                    </div>
-                                    <h4>Unable to load</h4>
-                                    <p>Please try again</p>
-                                    <button
-                                        class="notification-retry-btn"
-                                        id="notificationRetryBtn"
-                                    >
-                                        Retry
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
                     <!-- Cart Icon -->
                     <div class="navbar-cart-icon" id="navbarCartIcon">
                         <svg
@@ -715,7 +562,7 @@
                     <!-- User Account Section -->
                     <div class="user-account-section" id="userAccountSection">
                         <div class="user-logged-out" id="userLoggedOut">
-                            <button class="login-btn" id="loginBtn">
+                            <button class="charme-nav-trigger" id="loginBtn">
                                 <svg
                                     class="login-icon"
                                     viewBox="0 0 24 24"
@@ -729,7 +576,7 @@
                                     <polyline points="10,17 15,12 10,7" />
                                     <line x1="15" y1="12" x2="3" y2="12" />
                                 </svg>
-                                <span>Sign In</span>
+                                <span class="charme-nav-trigger-label">Sign In</span>
                             </button>
                         </div>
                         <div
@@ -745,7 +592,13 @@
                                     data-i18n-alt="User Avatar"
                                  loading="lazy" decoding="async"/>
                                 <span class="user-name" id="userName"></span>
+                                <svg class="profile-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 <div class="user-dropdown" id="userDropdown">
+                                    <div class="menu-header" id="menuHeader">
+                                        <span class="user-email" id="userEmail"></span>
+                                    </div>
+                                    <div class="menu-divider" id="menuHeaderDivider"></div>
+                                    <div class="menu-section-label">Personnel</div>
                                     <div
                                         class="dropdown-item"
                                         id="userProfileLink"
@@ -761,27 +614,7 @@
                                             />
                                             <circle cx="12" cy="7" r="4" />
                                         </svg>
-                                        Profile
-                                    </div>
-                                    <div
-                                        class="dropdown-item"
-                                        id="guidesBtn"
-                                    >
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                        >
-                                            <path
-                                                d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
-                                            />
-                                            <path
-                                                d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
-                                            />
-                                            <path d="M9 7h7" />
-                                        </svg>
-                                        Guides
+<span class="item-label">Profile</span>
                                     </div>
                                     <div
                                         class="dropdown-item"
@@ -797,7 +630,7 @@
                                                 points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
                                             />
                                         </svg>
-                                        Favorites
+<span class="item-label">Favorites</span>
                                     </div>
                                     <div class="dropdown-item" id="userCart">
                                         <svg
@@ -820,30 +653,15 @@
                                                 d="m1 1 4 4 2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
                                             ></path>
                                         </svg>
-                                        Cart
+                                        <span class="item-label">Cart</span>
                                         <span
                                             id="cartItemCount"
                                             class="cart-count"
                                             >0</span
                                         >
                                     </div>
-                                    <div
-                                        class="dropdown-item"
-                                        id="userSettings"
-                                    >
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                        >
-                                            <circle cx="12" cy="12" r="3" />
-                                            <path
-                                                d="M12 1v6m0 6v6m11-7h-6m-6 0H1"
-                                            />
-                                        </svg>
-                                        Settings
-                                    </div>
+                                    <div class="menu-divider"></div>
+                                    <div class="menu-section-label" id="adminSectionLabel" style="display: none">Administration &amp; Outils</div>
                                     <div
                                         class="dropdown-item"
                                         id="adminDashboard"
@@ -882,7 +700,27 @@
                                                 y2="15"
                                             />
                                         </svg>
-                                        Admin Dashboard
+<span class="item-label">Admin Dashboard</span>
+                                    </div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="guidesBtn"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
+                                            />
+                                            <path
+                                                d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                                            />
+                                            <path d="M9 7h7" />
+                                        </svg>
+                                        <span class="item-label">Guides</span>
                                     </div>
                                     <div
                                         class="dropdown-item"
@@ -905,7 +743,7 @@
                                             />
                                             <line x1="2" y1="10" x2="22" y2="10" />
                                         </svg>
-                                        Carte Fidélité
+<span class="item-label">Carte Fidélité</span>
                                     </div>
                                     <div
                                         class="dropdown-item"
@@ -931,7 +769,7 @@
                                             <path d="M16 8h2" />
                                             <path d="M16 12h2" />
                                         </svg>
-                                        News &amp; Notifications
+<span class="item-label">News &amp; Notifications</span>
                                     </div>
                                     <div
                                         class="dropdown-item"
@@ -952,11 +790,29 @@
                                             <line x1="16" y1="17" x2="8" y2="17"/>
                                             <polyline points="10 9 9 9 8 9"/>
                                         </svg>
-                                        Guest Notes
+                                        <span class="item-label">Guest Notes</span>
                                         <span class="admin-notes-badge" id="guestNotesBadge" style="display:none">0</span>
                                     </div>
+                                    <div class="menu-divider"></div>
+                                    <div
+                                        class="dropdown-item"
+                                        id="userSettings"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <circle cx="12" cy="12" r="3" />
+                                            <path
+                                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                            />
+                                        </svg>
+<span class="item-label">Settings</span>
+                                    </div>
                                     <div class="dropdown-divider"></div>
-                                    <div class="dropdown-item" id="logoutBtn">
+                                    <div class="dropdown-item danger-item" id="logoutBtn">
                                         <svg
                                             viewBox="0 0 24 24"
                                             fill="none"
@@ -976,7 +832,7 @@
                                                 y2="12"
                                             />
                                         </svg>
-                                        Sign Out
+                                        <span class="item-label">Sign Out</span>
                                     </div>
                                 </div>
                             </div>
@@ -4147,119 +4003,44 @@
         </div>
 
         <!-- Authentication Modal -->
-        <div id="authModal" class="auth-modal hidden">
-            <div class="auth-modal-content">
-                <div class="auth-header">
-                    <span class="auth-eyebrow">Parfumerie Charme</span>
-                    <h2 id="authTitle">Welcome back</h2>
-                    <button class="auth-close" id="authClose"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+        <div id="authModal" class="auth-modal charme-auth-overlay hidden">
+            <div class="charme-auth-card">
+                <button class="charme-auth-close" id="authClose" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                <div class="charme-card-header">
+                    <div class="charme-card-eyebrow">Parfumerie Charme</div>
+                    <h2 id="authTitle" class="charme-card-title">Welcome back</h2>
+                    <div class="charme-header-separator"></div>
                 </div>
 
                 <div class="auth-body">
                     <!-- Login Form -->
-                    <div class="auth-form" id="loginForm">
-                        <p class="auth-subtitle">Your collection, orders and rewards &mdash; all in one place.</p>
-
-                        <!-- Google Sign In (disabled) -->
-                        <div class="google-signin-container" style="display: none">
-                            <div class="google-signin-disabled">
-                                <p style="color: rgba(255,255,255,0.6); text-align: center; font-size: 14px; margin: 10px 0;">Google Sign-In temporarily unavailable</p>
-                            </div>
-                        </div>
-
-                        <div class="auth-divider" style="display: none">
-                            <span>or continue with email</span>
-                        </div>
-
+                    <div class="charme-view-pane" id="loginForm">
                         <!-- Error Display -->
-                        <div class="auth-error" id="loginError" style="display: none"></div>
+                        <div class="charme-error-slot" id="loginError" style="display: none" role="alert"></div>
 
                         <!-- Email/Password Form -->
-                        <form class="email-form" id="emailLoginForm">
-                            <div class="form-group">
-                                <label for="loginEmail">Email address</label>
-                                <input type="email" id="loginEmail" name="email" required autocomplete="email" />
+                        <form class="charme-form-stack" id="emailLoginForm">
+                            <div class="charme-field-unit">
+                                <label class="charme-form-label" for="loginEmail">Email address</label>
+                                <input class="charme-form-input" type="email" id="loginEmail" name="email" required autocomplete="email" />
                             </div>
-                            <div class="form-group password-field">
-                                <label for="loginPassword">Password</label>
-                                <input type="password" id="loginPassword" name="password" required autocomplete="current-password" />
-                                <button type="button" class="password-toggle" id="loginPasswordToggle">Show</button>
-                            </div>
-                            <div class="form-options">
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="rememberMe" />
-                                    <span class="checkmark"></span>
-                                    Remember me
-                                </label>
-                                <a href="#" class="forgot-password">Forgot password?</a>
-                            </div>
-                            <button type="submit" class="auth-submit-btn">Sign In</button>
-                        </form>
-
-                        <div class="auth-switch">
-                            <p>New to Charme? <a href="#" id="showSignup">Create an account</a></p>
-                        </div>
-                    </div>
-
-                    <!-- Signup Form -->
-                    <div class="auth-form" id="signupForm" style="display: none">
-                        <p class="auth-subtitle">Join the Charme circle for member pricing and curated picks.</p>
-
-                        <!-- Google Sign Up (disabled) -->
-                        <div class="google-signin-container" style="display: none">
-                            <div class="google-signin-disabled">
-                                <p style="color: rgba(255,255,255,0.6); text-align: center; font-size: 14px; margin: 10px 0;">Google Sign-In temporarily unavailable</p>
-                            </div>
-                        </div>
-
-                        <div class="auth-divider" style="display: none">
-                            <span>or create account with email</span>
-                        </div>
-
-                        <!-- Error Display -->
-                        <div class="auth-error" id="signupError" style="display: none"></div>
-
-                        <!-- Email/Password Signup -->
-                        <form class="email-form" id="emailSignupForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="signupFirstName">First name</label>
-                                    <input type="text" id="signupFirstName" name="firstName" required autocomplete="given-name" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="signupLastName">Last name</label>
-                                    <input type="text" id="signupLastName" name="lastName" required autocomplete="family-name" />
+                            <div class="charme-field-unit">
+                                <label class="charme-form-label" for="loginPassword">Password</label>
+                                <div class="charme-affix-shell">
+                                    <input class="charme-form-input charme-affix-input" type="password" id="loginPassword" name="password" required autocomplete="current-password" />
+                                    <button type="button" class="charme-affix-toggle" id="loginPasswordToggle">Show</button>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="signupEmail">Email address</label>
-                                <input type="email" id="signupEmail" name="email" required autocomplete="email" />
-                            </div>
-                            <div class="form-group password-field">
-                                <label for="signupPassword">Password</label>
-                                <input type="password" id="signupPassword" name="password" required autocomplete="new-password" />
-                                <button type="button" class="password-toggle" id="signupPasswordToggle">Show</button>
-                            </div>
-                            <div class="password-requirements">
-                                <small>Password must be at least 8 characters long</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmPassword">Confirm password</label>
-                                <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password" />
-                            </div>
-                            <div class="form-options terms-row">
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="agreeTerms" required />
-                                    <span class="checkmark"></span>
-                                    I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
+                            <div class="charme-utility-row">
+                                <label class="charme-control-indicator">
+                                    <input type="checkbox" id="rememberMe" class="charme-hidden-checkbox" />
+                                    <span class="charme-box-mark"></span>
+                                    <span class="charme-control-text">Remember me</span>
                                 </label>
+                                <a href="#" class="charme-subtle-link forgot-password">Forgot password?</a>
                             </div>
-                            <button type="submit" class="auth-submit-btn">Create Account</button>
+                            <button type="submit" class="charme-submit-action"><span class="charme-submit-text">Sign In</span></button>
                         </form>
-
-                        <div class="auth-switch">
-                            <p>Already have an account? <a href="#" id="showLogin">Sign in</a></p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -29263,10 +29044,10 @@
 
         <script src="js/i18n-dict.js?v=20260901a" defer></script>
         <script src="js/i18n.js?v=20260901e" defer></script>
-        <script src="js/guides.js?v=20260831d" defer></script>
+        <script src="js/guides.js?v=20260909b" defer></script>
         <script src="js/fragrantica-urls.js?v=20260820e" defer></script>
         <script src="js/cp-trait-icons.js?v=20260829a" defer></script>
-        <script src="script.js?v=20260906d" defer></script>
+        <script src="script.js?v=20260909c" defer></script>
 
         <script>
             // Quality selector functionality

@@ -5831,9 +5831,9 @@ function initializeAuth() {
 
     // Clear all errors
     clearAllAuthErrors();
-    // Reset to login form
-    signupForm.style.display = "none";
-    loginForm.style.display = "block";
+    // Reset to login form (signup form removed - sign-in only)
+    if (signupForm) signupForm.style.display = "none";
+    if (loginForm) loginForm.style.display = "block";
     document.getElementById("authTitle").textContent =
       "Welcome to Parfumerie Charme";
 
@@ -6979,6 +6979,10 @@ function initializeAuth() {
     userLoggedOut.style.display = "none";
     userLoggedIn.style.display = "block";
 
+    if (typeof updateNavigationUserInfo === "function") {
+      updateNavigationUserInfo(userData);
+    }
+
     // Update avatar and name with proper fallbacks and error handling
     const userAvatar = document.getElementById("userAvatar");
     const userName = document.getElementById("userName");
@@ -7089,6 +7093,11 @@ function initializeAuth() {
         adminDashboard.style.display = "none";
       }
       console.log("ðŸš« Admin dashboard access denied for:", userData.email);
+    }
+
+    var adminSectionLabel = document.getElementById("adminSectionLabel");
+    if (adminSectionLabel) {
+      adminSectionLabel.style.display = effectiveIsAdmin ? "block" : "none";
     }
 
     const loyaltyCardBtn = document.getElementById("loyaltyCardBtn");
@@ -9599,6 +9608,27 @@ function updateNavigationUserInfo(user) {
     userName.textContent = user.name;
     console.log("âœ… Updated navigation username");
   }
+
+  var userEmailEl = document.getElementById("userEmail");
+  var profileEmail =
+    (user && user.email) ||
+    localStorage.getItem("userEmail") ||
+    sessionStorage.getItem("userEmail") ||
+    "";
+  if (!profileEmail) {
+    try {
+      var storedUser =
+        JSON.parse(localStorage.getItem("user") || "null") ||
+        JSON.parse(sessionStorage.getItem("user") || "null");
+      if (storedUser && storedUser.email) profileEmail = storedUser.email;
+    } catch (e) {}
+  }
+  if (userEmailEl) userEmailEl.textContent = profileEmail;
+  var menuHeader = document.getElementById("menuHeader");
+  var menuHeaderDivider = document.getElementById("menuHeaderDivider");
+  var showHeader = !!profileEmail;
+  if (menuHeader) menuHeader.style.display = showHeader ? "" : "none";
+  if (menuHeaderDivider) menuHeaderDivider.style.display = showHeader ? "" : "none";
 
   if (userAvatar && user.avatar) {
     userAvatar.src = user.avatar;
@@ -14944,9 +14974,9 @@ document.addEventListener("DOMContentLoaded", () => {
   window.reviewsManager = reviewsManager;
   console.log("ðŸ’¬ Reviews system initialized");
 
-  // Initialize notification system
-  const notificationManager = new NotificationManager();
-  window.notificationManager = notificationManager;
+  // Notification system removed (bell retired from navbar).
+  // No-op stub so existing guarded callers stay safe.
+  window.notificationManager = null;
   console.log("ðŸ”” Notification manager initialized");
 
   // Quick debug function to check localStorage right now

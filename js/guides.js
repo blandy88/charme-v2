@@ -59,13 +59,22 @@
 
   /* -------------------------------------------------------------- UI copy */
   var UI = {
-    eyebrow: { en: "Parfumerie Charme", fr: "Parfumerie Charme", ar: "بارفومري شارم" },
-    title: { en: "Guides", fr: "Guides", ar: "الأدلة" },
+    eyebrow: { en: "Parfumerie Charme · Conciergerie", fr: "Parfumerie Charme · Conciergerie", ar: "بارفومري شارم · الضيافة" },
+    title: { en: "Journeys & Interactive Guides", fr: "Parcours & Guides Interactifs", ar: "رحلة ودليل تفاعلي" },
     sub: {
-      en: "Pick a guide and a cursor will walk you through it, step by step.",
-      fr: "Choisissez un guide et un curseur vous accompagnera, étape par étape.",
-      ar: "اختر دليلاً وسيقوم المؤشر بمرافقتك خطوة بخطوة."
+      en: "Choose a theme and an interactive cursor will lead you through the olfactory workshop, step by step.",
+      fr: "Sélectionnez une thématique. Un curseur interactif vous guidera pas à pas à travers l'atelier olfactif.",
+      ar: "اختر موضوعاً وسيقودك مؤشر تفاعلي خطوة بخطوة عبر ورشة العطور."
     },
+    tabs: {
+      all: { en: "All", fr: "Tous", ar: "الكل" },
+      discovery: { en: "Discovery & AI", fr: "Découverte & IA", ar: "اكتشاف وذكاء" },
+      shop: { en: "Shop & Orders", fr: "Boutique & Commandes", ar: "متجر وطلبات" },
+      account: { en: "Account & Perks", fr: "Compte & Privilèges", ar: "حساب ومزايا" },
+      admin: { en: "Back office", fr: "Back-office", ar: "الإدارة" }
+    },
+    launch: { en: "Start", fr: "Lancer", ar: "ابدأ" },
+    featured: { en: "AI Signature", fr: "Signature IA", ar: "بصمة ذكاء" },
     stepOf: {
       en: function (a, b) { return "Step " + a + " of " + b; },
       fr: function (a, b) { return "Étape " + a + " sur " + b; },
@@ -115,6 +124,28 @@
     note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14a1 1 0 0 1 1 1v11l-4 4H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 9h8M8 13h5"/></svg>',
     droplet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/></svg>'
   };
+
+  /* Concierge categories for the launcher filter tabs */
+  var CATEGORY = {
+    navigation: "discovery",
+    search: "discovery",
+    browsing: "discovery",
+    profiler: "discovery",
+    product: "shop",
+    cart: "shop",
+    account: "account",
+    loyalty: "account",
+    reviews: "account",
+    admin: "admin",
+    "client-profiles": "admin",
+    "add-achat": "admin",
+    "store-hours": "admin",
+    news: "admin",
+    ban: "admin",
+    "guest-notes": "admin"
+  };
+
+  var TAB_ORDER = ["all", "discovery", "shop", "account", "admin"];
 
   var GUIDES = [
     {
@@ -199,6 +230,11 @@
             en: "Start typing a fragrance name — results appear instantly, before you finish typing.",
             fr: "Commencez à taper un nom de parfum — les résultats apparaissent instantanément.",
             ar: "ابدأ بكتابة اسم العطر — تظهر النتائج فوراً."
+          },
+          hint: {
+            en: "You can also search for a client profile by switching the tab above the results.",
+            fr: "Vous pouvez aussi chercher un profil client en changeant l'onglet au-dessus des résultats.",
+            ar: "يمكنك أيضاً البحث عن ملف عميل بتبديل التبويب فوق النتائج."
           }
         },
         {
@@ -238,7 +274,6 @@
           sel: "#showAllFragrancesBtn",
           place: "top",
           opt: true,
-          onShow: function () { openIngredientSearch(); },
           onShow: function () { openIngredientSearch(); },
           t: { en: "Browse everything", fr: "Tout parcourir", ar: "تصفح الكل" },
           d: {
@@ -539,9 +574,14 @@
           opt: true,
           t: { en: "Open the loyalty desk", fr: "Ouvrir l'espace fidélité", ar: "فتح قسم الولاء" },
           d: {
-            en: "This entry appears once your account is linked to a loyalty card.",
-            fr: "Cette entrée apparaît une fois votre compte lié à une carte fidélité.",
-            ar: "يظهر هذا الخيار بعد ربط حسابك ببطاقة ولاء."
+            en: "Shown to staff (admin) accounts in the account menu: click your avatar, then « Carte Fidélité ». From here you can issue cards, add points, redeem rewards and open client profiles.",
+            fr: "Visible pour les comptes du personnel (admin) dans le menu compte : cliquez votre avatar, puis « Carte Fidélité ». D'ici, créez des cartes, ajoutez des points, échangez des récompenses et ouvrez les profils clients.",
+            ar: "يظهر لحسابات الطاقم (المشرفين) في قائمة الحساب: انقر صورتك ثم «بطاقة الولاء». من هنا تُصدر بطاقات، وتضيف نقاطاً، وتستبدل مكافآت وتفتح ملفات العملاء."
+          },
+          hint: {
+            en: "Reward rule: 5 points = 1 free perfume.",
+            fr: "Règle de récompense : 5 points = 1 parfum offert.",
+            ar: "قاعدة المكافأة: 5 نقاط = عطر مجاني."
           },
           onShow: function () { showDropdown('#userDropdown'); }
         },
@@ -724,11 +764,11 @@
           sel: "#adminModal",
           place: "left",
           opt: true,
-          t: { en: "Open the dashboard", fr: "Ouvrir le tableau de bord", ar: "فتح لوحة التحكم" },
+          t: { en: "Step 1 · Open the dashboard", fr: "Étape 1 · Ouvrir le tableau de bord", ar: "الخطوة 1 · افتح لوحة التحكم" },
           d: {
-            en: "Visible only to administrator accounts. It opens the management console.",
-            fr: "Visible uniquement pour les comptes administrateurs. Elle ouvre la console de gestion.",
-            ar: "تظهر لحسابات الإدارة فقط. تفتح لوحة التحكم."
+            en: "Visible only to administrator accounts. In your account menu, click « Admin Dashboard » to open the management console.",
+            fr: "Visible uniquement pour les comptes administrateurs. Dans votre menu compte, cliquez « Admin Dashboard » pour ouvrir la console de gestion.",
+            ar: "تظهر لحسابات الإدارة فقط. في قائمة حسابك، انقر «لوحة الإدارة» لفتح وحدة الإدارة."
           },
           onShow: function () { enterAdmin(); }
         },
@@ -738,9 +778,26 @@
           opt: true,
           t: { en: "Users", fr: "Utilisateurs", ar: "المستخدمون" },
           d: {
-            en: "Search, review and ban accounts from here.",
-            fr: "Recherchez, consultez et bloquez des comptes depuis ici.",
-            ar: "ابحث عن الحسابات وراجعها واحظرها من هنا."
+            en: "Every account created on the site, with name, e-mail, status and the date they joined. Use the Ban / Unban action to manage access. Note: this is the account list — client profiles (with purchases & loyalty) live in the Carte Fidélité section just below.",
+            fr: "Tous les comptes créés sur le site, avec nom, e-mail, statut et date d'inscription. Utilisez Ban / Unban pour gérer les accès. Note : c'est la liste des comptes — les profils clients (achats et fidélité) vivent dans la section Carte Fidélité juste en dessous.",
+            ar: "كل الحسابات المنشأة على الموقع، مع الاسم والبريد والحالة وتاريخ التسجيل. استخدم حظر/إلغاء حظر لإدارة الوصول. ملاحظة: هذه قائمة الحسابات — ملفات العملاء (مشتريات وولاء) في قسم بطاقة الولاء أدنى مباشرة."
+          },
+          hint: {
+            en: "Statuses: Active = normal, Admin = staff, Banned = blocked.",
+            fr: "Statuts : Active = normal, Admin = personnel, Banned = bloqué.",
+            ar: "الحالات: Active = عادي، Admin = طاقم، Banned = محظور."
+          }
+        },
+        {
+          sel: "#loyaltyTableBody",
+          place: "top",
+          opt: true,
+          onShow: function () { enterAdmin(); },
+          t: { en: "Carte Fidélité", fr: "Carte Fidélité", ar: "بطاقة الولاء" },
+          d: {
+            en: "The loyalty table lists every client with a card: name, contact, points and progress toward the reward. The +1 / + Points buttons add points, « Offrir parfum » redeems the reward (5 points), and the « Consult a client profile » guide shows the full profile there.",
+            fr: "Le tableau fidélité liste chaque client possédant une carte : nom, contact, points et progression. Les boutons +1 / + Points ajoutent des points, « Offrir parfum » échange la récompense (5 points), et le guide « Consulter un profil client » montre le profil complet.",
+            ar: "جدول الولاء يعرض كل عميل لديه بطاقة: الاسم، وسيلة الاتصال، النقاط والتقدم نحو المكافأة. زرّا +1 / + نقاط يضيفان نقاطاً، «أهدِ عطراً» يستبدل المكافأة (5 نقاط)، ودليل «استشارة ملف عميل» يعرض الملف الكامل."
           }
         },
         {
@@ -749,9 +806,9 @@
           opt: true,
           t: { en: "Store hours", fr: "Horaires", ar: "أوقات العمل" },
           d: {
-            en: "Set opening and closing times for each day. Tick 'Closed' for days the boutique is shut.",
-            fr: "Définissez les heures d'ouverture et de fermeture pour chaque jour. Cochez « Fermé » pour les jours de repos.",
-            ar: "حدد أوقات الفتح والإغلاق لكل يوم. علّم «مغلق» لأيام العطلة."
+            en: "Set opening and closing times for each day. Tick 'Closed' for days the boutique is shut, then press Save for the homepage to update.",
+            fr: "Définissez les heures d'ouverture et de fermeture pour chaque jour. Cochez « Fermé » pour les jours de repos, puis Enregistrer pour que l'accueil se mette à jour.",
+            ar: "حدد أوقات الفتح والإغلاق لكل يوم. علّم «مغلق» لأيام العطلة ثم اضغط حفظ لتتحدث الصفحة الرئيسية."
           }
         },
         {
@@ -776,9 +833,9 @@
           opt: true,
           t: { en: "News & notifications", fr: "Actualités", ar: "الأخبار" },
           d: {
-            en: "Publish an announcement and it reaches every visitor through the navbar bell.",
-            fr: "Publiez une annonce et elle atteindra chaque visiteur via la cloche de navigation.",
-            ar: "انشر إعلاناً وسيصل إلى كل زائر عبر جرس الشريط العلوي."
+            en: "Publish an announcement (see the « Publish news » guide) and it reaches every visitor through the navbar bell.",
+            fr: "Publiez une annonce (voir le guide « Publier une actualité ») et elle atteindra chaque visiteur via la cloche de navigation.",
+            ar: "انشر إعلاناً (انظر دليل «نشر خبر») وسيصل إلى كل زائر عبر جرس الشريط العلوي."
           }
         }
       ]
@@ -790,88 +847,185 @@
       icon: ICON.idcard,
       title: { en: "Consult a client profile", fr: "Consulter un profil client", ar: "استشارة ملف عميل" },
       desc: {
-        en: "Open any customer's profile from the admin dashboard to read their taste, history and tailored suggestions.",
-        fr: "Ouvrez le profil de n'importe quel client depuis le tableau de bord pour lire son goût, son historique et ses suggestions.",
-        ar: "افتح ملف أي عميل من لوحة التحكم لقراءة ذوقه وتاريخه واقتراحاته المخصّصة."
+        en: "Open any customer's profile from the loyalty desk to read their taste, history and tailored suggestions.",
+        fr: "Ouvrez le profil de n'importe quel client depuis l'espace fidélité pour lire son goût, son historique et ses suggestions.",
+        ar: "افتح ملف أي عميل من قسم الولاء لقراءة ذوقه وتاريخه واقتراحاته المخصّصة."
       },
       steps: [
         {
-          sel: "#adminModal",
+          sel: "#loyaltyCardBtn",
           place: "left",
           opt: true,
-          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          onShow: function () { showDropdown('#userDropdown'); },
+          t: { en: "Step 1 · Open the loyalty desk", fr: "Étape 1 · Ouvrir l'espace fidélité", ar: "الخطوة 1 · افتح قسم الولاء" },
           d: {
-            en: "Open the management console from the admin entry in your account menu.",
-            fr: "Ouvrez la console de gestion depuis l'entrée admin de votre menu compte.",
-            ar: "افتح وحدة الإدارة من خانة المشرف في قائمة حسابك."
+            en: "Click your avatar in the top-right corner to open the account menu, then click « Carte Fidélité ». This is the staff screen where every loyalty client is registered — client profiles are opened from here.",
+            fr: "Cliquez sur votre avatar en haut à droite pour ouvrir le menu compte, puis cliquez « Carte Fidélité ». C'est l'écran du personnel où chaque client fidélité est enregistré — les profils clients s'ouvrent d'ici.",
+            ar: "انقر صورتك في الأعلى يميناً لفتح قائمة حسابك، ثم انقر «بطاقة الولاء». هذه شاشة الطاقم حيث يُسجل كل عميل ولاء — ومن هنا تُفتح ملفات العملاء."
           },
-          onShow: function () { enterAdmin(); }
+          hint: {
+            en: "This entry only appears for staff (admin) accounts.",
+            fr: "Cette entrée n'apparaît que pour les comptes du personnel (admin).",
+            ar: "يظهر هذا الخيار لحسابات الطاقم (المشرفين) فقط."
+          }
         },
         {
-          sel: "#usersTableBody",
+          sel: "#loyaltyModal",
           place: "top",
           opt: true,
-          t: { en: "Users table", fr: "Table des utilisateurs", ar: "جدول المستخدمين" },
+          onShow: function () { openLoyalty(); },
+          t: { en: "Step 2 · The loyalty window", fr: "Étape 2 · La fenêtre fidélité", ar: "الخطوة 2 · نافذة الولاء" },
           d: {
-            en: "Click any row to open that client's full profile.",
-            fr: "Cliquez sur une ligne pour ouvrir le profil complet de ce client.",
-            ar: "انقر أي صف لفتح ملف العميل الكامل."
+            en: "A full-screen window opens. At the top: three totals (cards issued, clients eligible for a reward, free perfumes given). On the left: the form to create a new card. On the right: the client list — this is where you find a profile.",
+            fr: "Une fenêtre plein écran s'ouvre. En haut : trois totaux (cartes émises, clients éligibles à une récompense, parfums offerts). À gauche : le formulaire de création. À droite : la liste des clients — c'est ici qu'on trouve un profil.",
+            ar: "تفتح نافذة بملء الشاشة. في الأعلى: ثلاثة مجاميع (البطاقات المُصدرة، العملاء المؤهلون لمكافأة، العطور المهداة). يساراً: نموذج إنشاء بطاقة. يميناً: قائمة العملاء — وهنا تجد الملف."
+          }
+        },
+        {
+          sel: "#loyaltyModalTableBody",
+          place: "top",
+          opt: true,
+          onShow: function () { openLoyalty(); },
+          t: { en: "Step 3 · Find the client", fr: "Étape 3 · Retrouver le client", ar: "الخطوة 3 · اعثر على العميل" },
+          d: {
+            en: "Each row of the table is one client: name, contact (e-mail or phone), card number and loyalty points. Use the search box just above the table to type a name or phone number and narrow the list instantly.",
+            fr: "Chaque ligne du tableau est un client : nom, contact (e-mail ou téléphone), n° de carte et points. Utilisez la barre de recherche juste au-dessus pour taper un nom ou un numéro et affiner la liste instantanément.",
+            ar: "كل صف في الجدول يمثل عميلاً: الاسم، وسيلة الاتصال (بريد أو هاتف)، رقم البطاقة والنقاط. استخدم مربع البحث فوق الجدول لكتابة اسم أو رقم وتضييق القائمة فوراً."
+          },
+          hint: {
+            en: "Each row also shows a progress bar toward the reward (5 points = 1 free perfume).",
+            fr: "Chaque ligne montre aussi une barre de progression vers la récompense (5 points = 1 parfum offert).",
+            ar: "يعرض كل صف أيضاً شريط تقدم نحو المكافأة (5 نقاط = عطر مجاني)."
+          }
+        },
+        {
+          sel: "#customerProfileModal, .btn-loyalty-profile",
+          place: "top",
+          opt: true,
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Step 4 · The « Profil » button", fr: "Étape 4 · Le bouton « Profil »", ar: "الخطوة 4 · زر «الملف»" },
+          d: {
+            en: "At the end of each row, under « Actions », is a gold « Profil » button. Click it to open that client's complete profile. (In this tour an eligible client — one who already has purchases — is opened automatically.)",
+            fr: "À la fin de chaque ligne, sous « Actions », se trouve un bouton doré « Profil ». Cliquez-le pour ouvrir le profil complet du client. (Dans ce parcours, un client éligible — qui a déjà des achats enregistrés — est ouvert automatiquement.)",
+            ar: "في نهاية كل صف، تحت «إجراءات»، يوجد زر ذهبي «الملف». انقر عليه لفتح ملف العميل الكامل. (في هذا الدليل يُفتح عميل مؤهل — لديه مشتريات مسجلة — تلقائياً.)"
+          },
+          hint: {
+            en: "If the list is empty, it means no loyalty card has been issued yet.",
+            fr: "Si la liste est vide, c'est qu'aucune carte fidélité n'a encore été émise.",
+            ar: "إذا كانت القائمة فارغة فلم تُصدر أي بطاقة ولاء بعد."
           }
         },
         {
           sel: "#customerProfileModal",
           place: "top",
           opt: true,
-          t: { en: "Profile window", fr: "Fenêtre profil", ar: "نافذة الملف" },
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Step 5 · The profile opens", fr: "Étape 5 · Le profil s'ouvre", ar: "الخطوة 5 · يُفتح الملف" },
           d: {
-            en: "The profile opens here with the client's identity and avatar.",
-            fr: "Le profil s'ouvre ici avec l'identité et l'avatar du client.",
-            ar: "يُفتح الملف هنا بهوية العميل وصورته."
-          },
-          onShow: function () { openFirstClientProfile(); }
+            en: "The profile window opens in front of you. A spinner appears first (« Chargement du profil… »), then the content loads: identity, statistics, preferences, brands, suggestions and the purchase history.",
+            fr: "La fenêtre de profil s'ouvre devant vous. Un indicateur apparaît d'abord (« Chargement du profil… »), puis le contenu se charge : identité, statistiques, préférences, marques, suggestions et historique.",
+            ar: "تنفتح نافذة الملف أمامك. يظهر مؤشر أولاً («جارٍ تحميل الملف…»)، ثم يُحمَّل المحتوى: الهوية، الإحصاءات، التفضيلات، الماركات، الاقتراحات وسجل المشتريات."
+          }
         },
         {
           sel: "#cpHeader",
           place: "top",
           opt: true,
-          t: { en: "Identity", fr: "Identité", ar: "الهوية" },
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Identity card", fr: "Carte d'identité", ar: "بطاقة الهوية" },
           d: {
-            en: "Name, avatar and quick facts about the client.",
-            fr: "Nom, avatar et informations rapides sur le client.",
-            ar: "الاسم والصورة وملخص سريع عن العميل."
+            en: "Top of the profile: the client's avatar (first letter of their name), full name, card number, phone and e-mail. The badge on the right shows their current loyalty points — 5 points = 1 free perfume.",
+            fr: "En haut du profil : l'avatar du client (première lettre du nom), son nom complet, le n° de carte, le téléphone et l'e-mail. Le badge à droite indique ses points — 5 points = 1 parfum offert.",
+            ar: "أعلى الملف: صورة العميل (الحرف الأول من الاسم)، الاسم الكامل، رقم البطاقة، الهاتف والبريد. الشارة يميناً توضح نقاطه — 5 نقاط = عطر مجاني."
           }
         },
         {
           sel: "#cpStats",
           place: "top",
           opt: true,
-          t: { en: "Stats", fr: "Statistiques", ar: "الإحصاءات" },
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Quick statistics", fr: "Statistiques rapides", ar: "إحصاءات سريعة" },
           d: {
-            en: "Purchases, points and engagement at a glance.",
-            fr: "Achats, points et engagement en un coup d'œil.",
-            ar: "المشتريات والنقاط والتفاعل في لمحة."
+            en: "Four numbers summarise the client at a glance: recorded purchases, total amount spent, favourite fragrance family and favourite brand.",
+            fr: "Quatre chiffres résument le client en un coup d'œil : achats enregistrés, montant total dépensé, famille olfactive et marque préférées.",
+            ar: "أربعة أرقام تلخّص العميل في لمحة: المشتريات المسجلة، المبلغ المنفَق، العائلة العطرية والماركة المفضلة."
           }
         },
         {
-          sel: "#cpSuggestionGrid",
+          sel: "#cpPersonalityBody",
           place: "top",
           opt: true,
-          t: { en: "Tailored suggestions", fr: "Suggestions adaptées", ar: "اقتراحات مخصّصة" },
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Personality & description", fr: "Personnalité & description", ar: "الشخصية والوصف" },
           d: {
-            en: "Fragrances recommended from this client's taste profile.",
-            fr: "Parfums recommandés à partir du profil de goût du client.",
-            ar: "عطور موصى بها بناءً على ملف ذوق العميل."
+            en: "A short text portrait generated from this client's purchases: the styles, occasions and keywords that fit their taste. Perfect for giving personal advice quickly.",
+            fr: "Un portrait texte généré à partir des achats du client : styles, occasions et mots-clés qui correspondent à son goût. Parfait pour conseiller rapidement.",
+            ar: "وصف نصي قصير يُولَّد من مشتريات العميل: الأنماط والمناسبات والكلمات المفتاحية المناسبة لذوقه. مثالي للنصح الشخصي بسرعة."
+          }
+        },
+        {
+          sel: "#cpFamilyBars",
+          place: "top",
+          opt: true,
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Preferences", fr: "Préférences", ar: "التفضيلات" },
+          d: {
+            en: "One bar per fragrance family: the longer the bar, the more this client buys that family. It shows exactly what they love most.",
+            fr: "Une barre par famille olfactive : plus la barre est longue, plus ce client achète cette famille. On voit d'un coup ce qu'il préfère.",
+            ar: "شريط لكل عائلة عطرية: كلما طال الشريط زاد شراء العميل لهذه العائلة. يظهر بوضوح ما يحبه أكثر."
+          }
+        },
+        {
+          sel: "#cpBrandTags",
+          place: "top",
+          opt: true,
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Favourite brands", fr: "Marques favorites", ar: "الماركات المفضلة" },
+          d: {
+            en: "The brands this client buys most often, each followed by how many times it appears in their history (e.g. ×3).",
+            fr: "Les marques que ce client achète le plus, chacune suivie du nombre d'apparitions dans son historique (ex. ×3).",
+            ar: "الماركات التي يشتريها العميل أكثر، تليها عدد مرات ظهورها في سجله (مثل ×3)."
+          }
+        },
+        {
+          sel: "#cpSuggestionGrid, #cpSimilarGrid",
+          place: "top",
+          opt: true,
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Recommended fragrances", fr: "Parfums recommandés", ar: "عطور موصى بها" },
+          d: {
+            en: "Fragrances suggested for this client: bottles similar to the ones they already own, or alternatives when the catalogue has no close match. Handy for your next recommendation.",
+            fr: "Parfums suggérés pour ce client : flacons similaires à ceux qu'il possède, ou alternatives quand le catalogue n'a pas de correspondance proche. Pratique pour votre prochaine recommandation.",
+            ar: "عطور مقترحة لهذا العميل: زجاجات مشابهة لما يملكه، أو بدائل عندما لا يجد الكتالوج تطابقاً قريباً. مفيد لتوصيتك القادمة."
           }
         },
         {
           sel: "#cpPurchaseList",
           place: "top",
           opt: true,
+          onShow: function () { openFirstClientProfile(); },
           t: { en: "Purchase history", fr: "Historique d'achats", ar: "سجل المشتريات" },
           d: {
-            en: "Every recorded achat for this client, newest first.",
-            fr: "Chaque achat enregistré pour ce client, du plus récent au plus ancien.",
-            ar: "كل عملية شراء مسجّلة لهذا العميل، الأحدث أولاً."
+            en: "Every recorded achat, newest first. Each entry shows the perfume, brand, price, date and notes. This history feeds all the statistics and suggestions above.",
+            fr: "Chaque achat enregistré, du plus récent au plus ancien. Chaque entrée indique le parfum, la marque, le prix, la date et les notes. Cet historique alimente toutes les statistiques et suggestions ci-dessus.",
+            ar: "كل عملية شراء مسجلة، الأحدث أولاً. يعرض كل سطر العطر والماركة والسعر والتاريخ والملاحظات. هذا السجل يغذي كل الإحصاءات والاقتراحات أعلاه."
+          }
+        },
+        {
+          sel: "#cpAddPurchaseBtn",
+          place: "top",
+          opt: true,
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Add a purchase", fr: "Ajouter un achat", ar: "أضف شراءً" },
+          d: {
+            en: "When a client buys something, click the gold « + Ajouter un achat » button to record it. The next guide explains that recording flow step by step.",
+            fr: "Quand un client achète, cliquez sur le bouton doré « + Ajouter un achat » pour l'enregistrer. Le guide suivant vous explique ce parcours étape par étape.",
+            ar: "عندما يشتري العميل شيئاً، انقر الزر الذهبي «+ أضف شراءً» لتسجيله. الدليل التالي يشرح هذه العملية خطوة بخطوة."
+          },
+          hint: {
+            en: "Nothing in a profile is edited directly — purchases are the base data that updates everything else.",
+            fr: "Rien dans un profil ne se modifie directement — les achats sont les données de base qui mettent tout à jour.",
+            ar: "لا شيء في الملف يُعدَّل مباشرة — المشتريات هي البيانات الأساسية التي تحدّث كل شيء آخر."
           }
         }
       ]
@@ -883,104 +1037,180 @@
       icon: ICON.receipt,
       title: { en: "Record a purchase (achat)", fr: "Enregistrer un achat", ar: "تسجيل عملية شراء" },
       desc: {
-        en: "Add a past or in-store purchase to a client's profile so their history and suggestions stay accurate.",
-        fr: "Ajoutez un achat passé ou en boutique au profil d'un client pour garder son historique et ses suggestions à jour.",
-        ar: "أضف عملية شراء سابقة أو في المتجر إلى ملف العميل لتبقى سجلاته واقتراحاته دقيقة."
+        en: "Add a past or in-store purchase to a client's profile — step by step — so their points, history and suggestions stay accurate.",
+        fr: "Ajoutez un achat passé ou en boutique au profil d'un client — pas à pas — pour garder ses points, son historique et ses suggestions à jour.",
+        ar: "أضف عملية شراء سابقة أو في المتجر إلى ملف العميل — خطوة بخطوة — لتبقى نقاطه وسجلاته واقتراحاته دقيقة."
       },
       steps: [
         {
-          sel: "#adminModal",
+          sel: "#loyaltyCardBtn",
           place: "left",
           opt: true,
-          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          onShow: function () { showDropdown('#userDropdown'); },
+          t: { en: "Step 1 · Open the loyalty desk", fr: "Étape 1 · Ouvrir l'espace fidélité", ar: "الخطوة 1 · افتح قسم الولاء" },
           d: {
-            en: "Open the management console.",
-            fr: "Ouvrez la console de gestion.",
-            ar: "افتح وحدة الإدارة."
-          },
-          onShow: function () { enterAdmin(); }
-        },
-        {
-          sel: "#usersTableBody",
-          place: "top",
-          opt: true,
-          t: { en: "Open a client", fr: "Ouvrir un client", ar: "افتح ملف عميل" },
-          d: {
-            en: "Click a user row to open their profile.",
-            fr: "Cliquez une ligne utilisateur pour ouvrir son profil.",
-            ar: "انقر صف مستخدم لفتح ملفه."
+            en: "Click your avatar, then « Carte Fidélité ». A purchase is always recorded from a client's profile, and profiles are reached from this loyalty window.",
+            fr: "Cliquez sur votre avatar, puis « Carte Fidélité ». Un achat s'enregistre toujours depuis le profil d'un client, et les profils se rejoignent depuis cette fenêtre.",
+            ar: "انقر صورتك ثم «بطاقة الولاء». يُسجل الشراء دائماً من ملف عميل، وتصل إلى الملفات من نافذة الولاء هذه."
           }
         },
         {
-          sel: "#customerProfileModal",
+          sel: "#loyaltyModalTableBody",
           place: "top",
           opt: true,
-          t: { en: "Client profile", fr: "Profil client", ar: "ملف العميل" },
+          onShow: function () { openLoyalty(); },
+          t: { en: "Step 2 · Pick the client", fr: "Étape 2 · Choisir le client", ar: "الخطوة 2 · اختر العميل" },
           d: {
-            en: "You land on the client's profile.",
-            fr: "Vous arrivez sur le profil du client.",
-            ar: "تصل إلى ملف العميل."
+            en: "Find the client who made the purchase: browse the list or type their name / phone in the search box above the table.",
+            fr: "Retrouvez le client qui a acheté : parcourez la liste ou tapez son nom / téléphone dans la barre de recherche au-dessus du tableau.",
+            ar: "اعثر على العميل الذي اشترى: تصفح القائمة أو اكتب اسمه / هاتفه في مربع البحث فوق الجدول."
+          }
+        },
+        {
+          sel: "#customerProfileModal, .btn-loyalty-profile",
+          place: "top",
+          opt: true,
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Step 3 · Open the client's profile", fr: "Étape 3 · Ouvrir le profil", ar: "الخطوة 3 · افتح ملف العميل" },
+          d: {
+            en: "Click the gold « Profil » button at the end of the row. (In this tour an eligible client — one who already has purchases — opens automatically.) Wait until the profile loads — the purchase-history section appears at the bottom of the window.",
+            fr: "Cliquez sur le bouton doré « Profil » à la fin de la ligne. (Dans ce parcours, un client éligible — qui a déjà des achats enregistrés — s'ouvre automatiquement.) Attendez que le profil se charge — la section historique apparaît en bas.",
+            ar: "انقر الزر الذهبي «الملف» في نهاية الصف. (في هذا الدليل يُفتح عميل مؤهل — لديه مشتريات مسجلة — تلقائياً.) انتظر تحميل الملف — يظهر قسم سجل المشتريات أسفل النافذة."
           },
-          onShow: function () { openFirstClientProfile(); }
         },
         {
           sel: "#cpAddPurchaseBtn",
           place: "top",
           opt: true,
-          onShow: function () {
-            var b = document.getElementById("cpAddPurchaseBtn");
-            if (b) { try { b.click(); } catch (e) {} }
-          },
-          t: { en: "Add a purchase", fr: "Ajouter un achat", ar: "أضف شراءً" },
+          onShow: function () { openFirstClientProfile(); },
+          t: { en: "Step 4 · « + Ajouter un achat »", fr: "Étape 4 · « + Ajouter un achat »", ar: "الخطوة 4 · «+ أضف شراءً»" },
           d: {
-            en: "Tap “+ Ajouter un achat” in the purchase section.",
-            fr: "Appuyez sur « + Ajouter un achat » dans la section achats.",
-            ar: "اضغط «+ إضافة شراء» في قسم المشتريات."
+            en: "In the « Historique des achats » section, at the right of the title, is the gold « + Ajouter un achat » button. Click it to open the recording form.",
+            fr: "Dans la section « Historique des achats », à droite du titre, se trouve le bouton doré « + Ajouter un achat ». Cliquez-le pour ouvrir le formulaire.",
+            ar: "في قسم «سجل المشتريات»، يمين العنوان، يوجد الزر الذهبي «+ أضف شراءً». انقر عليه لفتح نموذج التسجيل."
+          },
+          hint: {
+            en: "This button only appears inside a client's profile window.",
+            fr: "Ce bouton n'apparaît que dans la fenêtre de profil d'un client.",
+            ar: "يظهر هذا الزر فقط داخل نافذة ملف عميل."
           }
         },
         {
           sel: "#recordPurchaseModal",
           place: "top",
           opt: true,
-          t: { en: "Record form", fr: "Formulaire", ar: "نموذج التسجيل" },
+          onShow: function () { openRecordForm(); },
+          t: { en: "Step 5 · The record form", fr: "Étape 5 · Le formulaire", ar: "الخطوة 5 · نموذج التسجيل" },
           d: {
-            en: "A form opens to capture the purchase.",
-            fr: "Un formulaire s'ouvre pour saisir l'achat.",
-            ar: "يُفتح نموذج لتسجيل الشراء."
-          },
-          onShow: function () { openPanel("#recordPurchaseModal"); }
+            en: "A form opens with the client's name at the top. It has 7 fields and a Save button, each explained in the following steps. Nothing is saved until you press « Enregistrer » at the bottom.",
+            fr: "Un formulaire s'ouvre avec le nom du client en haut. Il compte 7 champs et un bouton Enregistrer, détaillés aux étapes suivantes. Rien n'est enregistré avant d'appuyer sur « Enregistrer » en bas.",
+            ar: "يفتح نموذج باسم العميل في الأعلى. يحتوي 7 حقول وزر حفظ، وتفصّلها الخطوات القادمة. لا يُحفظ شيء قبل الضغط على «حفظ» بالأسفل."
+          }
         },
         {
           sel: "#rpPerfumeName",
           place: "top",
           opt: true,
-          t: { en: "Fragrance name", fr: "Nom du parfum", ar: "اسم العطر" },
+          onShow: function () { openRecordForm(); },
+          t: { en: "Field 1 · The perfume (required)", fr: "Champ 1 · Le parfum (obligatoire)", ar: "الحقل 1 · العطر (إلزامي)" },
           d: {
-            en: "Start typing — the catalogue suggests matches as you go.",
-            fr: "Tapez — le catalogue propose des correspondances.",
-            ar: "ابدأ الكتابة — يقترح الكتالوج مطابقات."
+            en: "Click this box and start typing the perfume bought (for example « La Vie Est Belle »). Matching fragrances from the catalogue drop down below — click the correct one and the brand, family and audience fill in automatically.",
+            fr: "Cliquez ici et tapez le nom du parfum acheté (par ex. « La Vie Est Belle »). Des correspondances du catalogue apparaissent en dessous — cliquez la bonne et la marque, la famille et le public se remplissent tout seuls.",
+            ar: "انقر هنا وابدأ كتابة اسم العطر الذي اشتُري (مثلاً «La Vie Est Belle»). تظهر مطابقات من الكتالوج بالأسفل — انقر الصحيح فيمتلئ الماركة والعائلة والجمهور تلقائياً."
+          },
+          hint: {
+            en: "A star (*) next to the label means the field is required — the form can't be saved without it.",
+            fr: "Une étoile (*) près du label signifie champ obligatoire — impossible d'enregistrer sans lui.",
+            ar: "النجمة (*) بجانب العنوان تعني حقل إلزامي — لا يمكن الحفظ بدونه."
+          }
+        },
+        {
+          sel: "#rpBrand",
+          place: "top",
+          opt: true,
+          onShow: function () { openRecordForm(); },
+          t: { en: "Field 2 · Brand (auto-filled)", fr: "Champ 2 · Marque (auto)", ar: "الحقل 2 · الماركة (تلقائي)" },
+          d: {
+            en: "The brand fills in automatically when you pick a suggestion from the catalogue. You can also correct it manually if needed.",
+            fr: "La marque se remplit automatiquement quand vous choisissez une suggestion du catalogue. Vous pouvez aussi la corriger à la main.",
+            ar: "تمتلئ الماركة تلقائياً عند اختيار اقتراح من الكتالوج. يمكنك أيضاً تصحيحها يدوياً."
+          }
+        },
+        {
+          sel: "#rpFamily",
+          place: "top",
+          opt: true,
+          onShow: function () { openRecordForm(); },
+          t: { en: "Field 3 · Scent family", fr: "Champ 3 · Famille olfactive", ar: "الحقل 3 · العائلة العطرية" },
+          d: {
+            en: "Opens a dropdown of fragrance families (Woody, Floral, Oriental…). Normally auto-selected from the catalogue — choose manually only if the perfume isn't in the catalogue.",
+            fr: "Ouvre la liste des familles olfactives (Boisée, Florale, Orientale…). D'ordinaire auto-sélectionnée depuis le catalogue — choisissez à la main seulement si le parfum n'y figure pas.",
+            ar: "يفتح قائمة العائلات العطرية (خشبية، زهرية، شرقية…). عادة تُختار تلقائياً من الكتالوج — اختر يدوياً فقط إذا لم يكن العطر موجوداً فيه."
+          }
+        },
+        {
+          sel: "#rpAudience",
+          place: "top",
+          opt: true,
+          onShow: function () { openRecordForm(); },
+          t: { en: "Field 4 · Audience", fr: "Champ 4 · Public cible", ar: "الحقل 4 · الجمهور" },
+          d: {
+            en: "Choose Men (Homme), Women (Femme) or Unisex (Mixte). This helps the boutique suggest the right products to this client.",
+            fr: "Choisissez Homme, Femme ou Mixte. Cela aide la boutique à suggérer les bons produits à ce client.",
+            ar: "اختر رجل (Homme) أو امرأة (Femme) أو مشترك (Mixte). هذا يساعد البوتيك على اقتراح المنتجات الصحيحة للعميل."
           }
         },
         {
           sel: "#rpPrice",
           place: "top",
           opt: true,
-          t: { en: "Price", fr: "Prix", ar: "السعر" },
+          onShow: function () { openRecordForm(); },
+          t: { en: "Field 5 · Price (€)", fr: "Champ 5 · Prix (€)", ar: "الحقل 5 · السعر (€)" },
           d: {
-            en: "Enter the amount paid.",
-            fr: "Saisissez le montant payé.",
-            ar: "أدخل المبلغ المدفوع."
+            en: "Enter the amount paid, e.g. 85.50. It is added to the « total spent » shown on the client's profile.",
+            fr: "Saisissez le montant payé, ex. 85.50. Il s'ajoute au « total dépensé » du profil client.",
+            ar: "أدخل المبلغ المدفوع، مثل 85.50. يُضاف إلى «إجمالي المنصرف» في ملف العميل."
+          }
+        },
+        {
+          sel: "#rpDate",
+          place: "top",
+          opt: true,
+          onShow: function () { openRecordForm(); },
+          t: { en: "Field 6 · Date", fr: "Champ 6 · Date", ar: "الحقل 6 · التاريخ" },
+          d: {
+            en: "Today's date is pre-filled. Pick another date to record a past purchase — the history stays accurate this way.",
+            fr: "La date du jour est pré-remplie. Choisissez une autre date pour enregistrer un achat passé.",
+            ar: "تاريخ اليوم مُعدّ مسبقاً. اختر تاريخاً آخر لتسجيل عملية شراء سابقة."
+          }
+        },
+        {
+          sel: "#rpNotes",
+          place: "top",
+          opt: true,
+          onShow: function () { openRecordForm(); },
+          t: { en: "Field 7 · Notes (optional)", fr: "Champ 7 · Notes (optionnel)", ar: "الحقل 7 · ملاحظات (اختياري)" },
+          d: {
+            en: "Add a private reminder if useful — for example « offered as a gift » or « prefers this flanker ». Max 500 characters.",
+            fr: "Ajoutez une note privée si utile — par ex. « offert en cadeau » ou « préfère cette déclinaison ». 500 caractères max.",
+            ar: "أضف ملاحظة خاصة إذا كانت مفيدة — مثل «أُهدي كهدية» أو «يفضل هذه النسخة». الحد الأقصى 500 حرف."
           }
         },
         {
           sel: "#rpSaveBtn",
           place: "top",
           opt: true,
-          t: { en: "Save", fr: "Enregistrer", ar: "حفظ" },
+          onShow: function () { openRecordForm(); },
+          t: { en: "Save the purchase", fr: "Enregistrer l'achat", ar: "حفظ الشراء" },
           d: {
-            en: "Save and the achat appears in the client's purchase history.",
-            fr: "Enregistrez et l'achat apparaît dans l'historique.",
-            ar: "احفظ فيظهر الشراء في سجل المشتريات."
+            en: "Click « Enregistrer ». A success notification appears, the form closes, and the client's history, points and statistics refresh automatically.",
+            fr: "Cliquez « Enregistrer ». Une notification de succès apparaît, le formulaire se ferme et l'historique, les points et les statistiques du client se rafraîchissent.",
+            ar: "انقر «حفظ». تظهر رسالة نجاح ويُغلق النموذج وتُحدَّث تلقائياً سجلات العميل ونقاطه وإحصاءاته."
+          },
+          hint: {
+            en: "Use « Annuler » to close the form without saving.",
+            fr: "Utilisez « Annuler » pour fermer sans enregistrer.",
+            ar: "استخدم «إلغاء» لإغلاق النموذج دون حفظ."
           }
         }
       ]
@@ -1001,11 +1231,11 @@
           sel: "#adminModal",
           place: "left",
           opt: true,
-          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          t: { en: "Step 1 · Open the management console", fr: "Étape 1 · Ouvrir la console de gestion", ar: "الخطوة 1 · افتح وحدة الإدارة" },
           d: {
-            en: "Open the management console.",
-            fr: "Ouvrez la console de gestion.",
-            ar: "افتح وحدة الإدارة."
+            en: "In your account menu, click « Admin Dashboard ». The store-hours section is the last one in the console.",
+            fr: "Dans votre menu compte, cliquez « Admin Dashboard ». La section horaires est la dernière de la console.",
+            ar: "في قائمة حسابك، انقر «لوحة الإدارة». قسم الأوقات هو الأخير في وحدة الإدارة."
           },
           onShow: function () { enterAdmin(); }
         },
@@ -1013,11 +1243,22 @@
           sel: "#hoursAdminGrid",
           place: "top",
           opt: true,
-          t: { en: "The 7-day grid", fr: "Grille des 7 jours", ar: "شبكة الأيام السبعة" },
+          t: { en: "Step 2 · The 7-day grid", fr: "Étape 2 · Grille des 7 jours", ar: "الخطوة 2 · شبكة الأيام السبعة" },
           d: {
-            en: "Tick “Closed” for a day off, or set opening and closing times for each weekday.",
-            fr: "Cochez « Fermé » pour un jour de repos, ou réglez les heures pour chaque jour.",
-            ar: "علّم «مغلق» لليوم المغلق، أو اضبط الأوقات لكل يوم."
+            en: "Tick « Fermé » for a day off, or set the opening and closing times for each weekday with the day's two time fields.",
+            fr: "Cochez « Fermé » pour un jour de repos, ou réglez les heures d'ouverture et de fermeture de chaque jour dans les deux champs du jour.",
+            ar: "علّم «مغلق» لليوم المغلق، أو اضبط أوقات الفتح والإغلاق لكل يوم في حقلَي اليوم."
+          }
+        },
+        {
+          sel: "#hoursResetBtn",
+          place: "top",
+          opt: true,
+          t: { en: "Reset", fr: "Réinitialiser", ar: "إعادة الضبط" },
+          d: {
+            en: "Made a mess? « Reset » restores the default week in one click — you can start over.",
+            fr: "Tout embrouillé ? « Reset » rétablit la semaine par défaut d'un clic — reprenez de zéro.",
+            ar: "ارتكبت خطأ؟ «إعادة الضبط» يعيد الأسبوع الافتراضي بنقرة واحدة — ابدأ من جديد."
           }
         },
         {
@@ -1026,9 +1267,9 @@
           opt: true,
           t: { en: "Timezone note", fr: "Note de fuseau", ar: "ملاحظة المنطقة" },
           d: {
-            en: "This line appears under the hours on the homepage footer.",
-            fr: "Cette ligne apparaît sous les horaires dans le pied de page.",
-            ar: "يظهر هذا السطر تحت الأوقات في تذييل الصفحة."
+            en: "This line appears under the hours on the homepage footer. It's a plain text note — write whatever is useful for clients.",
+            fr: "Cette ligne apparaît sous les horaires dans le pied de page. C'est un texte libre — écrivez ce qui est utile aux clients.",
+            ar: "يظهر هذا السطر تحت الأوقات في تذييل الصفحة. نص حر — اكتب ما هو مفيد للعملاء."
           }
         },
         {
@@ -1037,9 +1278,9 @@
           opt: true,
           t: { en: "Appointment note", fr: "Note de rendez-vous", ar: "ملاحظة المواعيد" },
           d: {
-            en: "e.g. “Appointments on request”.",
-            fr: "ex. « Rendez-vous sur demande ».",
-            ar: "مثلاً «المواعيد عند الطلب»."
+            en: "e.g. « Appointments on request ». Also shown on the homepage footer.",
+            fr: "ex. « Rendez-vous sur demande ». Affiché aussi dans le pied de page.",
+            ar: "مثلاً «المواعيد عند الطلب». يُعرض أيضاً في تذييل الصفحة."
           }
         },
         {
@@ -1048,9 +1289,9 @@
           opt: true,
           t: { en: "Save", fr: "Enregistrer", ar: "حفظ" },
           d: {
-            en: "Always press Save — the homepage card updates immediately.",
-            fr: "Appuyez toujours sur Enregistrer — la carte d'accueil se met à jour.",
-            ar: "اضغط حفظ دائماً — تتحدث بطاقة الصفحة الرئيسية."
+            en: "Always press Save — the homepage card updates immediately so visitors see the new opening hours.",
+            fr: "Appuyez toujours sur Enregistrer — la carte d'accueil se met à jour pour que les visiteurs voient les nouveaux horaires.",
+            ar: "اضغط حفظ دائماً — تتحدث بطاقة الصفحة الرئيسية ليرى الزوار الأوقات الجديدة."
           },
           hint: {
             en: "Nothing is stored until you press this button.",
@@ -1076,11 +1317,11 @@
           sel: "#adminModal",
           place: "left",
           opt: true,
-          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          t: { en: "Step 1 · Open the management console", fr: "Étape 1 · Ouvrir la console de gestion", ar: "الخطوة 1 · افتح وحدة الإدارة" },
           d: {
-            en: "Open the management console.",
-            fr: "Ouvrez la console de gestion.",
-            ar: "افتح وحدة الإدارة."
+            en: "In your account menu, click « Admin Dashboard ». This opens the management console — the news section is near the bottom.",
+            fr: "Dans votre menu compte, cliquez « Admin Dashboard ». Cela ouvre la console de gestion — la section actualités se trouve vers le bas.",
+            ar: "في قائمة حسابك، انقر «لوحة الإدارة». تفتح وحدة الإدارة — قسم الأخبار في الأسفل."
           },
           onShow: function () { enterAdmin(); }
         },
@@ -1088,22 +1329,71 @@
           sel: "#newsAdminNewBtn",
           place: "top",
           opt: true,
-          t: { en: "New announcement", fr: "Nouvelle actualité", ar: "إعلان جديد" },
+          t: { en: "Step 2 · « + Nouvelle actualité »", fr: "Étape 2 · « + Nouvelle actualité »", ar: "الخطوة 2 · «+ خبر جديد»" },
           d: {
-            en: "Click “+ Nouvelle actualité” to compose a post.",
-            fr: "Cliquez « + Nouvelle actualité » pour composer.",
-            ar: "انقر «+ فعل جديد» لكتابة منشور."
+            en: "Scroll to the « News & Notifications » section and click the gold « + Nouvelle actualité » button. This opens the composer window.",
+            fr: "Faites défiler jusqu'à la section « News & Notifications » et cliquez le bouton doré « + Nouvelle actualité ». La fenêtre de rédaction s'ouvre.",
+            ar: "مرر إلى قسم «الأخبار والإشعارات» وانقر الزر الذهبي «+ خبر جديد». تُفتح نافذة الكتابة."
+          }
+        },
+        {
+          sel: "#newsComposerModal",
+          place: "top",
+          opt: true,
+          onShow: function () { openNewsComposerGuide(); },
+          t: { en: "Step 3 · The composer", fr: "Étape 3 · Le rédacteur", ar: "الخطوة 3 · المحرر" },
+          d: {
+            en: "The composer opens with 4 templates at the top (Promotion, New perfume, Event, Announcement). Clicking a template pre-fills the badge, icon and title for you.",
+            fr: "Le rédacteur s'ouvre avec 4 modèles en haut (Promotion, Nouveau parfum, Événement, Annonce). Cliquer un modèle pré-remplit badge, icône et titre.",
+            ar: "يفتح المحرر مع 4 قوالب في الأعلى (ترويج، عطر جديد، حدث، إعلان). النقر على قالب يملأ الوسم والأيقونة والعنوان تلقائياً."
+          }
+        },
+        {
+          sel: "#newsComposerTitle",
+          place: "top",
+          opt: true,
+          onShow: function () { openNewsComposerGuide(); },
+          t: { en: "Title (required)", fr: "Titre (obligatoire)", ar: "العنوان (إلزامي)" },
+          d: {
+            en: "The short headline visitors will read in the bell notification, e.g. « -30% sur toute la boutique ». Keep it under 120 characters.",
+            fr: "Le titre court que les visiteurs liront dans la cloche, ex. « -30% sur toute la boutique ». Restez sous 120 caractères.",
+            ar: "العنوان القصير الذي يقرؤه الزوار في جرس التنبيهات، مثل «-30% على كل المتجر». أقل من 120 حرفاً."
+          }
+        },
+        {
+          sel: "#newsComposerContent",
+          place: "top",
+          opt: true,
+          onShow: function () { openNewsComposerGuide(); },
+          t: { en: "Message body", fr: "Corps du message", ar: "نص الرسالة" },
+          d: {
+            en: "Describe the news in a few lines (max 1000 characters). A live preview updates beside you as you type.",
+            fr: "Décrivez l'actualité en quelques lignes (1000 caractères max). Un aperçu se met à jour à côté pendant la saisie.",
+            ar: "صف الخبر في سطور قليلة (1000 حرف كحد أقصى). يتحدَّث معاين حي بجانبك أثناء الكتابة."
+          }
+        },
+        {
+          sel: "#newsComposerPublish",
+          place: "top",
+          opt: true,
+          onShow: function () { openNewsComposerGuide(); },
+          t: { en: "Publish", fr: "Publier", ar: "نشر" },
+          d: {
+            en: "Click « Publier » to send the announcement. It then appears in the list, and every visitor sees it in the navbar bell.",
+            fr: "Cliquez « Publier » pour envoyer l'annonce. Elle apparaît ensuite dans la liste et chaque visiteur la verra dans la cloche.",
+            ar: "انقر «نشر» لإرسال الإعلان. يظهر بعدها في القائمة ويراه كل زائر في جرس الشريط العلوي."
           }
         },
         {
           sel: "#adminNewsList",
           place: "top",
           opt: true,
+          onShow: function () { enterAdmin(); },
           t: { en: "Published news", fr: "Actualités publiées", ar: "الأخبار المنشورة" },
           d: {
-            en: "Your post appears here and in the navbar bell for all visitors.",
-            fr: "Votre post apparaît ici et dans la cloche pour tous.",
-            ar: "يظهر منشورك هنا وفي الجرس لكل الزوار."
+            en: "Your post appears here once published. Use the same area later to review or delete announcements.",
+            fr: "Votre post apparaît ici une fois publié. Utilisez cette zone plus tard pour relire ou supprimer des annonces.",
+            ar: "يظهر منشورك هنا بعد النشر. استخدم نفس المنطقة لاحقاً لمراجعة الإعلانات أو حذفها."
           }
         }
       ]
@@ -1124,11 +1414,11 @@
           sel: "#adminModal",
           place: "left",
           opt: true,
-          t: { en: "Admin dashboard", fr: "Tableau de bord", ar: "لوحة التحكم" },
+          t: { en: "Step 1 · Open the management console", fr: "Étape 1 · Ouvrir la console de gestion", ar: "الخطوة 1 · افتح وحدة الإدارة" },
           d: {
-            en: "Open the management console.",
-            fr: "Ouvrez la console de gestion.",
-            ar: "افتح وحدة الإدارة."
+            en: "In your account menu, click « Admin Dashboard ». This guide is for handling problem accounts in the Users table.",
+            fr: "Dans votre menu compte, cliquez « Admin Dashboard ». Ce guide sert à gérer les comptes problématiques dans le tableau des utilisateurs.",
+            ar: "في قائمة حسابك، انقر «لوحة الإدارة». هذا الدليل للتعامل مع الحسابات المخالفة في جدول المستخدمين."
           },
           onShow: function () { enterAdmin(); }
         },
@@ -1136,22 +1426,27 @@
           sel: "#usersTableBody",
           place: "top",
           opt: true,
-          t: { en: "Users table", fr: "Table des utilisateurs", ar: "جدول المستخدمين" },
+          t: { en: "Step 2 · Find the account", fr: "Étape 2 · Retrouver le compte", ar: "الخطوة 2 · اعثر على الحساب" },
           d: {
-            en: "Find the account in the user management list.",
-            fr: "Trouvez le compte dans la liste des utilisateurs.",
-            ar: "ابحث عن الحساب في قائمة المستخدمين."
+            en: "Locate the account in the user management list. The Status column tells you if it's Active, Admin or Banned.",
+            fr: "Localisez le compte dans la liste des utilisateurs. La colonne Statut indique s'il est Actif, Admin ou Banni.",
+            ar: "حدد مكان الحساب في قائمة المستخدمين. عمود الحالة يوضح إن كان نشطاً أو إدارة أو محظوراً."
           }
         },
         {
           sel: "#usersTableBody .btn-ban",
           place: "top",
           opt: true,
-          t: { en: "Ban / Unban", fr: "Bannir / Rétablir", ar: "حظر / إلغاء حظر" },
+          t: { en: "Step 3 · Ban / Unban", fr: "Étape 3 · Bannir / Rétablir", ar: "الخطوة 3 · حظر / إلغاء الحظر" },
           d: {
-            en: "Each row's Actions has a Ban (or Unban) button. Confirm and the status updates.",
-            fr: "Chaque ligne a un bouton Bannir (ou Rétablir). Confirmez pour mettre à jour.",
-            ar: "كل صف له زر حظر (أو إلغاء حظر). أكّد للتحديث."
+            en: "Each row's Actions column has a Ban button (or Unban for a banned account). Click it, confirm, and the status updates — the account is blocked from the site.",
+            fr: "La colonne Actions de chaque ligne a un bouton Bannir (ou Rétablir pour un compte banni). Cliquez, confirmez et le statut se met à jour — le compte est bloqué du site.",
+            ar: "عمود الإجراءات في كل صف يحتوي زر حظر (أو إلغاء حظر لحساب محظور). انقر وأكّد وتُحدَّث الحالة — يُحجب الحساب من الموقع."
+          },
+          hint: {
+            en: "To restore access later, find the account again and click Unban.",
+            fr: "Pour rétablir l'accès plus tard, retrouvez le compte et cliquez Rétablir.",
+            ar: "لاستعادة الوصول لاحقاً، اعثر على الحساب مجدداً وانقر إلغاء الحظر."
           }
         }
       ]
@@ -1178,9 +1473,9 @@
           },
           t: { en: "Guest notes", fr: "Notes invités", ar: "ملاحظات الضيوف" },
           d: {
-            en: "Open the guest notes panel from your account menu.",
-            fr: "Ouvrez le panneau depuis votre menu compte.",
-            ar: "افتح اللوحة من قائمة حسابك."
+            en: "Open the guest notes panel: in your account menu (staff account), click « Guest Notes » — the « Leave a Note » messages visitors sent are stored here.",
+            fr: "Ouvrez le panneau des notes invités : dans votre menu compte (compte personnel), cliquez « Guest Notes » — les messages « Leave a Note » envoyés par les visiteurs y sont stockés.",
+            ar: "افتح لوحة ملاحظات الضيوف: في قائمة حسابك (حساب الطاقم)، انقر «ملاحظات الضيوف» — رسائل «اترك ملاحظة» التي أرسلها الزوار مخزنة هنا."
           }
         },
         {
@@ -1196,8 +1491,7 @@
             en: "All feedback and notes are gathered here for the team.",
             fr: "Tous les retours et notes sont réunis ici.",
             ar: "تُجمع كل الآراء والملاحظات هنا."
-          },
-          onShow: function () { openPanel("#guestNotesModal"); }
+          }
         }
       ]
     }
@@ -1205,7 +1499,7 @@
 
   /* ------------------------------------------------------------- elements */
   var els = null;
-  var state = { guide: null, index: 0, active: false, lastRect: null };
+  var state = { guide: null, index: 0, active: false, lastRect: null, category: "all" };
 
   function buildDom() {
     if (els) return els;
@@ -1217,13 +1511,18 @@
       '<div class="guides-backdrop" data-guides-close></div>' +
       '<div class="guides-shell" role="dialog" aria-modal="true" aria-label="Guides">' +
       '  <div class="guides-head">' +
-      '    <div>' +
-      '      <span class="guides-eyebrow" data-g="eyebrow"></span>' +
-      '      <h2 class="guides-title" data-g="title"></h2>' +
-      '      <p class="guides-sub" data-g="sub"></p>' +
+      '    <div class="guides-head__top">' +
+      '      <div>' +
+      '        <span class="guides-eyebrow" data-g="eyebrow"></span>' +
+      '        <h2 class="guides-title" data-g="title"></h2>' +
+      '        <p class="guides-sub" data-g="sub"></p>' +
+      '      </div>' +
+      '      <button class="guides-close" type="button" data-guides-close aria-label="Close">' +
+      '        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
+      "      </button>" +
       '    </div>' +
-      '    <button class="guides-close" type="button" data-guides-close aria-label="Close">&times;</button>' +
-      '  </div>' +
+      '    <nav class="guides-tabs" data-g="tabs" aria-label="Filter guides"></nav>' +
+      "  </div>" +
       '  <div class="guides-body"><div class="guides-grid" data-g="grid"></div></div>' +
       "</div>";
 
@@ -1282,6 +1581,7 @@
       tip: tip,
       done: done,
       grid: launcher.querySelector('[data-g="grid"]'),
+      tabs: launcher.querySelector('[data-g="tabs"]'),
       step: tip.querySelector('[data-g="step"]'),
       stepTitle: tip.querySelector('[data-g="steptitle"]'),
       stepText: tip.querySelector('[data-g="steptext"]'),
@@ -1331,20 +1631,66 @@
     els.launcher.querySelector('[data-g="title"]').textContent = pick(UI.title);
     els.launcher.querySelector('[data-g="sub"]').textContent = pick(UI.sub);
 
+    var counts = {};
+    GUIDES.forEach(function (g) {
+      var cat = CATEGORY[g.id] || "discovery";
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+
+    els.tabs.innerHTML = "";
+    TAB_ORDER.forEach(function (key) {
+      var tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = "tab-btn" + (key === state.category ? " active" : "");
+      tab.textContent =
+        pick(UI.tabs[key]) +
+        " (" + (key === "all" ? GUIDES.length : counts[key] || 0) + ")";
+      tab.addEventListener("click", function () {
+        state.category = key;
+        renderLauncher();
+      });
+      els.tabs.appendChild(tab);
+    });
+
     els.grid.innerHTML = "";
     GUIDES.forEach(function (g) {
+      var cat = CATEGORY[g.id] || "discovery";
       var card = document.createElement("button");
       card.type = "button";
       card.className = "guide-card";
+      card.dataset.category = cat;
+      if (cat === "discovery" && g.id === "profiler") card.classList.add("featured-ai");
+
+      var pips = "";
+      for (var i = 0; i < g.steps.length; i++) pips += '<span class="step-pip"></span>';
+
       card.innerHTML =
-        '<span class="guide-card__icon" aria-hidden="true">' + g.icon + "</span>" +
+        '<span class="guide-card__head">' +
+        '  <span class="guide-card__icon" aria-hidden="true">' + g.icon + "</span>" +
+        (g.id === "profiler"
+          ? '  <span class="ai-badge"></span>'
+          : '  <span class="steps-tracker" aria-hidden="true">' + pips + "</span>") +
+        "</span>" +
         '<span class="guide-card__title"></span>' +
         '<span class="guide-card__desc"></span>' +
-        '<span class="guide-card__meta"></span>';
+        '<span class="guide-card__foot">' +
+        '  <span class="guide-card__tag"></span>' +
+        '  <span class="guide-card__go"></span>' +
+        "</span>";
       card.querySelector(".guide-card__title").textContent = pick(g.title);
       card.querySelector(".guide-card__desc").textContent = pick(g.desc);
-      card.querySelector(".guide-card__meta").textContent =
+      card.querySelector(".guide-card__tag").textContent =
         g.steps.length + " " + pick(UI.steps);
+      var go = card.querySelector(".guide-card__go");
+      go.textContent = pick(UI.launch);
+      go.insertAdjacentHTML(
+        "beforeend",
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>'
+      );
+      if (g.id === "profiler") {
+        card.querySelector(".ai-badge").textContent = pick(UI.featured);
+      }
+      card.style.display = state.category === "all" || cat === state.category ? "flex" : "none";
       card.addEventListener("click", function () {
         closeLauncher();
         startTour(g.id);
@@ -1529,20 +1875,135 @@
     } catch (e) {}
   }
 
-  /* Open the first loyalty client's profile (the customer-profile modal). The
-     loyalty modal renders client cards with a .btn-loyalty-profile button that
-     calls openCustomerProfile(cardId); we click the first one once it exists. */
+  /* The profile window is data-driven: several sections (personality, family
+     bars, brand tags, suggestion grids) are only rendered when the client has
+     at least one recorded purchase. If we open a client with no purchase these
+     steps would never resolve, so we remember a "good" client (one that HAS
+     purchase rows) and reopen that same client for every step of the tour. */
+  var __goodCard = null;
+
+  /* currentProfileCardId is a `let` top-level global (classic script), so it is
+     reachable by bare identifier but NOT via window.currentProfileCardId. */
+  function cpCardId() {
+    try {
+      if (typeof currentProfileCardId !== "undefined" && currentProfileCardId !== null) return currentProfileCardId;
+    } catch (e) {}
+    try { return window.currentProfileCardId || null; } catch (e) {}
+    return null;
+  }
+
+  /* Open a client whose profile actually has data. If we already found one
+     this session, reopen it directly. Otherwise open the loyalty desk, then
+     probe candidate rows one by one until a client with purchases loads. */
   function openFirstClientProfile() {
     try {
+      /* Already showing a loaded profile? Don't trigger another fetch/reload. */
+      var ct0 = document.getElementById("customerProfileContent");
+      if (cpCardId() && ct0 && getComputedStyle(ct0).display !== "none") return;
+      if (__goodCard && typeof window.openCustomerProfile === "function") {
+        window.openCustomerProfile(__goodCard.id, __goodCard.name);
+        return;
+      }
       openLoyalty();
+      /* Prefer the app's in-memory loyalty list: when the server exposes a
+         per-card purchaseCount we can pick the first client that HAS purchase
+         rows in one step, without probing dozens of empty profiles. */
+      var pickEligible = function () {
+        try {
+          if (typeof loyaltyCards !== "undefined" && window.Array && loyaltyCards.length) {
+            for (var i = 0; i < loyaltyCards.length; i++) {
+              if (loyaltyCards[i].cardId && loyaltyCards[i].purchaseCount > 0) {
+                var c = loyaltyCards[i];
+                __goodCard = { id: c.cardId, name: c.name || "" };
+                window.openCustomerProfile(c.cardId, c.name || "");
+                return true;
+              }
+            }
+          }
+        } catch (e) {}
+        return false;
+      };
+      if (pickEligible()) return;
       var tries = 0;
       var iv = setInterval(function () {
         tries++;
-        var btn = document.querySelector("#loyaltyModal .btn-loyalty-profile") ||
-                  document.querySelector(".btn-loyalty-profile");
-        if (btn) { try { btn.click(); } catch (e) {} clearInterval(iv); }
-        else if (tries > 40) clearInterval(iv);
+        var btns = document.querySelectorAll("#loyaltyModal .btn-loyalty-profile, .btn-loyalty-profile");
+        if (btns.length) {
+          clearInterval(iv);
+          if (!pickEligible()) tryDataClients([].slice.call(btns), 0);
+        } else if (tries > 80) clearInterval(iv);
       }, 100);
+    } catch (e) {}
+  }
+
+  /* True when the currently open profile shows at least one recorded purchase
+     (the section that feeds every data-driven block of the profile window). */
+  function hasProfileData() {
+    try {
+      return document.querySelectorAll("#cpPurchaseList .cp-purchase-table tbody tr").length > 0;
+    } catch (e) { return false; }
+  }
+
+  /* Try each loyalty row as the profile client until one with purchases opens.
+     On an empty client we close the profile and move to the next row. The first
+     good client found is cached so later steps reopen it instantly. */
+  function tryDataClients(btns, i) {
+    try {
+      if (i >= Math.min(40, btns.length)) {
+        /* no client with purchases found - fall back to the first row */
+        try { btns[0].click(); } catch (e) {}
+        return;
+      }
+      var name = "";
+      try {
+        var row = btns[i].closest("tr");
+        if (row && row.cells && row.cells[0]) {
+          name = row.cells[0].textContent.replace(/Manuel|Banned/gi, "").replace(/\s+/g, " ").trim();
+        }
+      } catch (e) {}
+      try { btns[i].click(); } catch (e) { tryDataClients(btns, i + 1); return; }
+      var seenLoaded = false;
+      var t2 = 0;
+      var iv2 = setInterval(function () {
+        t2++;
+        var content = document.getElementById("customerProfileContent");
+        var modal = document.getElementById("customerProfileModal");
+        var loaded = content && getComputedStyle(content).display !== "none";
+        var open = modal && !modal.classList.contains("hidden") &&
+                   getComputedStyle(modal).display !== "none";
+        if (!open) { if (t2 > 60) { clearInterval(iv2); setTimeout(function () { tryDataClients(btns, i + 1); }, 150); } return; }
+        if (!loaded) { if (t2 > 80) { clearInterval(iv2); } return; }
+        if (!seenLoaded) { seenLoaded = true; t2 = 0; }
+        if (hasProfileData()) {
+          __goodCard = { id: cpCardId(), name: name };
+          clearInterval(iv2);
+          return;
+        }
+        if (t2 > 8) {
+          /* loaded but empty: close it and try the next client */
+          clearInterval(iv2);
+          try { closeCustomerProfile(); } catch (e) {}
+          setTimeout(function () { tryDataClients(btns, i + 1); }, 150);
+        }
+      }, 100);
+    } catch (e) {}
+  }
+
+  /* Open the record-purchase form inside a client's profile. Opens a data-rich
+     profile first, then clicks the app's own « + Ajouter un achat » button once
+     the profile (and its cardId) is ready. */
+  function openRecordForm() {
+    try {
+      var rp = document.getElementById("recordPurchaseModal");
+      if (rp && !rp.classList.contains("hidden")) return;
+      openFirstClientProfile();
+      var tries = 0;
+      var iv = setInterval(function () {
+        tries++;
+        var b = document.getElementById("cpAddPurchaseBtn");
+        if (b && cpCardId()) { try { b.click(); } catch (e) {} clearInterval(iv); }
+        else if (tries > 100) clearInterval(iv);
+      }, 150);
     } catch (e) {}
   }
 
@@ -1560,6 +2021,18 @@
         var b = document.getElementById("adminDashboard");
         if (b) b.click();
       }
+    } catch (e) {}
+  }
+
+  /* Open the news composer through the app's own opener, remembering its
+     visibility so the tour can re-hide it at the end (otherwise the composer
+     would stay open once the guide finishes). */
+  function openNewsComposerGuide() {
+    try {
+      var m = document.getElementById("newsComposerModal");
+      if (m) rememberVis(m);
+      var b = document.getElementById("newsAdminNewBtn");
+      if (b) { try { b.click(); } catch (e) {} }
     } catch (e) {}
   }
 
@@ -1739,7 +2212,7 @@
      fetch, so a step that is unresolvable synchronously may become resolvable
      a moment later. */
   function pollResolve(step, cb, timeout) {
-    timeout = timeout || 2200;
+    timeout = timeout || 5000;
     var startT = Date.now();
     (function tick() {
       var el = null;
@@ -1802,6 +2275,12 @@
     if (i < 0) return;
 
     var step = g.steps[i];
+
+    /* Track the current step index from the very start, even when the step is
+       not resolvable yet: otherwise the Next button keeps retrying step `i`
+       while state.index points to the previous resolved step, freezing the
+       tour until the target eventually appears. */
+    state.index = i;
 
     /* Run an onShow hook BEFORE resolving — lets the guide open a panel/modal
        so that its internal elements become visible for highlighting. */

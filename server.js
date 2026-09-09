@@ -2445,7 +2445,8 @@ app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) 
               c.holder_name, c.holder_email, c.holder_phone,
               c.created_at AS card_created_at, c.updated_at AS card_updated_at,
               u.first_name, u.last_name, u.email AS user_email, u.is_banned,
-              (SELECT COUNT(*) FROM loyalty_transactions lt WHERE lt.card_id = c.id AND lt.type = 'redeem') AS rewards
+              (SELECT COUNT(*) FROM loyalty_transactions lt WHERE lt.card_id = c.id AND lt.type = 'redeem') AS rewards,
+              (SELECT COUNT(*) FROM customer_purchases cp WHERE cp.card_id = c.id) AS purchases
             FROM loyalty_cards c
             LEFT JOIN users u ON u.id = c.user_id
             ORDER BY c.points DESC, c.id ASC
@@ -2497,6 +2498,7 @@ app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) 
           eligible: (row.points || 0) >= LOYALTY_REWARD_THRESHOLD,
           progress: Math.min(100, Math.round(((row.points || 0) / LOYALTY_REWARD_THRESHOLD) * 100)),
           rewards: row.rewards || 0,
+          purchaseCount: row.purchases || 0,
           cardCreatedAt: row.card_created_at,
           cardUpdatedAt: row.card_updated_at,
         };
