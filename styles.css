@@ -12410,7 +12410,11 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     align-items: center;
     justify-content: space-between;
     padding: 16px 20px;
-    color: var(--color-text-primary);
+    /* The notification panel is always a near-black luxury panel in every
+       theme, so its text must be a fixed light tone — never the theme's
+       --color-text-primary (which is dark in the light theme and would make
+       the toast black-on-black and unreadable). */
+    color: #f2efe9;
     font-family: 'DM Sans', sans-serif;
     font-size: 12px;
     font-weight: 400;
@@ -12421,7 +12425,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .notification-close {
     background: none;
     border: 1px solid rgba(255, 255, 255, 0.04);
-    color: var(--color-text-muted);
+    color: rgba(245, 243, 240, 0.7);
     font-size: 14px;
     cursor: pointer;
     padding: 0;
@@ -22006,7 +22010,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .notification-message {
-    color: white;
+    color: #f5f3f0;
     font-size: 14px;
     font-weight: 500;
     line-height: 1.4;
