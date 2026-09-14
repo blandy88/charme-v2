@@ -36,19 +36,61 @@ const allowedOrigins = [
 const INSECURE_JWT_SECRET_PREFIX =
   "your-super-secret-jwt-key-change-this-in-production";
 const JWT_SECRET = process.env.JWT_SECRET || "";
+const JWT_SECRET_FILE = path.join(__dirname, ".jwt-secret");
 const _missingJwtSecret =
   !JWT_SECRET ||
   JWT_SECRET.length < 32 ||
   JWT_SECRET.startsWith(INSECURE_JWT_SECRET_PREFIX) ||
   JWT_SECRET === "CHANGE_ME_TO_RANDOM_SECRET";
-const ACTIVE_JWT_SECRET = _missingJwtSecret
-  ? crypto.randomBytes(64).toString("hex")
-  : JWT_SECRET;
-if (_missingJwtSecret) {
-  console.warn(
-    "WARNING: JWT_SECRET is missing or is a placeholder. " +
-      "A temporary random secret was generated. " +
-      "Set a persistent JWT_SECRET in the environment to keep sessions valid across restarts.",
+
+const _persistedJwtSecret = (() => {
+  if (!_missingJwtSecret) return null;
+  try {
+    const value = fs.readFileSync(JWT_SECRET_FILE, "utf8").trim();
+    return value.length >= 32 ? value : null;
+  } catch {
+    return null;
+  }
+})();
+
+const ACTIVE_JWT_SECRET =
+  JWT_SECRET ||
+  _persistedJwtSecret ||
+  crypto.randomBytes(64).toString("hex");
+
+if (_missingJwtSecret && !_persistedJwtSecret) {
+  try {
+    fs.writeFileSync(JWT_SECRET_FILE, ACTIVE_JWT_SECRET, {
+      encoding: "utf8",
+      mode: 0o600,
+    });
+    console.warn(
+      "WARNING: JWT_SECRET is missing or is a placeholder. " +
+        "A persistent secret was generated and saved to " +
+        JWT_SECRET_FILE +
+        " so sessions stay valid across restarts on this filesystem. " +
+        "For the definitive fix, set a persistent JWT_SECRET in the environment variables " +
+        "(locally: .env file; on Render: Dashboard > Environment).",
+    );
+  } catch (e) {
+    console.warn(
+      "WARNING: JWT_SECRET is missing or is a placeholder. " +
+        "A temporary secret was generated, but it could not persist to " +
+        JWT_SECRET_FILE +
+        " (" +
+        e.message +
+        "), so sessions will NOT survive restarts. " +
+        "Set a persistent JWT_SECRET in the environment variables to keep sessions valid.",
+    );
+  }
+} else {
+  console.log(
+    "JWT secret source: " +
+      (JWT_SECRET
+        ? "environment variable"
+        : _persistedJwtSecret
+          ? "persisted file"
+          : "newly generated"),
   );
 }
 

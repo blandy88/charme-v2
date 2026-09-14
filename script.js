@@ -7197,7 +7197,7 @@ function initializeAuth() {
   window.updateProfileFormData = updateProfileFormData;
   window.checkAuthState = checkAuthState;
 
-  function handleLogout() {
+  function handleLogout(message, type) {
     localStorage.removeItem("user");
     sessionStorage.removeItem("user");
     localStorage.removeItem("authToken");
@@ -7205,6 +7205,31 @@ function initializeAuth() {
 
     userLoggedIn.style.display = "none";
     userLoggedOut.style.display = "block";
+
+    // Hide admin-only UI (in case an admin session was expired mid-use)
+    const adminElements = [
+      "adminDashboard",
+      "adminSectionLabel",
+      "loyaltyCardBtn",
+      "guidesBtn",
+      "guestNotesBtn",
+      "newsAdminBtn",
+    ];
+    adminElements.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+
+    // Close any admin/loyalty/customer modals that may be open
+    if (typeof window.closeLoyaltyModal === "function") {
+      window.closeLoyaltyModal();
+    }
+    if (typeof closeCustomerProfile === "function") {
+      closeCustomerProfile();
+    }
+    if (typeof closeRecordPurchaseModal === "function") {
+      closeRecordPurchaseModal();
+    }
 
     // Handle favorites logout
     if (window.favoritesManager) {
@@ -7227,8 +7252,21 @@ function initializeAuth() {
       window.notificationManager.onUserSignOut();
     }
 
-    showNotification("You have been signed out successfully.", "info");
+    showNotification(
+      message || "You have been signed out successfully.",
+      type || "info",
+    );
   }
+
+  // Expose logout so admin API handlers can force a clean sign-out on 401/403
+  window.handleLogout = handleLogout;
+
+  // Handle a rejected admin/loyalty API response (401/403) by signing
+  // the stale session out once, instead of spamming red error toasts.
+  window.handleSessionExpired = function (context) {
+    console.warn("[auth] Session expired or rejected during: " + context);
+    handleLogout("Votre session a expiré. Veuillez vous reconnecter.", "error");
+  };
 }
 
 // Global notification function
@@ -10770,6 +10808,10 @@ async function loadAdminNews() {
     const response = await fetch("/api/admin/news", {
       headers: { Authorization: `Bearer ${token}` },
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("loading admin news");
+      return;
+    }
     const data = await response.json();
     if (data.success) {
       renderAdminNews(data.news || []);
@@ -10850,6 +10892,10 @@ async function deleteNews(newsId) {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("deleting a news item");
+      return;
+    }
     const data = await response.json();
     if (data.success) {
       showNotification("Actualité supprimée", "success");
@@ -10966,6 +11012,10 @@ async function publishNews() {
       },
       body: JSON.stringify(payload),
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("publishing news");
+      return;
+    }
     const data = await response.json();
     if (data.success) {
       showNotification("Actualité publiée pour tous les utilisateurs", "success");
@@ -11340,6 +11390,10 @@ async function loadUsersData() {
         Authorization: `Bearer ${token}`,
       },
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("loading users data");
+      return;
+    }
 
     const data = await response.json();
 
@@ -11500,6 +11554,10 @@ async function loadLoyaltyData(force = false) {
         headers: { Authorization: `Bearer ${token}` },
         signal: controller.signal,
       });
+      if (response.status === 401 || response.status === 403) {
+        window.handleSessionExpired("charging loyalty cards");
+        return;
+      }
       const data = await response.json();
 
       if (data.success) {
@@ -11671,6 +11729,10 @@ async function addLoyaltyPoints(cardId, points, skipConfirm = false) {
       },
       body: JSON.stringify({ cardId, points }),
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("adding loyalty points");
+      return;
+    }
     const data = await response.json();
 
     if (data.success) {
@@ -11704,6 +11766,10 @@ async function redeemLoyaltyReward(cardId, name) {
       },
       body: JSON.stringify({ cardId }),
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("redeeming a loyalty reward");
+      return;
+    }
     const data = await response.json();
 
     if (data.success) {
@@ -12041,6 +12107,10 @@ async function createManualLoyaltyCard() {
       },
       body: JSON.stringify({ name, email: email || undefined, phone: phone || undefined }),
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("creating a manual loyalty card");
+      return;
+    }
     const data = await response.json();
 
     if (data.success) {
@@ -12120,6 +12190,10 @@ async function saveLoyaltyEdit() {
       },
       body: JSON.stringify({ cardId, name, cardNumber: cardNumber || undefined, phone: phone || undefined, points: pts }),
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("editing a loyalty card");
+      return;
+    }
     const data = await response.json();
 
     if (data.success) {
@@ -12155,6 +12229,10 @@ async function deleteLoyaltyCard(cardId, name) {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("deleting a loyalty card");
+      return;
+    }
     const data = await response.json();
 
     if (data.success) {
@@ -12211,6 +12289,10 @@ async function loadCustomerProfile(cardId) {
     const response = await fetch(`/api/admin/loyalty/profiles/${cardId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    if (response.status === 401 || response.status === 403) {
+      window.handleSessionExpired("loading a customer profile");
+      return;
+    }
     if (!response.ok) throw new Error("Failed to load profile");
     const data = await response.json();
 
@@ -12613,6 +12695,10 @@ function renderProfilePurchases(purchases, cardId) {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (res.status === 401 || res.status === 403) {
+          window.handleSessionExpired("deleting a purchase");
+          return;
+        }
         const data = await res.json();
         if (data.success) {
           showNotification("Achat supprimé", "success");
@@ -12771,6 +12857,10 @@ async function saveRecordPurchase() {
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(body),
     });
+    if (res.status === 401 || res.status === 403) {
+      window.handleSessionExpired("saving a purchase");
+      return;
+    }
     const data = await res.json();
 
     if (data.success) {
