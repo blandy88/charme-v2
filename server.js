@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const { ipKeyGenerator } = require("express-rate-limit");
 const validator = require("validator");
 const path = require("path");
 const fs = require("fs");
@@ -35,6 +36,18 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.NODE_ENV || "development";
+
+// Both Vercel and Render terminate TLS at their own edge proxy and forward the
+// request with an `X-Forwarded-For` header. express-rate-limit v7+ inspects
+// that header and, when `trust proxy` is left at its default (false), throws
+// `ERR_ERL_UNEXPECTED_X_FORWARDED_FOR` on every request, and `req.ip` resolves
+// to the edge proxy instead of the visitor, which would put all traffic in a
+// single rate-limit bucket. Trust exactly one hop: `true` is rejected outright
+// by the same validator (ERR_ERL_PERMISSIVE_TRUST_PROXY) because it lets
+// anyone spoof their IP.
+if (process.env.VERCEL || process.env.RENDER) {
+  app.set("trust proxy", 1);
+}
 // Every browser-facing asset (html, css, js, images, uploads) now lives under
 // public/. Vercel REQUIRES this: it serves public/** from its CDN and
 // explicitly ignores express.static(). Keeping the same layout on Render means
@@ -48,9 +61,23 @@ const allowedOrigins = [
   process.env.RENDER_EXTERNAL_URL,
   // Vercel injects VERCEL_URL (host without protocol) for preview + prod deploys.
   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
+  // VERCEL_URL is the per-deployment host (charme-v2-<hash>.vercel.app), never
+  // the stable project alias, so the Origin the browser actually sends is a
+  // different string. Cover both explicit aliases plus every generated host.
+  process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : null,
+  "https://charme-v2.vercel.app",
   "https://charmeperfume.me",
   "https://www.charmeperfume.me",
 ].filter(Boolean);
+
+// Vercel mints a fresh host for every deployment and preview build, so an
+// allow-list of literal strings can never keep up while running there.
+const isVercelOrigin = (origin) =>
+  /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*\.vercel\.(app|dev)$/i.test(
+    String(origin || ""),
+  );
 const INSECURE_JWT_SECRET_PREFIX =
   "your-super-secret-jwt-key-change-this-in-production";
 const JWT_SECRET = process.env.JWT_SECRET || "";
@@ -818,7 +845,19 @@ if (ENV === "production") {
       origin: (origin, callback) => {
         if (!origin || origin === "null") return callback(null, true);
         if (allowedOrigins.includes(origin)) return callback(null, true);
-        return callback(new Error("Not allowed by CORS"));
+        // While running on Vercel, accept any host Vercel generated for this
+        // project. Rejecting it used to call back with an Error, which Express
+        // funneled into the generic error handler - so a blocked origin
+        // returned 500 "Something went wrong!" and looked like a server crash
+        // rather than a cross-origin policy problem.
+        if (process.env.VERCEL && isVercelOrigin(origin)) {
+          return callback(null, true);
+        }
+        console.warn("CORS: rejected origin", origin);
+        // `callback(null, false)` omits CORS headers and lets the request
+        // continue; the browser then reports a normal CORS error instead of the
+        // server appearing to fail.
+        return callback(null, false);
       },
       credentials: true,
     }),
@@ -1102,6 +1141,27 @@ for (const dir of new Set(avatarDirs)) {
 }
 
 // Rate limiting
+//
+// Behind a proxy `req.ip` is only as good as the `trust proxy` setting: if the
+// edge appends its own address to X-Forwarded-For, `trust proxy: 1` resolves to
+// the proxy address instead of the client, which would put every visitor in one
+// bucket and lock the whole site out after 20 failed logins. `x-real-ip` (set
+// by Vercel) and the leftmost X-Forwarded-For entry (the originating client)
+// are reliable regardless of how many hops were added.
+// `ipKeyGenerator` is required: express-rate-limit refuses any custom
+// keyGenerator that touches req.ip without it (ERR_ERL_KEY_GEN_IPV6), and it
+// also buckets IPv6 clients by /56 subnet so they cannot rotate addresses to
+// slip past the limit.
+const clientKey = (req) => {
+  const raw =
+    req.headers["x-real-ip"] ||
+    String(req.headers["x-forwarded-for"] || "").split(",")[0] ||
+    req.ip ||
+    "";
+  const ip = String(raw).trim();
+  return ipKeyGenerator(ip || req.ip || "unknown");
+};
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 20, // Limit each IP to 20 requests per windowMs (more generous)
@@ -1112,6 +1172,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   skipSuccessfulRequests: true, // Keep successful logins from consuming the login budget
   skipFailedRequests: false, // Count failed requests
+  keyGenerator: clientKey,
 });
 
 // Registration has a separate, stricter quota. The general auth limiter above intentionally
@@ -1127,6 +1188,7 @@ const registrationLimiter = rateLimit({
   legacyHeaders: false,
   skipSuccessfulRequests: false,
   skipFailedRequests: false,
+  keyGenerator: clientKey,
 });
 
 const resendVerificationLimiter = rateLimit({
@@ -1138,6 +1200,7 @@ const resendVerificationLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: false,
+  keyGenerator: clientKey,
 });
 
 const uploadLimiter = rateLimit({
@@ -1148,6 +1211,7 @@ const uploadLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: clientKey,
 });
 
 // Apply rate limiting to auth routes
@@ -1163,6 +1227,7 @@ const writeLimiter = rateLimit({
   message: {
     error: "Too many requests. Please slow down and try again shortly.",
   },
+  keyGenerator: clientKey,
 });
 
 app.use(["/api/reviews", "/api/replies"], writeLimiter);
@@ -1531,6 +1596,17 @@ app.get("/api/health", async (req, res) => {
     node: process.version,
     sharp: Boolean(sharp),
     dompurify: Boolean(DOMPurify),
+    // Only the source of the signing key is reported, never its value. If this
+    // says "generated", every cold start mints a different key and sessions die
+    // as soon as the instance is recycled - set JWT_SECRET in the host env.
+    jwtSecretSource: JWT_SECRET
+      ? "env"
+      : _persistedJwtSecret
+        ? "file"
+        : "generated",
+    jwtSecretLength: ACTIVE_JWT_SECRET.length,
+    corsAllowedOrigins: allowedOrigins.length,
+    trustProxy: app.get("trust proxy"),
   };
   try {
     const row = await new Promise((resolve, reject) => {
@@ -1607,10 +1683,20 @@ app.post("/api/auth/login", async (req, res) => {
       });
     }
 
-    // Update last login
-    db.run("UPDATE users SET last_login = datetime('now') WHERE id = ?", [
-      user.id,
-    ]);
+    // Update last login. Deliberately fire-and-forget - bookkeeping must not
+    // fail an otherwise successful login - but a rejected promise left floating
+    // on serverless takes the whole instance down (unhandledRejection), so it
+    // is always consumed here.
+    Promise.resolve(
+      db.run("UPDATE users SET last_login = datetime('now') WHERE id = ?", [
+        user.id,
+      ]),
+    ).catch((e) =>
+      console.error(
+        "last_login update failed:",
+        e && (e.code || e.message),
+      ),
+    );
 
     // Generate JWT token
     const token = jwt.sign({ userId: user.id, email: user.email }, ACTIVE_JWT_SECRET, {
@@ -3401,6 +3487,7 @@ const notesLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Too many notes, please try again later." },
+  keyGenerator: clientKey,
 });
 
 app.post("/api/notes", notesLimiter, (req, res) => {
