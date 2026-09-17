@@ -11,7 +11,19 @@ const fs = require("fs");
 const crypto = require("crypto");
 const compression = require("compression");
 const multer = require("multer");
-const sharp = require("sharp");
+// sharp is a native module. If its prebuilt binary is missing for the host
+// platform (a classic serverless failure), a bare require() would throw during
+// module load and kill every invocation. Load it defensively instead and let
+// the image-optimisation paths degrade to serving the original file.
+let sharp = null;
+try {
+  sharp = require("sharp");
+} catch (e) {
+  console.warn(
+    "sharp unavailable, image optimisation disabled:",
+    e.code || e.message,
+  );
+}
 const {
   generateVerificationCode,
   sendVerificationEmail,
@@ -251,6 +263,11 @@ async function migrateAvatarsToFileSystem() {
 console.log("Connected to PostgreSQL database");
 
 // Ensure foreign keys are enforced and concurrent writes wait briefly.
+// On Vercel (serverless) the schema already exists in Postgres: running ~40
+// migration statements on every cold start burns the invocation budget and is
+// a needless failure point, so they only run on long-lived hosts.
+const RUN_BOOT_MIGRATIONS = !process.env.VERCEL;
+if (RUN_BOOT_MIGRATIONS) {
 console.log("🔄 Checking for required database migrations...");
 
     // Check existing table structure
@@ -688,6 +705,9 @@ console.log("🔄 Checking for required database migrations...");
     migrateAvatarsToFileSystem();
 
     console.log("✅ Enhanced review system database migration completed");
+} else {
+  console.log("⏭️  Skipping boot-time migrations on Vercel (schema already provisioned)");
+}
 
 // Security hardening
 app.disable("x-powered-by");
@@ -3787,6 +3807,12 @@ app.post(
       const fileName = `avatar_${userId}_${Date.now()}.jpg`;
       const filePath = path.join(uploadsDir, fileName);
 
+      if (!sharp) {
+        return res
+          .status(500)
+          .json({ error: "Image processing is unavailable on this host" });
+      }
+
       // Process and resize image using Sharp
       await sharp(req.file.buffer)
         .resize(200, 200, {
@@ -4639,8 +4665,20 @@ app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-// Export the app so serverless hosts (Vercel api/index.js) can mount it.
+// Export the app so serverless hosts can mount it.
 module.exports = app;
+
+// On serverless, an unhandled rejection or exception kills the instance and
+// surfaces as an opaque FUNCTION_INVOCATION_FAILED. Log it first so the real
+// cause shows up in the host's logs.
+if (process.env.VERCEL) {
+  process.on("unhandledRejection", (reason) => {
+    console.error("unhandledRejection:", reason);
+  });
+  process.on("uncaughtException", (err) => {
+    console.error("uncaughtException:", err && err.stack ? err.stack : err);
+  });
+}
 
 // Start server (long-running hosts only — never on Vercel/serverless).
 if (!process.env.VERCEL) {

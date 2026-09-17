@@ -23,12 +23,61 @@ function normalizeParams(params) {
   });
 }
 
+// SQLite is only ever a local fallback. On serverless hosts the filesystem is
+// read-only and native addons may be absent, so load it defensively: a bare
+// require() here throws during module load and turns every request into
+// FUNCTION_INVOCATION_FAILED before any route can run.
+let sqlite3 = null;
 if (!connectionString) {
-  const sqlite3 = require("sqlite3").verbose();
+  try {
+    sqlite3 = require("sqlite3").verbose();
+  } catch (e) {
+    console.error(
+      "WARNING: DATABASE_URL is not set and sqlite3 could not be loaded (" +
+        (e.code || e.message) +
+        "). Queries will report the misconfiguration instead of crashing boot.",
+    );
+  }
+}
 
+if (!connectionString && !sqlite3) {
+  // Degraded driver: keeps the process alive so the host can serve static
+  // pages and return a clear per-query error instead of a blanket 500.
+  const unavailable = () => (sql, params, cb) => {
+    const err = new Error("DATABASE_URL is not configured on this host");
+    err.code = "ENOCONFIG";
+    if (typeof params === "function") cb = params;
+    if (typeof cb === "function") return cb(err);
+    return Promise.reject(err);
+  };
+  module.exports = {
+    get: unavailable(),
+    all: unavailable(),
+    run: unavailable(),
+    exec: (sql, cb) =>
+      typeof cb === "function" ? cb(null) : Promise.resolve(),
+    serialize: (fn) => (typeof fn === "function" ? fn() : undefined),
+    prepare: () => ({
+      run: (params, cb) => (typeof params === "function" ? params : cb)(null),
+      finalize: (cb) => (typeof cb === "function" ? cb(null) : undefined),
+    }),
+    close: (cb) => (typeof cb === "function" ? cb(null) : Promise.resolve()),
+    translate: (sql) => ({ skip: false, text: sql }),
+    replacePlaceholders: (sql) => sql,
+  };
+} else if (!connectionString) {
   const dbDir = path.join(__dirname, "database");
-  if (!fs.existsSync(dbDir)) {
+  try {
     fs.mkdirSync(dbDir, { recursive: true });
+  } catch (e) {
+    // Read-only filesystem (Vercel): opening the DB below will fail in the
+    // callback rather than killing the module here.
+    console.warn(
+      "database dir unavailable (read-only FS?):",
+      dbDir,
+      "-",
+      e.code || e.message,
+    );
   }
 
   const sqlitePath = path.join(dbDir, "parfumerie.db");
