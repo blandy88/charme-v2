@@ -27,19 +27,9 @@ jobs:
       - name: Assemble static site
         run: |
           mkdir -p _site
-          cp index.html _site/
-          cp styles.css _site/
-          cp script.js _site/
-          cp -r js _site/
-          cp -r css _site/
-          cp -r images _site/ 2>/dev/null || true
-          cp -r assets _site/ 2>/dev/null || true
-          cp *.png _site/ 2>/dev/null || true
-          cp *.jpg _site/ 2>/dev/null || true
-          cp *.svg _site/ 2>/dev/null || true
-          cp *.webp _site/ 2>/dev/null || true
+          # Browser-facing assets now live in public/ (required by Vercel's CDN).
+          cp -r public/. _site/
           cp CNAME _site/ 2>/dev/null || true
-          cp favicon.ico _site/ 2>/dev/null || true
           touch _site/.nojekyll
 
       - name: Upload artifact

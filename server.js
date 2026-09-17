@@ -24,12 +24,19 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.NODE_ENV || "development";
+// Every browser-facing asset (html, css, js, images, uploads) now lives under
+// public/. Vercel REQUIRES this: it serves public/** from its CDN and
+// explicitly ignores express.static(). Keeping the same layout on Render means
+// one codebase behaves identically on both hosts.
+const PUBLIC_DIR = path.join(__dirname, "public");
 const allowedOrigins = [
   ...(process.env.CORS_ORIGINS || "")
     .split(",")
     .map((o) => o.trim())
     .filter(Boolean),
   process.env.RENDER_EXTERNAL_URL,
+  // Vercel injects VERCEL_URL (host without protocol) for preview + prod deploys.
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
   "https://charmeperfume.me",
   "https://www.charmeperfume.me",
 ].filter(Boolean);
@@ -126,16 +133,46 @@ const upload = multer({
   },
 });
 
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, "uploads", "avatars");
-if (!fs.existsSync(uploadsDir)) {
+// Vercel (serverless) ships a READ-ONLY filesystem: the project dir cannot be
+// written, and only /tmp is guaranteed writable (and then only for the life of
+// one invocation). Render's free tier DOES allow writes. So target whichever
+// the runtime allows, and NEVER let a boot-time mkdir crash the whole deploy.
+// Vercel's project dir is read-only; /tmp is the only writable spot (and it is
+// wiped between invocations). Everywhere else (Render, local) keep uploads
+// inside the repo so a persistent disk can hold them.
+const uploadedBase = process.env.VERCEL
+  ? path.join("/tmp", "charme")
+  : path.join(PUBLIC_DIR, "uploads");
+const uploadsDir = path.join(uploadedBase, "uploads", "avatars");
+try {
   fs.mkdirSync(uploadsDir, { recursive: true });
+} catch (e) {
+  console.warn(
+    "uploads dir unavailable (read-only FS?):",
+    uploadsDir,
+    "-",
+    e.code || e.message
+  );
+  // never throw at boot: multer routes will surface their own error later
 }
+process.env.CHARME_UPLOADS = uploadsDir; // let other modules honour the same dir
 
-// Ensure database directory exists (fresh clones omit the git-ignored database/)
-const dbDir = path.join(__dirname, "database");
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+// Ensure database directory exists (fresh clones omit the git-ignored database/).
+// Only needed for the SQLite fallback: with DATABASE_URL set we never touch disk.
+// MUST stay try/catch — on Vercel the project dir is read-only and an unguarded
+// mkdirSync here throws EROFS at module load, which 500s EVERY invocation.
+if (!process.env.DATABASE_URL) {
+  const dbDir = path.join(__dirname, "database");
+  try {
+    fs.mkdirSync(dbDir, { recursive: true });
+  } catch (e) {
+    console.warn(
+      "database dir unavailable (read-only FS?):",
+      dbDir,
+      "-",
+      e.code || e.message,
+    );
+  }
 }
 
 // 🔧 Avatar migration function
@@ -770,24 +807,24 @@ function resolveImageSource(reqPath) {
   // upscaling) instead of serving the ~2MB raw JPEG.
   const lowerPath = reqPath.toLowerCase();
   if (lowerPath === "/hero-bg.jpg") {
-    return { filePath: path.join(__dirname, "hero-bg.jpg"), width: 1920 };
+    return { filePath: path.join(PUBLIC_DIR, "hero-bg.jpg"), width: 1920 };
   }
   if (lowerPath === "/hero-bg-night.jpg") {
-    return { filePath: path.join(__dirname, "hero-bg-night.jpg"), width: 1920 };
+    return { filePath: path.join(PUBLIC_DIR, "hero-bg-night.jpg"), width: 1920 };
   }
   // Root-level perfume bottle images (e.g. /layton.png)
   if (reqPath.startsWith("/") && IMAGE_EXT.test(reqPath) && reqPath.indexOf("/", 1) === -1) {
     const file = reqPath.slice(1).toLowerCase();
     if (allowedStaticFiles.has(`/${file}`)) {
       const real = allowedStaticFiles.get(`/${file}`);
-      return { filePath: path.join(__dirname, real), width: 800 };
+      return { filePath: path.join(PUBLIC_DIR, real), width: 800 };
     }
     return null;
   }
   for (const { prefix, width } of IMAGE_SIZES) {
     if (reqPath.startsWith(prefix)) {
       const rel = reqPath.slice(prefix.length).replace(/[/\\]/g, "");
-      const filePath = path.join(__dirname, prefix, rel);
+      const filePath = path.join(PUBLIC_DIR, prefix, rel);
       if (fs.existsSync(filePath)) return { filePath, width };
       return null;
     }
@@ -864,14 +901,22 @@ app.use(async (req, res, next) => {
   next();
 });
 
-const allowedStaticFiles = new Map([
-  "index.html",
-  "styles.css",
-  "script.js",
-  "default.jpg",
-  ...fs.readdirSync(__dirname).filter((file) => /\.(png|jpe?g)$/i.test(file)),
-  ...fs.readdirSync(__dirname).filter((file) => file.toLowerCase().endsWith(".svg")),
-].map((file) => [`/${file.toLowerCase()}`, file]),
+const _publicFiles = (() => {
+  try {
+    return fs.readdirSync(PUBLIC_DIR);
+  } catch {
+    return [];
+  }
+})();
+const allowedStaticFiles = new Map(
+  [
+    "index.html",
+    "styles.css",
+    "script.js",
+    "default.jpg",
+    ..._publicFiles.filter((file) => /\.(png|jpe?g)$/i.test(file)),
+    ..._publicFiles.filter((file) => file.toLowerCase().endsWith(".svg")),
+  ].map((file) => [`/${file.toLowerCase()}`, file]),
 );
 
 /* The whitelist above is a snapshot taken at boot, so any root-level asset
@@ -896,8 +941,8 @@ function resolveRootFile(reqPath) {
   const name = String(reqPath || "").replace(/^\/+/, "");
   if (!ROOT_FILE_RE.test(name) || name.indexOf("..") !== -1) return null;
   if (!ROOT_FILE_EXT.has(path.extname(name).toLowerCase())) return null;
-  const abs = path.join(__dirname, name);
-  if (path.dirname(abs) !== __dirname) return null;
+  const abs = path.join(PUBLIC_DIR, name);
+  if (path.dirname(abs) !== PUBLIC_DIR) return null;
   let st;
   try {
     st = fs.statSync(abs);
@@ -911,7 +956,7 @@ function resolveRootFile(reqPath) {
 app.use((req, res, next) => {
   if (req.path === "/") {
     res.setHeader("Cache-Control", "no-cache, must-revalidate");
-    return res.sendFile(path.join(__dirname, "index.html"));
+    return res.sendFile(path.join(PUBLIC_DIR, "index.html"));
   }
 
   const normalizedPath = req.path.toLowerCase();
@@ -937,59 +982,39 @@ app.use((req, res, next) => {
     } else {
       res.setHeader("Cache-Control", "public, max-age=604800");
     }
-    return res.sendFile(path.join(__dirname, staticFile));
+    return res.sendFile(path.join(PUBLIC_DIR, staticFile));
   }
 
   next();
 });
-app.use(
-  "/css",
-  express.static(path.join(__dirname, "css"), {
-    index: false,
-    maxAge: "7d",
-  }),
-);
-app.use(
-  "/js",
-  express.static(path.join(__dirname, "js"), {
-    index: false,
-    maxAge: "7d",
-  }),
-);
-app.use(
-  "/assets",
-  express.static(path.join(__dirname, "assets"), {
-    index: false,
-    maxAge: "7d",
-  }),
-);
-app.use(
-  "/uploads/fragrances",
-  express.static(path.join(__dirname, "uploads", "fragrances"), {
-    index: false,
-    maxAge: "7d",
-  }),
-);
-app.use(
-  "/images/notes",
-  express.static(path.join(__dirname, "images", "notes"), {
-    index: false,
-    maxAge: "30d",
-  }),
-);
-app.use(
-  "/images/mood-pictures",
-  express.static(path.join(__dirname, "images", "mood-pictures"), {
-    index: false,
-    maxAge: "30d",
-  }),
-);
 
-// Serve avatar files
-app.use(
-  "/uploads/avatars",
-  express.static(path.join(__dirname, "uploads", "avatars"), { maxAge: "7d" }),
-);
+// On Vercel these mounts never fire (the CDN serves public/** first), but they
+// must stay correct for Render / local, where Express is the only server.
+const staticMounts = [
+  ["/css", path.join(PUBLIC_DIR, "css"), "7d"],
+  ["/js", path.join(PUBLIC_DIR, "js"), "7d"],
+  ["/assets", path.join(PUBLIC_DIR, "assets"), "7d"],
+  ["/uploads/fragrances", path.join(PUBLIC_DIR, "uploads", "fragrances"), "7d"],
+  ["/images/notes", path.join(PUBLIC_DIR, "images", "notes"), "30d"],
+  [
+    "/images/mood-pictures",
+    path.join(PUBLIC_DIR, "images", "mood-pictures"),
+    "30d",
+  ],
+];
+for (const [route, dir, maxAge] of staticMounts) {
+  app.use(route, express.static(dir, { index: false, maxAge }));
+}
+
+// Serve avatar files: committed ones under public/uploads/avatars, plus
+// anything written at runtime (Vercel: /tmp, Render: repo disk).
+const avatarDirs = [
+  path.join(PUBLIC_DIR, "uploads", "avatars"),
+  path.join(uploadedBase, "uploads", "avatars"),
+];
+for (const dir of new Set(avatarDirs)) {
+  app.use("/uploads/avatars", express.static(dir, { index: false, maxAge: "7d" }));
+}
 
 // Rate limiting
 const authLimiter = rateLimit({
@@ -4194,7 +4219,7 @@ app.get("/api/reviews/likes/:fragrance", authenticateToken, (req, res) => {
 
 // Serve the main page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.join(PUBLIC_DIR, "index.html"));
 });
 
 // 🚀 ENHANCED REVIEW SYSTEM: Reply Management Endpoints
@@ -4614,20 +4639,26 @@ app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// Export the app so serverless hosts (Vercel api/index.js) can mount it.
+module.exports = app;
 
-  // Keep-alive: self-ping every 10 min so Render free tier doesn't sleep
-  const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
-  if (SELF_URL.startsWith("http")) {
-    setInterval(() => {
-      fetch(SELF_URL)
-        .then(() => console.log("🔁 Keep-alive ping sent"))
-        .catch(() => {});
-    }, 10 * 60 * 1000); // every 10 minutes
-  }
-});
+// Start server (long-running hosts only — never on Vercel/serverless).
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+
+    // Keep-alive: self-ping every 10 min so Render free tier doesn't sleep
+    const SELF_URL =
+      process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+    if (SELF_URL.startsWith("http")) {
+      setInterval(() => {
+        fetch(SELF_URL)
+          .then(() => console.log("🔁 Keep-alive ping sent"))
+          .catch(() => {});
+      }, 10 * 60 * 1000); // every 10 minutes
+    }
+  });
+}
 
 // Graceful shutdown
 process.on("SIGINT", () => {

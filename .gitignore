@@ -29,7 +29,7 @@ build/
 .idea/
 
 # Uploads
-/uploads/
+/public/uploads/
 
 # Generated image import artifacts
 /scripts/fragrance-image-manifest.csv
