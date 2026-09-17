@@ -8,9 +8,16 @@ const _isLocalHost =
   /^(localhost|127\.0\.0\.1|\[::1\]|::1)$/i.test(window.location.hostname);
 const _isRenderHost =
   /(^|\.)onrender\.com$/i.test(window.location.hostname);
-window.CHARME_API_ORIGIN = _isLocalHost || _isRenderHost
-  ? window.location.origin
-  : "https://parfumerie-charme.onrender.com";
+// Vercel serves the full Express app too, so it has its own /api. Pointing
+// Vercel pages at the Render origin made every call cross-origin, and helmet's
+// connect-src 'self' blocked them (login died with "Failed to fetch").
+const _isVercelHost = /(^|\.)vercel\.(app|dev)$/i.test(
+  window.location.hostname,
+);
+window.CHARME_API_ORIGIN =
+  _isLocalHost || _isRenderHost || _isVercelHost
+    ? window.location.origin
+    : "https://parfumerie-charme.onrender.com";
 (function () {
   if (window.location.origin === window.CHARME_API_ORIGIN) return;
   const nativeFetch = window.fetch.bind(window);

@@ -777,7 +777,14 @@ const helmetOptions =
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             imgSrc: ["'self'", "data:", "blob:", "https://fimgs.net"],
             mediaSrc: ["'self'"],
-            connectSrc: ["'self'"],
+            // 'self' covers same-origin /api calls on Render and Vercel. The
+            // Render origin is listed so static hosts that legitimately call
+            // the backend cross-origin (GitHub Pages / a custom domain) are not
+            // silently blocked.
+            connectSrc: [
+              "'self'",
+              "https://parfumerie-charme.onrender.com",
+            ],
             objectSrc: ["'none'"],
             baseUri: ["'self'"],
             frameSrc: ["'self'", "https://www.openstreetmap.org", "https://openstreetmap.org"],
