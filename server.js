@@ -30,7 +30,6 @@ const {
   sendWelcomeEmail,
 } = require("./services/emailService");
 const createDOMPurify = require("dompurify");
-const { JSDOM } = require("jsdom");
 require("dotenv").config();
 
 const app = express();
@@ -117,16 +116,71 @@ if (ENV === "production" && allowedOrigins.length === 0) {
   throw new Error("CORS_ORIGINS must be set in production");
 }
 
-// Setup DOMPurify for server-side HTML sanitization
-const window = new JSDOM("").window;
-const DOMPurify = createDOMPurify(window);
+// Setup DOMPurify for server-side HTML sanitization.
+//
+// jsdom pulls in html-encoding-sniffer -> @exodus/bytes, which ships as
+// ESM-only. Runtimes without require(ESM) support (Vercel's Node runtime)
+// throw ERR_REQUIRE_ESM while loading this module, which kills every
+// invocation with FUNCTION_INVOCATION_FAILED. Load it defensively and fall
+// back to the strict allow-list sanitizer below.
+const ALLOWED_TAGS = ["b", "i", "em", "strong", "u", "br", "p"];
+let DOMPurify = null;
+try {
+  const { JSDOM } = require("jsdom");
+  DOMPurify = createDOMPurify(new JSDOM("").window);
+} catch (e) {
+  console.warn(
+    "jsdom unavailable, using built-in HTML sanitizer:",
+    e.code || e.message,
+  );
+}
+
+// Minimal, attribute-free sanitizer used when jsdom/DOMPurify cannot load.
+// It keeps only the allow-listed tags and drops every attribute, so injected
+// scripts, event handlers and urls are removed rather than escaped.
+function escapeHtmlText(text) {
+  return String(text).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function fallbackSanitize(dirty) {
+  let s = String(dirty == null ? "" : dirty);
+  s = s.replace(/<!--[\s\S]*?-->/g, "");
+  s = s.replace(/<\s*(script|style)\b[\s\S]*?<\s*\/\s*\1\s*>/gi, "");
+
+  const allowed = new Set(ALLOWED_TAGS);
+  const tagPattern = /<[^>]*>?/g;
+  let out = "";
+  let last = 0;
+  let match;
+  while ((match = tagPattern.exec(s)) !== null) {
+    out += escapeHtmlText(s.slice(last, match.index));
+    const raw = match[0];
+    // A real tag has no whitespace straight after "<" or after the slash, so
+    // plain prose like "a < b and c > d" stays text and is escaped, not parsed.
+    const parsed = raw.match(/^<(\/?)([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/);
+    if (parsed) {
+      const name = parsed[2].toLowerCase();
+      if (allowed.has(name)) {
+        out += parsed[1] ? `</${name}>` : name === "br" ? "<br />" : `<${name}>`;
+      }
+      // anything else is dropped entirely
+    } else {
+      out += escapeHtmlText(raw); // stray "<" or malformed tag
+    }
+    last = match.index + raw.length;
+  }
+  out += escapeHtmlText(s.slice(last));
+  return out;
+}
 
 // HTML sanitization function
 function sanitizeHtml(dirty) {
-  return DOMPurify.sanitize(dirty, {
-    ALLOWED_TAGS: ["b", "i", "em", "strong", "u", "br", "p"],
-    ALLOWED_ATTR: [],
-  });
+  if (DOMPurify) {
+    return DOMPurify.sanitize(dirty, {
+      ALLOWED_TAGS,
+      ALLOWED_ATTR: [],
+    });
+  }
+  return fallbackSanitize(dirty);
 }
 
 // Multer configuration for avatar uploads
@@ -4667,6 +4721,8 @@ app.use((req, res) => {
 
 // Export the app so serverless hosts can mount it.
 module.exports = app;
+// Exposed for tests only; harmless to the Express app.
+module.exports.__sanitizeHtml = sanitizeHtml;
 
 // On serverless, an unhandled rejection or exception kills the instance and
 // surfaces as an opaque FUNCTION_INVOCATION_FAILED. Log it first so the real
