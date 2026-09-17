@@ -314,7 +314,11 @@ async function migrateAvatarsToFileSystem() {
 }
 
 // Database setup (PostgreSQL)
-console.log("Connected to PostgreSQL database");
+console.log(
+  process.env.DATABASE_URL
+    ? "Connected to PostgreSQL database"
+    : "WARNING: DATABASE_URL is NOT set on this host - database queries will fail",
+);
 
 // Ensure foreign keys are enforced and concurrent writes wait briefly.
 // On Vercel (serverless) the schema already exists in Postgres: running ~40
@@ -1517,6 +1521,32 @@ app.post("/api/auth/resend-verification", resendVerificationLimiter, async (req,
   }
 });
 
+// Diagnostic endpoint: open /api/health on any deployment to see whether this
+// host actually has DATABASE_URL and can reach the database. Never exposes the
+// connection string itself.
+app.get("/api/health", async (req, res) => {
+  const info = {
+    hasDatabaseUrl: Boolean(process.env.DATABASE_URL),
+    onVercel: Boolean(process.env.VERCEL),
+    node: process.version,
+    sharp: Boolean(sharp),
+    dompurify: Boolean(DOMPurify),
+  };
+  try {
+    const row = await new Promise((resolve, reject) => {
+      db.get("SELECT 1 AS ok", [], (err, r) => (err ? reject(err) : resolve(r)));
+    });
+    info.db = "ok";
+    info.dbValue = row ? row.ok : null;
+    info.ok = true;
+  } catch (e) {
+    info.ok = false;
+    info.db = "error";
+    info.dbError = e && (e.code || e.message);
+  }
+  res.status(info.ok ? 200 : 503).json(info);
+});
+
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -1604,6 +1634,13 @@ app.post("/api/auth/login", async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
+    // Surface a database misconfiguration as its own status instead of a bare
+    // 500, so it is obvious from the browser what is actually wrong.
+    if (error && error.code === "ENOCONFIG") {
+      return res
+        .status(503)
+        .json({ error: "DATABASE_URL is not configured on this host" });
+    }
     res.status(500).json({ error: "Internal server error" });
   }
 });
