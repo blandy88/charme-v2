@@ -165,11 +165,77 @@ only inside the three dead files, so there is no live impact.
 | 5 | Finish raising sub-11 px text (2,810 elements at tablet) | low-med | readability |
 | 7 | Consolidate 17 breakpoints → 4 | medium | predictable responsive |
 | 8 | Rebuild z-index scale | low | no more stacking wars |
+| 10 | **Delete 663 KB dead JS** (three.min.js 636 KB + 2) | none | −663 KB per deploy |
+| 11 | Add `width`/`height` to 2,983 images | low-med | kills layout shift |
+| 12 | Add `og:image`, canonical, Product JSON-LD | low | social + SEO |
+| 13 | Strip 1,130 `console.*` calls from prod JS | low | payload + hygiene |
+| 14 | Enlarge 251 sub-44 px tap targets | medium | mobile usability |
+| 15 | Fix 154 contrast failures (verify over images first) | medium | WCAG AA |
 
 Items 1, 2 and 3 (collapse the profile CSS, render cards from JSON, unify the
 colour tokens) are taste-level craft — worth doing on a premium model with a
 tight spec, not as a mechanical sweep. Item 5 needs a design pass because that
 text sits inside fixed-size badges. Items 7 and 8 are mechanical.
+
+---
+
+## 6b. Second pass — deeper measurements
+
+### CSS coverage: **93% of what ships is never applied**
+Measured with Chromium coverage on the initial load:
+
+| stylesheet | shipped | used |
+|---|---|---|
+| `css/combined-profiles.css` | **2,098 KB** | **1%** |
+| `styles.css` | 708 KB | 24% |
+| `css/charme-signin.css` | 17 KB | 9% |
+| `css/auth-modal.css` | 16 KB | 1% |
+| `css/guides.css` | 15 KB | 0% |
+| `css/fragrance-layout-normalize.css` | 13 KB | 61% |
+| **total** | **2,955 KB** | **7% (209 KB)** |
+
+`combined-profiles.css` is downloaded on every page to supply roughly 21 KB of
+rules. Caveat: coverage reflects the initial view, so modal/expanded-state rules
+count as unused — but 1% is not explained by that.
+
+### Contrast
+**154 of 1,197 visible text elements fail WCAG AA.** Worst:
+`.bottle-render__name` at **1.07:1** (product name effectively invisible),
+`font-size: clamp(5px, 2.7cqi, 34px)` — a 5px floor.
+*Caveat:* some of these sit on top of images, which the audit cannot sample, so
+each needs a visual confirmation before being "fixed".
+
+### Mobile tap targets
+**251 interactive elements smaller than 44×44 px** at 375 px wide.
+Worst: `.search-tab` 64×15, `.theme-toggle` 28×28, `.charme-nav-trigger` 30×28.
+
+### Images
+3,169 images at runtime. **2,983 have no `width`/`height`** → layout shift as
+they load. Only 2 lack `loading="lazy"`, and **0 lack `alt`** (that part is good).
+
+### Forms & controls
+980 fields, **2 unlabelled**. 2,542 buttons, **14 with no accessible name**.
+
+### SEO
+Present: `<title>`, `meta description`, `og:title`.
+Missing: **`og:image`** (no social preview), **`<link rel=canonical>`**, and
+**any JSON-LD structured data** — notable for a shop, since Product schema is
+what earns rich results.
+
+### JavaScript
+2,596 KB across 14 files. `script.js` alone is 842 KB with **1,130 `console.*`
+calls**, 86 `innerHTML` assignments and 3 empty `catch {}` blocks.
+
+**663 KB of dead JS** is never loaded:
+- `three.min.js` — **636 KB**, a 3D library. Not referenced by any HTML or JS,
+  and nothing in the codebase calls `THREE.*`.
+- `bmi-calculator.js` — 21 KB
+- `fragrance-api-service-clean.js` — 6 KB
+
+### Checked and correct (no action)
+- **RTL for Arabic works.** `i18n.js:2434` sets `dir="rtl"` plus a `lang-rtl`
+  class for `ar`/`he`/`fa`/`ur`, and `:2423` updates `<html lang>`.
+- 0 console errors, 0 page errors, 0 images missing `alt`.
 
 ---
 
