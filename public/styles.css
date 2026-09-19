@@ -1470,7 +1470,7 @@ html {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 8.5px !important;
+    font-size: 10px !important;
     font-weight: 700 !important;
     line-height: 1 !important;
     color: #0a0a0a !important;
@@ -2337,7 +2337,7 @@ html {
         right: -6px;
         min-width: 14px;
         height: 14px;
-        font-size: 8px;
+        font-size: 10px;
         line-height: 10px;
         padding: 2px 4px;
         border-width: 1.5px;
@@ -3823,7 +3823,7 @@ html {
     }
 
     .user-profile.admin-user .user-name::after {
-        font-size: 7px;
+        font-size: 9px;
         padding: 1.5px 4px;
     }
 }
@@ -3885,7 +3885,7 @@ html {
     }
 
     .user-profile.admin-user .user-name::after {
-        font-size: 6.5px !important;
+        font-size: 9px !important;
         padding: 1px 3.5px !important;
         letter-spacing: 0.3px;
     }
@@ -4227,7 +4227,7 @@ html[data-theme="light"] .contact-card {
 }
 
 .meta-separator {
-    font-size: 8px;
+    font-size: 10px;
     color: rgba(255, 255, 255, 0.2);
 }
 
@@ -5754,7 +5754,7 @@ html[data-theme="light"] .social-popup__backdrop {
     color: #060606;
     border-radius: 50%;
     padding: 2px 5px;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 600;
     min-width: 14px;
     height: 14px;
@@ -13413,7 +13413,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 8px;
+    font-size: 10px;
     z-index: 10;
     filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5))
         drop-shadow(0 0 3px rgba(255, 215, 0, 0.7))
@@ -17205,7 +17205,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 50%;
     width: 8px;
     height: 8px;
-    font-size: 6px;
+    font-size: 9px;
     font-weight: bold;
     text-align: center;
     line-height: 8px;
@@ -18165,7 +18165,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .user-counter-label-small {
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
@@ -18834,7 +18834,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     display: inline-block;
     background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
     color: white;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 600;
     padding: 2px 6px;
     border-radius: 6px;
@@ -19060,7 +19060,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .user-counter-label-small {
-    font-size: 7px;
+    font-size: 9px;
     letter-spacing: 0.4px;
 }
 
@@ -19128,7 +19128,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     }
 
     .user-counter-label-small {
-        font-size: 6px;
+        font-size: 9px;
         letter-spacing: 0.3px;
     }
 }
@@ -28444,7 +28444,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     min-width: 13px !important;
     height: 13px !important;
     line-height: 13px !important;
-    font-size: 8.5px !important;
+    font-size: 10px !important;
     padding: 0 3px !important;
 }
 
@@ -28792,7 +28792,7 @@ html[data-theme="light"] .lang-option:hover {
     position: static !important;
     display: inline-flex !important;
     align-items: center !important;
-    font-size: 8.5px !important;
+    font-size: 10px !important;
     font-weight: 700 !important;
     letter-spacing: 0.07em !important;
     line-height: 1 !important;

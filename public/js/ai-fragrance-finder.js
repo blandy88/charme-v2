@@ -207,7 +207,7 @@ class AIFragranceFinder {
                 <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
               </svg>
             </div>
-            <h1 class="sp-title">Find Your Signature</h1>
+            <h2 class="sp-title">Find Your Signature</h2>
             <p class="sp-subtitle">Answer 8 quick questions and discover fragrances that match your taste.</p>
             <button class="sp-start-btn" id="spStartBtn">
               Start Profiling

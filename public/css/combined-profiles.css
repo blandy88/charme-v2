@@ -3450,13 +3450,13 @@
 
 .sauvage-theme .brand-name {
     color: #647b95 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
     font-weight: 500 !important;
 }
 .sauvage-theme .brand-location { color: #9aa8b8 !important; }
 .sauvage-theme .product-name {
     color: #1d2a36 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
     font-weight: 700 !important;
 }
 .sauvage-theme .price-badge {
@@ -3518,7 +3518,7 @@
 }
 .sauvage-profile-card .profile-title {
     color: #1d2a36 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 .sauvage-profile-card .profile-subtitle {
     color: #9aa8b8 !important;
@@ -3632,7 +3632,7 @@
 }
 .sauvage-description-title {
     color: #1d2a36 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
     font-size: 1.4rem !important;
     margin-bottom: 5px !important;
 }
@@ -3887,13 +3887,13 @@
 
 .bleudechanel-theme .brand-name {
     color: #4A90D9 !important;
-    font-family: 'Montserrat', sans-serif !important;
+    font-family: 'DM Sans', sans-serif !important;
     font-weight: 300 !important;
 }
 .bleudechanel-theme .brand-location { color: #7BA3CC !important; }
 .bleudechanel-theme .product-name {
     color: #e0e8f0 !important;
-    font-family: 'Montserrat', sans-serif !important;
+    font-family: 'DM Sans', sans-serif !important;
     font-weight: 600 !important;
 }
 .bleudechanel-theme .price-badge {
@@ -3953,7 +3953,7 @@
     border-radius: 10px !important;
     padding: 30px !important;
 }
-.bleudechanel-profile-card .profile-title { color: #e0e8f0 !important; font-family: 'Montserrat', sans-serif !important; }
+.bleudechanel-profile-card .profile-title { color: #e0e8f0 !important; font-family: 'DM Sans', sans-serif !important; }
 .bleudechanel-profile-card .profile-subtitle { color: #7BA3CC !important; }
 
 /* VERTICAL WAVE BARS (Unique to Bleu de Chanel) */
@@ -4099,7 +4099,7 @@
     border-radius: 10px !important;
     padding: 35px !important;
 }
-.bleudechanel-description-title { color: #e0e8f0 !important; font-family: 'Montserrat', sans-serif !important; font-size: 1.4rem !important; }
+.bleudechanel-description-title { color: #e0e8f0 !important; font-family: 'DM Sans', sans-serif !important; font-size: 1.4rem !important; }
 .bleudechanel-description-subtitle { color: #7BA3CC !important; font-size: 0.75rem !important; margin-bottom: 20px !important; }
 .bleudechanel-description-text { color: #c0ccd8 !important; line-height: 1.8 !important; margin-bottom: 12px !important; }
 .bleudechanel-description-text strong { color: #4A90D9 !important; }
@@ -4804,13 +4804,13 @@
 
 .oudwood-theme .brand-name {
     color: #7D8B6A !important;
-    font-family: 'Libre Baskerville', serif !important;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 400 !important;
 }
 .oudwood-theme .brand-location { color: #5e6b4e !important; }
 .oudwood-theme .product-name {
     color: #e8ede0 !important;
-    font-family: 'Libre Baskerville', serif !important;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 600 !important;
 }
 .oudwood-theme .price-badge {
@@ -4870,7 +4870,7 @@
     border-radius: 6px !important;
     padding: 30px !important;
 }
-.oudwood-profile-card .profile-title { color: #e8ede0 !important; font-family: 'Libre Baskerville', serif !important; }
+.oudwood-profile-card .profile-title { color: #e8ede0 !important; font-family: 'Playfair Display', serif !important; }
 .oudwood-profile-card .profile-subtitle { color: #5e6b4e !important; }
 
 /* CONCENTRIC RINGS (Unique to Oud Wood) */
@@ -4899,8 +4899,8 @@
 .ow-ring-versatility { stroke: #a8b898 !important; }
 .ow-ring-label {
     fill: #5e6b4e !important;
-    font-size: 8px !important;
-    font-family: 'Libre Baskerville', serif !important;
+    font-size: 10px !important;
+    font-family: 'Playfair Display', serif !important;
     text-transform: uppercase !important;
     letter-spacing: 1px !important;
 }
@@ -4908,7 +4908,7 @@
     fill: #e8ede0 !important;
     font-size: 10px !important;
     font-weight: 700 !important;
-    font-family: 'Libre Baskerville', serif !important;
+    font-family: 'Playfair Display', serif !important;
 }
 
 /* Section Headers */
@@ -4931,7 +4931,7 @@
     font-weight: 700 !important;
     letter-spacing: 3px !important;
     color: #7D8B6A !important;
-    font-family: 'Libre Baskerville', serif !important;
+    font-family: 'Playfair Display', serif !important;
 }
 
 /* LEAF NOTES (Unique to Oud Wood) */
@@ -4952,7 +4952,7 @@
     align-items: center !important;
     gap: 10px !important;
     transition: all 0.3s ease !important;
-    font-family: 'Libre Baskerville', serif !important;
+    font-family: 'Playfair Display', serif !important;
 }
 .ow-leaf:hover {
     background: rgba(125,139,106,0.12) !important;
@@ -4970,7 +4970,7 @@
     border-radius: 6px !important;
     padding: 35px !important;
 }
-.oudwood-description-title { color: #e8ede0 !important; font-family: 'Libre Baskerville', serif !important; font-size: 1.4rem !important; }
+.oudwood-description-title { color: #e8ede0 !important; font-family: 'Playfair Display', serif !important; font-size: 1.4rem !important; }
 .oudwood-description-subtitle { color: #5e6b4e !important; font-size: 0.75rem !important; margin-bottom: 20px !important; }
 .oudwood-description-text { color: #c4cfb8 !important; line-height: 1.8 !important; margin-bottom: 12px !important; }
 .oudwood-description-text strong { color: #7D8B6A !important; }
@@ -5217,13 +5217,13 @@
 
 .lanuit-theme .brand-name {
     color: #9B7FD4 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
     font-weight: 400 !important;
 }
 .lanuit-theme .brand-location { color: #7a60b8 !important; }
 .lanuit-theme .product-name {
     color: #e0d8f0 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
     font-weight: 600 !important;
 }
 .lanuit-theme .price-badge {
@@ -5283,7 +5283,7 @@
     border-radius: 10px !important;
     padding: 30px !important;
 }
-.lanuit-profile-card .profile-title { color: #e0d8f0 !important; font-family: 'Space Grotesk', sans-serif !important; }
+.lanuit-profile-card .profile-title { color: #e0d8f0 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
 .lanuit-profile-card .profile-subtitle { color: #7a60b8 !important; }
 
 /* CONSTELLATION MAP (Unique to La Nuit) */
@@ -5314,8 +5314,8 @@
 }
 .lanuit-star-label {
     fill: #7a60b8 !important;
-    font-size: 8px !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 10px !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
 }
@@ -5323,7 +5323,7 @@
     fill: #e0d8f0 !important;
     font-size: 11px !important;
     font-weight: 700 !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
 /* Stat Cards */
@@ -5383,7 +5383,7 @@
     margin-bottom: 12px !important;
     padding-bottom: 8px !important;
     border-bottom: 1px solid rgba(155,127,212,0.15) !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 .lanuit-star-notes {
     display: flex !important;
@@ -5435,7 +5435,7 @@
     border-radius: 10px !important;
     padding: 35px !important;
 }
-.lanuit-description-title { color: #e0d8f0 !important; font-family: 'Space Grotesk', sans-serif !important; font-size: 1.4rem !important; }
+.lanuit-description-title { color: #e0d8f0 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 1.4rem !important; }
 .lanuit-description-subtitle { color: #7a60b8 !important; font-size: 0.75rem !important; margin-bottom: 20px !important; }
 .lanuit-description-text { color: #c4bada !important; line-height: 1.8 !important; margin-bottom: 12px !important; }
 .lanuit-description-text strong { color: #9B7FD4 !important; }

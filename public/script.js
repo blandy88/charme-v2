@@ -886,7 +886,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="product-info-section database-product-info">
               <div class="product-header-row">
                 <div class="product-info">
-                  <h1 class="brand-name">${safeBrand}</h1>
+                  <h3 class="brand-name">${safeBrand}</h3>
                   <h2 class="brand-location">${safeAudience} • ${safeType}</h2>
                   <h3 class="product-name">${safeName}</h3>
                 </div>
