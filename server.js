@@ -1035,8 +1035,6 @@ const _publicFiles = (() => {
 const allowedStaticFiles = new Map(
   [
     "index.html",
-    // The pre-React site, kept reachable at /legacy.html now that / is React.
-    "legacy.html",
     "styles.css",
     "script.js",
     "default.jpg",
@@ -1132,16 +1130,20 @@ for (const [route, dir, maxAge] of staticMounts) {
   app.use(route, express.static(dir, { index: false, maxAge }));
 }
 
-// React root bundle at /r-assets (content-hashed, so immutable). Named
-// distinctly from /assets, which holds the legacy site's icons.
+// React + Vite app at /app (source in frontend/, built output in public/app).
+// On Vercel the CDN serves public/** before Express ever runs, and GitHub Pages
+// copies public/ to the site root, so this mount only matters for Render and
+// local dev, where Express is the only server. Content-hashed assets are
+// immutable; index.html must always revalidate so a new build is picked up.
 app.use(
-  "/r-assets",
-  express.static(path.join(PUBLIC_DIR, "r-assets"), {
+  "/app/assets",
+  express.static(path.join(PUBLIC_DIR, "app", "assets"), {
     index: false,
     maxAge: "365d",
     immutable: true,
   }),
 );
+app.use("/app", express.static(path.join(PUBLIC_DIR, "app"), { maxAge: 0 }));
 
 // Serve avatar files: committed ones under public/uploads/avatars, plus
 // anything written at runtime (Vercel: /tmp, Render: repo disk).
@@ -4856,20 +4858,6 @@ app.delete("/api/replies/:replyId", authenticateToken, (req, res) => {
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Something went wrong!" });
-});
-
-// SPA fallback for the React root (/, /collection, /p/:slug, /favourites).
-//
-// Only Render and local need this: Vercel uses vercel.json rewrites and GitHub
-// Pages serves the generated 404.html. It MUST sit after every /api route and
-// before the JSON 404 handler. Requests for real files (anything with an
-// extension) fall through so missing assets still 404 honestly.
-app.use((req, res, next) => {
-  if (req.method !== "GET") return next();
-  if (req.path.startsWith("/api/")) return next();
-  if (path.extname(req.path)) return next();
-  if (!req.accepts("html")) return next();
-  return res.sendFile(path.join(PUBLIC_DIR, "index.html"));
 });
 
 // 404 handler

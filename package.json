@@ -10,8 +10,8 @@
     "update-avatars": "node scripts/update-avatars.js",
     "audit": "npm audit --omit=dev",
     "data:fragrances": "node scripts/build-fragrance-json.cjs",
-    "dev:web": "npm --prefix frontend run dev",
-    "build:web": "npm run data:fragrances && npm --prefix frontend run build"
+    "dev:app": "npm --prefix frontend run dev",
+    "build:app": "npm run data:fragrances && npm --prefix frontend run build"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
