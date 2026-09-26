@@ -1130,6 +1130,21 @@ for (const [route, dir, maxAge] of staticMounts) {
   app.use(route, express.static(dir, { index: false, maxAge }));
 }
 
+// React + Vite app at /app (source in frontend/, built output in public/app).
+// On Vercel the CDN serves public/** before Express ever runs, and GitHub Pages
+// copies public/ to the site root, so this mount only matters for Render and
+// local dev, where Express is the only server. Content-hashed assets are
+// immutable; index.html must always revalidate so a new build is picked up.
+app.use(
+  "/app/assets",
+  express.static(path.join(PUBLIC_DIR, "app", "assets"), {
+    index: false,
+    maxAge: "365d",
+    immutable: true,
+  }),
+);
+app.use("/app", express.static(path.join(PUBLIC_DIR, "app"), { maxAge: 0 }));
+
 // Serve avatar files: committed ones under public/uploads/avatars, plus
 // anything written at runtime (Vercel: /tmp, Render: repo disk).
 const avatarDirs = [

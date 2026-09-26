@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warm near-black, brass accent, ivory type — matches the Charme identity. */
+  --color-ink: #0b0a09;
+  --color-surface: #141210;
+  --color-surface-2: #1b1816;
+  --color-hairline: rgb(241 236 227 / 0.1);
+  --color-hairline-strong: rgb(241 236 227 / 0.18);
+  --color-cream: #f1ece3;
+  --color-muted: #a49a8e;
+  --color-faint: #756d64;
+  --color-brass: #c8a45c;
+  --color-brass-dim: #8d7440;
+
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--color-surface-2) var(--color-ink);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-brass);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Native selects render a white list on Windows regardless of colour-scheme;
+     force the dark surface so the filter rail stays coherent. */
+  select option {
+    background-color: var(--color-surface);
+    color: var(--color-cream);
+  }
+}
+
+@layer utilities {
+  /* Cards fade+rise once on entry. Staggered inline via --d. */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .animate-rise {
+    animation: rise 0.5s var(--ease-out-quint) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /* Small-caps meta line: letterspaced, muted — the editorial signature. */
+  .meta {
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .hairline {
+    border-color: var(--color-hairline);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
