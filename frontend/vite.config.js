@@ -7,7 +7,11 @@ import tailwindcss from "@tailwindcss/vite";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "..");
-const CATALOGUE = path.resolve(repoRoot, "public/data/fragrances.json");
+const PUBLIC_DIR = path.resolve(repoRoot, "public");
+const CATALOGUE = path.resolve(PUBLIC_DIR, "data/fragrances.json");
+
+// Distinct from public/assets (legacy icons) so the build can never clobber it.
+const ASSETS_DIR = "r-assets";
 
 const VIRTUAL_ID = "virtual:catalogue";
 const RESOLVED_ID = "\0" + VIRTUAL_ID;
@@ -18,7 +22,7 @@ const RESOLVED_ID = "\0" + VIRTUAL_ID;
  * We inline it as a virtual module so this app has ONE source of truth and
  * ships self-contained: no runtime fetch, so it works on Vercel (CDN), GitHub
  * Pages (static) and Render (Express) without touching server.js's static
- * allow-list. Long prose is trimmed here to keep the bundle lean.
+ * allow-list (which has no entry for /data).
  */
 function catalogue() {
   return {
@@ -58,16 +62,42 @@ function catalogue() {
   };
 }
 
+/**
+ * Root takeover housekeeping.
+ *
+ * outDir is `public/` — the directory Express, Vercel's CDN and GitHub Pages
+ * all serve. It is FULL of legacy files, so `emptyOutDir` must stay false;
+ * we only ever delete our own asset dir.
+ *
+ * GitHub Pages has no rewrite rules, so it serves `404.html` for any path it
+ * can't find. Emitting a copy of index.html as 404.html is what makes deep
+ * links like /p/layton work there (at the cost of a 404 status).
+ */
+function rootTakeover() {
+  const assetsAbs = path.join(PUBLIC_DIR, ASSETS_DIR);
+  return {
+    name: "charme-root-takeover",
+    buildStart() {
+      fs.rmSync(assetsAbs, { recursive: true, force: true });
+    },
+    closeBundle() {
+      const indexHtml = path.join(PUBLIC_DIR, "index.html");
+      if (fs.existsSync(indexHtml)) {
+        fs.copyFileSync(indexHtml, path.join(PUBLIC_DIR, "404.html"));
+      }
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), tailwindcss(), catalogue()],
-  // Built to public/app/** so all three hosts serve it from one committed dir.
-  // base must match that path: /app/ on Express, Vercel and GitHub Pages.
-  base: "/app/",
+  plugins: [react(), tailwindcss(), catalogue(), rootTakeover()],
+  // The app owns the site root now.
+  base: "/",
   build: {
-    outDir: path.resolve(repoRoot, "public/app"),
-    emptyOutDir: true,
-    // Content-hashed assets under /app/assets/** are immutable.
-    assetsDir: "assets",
+    outDir: PUBLIC_DIR,
+    // NEVER true: public/ holds legacy.html, 170 catalogue images, css/, js/.
+    emptyOutDir: false,
+    assetsDir: ASSETS_DIR,
     sourcemap: false,
   },
   server: {
