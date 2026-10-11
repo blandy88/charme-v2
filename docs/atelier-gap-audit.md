@@ -29,7 +29,7 @@ Sources: `_recon/legacy-inventory.md`, `_recon/scriptjs.md`, `_recon/product-blo
 | 5 | **Enhanced Ingredient Finder modal** | ✅ discovery overlay › Ingredient Finder | see §3c |
 | 6 | **Scent Profiler (AI note-matcher, `ai-fragrance-finder.js`)** | ✅ discovery overlay › Scent Profiler | see §3c |
 | 7 | Profile modal | ✅ /profile | — |
-| 8 | **Photo editor modal (crop / zoom / rotate avatar)** | ⚠️ plain upload only | **crop/zoom missing** |
+| 8 | **Photo editor modal (crop / zoom / rotate avatar)** | ✅ `/profile` › photo editor | see §3f |
 | 9 | Favorites modal | ✅ /favorites | — |
 | 10 | Settings modal | ✅ /profile settings | — |
 | 11 | Cart modal | ✅ /cart | — |
@@ -156,6 +156,30 @@ Verified by `probe-contact.cjs` (38 checks): both formats of hours, today's high
 contact links, the note POST actually reaching `/api/notes` with its payload, the empty-note
 refusal, EN/FR/AR including translated day names, and 320–1440px overflow.
 
+## 3f. Avatar photo editor
+
+`frontend/src/atelier/pages/AvatarEditor.jsx` (+ `avatarEditor.css`), opened from **Profile › photo**
+after a file is picked, replacing the previous direct upload.
+
+The legacy's photoEditorModal let you crop, zoom and rotate before the picture was sent. This one
+matters more than it looks: the server's `POST /api/upload-avatar` always cover-crops its upload to
+a **200×200 centre square** (`.resize(200, 200, { fit: "cover", position: "center" })`), so without a
+client-side editor the server decides the framing and any non-square photo is centre-cropped
+whether or not that is what you wanted. The editor therefore exports an already-square 512×512 JPEG
+of exactly the view you chose — the server's resize then has nothing left to decide.
+
+State: pan (pointer drag, wheel or slider to zoom), rotate 90°, reset, a circular mask matching the
+avatar it feeds, and a live scale/rotation readout. All client-side (object URL + canvas) — no
+third-party crop library, and the file is not uploaded until you confirm. One real constraint found
+while building it: the geometry is derived from the stage's **measured** width (a ResizeObserver,
+not the 288px constant) because the stage is a percentage of the dialog, which is still settling
+while the entry animation and the webfont land. Hard-coding it left the pan limits and the exported
+crop disagreeing with the visible frame.
+
+Verified by `probe-avatar.cjs` (33 checks): nothing uploads until confirm, the multipart body that
+actually leaves is a square `image/jpeg` named `avatar.jpg`, zoom/rotate/drag/reset all move the
+picture and stay clamped to the stage, cancel uploads nothing, and 320–1440px overflow.
+
 ## 4. Backend API surface (48) — usage in Atelier
 
 Covered: auth (login, register, verify-email, resend-verification), profile GET/PUT, settings
@@ -272,6 +296,12 @@ Done in the contact increment:
     overflow, which found two intrinsic-sizing bugs: the 300px percentage-width map iframe and
     the nowrap time token in the hours row).
 
-`docs/atelier-gap-audit.md` §3e and the status table carry the detail; the legacy reality of
-the loyalty card (every `/api/loyalty*` route was admin-only, and all 614 live cards are manual
-cards with no account link) is recorded there too.
+Done in the avatar increment:
+
+11. **Photo editor** — `pages/AvatarEditor.jsx` (+ `avatarEditor.css`), opened from Profile after a
+    file is picked: pan, zoom (slider/wheel/buttons), rotate 90°, reset, circular mask, and a live
+    scale/rotation readout, exporting a square 512×512 JPEG so the server's constant 200×200
+    centre-crop has nothing left to decide. Nothing is uploaded until you confirm. Verified by
+    `probe-avatar.cjs` (33 checks incl. the actual multipart body).
+
+Still open (recorded, not dropped): the admin-only Guides tour (`/guides`).

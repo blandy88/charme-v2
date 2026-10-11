@@ -19,8 +19,13 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useFavorites } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { api, apiUpload, setToken } from "../../api/client.js";
+import AvatarEditor from "./AvatarEditor.jsx";
 import { initials } from "../lib/text.js";
 import "./account.css";
+import "./avatarEditor.css";
+
+const MAX_AVATAR_BYTES = 8 * 1024 * 1024;
+const ACCEPTED = ["image/png", "image/jpeg", "image/webp"];
 
 const DEFAULT_SETTINGS = {
   emailNotifications: true,
@@ -36,6 +41,7 @@ export default function Profile() {
   const fileRef = useRef(null);
 
   const [pane, setPane] = useState("profile");
+  const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ first_name: "", last_name: "", phone: "", birthday: "" });
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [status, setStatus] = useState({ pane: "", kind: "", text: "" });
@@ -126,23 +132,28 @@ export default function Profile() {
     }
   };
 
+  /* The picked file goes to the editor first: it crops, zooms and rotates, then
+     uploads an already-square JPEG. The server's 200×200 cover-crop would
+     otherwise decide the framing for us. */
   const uploadAvatar = async (e) => {
     const file = e.target.files && e.target.files[0];
     e.target.value = "";
     if (!file) return;
-    setBusy(true);
-    setStatus({ pane: "", kind: "", text: "" });
-    const body = new FormData();
-    body.append("avatar", file);
-    try {
-      await apiUpload("/api/upload-avatar", body);
-      await refresh();
-      setStatus({ pane: "profile", kind: "ok", text: t("profilePhotoSaved") });
-    } catch (err) {
-      setStatus({ pane: "profile", kind: "error", text: (err.data && err.data.error) || err.message });
-    } finally {
-      setBusy(false);
+    if (!ACCEPTED.includes(file.type)) {
+      setStatus({ pane: "profile", kind: "error", text: t("avatarBadType") });
+      return;
     }
+    if (file.size > MAX_AVATAR_BYTES) {
+      setStatus({ pane: "profile", kind: "error", text: t("avatarTooBig") });
+      return;
+    }
+    setEditing(file);
+  };
+
+  const finishAvatar = async () => {
+    setEditing(null);
+    await refresh();
+    setStatus({ pane: "profile", kind: "ok", text: t("profilePhotoSaved") });
   };
 
   /* Exactly what the legacy handler did: clear this device, then sign out. */
@@ -209,6 +220,14 @@ export default function Profile() {
             hidden
             onChange={uploadAvatar}
           />
+
+          {editing ? (
+            <AvatarEditor
+              file={editing}
+              onDone={finishAvatar}
+              onCancel={() => setEditing(null)}
+            />
+          ) : null}
 
           {isAdmin ? (
             <span className="badge-admin">
