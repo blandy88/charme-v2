@@ -1,0 +1,248 @@
+/*
+ * Contact page — the note form beside the boutique's details and live hours.
+ * The hero form already has its own skin on the homepage; this one reuses the
+ * same tokens but lives in a page grid rather than the hero split.
+ */
+
+.ct {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.ct-title {
+  font-size: var(--step-3);
+}
+
+.ct-lede {
+  color: var(--text-2);
+  max-inline-size: 46ch;
+  text-wrap: pretty;
+  margin-bottom: var(--space-xs);
+}
+
+.ct-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--space-m);
+  align-items: start;
+}
+
+.ct-grid > * {
+  min-inline-size: 0;
+}
+
+.ct-side {
+  display: grid;
+  gap: var(--space-s);
+}
+
+/* ---------- note form ---------- */
+
+.ct-note,
+.ct-hours,
+.ct-details {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-m);
+}
+
+.ct-note h2 {
+  font-size: var(--step-2);
+}
+
+.ct-field {
+  display: grid;
+  gap: 0.3rem;
+  font-size: var(--step--1);
+  color: var(--text-2);
+}
+
+.ct-field input,
+.ct-field textarea {
+  background: var(--surface-0);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-s);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--step-0);
+  padding: 0.55rem 0.7rem;
+  resize: vertical;
+  inline-size: 100%;
+}
+
+.ct-field input:focus,
+.ct-field textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.ct-field-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+
+.ct-count {
+  font-size: var(--step--1);
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-count.warn {
+  color: var(--warn-text);
+}
+
+.ct-note .btn-accent {
+  padding: 0.55rem 1.15rem;
+  cursor: pointer;
+}
+
+.ct-status {
+  font-size: var(--step--1);
+  margin: 0;
+}
+
+.ct-status.ok {
+  color: var(--ok-text);
+}
+
+.ct-status.err {
+  color: var(--warn-text);
+}
+
+/* ---------- hours ---------- */
+
+.ct-week {
+  list-style: none;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.ct-week li {
+  display: flex;
+  /* wrap, not shrink: a schedule keeps its times unbroken (09:30 – 19:45 is
+     a single token), so on a 320px phone the time drops to a second line
+     instead of forcing the card — and the page — wider than the screen. */
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.15rem var(--space-s);
+  padding: 0.28rem 0.5rem;
+  border-radius: var(--radius-s);
+  font-size: var(--step-0);
+  color: var(--text-2);
+}
+
+.ct-week li.now {
+  background: var(--accent-quiet);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.ct-week li.shut .ct-time {
+  color: var(--text-3);
+}
+
+.ct-time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ct-tz,
+.ct-appt,
+.ct-hours-fallback {
+  font-size: var(--step--1);
+  color: var(--text-3);
+  margin: 0;
+}
+
+/* ---------- details ---------- */
+
+.ct-list {
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ct-list li {
+  display: grid;
+  grid-template-columns: 1.1rem auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.55rem;
+  font-size: var(--step-0);
+}
+
+.ct-list svg {
+  color: var(--accent);
+}
+
+.ct-list span:nth-of-type(1) {
+  color: var(--text-3);
+  font-size: var(--step--1);
+}
+
+.ct-list a {
+  color: var(--accent);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.ct-list a:hover {
+  text-decoration: underline;
+}
+
+.ct-map {
+  /* The iframe is absolutely positioned inside this box: a percentage-width
+     iframe contributes its ~300px intrinsic width to any min-content
+     calculation around it, which at 320px pushes the whole page 6px past
+     the viewport. Out of flow, it sizes to this box instead. */
+  position: relative;
+  border-radius: var(--radius-s);
+  overflow: clip;
+  border: 1px solid var(--hairline);
+  aspect-ratio: 16 / 9;
+  background: var(--surface-2);
+}
+
+.ct-map iframe {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  display: block;
+}
+
+.ct-details .btn-ghost,
+.ct-hours .btn-ghost {
+  padding: 0.55rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ---------- footer line ---------- */
+
+.ct-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: var(--space-m);
+  color: var(--text-3);
+  font-size: var(--step--1);
+}
+
+.ct-foot-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+@media (max-width: 900px) {
+  .ct-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

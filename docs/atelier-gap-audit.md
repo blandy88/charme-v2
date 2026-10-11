@@ -74,7 +74,7 @@ finder icons the legacy had as separate nav buttons now share one compass button
 | --- | --- | --- |
 | `/` | Homepage = chrome + 185 product sections + grid view | ✅ (fragrance list to be removed) |
 | `/guides` | **Admin-only** onboarding tour (`public/js/guides.js`, `GUIDES`, 3 languages) | ❌ Placeholder |
-| `/contact` | No page — "Contact" nav was `href="#"`; contact lived in footer + hero note form | ⚠️ Placeholder |
+| `/contact` | No page — "Contact" nav was `href="#"`; contact lived in footer + hero note form | ✅ `/contact` (§3e) |
 | `/loyalty` | Modal, admin-driven "5 points = 1 parfum offert" (customer view of own card) | ✅ `/loyalty` |
 | `/news` | Modal feed, admin-published | ✅ `/news` |
 | `/admin` | Modal dashboard (users, loyalty, news, store hours) | ✅ `/admin` |
@@ -127,6 +127,34 @@ clearing state, close + Escape, every row linking into the catalogue, results so
 note chips with their counts, search filtering, chosen-note removal, clear, EN/FR/AR copy with
 RTL, and 11 viewport widths from 320 to 1920 — including the 1180–1245px span that once overflowed
 the signed-in admin nav — with no horizontal overflow.
+
+## 3e. Contact
+
+`frontend/src/atelier/pages/Contact.jsx` (+ `contact.css`) on `/app/contact`.
+
+Legacy had no contact page: the nav's "Contact" was `href="#" and the real contact surfaces were
+the footer and the hero note form. Rather than invent a channel the shop does not have, this
+page puts those two in one place:
+
+* the **note form** — the same public, rate-limited `POST /api/notes` route the hero form posts
+  to (so the shop's guest-notes inbox keeps every message in one table), with a live countdown
+  against the server's 1000-character rule;
+* the **boutique details** — phone, WhatsApp, address, the OpenStreetMap embed and the Google
+  Maps link, copied from the footer;
+* the **week's hours**, read live from the public `GET /api/store-hours` so the page shows
+  whatever the shop set in the console instead of a hard-coded schedule. Values arrive as
+  numbers (9, 9.5, 18.75) or `"HH:MM"` strings — the admin console accepts both — so the
+  formatter handles both, and marks today.
+
+Two layout details worth recording: a percentage-width `<iframe>` contributes its ~300px
+intrinsic width to every min-content calculation around it, so the map is positioned absolutely
+inside its box and contributes nothing; and the hours rows use `flex-wrap` so an unbreakable
+`09:30 – 19:45` token drops to a second line at 320px instead of forcing the card wider than
+the screen.
+
+Verified by `probe-contact.cjs` (38 checks): both formats of hours, today's highlight, all the
+contact links, the note POST actually reaching `/api/notes` with its payload, the empty-note
+refusal, EN/FR/AR including translated day names, and 320–1440px overflow.
 
 ## 4. Backend API surface (48) — usage in Atelier
 
@@ -231,6 +259,19 @@ Done in the loyalty increment:
    previously overflowed for signed-in admins. The field is the one nav item with real slack.
    Verified by `probe-loyalty.cjs` (48 checks) with the overflow suite re-run after.
 
-`docs/atelier-gap-audit.md` §3c/§3d and the status table carry the detail; the legacy reality of
+Still open (recorded, not dropped): avatar crop/zoom editor and the admin-only Guides tour
+(`/guides`). Each maps 1:1 to a legacy block above and can reuse the endpoints listed in §4.
+
+Done in the contact increment:
+
+10. **Contact page** — `pages/Contact.jsx` (+ `contact.css`) on `/app/contact`, replacing the
+    placeholder. The visitor's note posts to the same public `/api/notes` route the hero form
+    uses (one guest-notes table), beside the footer's contact details and the week's hours read
+    live from `/api/store-hours` — numbers, half hours and `"HH:MM"` strings all formatted, today
+    highlighted, EN/FR/AR day names. Verified by `probe-contact.cjs` (38 checks incl. 320px
+    overflow, which found two intrinsic-sizing bugs: the 300px percentage-width map iframe and
+    the nowrap time token in the hours row).
+
+`docs/atelier-gap-audit.md` §3e and the status table carry the detail; the legacy reality of
 the loyalty card (every `/api/loyalty*` route was admin-only, and all 614 live cards are manual
 cards with no account link) is recorded there too.
