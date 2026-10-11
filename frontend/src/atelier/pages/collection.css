@@ -826,3 +826,27 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* The favourite control on a catalogue card. It is a sibling of the card link,
+   not a child: a <button> inside an <a> is invalid and breaks tab order. */
+.shelf-wrap {
+  position: relative;
+}
+
+.shelf-fav {
+  position: absolute;
+  top: 0.55rem;
+  inset-inline-end: 0.55rem;
+  z-index: 2;
+}
+
+.pdp-brandrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+
+.pdp-save {
+  flex: none;
+}

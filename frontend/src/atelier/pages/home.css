@@ -385,3 +385,17 @@
   line-height: 1.65;
   max-width: 40rem;
 }
+
+/* The heart sits over the bottle, top-right, out of the price badge's way. */
+.piece-fav {
+  position: absolute;
+  top: 0.5rem;
+  inset-inline-end: 0.5rem;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .piece-fav {
+    transition-duration: 1ms;
+  }
+}

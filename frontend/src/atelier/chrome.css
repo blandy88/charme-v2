@@ -1,0 +1,446 @@
+/*
+ * Atelier chrome: the nav search panel, the favourite control and the five
+ * utility overlays. Kept out of shell.css so the shell's layout rules stay
+ * readable — everything here is either fixed-position or nav-local.
+ */
+
+/* ---------------- Nav search (quick bar + AI finder) ---------------- */
+
+.global-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.gs-field {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--hairline);
+  background: var(--surface-1);
+  border-radius: var(--radius-pill);
+  padding: 0.32rem 0.7rem;
+  color: var(--text-3);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.gs-field:focus-within {
+  border-color: var(--accent);
+}
+
+.gs-field input {
+  border: 0;
+  background: transparent;
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--step--1);
+  inline-size: clamp(6rem, 16vw, 14rem);
+  outline: none;
+}
+
+.gs-field input::placeholder {
+  color: var(--text-3);
+}
+
+.gs-clear {
+  border: 0;
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  padding: 0.1rem;
+}
+
+.gs-clear:hover {
+  color: var(--accent);
+}
+
+.gs-panel {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  inset-inline-end: 0;
+  inline-size: min(26rem, calc(100vw - 2rem));
+  max-block-size: min(72vh, 34rem);
+  overflow: auto;
+  padding: var(--space-s);
+  z-index: 60;
+  /* opacity/transform come from .panel-style motion elsewhere; keep it solid */
+  animation: gs-in var(--dur-base) var(--ease-out) both;
+}
+
+@keyframes gs-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.4rem);
+  }
+}
+
+.gs-tabs {
+  display: inline-flex;
+  gap: 0.2rem;
+  padding: 0.15rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-s);
+}
+
+.gs-tabs button {
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.75rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.gs-tabs button.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.gs-suggest .eyebrow {
+  margin-bottom: var(--space-xs);
+}
+
+.gs-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.gs-chip {
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  color: var(--text-2);
+  border-radius: var(--radius-pill);
+  padding: 0.28rem 0.7rem;
+  font-size: var(--step--1);
+  cursor: pointer;
+}
+
+.gs-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.gs-results {
+  list-style: none;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.gs-row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.4rem;
+  border-radius: var(--radius-s);
+  text-decoration: none;
+  color: inherit;
+}
+
+.gs-row:hover {
+  background: var(--accent-quiet);
+}
+
+.gs-thumb {
+  inline-size: 2.5rem;
+  block-size: 3rem;
+  border-radius: var(--radius-s);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  overflow: clip;
+  display: grid;
+  place-items: center;
+}
+
+.gs-thumb img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
+.gs-mark {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  color: var(--text-3);
+}
+
+.gs-meta {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.gs-meta strong {
+  font-weight: 600;
+  font-size: var(--step-0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-meta span {
+  color: var(--text-2);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-price {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.gs-all {
+  margin-top: var(--space-xs);
+  inline-size: 100%;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--text-2);
+  border-radius: var(--radius-s);
+  padding: 0.5rem;
+  font-size: var(--step--1);
+  cursor: pointer;
+}
+
+.gs-all:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.gs-empty {
+  color: var(--text-2);
+  font-size: var(--step-0);
+  padding: var(--space-s) 0;
+}
+
+/* ---------------- Favourite control ---------------- */
+
+.fav-btn {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline);
+  background: color-mix(in oklch, var(--surface-1) 82%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.fav-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.fav-btn.on {
+  color: var(--accent);
+  border-color: color-mix(in oklch, var(--accent) 55%, var(--hairline));
+  background: color-mix(in oklch, var(--accent) 14%, transparent);
+}
+
+/* ---------------- Overlays ---------------- */
+
+.top-vignette {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  block-size: 7rem;
+  z-index: 45;
+  pointer-events: none;
+  background: linear-gradient(to bottom, color-mix(in oklch, var(--surface-0) 55%, transparent), transparent);
+}
+
+.social-rail {
+  position: fixed;
+  z-index: 40;
+  inset-inline-start: clamp(0.6rem, 1.5vw, 1.2rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.55rem 0.35rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline);
+  background: color-mix(in oklch, var(--surface-0) 82%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.social-rail a {
+  display: grid;
+  place-items: center;
+  inline-size: 1.7rem;
+  block-size: 1.7rem;
+  color: var(--text-2);
+  border-radius: var(--radius-pill);
+}
+
+.social-rail a:hover {
+  color: var(--accent);
+}
+
+.social-rail svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+@media (max-width: 1180px) {
+  .social-rail {
+    display: none;
+  }
+}
+
+.floating-cart {
+  position: fixed;
+  z-index: 40;
+  inset-inline-end: clamp(0.9rem, 2vw, 1.5rem);
+  inset-block-end: clamp(0.9rem, 2vw, 1.5rem);
+  inline-size: 3.2rem;
+  block-size: 3.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-2);
+  text-decoration: none;
+}
+
+.floating-badge {
+  position: absolute;
+  top: -0.35rem;
+  inset-inline-end: -0.35rem;
+  min-inline-size: 1.15rem;
+  background: var(--surface-1);
+  color: var(--text-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0 0.3rem;
+}
+
+.back-to-top {
+  position: fixed;
+  z-index: 40;
+  inset-inline-end: clamp(0.9rem, 2vw, 1.5rem);
+  inset-block-end: calc(clamp(0.9rem, 2vw, 1.5rem) + 4rem);
+  inline-size: 3.2rem;
+  block-size: 3.2rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out),
+    visibility 0s linear var(--dur-base);
+}
+
+.back-to-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.back-to-top:hover {
+  color: var(--accent);
+}
+
+.back-to-top svg {
+  position: absolute;
+  inset: 0;
+}
+
+.back-to-top .ring-track {
+  fill: none;
+  stroke: var(--hairline-strong);
+  stroke-width: 2;
+}
+
+.back-to-top .ring-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 30px 30px;
+}
+
+.perfume-toggle {
+  position: fixed;
+  z-index: 40;
+  inset-inline-start: clamp(0.9rem, 2vw, 1.5rem);
+  inset-block-end: clamp(0.9rem, 2vw, 1.5rem);
+  display: inline-flex;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklch, var(--surface-0) 85%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.perfume-toggle button {
+  border: 0;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.perfume-toggle button.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* The mode actually changes the homepage run. "details" (default) is the full
+   anatomy; "grid" is the compact wall of bottles. */
+[data-perfume-mode="grid"] .piece-list {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-m) var(--space-s);
+}
+
+[data-perfume-mode="grid"] .piece-grid {
+  grid-template-columns: 1fr;
+}
+
+[data-perfume-mode="grid"] .piece-media {
+  aspect-ratio: 1 / 1;
+}
+
+[data-perfume-mode="grid"] .piece-bars,
+[data-perfume-mode="grid"] .piece-trail,
+[data-perfume-mode="grid"] .piece-indicators {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-panel {
+    animation-duration: 1ms;
+  }
+}

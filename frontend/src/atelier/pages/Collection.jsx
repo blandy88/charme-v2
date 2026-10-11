@@ -1,5 +1,6 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { facets, formatPrice, initials, products as ALL } from "../lib/catalog.js";
 import "./collection.css";
@@ -14,55 +15,68 @@ const SORTS = [
 
 const PRICE = (p) => (p.fromPrice == null ? Infinity : p.fromPrice);
 
+const FILTER_KEYS = ["q", "brand", "family", "conc", "perfumer", "avail", "sort"];
+const EMPTY_FILTERS = { q: "", brand: "", family: "", conc: "", perfumer: "", avail: "", sort: "featured" };
+
+function readParams(params) {
+  const out = { ...EMPTY_FILTERS };
+  for (const k of FILTER_KEYS) out[k] = params.get(k) || out[k];
+  return out;
+}
+
+const sameFilters = (a, b) => FILTER_KEYS.every((k) => (a[k] || "") === (b[k] || ""));
+
 export default function Collection() {
   const { t } = useI18n();
   const [params, setParams] = useSearchParams();
   const [view, setView] = useState("grid");
 
-  const urlQ = params.get("q") || "";
-  const brand = params.get("brand") || "";
-  const family = params.get("family") || "";
-  const conc = params.get("conc") || "";
-  const perfumer = params.get("perfumer") || "";
-  const avail = params.get("avail") || "";
-  const sort = params.get("sort") || "featured";
-
   /*
-   * The search field is deliberately NOT bound straight to the URL.
-   * A controlled input whose value round-trips through the router drops
-   * characters when you type quickly: the URL update lands a tick late and
-   * React re-renders the input with the previous value, clobbering the
-   * keystroke. So the field owns its own state, the URL is written from a
-   * deferred copy (shareable links, no per-keystroke re-render of 752 cards),
-   * and the URL only writes BACK into the field when it changes from outside
-   * -- i.e. back/forward, or "clear all".
+   * Filter state is the single source of truth; the URL is a pure reflection of
+   * it. Writing the URL from React Router's `prev` snapshot is not safe here:
+   * `setSearchParams(fn)` is handed the search params of the *rendered*
+   * location, not the live URL. Clearing the field and immediately choosing a
+   * family therefore produced `?q=pineapple+cardamom&family=Oriental+Woody`
+   * (the cleared query resurrected), and the next write then wiped the family.
+   * With one owner and one writer, overlapping updates cannot clobber.
+   *
+   * The field keeps its own draft so typing never round-trips through the
+   * router (that used to drop characters); the deferred draft is what actually
+   * lands in state, so 752 cards do not re-render per keystroke.
    */
-  const [draft, setDraft] = useState(urlQ);
+  const [filters, setFilters] = useState(() => readParams(params));
+  const [draft, setDraft] = useState(() => readParams(params).q);
   const deferredQ = useDeferredValue(draft);
 
-  /* Values this component pushed into the URL itself. Anything else arriving
-     in the URL (back/forward, a shared link, "clear all") is external and
-     should flow back into the field. */
-  const pushed = useRef(urlQ);
-  const latestParams = useRef(params);
-  latestParams.current = params;
+  /* The last filter set we wrote or accepted. A URL that differs from it was
+     changed externally (back/forward, a shared link) and flows back in. */
+  const lastWritten = useRef(readParams(params));
 
   useEffect(() => {
-    if (urlQ === pushed.current) return;
-    pushed.current = urlQ;
-    setDraft(urlQ);
-  }, [urlQ]);
+    const incoming = readParams(params);
+    if (sameFilters(incoming, lastWritten.current)) return;
+    lastWritten.current = incoming;
+    setFilters(incoming);
+    setDraft(incoming.q);
+  }, [params]);
 
   useEffect(() => {
-    const current = latestParams.current.get("q") || "";
-    pushed.current = deferredQ;
-    if (current === deferredQ) return;
-    const next = new URLSearchParams(latestParams.current);
-    if (deferredQ) next.set("q", deferredQ);
-    else next.delete("q");
-    setParams(next, { replace: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setFilters((f) => (f.q === deferredQ ? f : { ...f, q: deferredQ }));
   }, [deferredQ]);
+
+  useEffect(() => {
+    if (sameFilters(filters, lastWritten.current)) return;
+    lastWritten.current = filters;
+    const next = new URLSearchParams();
+    for (const k of FILTER_KEYS) {
+      const v = filters[k];
+      if (v && !(k === "sort" && v === "featured")) next.set(k, v);
+    }
+    setParams(next, { replace: true });
+  }, [filters, setParams]);
+
+  const { brand, family, conc, perfumer, avail, sort } = filters;
+  const urlQ = filters.q;
 
   const f = useMemo(() => facets(ALL), []);
 
@@ -90,15 +104,13 @@ export default function Collection() {
     return out;
   }, [deferredQ, brand, family, conc, perfumer, avail, sort]);
 
-  const set = (key, value) => {
-    const next = new URLSearchParams(params);
-    if (value) next.set(key, value);
-    else next.delete(key);
-    setParams(next, { replace: true });
-  };
+  const set = (key, value) => setFilters((f) => ({ ...f, [key]: value || "" }));
 
   const active = [brand, family, conc, perfumer, avail, urlQ].filter(Boolean).length;
-  const clear = () => setParams(new URLSearchParams(), { replace: true });
+  const clear = () => {
+    setFilters({ ...EMPTY_FILTERS });
+    setDraft("");
+  };
 
   const title = urlQ ? `« ${urlQ} »` : brand || family || t("collTitle");
 
@@ -202,7 +214,7 @@ export default function Collection() {
       ) : view === "grid" ? (
         <ul className="coll-grid">
           {shown.map((p) => (
-            <li key={p.id}>
+            <li key={p.id} className="shelf-wrap">
               <Link to={`/collection/${encodeURIComponent(p.id)}`} className="shelf pressable">
                 <div className="shelf-media">
                   {p.image ? (
@@ -237,6 +249,7 @@ export default function Collection() {
                   </p>
                 </div>
               </Link>
+              <FavoriteButton product={p} className="shelf-fav" label={t("save")} savedLabel={t("saved")} />
             </li>
           ))}
         </ul>

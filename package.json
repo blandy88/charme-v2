@@ -11,7 +11,10 @@
     "audit": "npm audit --omit=dev",
     "data:fragrances": "node scripts/build-fragrance-json.cjs",
     "dev:app": "npm --prefix frontend run dev",
-    "build:app": "npm run data:fragrances && npm --prefix frontend run build"
+    "build:app": "npm run data:fragrances && npm --prefix frontend run build",
+    "extract:legacy": "node scripts/extract-legacy-sections.cjs",
+    "check:legacy": "node scripts/extract-legacy-sections.cjs --check && node scripts/verify-legacy-fixture.mjs",
+    "build:legacy": "node scripts/build-legacy-page.mjs --check"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

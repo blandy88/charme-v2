@@ -108,6 +108,22 @@ const STRINGS = {
     hoursLabel: "Open",
     hoursValue: "Mon–Sat, 9:00–19:00",
     mapTitle: "Map of the boutique",
+
+    /* Chrome: search + overlays */
+    clear: "Clear",
+    aiFinder: "Describe what you want (AI finder)",
+    aiPlaceholder: "Describe a scent — “warm and sweet for winter”",
+    gsSearch: "Search",
+    gsDescribe: "Describe",
+    gsSuggestions: "Houses to start from",
+    gsSeeAll: "See all results for",
+    followUs: "Follow us",
+    backToTop: "Back to top",
+    perfumeMode: "Perfume display mode",
+    modeDetails: "Details",
+    modeGrid: "Grid",
+    save: "Save to favourites",
+    saved: "Saved — remove from favourites",
   },
   fr: {
     home: "Accueil",
@@ -214,6 +230,22 @@ const STRINGS = {
     hoursLabel: "Ouvert",
     hoursValue: "Lun–Sam, 9h–19h",
     mapTitle: "Plan de la boutique",
+
+    /* Habillage : recherche + surcouches */
+    clear: "Effacer",
+    aiFinder: "Décrivez ce que vous cherchez (recherche IA)",
+    aiPlaceholder: "Décrivez un parfum — « chaud et sucré pour l'hiver »",
+    gsSearch: "Rechercher",
+    gsDescribe: "Décrire",
+    gsSuggestions: "Maisons pour commencer",
+    gsSeeAll: "Voir tous les résultats pour",
+    followUs: "Suivez-nous",
+    backToTop: "Retour en haut",
+    perfumeMode: "Mode d'affichage des parfums",
+    modeDetails: "Détails",
+    modeGrid: "Grille",
+    save: "Ajouter aux favoris",
+    saved: "Enregistré — retirer des favoris",
   },
   ar: {
     home: "الرئيسية",
@@ -319,6 +351,22 @@ const STRINGS = {
     hoursLabel: "مفتوح",
     hoursValue: "الإثنين–السبت، 9:00–19:00",
     mapTitle: "خريطة المتجر",
+
+    /* البحث والطبقات */
+    clear: "مسح",
+    aiFinder: "صف ما تبحث عنه (الباحث الذكي)",
+    aiPlaceholder: "صِف عطرًا — «دافئ وحلو للشتاء»",
+    gsSearch: "بحث",
+    gsDescribe: "وصف",
+    gsSuggestions: "دور للبدء",
+    gsSeeAll: "عرض كل النتائج لـ",
+    followUs: "تابعنا",
+    backToTop: "العودة للأعلى",
+    perfumeMode: "وضع عرض العطور",
+    modeDetails: "تفاصيل",
+    modeGrid: "شبكة",
+    save: "أضف إلى المفضلة",
+    saved: "محفوظ — إزالة من المفضلة",
   },
 };
 

@@ -1,16 +1,20 @@
 import { Suspense, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route } from "react-router-dom";
-import { Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
+import { Heart, Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
 import { AuthProvider, useAuth } from "../contexts/AuthContext.jsx";
 import { CartProvider, useCart } from "../contexts/CartContext.jsx";
+import { FavoritesProvider, useFavorites } from "../contexts/FavoritesContext.jsx";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext.jsx";
 import { useI18n } from "../contexts/I18nContext.jsx";
 import FaithfulSite from "../faithful/FaithfulSite.jsx";
 import Home from "./pages/Home.jsx";
+import GlobalSearch from "./GlobalSearch.jsx";
+import Overlays from "./Overlays.jsx";
 import SmoothScroll from "./SmoothScroll.jsx";
 import RouteTransition from "./RouteTransition.jsx";
 import "./tokens.css";
 import "./shell.css";
+import "./chrome.css";
 
 /* The catalogue is ~550KB of editorial data. Loading it here would put it on
    the critical path for the homepage, so both catalogue routes are split out
@@ -90,6 +94,7 @@ const deferred = (node) => <Suspense fallback={<RouteFallback />}>{node}</Suspen
 function Nav() {
   const { user, isAdmin, signOut } = useAuth();
   const { count } = useCart();
+  const { count: favCount } = useFavorites();
   const { theme, toggle } = useTheme();
   const { lang, setLang, t } = useI18n();
   const [menu, setMenu] = useState(false);
@@ -109,6 +114,7 @@ function Nav() {
           {isAdmin ? <NavLink to="/admin" className={link}>{t("admin")}</NavLink> : null}
         </nav>
         <div className="nav-tools">
+          <GlobalSearch />
           <select
             value={lang}
             onChange={(e) => setLang(e.target.value)}
@@ -123,6 +129,9 @@ function Nav() {
             {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
           </button>
           <Link to="/news" aria-label={t("news")} className="tool-btn pressable"><Newspaper size={15} /></Link>
+          <Link to="/favorites" aria-label={t("favorites")} className="tool-btn pressable">
+            <Heart size={15} />{favCount > 0 ? <span className="count">{favCount}</span> : null}
+          </Link>
           <Link to="/cart" aria-label={t("cart")} className="tool-btn pressable">
             <ShoppingBag size={15} />{count > 0 ? <span className="count">{count}</span> : null}
           </Link>
@@ -206,26 +215,29 @@ export default function Shell() {
       <SmoothScroll />
       <ThemeProvider>
         <AuthProvider>
-          <CartProvider>
-            <Nav />
-            <RouteTransition preload={preloadRoute}>
-              <Route path="/" element={<Home />} />
-              <Route path="/faithful" element={<FaithfulSite />} />
-              <Route path="/collection" element={deferred(<Collection />)} />
-              <Route path="/collection/:id" element={deferred(<Product />)} />
-              <Route path="/guides" element={<Placeholder title={t("guides")} />} />
-              <Route path="/contact" element={<Placeholder title={t("contact")} />} />
-              <Route path="/news" element={<Placeholder title={t("news")} />} />
-              <Route path="/auth" element={<Placeholder title={t("signIn")} />} />
-              <Route path="/cart" element={<Placeholder title={t("cart")} />} />
-              <Route path="/profile" element={<Placeholder title={t("profile")} />} />
-              <Route path="/favorites" element={<Placeholder title={t("favorites")} />} />
-              <Route path="/loyalty" element={<Placeholder title={t("loyalty")} />} />
-              <Route path="/admin" element={<Placeholder title={t("admin")} />} />
-              <Route path="*" element={<Home />} />
-            </RouteTransition>
-            <Footer />
-          </CartProvider>
+          <FavoritesProvider>
+            <CartProvider>
+              <Nav />
+              <RouteTransition preload={preloadRoute}>
+                <Route path="/" element={<Home />} />
+                <Route path="/faithful" element={<FaithfulSite />} />
+                <Route path="/collection" element={deferred(<Collection />)} />
+                <Route path="/collection/:id" element={deferred(<Product />)} />
+                <Route path="/guides" element={<Placeholder title={t("guides")} />} />
+                <Route path="/contact" element={<Placeholder title={t("contact")} />} />
+                <Route path="/news" element={<Placeholder title={t("news")} />} />
+                <Route path="/auth" element={<Placeholder title={t("signIn")} />} />
+                <Route path="/cart" element={<Placeholder title={t("cart")} />} />
+                <Route path="/profile" element={<Placeholder title={t("profile")} />} />
+                <Route path="/favorites" element={<Placeholder title={t("favorites")} />} />
+                <Route path="/loyalty" element={<Placeholder title={t("loyalty")} />} />
+                <Route path="/admin" element={<Placeholder title={t("admin")} />} />
+                <Route path="*" element={<Home />} />
+              </RouteTransition>
+              <Footer />
+              <Overlays />
+            </CartProvider>
+          </FavoritesProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

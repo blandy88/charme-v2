@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { byId, formatPrice, initials, products as ALL, related } from "../lib/catalog.js";
 import "./collection.css";
@@ -132,7 +133,10 @@ export default function Product() {
         </div>
 
         <div className="pdp-main">
-          <p className="pdp-brand">{product.brand}</p>
+          <div className="pdp-brandrow">
+            <p className="pdp-brand">{product.brand}</p>
+            <FavoriteButton product={product} className="pdp-save" label={t("save")} savedLabel={t("saved")} size={17} />
+          </div>
           <h1>{product.name}</h1>
 
           {product.description ? <p className="pdp-desc">{product.description}</p> : null}

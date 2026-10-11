@@ -12,6 +12,7 @@
  * 167 of the 185 slugs do not exist in the catalogue. Linking them would 404.
  */
 import { useState } from "react";
+import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { initials } from "../lib/text.js";
 
@@ -29,7 +30,6 @@ function tierLabel(label, t) {
 export default function Piece({ section }) {
   const { t } = useI18n();
   const [broken, setBroken] = useState(false);
-
   const s = section;
   const metrics = s.metrics || [];
   const tiers = s.tiers || [];
@@ -67,6 +67,12 @@ export default function Piece({ section }) {
               <span className="piece-mark">{initials(s.name)}</span>
             </span>
           )}
+          <FavoriteButton
+            product={{ id: s.slug, name: s.name, brand: s.brand, slug: s.slug }}
+            className="piece-fav"
+            label={t("save")}
+            savedLabel={t("saved")}
+          />
           <figcaption className="piece-price">
             {s.price} <span>{s.unit}</span>
           </figcaption>
