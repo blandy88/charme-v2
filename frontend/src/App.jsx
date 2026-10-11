@@ -1,41 +1,10 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "./components/Navbar.jsx";
-import Footer from "./components/Footer.jsx";
-import Home from "./pages/Home.jsx";
-import Collection from "./pages/Collection.jsx";
-import Contact from "./pages/Contact.jsx";
-import Auth from "./pages/Auth.jsx";
-import Cart from "./pages/Cart.jsx";
-import Loyalty from "./pages/Loyalty.jsx";
-import Guides from "./pages/Guides.jsx";
-import News from "./pages/News.jsx";
-import Admin from "./pages/Admin.jsx";
-import Favorites from "./pages/Favorites.jsx";
-import Product from "./pages/Product.jsx";
-import Profile from "./pages/Profile.jsx";
+import FaithfulSite from "./faithful/FaithfulSite.jsx";
 
+/*
+ * The React app IS the legacy site now: same document, same styles, same
+ * scripts — React owns the root. Typed replacements for individual
+ * subtrees land one at a time, each gated on visual parity.
+ */
 export default function App() {
-  return (
-    <div className="flex min-h-screen flex-col bg-ink">
-      <Navbar />
-      <div className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/collection" element={<Collection />} />
-          <Route path="/collection/:slug" element={<Product />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/loyalty" element={<Loyalty />} />
-          <Route path="/guides" element={<Guides />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
-      <Footer />
-    </div>
-  );
+  return <FaithfulSite />;
 }
