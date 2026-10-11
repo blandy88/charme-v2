@@ -5,23 +5,45 @@ import Lenis from "lenis";
 /*
  * The slow sliding smooth scroll: Lenis tuned HEAVY.
  *
- * - lerp 0.035 = the page trails far behind the wheel with long inertia
- *   (the luxury award-site feel). Lower = heavier. 0.1 is default-subtle.
- * - Lenis drives native scroll, so scroll-driven CSS animations
- *   (reveal timelines) stay in sync for free.
- * - NEVER disabled. Under prefers-reduced-motion the glide is softened to
- *   near-native (0.25) instead of being skipped outright — skipping it
- *   meant the effect silently did not exist on machines that report
- *   reduce (Windows "show animations" off, battery saver, etc.).
- * - Anchor links glide instead of jumping; route changes reset to top.
+ * lerp is a damping rate, not a fraction-per-frame: Lenis delta-normalises it
+ * (1 - exp(-lerp*60*dt)), so the feel is identical at 60Hz and 165Hz.
+ *   lerp 0.10 -> time constant 0.17s  (subtle)
+ *   lerp 0.022 -> time constant 0.76s (heavy: ~2.3s to 95%) <- default
  *
- * Tuning: lower lerp = heavier glide. 0.04 is extreme, 0.08 is medium.
+ * IMPORTANT (this bit us twice):
+ * Lenis's own default `respectReducedMotion: true` forces `lerp = 1` — i.e.
+ * completely disables smoothing — on every machine that reports
+ * prefers-reduced-motion. That silently made the whole effect a no-op.
+ * We disable Lenis's handling and manage reduced motion ourselves with a
+ * softened lerp, so the glide always exists but stays gentle.
+ *
+ * Live tuning without a rebuild: open /app/?glide=0.015 (range ~0.01 heavy,
+ * ~0.08 light). The value is remembered in localStorage.
  */
 
-const LERP = 0.035;
-const LERP_REDUCED = 0.25;
+const LERP = 0.022;
+const LERP_REDUCED = 0.09;
+
+function resolveLerp() {
+  try {
+    const q = new URLSearchParams(window.location.search).get("glide");
+    if (q !== null) {
+      const v = Number(q);
+      if (Number.isFinite(v) && v > 0 && v < 0.5) {
+        localStorage.setItem("charme-glide", String(v));
+        return v;
+      }
+    }
+    const saved = Number(localStorage.getItem("charme-glide"));
+    if (Number.isFinite(saved) && saved > 0 && saved < 0.5) return saved;
+  } catch {
+    /* private mode etc. */
+  }
+  return LERP;
+}
 
 let lenis = null;
+let currentLerp = null;
 
 export function getLenis() {
   return lenis;
@@ -40,19 +62,22 @@ export default function SmoothScroll() {
       /* ignore */
     }
 
+    currentLerp = reduced ? LERP_REDUCED : resolveLerp();
+
     try {
       lenis = new Lenis({
-        lerp: reduced ? LERP_REDUCED : LERP,
+        lerp: currentLerp,
         wheelMultiplier: 1,
         touchMultiplier: 1.8,
         smoothWheel: true,
+        // Lenis would otherwise force lerp = 1 (no smoothing at all).
+        respectReducedMotion: false,
       });
     } catch {
       lenis = null;
       return;
     }
 
-    // Visible, inspectable proof the glide is live (also aids debugging).
     document.documentElement.dataset.scrollWeight = reduced ? "soft" : "heavy";
 
     let raf = 0;
@@ -79,6 +104,7 @@ export default function SmoothScroll() {
       document.removeEventListener("click", onClick);
       lenis.destroy();
       lenis = null;
+      currentLerp = null;
       delete document.documentElement.dataset.scrollWeight;
     };
   }, []);
