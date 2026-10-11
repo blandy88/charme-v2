@@ -1,6 +1,6 @@
 import { Suspense, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route } from "react-router-dom";
-import { Heart, Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
+import { Compass, Heart, Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
 import { AuthProvider, useAuth } from "../contexts/AuthContext.jsx";
 import { CartProvider, useCart } from "../contexts/CartContext.jsx";
 import { FavoritesProvider, useFavorites } from "../contexts/FavoritesContext.jsx";
@@ -10,6 +10,7 @@ import { useI18n } from "../contexts/I18nContext.jsx";
 import FaithfulSite from "../faithful/FaithfulSite.jsx";
 import Home from "./pages/Home.jsx";
 import GlobalSearch from "./GlobalSearch.jsx";
+import Discover from "./Discover.jsx";
 import Overlays from "./Overlays.jsx";
 import SmoothScroll from "./SmoothScroll.jsx";
 import RouteTransition from "./RouteTransition.jsx";
@@ -126,7 +127,7 @@ function RouteFallback() {
    element rather than around the switch. */
 const deferred = (node) => <Suspense fallback={<RouteFallback />}>{node}</Suspense>;
 
-function Nav() {
+function Nav({ onDiscover }) {
   const { user, isAdmin, signOut } = useAuth();
   const { count } = useCart();
   const { count: favCount } = useFavorites();
@@ -150,6 +151,15 @@ function Nav() {
         </nav>
         <div className="nav-tools">
           <GlobalSearch />
+          <button
+            type="button"
+            onClick={() => onDiscover("profiler")}
+            aria-label={t("discover")}
+            title={t("discover")}
+            className="tool-btn pressable"
+          >
+            <Compass size={15} />
+          </button>
           <select
             value={lang}
             onChange={(e) => setLang(e.target.value)}
@@ -293,6 +303,7 @@ function Placeholder({ title }) {
 
 export default function Shell() {
   const { t } = useI18n();
+  const [discover, setDiscover] = useState(null);
   return (
     <BrowserRouter basename="/app">
       <SmoothScroll />
@@ -301,7 +312,7 @@ export default function Shell() {
           <FavoritesProvider>
             <CartProvider>
               <NewsProvider>
-              <Nav />
+              <Nav onDiscover={setDiscover} />
               <RouteTransition preload={preloadRoute}>
                 <Route path="/" element={<Home />} />
                 <Route path="/faithful" element={<FaithfulSite />} />
@@ -320,6 +331,7 @@ export default function Shell() {
               </RouteTransition>
               <Footer />
               <Overlays />
+              {discover ? <Discover initialTab={discover} onClose={() => setDiscover(null)} /> : null}
               </NewsProvider>
             </CartProvider>
           </FavoritesProvider>

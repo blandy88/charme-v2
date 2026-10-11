@@ -3,15 +3,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { Search, Sparkles, X } from "lucide-react";
 import { useI18n } from "../contexts/I18nContext.jsx";
 import { initials } from "./lib/text.js";
+import { loadCatalogue } from "./lib/lazyCatalog.js";
 import { searchCatalogue, topBrands } from "./lib/search.js";
 
 /*
- * The nav search — one surface for the three legacy entry points that all did
- * the same job (quickSearchBar's dropdown, searchModal, and aiFragranceFinder /
- * ingredientModal), kept as two modes:
+ * The nav search — one surface for the two legacy entry points that both did
+ * the same job (quickSearchBar's dropdown and searchModal), kept as two modes:
  *
  *   Search   — every word must match (the quick bar / search modal behaviour).
- *   Describe — rank whatever matches the wish (the AI / ingredient finder).
+ *   Describe — rank whatever matches the wish.
+ *
+ * The deeper finders (Scent Profiler, Ingredient Finder) live in the
+ * discovery overlay (Discover.jsx), reached from the nav's compass button.
  *
  * The catalogue is ~550KB and lives in the Collection chunk, so it is imported
  * on first open, never on the critical path. Until it lands the panel shows the
@@ -19,16 +22,11 @@ import { searchCatalogue, topBrands } from "./lib/search.js";
  */
 
 let CATALOGUE = null;
-let INFLIGHT = null;
-function loadCatalogue() {
-  if (CATALOGUE) return Promise.resolve(CATALOGUE);
-  if (!INFLIGHT) {
-    INFLIGHT = import("./lib/catalog.js").then((m) => {
-      CATALOGUE = m.products;
-      return CATALOGUE;
-    });
-  }
-  return INFLIGHT;
+function ensureCatalogue(setCatalogue) {
+  loadCatalogue().then((c) => {
+    CATALOGUE = c;
+    setCatalogue(c);
+  }).catch(() => {});
 }
 
 export default function GlobalSearch() {
@@ -43,9 +41,7 @@ export default function GlobalSearch() {
   const deferred = useDeferredValue(query);
 
   const ensure = useCallback(() => {
-    if (!CATALOGUE) {
-      loadCatalogue().then((c) => setCatalogue(c)).catch(() => {});
-    }
+    if (!CATALOGUE) ensureCatalogue(setCatalogue);
   }, []);
 
   useEffect(() => {

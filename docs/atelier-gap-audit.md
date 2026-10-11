@@ -26,8 +26,8 @@ Sources: `_recon/legacy-inventory.md`, `_recon/scriptjs.md`, `_recon/product-blo
 | 2 | Navbar | ⚠️ partial | see §2 |
 | 3 | Quick search (inline dropdown) | ✅ GlobalSearch | — |
 | 4 | Full-screen search modal + suggestion tags | ✅ GlobalSearch panel | — |
-| 5 | **Enhanced Ingredient Finder modal** | ❌ | **missing** |
-| 6 | **Scent Profiler (AI note-matcher, `ai-fragrance-finder.js`)** | ❌ | **missing** |
+| 5 | **Enhanced Ingredient Finder modal** | ✅ discovery overlay › Ingredient Finder | see §3c |
+| 6 | **Scent Profiler (AI note-matcher, `ai-fragrance-finder.js`)** | ✅ discovery overlay › Scent Profiler | see §3c |
 | 7 | Profile modal | ✅ /profile | — |
 | 8 | **Photo editor modal (crop / zoom / rotate avatar)** | ⚠️ plain upload only | **crop/zoom missing** |
 | 9 | Favorites modal | ✅ /favorites | — |
@@ -59,13 +59,14 @@ input, language selector (EN/FR/AR), theme toggle, admin badge, user menu (Profi
 Cart / Settings / **Guest Notes · badge** / **Admin dashboard** / News admin / Logout).
 
 Atelier has: wordmark, Home / Collection / Guides / Contact / Loyalty (signed in), search
-(+ AI finder tab), lang select, theme, news link + unread badge, favourites, cart, account menu.
+(+ AI finder tab), **discovery button** (compass — Scent Profiler + Ingredient Finder), lang
+select, theme, news link + unread badge, favourites, cart, account menu.
 The **Admin** entry now lives in the account menu (`Administration & outils`), which is where the
 legacy kept it and which keeps an extra admin-only link out of the 1180px primary row (that link
 used to push the nav 63px past the viewport for signed-in admins between 1180–1245px).
 
-Still missing: ingredient-finder entry, scent-profiler entry, guest-notes badge in the user menu,
-Fragrances/Profiles jump buttons.
+Still missing: guest-notes badge in the user menu, Fragrances/Profiles jump buttons. (The two
+finder icons the legacy had as separate nav buttons now share one compass button — see §3c.)
 
 ## 3. Secondary pages
 
@@ -84,6 +85,48 @@ Legacy renders **all** fragrances in one grid/list (no pagination) plus client f
 (note, quality, season) and a grid/list toggle. Atelier keeps the filters + grid/list and adds
 the requested **numbered pagination** (24 per page, `?page=n`, gaps + prev/next + "showing a–b of n"
 at the foot); any filter change drops `page` and returns to page 1.
+
+## 3c. Discovery overlay — Scent Profiler + Ingredient Finder
+
+Frontend/src/atelier/Discover.jsx (+ discover.css), a modal overlay reached from the nav compass
+button. Both finders read the catalogue through the shared lazy loader (`lib/lazyCatalog.js`),
+so neither costs anything on the critical path, and both run entirely in the browser — the
+legacy's "AI" was a local weighted score and so is this one. Copy lives in
+`lib/discoverI18n.js` (EN/FR/AR, English fallback per key), same convention as `adminI18n.js`.
+
+**Scent Profiler** — 7 questions (loved notes · scent family · season · intensity · occasion ·
+budget · notes to avoid) scored out of 100: notes 32 (2–4 chosen notes, each hit worth its share
+plus up to 5 for how early the note sits in the ingredient list, so notes with more presence
+dominate) · family 18 · season 18 · intensity 12 · occasion 10 · budget 10, minus 8 for each
+ignored note group found in the bottle. Every single-choice question has a "no preference", so no
+answer can be forced. Sorted best first, top 8.
+
+Legacy scoring was the same shape — notes 35 (30 + prominence) · family 15 · season 15 · gender 15 ·
+dislike penalty 10 · occasion 5 — but across 9 questions, and with three inputs ours does not need
+or cannot answer: the `budget` question now uses the catalogue's real `fromPrice` (18–650 dt), the
+bottle image comes from the build-time join rather than `getPerfumeImage()`, and `gender` had no
+equivalent data in the Atelier catalogue.
+
+*Adaptation*: the legacy keyed `gender` off `fragrance-catalog-data.js`, which the Atelier does
+not carry — our 752 products have no `gender`/`audience` field, and the 15 `home-sections.json`
+profiles that do report a GENDER are far too sparse to score 752 bottles against. Rather than
+invent an answer, the `gender` question was dropped and its 15 points moved into `season` (18),
+which is now answered from real data: 177 of the 185 references carry active season indicators,
+which the legacy's family heuristic only guessed at. Season therefore matches where the note
+pyramid agrees, and the ingredient sets carry the remaining weight.
+
+**Ingredient Finder** — chips derived from the **catalogue itself** (all 543 distinct notes, each
+with a count of stock), searchable, up to 6 at a time. Bottles are ranked by how many of the
+chosen notes they carry, each row showing which of the six matched. The legacy shipped a
+hard-coded icon list of ~300 notes in 11 categories; ours needs no such list, because it counts
+what is actually in stock, and every chip is therefore guaranteed to resolve to a real listing.
+
+Verified by `probe-discover.cjs` (60 checks): dialog/modal semantics, tab defaults, note
+selection with `aria-pressed`, answers retained when stepping back, translated flow, restart
+clearing state, close + Escape, every row linking into the catalogue, results sorted best first,
+note chips with their counts, search filtering, chosen-note removal, clear, EN/FR/AR copy with
+RTL, and 11 viewport widths from 320 to 1920 — including the 1180–1245px span that once overflowed
+the signed-in admin nav — with no horizontal overflow.
 
 ## 4. Backend API surface (48) — usage in Atelier
 
@@ -132,6 +175,19 @@ Done in the reviews increment:
    admin delete, and a sign-in gate for guests. Copy in EN/FR/AR. Verified by `probe-reviews.cjs`
    (36 checks incl. 320–768px overflow).
 
-Still open (recorded, not dropped): Scent Profiler, Ingredient Finder, avatar crop/zoom editor,
-the customer-facing Carte Fidélité card (`/loyalty`), the admin-only Guides tour (`/guides`), and a
-contact page. Each maps 1:1 to a legacy block above and can reuse the endpoints listed in §4.
+Done in the discovery increment:
+
+8. **Discovery overlay** — `Discover.jsx` (+ `discover.css`), reached from a new nav compass button
+   and shared by both finders (see §3c):
+   - **Scent Profiler**: 7 questions, weighted 100-point score, top 8 with match percentages.
+     `gender` dropped for want of data; its 15 points moved into a season channel now answered
+     from the catalogue's real season indicators.
+   - **Ingredient Finder**: all 543 catalogue notes as searchable chips with stock counts,
+     ranked results over 752 bottles, no hard-coded note list.
+   - `lib/lazyCatalog.js` extracted from `GlobalSearch.jsx` so the catalogue is loaded once for
+     both surfaces; `lib/discoverI18n.js` holds EN/FR/AR copy with an English fallback.
+   - Verified by `probe-discover.cjs` (60 checks incl. 320–1920px overflow).
+
+Still open (recorded, not dropped): avatar crop/zoom editor, the customer-facing Carte Fidélité
+card (`/loyalty`), the admin-only Guides tour (`/guides`), and a contact page. Each maps 1:1 to a
+legacy block above and can reuse the endpoints listed in §4.
