@@ -5,6 +5,7 @@ import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useCart } from "../../contexts/CartContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { byId, formatPrice, initials, products as ALL, related } from "../lib/catalog.js";
+import Reviews from "./Reviews.jsx";
 import "./collection.css";
 
 /* The typographic bottle, used for the 659 references with no artwork on disk.
@@ -274,6 +275,8 @@ export default function Product() {
           ) : null}
         </>
       ) : null}
+
+      <Reviews product={product} />
 
       {also.length ? (
         <section className="pdp-block">

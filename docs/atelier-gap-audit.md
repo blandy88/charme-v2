@@ -88,17 +88,21 @@ at the foot); any filter change drops `page` and returns to page 1.
 ## 4. Backend API surface (48) — usage in Atelier
 
 Covered: auth (login, register, verify-email, resend-verification), profile GET/PUT, settings
-GET/PUT, favourites GET/toggle, upload-avatar, notes POST, news GET, and the whole admin surface —
+GET/PUT, favourites GET/toggle, upload-avatar, notes POST, news GET, the whole admin surface —
 `/api/stats/users`, `/api/admin/users`, ban/unban, `/api/admin/loyalty` (+ add-points, redeem,
 create, update, delete, purchases, purchases/:id, profiles/:cardId), `/api/admin/news`
-(GET/POST/DELETE), `/api/admin/store-hours` (GET/PUT), `/api/admin/notes` (GET/read/DELETE).
+(GET/POST/DELETE), `/api/admin/store-hours` (GET/PUT), `/api/admin/notes` (GET/read/DELETE) — and
+the reviews + replies set (9): `GET /api/reviews/:fragrance`, `POST /api/reviews`,
+`PUT /api/reviews/update`, `DELETE /api/reviews/delete`, `POST /api/reviews/like`,
+`GET /api/reviews/likes/:fragrance`, `GET/POST /api/reviews/:reviewId/replies`,
+`POST /api/replies/:replyId/like`, `DELETE /api/replies/:replyId`.
+
+Reviews are keyed by the Atelier product **slug** (`product.slug || product.id`), matching the
+legacy's per-fragrance slug key; the `reviews` / `review_replies` tables were empty, so nothing
+needed migrating.
 
 **Still not covered:**
 
-* Reviews + replies (9): `GET /api/reviews/:fragrance`, `POST /api/reviews`,
-  `PUT /api/reviews/update`, `DELETE /api/reviews/delete`, `POST /api/reviews/like`,
-  `GET /api/reviews/likes/:fragrance`, `GET/POST /api/reviews/:reviewId/replies`,
-  `POST /api/replies/:replyId/like`, `DELETE /api/replies/:replyId`.
 * `GET /api/search/loyalty-profiles` — the admin card form links a user from the
   `usersWithoutCards` list returned by `/api/admin/loyalty` instead.
 
@@ -119,7 +123,15 @@ Done in the admin/pagination increment:
 6. **Nav fix** — the extra admin-only primary link was moved into the account menu, which removes
    a 63px horizontal overflow that only appeared for signed-in admins between 1180–1245px.
 
-Deferred (recorded, not dropped): Scent Profiler, Ingredient Finder, avatar crop/zoom editor,
-product reviews + replies, the customer-facing Carte Fidélité card (`/loyalty`), the admin-only
-Guides tour (`/guides`), and a contact page. Each maps 1:1 to a legacy block above and can reuse
-the endpoints listed in §4.
+Done in the reviews increment:
+
+7. **Product reviews** — `frontend/src/atelier/pages/Reviews.jsx` (+ `reviews.css`), one section on
+   the PDP replacing the legacy's 185 per-fragrance blocks. Rating summary with a 5–1 distribution,
+   a write/edit composer with a star picker and a live counter, load-more, like/dislike toggles,
+   one-level reply threads (with reply likes, reply-to-reply and deletes), owner edit/delete plus
+   admin delete, and a sign-in gate for guests. Copy in EN/FR/AR. Verified by `probe-reviews.cjs`
+   (36 checks incl. 320–768px overflow).
+
+Still open (recorded, not dropped): Scent Profiler, Ingredient Finder, avatar crop/zoom editor,
+the customer-facing Carte Fidélité card (`/loyalty`), the admin-only Guides tour (`/guides`), and a
+contact page. Each maps 1:1 to a legacy block above and can reuse the endpoints listed in §4.
