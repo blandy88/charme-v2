@@ -10,6 +10,9 @@ import Loyalty from "./pages/Loyalty.jsx";
 import Guides from "./pages/Guides.jsx";
 import News from "./pages/News.jsx";
 import Admin from "./pages/Admin.jsx";
+import Favorites from "./pages/Favorites.jsx";
+import Product from "./pages/Product.jsx";
+import Profile from "./pages/Profile.jsx";
 
 export default function App() {
   return (
@@ -19,6 +22,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/collection" element={<Collection />} />
+          <Route path="/collection/:slug" element={<Product />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/cart" element={<Cart />} />
@@ -26,6 +30,8 @@ export default function App() {
           <Route path="/guides" element={<Guides />} />
           <Route path="/news" element={<News />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

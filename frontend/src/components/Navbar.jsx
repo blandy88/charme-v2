@@ -66,13 +66,22 @@ export default function Navbar() {
           </Link>
 
           {user ? (
-            <button
+            <>
+              <Link
+                to="/profile"
+                aria-label="Profile"
+                className="rounded-sm border border-hairline px-2 py-1 text-xs text-muted transition-colors hover:border-brass hover:text-brass"
+              >
+                👤
+              </Link>
+              <button
               type="button"
               onClick={signOut}
               className="rounded-sm border border-hairline px-2.5 py-1 text-xs text-cream transition-colors hover:border-brass hover:text-brass"
             >
               {t("signOut")}
             </button>
+            </>
           ) : (
             <Link
               to="/auth"
