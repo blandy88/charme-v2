@@ -1,0 +1,297 @@
+/*
+ * Charme Atelier — 2027 design tokens and motion system.
+ * Same structure and information as the legacy site, entirely new skin.
+ * Modern-only baseline (Chromium 138+ / Safari 26+). No legacy CSS is
+ * imported anywhere on this surface, so none of the ~43k !important
+ * rules or #id selectors can reach it.
+ *
+ * Derived from docs/modern-web-2027-tokens.css.
+ */
+
+:root {
+  color-scheme: dark;
+
+  --brand-hue: 42;
+  --surface-0: oklch(17% 0.018 var(--brand-hue));
+  --surface-1: oklch(22% 0.02 var(--brand-hue));
+  --surface-2: oklch(27% 0.022 var(--brand-hue));
+  --text-1: oklch(96% 0.008 var(--brand-hue));
+  --text-2: oklch(78% 0.012 var(--brand-hue));
+  --text-3: oklch(62% 0.014 var(--brand-hue));
+  --accent: oklch(78% 0.13 var(--brand-hue));
+  --accent-quiet: oklch(from var(--accent) l c h / 0.14);
+  --accent-hover: oklch(from var(--accent) calc(l + 0.06) c h);
+  --hairline: oklch(from var(--text-1) l c h / 0.09);
+  --hairline-strong: oklch(from var(--text-1) l c h / 0.2);
+  --on-accent: #171204;
+
+  --font-display: "Fraunces", "Playfair Display", ui-serif, Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.16vw, 1.05rem);
+  --step-1: clamp(1.15rem, 1.08rem + 0.32vw, 1.35rem);
+  --step-2: clamp(1.4rem, 1.26rem + 0.62vw, 1.8rem);
+  --step-3: clamp(1.75rem, 1.45rem + 1.2vw, 2.6rem);
+  --step-4: clamp(2.2rem, 1.6rem + 2.4vw, 4rem);
+  --step-5: clamp(2.8rem, 1.6rem + 5vw, 6.5rem);
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2.25rem;
+  --space-xl: 3.5rem;
+  --space-2xl: 5.5rem;
+
+  --radius-s: 0.5rem;
+  --radius-m: 1rem;
+  --radius-l: 1.75rem;
+  --radius-pill: 999px;
+
+  --shadow-1: 0 1px 2px oklch(0% 0 0 / 0.28);
+  --shadow-2: 0 12px 32px oklch(0% 0 0 / 0.34);
+
+  --dur-instant: 90ms;
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 520ms;
+  --dur-morph: 720ms;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --ease-spring-gentle: linear(0, 0.031, 0.1085, 0.213, 0.3297, 0.4479, 0.5602, 0.662, 0.7507,
+    0.8254, 0.8862, 0.9341, 0.9704, 0.9967, 1.0148, 1.0262, 1.0324, 1.0347, 1.0342, 1.0319,
+    1.0285, 1.0245, 1.0204, 1.0164, 1.0128, 1.0095, 1.0068, 1.0045, 1.0027, 1.0014, 1.0004,
+    0.9996, 0.9992);
+
+  --ease-spring-snappy: linear(0, 0.0428, 0.1487, 0.289, 0.4413, 0.5894, 0.7229, 0.8357, 0.9254,
+    0.9922, 1.0381, 1.0662, 1.0799, 1.0828, 1.0781, 1.0687, 1.0567, 1.0441, 1.0319, 1.0212,
+    1.0121, 1.005, 0.9998, 0.9963, 0.9942, 0.9933, 0.9932, 0.9936, 0.9945, 0.9955, 0.9965,
+    0.9975, 0.9984);
+
+  --stagger-step: 45ms;
+}
+
+/* Light theme: same hue, derived surfaces. */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --surface-0: oklch(94% 0.01 var(--brand-hue));
+  --surface-1: oklch(99% 0.008 var(--brand-hue));
+  --surface-2: oklch(90% 0.012 var(--brand-hue));
+  --text-1: oklch(24% 0.02 var(--brand-hue));
+  --text-2: oklch(38% 0.02 var(--brand-hue));
+  --text-3: oklch(52% 0.02 var(--brand-hue));
+  --accent: oklch(62% 0.13 var(--brand-hue));
+  --accent-quiet: oklch(from var(--accent) l c h / 0.12);
+  --accent-hover: oklch(from var(--accent) calc(l - 0.06) c h);
+  --hairline: oklch(from var(--text-1) l c h / 0.12);
+  --hairline-strong: oklch(from var(--text-1) l c h / 0.24);
+  --on-accent: oklch(99% 0.008 var(--brand-hue));
+
+  --shadow-1: 0 1px 2px oklch(0% 0 0 / 0.08);
+  --shadow-2: 0 12px 32px oklch(0% 0 0 / 0.12);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Lenis owns scrolling; native smooth would fight it. */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  background: var(--surface-0);
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p {
+  text-wrap: pretty;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Editorial eyebrow label — the section signature. */
+.eyebrow {
+  font-size: var(--step--1);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+/* Heavy repeated blocks skip rendering offscreen without layout shift. */
+.virtual-block {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: reveal-up var(--dur-slow) var(--ease-enter) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
+}
+
+.reveal-group > * {
+  animation: reveal-up var(--dur-slow) var(--ease-enter) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 40%;
+  animation-delay: calc(sibling-index() * var(--stagger-step) * -1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) {
+    animation-duration: var(--dur-morph);
+  }
+}
+
+.panel {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-base) var(--ease-spring-snappy),
+    transform var(--dur-base) var(--ease-spring-snappy);
+}
+
+@starting-style {
+  .panel {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+.pressable {
+  transition:
+    transform var(--dur-instant) var(--ease-spring-snappy),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.pressable:hover {
+  transform: translateY(-2px);
+}
+
+.pressable:active {
+  transform: scale(0.97);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  font-weight: 600;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-1);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-s);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.field {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-s);
+  color: var(--text-1);
+  padding: 0.6rem 0.8rem;
+  font: inherit;
+  font-size: var(--step-0);
+  width: 100%;
+}
+
+.field::placeholder {
+  color: var(--text-3);
+}
+
+.field:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+select.field option {
+  background: var(--surface-1);
+  color: var(--text-1);
+}
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-m);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal,
+  .reveal-group > * {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
