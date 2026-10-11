@@ -53,6 +53,15 @@ if (process.env.VERCEL || process.env.RENDER) {
 // explicitly ignores express.static(). Keeping the same layout on Render means
 // one codebase behaves identically on both hosts.
 const PUBLIC_DIR = path.join(__dirname, "public");
+/*
+ * SERVE_REACT=1 makes "/" serve the document emitted by the React build pipeline
+ * (scripts/build-legacy-page.mjs) instead of public/index.html, and tags the response
+ * with X-Charme-Render so you can tell which pipeline answered. The two are byte-identical
+ * by construction — that parity is the whole point — so the header, not the pixels, is the
+ * signal. Default is unchanged: public/index.html.
+ */
+const REACT_CANDIDATE = path.join(__dirname, "_recon", "legacy-react-candidate.html");
+const SERVE_REACT = process.env.SERVE_REACT === "1";
 const allowedOrigins = [
   ...(process.env.CORS_ORIGINS || "")
     .split(",")
@@ -1080,6 +1089,11 @@ function resolveRootFile(reqPath) {
 app.use((req, res, next) => {
   if (req.path === "/") {
     res.setHeader("Cache-Control", "no-cache, must-revalidate");
+    if (SERVE_REACT) {
+      res.setHeader("X-Charme-Render", "react-build");
+      return res.sendFile(REACT_CANDIDATE);
+    }
+    res.setHeader("X-Charme-Render", "public-index");
     return res.sendFile(path.join(PUBLIC_DIR, "index.html"));
   }
 
@@ -1144,6 +1158,22 @@ app.use(
   }),
 );
 app.use("/app", express.static(path.join(PUBLIC_DIR, "app"), { maxAge: 0 }));
+// SPA fallback: React Router owns every /app/* path, so deep links and
+// refreshes must serve the built index.html instead of 404ing.
+app.get(/^\/app(\/.*)?$/, (req, res) => {
+  res.setHeader("Cache-Control", "no-cache, must-revalidate");
+  res.sendFile(path.join(PUBLIC_DIR, "app", "index.html"));
+});
+
+// 2027 surface: a separate modern front end at /2027. It imports no legacy CSS and
+// never touches the legacy DOM, so the homepage at "/" is unaffected by its existence.
+app.use("/2027", express.static(path.join(PUBLIC_DIR, "2027"), { maxAge: 0 }));
+// Catalogue JSON for that surface (same data the legacy site ships inside
+// js/fragrance-catalog-data.js, so nothing new is exposed).
+app.use(
+  "/data",
+  express.static(path.join(PUBLIC_DIR, "data"), { index: false, maxAge: "1h" }),
+);
 
 // Serve avatar files: committed ones under public/uploads/avatars, plus
 // anything written at runtime (Vercel: /tmp, Render: repo disk).
@@ -4443,10 +4473,30 @@ app.get("/api/reviews/likes/:fragrance", authenticateToken, (req, res) => {
   );
 });
 
-// Serve the main page
+/*
+ * Main page. Default behaviour is unchanged.
+ *
+ * SERVE_REACT=1 serves the document produced by the React build pipeline
+ * (scripts/build-legacy-page.mjs) instead, and marks which pipeline answered with an
+ * X-Charme-Render header. The bytes are identical by construction — that is the parity
+ * guarantee — so the header, not the pixels, is how you tell them apart.
+ * /legacy then serves the checked-in document for side-by-side comparison.
+ */
 app.get("/", (req, res) => {
+  if (SERVE_REACT) {
+    res.set("X-Charme-Render", "react-build");
+    return res.sendFile(REACT_CANDIDATE);
+  }
+  res.set("X-Charme-Render", "public-index");
   res.sendFile(path.join(PUBLIC_DIR, "index.html"));
 });
+
+if (SERVE_REACT) {
+  app.get("/legacy", (req, res) => {
+    res.set("X-Charme-Render", "public-index");
+    res.sendFile(path.join(PUBLIC_DIR, "index.html"));
+  });
+}
 
 // 🚀 ENHANCED REVIEW SYSTEM: Reply Management Endpoints
 
