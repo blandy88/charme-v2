@@ -37,7 +37,7 @@ Sources: `_recon/legacy-inventory.md`, `_recon/scriptjs.md`, `_recon/product-blo
 | 13 | **Admin dashboard modal** | ✅ `/admin` (6 tabs) | — |
 | 14 | **Guest notes modal (unread badge)** | ✅ `/admin` › Notes (+ unread count) | — |
 | 15 | **News composer modal** | ✅ `/admin` › News | — |
-| 16 | **Carte Fidélité modal** | ✅ admin side (`/admin` › Loyalty) | customer-facing card still open |
+| 16 | **Carte Fidélité modal** | ✅ `/loyalty` (customer) + `/admin` › Loyalty | — |
 | 17 | **Ban user modal** | ✅ `/admin` › Users | — |
 | 18 | **Loyalty card edit modal** | ✅ `/admin` › Loyalty | — |
 | 19 | **Customer profile modal** | ✅ `/admin` › Loyalty › profile | — |
@@ -75,7 +75,7 @@ finder icons the legacy had as separate nav buttons now share one compass button
 | `/` | Homepage = chrome + 185 product sections + grid view | ✅ (fragrance list to be removed) |
 | `/guides` | **Admin-only** onboarding tour (`public/js/guides.js`, `GUIDES`, 3 languages) | ❌ Placeholder |
 | `/contact` | No page — "Contact" nav was `href="#"`; contact lived in footer + hero note form | ⚠️ Placeholder |
-| `/loyalty` | Modal, admin-driven "5 points = 1 parfum offert" (customer view of own card) | ⚠️ Placeholder — admin side done |
+| `/loyalty` | Modal, admin-driven "5 points = 1 parfum offert" (customer view of own card) | ✅ `/loyalty` |
 | `/news` | Modal feed, admin-published | ✅ `/news` |
 | `/admin` | Modal dashboard (users, loyalty, news, store hours) | ✅ `/admin` |
 
@@ -138,16 +138,41 @@ create, update, delete, purchases, purchases/:id, profiles/:cardId), `/api/admin
 the reviews + replies set (9): `GET /api/reviews/:fragrance`, `POST /api/reviews`,
 `PUT /api/reviews/update`, `DELETE /api/reviews/delete`, `POST /api/reviews/like`,
 `GET /api/reviews/likes/:fragrance`, `GET/POST /api/reviews/:reviewId/replies`,
-`POST /api/replies/:replyId/like`, `DELETE /api/replies/:replyId`.
+`POST /api/replies/:replyId/like`, `DELETE /api/replies/:replyId` — plus
+`GET /api/loyalty/me`, added for the customer card (see §3d).
 
 Reviews are keyed by the Atelier product **slug** (`product.slug || product.id`), matching the
 legacy's per-fragrance slug key; the `reviews` / `review_replies` tables were empty, so nothing
 needed migrating.
 
+## 3d. Carte Fidélité — the customer's own card
+
+`frontend/src/atelier/pages/Loyalty.jsx` (+ `loyalty.css`) on `/app/loyalty`.
+
+The legacy never had a customer-facing loyalty route: every `/api/loyalty*` endpoint was
+`authenticateToken + requireAdmin`, so the "customer view of own card" the IA describes was
+admin console only. The page therefore needs one new endpoint, `GET /api/loyalty/me`
+(authenticated for any signed-in user, scoped to the caller's own card), which reuses the same
+query shapes as `/api/admin/loyalty/profiles/:cardId` but returns nothing about anyone else's
+card and can move no points: purchases, point movements, family/brand preferences, and the
+suggestions query.
+
+State as deployed matters here: the 614 cards in the live database are all manual cards
+(`user_id` is null — none linked to an account), so a signed-in customer lands on the
+**no card yet** state, which invites them to ask at the boutique. A full card is framed as an
+invitation to the counter rather than a redeem button — there is no customer-side redeem
+endpoint to call, and inventing one would move loyalty balances outside the shop.
+
+Verified by `probe-loyalty.cjs` (48 checks): both branches of the endpoint, the balance, the
+progress bar, the eligibility copy and banner, purchase formatting (165.5 → "165.50 DT"), the
+point-movement ledger with the redeem row marked, family bars, houses, suggestions,
+EN/FR/AR copy including the `{n}` substitution, the guest redirect, and 320–1440px overflow.
+
 **Still not covered:**
 
 * `GET /api/search/loyalty-profiles` — the admin card form links a user from the
-  `usersWithoutCards` list returned by `/api/admin/loyalty` instead.
+  `usersWithoutCards` list returned by `/api/admin/loyalty` instead, and the customer page has
+  no search box to fill.
 
 ## 5. Work plan
 
@@ -188,6 +213,24 @@ Done in the discovery increment:
      both surfaces; `lib/discoverI18n.js` holds EN/FR/AR copy with an English fallback.
    - Verified by `probe-discover.cjs` (60 checks incl. 320–1920px overflow).
 
-Still open (recorded, not dropped): avatar crop/zoom editor, the customer-facing Carte Fidélité
-card (`/loyalty`), the admin-only Guides tour (`/guides`), and a contact page. Each maps 1:1 to a
-legacy block above and can reuse the endpoints listed in §4.
+Still open (recorded, not dropped): avatar crop/zoom editor, the admin-only Guides tour
+(`/guides`), and a contact page. Each maps 1:1 to a legacy block above and can reuse the
+endpoints listed in §4.
+
+Done in the loyalty increment:
+
+9. **Carte Fidélité (customer)** — `pages/Loyalty.jsx` (+ `loyalty.css`) on `/app/loyalty`, behind
+   the new `GET /api/loyalty/me`: the caller's own card only (balance against the 5-point
+   threshold, progress, eligibility), their purchases and point movements, their family/brand
+   preferences, and the same suggestions query the admin console uses. No points can move from
+   the page — rewards are redeemed at the counter, so a full card is framed as an invitation
+   rather than a button.
+   Plus one incidental fix: the nav search field's clamp went from `clamp(6rem, 16vw, 14rem)` to
+   `clamp(6rem, 14vw, 13rem)`. At 1180px the clamp picks the vw term, and the extra tool button
+   the discovery button added had pushed the tools row 6px past the viewport — the band that
+   previously overflowed for signed-in admins. The field is the one nav item with real slack.
+   Verified by `probe-loyalty.cjs` (48 checks) with the overflow suite re-run after.
+
+`docs/atelier-gap-audit.md` §3c/§3d and the status table carry the detail; the legacy reality of
+the loyalty card (every `/api/loyalty*` route was admin-only, and all 614 live cards are manual
+cards with no account link) is recorded there too.

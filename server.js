@@ -3335,6 +3335,121 @@ app.get("/api/admin/loyalty/profiles/:cardId", authenticateToken, requireAdmin, 
   }
 });
 
+// 💳 CARTE FIDÉLITÉ — the customer's own card (drives /app/loyalty).
+// The admin route above shows every card; this one shows only the caller's,
+// and only the fields that belong to them: their balance, their own history
+// and the same preference maths the shop assistant sees — nothing about any
+// other customer. No points can move from here.
+app.get("/api/loyalty/me", authenticateToken, async (req, res) => {
+  try {
+    const card = await getLoyaltyCardByUserId(req.user.userId);
+    if (!card) {
+      return res.json({ success: true, hasCard: false, rewardThreshold: LOYALTY_REWARD_THRESHOLD });
+    }
+
+    const purchases = await new Promise((resolve, reject) => {
+      db.all(
+        "SELECT * FROM customer_purchases WHERE card_id = ? ORDER BY purchase_date DESC, id DESC",
+        [card.id],
+        (err, rows) => (err ? reject(err) : resolve(rows || [])),
+      );
+    });
+
+    const transactions = await new Promise((resolve, reject) => {
+      db.all(
+        "SELECT points_change, type, description, created_at FROM loyalty_transactions WHERE card_id = ? ORDER BY created_at DESC, id DESC",
+        [card.id],
+        (err, rows) => (err ? reject(err) : resolve(rows || [])),
+      );
+    });
+
+    // Same preference maths as the admin profile: families, then brands, then
+    // the suggestions the customer does not own yet.
+    const familyCount = {};
+    purchases.forEach((p) => {
+      const f = p.fragrance_family || "Non spécifié";
+      familyCount[f] = (familyCount[f] || 0) + 1;
+    });
+    const totalPurchases = purchases.length;
+    const preferences = Object.entries(familyCount)
+      .map(([family, count]) => ({
+        family,
+        count,
+        percentage: totalPurchases > 0 ? Math.round((count / totalPurchases) * 100) : 0,
+      }))
+      .sort((a, b) => b.count - a.count);
+
+    const brandCount = {};
+    purchases.forEach((p) => {
+      const b = p.brand || "Inconnu";
+      brandCount[b] = (brandCount[b] || 0) + 1;
+    });
+    const topBrands = Object.entries(brandCount)
+      .map(([brand, count]) => ({ brand, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
+    const purchasedNames = purchases.map((p) => p.perfume_name.toLowerCase());
+    const topFamilies = preferences.slice(0, 3).map((p) => p.family).filter((f) => f !== "Non spécifié");
+    let suggestions = [];
+    if (topFamilies.length > 0) {
+      const familyPlaceholders = topFamilies.map(() => "?").join(",");
+      const namePlaceholders = purchasedNames.length > 0 ? purchasedNames.map(() => "?").join(",") : "''";
+      suggestions = await new Promise((resolve, reject) => {
+        db.all(
+          `SELECT perfume_name, brand, fragrance_family, audience, COUNT(*) AS freq
+           FROM customer_purchases
+           WHERE fragrance_family IN (${familyPlaceholders})
+             AND LOWER(perfume_name) NOT IN (${namePlaceholders})
+           GROUP BY perfume_name, brand, fragrance_family, audience
+           ORDER BY freq DESC
+           LIMIT 6`,
+          [...topFamilies, ...purchasedNames],
+          (err, rows) => (err ? reject(err) : resolve(rows || [])),
+        );
+      });
+    }
+
+    const totalSpent = purchases.reduce((sum, p) => sum + (p.purchase_price || 0), 0);
+    const rewardsCount = transactions.filter((t) => t.type === "redeem").length;
+
+    // The card rule: LOYALTY_REWARD_THRESHOLD redeemed points = one perfume.
+    const remaining = Math.max(0, LOYALTY_REWARD_THRESHOLD - (card.points || 0));
+
+    res.json({
+      success: true,
+      hasCard: true,
+      rewardThreshold: LOYALTY_REWARD_THRESHOLD,
+      card: {
+        cardId: card.id,
+        name: (card.holder_name || "").trim() || null,
+        cardNumber: card.card_number || null,
+        points: card.points || 0,
+        eligible: (card.points || 0) >= LOYALTY_REWARD_THRESHOLD,
+        progress: Math.min(100, Math.round(((card.points || 0) / LOYALTY_REWARD_THRESHOLD) * 100)),
+        remaining,
+        rewards: rewardsCount,
+        createdAt: card.created_at,
+        updatedAt: card.updated_at,
+      },
+      purchases,
+      preferences,
+      topBrands,
+      suggestions,
+      transactions: transactions.slice(0, 40),
+      stats: {
+        totalPurchases,
+        totalSpent: Math.round(totalSpent * 100) / 100,
+        topFamily: preferences[0]?.family || null,
+        favoriteBrand: topBrands[0]?.brand || null,
+      },
+    });
+  } catch (error) {
+    console.error("Loyalty me error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // 🔍 SEARCH LOYALTY PROFILES — for navbar search
 app.get("/api/search/loyalty-profiles", authenticateToken, async (req, res) => {
   try {

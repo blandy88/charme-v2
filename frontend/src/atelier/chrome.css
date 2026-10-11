@@ -39,7 +39,11 @@
   color: var(--text-1);
   font: inherit;
   font-size: var(--step--1);
-  inline-size: clamp(6rem, 16vw, 14rem);
+  /* 14vw, not 16: the tools row (search, discovery, language, theme, news,
+     favourites, cart, account) has to fit between 1180 and 1245px, and the
+     field is the one item in it with real slack — at 1180px the clamp picks
+     the vw term, not the 13rem ceiling. */
+  inline-size: clamp(6rem, 14vw, 13rem);
   min-inline-size: 0;
   outline: none;
 }

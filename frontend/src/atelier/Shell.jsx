@@ -31,6 +31,7 @@ const loadFavorites = () => import("./pages/Favorites.jsx");
 const loadAuth = () => import("./pages/Auth.jsx");
 const loadCart = () => import("./pages/Cart.jsx");
 const loadProfile = () => import("./pages/Profile.jsx");
+const loadLoyalty = () => import("./pages/Loyalty.jsx");
 const loadNews = () => import("./pages/News.jsx");
 const loadAdmin = () => import("./pages/Admin.jsx");
 
@@ -41,6 +42,7 @@ const SPLIT_ROUTES = {
   "/auth": loadAuth,
   "/cart": loadCart,
   "/profile": loadProfile,
+  "/loyalty": loadLoyalty,
   "/news": loadNews,
   "/admin": loadAdmin,
 };
@@ -89,6 +91,7 @@ const Favorites = routed(loadFavorites);
 const Auth = routed(loadAuth);
 const Cart = routed(loadCart);
 const Profile = routed(loadProfile);
+const Loyalty = routed(loadLoyalty);
 const News = routed(loadNews);
 const Admin = routed(loadAdmin);
 
@@ -111,6 +114,7 @@ const warmCatalogue = warm(loadCollection);
 const warmFavorites = warm(loadFavorites);
 const warmCart = warm(loadCart);
 const warmProfile = warm(loadProfile);
+const warmLoyalty = warm(loadLoyalty);
 const warmNews = warm(loadNews);
 const warmAdmin = warm(loadAdmin);
 const warmAuth = warm(loadAuth);
@@ -147,7 +151,7 @@ function Nav({ onDiscover }) {
           <NavLink to="/collection" className={link} onMouseEnter={warmCatalogue} onPointerDown={warmCatalogue} onFocus={warmCatalogue}>{t("collection")}</NavLink>
           <NavLink to="/guides" className={link}>{t("guides")}</NavLink>
           <NavLink to="/contact" className={link}>{t("contact")}</NavLink>
-          {user ? <NavLink to="/loyalty" className={link}>{t("loyalty")}</NavLink> : null}
+          {user ? <NavLink to="/loyalty" className={link} onMouseEnter={warmLoyalty} onPointerDown={warmLoyalty} onFocus={warmLoyalty}>{t("loyalty")}</NavLink> : null}
         </nav>
         <div className="nav-tools">
           <GlobalSearch />
@@ -325,7 +329,7 @@ export default function Shell() {
                 <Route path="/guides" element={<Placeholder title={t("guides")} />} />
                 <Route path="/contact" element={<Placeholder title={t("contact")} />} />
                 <Route path="/news" element={deferred(<News />)} />
-                <Route path="/loyalty" element={<Placeholder title={t("loyalty")} />} />
+                <Route path="/loyalty" element={deferred(<Loyalty />)} />
                 <Route path="/admin" element={deferred(<Admin />)} />
                 <Route path="*" element={<Home />} />
               </RouteTransition>
