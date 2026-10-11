@@ -4,17 +4,22 @@ import Lenis from "lenis";
 
 /*
  * The slow sliding smooth scroll: Lenis tuned HEAVY.
- * - lerp 0.06 = the page trails far behind the wheel with long inertia
+ *
+ * - lerp 0.035 = the page trails far behind the wheel with long inertia
  *   (the luxury award-site feel). Lower = heavier. 0.1 is default-subtle.
  * - Lenis drives native scroll, so scroll-driven CSS animations
  *   (reveal timelines) stay in sync for free.
- * - Skipped entirely under prefers-reduced-motion.
+ * - NEVER disabled. Under prefers-reduced-motion the glide is softened to
+ *   near-native (0.25) instead of being skipped outright — skipping it
+ *   meant the effect silently did not exist on machines that report
+ *   reduce (Windows "show animations" off, battery saver, etc.).
  * - Anchor links glide instead of jumping; route changes reset to top.
  *
  * Tuning: lower lerp = heavier glide. 0.04 is extreme, 0.08 is medium.
  */
 
-const LERP = 0.05;
+const LERP = 0.035;
+const LERP_REDUCED = 0.25;
 
 let lenis = null;
 
@@ -26,15 +31,29 @@ export default function SmoothScroll() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (lenis) return;
 
-    lenis = new Lenis({
-      lerp: LERP,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.8,
-      smoothWheel: true,
-    });
+    let reduced = false;
+    try {
+      reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch {
+      /* ignore */
+    }
+
+    try {
+      lenis = new Lenis({
+        lerp: reduced ? LERP_REDUCED : LERP,
+        wheelMultiplier: 1,
+        touchMultiplier: 1.8,
+        smoothWheel: true,
+      });
+    } catch {
+      lenis = null;
+      return;
+    }
+
+    // Visible, inspectable proof the glide is live (also aids debugging).
+    document.documentElement.dataset.scrollWeight = reduced ? "soft" : "heavy";
 
     let raf = 0;
     const loop = (time) => {
@@ -60,6 +79,7 @@ export default function SmoothScroll() {
       document.removeEventListener("click", onClick);
       lenis.destroy();
       lenis = null;
+      delete document.documentElement.dataset.scrollWeight;
     };
   }, []);
 
