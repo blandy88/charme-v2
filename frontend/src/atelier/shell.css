@@ -164,6 +164,24 @@
   color: var(--text-1);
 }
 
+/* Admin lives in the account menu — the legacy site kept "Administration &
+   outils" in the user menu too, and it keeps the primary nav from having to
+   fit an extra link at the 1180px breakpoint. */
+.account-pop-label {
+  margin: 0.35rem 0.2rem 0.15rem;
+  padding-block-start: 0.55rem;
+  border-block-start: 1px solid var(--hairline);
+  font-size: var(--step--1);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.account-pop .admin-entry {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 /* ---------- Hero ---------- */
 .hero {
   position: relative;

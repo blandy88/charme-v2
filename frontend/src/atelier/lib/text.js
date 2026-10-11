@@ -3,7 +3,8 @@
  *
  * `initials` used to live in catalog.js, but that module imports the whole
  * `virtual:catalogue` (553 KB). Anything on the critical path that only needs
- * initials must not pull the catalogue in with it — see Piece.jsx.
+ * initials must not pull the catalogue in with it — the collection shelves and
+ * the homepage piece run were both in that position, so the helper is standalone.
  */
 
 export function initials(name) {

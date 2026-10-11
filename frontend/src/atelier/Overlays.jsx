@@ -6,10 +6,9 @@ import { useI18n } from "../contexts/I18nContext.jsx";
 import { getLenis } from "./SmoothScroll.jsx";
 
 /*
- * The five utility overlays the legacy document keeps after the product run
- * (blocks 22-27 of the recon inventory):
- *
- *   social rail, floating cart, back-to-top ring, perfume-mode toggle, vignette
+ * The utility overlays the legacy document keeps after the product run
+ * (blocks 22-27 of the recon inventory): social rail, floating cart,
+ * back-to-top ring, vignette.
  *
  * They are chrome, not content, so they live outside <Routes> and survive every
  * tab change. The legacy puts them at the very end of the body; here they are
@@ -108,44 +107,9 @@ function FloatingCart() {
   );
 }
 
-/* Details / Grid — the legacy perfume-mode toggle. It only changes the density
-   of the homepage product run, so it sets one attribute on <html>. */
-function PerfumeModeToggle() {
-  const { t } = useI18n();
-  const [mode, setMode] = useState(() => {
-    try {
-      return localStorage.getItem("charme-perfume-mode") === "grid" ? "grid" : "details";
-    } catch {
-      return "details";
-    }
-  });
-
-  useEffect(() => {
-    document.documentElement.dataset.perfumeMode = mode;
-    try {
-      localStorage.setItem("charme-perfume-mode", mode);
-    } catch {
-      /* ignore */
-    }
-  }, [mode]);
-
-  return (
-    <div className="perfume-toggle" role="group" aria-label={t("perfumeMode")}>
-      {["details", "grid"].map((m) => (
-        <button
-          key={m}
-          type="button"
-          className={`pressable${mode === m ? " on" : ""}`}
-          data-mode={m}
-          aria-pressed={mode === m}
-          onClick={() => setMode(m)}
-        >
-          {m === "details" ? t("modeDetails") : t("modeGrid")}
-        </button>
-      ))}
-    </div>
-  );
-}
+/* Details / Grid — removed with the homepage product run: the mode only ever
+   changed the density of that run, so with the run gone the control would have
+   been a switch wired to nothing. */
 
 export default function Overlays() {
   return (
@@ -153,7 +117,6 @@ export default function Overlays() {
       <div className="top-vignette" aria-hidden="true" />
       <SocialRail />
       <FloatingCart />
-      <PerfumeModeToggle />
       <BackToTop />
     </>
   );

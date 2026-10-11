@@ -4,6 +4,7 @@ import { Heart, Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
 import { AuthProvider, useAuth } from "../contexts/AuthContext.jsx";
 import { CartProvider, useCart } from "../contexts/CartContext.jsx";
 import { FavoritesProvider, useFavorites } from "../contexts/FavoritesContext.jsx";
+import { NewsProvider, useNews } from "../contexts/NewsContext.jsx";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext.jsx";
 import { useI18n } from "../contexts/I18nContext.jsx";
 import FaithfulSite from "../faithful/FaithfulSite.jsx";
@@ -29,6 +30,8 @@ const loadFavorites = () => import("./pages/Favorites.jsx");
 const loadAuth = () => import("./pages/Auth.jsx");
 const loadCart = () => import("./pages/Cart.jsx");
 const loadProfile = () => import("./pages/Profile.jsx");
+const loadNews = () => import("./pages/News.jsx");
+const loadAdmin = () => import("./pages/Admin.jsx");
 
 /* Everything reachable by a plain path that is worth fetching ahead of time. */
 const SPLIT_ROUTES = {
@@ -37,6 +40,8 @@ const SPLIT_ROUTES = {
   "/auth": loadAuth,
   "/cart": loadCart,
   "/profile": loadProfile,
+  "/news": loadNews,
+  "/admin": loadAdmin,
 };
 
 const chunks = new Map();
@@ -83,6 +88,8 @@ const Favorites = routed(loadFavorites);
 const Auth = routed(loadAuth);
 const Cart = routed(loadCart);
 const Profile = routed(loadProfile);
+const News = routed(loadNews);
+const Admin = routed(loadAdmin);
 
 /* Which split chunk a pathname needs, if any. The catalogue data is shared by
    both catalogue routes and by Favourites, so warming one warms the heavy half
@@ -103,6 +110,8 @@ const warmCatalogue = warm(loadCollection);
 const warmFavorites = warm(loadFavorites);
 const warmCart = warm(loadCart);
 const warmProfile = warm(loadProfile);
+const warmNews = warm(loadNews);
+const warmAdmin = warm(loadAdmin);
 const warmAuth = warm(loadAuth);
 
 function RouteFallback() {
@@ -122,6 +131,7 @@ function Nav() {
   const { count } = useCart();
   const { count: favCount } = useFavorites();
   const { theme, toggle } = useTheme();
+  const { unread: newsUnread } = useNews();
   const { lang, setLang, t } = useI18n();
   const [menu, setMenu] = useState(false);
 
@@ -137,7 +147,6 @@ function Nav() {
           <NavLink to="/guides" className={link}>{t("guides")}</NavLink>
           <NavLink to="/contact" className={link}>{t("contact")}</NavLink>
           {user ? <NavLink to="/loyalty" className={link}>{t("loyalty")}</NavLink> : null}
-          {isAdmin ? <NavLink to="/admin" className={link}>{t("admin")}</NavLink> : null}
         </nav>
         <div className="nav-tools">
           <GlobalSearch />
@@ -154,7 +163,16 @@ function Nav() {
           <button type="button" onClick={toggle} aria-label="Toggle theme" className="tool-btn pressable">
             {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
           </button>
-          <Link to="/news" aria-label={t("news")} className="tool-btn pressable"><Newspaper size={15} /></Link>
+          <Link
+            to="/news"
+            aria-label={t("news")}
+            className="tool-btn pressable"
+            onMouseEnter={warmNews}
+            onPointerDown={warmNews}
+            onFocus={warmNews}
+          >
+            <Newspaper size={15} />{newsUnread > 0 ? <span className="count">{newsUnread}</span> : null}
+          </Link>
           <Link
             to="/favorites"
             aria-label={t("favorites")}
@@ -193,6 +211,21 @@ function Nav() {
                   <Link to="/profile" onClick={() => setMenu(false)}>{t("profile")}</Link>
                   <Link to="/favorites" onClick={() => setMenu(false)}>{t("favorites")}</Link>
                   <Link to="/cart" onClick={() => setMenu(false)}>{t("cart")}</Link>
+                  {isAdmin ? (
+                    <>
+                      <p className="account-pop-label">{t("adminTools")}</p>
+                      <Link
+                        to="/admin"
+                        className="admin-entry"
+                        onClick={() => setMenu(false)}
+                        onMouseEnter={warmAdmin}
+                        onPointerDown={warmAdmin}
+                        onFocus={warmAdmin}
+                      >
+                        {t("admin")}
+                      </Link>
+                    </>
+                  ) : null}
                   <button type="button" onClick={() => { setMenu(false); signOut(); }}>{t("signOut")}</button>
                 </div>
               ) : null}
@@ -267,6 +300,7 @@ export default function Shell() {
         <AuthProvider>
           <FavoritesProvider>
             <CartProvider>
+              <NewsProvider>
               <Nav />
               <RouteTransition preload={preloadRoute}>
                 <Route path="/" element={<Home />} />
@@ -279,13 +313,14 @@ export default function Shell() {
                 <Route path="/favorites" element={deferred(<Favorites />)} />
                 <Route path="/guides" element={<Placeholder title={t("guides")} />} />
                 <Route path="/contact" element={<Placeholder title={t("contact")} />} />
-                <Route path="/news" element={<Placeholder title={t("news")} />} />
+                <Route path="/news" element={deferred(<News />)} />
                 <Route path="/loyalty" element={<Placeholder title={t("loyalty")} />} />
-                <Route path="/admin" element={<Placeholder title={t("admin")} />} />
+                <Route path="/admin" element={deferred(<Admin />)} />
                 <Route path="*" element={<Home />} />
               </RouteTransition>
               <Footer />
               <Overlays />
+              </NewsProvider>
             </CartProvider>
           </FavoritesProvider>
         </AuthProvider>

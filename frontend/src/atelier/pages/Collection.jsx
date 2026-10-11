@@ -1,9 +1,15 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { facets, formatPrice, initials, products as ALL } from "../lib/catalog.js";
+import { getLenis } from "../SmoothScroll.jsx";
 import "./collection.css";
+
+/* References per page. The legacy grid rendered every fragrance at once; a
+   numbered pager pinned to the foot of the page is the requested behaviour. */
+const PAGE_SIZE = 24;
 
 const SORTS = [
   ["featured", "collSortFeatured"],
@@ -25,6 +31,21 @@ function readParams(params) {
 }
 
 const sameFilters = (a, b) => FILTER_KEYS.every((k) => (a[k] || "") === (b[k] || ""));
+
+/* Windowed list of page numbers: first, last, current ± 1, with "…" fillers. */
+function pageList(current, pages) {
+  const seen = new Set([1, pages]);
+  for (let p = current - 1; p <= current + 1; p++) if (p > 1 && p < pages) seen.add(p);
+  const ordered = [...seen].sort((a, b) => a - b);
+  const out = [];
+  let prev = 0;
+  for (const p of ordered) {
+    if (prev && p - prev > 1) out.push("\u2026");
+    out.push(p);
+    prev = p;
+  }
+  return out;
+}
 
 export default function Collection() {
   const { t } = useI18n();
@@ -103,6 +124,30 @@ export default function Collection() {
     else if (sort === "year-desc") out.sort((a, b) => (b.year || 0) - (a.year || 0));
     return out;
   }, [deferredQ, brand, family, conc, perfumer, avail, sort]);
+
+  /* Pagination is read straight from the URL so a shared link lands on the
+     same page. Filter changes rewrite the query without `page`, which is how a
+     new filter set snaps back to page one. */
+  const pages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
+  const rawPage = Math.trunc(Number(params.get("page")) || 1);
+  const current = Math.min(Math.max(1, rawPage), pages);
+  const start = (current - 1) * PAGE_SIZE;
+  const paged = shown.slice(start, start + PAGE_SIZE);
+
+  const goPage = (n) => {
+    const target = Math.min(Math.max(1, n), pages);
+    if (target === current) return;
+    const next = new URLSearchParams(params);
+    if (target === 1) next.delete("page");
+    else next.set("page", String(target));
+    setParams(next);
+    /* Land on the first row of the new page rather than mid-scroll. */
+    const lenis = getLenis();
+    const anchor = document.querySelector(".coll-head");
+    const top = anchor ? anchor.getBoundingClientRect().top + window.scrollY - 88 : 0;
+    if (lenis) lenis.scrollTo(top);
+    else window.scrollTo({ top, behavior: "smooth" });
+  };
 
   const set = (key, value) => setFilters((f) => ({ ...f, [key]: value || "" }));
 
@@ -213,7 +258,7 @@ export default function Collection() {
         </div>
       ) : view === "grid" ? (
         <ul className="coll-grid">
-          {shown.map((p) => (
+          {paged.map((p) => (
             <li key={p.id} className="shelf-wrap">
               <Link to={`/collection/${encodeURIComponent(p.id)}`} className="shelf pressable">
                 <div className="shelf-media">
@@ -272,7 +317,7 @@ export default function Collection() {
               </tr>
             </thead>
             <tbody>
-              {shown.map((p) => (
+              {paged.map((p) => (
                 <tr key={p.id}>
                   <td>
                     <Link to={`/collection/${encodeURIComponent(p.id)}`}>{p.name}</Link>
@@ -289,6 +334,57 @@ export default function Collection() {
           </table>
         </div>
       )}
+
+      {shown.length > 0 && pages > 1 ? (
+        <nav className="coll-pager" aria-label={t("collPagination")}>
+          <button
+            type="button"
+            className="pager-step pressable"
+            onClick={() => goPage(current - 1)}
+            disabled={current === 1}
+            aria-label={t("collPrev")}
+          >
+            <ChevronLeft size={16} aria-hidden="true" />
+          </button>
+
+          <ul className="pager-pages">
+            {pageList(current, pages).map((p, i) =>
+              p === "\u2026" ? (
+                <li key={`gap-${i}`} className="pager-gap" aria-hidden="true">…</li>
+              ) : (
+                <li key={p}>
+                  <button
+                    type="button"
+                    className={`pager-num pressable${p === current ? " on" : ""}`}
+                    aria-current={p === current ? "page" : undefined}
+                    onClick={() => goPage(p)}
+                  >
+                    {p}
+                  </button>
+                </li>
+              ),
+            )}
+          </ul>
+
+          <button
+            type="button"
+            className="pager-step pressable"
+            onClick={() => goPage(current + 1)}
+            disabled={current === pages}
+            aria-label={t("collNext")}
+          >
+            <ChevronRight size={16} aria-hidden="true" />
+          </button>
+
+          <p className="pager-meta">
+            {t("collShowing")}{" "}
+            <strong>
+              {start + 1}–{Math.min(start + PAGE_SIZE, shown.length)}
+            </strong>{" "}
+            {t("collOf")} <strong>{shown.length}</strong>
+          </p>
+        </nav>
+      ) : null}
     </main>
   );
 }

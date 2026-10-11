@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
-import Piece from "./Piece.jsx";
 import "./home.css";
 
 const OSM_EMBED =
@@ -183,25 +182,6 @@ export default function Home() {
           <NoteForm />
           <Concierge />
         </div>
-      </section>
-
-      <section className="wrap section pieces">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">{t("piecesSub")}</p>
-            <h2>{t("piecesTitle")}</h2>
-          </div>
-          <Link to="/collection">{t("viewAll")}</Link>
-        </div>
-        {sections ? (
-          <div className="piece-list">
-            {sections.map((s) => (
-              <Piece key={s.slug} section={s} />
-            ))}
-          </div>
-        ) : (
-          <div className="notice">{t("collLoading")}</div>
-        )}
       </section>
 
       <section className="wrap section visit">

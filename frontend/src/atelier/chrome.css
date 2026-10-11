@@ -474,58 +474,6 @@
   transform-origin: 30px 30px;
 }
 
-.perfume-toggle {
-  position: fixed;
-  z-index: 40;
-  inset-inline-start: clamp(0.9rem, 2vw, 1.5rem);
-  inset-block-end: clamp(0.9rem, 2vw, 1.5rem);
-  display: inline-flex;
-  gap: 0.15rem;
-  padding: 0.15rem;
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-pill);
-  background: color-mix(in oklch, var(--surface-0) 85%, transparent);
-  backdrop-filter: blur(10px);
-}
-
-.perfume-toggle button {
-  border: 0;
-  background: transparent;
-  color: var(--text-2);
-  font-size: 0.7rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  padding: 0.3rem 0.7rem;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-}
-
-.perfume-toggle button.on {
-  background: var(--accent);
-  color: var(--on-accent);
-}
-
-/* The mode actually changes the homepage run. "details" (default) is the full
-   anatomy; "grid" is the compact wall of bottles. */
-[data-perfume-mode="grid"] .piece-list {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
-  gap: var(--space-m) var(--space-s);
-}
-
-[data-perfume-mode="grid"] .piece-grid {
-  grid-template-columns: 1fr;
-}
-
-[data-perfume-mode="grid"] .piece-media {
-  aspect-ratio: 1 / 1;
-}
-
-[data-perfume-mode="grid"] .piece-bars,
-[data-perfume-mode="grid"] .piece-trail,
-[data-perfume-mode="grid"] .piece-indicators {
-  display: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .gs-panel {
     animation-duration: 1ms;

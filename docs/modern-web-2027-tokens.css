@@ -1,0 +1,189 @@
+/*
+ * Charme — 2027 design tokens and motion system
+ * ==============================================
+ * Target baseline: modern-only, no fallbacks (Chromium 138+ / Safari 26+), as chosen.
+ * This file is for the NEW surface. It is NOT imported by the legacy homepage; importing it
+ * there would put @layer/@scope rules in front of ~43,000 !important declarations.
+ *
+ * Companion research: docs/modern-web-2027-research.md
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ---------- Colour: oklch + relative colour derivation ---------- */
+  --brand-hue: 42;                                   /* warm amber, perfume gold */
+  --surface-0: oklch(17% 0.018 var(--brand-hue));    /* page */
+  --surface-1: oklch(22% 0.02 var(--brand-hue));     /* card */
+  --surface-2: oklch(27% 0.022 var(--brand-hue));    /* raised */
+  --text-1: oklch(96% 0.008 var(--brand-hue));
+  --text-2: oklch(78% 0.012 var(--brand-hue));
+  --text-3: oklch(62% 0.014 var(--brand-hue));
+  --accent: oklch(78% 0.13 var(--brand-hue));
+  --accent-quiet: oklch(from var(--accent) l c h / 0.14);
+  --accent-hover: oklch(from var(--accent) calc(l + 0.06) c h);
+  --hairline: oklch(from var(--text-1) l c h / 0.09);
+
+  /* contrast-color() guarantees readable text on any badge background */
+  --on-accent: contrast-color(var(--accent));
+
+  /* ---------- Fluid type: one scale, no breakpoint jumps ---------- */
+  --font-display: "Fraunces", "Playfair Display", ui-serif, Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.16vw, 1.05rem);
+  --step-1: clamp(1.15rem, 1.08rem + 0.32vw, 1.35rem);
+  --step-2: clamp(1.4rem, 1.26rem + 0.62vw, 1.8rem);
+  --step-3: clamp(1.75rem, 1.45rem + 1.2vw, 2.6rem);
+  --step-4: clamp(2.2rem, 1.6rem + 2.4vw, 4rem);
+  --step-5: clamp(2.8rem, 1.6rem + 5vw, 6.5rem);
+
+  /* True optical centring for badges, buttons, headings */
+  --optical-center: trim-both cap alphabetic;
+
+  /* ---------- Space, radius, shadow ---------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2.25rem;
+  --space-xl: 3.5rem;
+  --space-2xl: 5.5rem;
+  --space-3xl: 8rem;
+
+  --radius-s: 0.5rem;
+  --radius-m: 1rem;
+  --radius-l: 1.75rem;
+  --radius-pill: 999px;
+
+  --shadow-1: 0 1px 2px oklch(0% 0 0 / 0.28);
+  --shadow-2: 0 12px 32px oklch(0% 0 0 / 0.34);
+
+  /* ---------- Motion: duration ---------- */
+  --dur-instant: 90ms;    /* press / release feedback */
+  --dur-fast: 160ms;      /* hover, colour */
+  --dur-base: 280ms;      /* the default; most UI lives here */
+  --dur-slow: 520ms;      /* reveals, panels */
+  --dur-morph: 720ms;     /* view transitions, layout morphs */
+
+  /* ---------- Motion: easing ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /*
+   * Real spring physics sampled into linear() — generated from the damped-spring solution
+   * x(t) = 1 - e^(-zw0 t)(cos(wd t) + (zw0/wd) sin(wd t)), mass 1, 32 samples.
+   * Values above 1 are the overshoot; that is the point.
+   */
+  --ease-spring-gentle: linear(0, 0.031, 0.1085, 0.213, 0.3297, 0.4479, 0.5602, 0.662, 0.7507,
+    0.8254, 0.8862, 0.9341, 0.9704, 0.9967, 1.0148, 1.0262, 1.0324, 1.0347, 1.0342, 1.0319,
+    1.0285, 1.0245, 1.0204, 1.0164, 1.0128, 1.0095, 1.0068, 1.0045, 1.0027, 1.0014, 1.0004,
+    0.9996, 0.9992);                                     /* zeta 0.730 — settle 0.78s */
+
+  --ease-spring-snappy: linear(0, 0.0428, 0.1487, 0.289, 0.4413, 0.5894, 0.7229, 0.8357, 0.9254,
+    0.9922, 1.0381, 1.0662, 1.0799, 1.0828, 1.0781, 1.0687, 1.0567, 1.0441, 1.0319, 1.0212,
+    1.0121, 1.005, 0.9998, 0.9963, 0.9942, 0.9933, 0.9932, 0.9936, 0.9945, 0.9955, 0.9965,
+    0.9975, 0.9984);                                     /* zeta 0.621 — settle 0.69s */
+
+  --ease-spring-bouncy: linear(0, 0.1156, 0.3859, 0.7025, 0.9818, 1.1751, 1.2682, 1.2731, 1.2172,
+    1.1321, 1.0458, 0.9773, 0.9358, 0.9215, 0.9289, 0.9494, 0.9742, 0.9967, 1.0126, 1.0207,
+    1.0217, 1.0176, 1.0111, 1.0042, 0.9987, 0.9952, 0.9939, 0.9943, 0.9958, 0.9978, 0.9996,
+    1.0009, 1.0016);                                     /* zeta 0.375 — settle 0.96s */
+
+  /* ---------- Motion: stagger ---------- */
+  /* No nth-child index variables: sibling-index() gives the position for free. */
+  --stagger-step: 45ms;
+}
+
+/* ---------- Base ---------- */
+body {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  background: var(--surface-0);
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-wrap: balance;
+  text-box: var(--optical-center);
+}
+p { text-wrap: pretty; }
+
+/* ---------- The performance primitive that makes a heavy page feel light ---------- */
+/*
+ * On a page built from many repeated blocks this is the single biggest win. Purely additive:
+ * with contain-intrinsic-size set correctly the layout does not change, offscreen blocks simply
+ * stop being rendered.
+ */
+.virtual-block {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
+}
+
+/* ---------- Scroll-driven reveal (compositor-only) ---------- */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  animation: reveal-up var(--dur-slow) var(--ease-enter) both;
+  animation-timeline: view();          /* duration is ignored once a timeline is set */
+  animation-range: entry 0% entry 35%;
+}
+
+/* Stagger without nth-child: each sibling starts later in the entry phase. */
+.reveal-group > * {
+  animation: reveal-up var(--dur-slow) var(--ease-enter) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 40%;
+  animation-delay: calc(sibling-index() * var(--stagger-step) * -1);
+}
+
+/* ---------- Directed transitions, not hard cuts ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) { animation-duration: var(--dur-morph); }
+  ::view-transition-old(root) { animation: var(--dur-morph) var(--ease-out) both fade-out; }
+  ::view-transition-new(root) { animation: var(--dur-morph) var(--ease-out) both fade-in; }
+}
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+
+/* ---------- Entry animation from display:none, no JS timing ---------- */
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.panel {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--dur-base) var(--ease-spring-snappy),
+              transform var(--dur-base) var(--ease-spring-snappy);
+}
+@starting-style {
+  .panel { opacity: 0; transform: translateY(12px) scale(0.98); }
+}
+
+/* ---------- Micro-interaction with physicality ---------- */
+.pressable {
+  transition: transform var(--dur-instant) var(--ease-spring-snappy),
+              background-color var(--dur-fast) var(--ease-out);
+}
+.pressable:hover { transform: translateY(-2px); }
+.pressable:active { transform: scale(0.97); }
+
+/* ---------- Reduced motion is a designed state, not an afterthought ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .reveal-group > * { animation: none; opacity: 1; transform: none; }
+}
