@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom";
+import { lazy, Suspense, useState } from "react";
+import { BrowserRouter, Link, NavLink, Route } from "react-router-dom";
 import { Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
 import { AuthProvider, useAuth } from "../contexts/AuthContext.jsx";
 import { CartProvider, useCart } from "../contexts/CartContext.jsx";
@@ -11,6 +11,32 @@ import SmoothScroll from "./SmoothScroll.jsx";
 import RouteTransition from "./RouteTransition.jsx";
 import "./tokens.css";
 import "./shell.css";
+
+/* The catalogue is ~550KB of editorial data. Loading it here would put it on
+   the critical path for the homepage, so both catalogue routes are split out
+   and fetched on intent -- pointer or keyboard focus on the way in. */
+const loadCollection = () => import("./pages/Collection.jsx");
+const loadProduct = () => import("./pages/Product.jsx");
+const Collection = lazy(loadCollection);
+const Product = lazy(loadProduct);
+
+/* Product also needs the shared catalogue chunk, so either one warms both. */
+const warmCatalogue = () => {
+  loadCollection();
+  loadProduct();
+};
+
+function RouteFallback() {
+  return (
+    <main className="wrap collection">
+      <div className="coll-empty">Chargement…</div>
+    </main>
+  );
+}
+
+/* RouteTransition renders <Routes>, so Suspense has to sit inside each route's
+   element rather than around the switch. */
+const deferred = (node) => <Suspense fallback={<RouteFallback />}>{node}</Suspense>;
 
 function Nav() {
   const { user, isAdmin, signOut } = useAuth();
@@ -27,7 +53,7 @@ function Nav() {
         <Link to="/" className="wordmark">Charme</Link>
         <nav className="nav-links" aria-label="Primary">
           <NavLink to="/" end className={link}>{t("home")}</NavLink>
-          <NavLink to="/collection" className={link}>{t("collection")}</NavLink>
+          <NavLink to="/collection" className={link} onMouseEnter={warmCatalogue} onFocus={warmCatalogue}>{t("collection")}</NavLink>
           <NavLink to="/guides" className={link}>{t("guides")}</NavLink>
           <NavLink to="/contact" className={link}>{t("contact")}</NavLink>
           {user ? <NavLink to="/loyalty" className={link}>{t("loyalty")}</NavLink> : null}
@@ -136,7 +162,8 @@ export default function Shell() {
             <RouteTransition>
               <Route path="/" element={<Home />} />
               <Route path="/faithful" element={<FaithfulSite />} />
-              <Route path="/collection" element={<Placeholder title={t("collection")} />} />
+              <Route path="/collection" element={deferred(<Collection />)} />
+              <Route path="/collection/:id" element={deferred(<Product />)} />
               <Route path="/guides" element={<Placeholder title={t("guides")} />} />
               <Route path="/contact" element={<Placeholder title={t("contact")} />} />
               <Route path="/news" element={<Placeholder title={t("news")} />} />

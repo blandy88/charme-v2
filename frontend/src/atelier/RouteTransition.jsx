@@ -24,6 +24,7 @@ import { getLenis } from "./SmoothScroll.jsx";
  */
 
 const OUT_MS = 320;
+const OUT_MS_REDUCED = 150;
 const IN_MS = 680;
 const STAGGER_MS = 90;
 
@@ -59,25 +60,29 @@ function prefersReduced() {
 }
 
 export default function RouteTransition({ children }) {
-  const location = useLocation();
-  const [state, setState] = useState({ location, phase: "in" });
+  const live = useLocation();
+  const [phase, setPhase] = useState("in");
+  const [leaving, setLeaving] = useState(live);
+  const last = useRef(live);
   const timer = useRef(0);
-  const target = useRef(null);
-  const shown = useRef(location);
 
   useEffect(() => {
-    if (location === shown.current) return;
-    if (target.current === location) return;
-    target.current = location;
+    /* Search-param and hash changes are NOT page changes. They must reach the
+       routed component untouched -- the collection page drives its whole
+       filter UI through useSearchParams, and it does so on every keystroke.
+       Only a pathname change earns a transition. */
+    if (live.pathname === last.current.pathname) {
+      last.current = live;
+      return;
+    }
+
+    const from = last.current;
+    last.current = live;
 
     const lenis = getLenis();
-    const reduced = prefersReduced();
-    const outMs = reduced ? 150 : OUT_MS;
+    const outMs = prefersReduced() ? OUT_MS_REDUCED : OUT_MS;
 
-    document.documentElement.dataset.navDir = navDirection(
-      shown.current.pathname,
-      location.pathname
-    );
+    document.documentElement.dataset.navDir = navDirection(from.pathname, live.pathname);
 
     // Glide to the top while the page leaves: a visible scroll-up, not a snap.
     if (lenis && window.scrollY > 4) {
@@ -89,33 +94,42 @@ export default function RouteTransition({ children }) {
       window.scrollTo(0, 0);
     }
 
-    setState((s) => ({ ...s, phase: "out" }));
+    setLeaving(from);
+    setPhase("out");
 
+    // Rapid hops: a later navigation supersedes the one still leaving.
+    window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => {
-      shown.current = location;
-      setState({ location, phase: "in" });
-      target.current = null;
+      setPhase("in");
       delete document.documentElement.dataset.navDir;
     }, outMs);
-  }, [location]);
+  }, [live]);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
   // Timing exposed for the CSS to read, so both stay in sync.
   const duration = prefersReduced() ? IN_MS / 2 : IN_MS;
+  const reduced = prefersReduced();
+
+  /* While leaving we render the outgoing location (that is what animates out);
+     once in, we hand the LIVE location to Routes so hooks inside the page see
+     the current URL. Keying on pathname -- not location.key, which the router
+     regenerates for search changes too -- is what stops a keystroke from
+     remounting the page under the user's cursor. */
+  const routed = phase === "out" ? leaving : live;
 
   return (
     <div
       className="stage"
-      data-phase={state.phase}
-      key={state.location.key}
+      data-phase={phase}
+      key={routed.pathname}
       style={{
         "--stage-in": `${duration}ms`,
-        "--stage-stagger": `${prefersReduced() ? STAGGER_MS / 3 : STAGGER_MS}ms`,
-        "--stage-out": `${prefersReduced() ? 150 : OUT_MS}ms`,
+        "--stage-stagger": `${reduced ? STAGGER_MS / 3 : STAGGER_MS}ms`,
+        "--stage-out": `${reduced ? OUT_MS_REDUCED : OUT_MS}ms`,
       }}
     >
-      <Routes location={state.location}>{children}</Routes>
+      <Routes location={routed}>{children}</Routes>
     </div>
   );
 }

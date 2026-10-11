@@ -25,6 +25,11 @@
   --hairline-strong: oklch(from var(--text-1) l c h / 0.2);
   --on-accent: #171204;
 
+  /* Status colours are separate from the brand hue so they can be tuned per
+     theme; both clear AA as small text on their own surface. */
+  --ok-text: oklch(76% 0.13 150);
+  --warn-text: oklch(74% 0.13 32);
+
   --font-display: "Fraunces", "Playfair Display", ui-serif, Georgia, serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 
@@ -86,12 +91,18 @@
   --text-1: oklch(24% 0.02 var(--brand-hue));
   --text-2: oklch(38% 0.02 var(--brand-hue));
   --text-3: oklch(52% 0.02 var(--brand-hue));
-  --accent: oklch(62% 0.13 var(--brand-hue));
+  /* Deeper than the night-theme accent: the 62% gold that reads well on a
+     17%-lightness surface only manages ~3.7:1 as small text on the 99% one,
+     and ~2.7:1 underneath the white label of .btn-accent. */
+  --accent: oklch(45% 0.12 var(--brand-hue));
   --accent-quiet: oklch(from var(--accent) l c h / 0.12);
   --accent-hover: oklch(from var(--accent) calc(l - 0.06) c h);
   --hairline: oklch(from var(--text-1) l c h / 0.12);
   --hairline-strong: oklch(from var(--text-1) l c h / 0.24);
   --on-accent: oklch(99% 0.008 var(--brand-hue));
+
+  --ok-text: oklch(45% 0.11 150);
+  --warn-text: oklch(48% 0.14 32);
 
   --shadow-1: 0 1px 2px oklch(0% 0 0 / 0.08);
   --shadow-2: 0 12px 32px oklch(0% 0 0 / 0.12);
@@ -106,6 +117,10 @@
 html {
   -webkit-text-size-adjust: 100%;
   /* Lenis owns scrolling; native smooth would fight it. */
+  /* Sub-pixel rounding can otherwise leave a 1px stray scrollbar on phones.
+     `clip`, not `hidden`: hidden would create a scroll container and break the
+     sticky nav. */
+  overflow-x: clip;
 }
 
 body {

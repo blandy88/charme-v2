@@ -1,0 +1,828 @@
+/* Collection + product pages.
+ *
+ * Deliberately avoiding the patterns my own audit flagged on the home page:
+ * no stat-banner row, no all-caps eyebrow wall, no identical icon-topped
+ * cards. The repeated primitive here is the "shelf": a fixed media slot
+ * beside a text block, which stays identical whether the product has a
+ * photograph or falls through to the typographic bottle (712 of 752 do).
+ */
+
+.collection {
+  padding-block: var(--space-xl) var(--space-2xl);
+}
+
+.coll-head {
+  padding-block: var(--space-l) var(--space-m);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.coll-head h1 {
+  font-size: var(--step-4);
+  line-height: 1.05;
+  margin-top: 0.35rem;
+}
+
+.coll-sub {
+  margin-top: var(--space-xs);
+  color: var(--text-3);
+  font-size: var(--step--1);
+}
+
+.coll-sub strong {
+  color: var(--text-1);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- toolbar ---------- */
+.coll-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding-block: var(--space-m);
+  position: sticky;
+  top: 3.6rem;
+  z-index: 20;
+  background: oklch(from var(--surface-0) l c h / 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.coll-search {
+  flex: 1 1 16rem;
+}
+
+.coll-search input {
+  width: 100%;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-s);
+  color: var(--text-1);
+  padding: 0.6rem 0.85rem;
+  font: inherit;
+  font-size: var(--step-0);
+}
+
+.coll-search input::placeholder {
+  color: var(--text-3);
+}
+
+.coll-search input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.coll-selects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.coll-selects select {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-s);
+  color: var(--text-2);
+  padding: 0.55rem 0.4rem;
+  font: inherit;
+  font-size: var(--step--1);
+  max-width: 11rem;
+}
+
+.coll-selects select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.coll-view {
+  display: flex;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-s);
+  overflow: clip;
+}
+
+.coll-view button {
+  background: transparent;
+  border: 0;
+  color: var(--text-3);
+  font: inherit;
+  font-size: var(--step--1);
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.coll-view button + button {
+  border-inline-start: 1px solid var(--hairline);
+}
+
+.coll-view button.on {
+  background: var(--accent-quiet);
+  color: var(--text-1);
+}
+
+.coll-active {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding-block: var(--space-s) 0;
+  color: var(--text-3);
+  font-size: var(--step--1);
+}
+
+.coll-active button {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  font: inherit;
+  font-size: var(--step--1);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.coll-empty {
+  padding-block: var(--space-2xl);
+  text-align: center;
+  color: var(--text-3);
+  display: grid;
+  gap: var(--space-s);
+  justify-items: center;
+}
+
+.coll-empty button {
+  background: none;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-s);
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--step--1);
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+}
+
+/* ---------- the shelf primitive ---------- */
+.coll-grid {
+  list-style: none;
+  margin: var(--space-m) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--space-s);
+}
+
+.shelf {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: var(--space-2xs);
+  align-items: center;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-m);
+  padding: var(--space-2xs);
+  text-decoration: none;
+  block-size: 100%;
+}
+
+.shelf:hover {
+  border-color: var(--hairline-strong);
+}
+
+.shelf-media {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-s);
+  overflow: clip;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+}
+
+.shelf-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.shelf-body {
+  min-width: 0;
+}
+
+.shelf-brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.shelf-body h3 {
+  font-size: var(--step-0);
+  font-weight: 500;
+  margin-top: 0.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shelf-meta {
+  font-size: var(--step--1);
+  color: var(--text-3);
+  margin-top: 0.15rem;
+}
+
+.shelf-foot {
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.shelf-price {
+  font-size: var(--step--1);
+  color: var(--accent);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.shelf-out {
+  font-size: 0.75rem;
+  color: var(--text-3);
+}
+
+/* the typographic bottle */
+.bottle {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  inline-size: 100%;
+  block-size: 100%;
+  align-content: center;
+}
+
+.bottle-neck {
+  inline-size: 26%;
+  block-size: 12%;
+  background: linear-gradient(oklch(from var(--text-1) l c h / 0.22), oklch(from var(--text-1) l c h / 0.1));
+  border-radius: 2px 2px 0 0;
+}
+
+.bottle-body {
+  inline-size: 76%;
+  block-size: 58%;
+  border-radius: 6px;
+  background:
+    linear-gradient(160deg, oklch(from var(--accent) l c h / 0.16), oklch(from var(--accent) l c h / 0.04) 55%, transparent),
+    var(--surface-1);
+  border: 1px solid oklch(from var(--accent) l c h / 0.28);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 3px;
+  padding: 8% 6%;
+}
+
+.bottle-mark {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1;
+  color: oklch(from var(--accent) l c h / 0.85);
+}
+
+.bottle-line {
+  inline-size: 70%;
+  block-size: 1px;
+  background: oklch(from var(--text-1) l c h / 0.22);
+}
+
+.bottle-line.short {
+  inline-size: 45%;
+}
+
+.bottle-caption {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-inline-size: 100%;
+}
+
+.bottle-lg .bottle-body {
+  block-size: 62%;
+}
+
+.bottle-lg .bottle-mark {
+  font-size: var(--step-5);
+}
+
+/* ---------- list view ---------- */
+/* Six columns do not fit a phone, so the table gets its own scroll region
+   rather than dragging the whole page sideways. Focusable so it can be
+   scrolled by keyboard. */
+.coll-table-wrap {
+  margin-top: var(--space-m);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.coll-table-wrap:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.coll-table {
+  width: 100%;
+  min-inline-size: 44rem;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+}
+
+.coll-table th {
+  text-align: start;
+  font-weight: 500;
+  color: var(--text-3);
+  padding: var(--space-2xs) var(--space-2xs);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.coll-table td {
+  padding: var(--space-2xs);
+  border-bottom: 1px solid var(--hairline);
+  color: var(--text-2);
+}
+
+.coll-table td:first-child {
+  color: var(--text-1);
+}
+
+.coll-table a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.coll-table a:hover {
+  color: var(--accent);
+}
+
+.coll-table .num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.coll-table .tag {
+  margin-inline-start: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+/* ---------- product page ---------- */
+.pdp {
+  padding-block: var(--space-s) var(--space-2xl);
+}
+
+.pdp-crumb {
+  display: flex;
+  gap: 0.5rem;
+  font-size: var(--step--1);
+  color: var(--text-3);
+  padding-block: var(--space-s);
+}
+
+.pdp-crumb a {
+  color: var(--text-3);
+  text-decoration: none;
+}
+
+.pdp-crumb a:hover {
+  color: var(--accent);
+}
+
+.pdp-top {
+  display: grid;
+  gap: var(--space-l);
+  padding-block: var(--space-m);
+}
+
+@media (min-width: 900px) {
+  .pdp-top {
+    grid-template-columns: 20rem 1fr;
+    align-items: start;
+  }
+}
+
+.pdp-media {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-m);
+  overflow: clip;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  display: grid;
+  place-items: center;
+  padding: var(--space-m);
+}
+
+.pdp-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pdp-brand {
+  font-size: var(--step--1);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.pdp-main h1 {
+  font-size: var(--step-4);
+  line-height: 1.05;
+  margin-top: 0.3rem;
+}
+
+.pdp-desc {
+  margin-top: var(--space-s);
+  font-size: var(--step-1);
+  line-height: 1.65;
+  color: var(--text-2);
+  max-width: 34rem;
+}
+
+.pdp-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-2xs) var(--space-s);
+  margin: var(--space-m) 0 0;
+  padding-block: var(--space-s);
+  border-block: 1px solid var(--hairline);
+}
+
+.pdp-facts dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.pdp-facts dd {
+  margin: 0.15rem 0 0;
+  font-size: var(--step-0);
+  color: var(--text-1);
+}
+
+.pdp-block {
+  padding-block: var(--space-l);
+  border-top: 1px solid var(--hairline);
+}
+
+/* Inside .pdp-main the block already follows the hairline of .pdp-facts. */
+.pdp-block-flush {
+  border-top: 0;
+  padding-block: var(--space-m) 0;
+}
+
+.pdp-h2 {
+  font-size: var(--step-2);
+  margin-bottom: var(--space-s);
+}
+
+/* ingredients */
+.ingredients {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ingredients li {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 0.3rem 0.8rem;
+  font-size: var(--step--1);
+  color: var(--text-2);
+  background: var(--surface-1);
+}
+
+/* buy block */
+.pdp-buy {
+  margin-top: var(--space-m);
+  display: grid;
+  gap: var(--space-2xs);
+}
+
+.sizes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.sizes li {
+  display: grid;
+  gap: 0.1rem;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-s);
+  padding: 0.55rem 1rem;
+  min-inline-size: 6rem;
+}
+
+.size-label {
+  font-size: var(--step--1);
+  color: var(--text-3);
+}
+
+.size-price {
+  font-size: var(--step-0);
+  color: var(--text-1);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.pdp-price {
+  font-size: var(--step-2);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.pdp-stock {
+  font-size: var(--step--1);
+  color: var(--text-3);
+}
+
+.pdp-stock.in {
+  color: var(--ok-text);
+}
+
+.pdp-stock.out {
+  color: var(--warn-text);
+}
+
+/* the note trail: three stages, connected */
+.trail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-s);
+  counter-reset: stage;
+}
+
+@media (min-width: 820px) {
+  .trail {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+}
+
+.trail-stage {
+  padding: var(--space-m) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+@media (min-width: 820px) {
+  .trail-stage {
+    padding: var(--space-m) var(--space-m) var(--space-m) 0;
+  }
+  .trail-stage + .trail-stage {
+    padding-inline-start: var(--space-m);
+  }
+}
+
+.trail-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  flex-wrap: wrap;
+}
+
+.trail-idx {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  color: var(--accent);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.trail-label {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  color: var(--text-1);
+}
+
+.trail-time {
+  margin-inline-start: auto;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.trail-notes {
+  list-style: none;
+  margin: var(--space-s) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.trail-notes li {
+  font-size: var(--step--1);
+  color: var(--text-2);
+  border-bottom: 1px solid var(--hairline-strong);
+  padding-block-end: 1px;
+}
+
+/* strengths */
+.strengths {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  max-width: 44rem;
+}
+
+.strengths li {
+  display: grid;
+  grid-template-columns: 7rem 1fr 2.6rem;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--step--1);
+}
+
+.strength-label {
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.strength-track {
+  block-size: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  overflow: clip;
+}
+
+.strength-fill {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transform-origin: left center;
+  animation: strength-grow 900ms var(--ease-enter) both;
+}
+
+@keyframes strength-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.strength-val {
+  text-align: end;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* qualities + indicators */
+.qualities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.qualities li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  font-size: var(--step-0);
+}
+
+.qualities strong {
+  font-weight: 600;
+}
+
+.qualities span {
+  color: var(--text-3);
+  font-size: var(--step--1);
+}
+
+.indicators {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.indicators li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.8rem;
+  font-size: var(--step--1);
+  color: var(--text-3);
+}
+
+.indicators li.on {
+  border-color: var(--accent);
+  color: var(--text-1);
+  background: var(--accent-quiet);
+}
+
+.ind-dot {
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* review */
+.pdp-review {
+  margin: 0;
+  padding-inline-start: var(--space-s);
+  border-inline-start: 2px solid var(--accent);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 40rem;
+}
+
+/* related */
+.also {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--space-s);
+}
+
+.also a {
+  display: grid;
+  gap: 0.3rem;
+  text-decoration: none;
+}
+
+.also-media {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-s);
+  overflow: clip;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+}
+
+.also-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.also-brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.also-name {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  color: var(--text-1);
+}
+
+.also-meta {
+  font-size: var(--step--1);
+  color: var(--text-3);
+}
+
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
