@@ -3,13 +3,18 @@ import { useLocation } from "react-router-dom";
 import Lenis from "lenis";
 
 /*
- * The slow sliding smooth scroll: Lenis with a long glide.
- * - duration 1.8s + soft easing = the famous heavy, buttery feel
- * - compositor-friendly: Lenis drives native scroll, so scroll-driven
- *   CSS animations (reveal timelines) stay in sync for free
- * - skipped entirely under prefers-reduced-motion
- * - anchor links glide instead of jumping; route changes reset to top
+ * The slow sliding smooth scroll: Lenis tuned HEAVY.
+ * - lerp 0.06 = the page trails far behind the wheel with long inertia
+ *   (the luxury award-site feel). Lower = heavier. 0.1 is default-subtle.
+ * - Lenis drives native scroll, so scroll-driven CSS animations
+ *   (reveal timelines) stay in sync for free.
+ * - Skipped entirely under prefers-reduced-motion.
+ * - Anchor links glide instead of jumping; route changes reset to top.
+ *
+ * Tuning: lower lerp = heavier glide. 0.04 is extreme, 0.08 is medium.
  */
+
+const LERP = 0.05;
 
 let lenis = null;
 
@@ -25,10 +30,10 @@ export default function SmoothScroll() {
     if (lenis) return;
 
     lenis = new Lenis({
-      duration: 1.8,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: LERP,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.8,
       smoothWheel: true,
-      touchMultiplier: 1.6,
     });
 
     let raf = 0;
