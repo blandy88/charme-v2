@@ -1,25 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Routes } from "react-router-dom";
-import { flushSync } from "react-dom";
 import { getLenis } from "./SmoothScroll.jsx";
 
 /*
- * Tab (route) transitions — native View Transitions API.
+ * Tab (route) transitions.
  *
- * Why hand-rolled instead of react-router's `viewTransition` prop: this
- * build of react-router-dom has no such prop, and three things need
- * coordinating that the router cannot see:
- *   1. Lenis must be frozen, or it fights the scroll reset mid-transition
- *   2. scroll must land on 0 *after* the new DOM is flushed but *before*
- *      the new snapshot is taken, or the new page opens mid-page
- *   3. direction (forward/back) for spatial continuity between tabs
+ * Deliberately NOT the View Transitions API. Tried it; it produced real
+ * artifacts (Chrome animated the transition group between two very
+ * different page heights, scaling the entire outgoing document into the
+ * viewport) and, worse, its pause is trivially defeated by a media query
+ * -- which silently made the whole thing a no-op on machines reporting
+ * prefers-reduced-motion.
  *
- * Choreography lives in tokens.css (`::view-transition-*`): the old page
- * leaves fast (300ms), the new one arrives slow (560ms) on a soft spring —
- * deliberately offset so the two never half-dissolve into a wash.
- * Degrades to a plain route swap where the API is absent.
+ * So the motion is owned here, in JS + CSS, and is therefore always
+ * perceptible. Sequence on a tab change:
+ *   1. the outgoing page glides up while it fades and slides away
+ *      (a real scroll-up driven by Lenis, not a snap to 0)
+ *   2. the incoming page rises into place, section by section
+ *
+ * prefers-reduced-motion shortens the timings here; it never disables
+ * them, because "no animation at all" is what a broken site feels like.
  */
+
+const OUT_MS = 320;
+const IN_MS = 680;
+const STAGGER_MS = 90;
 
 /* Primary navigation order, so "back" reads as back. */
 const ORDER = [
@@ -44,63 +50,72 @@ function navDirection(fromPath, toPath) {
   return b >= a ? "forward" : "back";
 }
 
+function prefersReduced() {
+  try {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
+}
+
 export default function RouteTransition({ children }) {
   const location = useLocation();
-  const [display, setDisplay] = useState(location);
-  const running = useRef(false);
+  const [state, setState] = useState({ location, phase: "in" });
+  const timer = useRef(0);
+  const target = useRef(null);
+  const shown = useRef(location);
 
   useEffect(() => {
-    if (location === display) return;
+    if (location === shown.current) return;
+    if (target.current === location) return;
+    target.current = location;
 
     const lenis = getLenis();
-    const dir = navDirection(display.pathname, location.pathname);
-    const root = document.documentElement;
-    const start =
-      typeof document.startViewTransition === "function"
-        ? document.startViewTransition.bind(document)
-        : null;
+    const reduced = prefersReduced();
+    const outMs = reduced ? 150 : OUT_MS;
 
-    if (!start || running.current) {
-      setDisplay(location);
+    document.documentElement.dataset.navDir = navDirection(
+      shown.current.pathname,
+      location.pathname
+    );
+
+    // Glide to the top while the page leaves: a visible scroll-up, not a snap.
+    if (lenis && window.scrollY > 4) {
+      lenis.scrollTo(0, {
+        duration: outMs / 1000,
+        easing: (t) => 1 - (1 - t) * (1 - t),
+      });
+    } else {
       window.scrollTo(0, 0);
-      return;
     }
 
-    // Freeze the smoother: without this Lenis keeps easing toward its old
-    // target while we reset the scroll position underneath it.
-    lenis?.stop?.();
-    root.dataset.navDir = dir;
+    setState((s) => ({ ...s, phase: "out" }));
 
-    // Show the outgoing page where you actually were, not at its top.
-    const stage = document.querySelector(".stage");
-    const stageTop = stage ? stage.getBoundingClientRect().top + window.scrollY : 0;
-    root.style.setProperty("--vt-offset", `${Math.max(0, window.scrollY - stageTop)}px`);
+    timer.current = window.setTimeout(() => {
+      shown.current = location;
+      setState({ location, phase: "in" });
+      target.current = null;
+      delete document.documentElement.dataset.navDir;
+    }, outMs);
+  }, [location]);
 
-    running.current = true;
+  useEffect(() => () => window.clearTimeout(timer.current), []);
 
-    const transition = start(() => {
-      flushSync(() => setDisplay(location));
-      // New DOM is live; pin scroll before the new snapshot is captured.
-      if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
-      window.scrollTo(0, 0);
-    });
-
-    const settle = () => {
-      running.current = false;
-      lenis?.start?.();
-      delete root.dataset.navDir;
-      root.style.removeProperty("--vt-offset");
-    };
-
-    if (transition && transition.finished) transition.finished.then(settle, settle);
-    else settle();
-  }, [location, display]);
+  // Timing exposed for the CSS to read, so both stay in sync.
+  const duration = prefersReduced() ? IN_MS / 2 : IN_MS;
 
   return (
-    /* `location` pins Routes to the captured location, so React's DOM update
-       and the browser's old/new snapshots describe the same two states. */
-    <div className="stage">
-      <Routes location={display}>{children}</Routes>
+    <div
+      className="stage"
+      data-phase={state.phase}
+      key={state.location.key}
+      style={{
+        "--stage-in": `${duration}ms`,
+        "--stage-stagger": `${prefersReduced() ? STAGGER_MS / 3 : STAGGER_MS}ms`,
+        "--stage-out": `${prefersReduced() ? 150 : OUT_MS}ms`,
+      }}
+    >
+      <Routes location={state.location}>{children}</Routes>
     </div>
   );
 }

@@ -158,80 +158,94 @@ img {
 }
 
 /*
- * Page-level transition choreography.
+ * Route transitions (driven by RouteTransition.jsx).
  *
- * The group is pinned to the viewport and its size animation disabled: left
- * alone, Chrome animates the group between two very different page heights,
- * which scales the *entire* outgoing document into the viewport (measured:
- * a 3190px page forced into a 900px group -> the whole old page squashed and
- * ghosting through the new one). Both snapshots instead render at natural
- * scale; --vt-offset shifts the outgoing one to whatever part of the page
- * you were actually looking at.
+ * Two beats, deliberately separated so they never half-dissolve into a wash:
+ *   1. outgoing page: fades and slides up while the scroll glides to the top
+ *   2. incoming page: rises into place, section by section, staggered
  *
- * Rhythm: old leaves in 300ms, new arrives in 560ms on a soft spring, offset
- * by 70ms so the two never half-dissolve into a wash.
+ * Reduced motion shortens the timings (via --stage-* set in JS) and halves
+ * the travel. It never removes them.
  */
-::view-transition-group(page) {
-  animation: none;
-  height: 100%;
-}
 
-::view-transition-image-pair(page) {
-  height: 100%;
-}
-
-::view-transition-old(page),
-::view-transition-new(page) {
-  height: 100%;
-  object-fit: none;
-  object-position: 50% calc(-1 * var(--vt-offset, 0px));
-}
-
-::view-transition-old(page) {
-  animation-name: tab-out;
-  animation-duration: 300ms;
-  animation-timing-function: var(--ease-in-out);
-}
-::view-transition-new(page) {
-  animation-name: tab-in;
-  animation-duration: 560ms;
-  animation-delay: 70ms;
-  animation-timing-function: var(--ease-enter);
-  /* A hairline of accent rides the leading edge of the arriving page —
-     one signature gesture, no curtain, no wipe. */
-  box-shadow: 0 -2px 0 0 var(--accent);
-}
-
-/* Backward navigation reads as coming from above. */
-:root[data-nav-dir="back"]::view-transition-old(page) {
-  animation-name: tab-out-back;
-}
-:root[data-nav-dir="back"]::view-transition-new(page) {
-  animation-name: tab-in-back;
-}
-
-@keyframes tab-out {
+@keyframes stage-out {
   to {
     opacity: 0;
-    transform: translateY(-18px) scale(0.985);
+    transform: translateY(-64px) scale(0.985);
   }
 }
-@keyframes tab-in {
+
+@keyframes stage-fade-in {
   from {
     opacity: 0;
-    transform: translateY(28px) scale(0.99);
   }
 }
-@keyframes tab-out-back {
+
+@keyframes page-rise {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+}
+
+/* Outgoing: no pointer, slides up and away. */
+.stage[data-phase="out"] {
+  animation: stage-out var(--stage-out, 320ms) var(--ease-in-out) both;
+  pointer-events: none;
+}
+
+/* Incoming: the page itself eases in, then each section rises in turn. */
+.stage[data-phase="in"] > * {
+  animation: stage-fade-in calc(var(--stage-in, 680ms) * 0.5) var(--ease-out) both;
+}
+
+.stage[data-phase="in"] > main > * {
+  animation: page-rise var(--stage-in, 680ms) var(--ease-enter) both;
+}
+
+.stage[data-phase="in"] > main > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.stage[data-phase="in"] > main > *:nth-child(2) {
+  animation-delay: var(--stage-stagger, 90ms);
+}
+.stage[data-phase="in"] > main > *:nth-child(3) {
+  animation-delay: calc(var(--stage-stagger, 90ms) * 2);
+}
+.stage[data-phase="in"] > main > *:nth-child(4) {
+  animation-delay: calc(var(--stage-stagger, 90ms) * 3);
+}
+.stage[data-phase="in"] > main > *:nth-child(5) {
+  animation-delay: calc(var(--stage-stagger, 90ms) * 4);
+}
+.stage[data-phase="in"] > main > *:nth-child(n + 6) {
+  animation-delay: calc(var(--stage-stagger, 90ms) * 5);
+}
+
+/* Backward navigation: leave downward, arrive from above. */
+:root[data-nav-dir="back"] .stage[data-phase="out"] {
+  animation-name: stage-out-back;
+}
+
+@keyframes stage-out-back {
   to {
     opacity: 0;
-    transform: translateY(18px) scale(0.985);
+    transform: translateY(64px) scale(0.985);
   }
 }
-@keyframes tab-in-back {
-  from {
-    opacity: 0;
-    transform: translateY(-28px) scale(0.99);
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes stage-out {
+    to {
+      opacity: 0;
+      transform: translateY(-24px);
+    }
+  }
+  @keyframes page-rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
   }
 }
 
@@ -403,16 +417,25 @@ select.field option {
     transition-duration: 1ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* Route transitions are shortened by RouteTransition.jsx via --stage-*,
+     never removed: an instant tab change is exactly the bug we just fixed.
+     Re-asserted here with !important because it has to beat the blanket
+     rule above. */
+  .stage[data-phase="out"] {
+    animation-duration: var(--stage-out, 150ms) !important;
+  }
+  .stage[data-phase="in"] > * {
+    animation-duration: calc(var(--stage-in, 340ms) / 2) !important;
+  }
+  .stage[data-phase="in"] > main > * {
+    animation-duration: var(--stage-in, 340ms) !important;
+  }
+
   .reveal,
   .reveal-group > * {
     animation: none;
     opacity: 1;
     transform: none;
-  }
-  /* Route transitions collapse to a plain swap. */
-  ::view-transition-old(page),
-  ::view-transition-new(page) {
-    animation: none !important;
-    box-shadow: none;
   }
 }
