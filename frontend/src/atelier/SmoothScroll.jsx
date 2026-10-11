@@ -50,8 +50,6 @@ export function getLenis() {
 }
 
 export default function SmoothScroll() {
-  const { pathname } = useLocation();
-
   useEffect(() => {
     if (lenis) return;
 
@@ -109,10 +107,16 @@ export default function SmoothScroll() {
     };
   }, []);
 
+  // Route transitions own the scroll reset (see RouteTransition.jsx): it must
+  // happen after the new DOM is flushed but before the new snapshot is taken,
+  // otherwise the outgoing page jumps to the top mid-transition.
   useEffect(() => {
-    if (lenis) lenis.scrollTo(0, { immediate: true });
-    else window.scrollTo(0, 0);
-  }, [pathname]);
+    const onPop = () => {
+      if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   return null;
 }

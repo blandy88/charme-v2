@@ -152,6 +152,89 @@ img {
   border-radius: 2px;
 }
 
+/* Interpolating to/from auto keywords (height: auto transitions etc.). */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+/*
+ * Page-level transition choreography.
+ *
+ * The group is pinned to the viewport and its size animation disabled: left
+ * alone, Chrome animates the group between two very different page heights,
+ * which scales the *entire* outgoing document into the viewport (measured:
+ * a 3190px page forced into a 900px group -> the whole old page squashed and
+ * ghosting through the new one). Both snapshots instead render at natural
+ * scale; --vt-offset shifts the outgoing one to whatever part of the page
+ * you were actually looking at.
+ *
+ * Rhythm: old leaves in 300ms, new arrives in 560ms on a soft spring, offset
+ * by 70ms so the two never half-dissolve into a wash.
+ */
+::view-transition-group(page) {
+  animation: none;
+  height: 100%;
+}
+
+::view-transition-image-pair(page) {
+  height: 100%;
+}
+
+::view-transition-old(page),
+::view-transition-new(page) {
+  height: 100%;
+  object-fit: none;
+  object-position: 50% calc(-1 * var(--vt-offset, 0px));
+}
+
+::view-transition-old(page) {
+  animation-name: tab-out;
+  animation-duration: 300ms;
+  animation-timing-function: var(--ease-in-out);
+}
+::view-transition-new(page) {
+  animation-name: tab-in;
+  animation-duration: 560ms;
+  animation-delay: 70ms;
+  animation-timing-function: var(--ease-enter);
+  /* A hairline of accent rides the leading edge of the arriving page —
+     one signature gesture, no curtain, no wipe. */
+  box-shadow: 0 -2px 0 0 var(--accent);
+}
+
+/* Backward navigation reads as coming from above. */
+:root[data-nav-dir="back"]::view-transition-old(page) {
+  animation-name: tab-out-back;
+}
+:root[data-nav-dir="back"]::view-transition-new(page) {
+  animation-name: tab-in-back;
+}
+
+@keyframes tab-out {
+  to {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.985);
+  }
+}
+@keyframes tab-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.99);
+  }
+}
+@keyframes tab-out-back {
+  to {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+}
+@keyframes tab-in-back {
+  from {
+    opacity: 0;
+    transform: translateY(-28px) scale(0.99);
+  }
+}
+
 /* Editorial eyebrow label — the section signature. */
 .eyebrow {
   font-size: var(--step--1);
@@ -211,32 +294,63 @@ img {
   }
 }
 
+/*
+ * Buttons: liquid fill + spring press.
+ * The fill is a background-image that grows from the left, so it paints
+ * above the element's own background with no z-index/stacking hacks and
+ * nothing to reflow. Timing is a real spring, not generic `ease`.
+ */
+
 .pressable {
+  position: relative;
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  background-position: 0 0;
   transition:
-    transform var(--dur-instant) var(--ease-spring-snappy),
+    transform 320ms var(--ease-spring-snappy),
     background-color var(--dur-fast) var(--ease-out),
+    background-size 420ms var(--ease-enter),
     border-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Bigger hit area without moving the visual box. */
+.pressable::before {
+  content: "";
+  position: absolute;
+  inset: -0.4rem;
+  border-radius: inherit;
 }
 
 .pressable:hover {
   transform: translateY(-2px);
+  background-size: 100% 100%;
 }
 
 .pressable:active {
-  transform: scale(0.97);
+  transform: translateY(-1px) scale(0.97);
+  box-shadow: var(--shadow-1);
 }
 
 .btn-accent {
-  background: var(--accent);
+  background-color: var(--accent);
+  background-image: linear-gradient(oklch(100% 0 0 / 0.22), oklch(100% 0 0 / 0.22));
   color: var(--on-accent);
   border: 1px solid transparent;
   border-radius: var(--radius-s);
   font-weight: 600;
 }
 
+.btn-accent:hover {
+  box-shadow: 0 8px 24px oklch(from var(--accent) l c h / 0.28);
+}
+
 .btn-ghost {
-  background: transparent;
+  background-color: transparent;
+  background-image: linear-gradient(var(--accent-quiet), var(--accent-quiet));
   color: var(--text-1);
   border: 1px solid var(--hairline-strong);
   border-radius: var(--radius-s);
@@ -245,6 +359,7 @@ img {
 .btn-ghost:hover {
   border-color: var(--accent);
   color: var(--accent);
+  box-shadow: 0 6px 18px oklch(from var(--accent) l c h / 0.12);
 }
 
 .field {
@@ -293,5 +408,11 @@ select.field option {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+  /* Route transitions collapse to a plain swap. */
+  ::view-transition-old(page),
+  ::view-transition-new(page) {
+    animation: none !important;
+    box-shadow: none;
   }
 }

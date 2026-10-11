@@ -8,6 +8,7 @@ import { useI18n } from "../contexts/I18nContext.jsx";
 import FaithfulSite from "../faithful/FaithfulSite.jsx";
 import Home from "./pages/Home.jsx";
 import SmoothScroll from "./SmoothScroll.jsx";
+import RouteTransition from "./RouteTransition.jsx";
 import "./tokens.css";
 import "./shell.css";
 
@@ -132,7 +133,7 @@ export default function Shell() {
         <AuthProvider>
           <CartProvider>
             <Nav />
-            <Routes>
+            <RouteTransition>
               <Route path="/" element={<Home />} />
               <Route path="/faithful" element={<FaithfulSite />} />
               <Route path="/collection" element={<Placeholder title={t("collection")} />} />
@@ -146,7 +147,7 @@ export default function Shell() {
               <Route path="/loyalty" element={<Placeholder title={t("loyalty")} />} />
               <Route path="/admin" element={<Placeholder title={t("admin")} />} />
               <Route path="*" element={<Home />} />
-            </Routes>
+            </RouteTransition>
             <Footer />
           </CartProvider>
         </AuthProvider>
