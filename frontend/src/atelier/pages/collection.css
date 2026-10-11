@@ -526,12 +526,71 @@
 }
 
 .sizes li {
+  display: block;
+}
+
+/* The size is a real choice, not a price list: the pill is the control. */
+.size-pill {
   display: grid;
   gap: 0.1rem;
+  inline-size: 100%;
+  text-align: start;
   border: 1px solid var(--hairline-strong);
   border-radius: var(--radius-s);
   padding: 0.55rem 1rem;
   min-inline-size: 6rem;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.size-pill:hover {
+  border-color: var(--accent);
+}
+
+.size-pill.on {
+  border-color: var(--accent);
+  background: var(--accent-quiet);
+}
+
+.size-pill.on .size-label {
+  color: var(--accent);
+}
+
+.buy-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.buy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.72rem 1.4rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.buy-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.buy-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.72rem 1.1rem;
+  font-size: var(--step--1);
+  text-decoration: none;
 }
 
 .size-label {
@@ -778,6 +837,11 @@
 
 .also a {
   display: grid;
+  /* The bottle caption is nowrap, so an implicit `auto` column would be sized
+     to its full text and blow past the 11rem track. Pin the column instead and
+     let the caption's own ellipsis do the clipping. */
+  grid-template-columns: minmax(0, 1fr);
+  min-inline-size: 0;
   gap: 0.3rem;
   text-decoration: none;
 }

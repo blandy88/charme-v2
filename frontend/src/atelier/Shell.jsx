@@ -17,11 +17,27 @@ import "./shell.css";
 import "./chrome.css";
 
 /* The catalogue is ~550KB of editorial data. Loading it here would put it on
-   the critical path for the homepage, so both catalogue routes are split out
-   and fetched on intent -- pointer, keyboard focus, or the start of a tab
-   change (see RouteTransition's `preload`). */
+   the critical path for the homepage, so the catalogue routes are split out and
+   fetched on intent -- pointer, keyboard focus, or the start of a tab change
+   (see RouteTransition's `preload`). The account pages ride along: they share
+   one stylesheet and none of them is ever the landing page. */
 const loadCollection = () => import("./pages/Collection.jsx");
 const loadProduct = () => import("./pages/Product.jsx");
+/* Favourites is split for the same reason: it resolves every saved id against
+   the catalogue to decide which half of the page a card belongs to. */
+const loadFavorites = () => import("./pages/Favorites.jsx");
+const loadAuth = () => import("./pages/Auth.jsx");
+const loadCart = () => import("./pages/Cart.jsx");
+const loadProfile = () => import("./pages/Profile.jsx");
+
+/* Everything reachable by a plain path that is worth fetching ahead of time. */
+const SPLIT_ROUTES = {
+  "/collection": loadCollection,
+  "/favorites": loadFavorites,
+  "/auth": loadAuth,
+  "/cart": loadCart,
+  "/profile": loadProfile,
+};
 
 const chunks = new Map();
 
@@ -63,21 +79,31 @@ function routed(loader) {
 
 const Collection = routed(loadCollection);
 const Product = routed(loadProduct);
+const Favorites = routed(loadFavorites);
+const Auth = routed(loadAuth);
+const Cart = routed(loadCart);
+const Profile = routed(loadProfile);
 
 /* Which split chunk a pathname needs, if any. The catalogue data is shared by
-   both routes and lives in Collection's chunk, so warming one warms the heavy
-   half of the other. */
+   both catalogue routes and by Favourites, so warming one warms the heavy half
+   of the others. */
 function preloadRoute(pathname) {
   if (pathname.startsWith("/collection/")) return loadChunk(loadProduct);
-  if (pathname === "/collection") return loadChunk(loadCollection);
-  return null;
+  const loader = SPLIT_ROUTES[pathname];
+  return loader ? loadChunk(loader) : null;
 }
 
-/* Called on pointer/focus intent. Only the catalogue route is warmable from the
-   nav, and its chunk carries the shared catalogue data. */
-const warmCatalogue = () => {
-  loadChunk(loadCollection);
+/* Called on pointer/focus intent: the chunk is usually in hand by the time the
+   click lands, so the transition never has to wait. */
+const warm = (loader) => () => {
+  loadChunk(loader);
 };
+
+const warmCatalogue = warm(loadCollection);
+const warmFavorites = warm(loadFavorites);
+const warmCart = warm(loadCart);
+const warmProfile = warm(loadProfile);
+const warmAuth = warm(loadAuth);
 
 function RouteFallback() {
   return (
@@ -129,10 +155,24 @@ function Nav() {
             {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
           </button>
           <Link to="/news" aria-label={t("news")} className="tool-btn pressable"><Newspaper size={15} /></Link>
-          <Link to="/favorites" aria-label={t("favorites")} className="tool-btn pressable">
+          <Link
+            to="/favorites"
+            aria-label={t("favorites")}
+            className="tool-btn pressable"
+            onMouseEnter={warmFavorites}
+            onPointerDown={warmFavorites}
+            onFocus={warmFavorites}
+          >
             <Heart size={15} />{favCount > 0 ? <span className="count">{favCount}</span> : null}
           </Link>
-          <Link to="/cart" aria-label={t("cart")} className="tool-btn pressable">
+          <Link
+            to="/cart"
+            aria-label={t("cart")}
+            className="tool-btn pressable"
+            onMouseEnter={warmCart}
+            onPointerDown={warmCart}
+            onFocus={warmCart}
+          >
             <ShoppingBag size={15} />{count > 0 ? <span className="count">{count}</span> : null}
           </Link>
           {user ? (
@@ -143,6 +183,8 @@ function Nav() {
                 aria-expanded={menu}
                 aria-label={t("profile")}
                 className="tool-btn pressable"
+                onMouseEnter={warmProfile}
+                onFocus={warmProfile}
               >
                 <User size={15} />
               </button>
@@ -156,7 +198,15 @@ function Nav() {
               ) : null}
             </div>
           ) : (
-            <Link to="/auth" className="signin-btn pressable">{t("signIn")}</Link>
+            <Link
+              to="/auth"
+              className="signin-btn pressable"
+              onMouseEnter={warmAuth}
+              onPointerDown={warmAuth}
+              onFocus={warmAuth}
+            >
+              {t("signIn")}
+            </Link>
           )}
         </div>
       </div>
@@ -223,13 +273,13 @@ export default function Shell() {
                 <Route path="/faithful" element={<FaithfulSite />} />
                 <Route path="/collection" element={deferred(<Collection />)} />
                 <Route path="/collection/:id" element={deferred(<Product />)} />
+                <Route path="/auth" element={deferred(<Auth />)} />
+                <Route path="/cart" element={deferred(<Cart />)} />
+                <Route path="/profile" element={deferred(<Profile />)} />
+                <Route path="/favorites" element={deferred(<Favorites />)} />
                 <Route path="/guides" element={<Placeholder title={t("guides")} />} />
                 <Route path="/contact" element={<Placeholder title={t("contact")} />} />
                 <Route path="/news" element={<Placeholder title={t("news")} />} />
-                <Route path="/auth" element={<Placeholder title={t("signIn")} />} />
-                <Route path="/cart" element={<Placeholder title={t("cart")} />} />
-                <Route path="/profile" element={<Placeholder title={t("profile")} />} />
-                <Route path="/favorites" element={<Placeholder title={t("favorites")} />} />
                 <Route path="/loyalty" element={<Placeholder title={t("loyalty")} />} />
                 <Route path="/admin" element={<Placeholder title={t("admin")} />} />
                 <Route path="*" element={<Home />} />

@@ -1,6 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Check, ShoppingBag } from "lucide-react";
 import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
+import { useCart } from "../../contexts/CartContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { byId, formatPrice, initials, products as ALL, related } from "../lib/catalog.js";
 import "./collection.css";
@@ -88,6 +90,39 @@ export default function Product() {
   const product = useMemo(() => byId(id), [id]);
   const also = useMemo(() => (product ? related(ALL, product, 4) : []), [product]);
 
+  /* Declared before the not-found return so the hook order is stable: a
+     reference page is mounted for a missing id too. */
+  const { add } = useCart();
+  const [size, setSize] = useState(null);
+  const [added, setAdded] = useState(false);
+
+  useEffect(() => {
+    if (!added) return undefined;
+    const timer = setTimeout(() => setAdded(false), 2600);
+    return () => clearTimeout(timer);
+  }, [added]);
+
+  const sizes = product?.sizes || [];
+  const activeSize = size != null ? size : (sizes[0]?.size ?? null);
+  const chosen = sizes.find((s) => s.size === activeSize) || null;
+  const unitPrice =
+    chosen && typeof chosen.price === "number" ? chosen.price : (product?.fromPrice ?? null);
+  const canBuy = Boolean(product?.available) && unitPrice != null;
+
+  const addToCart = () => {
+    if (!canBuy) return;
+    add({
+      id: product.id,
+      name: product.name,
+      brand: product.brand,
+      image: product.image || "",
+      price: unitPrice,
+      quality: product.concentration || "",
+      size: activeSize || "",
+    });
+    setAdded(true);
+  };
+
   if (!product) {
     return (
       <main className="wrap collection">
@@ -162,20 +197,57 @@ export default function Product() {
           ) : null}
 
           <section className="pdp-buy">
-            {product.sizes.length ? (
+            {sizes.length ? (
               <ul className="sizes">
-                {product.sizes.map((s) => (
-                  <li key={s.size}>
-                    <span className="size-label">{s.size}</span>
-                    <span className="size-price">
-                      {typeof s.price === "number" ? `${s.price} dt` : "—"}
-                    </span>
-                  </li>
-                ))}
+                {sizes.map((s) => {
+                  const on = s.size === activeSize;
+                  return (
+                    <li key={s.size}>
+                      <button
+                        type="button"
+                        className={`size-pill pressable${on ? " on" : ""}`}
+                        aria-pressed={on}
+                        onClick={() => setSize(s.size)}
+                      >
+                        <span className="size-label">{s.size}</span>
+                        <span className="size-price">
+                          {typeof s.price === "number" ? `${s.price} dt` : "—"}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             ) : product.fromPrice != null ? (
               <p className="pdp-price">{formatPrice(product.fromPrice)} dt</p>
             ) : null}
+
+            <div className="buy-row">
+              <button
+                type="button"
+                className={`btn-accent pressable buy-btn${added ? " done" : ""}`}
+                onClick={addToCart}
+                disabled={!canBuy}
+              >
+                {added ? (
+                  <>
+                    <Check size={16} strokeWidth={2.2} aria-hidden="true" />
+                    {t("pdpAdded")}
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag size={16} strokeWidth={1.9} aria-hidden="true" />
+                    {t("pdpAdd")}
+                  </>
+                )}
+              </button>
+              {added ? (
+                <Link to="/cart" className="btn-ghost pressable buy-link">
+                  {t("pdpGoCart")}
+                </Link>
+              ) : null}
+            </div>
+
             <p className={`pdp-stock ${product.available ? "in" : "out"}`}>
               {product.available ? t("pdAvailable") : t("pdOutOfStock")}
             </p>

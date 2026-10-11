@@ -43,7 +43,9 @@
   gap: var(--space-m);
 }
 
-@media (min-width: 900px) {
+/* Links join the row only once there is room for them *and* the full tool
+   row (search + buttons); below this they would push the page wider. */
+@media (min-width: 1180px) {
   .nav-links {
     display: flex;
   }

@@ -91,7 +91,20 @@ export default function GlobalSearch() {
   }
 
   return (
-    <div className="global-search" ref={boxRef}>
+    <div className={`global-search${open ? " open" : ""}`} ref={boxRef}>
+      {/* Narrow screens: the field is replaced by this icon, which opens the
+          sheet below. The AI entry point is still the panel's "Describe" tab,
+          so its own button is redundant there and hides too. */}
+      <button
+        type="button"
+        className="tool-btn pressable gs-compact"
+        aria-label={t("searchPlaceholder")}
+        title={t("searchPlaceholder")}
+        onClick={() => openWith(mode)}
+      >
+        <Search size={15} aria-hidden="true" />
+      </button>
+
       <form className="gs-field" role="search" onSubmit={go}>
         <Search size={15} aria-hidden="true" />
         <input
@@ -109,6 +122,15 @@ export default function GlobalSearch() {
           </button>
         ) : null}
       </form>
+
+      <button
+        type="button"
+        className="gs-close"
+        aria-label={t("close")}
+        onClick={() => { setOpen(false); inputRef.current?.blur(); }}
+      >
+        <X size={16} aria-hidden="true" />
+      </button>
 
       <button
         type="button"

@@ -68,7 +68,16 @@ export default function Piece({ section }) {
             </span>
           )}
           <FavoriteButton
-            product={{ id: s.slug, name: s.name, brand: s.brand, slug: s.slug }}
+            product={{
+              id: s.slug,
+              name: s.name,
+              brand: s.brand,
+              slug: s.slug,
+              price: s.price,
+              unit: s.unit,
+              image: s.image,
+              kind: "home",
+            }}
             className="piece-fav"
             label={t("save")}
             savedLabel={t("saved")}

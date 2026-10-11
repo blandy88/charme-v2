@@ -93,6 +93,12 @@ export function FavoritesProvider({ children }) {
       name: product?.name || product?.productName || prev?.name || "",
       brand: product?.brand || prev?.brand || "",
       slug: product?.slug || prev?.slug || "",
+      /* Whatever the surface knew, so the favourites page can render a card
+         without refetching the catalogue (the API only stores id + name). */
+      price: product?.price ?? product?.fromPrice ?? prev?.price ?? null,
+      unit: product?.unit || prev?.unit || "",
+      image: product?.image || prev?.image || "",
+      kind: product?.kind || prev?.kind || "",
     };
     const wasSaved = items.some((i) => i.id === id);
 

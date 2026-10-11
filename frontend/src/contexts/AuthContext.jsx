@@ -27,9 +27,13 @@ export function AuthProvider({ children }) {
       return null;
     }
     try {
-      const me = await api("/api/user/profile");
-      setUser(me || null);
-      return me || null;
+      const res = await api("/api/user/profile");
+      /* The endpoint answers {success, user}; only `user` is the profile. The
+         login endpoint answers a flat {id, name, isAdmin…} under its own
+         `user` key, so both paths land on the same shape here. */
+      const me = (res && res.user) || res || null;
+      setUser(me);
+      return me;
     } catch (err) {
       if (err.code !== "SESSION_EXPIRED") {
         setToken("");
@@ -53,15 +57,26 @@ export function AuthProvider({ children }) {
   const value = useMemo(
     () => ({
       user,
-      isAdmin: Boolean(user && (user.is_admin === 1 || user.is_admin === true || user.role === "admin")),
+      isAdmin: Boolean(
+        user &&
+          (user.is_admin === 1 ||
+            user.is_admin === true ||
+            user.isAdmin === true ||
+            user.role === "admin"),
+      ),
       ready,
       refresh,
       signOut,
-      async signIn(email, password) {
+      async signIn(email, password, remember = true) {
         const res = await api("/api/auth/login", { method: "POST", body: { email, password }, auth: false });
-        if (res.token) setToken(res.token);
+        if (res.token) setToken(res.token, remember);
         resetSessionFlag();
         setUser(res.user || null);
+        /* The login payload has name/avatar but not first_name/last_name, so
+           re-read the canonical profile. Falls back to the login payload if
+           that call fails — better a thin user than none. */
+        const me = await refresh();
+        if (!me) setUser(res.user || null);
         return res;
       },
       async register(payload) {

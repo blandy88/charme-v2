@@ -309,9 +309,30 @@
   gap: var(--space-s);
 }
 
+/* Phones: the bottle sits above the detail column instead of beside it. */
+@media (max-width: 899px) {
+  .piece-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .piece-media {
+    inline-size: min(12rem, 55%);
+    justify-self: start;
+  }
+}
+
+/* While the piece list is two-up, a three-column trail leaves each note column
+   too narrow to hold a name like "frankincense". */
+@media (max-width: 1099px) {
+  .piece-trail {
+    grid-template-columns: 1fr;
+  }
+}
+
 .piece-stage-head {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 0.35rem;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
@@ -337,6 +358,12 @@
   font-size: 0.8rem;
   color: var(--text-1);
   line-height: 1.45;
+}
+
+/* Ingredient names ("frankincense", "Marshmallow") are single long words that
+   would otherwise set the column's min-content and overflow a narrow trail. */
+.piece-notes li {
+  overflow-wrap: anywhere;
 }
 
 .piece-notes li::before {
