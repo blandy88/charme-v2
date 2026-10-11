@@ -1,59 +1,374 @@
-.featured-grid {
+/* ---------------- Hero: note form + concierge + map ---------------- */
+
+.hero-contact {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-s);
+  gap: var(--space-m);
+  margin-top: var(--space-xl);
 }
 
-@media (min-width: 700px) {
-  .featured-grid {
-    grid-template-columns: repeat(4, 1fr);
+@media (min-width: 900px) {
+  .hero-contact {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
   }
 }
 
-.feat-card {
+.note-card {
+  padding: clamp(var(--space-m), 3vw, var(--space-l));
+}
+
+.note-title {
+  font-size: var(--step-2);
+  margin-top: 0.3rem;
+}
+
+.note-field {
   display: block;
-  background: var(--surface-1);
+  margin-top: var(--space-s);
+}
+
+.note-field > span {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: 0.3rem;
+}
+
+.note-field input,
+.note-field textarea {
+  width: 100%;
+  background: var(--surface-2);
   border: 1px solid var(--hairline);
-  border-radius: var(--radius-m);
-  padding: var(--space-s);
-  text-decoration: none;
+  border-radius: var(--radius-s);
+  color: var(--text-1);
+  font: inherit;
+  padding: 0.55rem 0.7rem;
+  resize: vertical;
 }
 
-.feat-card:hover {
-  border-color: var(--hairline-strong);
+.note-field input:focus-visible,
+.note-field textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }
 
-.feat-media {
+.note-card .btn-accent {
+  margin-top: var(--space-s);
+}
+
+.note-status {
+  margin-top: var(--space-xs);
+  font-size: var(--step-0);
+}
+
+.note-status.ok {
+  color: var(--ok-text);
+}
+
+.note-status.err {
+  color: var(--warn-text);
+}
+
+.concierge {
+  padding: clamp(var(--space-m), 3vw, var(--space-l));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.concierge-list {
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+  font-size: var(--step-0);
+}
+
+.concierge-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-s);
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: 0.4rem;
+}
+
+.concierge-list li > span:first-child {
+  color: var(--text-2);
+}
+
+.concierge-list a {
+  color: var(--accent);
+}
+
+.concierge-map {
+  border: 1px solid var(--hairline);
   border-radius: var(--radius-s);
   overflow: clip;
+  aspect-ratio: 16 / 10;
   background: var(--surface-2);
+}
+
+.concierge-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  filter: grayscale(0.35) contrast(0.95);
+}
+
+[data-theme="night"] .concierge-map iframe {
+  filter: grayscale(0.5) invert(0.9) contrast(0.85);
+}
+
+/* ------------- The 185 homepage pieces (one per original section) ------------- */
+
+.pieces .section-head {
+  margin-bottom: var(--space-m);
+}
+
+.piece-list {
+  display: grid;
+  gap: var(--space-l);
+}
+
+@media (min-width: 920px) {
+  .piece-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-l) var(--space-xl);
+  }
+}
+
+.piece {
+  border-top: 1px solid var(--hairline);
+  padding-top: var(--space-s);
+  scroll-margin-top: 6rem;
+}
+
+.piece-head {
+  display: flex;
+  flex-direction: column;
+}
+
+.piece-house {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.piece-loc {
+  opacity: 0.85;
+}
+
+.piece-name {
+  font-size: var(--step-1);
+  margin-top: 0.1rem;
+}
+
+.piece-grid {
+  display: grid;
+  grid-template-columns: minmax(92px, 124px) minmax(0, 1fr);
+  gap: var(--space-s);
+  margin-top: var(--space-s);
+}
+
+.piece-media {
+  position: relative;
+  margin: 0;
   aspect-ratio: 3 / 4;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-m);
+  overflow: clip;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.feat-media img {
+.piece-media img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.feat-card h3 {
-  font-size: var(--step-1);
-  margin-top: 0.3rem;
+.piece-bottle {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
 }
 
-.feat-card .eyebrow {
-  margin-top: var(--space-xs);
+.piece-mark {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  color: color-mix(in oklch, var(--text-1) 60%, transparent);
+  letter-spacing: 0.05em;
 }
 
-.feat-price {
-  margin-top: 0.3rem;
-  color: var(--accent);
+.piece-price {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: 0.3rem 0.4rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
   font-weight: 600;
+  color: var(--accent);
+  background: color-mix(in oklch, var(--surface-1) 84%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.piece-price span {
+  font-size: 0.72em;
+  opacity: 0.8;
+}
+
+.piece-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  min-width: 0;
+}
+
+.piece-chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.piece-chips li {
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  background: var(--surface-1);
+}
+
+.piece-chips li strong {
+  font-weight: 600;
+}
+
+.piece-chips li span {
+  color: var(--text-2);
+}
+
+.piece-chips li span::before {
+  content: " · ";
+}
+
+.piece-bars {
+  list-style: none;
+  display: grid;
+  gap: 0.28rem;
+}
+
+.piece-bars li {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 6rem) 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.piece-bar-label {
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.piece-bar-track {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: clip;
+}
+
+.piece-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in oklch, var(--accent) 55%, var(--text-1)));
+}
+
+.piece-bar-val {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+
+.piece-trail {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-s);
+}
+
+.piece-stage-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.piece-idx {
+  color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
+
+.piece-stage-time {
+  margin-inline-start: auto;
+  opacity: 0.7;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.piece-notes {
+  list-style: none;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--text-1);
+  line-height: 1.45;
+}
+
+.piece-notes li::before {
+  content: "— ";
+  color: var(--text-2);
+}
+
+.piece-indicators {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.piece-indicators li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  color: var(--text-2);
+}
+
+.piece-indicators li.on {
+  color: var(--text-1);
+  border-color: color-mix(in oklch, var(--accent) 45%, var(--hairline));
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+/* ---------------- Visit card ---------------- */
 
 .visit-card {
   padding: clamp(var(--space-m), 5vw, var(--space-xl));

@@ -56,15 +56,7 @@ export function formatPrice(p) {
 }
 
 /* Initials for the typographic bottle: "Bleu de Chanel" -> "BC". */
-export function initials(name) {
-  return String(name || "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase();
-}
+export { initials } from "./text.js";
 
 export function byId(id) {
   return products.find((p) => String(p.id) === String(id)) || null;
