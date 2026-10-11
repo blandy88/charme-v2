@@ -28,6 +28,9 @@ const OUT_MS_REDUCED = 150;
 const IN_MS = 680;
 const STAGGER_MS = 90;
 
+/* Never let a slow chunk hold a tab change hostage. */
+const CHUNK_WAIT_MS = 1200;
+
 /* Primary navigation order, so "back" reads as back. */
 const ORDER = [
   "/",
@@ -59,11 +62,22 @@ function prefersReduced() {
   }
 }
 
-export default function RouteTransition({ children }) {
+export default function RouteTransition({ children, preload }) {
   const live = useLocation();
   const [phase, setPhase] = useState("in");
-  const [leaving, setLeaving] = useState(live);
-  const last = useRef(live);
+  /* The location the stage is actually showing. This is NOT the same thing as
+     `live`, and the difference is the whole point.
+
+     After a navigation, `live` is already the new location, but the outgoing
+     beat has not started yet -- it begins in the effect below, one commit
+     later. If this component rendered `live` straight away, the new page would
+     mount for a frame, then be thrown away and replaced by the old page so the
+     old page could animate out, and then mount a second time for the incoming
+     beat. Three mounts, one of them a single frame of the wrong page: that
+     flicker is what makes a tab change feel like a page refresh. So the stage
+     renders the last SHOWN location until the beat lands, and `live` only takes
+     over once `shown` has caught up. */
+  const [shown, setShown] = useState(live);
   const timer = useRef(0);
 
   useEffect(() => {
@@ -71,39 +85,64 @@ export default function RouteTransition({ children }) {
        routed component untouched -- the collection page drives its whole
        filter UI through useSearchParams, and it does so on every keystroke.
        Only a pathname change earns a transition. */
-    if (live.pathname === last.current.pathname) {
-      last.current = live;
-      return;
-    }
+    if (live.pathname === shown.pathname) return;
 
-    const from = last.current;
-    last.current = live;
+    const from = shown;
+    let cancelled = false;
+    let started = false;
+    let chunk = null;
+    let gaveUp = 0;
 
-    const lenis = getLenis();
-    const outMs = prefersReduced() ? OUT_MS_REDUCED : OUT_MS;
+    const begin = () => {
+      if (cancelled || started) return;
+      started = true;
 
-    document.documentElement.dataset.navDir = navDirection(from.pathname, live.pathname);
+      const lenis = getLenis();
+      const outMs = prefersReduced() ? OUT_MS_REDUCED : OUT_MS;
 
-    // Glide to the top while the page leaves: a visible scroll-up, not a snap.
-    if (lenis && window.scrollY > 4) {
-      lenis.scrollTo(0, {
-        duration: outMs / 1000,
-        easing: (t) => 1 - (1 - t) * (1 - t),
-      });
+      document.documentElement.dataset.navDir = navDirection(from.pathname, live.pathname);
+
+      // Glide to the top while the page leaves: a visible scroll-up, not a snap.
+      if (lenis && window.scrollY > 4) {
+        lenis.scrollTo(0, {
+          duration: outMs / 1000,
+          easing: (t) => 1 - (1 - t) * (1 - t),
+        });
+      } else {
+        window.scrollTo(0, 0);
+      }
+
+      setPhase("out");
+
+      // Rapid hops: a later navigation supersedes the one still leaving.
+      window.clearTimeout(timer.current);
+      timer.current = window.setTimeout(() => {
+        if (cancelled) return;
+        setShown(live);
+        setPhase("in");
+        delete document.documentElement.dataset.navDir;
+      }, outMs);
+    };
+
+    /* A catalogue route is a split chunk. If the incoming beat started before
+       that chunk arrived, it would play against the Suspense placeholder and
+       the real page would pop in afterwards -- precisely the jolt this is meant
+       to avoid. So the outgoing page stays put until the chunk is in hand; on
+       an intent-driven preload (pointer, focus) it is already cached and there
+       is nothing to wait for. The timer is a floor, not the expected path. */
+    chunk = preload ? preload(live.pathname) : null;
+    if (chunk && typeof chunk.then === "function") {
+      gaveUp = window.setTimeout(begin, CHUNK_WAIT_MS);
+      chunk.then(begin, begin);
     } else {
-      window.scrollTo(0, 0);
+      begin();
     }
 
-    setLeaving(from);
-    setPhase("out");
-
-    // Rapid hops: a later navigation supersedes the one still leaving.
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => {
-      setPhase("in");
-      delete document.documentElement.dataset.navDir;
-    }, outMs);
-  }, [live]);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(gaveUp);
+    };
+  }, [live, shown, preload]);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
@@ -111,12 +150,13 @@ export default function RouteTransition({ children }) {
   const duration = prefersReduced() ? IN_MS / 2 : IN_MS;
   const reduced = prefersReduced();
 
-  /* While leaving we render the outgoing location (that is what animates out);
-     once in, we hand the LIVE location to Routes so hooks inside the page see
-     the current URL. Keying on pathname -- not location.key, which the router
-     regenerates for search changes too -- is what stops a keystroke from
+  /* Once the beat has landed, hand the LIVE location to Routes so hooks inside
+     the page see the current URL (`shown` and `live` agree on the pathname by
+     then, so this is the only place search params can change). Until then,
+     render what is on screen. Keying on pathname -- not location.key, which the
+     router regenerates for search changes too -- is what stops a keystroke from
      remounting the page under the user's cursor. */
-  const routed = phase === "out" ? leaving : live;
+  const routed = live.pathname === shown.pathname ? live : shown;
 
   return (
     <div

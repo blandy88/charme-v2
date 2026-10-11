@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { Suspense, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route } from "react-router-dom";
 import { Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
 import { AuthProvider, useAuth } from "../contexts/AuthContext.jsx";
@@ -14,16 +14,65 @@ import "./shell.css";
 
 /* The catalogue is ~550KB of editorial data. Loading it here would put it on
    the critical path for the homepage, so both catalogue routes are split out
-   and fetched on intent -- pointer or keyboard focus on the way in. */
+   and fetched on intent -- pointer, keyboard focus, or the start of a tab
+   change (see RouteTransition's `preload`). */
 const loadCollection = () => import("./pages/Collection.jsx");
 const loadProduct = () => import("./pages/Product.jsx");
-const Collection = lazy(loadCollection);
-const Product = lazy(loadProduct);
 
-/* Product also needs the shared catalogue chunk, so either one warms both. */
+const chunks = new Map();
+
+/* Fetch (once) the chunk a loader names, and remember the module when it lands.
+   `import()` already caches, but we need the resolved module itself for below. */
+function loadChunk(loader) {
+  let entry = chunks.get(loader);
+  if (!entry) {
+    entry = { mod: null };
+    entry.promise = loader().then((mod) => {
+      entry.mod = mod;
+      return mod;
+    });
+    chunks.set(loader, entry);
+  }
+  return entry.promise;
+}
+
+/* A split route, but NOT React.lazy.
+
+   lazy() suspends on the first render that touches it -- always. Its payload
+   only flips to "resolved" inside that very render, so even a module sitting in
+   memory still costs one Suspense round-trip. On a tab change that means the
+   incoming beat animates against the placeholder, and the real page pops in a
+   beat later: the tab "refreshes". Here the transition awaits loadChunk()
+   first, so by the time this renders the module is in hand and the real
+   component goes straight up, no suspense. A direct visit (no transition to
+   wait on) still suspends, which is what the placeholder is for. */
+function routed(loader) {
+  return function Routed(props) {
+    const entry = chunks.get(loader);
+    if (entry && entry.mod) {
+      const Page = entry.mod.default;
+      return <Page {...props} />;
+    }
+    throw loadChunk(loader);
+  };
+}
+
+const Collection = routed(loadCollection);
+const Product = routed(loadProduct);
+
+/* Which split chunk a pathname needs, if any. The catalogue data is shared by
+   both routes and lives in Collection's chunk, so warming one warms the heavy
+   half of the other. */
+function preloadRoute(pathname) {
+  if (pathname.startsWith("/collection/")) return loadChunk(loadProduct);
+  if (pathname === "/collection") return loadChunk(loadCollection);
+  return null;
+}
+
+/* Called on pointer/focus intent. Only the catalogue route is warmable from the
+   nav, and its chunk carries the shared catalogue data. */
 const warmCatalogue = () => {
-  loadCollection();
-  loadProduct();
+  loadChunk(loadCollection);
 };
 
 function RouteFallback() {
@@ -53,7 +102,7 @@ function Nav() {
         <Link to="/" className="wordmark">Charme</Link>
         <nav className="nav-links" aria-label="Primary">
           <NavLink to="/" end className={link}>{t("home")}</NavLink>
-          <NavLink to="/collection" className={link} onMouseEnter={warmCatalogue} onFocus={warmCatalogue}>{t("collection")}</NavLink>
+          <NavLink to="/collection" className={link} onMouseEnter={warmCatalogue} onPointerDown={warmCatalogue} onFocus={warmCatalogue}>{t("collection")}</NavLink>
           <NavLink to="/guides" className={link}>{t("guides")}</NavLink>
           <NavLink to="/contact" className={link}>{t("contact")}</NavLink>
           {user ? <NavLink to="/loyalty" className={link}>{t("loyalty")}</NavLink> : null}
@@ -159,7 +208,7 @@ export default function Shell() {
         <AuthProvider>
           <CartProvider>
             <Nav />
-            <RouteTransition>
+            <RouteTransition preload={preloadRoute}>
               <Route path="/" element={<Home />} />
               <Route path="/faithful" element={<FaithfulSite />} />
               <Route path="/collection" element={deferred(<Collection />)} />
