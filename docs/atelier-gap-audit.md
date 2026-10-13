@@ -394,3 +394,13 @@ Done in the final audit increment (exhaustive legacy-vs-rebuild pass):
       catalogue UI with no importer in the app, scripts, docs or tests.
     `frontend/src/legacy/*` is kept: the parity scripts (`npm run check:legacy`) still consume it.
     Rebuilt with `npm run build:app`; the full probe suite is green.
+16. **Guest `/loyalty` showed a false "session expired"** — the footer links to `/loyalty` for
+    everyone, but the page called `GET /api/loyalty/me` before checking whether anyone was signed
+    in. For a visitor who had never signed in the request 401'd, and the api client turned that into
+    a full-page bounce to `/auth?expired=1` carrying "your session has expired" copy — wrong for
+    someone who was never signed in. (`/profile` already handled this correctly with an inline
+    gate.) The page now waits for the session to settle and renders the same kind of gate ("Sign in
+    to see your loyalty card" + an `/auth?next=/loyalty` link, EN/FR/AR) when there is no user, so a
+    guest stays on `/loyalty` and fires no request; a genuinely stale session (token present, 401
+    back) still bounces to sign-in. Verified by `probe-loyalty.cjs` (both cases, three languages,
+    RTL, 320–1440px) and by a live-backend smoke over every route.

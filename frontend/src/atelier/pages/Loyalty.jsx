@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Gift, Loader2, Sparkles, Trophy } from "lucide-react";
 import { api } from "../../api/client.js";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { initials } from "../lib/text.js";
 import "./loyalty.css";
@@ -19,6 +20,7 @@ import "./loyalty.css";
 
 export default function Loyalty() {
   const { t } = useI18n();
+  const { user, ready } = useAuth();
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
 
@@ -28,9 +30,39 @@ export default function Loyalty() {
       .catch((e) => setError(e.message));
   }, []);
 
+  /* Wait for the session to settle, and never call for a visitor with no
+     account: /api/loyalty/me answers 401 for them, and the api client turns that
+     into a full-page "session expired" bounce - wrong for someone who was never
+     signed in. They get the same inline gate as /profile instead. */
   useEffect(() => {
+    if (!ready || !user) return;
     load();
-  }, [load]);
+  }, [ready, user, load]);
+
+  if (!ready) {
+    return (
+      <main className="wrap section ly">
+        <p className="ly-loading">
+          <Loader2 size={16} className="ly-spin" aria-hidden="true" />
+        </p>
+      </main>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main className="wrap section ly">
+        <p className="eyebrow">{t("loyalty")}</p>
+        <h1 className="ly-title">{t("loyaltyGateTitle")}</h1>
+        <div className="ly-empty panel">
+          <p>{t("loyaltyGateBody")}</p>
+        </div>
+        <Link to="/auth?next=/loyalty" className="btn-accent pressable ly-cta">
+          {t("signIn")}
+        </Link>
+      </main>
+    );
+  }
 
   if (error) {
     return (
