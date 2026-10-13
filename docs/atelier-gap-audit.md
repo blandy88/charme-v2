@@ -371,9 +371,13 @@ Done in the final audit increment (exhaustive legacy-vs-rebuild pass):
     entry for admins with the unread count. The count is fetched only when the menu opens, and the
     entry deep-links to `/admin?tab=notes`, which required moving the back-office tab into the URL
     (`Admin.jsx` now reads the tab from `?tab=` and writes it back on every switch; unknown values
-    fall back to Overview). Verified by `probe-guest-notes.cjs` (24 checks: badge count, deep link,
-    tab↔URL sync, direct visit, bogus tab, the zero-unread case, a plain customer seeing nothing and
-    firing no request, 320px overflow).
+    fall back to Overview).
+    While here, a **latent bug**: the account menu had no dismissal — it stayed open after a click
+    anywhere else or after Escape (the search panel already handled both). `Nav` now closes it on
+    an outside `pointerdown` or `Escape`, matching `GlobalSearch`.
+    Verified by `probe-guest-notes.cjs` (29 checks: badge count, deep link, tab↔URL sync, direct
+    visit, bogus tab, the zero-unread case, dismissal by Escape / outside click / toggle, a plain
+    customer seeing nothing and firing no request, 320px overflow).
 14. **i18n gaps** — `t("rvSend")` on the review reply button had no entry in any dictionary, so the
     button rendered the raw key `rvSend`. Added "Send / Envoyer / أرسل". Six keys left over from the
     removed homepage pieces (`viewAll`, `featuredTitle`, `featuredSub`, `pdHouseNote`, `pdReactions`,

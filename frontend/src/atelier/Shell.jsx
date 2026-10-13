@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route } from "react-router-dom";
 import { Compass, Heart, Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
 import { api } from "../api/client.js";
@@ -163,6 +163,25 @@ function Nav({ onDiscover }) {
   const { user, isAdmin, signOut } = useAuth();
   const [menu, setMenu] = useState(false);
   const unreadNotes = useUnreadNotes(isAdmin && menu);
+  const menuRef = useRef(null);
+
+  /* Dismiss the account menu the same way the search panel dismisses itself:
+     a click anywhere outside, or Escape. */
+  useEffect(() => {
+    if (!menu) return undefined;
+    const onDown = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenu(false);
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") setMenu(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menu]);
   const { count } = useCart();
   const { count: favCount } = useFavorites();
   const { theme, toggle } = useTheme();
@@ -241,7 +260,7 @@ function Nav({ onDiscover }) {
             <ShoppingBag size={15} />{count > 0 ? <span className="count">{count}</span> : null}
           </Link>
           {user ? (
-            <div className="account-menu" data-guide="account">
+            <div className="account-menu" data-guide="account" ref={menuRef}>
               <button
                 type="button"
                 onClick={() => setMenu((m) => !m)}
