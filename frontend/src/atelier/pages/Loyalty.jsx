@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Gift, Loader2, Sparkles, Trophy } from "lucide-react";
+import { Gift, Loader2, Sparkles, Stamp, Trophy } from "lucide-react";
 import { api } from "../../api/client.js";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { initials } from "../lib/text.js";
+import LoyaltyCardArt from "../LoyaltyCardArt.jsx";
 import "./loyalty.css";
 
 /* Carte Fidélité — the customer's own card.
@@ -114,38 +115,74 @@ export default function Loyalty() {
     return `${amount.toFixed(amount % 1 === 0 ? 0 : 2)} DT`;
   };
 
+  /* t() is a plain lookup, so the placeholders are filled by hand — the same
+     one-line pattern the rest of the app uses. */
+  const fill = (key, vars) =>
+    Object.keys(vars).reduce((str, k) => str.split(`{${k}}`).join(vars[k]), t(key));
+
+  /* The printed card carries no DOM text — the name, number and punches are
+     rasterised into the bitmap — so it needs an explicit description for
+     assistive technology, and it doubles as the fallback if the artwork
+     cannot load. */
+  const artLabel = fill("lyArtAlt", {
+    name: card.name || t("lyArtNoName"),
+    number: card.cardNumber || "—",
+    n: String(card.points),
+    t: String(threshold),
+  });
+
   return (
     <main className="wrap section ly" data-guide="loyalty">
       <p className="eyebrow">{t("loyalty")}</p>
       <h1 className="ly-title">{t("lyTitle")}</h1>
       <p className="ly-lede">{t("lyLede")}</p>
 
-      <section className="ly-card panel" aria-label={t("lyBalance")} data-guide="loyalty-card">
-        <div className="ly-card-top">
-          <p className="eyebrow">{t("lyCardNumber")}</p>
-          <p className="ly-number">{card.cardNumber || "—"}</p>
-          {card.name ? <p className="ly-holder">{card.name}</p> : null}
-        </div>
+      <div className="ly-card-row">
+        <section className="ly-card panel" aria-label={t("lyBalance")} data-guide="loyalty-card">
+          <div className="ly-card-top">
+            <p className="eyebrow">{t("lyCardNumber")}</p>
+            <p className="ly-number">{card.cardNumber || "—"}</p>
+            {card.name ? <p className="ly-holder">{card.name}</p> : null}
+          </div>
 
-        <div className="ly-points">
-          <p className="ly-points-value">
-            <strong>{card.points}</strong>
-            <span>/{threshold}</span>
+          <div className="ly-points">
+            <p className="ly-points-value">
+              <strong>{card.points}</strong>
+              <span>/{threshold}</span>
+            </p>
+            <p className="ly-points-label">{t("lyPoints")}</p>
+          </div>
+
+          <div className="ly-track" aria-hidden="true">
+            <span style={{ inlineSize: `${card.progress}%` }} />
+          </div>
+
+          <p className={`ly-status ${card.eligible ? "ready" : ""}`}>
+            <Trophy size={15} aria-hidden="true" />
+            {card.eligible
+              ? t("lyEligible").replace("{n}", String(threshold))
+              : t("lyRemaining").replace("{n}", String(card.remaining))}
           </p>
-          <p className="ly-points-label">{t("lyPoints")}</p>
-        </div>
+        </section>
 
-        <div className="ly-track" aria-hidden="true">
-          <span style={{ inlineSize: `${card.progress}%` }} />
-        </div>
+        {/* The card itself, painted: name and number written into the template,
+            and one punch per purchase. It sits beside the balance panel rather
+            than replacing it — the panel is the live number, this is the copy
+            the customer keeps. */}
+        <LoyaltyCardArt
+          name={card.name}
+          cardNumber={card.cardNumber}
+          points={card.points}
+          threshold={threshold}
+          label={artLabel}
+          downloadLabel={t("lyArtDownload")}
+        />
+      </div>
 
-        <p className={`ly-status ${card.eligible ? "ready" : ""}`}>
-          <Trophy size={15} aria-hidden="true" />
-          {card.eligible
-            ? t("lyEligible").replace("{n}", String(threshold))
-            : t("lyRemaining").replace("{n}", String(card.remaining))}
-        </p>
-      </section>
+      <p className="ly-rule">
+        <Stamp size={14} aria-hidden="true" />
+        {t("lyRule")}
+      </p>
 
       {card.eligible ? (
         <p className="ly-reward-note panel">

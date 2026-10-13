@@ -129,6 +129,77 @@
   max-inline-size: 42rem;
 }
 
+/* ---------- the balance panel and the printed card, side by side ---------- */
+
+/* The existing balance panel keeps its place; the printed card sits to its
+   right, because that is the artefact the customer actually keeps. They stack
+   below ~62rem, where the card art would otherwise be squeezed to a stamp. */
+.ly-card-row {
+  display: grid;
+  gap: var(--space-m);
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 62rem) {
+  .ly-card-row {
+    grid-template-columns: minmax(14rem, 19rem) minmax(0, 1.4fr);
+  }
+}
+
+/* ---------- the printed card ---------- */
+
+.ly-art {
+  margin: 0;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.ly-art-frame {
+  position: relative;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background: var(--surface-1);
+  box-shadow: var(--shadow-2);
+}
+
+.ly-art-canvas {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.ly-art-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-3);
+}
+
+/* The template is a picture; if it cannot load the numbers above still say
+   everything, so this stays a quiet line rather than an error block. */
+.ly-art-fallback {
+  padding: var(--space-m);
+  font-size: var(--step--1);
+  color: var(--text-2);
+}
+
+.ly-art-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
+.ly-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--step--1);
+  color: var(--text-3);
+}
+
+
 /* ---------- two columns ---------- */
 
 .ly-grid {

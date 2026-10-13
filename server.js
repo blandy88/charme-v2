@@ -3124,14 +3124,73 @@ app.delete("/api/admin/loyalty/delete", authenticateToken, requireAdmin, async (
 });
 
 // 🛍️ CUSTOMER PURCHASES — record a purchase for a loyalty card
+// This is also the only way a card comes into existence: naming a customer who
+// has no card yet issues one, with this purchase as its first point. There is
+// deliberately no other route to a card for an account.
 app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const { cardId, perfumeName, brand, fragranceFamily, audience, purchasePrice, purchaseDate, notes, awardPoints } = req.body;
-    if (!cardId) return res.status(400).json({ error: "cardId requis" });
+    const {
+      cardId,
+      userId,
+      holderName,
+      holderEmail,
+      holderPhone,
+      perfumeName,
+      brand,
+      fragranceFamily,
+      audience,
+      purchasePrice,
+      purchaseDate,
+      notes,
+      awardPoints,
+    } = req.body;
     if (!perfumeName || !String(perfumeName).trim()) return res.status(400).json({ error: "Le nom du parfum est requis" });
 
-    const card = await getLoyaltyCardById(cardId);
-    if (!card) return res.status(404).json({ error: "Carte introuvable" });
+    let card = cardId ? await getLoyaltyCardById(cardId) : null;
+    if (cardId && !card) return res.status(404).json({ error: "Carte introuvable" });
+
+    /* --- issue the card on its first purchase --------------------------- */
+    let issued = false;
+    if (!card) {
+      if (userId) {
+        const target = await new Promise((resolve, reject) => {
+          db.get("SELECT id FROM users WHERE id = ?", [Number(userId)], (err, row) =>
+            err ? reject(err) : resolve(row),
+          );
+        });
+        if (!target) return res.status(404).json({ error: "User not found" });
+
+        const existing = await getLoyaltyCardByUserId(Number(userId));
+        if (existing) {
+          return res.status(400).json({ error: "Ce client possède déjà une carte" });
+        }
+
+        const cardNumber = await generateCardNumber();
+        card = await insertLoyaltyCard({
+          userId: Number(userId),
+          cardNumber,
+          holderName: null,
+          holderEmail: null,
+          holderPhone: null,
+        });
+        issued = true;
+      } else {
+        // Walk-in with no account: the name on the card is the one typed here.
+        const name = String(holderName || "").trim();
+        if (!name) {
+          return res.status(400).json({ error: "Le nom du client est requis" });
+        }
+        const cardNumber = await generateCardNumber();
+        card = await insertLoyaltyCard({
+          userId: null,
+          cardNumber,
+          holderName: name,
+          holderEmail: String(holderEmail || "").trim(),
+          holderPhone: String(holderPhone || "").trim(),
+        });
+        issued = true;
+      }
+    }
 
     const trimmedName = String(perfumeName).trim();
     if (trimmedName.length > 150) return res.status(400).json({ error: "Le nom ne peut pas dépasser 150 caractères" });
@@ -3183,7 +3242,19 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
       await logLoyaltyTransaction(card.id, card.user_id, 1, "earn", `Achat: ${trimmedName}`);
     }
 
-    res.json({ success: true, purchaseId, message: "Achat enregistré" });
+    res.json({
+      success: true,
+      purchaseId,
+      issued,
+      card: {
+        cardId: card.id,
+        cardNumber: card.card_number,
+        holderName: card.holder_name || null,
+      },
+      message: issued
+        ? `Carte ${card.card_number} ouverte — premier achat enregistré`
+        : "Achat enregistré",
+    });
   } catch (error) {
     console.error("Create purchase error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -3343,17 +3414,28 @@ app.get("/api/admin/loyalty/profiles/:cardId", authenticateToken, requireAdmin, 
 app.get("/api/loyalty/me", authenticateToken, async (req, res) => {
   try {
     const card = await getLoyaltyCardByUserId(req.user.userId);
-    if (!card) {
-      return res.json({ success: true, hasCard: false, rewardThreshold: LOYALTY_REWARD_THRESHOLD });
-    }
 
-    const purchases = await new Promise((resolve, reject) => {
-      db.all(
-        "SELECT * FROM customer_purchases WHERE card_id = ? ORDER BY purchase_date DESC, id DESC",
-        [card.id],
-        (err, rows) => (err ? reject(err) : resolve(rows || [])),
-      );
-    });
+    const purchases = card
+      ? await new Promise((resolve, reject) => {
+          db.all(
+            "SELECT * FROM customer_purchases WHERE card_id = ? ORDER BY purchase_date DESC, id DESC",
+            [card.id],
+            (err, rows) => (err ? reject(err) : resolve(rows || [])),
+          );
+        })
+      : [];
+
+    /* A card only exists for the customer once they have bought something.
+       A stock card with no purchase is not a loyalty card, so the page gets the
+       "make a first purchase" gate rather than an empty balance that would look
+       broken. Cards are issued by POST /api/admin/loyalty/purchases. */
+    if (!card || purchases.length === 0) {
+      return res.json({
+        success: true,
+        hasCard: false,
+        rewardThreshold: LOYALTY_REWARD_THRESHOLD,
+      });
+    }
 
     const transactions = await new Promise((resolve, reject) => {
       db.all(
