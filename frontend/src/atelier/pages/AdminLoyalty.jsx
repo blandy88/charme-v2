@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "../../api/client.js";
-import { fmtDate, Modal } from "./adminKit.jsx";
+import { fmtDate } from "./adminKit.jsx";
 
 const FAMILIES = [
   "",
@@ -28,6 +28,27 @@ const audienceLabel = (value, at) =>
         ? at("audienceUnisex")
         : at("familyNone");
 
+/* A tab bar in the admin house style, shared by the card list and the
+   customer profile so both sections page through instead of scrolling. */
+function Tabs({ at, label, tabs, current, onSelect }) {
+  return (
+    <nav className="admin-tabs" role="tablist" aria-label={label}>
+      {tabs.map(([id, text]) => (
+        <button
+          key={id}
+          type="button"
+          role="tab"
+          aria-selected={current === id}
+          className={`admin-tab pressable${current === id ? " on" : ""}`}
+          onClick={() => onSelect(id)}
+        >
+          {text}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 /* ------------------------------------------------------------------ Loyalty */
 export function Loyalty({ at }) {
   const [data, setData] = useState(null);
@@ -35,7 +56,10 @@ export function Loyalty({ at }) {
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState(false);
   const [profileId, setProfileId] = useState(null);
-  const [newOpen, setNewOpen] = useState(false);
+  /* The admin used to pop the create/edit forms over the table, which landed
+     mid-scroll and read as a bug. They are tabs now: "cards" is the table,
+     "new" and "edit" are forms. */
+  const [tab, setTab] = useState("cards");
   const [editing, setEditing] = useState(null);
 
   const load = useCallback(
@@ -102,113 +126,135 @@ export function Loyalty({ at }) {
     );
   }
 
+  const tabs = [
+    ["cards", at("loyTabCards")],
+    ["new", at("loyNew")],
+  ];
+  if (tab === "edit" && editing) {
+    tabs.push(["edit", editing.name || at("loyEditTitle")]);
+  }
+
   return (
     <div className="admin-block">
-      <div className="admin-toolbar">
-        <input
-          type="search"
-          className="field admin-search"
-          placeholder={at("search")}
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-        />
-        <button type="button" className="btn-accent pressable" onClick={() => setNewOpen(true)}>
-          {at("loyNew")}
-        </button>
-      </div>
-      <p className="admin-muted">{at("loyIntro")}</p>
+      <Tabs at={at} label={at("tabLoyalty")} tabs={tabs} current={tab} onSelect={setTab} />
       {error ? <p className="admin-error">{error}</p> : null}
 
-      {!data ? (
-        <p className="admin-muted">{at("loading")}</p>
-      ) : cards.length === 0 ? (
-        <p className="admin-muted">{at("empty")}</p>
-      ) : (
-        <div className="admin-table-wrap">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>{at("colName")}</th>
-                <th>{at("loyCardNumber")}</th>
-                <th>{at("colPhone")}</th>
-                <th className="num">{at("loyPoints")}</th>
-                <th className="num">{at("loyPurchases")}</th>
-                <th className="num">{at("loyRewards")}</th>
-                <th className="num">{at("colActions")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {shown.map((c) => (
-                <tr key={c.cardId} className={c.eligible ? "is-eligible" : undefined}>
-                  <td>
-                    {c.name || "—"}
-                    {c.isManual ? <span className="admin-tag">{at("loyManual")}</span> : null}
-                    {c.isBanned ? <span className="admin-tag danger">{at("banned")}</span> : null}
-                    <div className="admin-muted admin-small">{c.email || "—"}</div>
-                  </td>
-                  <td>{c.cardNumber || "—"}</td>
-                  <td>{c.phone || "—"}</td>
-                  <td className="num">
-                    <strong>{c.points}</strong>
-                    <div className="admin-progress" aria-hidden="true">
-                      <span style={{ inlineSize: `${c.progress}%` }} />
-                    </div>
-                  </td>
-                  <td className="num">{c.purchaseCount}</td>
-                  <td className="num">{c.rewards}</td>
-                  <td className="num admin-actions">
-                    <button type="button" className="admin-mini pressable" disabled={busy} onClick={() => addPoint(c)}>
-                      {at("loyAddPoint")}
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-mini pressable"
-                      disabled={busy || !c.eligible}
-                      onClick={() => redeem(c)}
-                    >
-                      {at("loyRedeem")}
-                    </button>
-                    <button type="button" className="admin-mini pressable" onClick={() => setProfileId(c.cardId)}>
-                      {at("loyView")}
-                    </button>
-                    <button type="button" className="admin-mini pressable" onClick={() => setEditing(c)}>
-                      {at("edit")}
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-mini pressable danger"
-                      disabled={busy}
-                      onClick={() => remove(c)}
-                    >
-                      {at("delete")}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      {tab === "cards" ? (
+        <>
+          <div className="admin-toolbar">
+            <input
+              type="search"
+              className="field admin-search"
+              placeholder={at("search")}
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+            />
+            <button type="button" className="btn-accent pressable" onClick={() => { setEditing(null); setTab("new"); }}>
+              {at("loyNew")}
+            </button>
+          </div>
+          <p className="admin-muted">{at("loyIntro")}</p>
 
-      {newOpen ? (
-        <NewCardModal
+          {!data ? (
+            <p className="admin-muted">{at("loading")}</p>
+          ) : cards.length === 0 ? (
+            <p className="admin-muted">{at("empty")}</p>
+          ) : (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>{at("colName")}</th>
+                    <th>{at("loyCardNumber")}</th>
+                    <th>{at("colPhone")}</th>
+                    <th className="num">{at("loyPoints")}</th>
+                    <th className="num">{at("loyPurchases")}</th>
+                    <th className="num">{at("loyRewards")}</th>
+                    <th className="num">{at("colActions")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {shown.map((c) => (
+                    <tr key={c.cardId} className={c.eligible ? "is-eligible" : undefined}>
+                      <td>
+                        {c.name || "—"}
+                        {c.isManual ? <span className="admin-tag">{at("loyManual")}</span> : null}
+                        {c.isBanned ? <span className="admin-tag danger">{at("banned")}</span> : null}
+                        <div className="admin-muted admin-small">{c.email || "—"}</div>
+                      </td>
+                      <td>{c.cardNumber || "—"}</td>
+                      <td>{c.phone || "—"}</td>
+                      <td className="num">
+                        <strong>{c.points}</strong>
+                        <div className="admin-progress" aria-hidden="true">
+                          <span style={{ inlineSize: `${c.progress}%` }} />
+                        </div>
+                      </td>
+                      <td className="num">{c.purchaseCount}</td>
+                      <td className="num">{c.rewards}</td>
+                      <td className="num admin-actions">
+                        <button type="button" className="admin-mini pressable" disabled={busy} onClick={() => addPoint(c)}>
+                          {at("loyAddPoint")}
+                        </button>
+                        <button
+                          type="button"
+                          className="admin-mini pressable"
+                          disabled={busy || !c.eligible}
+                          onClick={() => redeem(c)}
+                        >
+                          {at("loyRedeem")}
+                        </button>
+                        <button type="button" className="admin-mini pressable" onClick={() => setProfileId(c.cardId)}>
+                          {at("loyView")}
+                        </button>
+                        <button
+                          type="button"
+                          className="admin-mini pressable"
+                          onClick={() => {
+                            setEditing(c);
+                            setTab("edit");
+                          }}
+                        >
+                          {at("edit")}
+                        </button>
+                        <button
+                          type="button"
+                          className="admin-mini pressable danger"
+                          disabled={busy}
+                          onClick={() => remove(c)}
+                        >
+                          {at("delete")}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      ) : null}
+
+      {tab === "new" ? (
+        <NewCardPanel
           at={at}
           usersWithoutCards={data?.usersWithoutCards || []}
-          onClose={() => setNewOpen(false)}
+          onCancel={() => setTab("cards")}
           onDone={() => {
-            setNewOpen(false);
+            setTab("cards");
             load();
           }}
         />
       ) : null}
 
-      {editing ? (
-        <EditCardModal
+      {tab === "edit" && editing ? (
+        <EditCardPanel
           at={at}
           card={editing}
-          onClose={() => setEditing(null)}
+          onCancel={() => setTab("cards")}
           onDone={() => {
             setEditing(null);
+            setTab("cards");
             load();
           }}
         />
@@ -218,10 +264,24 @@ export function Loyalty({ at }) {
 }
 
 /* --------------------------------------------------------------- New card */
-function NewCardModal({ at, usersWithoutCards, onClose, onDone }) {
+/* A card is born from its first purchase, so this form opens one: the
+   customer, then the fragrance that stamps the first point. */
+function NewCardPanel({ at, usersWithoutCards, onCancel, onDone }) {
   const [mode, setMode] = useState("manual");
   const [userId, setUserId] = useState("");
-  const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    perfumeName: "",
+    brand: "",
+    fragranceFamily: "",
+    audience: "",
+    purchasePrice: "",
+    purchaseDate: new Date().toISOString().slice(0, 10),
+    notes: "",
+    awardPoints: true,
+  });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -230,15 +290,31 @@ function NewCardModal({ at, usersWithoutCards, onClose, onDone }) {
   async function submit(e) {
     e.preventDefault();
     setError("");
+    if (mode === "link" && !userId) return setError(at("loyPickUser"));
+    if (mode === "manual" && !form.name.trim()) return setError(at("loyName"));
+    if (!form.perfumeName.trim()) return setError(at("rpPerfume"));
     setBusy(true);
     try {
-      if (mode === "link" && !userId) throw new Error(at("loyPickUser"));
-      if (mode === "manual" && !form.name.trim()) throw new Error(at("loyName"));
+      const purchase = {
+        perfumeName: form.perfumeName,
+        brand: form.brand,
+        fragranceFamily: form.fragranceFamily,
+        audience: form.audience,
+        purchasePrice: form.purchasePrice === "" ? null : Number(form.purchasePrice),
+        purchaseDate: form.purchaseDate,
+        notes: form.notes,
+        awardPoints: form.awardPoints,
+      };
       const body =
         mode === "link"
-          ? { userId: Number(userId) }
-          : { name: form.name, email: form.email, phone: form.phone };
-      await api("/api/admin/loyalty/create", { method: "POST", body });
+          ? { userId: Number(userId), ...purchase }
+          : {
+              holderName: form.name,
+              holderEmail: form.email,
+              holderPhone: form.phone,
+              ...purchase,
+            };
+      await api("/api/admin/loyalty/purchases", { method: "POST", body });
       onDone();
     } catch (e2) {
       setError(e2.message);
@@ -248,73 +324,80 @@ function NewCardModal({ at, usersWithoutCards, onClose, onDone }) {
   }
 
   return (
-    <Modal
-      title={at("loyNew")}
-      onClose={onClose}
-      footer={
-        <>
-          <button type="button" className="btn-ghost pressable" onClick={onClose}>
-            {at("cancel")}
+    <form className="admin-block" onSubmit={submit}>
+      <p className="admin-muted">{at("loyTabNewIntro")}</p>
+      {error ? <p className="admin-error">{error}</p> : null}
+
+      <section className="card admin-section">
+        <h2 className="admin-subhead">{at("loyNew")}</h2>
+        <div className="admin-seg" role="tablist">
+          <button
+            type="button"
+            className={`admin-seg-btn pressable${mode === "manual" ? " on" : ""}`}
+            onClick={() => setMode("manual")}
+          >
+            {at("loyManual")}
           </button>
-          <button type="button" className="btn-accent pressable" disabled={busy} onClick={submit}>
-            {at("loyCreate")}
+          <button
+            type="button"
+            className={`admin-seg-btn pressable${mode === "link" ? " on" : ""}`}
+            onClick={() => setMode("link")}
+          >
+            {at("loyLink")}
           </button>
-        </>
-      }
-    >
-      <div className="admin-seg" role="tablist">
-        <button
-          type="button"
-          className={`admin-seg-btn pressable${mode === "manual" ? " on" : ""}`}
-          onClick={() => setMode("manual")}
-        >
-          {at("loyManual")}
+        </div>
+
+        {mode === "link" ? (
+          <label className="admin-field">
+            <span>{at("loyPickUser")}</span>
+            <select className="field" value={userId} onChange={(e) => setUserId(e.target.value)}>
+              <option value="">—</option>
+              {usersWithoutCards.map((u) => (
+                <option key={u.userId} value={u.userId}>
+                  {u.name} · {u.email}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : (
+          <>
+            <label className="admin-field">
+              <span>{at("loyName")}</span>
+              <input className="field" value={form.name} onChange={(e) => set("name", e.target.value)} maxLength={80} />
+            </label>
+            <div className="admin-form-row">
+              <label className="admin-field">
+                <span>{at("loyEmail")}</span>
+                <input className="field" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
+              </label>
+              <label className="admin-field">
+                <span>{at("colPhone")}</span>
+                <input className="field" value={form.phone} onChange={(e) => set("phone", e.target.value)} maxLength={30} />
+              </label>
+            </div>
+          </>
+        )}
+      </section>
+
+      <section className="card admin-section">
+        <h2 className="admin-subhead">{at("rpTitle")}</h2>
+        <PurchaseFields at={at} form={form} set={set} />
+      </section>
+
+      <div className="admin-form-foot">
+        <button type="button" className="btn-ghost pressable" onClick={onCancel}>
+          {at("cancel")}
         </button>
-        <button
-          type="button"
-          className={`admin-seg-btn pressable${mode === "link" ? " on" : ""}`}
-          onClick={() => setMode("link")}
-        >
-          {at("loyLink")}
+        <button type="submit" className="btn-accent pressable" disabled={busy}>
+          {at("loyCreate")}
         </button>
       </div>
-
-      {mode === "link" ? (
-        <label className="admin-field">
-          <span>{at("loyPickUser")}</span>
-          <select className="field" value={userId} onChange={(e) => setUserId(e.target.value)}>
-            <option value="">—</option>
-            {usersWithoutCards.map((u) => (
-              <option key={u.userId} value={u.userId}>
-                {u.name} · {u.email}
-              </option>
-            ))}
-          </select>
-        </label>
-      ) : (
-        <>
-          <label className="admin-field">
-            <span>{at("loyName")}</span>
-            <input className="field" value={form.name} onChange={(e) => set("name", e.target.value)} />
-          </label>
-          <label className="admin-field">
-            <span>{at("loyEmail")}</span>
-            <input className="field" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
-          </label>
-          <label className="admin-field">
-            <span>{at("colPhone")}</span>
-            <input className="field" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
-          </label>
-        </>
-      )}
-
-      {error ? <p className="admin-error">{error}</p> : null}
-    </Modal>
+    </form>
   );
 }
 
 /* -------------------------------------------------------------- Edit card */
-function EditCardModal({ at, card, onClose, onDone }) {
+function EditCardPanel({ at, card, onCancel, onDone }) {
   const [form, setForm] = useState({
     name: card.name || "",
     cardNumber: card.cardNumber || "",
@@ -350,298 +433,55 @@ function EditCardModal({ at, card, onClose, onDone }) {
   }
 
   return (
-    <Modal
-      title={at("loyEditTitle")}
-      onClose={onClose}
-      footer={
-        <>
-          <button type="button" className="btn-ghost pressable" onClick={onClose}>
-            {at("cancel")}
-          </button>
-          <button type="button" className="btn-accent pressable" disabled={busy} onClick={submit}>
-            {at("save")}
-          </button>
-        </>
-      }
-    >
-      <label className="admin-field">
-        <span>{at("colName")}</span>
-        <input className="field" value={form.name} onChange={(e) => set("name", e.target.value)} maxLength={80} />
-      </label>
-      <label className="admin-field">
-        <span>{at("loyCardNumber")}</span>
-        <input className="field" value={form.cardNumber} onChange={(e) => set("cardNumber", e.target.value)} />
-      </label>
-      <label className="admin-field">
-        <span>{at("colPhone")}</span>
-        <input className="field" value={form.phone} onChange={(e) => set("phone", e.target.value)} maxLength={30} />
-      </label>
-      <label className="admin-field">
-        <span>{at("loyPoints")}</span>
-        <input
-          className="field"
-          type="number"
-          min="0"
-          max="10000"
-          value={form.points}
-          onChange={(e) => set("points", e.target.value)}
-        />
-      </label>
+    <form className="admin-block" onSubmit={submit}>
+      <p className="admin-muted">
+        {at("loyCardNumber")}: <strong>{card.cardNumber || "—"}</strong>
+      </p>
       {error ? <p className="admin-error">{error}</p> : null}
-    </Modal>
-  );
-}
 
-/* ------------------------------------------------------- Customer profile */
-function CustomerProfile({ at, cardId, onBack }) {
-  const [profile, setProfile] = useState(null);
-  const [error, setError] = useState("");
-  const [purchaseOpen, setPurchaseOpen] = useState(false);
+      <section className="card admin-section">
+        <h2 className="admin-subhead">{at("loyEditTitle")}</h2>
+        <label className="admin-field">
+          <span>{at("colName")}</span>
+          <input className="field" value={form.name} onChange={(e) => set("name", e.target.value)} maxLength={80} />
+        </label>
+        <label className="admin-field">
+          <span>{at("loyCardNumber")}</span>
+          <input className="field" value={form.cardNumber} onChange={(e) => set("cardNumber", e.target.value)} />
+        </label>
+        <label className="admin-field">
+          <span>{at("colPhone")}</span>
+          <input className="field" value={form.phone} onChange={(e) => set("phone", e.target.value)} maxLength={30} />
+        </label>
+        <label className="admin-field">
+          <span>{at("loyPoints")}</span>
+          <input
+            className="field"
+            type="number"
+            min="0"
+            max="10000"
+            value={form.points}
+            onChange={(e) => set("points", e.target.value)}
+          />
+        </label>
+      </section>
 
-  const load = useCallback(
-    () =>
-      api(`/api/admin/loyalty/profiles/${cardId}`)
-        .then(setProfile)
-        .catch((e) => setError(e.message)),
-    [cardId],
-  );
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
-  async function removePurchase(id) {
-    if (!window.confirm(at("cpDeletePurchase"))) return;
-    try {
-      await api(`/api/admin/loyalty/purchases/${id}`, { method: "DELETE" });
-      await load();
-    } catch (e) {
-      setError(e.message);
-    }
-  }
-
-  const personality = useMemo(() => {
-    if (!profile || !profile.stats || profile.stats.totalPurchases === 0) return at("cpPersonalityNone");
-    const top = profile.preferences[0];
-    if (!top) return at("cpPersonalityNone");
-    return `${top.family} · ${top.percentage}%`;
-  }, [profile, at]);
-
-  return (
-    <div className="admin-block admin-profile">
-      <div className="admin-toolbar">
-        <button type="button" className="admin-mini pressable" onClick={onBack}>
-          ← {at("cpBack")}
+      <div className="admin-form-foot">
+        <button type="button" className="btn-ghost pressable" onClick={onCancel}>
+          {at("cancel")}
         </button>
-        <button type="button" className="btn-accent pressable" onClick={() => setPurchaseOpen(true)}>
-          {at("cpAddPurchase")}
+        <button type="submit" className="btn-accent pressable" disabled={busy}>
+          {at("save")}
         </button>
       </div>
-      {error ? <p className="admin-error">{error}</p> : null}
-
-      {!profile ? (
-        <p className="admin-muted">{at("loading")}</p>
-      ) : (
-        <>
-          <div className="card admin-profile-head">
-            <div>
-              <h2>{profile.card.name || "—"}</h2>
-              <p className="admin-muted">
-                {profile.card.cardNumber || "—"} · {profile.card.phone || "—"} · {profile.card.email || "—"}
-              </p>
-            </div>
-            <div className="admin-profile-points">
-              <strong>{profile.card.points}</strong>
-              <span>{at("loyPoints")}</span>
-            </div>
-          </div>
-
-          <div className="admin-stats">
-            <div className="admin-stat card">
-              <strong>{profile.stats.totalPurchases}</strong>
-              <span>{at("loyPurchases")}</span>
-            </div>
-            <div className="admin-stat card">
-              <strong>{profile.stats.totalSpent}</strong>
-              <span>{at("cpTotalSpent")}</span>
-            </div>
-            <div className="admin-stat card">
-              <strong>{profile.stats.topFamily || at("familyNone")}</strong>
-              <span>{at("cpTopFamily")}</span>
-            </div>
-            <div className="admin-stat card">
-              <strong>{profile.stats.favoriteBrand || at("familyNone")}</strong>
-              <span>{at("cpFavouriteBrand")}</span>
-            </div>
-          </div>
-
-      <section className="card admin-section">
-        <h2 className="admin-subhead">{at("cpPersonality")}</h2>
-        <p className="admin-muted">{personality}</p>
-      </section>
-
-      {profile.preferences.length > 0 ? (
-        <section className="card admin-section">
-          <h2 className="admin-subhead">{at("cpPreferences")}</h2>
-          <ul className="admin-bars">
-            {profile.preferences.map((p) => (
-              <li key={p.family}>
-                <span className="admin-bar-label">
-                  {p.family === "Non spécifié" ? at("familyNone") : p.family}
-                </span>
-                <span className="admin-bar">
-                  <span style={{ inlineSize: `${p.percentage}%` }} />
-                </span>
-                <span className="admin-bar-val">{p.percentage}%</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      {profile.topBrands.length > 0 ? (
-        <section className="card admin-section">
-          <h2 className="admin-subhead">{at("cpBrands")}</h2>
-          <ul className="admin-chips">
-            {profile.topBrands.map((b) => (
-              <li key={b.brand} className="admin-chip">
-                {b.brand} <strong>{b.count}</strong>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      {profile.suggestions.length > 0 ? (
-        <section className="card admin-section">
-          <h2 className="admin-subhead">{at("cpSuggestions")}</h2>
-          <ul className="admin-suggestions">
-            {profile.suggestions.map((s, i) => (
-              <li key={`${s.name}-${i}`} className="admin-suggestion">
-                <strong>{s.name}</strong>
-                <span className="admin-muted">
-                  {s.brand || "—"} · {s.fragrance_family || at("familyNone")} · {audienceLabel(s.audience, at)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      <section className="card admin-section">
-        <h2 className="admin-subhead">{at("cpHistory")}</h2>
-        {profile.purchases.length === 0 ? (
-          <p className="admin-muted">{at("cpNoPurchases")}</p>
-        ) : (
-          <ul className="admin-purchases">
-            {profile.purchases.map((p) => (
-              <li key={p.id} className="admin-purchase">
-                <div>
-                  <strong>{p.perfume_name}</strong>
-                  <div className="admin-muted admin-small">
-                    {[p.brand, p.fragrance_family, audienceLabel(p.audience, at)].filter(Boolean).join(" · ")}
-                  </div>
-                  {p.notes ? <p className="admin-small admin-muted">{p.notes}</p> : null}
-                </div>
-                <div className="admin-purchase-meta">
-                  <span>{p.purchase_date || fmtDate(p.created_at)}</span>
-                  <strong>{p.purchase_price == null ? "—" : `${p.purchase_price} dt`}</strong>
-                  <button
-                    type="button"
-                    className="admin-mini pressable danger"
-                    onClick={() => removePurchase(p.id)}
-                  >
-                    {at("delete")}
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {error ? <p className="admin-error">{error}</p> : null}
-
-      {purchaseOpen ? (
-        <PurchaseModal
-          at={at}
-          cardId={cardId}
-          onClose={() => setPurchaseOpen(false)}
-          onDone={() => {
-            setPurchaseOpen(false);
-            load();
-          }}
-        />
-      ) : null}
-        </>
-      )}
-    </div>
+    </form>
   );
 }
 
-/* ------------------------------------------------------ Record a purchase */
-function PurchaseModal({ at, cardId, onClose, onDone }) {
-  const [form, setForm] = useState({
-    perfumeName: "",
-    brand: "",
-    fragranceFamily: "",
-    audience: "",
-    purchasePrice: "",
-    purchaseDate: new Date().toISOString().slice(0, 10),
-    notes: "",
-  });
-  const [awardPoints, setAwardPoints] = useState(true);
-  const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-
-  async function submit(e) {
-    e.preventDefault();
-    if (!form.perfumeName.trim()) {
-      setError(at("rpPerfume"));
-      return;
-    }
-    setError("");
-    setBusy(true);
-    try {
-      await api("/api/admin/loyalty/purchases", {
-        method: "POST",
-        body: {
-          cardId,
-          perfumeName: form.perfumeName,
-          brand: form.brand,
-          fragranceFamily: form.fragranceFamily,
-          audience: form.audience,
-          purchasePrice: form.purchasePrice === "" ? null : Number(form.purchasePrice),
-          purchaseDate: form.purchaseDate,
-          notes: form.notes,
-          awardPoints,
-        },
-      });
-      onDone();
-    } catch (e2) {
-      setError(e2.message);
-    } finally {
-      setBusy(false);
-    }
-  }
-
+/* ---------------------------------------------------- Shared purchase form */
+function PurchaseFields({ at, form, set }) {
   return (
-    <Modal
-      title={at("rpTitle")}
-      onClose={onClose}
-      footer={
-        <>
-          <button type="button" className="btn-ghost pressable" onClick={onClose}>
-            {at("cancel")}
-          </button>
-          <button type="button" className="btn-accent pressable" disabled={busy} onClick={submit}>
-            {at("rpSave")}
-          </button>
-        </>
-      }
-    >
+    <>
       <label className="admin-field">
         <span>{at("rpPerfume")}</span>
         <input className="field" value={form.perfumeName} onChange={(e) => set("perfumeName", e.target.value)} maxLength={150} />
@@ -694,10 +534,278 @@ function PurchaseModal({ at, cardId, onClose, onDone }) {
         <input className="field" value={form.notes} onChange={(e) => set("notes", e.target.value)} maxLength={500} />
       </label>
       <label className="admin-check">
-        <input type="checkbox" checked={awardPoints} onChange={(e) => setAwardPoints(e.target.checked)} />
+        <input type="checkbox" checked={form.awardPoints} onChange={(e) => set("awardPoints", e.target.checked)} />
         <span>{at("rpAward")}</span>
       </label>
+    </>
+  );
+}
+
+/* ------------------------------------------------------- Customer profile */
+/* One long scroll before (head, stats, personality, tastes, brands,
+   suggestions, history). It pages now. */
+function CustomerProfile({ at, cardId, onBack }) {
+  const [profile, setProfile] = useState(null);
+  const [error, setError] = useState("");
+  const [tab, setTab] = useState("overview");
+
+  const load = useCallback(
+    () =>
+      api(`/api/admin/loyalty/profiles/${cardId}`)
+        .then(setProfile)
+        .catch((e) => setError(e.message)),
+    [cardId],
+  );
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function removePurchase(id) {
+    if (!window.confirm(at("cpDeletePurchase"))) return;
+    try {
+      await api(`/api/admin/loyalty/purchases/${id}`, { method: "DELETE" });
+      await load();
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
+  const personality = useMemo(() => {
+    if (!profile || !profile.stats || profile.stats.totalPurchases === 0) return at("cpPersonalityNone");
+    const top = profile.preferences[0];
+    if (!top) return at("cpPersonalityNone");
+    return `${top.family} · ${top.percentage}%`;
+  }, [profile, at]);
+
+  const tabs = [
+    ["overview", at("cpTabOverview")],
+    ["tastes", at("cpTabTastes")],
+    ["purchases", at("cpTabPurchases")],
+    ["record", at("rpTitle")],
+  ];
+
+  return (
+    <div className="admin-block admin-profile">
+      <div className="admin-toolbar">
+        <button type="button" className="admin-mini pressable" onClick={onBack}>
+          ← {at("cpBack")}
+        </button>
+      </div>
+      <Tabs at={at} label={at("cpTitle")} tabs={tabs} current={tab} onSelect={setTab} />
       {error ? <p className="admin-error">{error}</p> : null}
-    </Modal>
+
+      {!profile ? (
+        <p className="admin-muted">{at("loading")}</p>
+      ) : (
+        <>
+          {tab === "overview" ? (
+            <>
+              <div className="card admin-profile-head">
+                <div>
+                  <h2>{profile.card.name || "—"}</h2>
+                  <p className="admin-muted">
+                    {profile.card.cardNumber || "—"} · {profile.card.phone || "—"} · {profile.card.email || "—"}
+                  </p>
+                </div>
+                <div className="admin-profile-points">
+                  <strong>{profile.card.points}</strong>
+                  <span>{at("loyPoints")}</span>
+                </div>
+              </div>
+
+              <div className="admin-stats">
+                <div className="admin-stat card">
+                  <strong>{profile.stats.totalPurchases}</strong>
+                  <span>{at("loyPurchases")}</span>
+                </div>
+                <div className="admin-stat card">
+                  <strong>{profile.stats.totalSpent}</strong>
+                  <span>{at("cpTotalSpent")}</span>
+                </div>
+                <div className="admin-stat card">
+                  <strong>{profile.stats.topFamily || at("familyNone")}</strong>
+                  <span>{at("cpTopFamily")}</span>
+                </div>
+                <div className="admin-stat card">
+                  <strong>{profile.stats.favoriteBrand || at("familyNone")}</strong>
+                  <span>{at("cpFavouriteBrand")}</span>
+                </div>
+              </div>
+
+              <section className="card admin-section">
+                <h2 className="admin-subhead">{at("cpPersonality")}</h2>
+                <p className="admin-muted">{personality}</p>
+              </section>
+            </>
+          ) : null}
+
+          {tab === "tastes" ? (
+            <>
+              {profile.preferences.length > 0 ? (
+                <section className="card admin-section">
+                  <h2 className="admin-subhead">{at("cpPreferences")}</h2>
+                  <ul className="admin-bars">
+                    {profile.preferences.map((p) => (
+                      <li key={p.family}>
+                        <span className="admin-bar-label">
+                          {p.family === "Non spécifié" ? at("familyNone") : p.family}
+                        </span>
+                        <span className="admin-bar">
+                          <span style={{ inlineSize: `${p.percentage}%` }} />
+                        </span>
+                        <span className="admin-bar-val">{p.percentage}%</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
+              {profile.topBrands.length > 0 ? (
+                <section className="card admin-section">
+                  <h2 className="admin-subhead">{at("cpBrands")}</h2>
+                  <ul className="admin-chips">
+                    {profile.topBrands.map((b) => (
+                      <li key={b.brand} className="admin-chip">
+                        {b.brand} <strong>{b.count}</strong>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
+              {profile.suggestions.length > 0 ? (
+                <section className="card admin-section">
+                  <h2 className="admin-subhead">{at("cpSuggestions")}</h2>
+                  <ul className="admin-suggestions">
+                    {profile.suggestions.map((s, i) => (
+                      <li key={`${s.name}-${i}`} className="admin-suggestion">
+                        <strong>{s.name}</strong>
+                        <span className="admin-muted">
+                          {s.brand || "—"} · {s.fragrance_family || at("familyNone")} · {audienceLabel(s.audience, at)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
+              {profile.preferences.length === 0 && profile.topBrands.length === 0 && profile.suggestions.length === 0 ? (
+                <p className="admin-muted">{at("cpPersonalityNone")}</p>
+              ) : null}
+            </>
+          ) : null}
+
+          {tab === "purchases" ? (
+            <section className="card admin-section">
+              <h2 className="admin-subhead">{at("cpHistory")}</h2>
+              {profile.purchases.length === 0 ? (
+                <p className="admin-muted">{at("cpNoPurchases")}</p>
+              ) : (
+                <ul className="admin-purchases">
+                  {profile.purchases.map((p) => (
+                    <li key={p.id} className="admin-purchase">
+                      <div>
+                        <strong>{p.perfume_name}</strong>
+                        <div className="admin-muted admin-small">
+                          {[p.brand, p.fragrance_family, audienceLabel(p.audience, at)].filter(Boolean).join(" · ")}
+                        </div>
+                        {p.notes ? <p className="admin-small admin-muted">{p.notes}</p> : null}
+                      </div>
+                      <div className="admin-purchase-meta">
+                        <span>{p.purchase_date || fmtDate(p.created_at)}</span>
+                        <strong>{p.purchase_price == null ? "—" : `${p.purchase_price} dt`}</strong>
+                        <button
+                          type="button"
+                          className="admin-mini pressable danger"
+                          onClick={() => removePurchase(p.id)}
+                        >
+                          {at("delete")}
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          ) : null}
+
+          {tab === "record" ? (
+            <PurchasePanel
+              at={at}
+              cardId={cardId}
+              onDone={() => {
+                setTab("purchases");
+                load();
+              }}
+            />
+          ) : null}
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------ Record a purchase */
+function PurchasePanel({ at, cardId, onDone }) {
+  const [form, setForm] = useState({
+    perfumeName: "",
+    brand: "",
+    fragranceFamily: "",
+    audience: "",
+    purchasePrice: "",
+    purchaseDate: new Date().toISOString().slice(0, 10),
+    notes: "",
+    awardPoints: true,
+  });
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  async function submit(e) {
+    e.preventDefault();
+    if (!form.perfumeName.trim()) {
+      setError(at("rpPerfume"));
+      return;
+    }
+    setError("");
+    setBusy(true);
+    try {
+      await api("/api/admin/loyalty/purchases", {
+        method: "POST",
+        body: {
+          cardId,
+          perfumeName: form.perfumeName,
+          brand: form.brand,
+          fragranceFamily: form.fragranceFamily,
+          audience: form.audience,
+          purchasePrice: form.purchasePrice === "" ? null : Number(form.purchasePrice),
+          purchaseDate: form.purchaseDate,
+          notes: form.notes,
+          awardPoints: form.awardPoints,
+        },
+      });
+      onDone();
+    } catch (e2) {
+      setError(e2.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <form className="admin-block" onSubmit={submit}>
+      {error ? <p className="admin-error">{error}</p> : null}
+      <section className="card admin-section">
+        <h2 className="admin-subhead">{at("rpTitle")}</h2>
+        <PurchaseFields at={at} form={form} set={set} />
+      </section>
+      <div className="admin-form-foot">
+        <button type="submit" className="btn-accent pressable" disabled={busy}>
+          {at("rpSave")}
+        </button>
+      </div>
+    </form>
   );
 }

@@ -34,6 +34,15 @@ function loadTemplate() {
 const RENDER_W = 2048;
 const RENDER_H = Math.round((CARD_TEMPLATE.height / CARD_TEMPLATE.width) * RENDER_W);
 
+/* The saved file is deliberately smaller than the display. The canvas above
+   is sized for a retina column (~2× its CSS width), but the download is what
+   gets kept, emailed or printed: 1600 px across an 85 mm card is ~480 DPI,
+   which no printer will notice, and at q0.8 the file lands near 200 KB
+   instead of the 578 KB a 2048/q0.95 encode costs. */
+const DOWNLOAD_W = 1600;
+const DOWNLOAD_H = Math.round((CARD_TEMPLATE.height / CARD_TEMPLATE.width) * DOWNLOAD_W);
+const DOWNLOAD_Q = 0.8;
+
 export default function LoyaltyCardArt({
   name,
   cardNumber,
@@ -74,8 +83,8 @@ export default function LoyaltyCardArt({
     };
   }, [name, cardNumber, points, threshold]);
 
-  /* Save the painted bitmap. Re-runs the painter at full resolution rather
-     than reading the visible canvas back, so a scaled-down or
+  /* Save the painted bitmap. Re-runs the painter at the download resolution
+     rather than reading the visible canvas back, so a scaled-down or
      devicePixelRatio-clipped display can never cost the download any
      sharpness. */
   function download() {
@@ -84,15 +93,15 @@ export default function LoyaltyCardArt({
     setBusy(true);
     try {
       const off = document.createElement("canvas");
-      off.width = RENDER_W;
-      off.height = RENDER_H;
+      off.width = DOWNLOAD_W;
+      off.height = DOWNLOAD_H;
       const ctx = off.getContext("2d");
       // The template is already in the module cache at this point, so this
       // resolves without a network round-trip.
       loadTemplate().then((img) => {
         drawLoyaltyCard(ctx, img, {
-          width: RENDER_W,
-          height: RENDER_H,
+          width: DOWNLOAD_W,
+          height: DOWNLOAD_H,
           name,
           cardNumber,
           points,
@@ -117,7 +126,7 @@ export default function LoyaltyCardArt({
             URL.revokeObjectURL(url);
           },
           "image/jpeg",
-          0.95,
+          DOWNLOAD_Q,
         );
         setBusy(false);
       });

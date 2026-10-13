@@ -154,6 +154,23 @@
   justify-content: flex-end;
 }
 
+/* A form rendered as a tab scrolls with the page, so its buttons would
+   wander off the bottom. Pinned to the edge of the viewport instead, on
+   the body surface so the content reads through underneath. */
+.admin-form-foot {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  margin-block-start: 1rem;
+  padding-block: 0.75rem;
+  background: var(--surface-0);
+  border-block-start: 1px solid var(--hairline);
+}
+
 /* ------------------------------------------------------------------ tables */
 .admin-table-wrap {
   overflow-x: auto;

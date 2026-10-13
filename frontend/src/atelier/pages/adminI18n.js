@@ -54,13 +54,16 @@ export const ADMIN_STR = {
     no: "No",
 
     loyIntro: "5 points = 1 free fragrance.",
+    loyTabCards: "All cards",
+    loyTabNewIntro:
+      "A card opens with its first purchase — fill in the customer, then the fragrance that stamps the first point.",
     loyNew: "New card",
     loyManual: "Manual card",
     loyLink: "Link a customer",
     loyPickUser: "Choose a customer without a card…",
     loyName: "Full name",
     loyEmail: "Email (optional)",
-    loyCreate: "Create the card",
+    loyCreate: "Open the card",
     loyCardNumber: "Card no.",
     loyPoints: "Points",
     loyPurchases: "Purchases",
@@ -77,6 +80,9 @@ export const ADMIN_STR = {
 
     cpTitle: "Customer profile",
     cpBack: "All cards",
+    cpTabOverview: "Overview",
+    cpTabTastes: "Tastes",
+    cpTabPurchases: "Purchases",
     cpPersonality: "Personality",
     cpPersonalityNone:
       "No purchases recorded yet — the profile builds as purchases are logged.",
@@ -195,13 +201,16 @@ export const ADMIN_STR = {
     no: "Non",
 
     loyIntro: "5 points = 1 parfum offert.",
+    loyTabCards: "Toutes les cartes",
+    loyTabNewIntro:
+      "Une carte s'ouvre avec son premier achat — renseignez le client, puis le parfum qui marque le premier point.",
     loyNew: "Nouvelle carte",
     loyManual: "Carte manuelle",
     loyLink: "Associer un client",
     loyPickUser: "Choisir un client sans carte…",
     loyName: "Nom complet",
     loyEmail: "E-mail (optionnel)",
-    loyCreate: "Créer la carte",
+    loyCreate: "Ouvrir la carte",
     loyCardNumber: "N° de carte",
     loyPoints: "Points",
     loyPurchases: "Achats",
@@ -218,6 +227,9 @@ export const ADMIN_STR = {
 
     cpTitle: "Profil client",
     cpBack: "Toutes les cartes",
+    cpTabOverview: "Vue d'ensemble",
+    cpTabTastes: "Goûts",
+    cpTabPurchases: "Achats",
     cpPersonality: "Personnalité",
     cpPersonalityNone:
       "Aucun achat enregistré — le profil se construit au fil des achats.",
@@ -336,13 +348,16 @@ export const ADMIN_STR = {
     no: "لا",
 
     loyIntro: "5 نقاط = عطر مجاني.",
+    loyTabCards: "كل البطاقات",
+    loyTabNewIntro:
+      "تُفتح البطاقة بأول عملية شراء — أدخل بيانات العميل، ثم العطر الذي يمنح النقطة الأولى.",
     loyNew: "بطاقة جديدة",
     loyManual: "بطاقة يدوية",
     loyLink: "ربط عميل",
     loyPickUser: "اختر عميلًا بلا بطاقة…",
     loyName: "الاسم الكامل",
     loyEmail: "البريد (اختياري)",
-    loyCreate: "إنشاء البطاقة",
+    loyCreate: "فتح البطاقة",
     loyCardNumber: "رقم البطاقة",
     loyPoints: "النقاط",
     loyPurchases: "المشتريات",
@@ -359,6 +374,9 @@ export const ADMIN_STR = {
 
     cpTitle: "ملف العميل",
     cpBack: "كل البطاقات",
+    cpTabOverview: "نظرة عامة",
+    cpTabTastes: "الأذواق",
+    cpTabPurchases: "المشتريات",
     cpPersonality: "الشخصية",
     cpPersonalityNone: "لا مشتريات مسجلة بعد — يتكوّن الملف مع تسجيل المشتريات.",
     cpPreferences: "التفضيلات",
