@@ -178,8 +178,23 @@
 }
 
 .account-pop .admin-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
   color: var(--accent);
   font-weight: 600;
+}
+
+/* Unread guest-note count (the legacy #guestNotesBadge, admin-only). */
+.account-pop .admin-badge {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius-pill);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0 0.4rem;
+  line-height: 1.4;
 }
 
 /* ---------- Hero ---------- */

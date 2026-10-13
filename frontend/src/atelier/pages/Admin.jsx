@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { api } from "../../api/client.js";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
@@ -553,6 +553,11 @@ function Notes({ at }) {
 }
 
 /* --------------------------------------------------------------------- Shell */
+
+/* Tab ids in display order. The active tab lives in the URL (?tab=notes) so the
+   user menu's "Guest notes" entry — and any bookmark — can deep-link to it. */
+const TAB_IDS = ["overview", "users", "loyalty", "news", "hours", "notes"];
+
 export default function Admin() {
   const { isAdmin, ready } = useAuth();
   const { lang } = useI18n();
@@ -560,7 +565,15 @@ export default function Admin() {
     (k) => (ADMIN_STR[lang] && ADMIN_STR[lang][k]) || ADMIN_STR.en[k] || k,
     [lang],
   );
-  const [tab, setTab] = useState("overview");
+  const [params, setParams] = useSearchParams();
+  const requested = params.get("tab");
+  const tab = TAB_IDS.includes(requested) ? requested : "overview";
+  const setTab = (id) => {
+    const next = new URLSearchParams(params);
+    if (id === "overview") next.delete("tab");
+    else next.set("tab", id);
+    setParams(next, { replace: true });
+  };
   const [unread, setUnread] = useState(0);
 
   useEffect(() => {

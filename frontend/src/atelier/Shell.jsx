@@ -1,13 +1,13 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route } from "react-router-dom";
 import { Compass, Heart, Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
+import { api } from "../api/client.js";
 import { AuthProvider, useAuth } from "../contexts/AuthContext.jsx";
 import { CartProvider, useCart } from "../contexts/CartContext.jsx";
 import { FavoritesProvider, useFavorites } from "../contexts/FavoritesContext.jsx";
 import { NewsProvider, useNews } from "../contexts/NewsContext.jsx";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext.jsx";
 import { useI18n } from "../contexts/I18nContext.jsx";
-import FaithfulSite from "../faithful/FaithfulSite.jsx";
 import Home from "./pages/Home.jsx";
 import GlobalSearch from "./GlobalSearch.jsx";
 import Discover from "./Discover.jsx";
@@ -127,6 +127,26 @@ const warmNews = warm(loadNews);
 const warmAdmin = warm(loadAdmin);
 const warmAuth = warm(loadAuth);
 
+/* The legacy user menu carried a "Guest notes" entry with an unread badge
+   (#guestNotesBadge). It is admin-only, and the count is only worth a request
+   when the menu is actually open, so we fetch on demand and drop stale replies. */
+function useUnreadNotes(enabled) {
+  const [unread, setUnread] = useState(0);
+  useEffect(() => {
+    if (!enabled) return undefined;
+    let alive = true;
+    api("/api/admin/notes")
+      .then((d) => {
+        if (alive) setUnread((d.notes || []).filter((n) => !n.is_read).length);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [enabled]);
+  return unread;
+}
+
 function RouteFallback() {
   return (
     <main className="wrap collection">
@@ -141,12 +161,13 @@ const deferred = (node) => <Suspense fallback={<RouteFallback />}>{node}</Suspen
 
 function Nav({ onDiscover }) {
   const { user, isAdmin, signOut } = useAuth();
+  const [menu, setMenu] = useState(false);
+  const unreadNotes = useUnreadNotes(isAdmin && menu);
   const { count } = useCart();
   const { count: favCount } = useFavorites();
   const { theme, toggle } = useTheme();
   const { unread: newsUnread } = useNews();
   const { lang, setLang, t } = useI18n();
-  const [menu, setMenu] = useState(false);
 
   const link = ({ isActive }) => (isActive ? "active" : undefined);
 
@@ -251,6 +272,17 @@ function Nav({ onDiscover }) {
                         {t("admin")}
                       </Link>
                       <Link
+                        to="/admin?tab=notes"
+                        className="admin-entry"
+                        onClick={() => setMenu(false)}
+                        onMouseEnter={warmAdmin}
+                        onPointerDown={warmAdmin}
+                        onFocus={warmAdmin}
+                      >
+                        {t("guestNotes")}
+                        {unreadNotes > 0 ? <span className="admin-badge">{unreadNotes}</span> : null}
+                      </Link>
+                      <Link
                         to="/guides"
                         className="admin-entry"
                         onClick={() => setMenu(false)}
@@ -317,16 +349,6 @@ function Footer() {
   );
 }
 
-function Placeholder({ title }) {
-  return (
-    <main className="wrap section">
-      <p className="eyebrow">Charme</p>
-      <h1 style={{ fontSize: "var(--step-4)", marginTop: "0.5rem" }}>{title}</h1>
-      <div className="notice" style={{ marginTop: "1.5rem" }}>Coming soon in the new design.</div>
-    </main>
-  );
-}
-
 export default function Shell() {
   const { t } = useI18n();
   const [discover, setDiscover] = useState(null);
@@ -341,7 +363,6 @@ export default function Shell() {
               <Nav onDiscover={setDiscover} />
               <RouteTransition preload={preloadRoute}>
                 <Route path="/" element={<Home />} />
-                <Route path="/faithful" element={<FaithfulSite />} />
                 <Route path="/collection" element={deferred(<Collection />)} />
                 <Route path="/collection/:id" element={deferred(<Product />)} />
                 <Route path="/auth" element={deferred(<Auth />)} />

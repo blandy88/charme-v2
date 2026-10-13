@@ -38,7 +38,6 @@ const ORDER = [
   "/guides",
   "/contact",
   "/news",
-  "/faithful",
   "/auth",
   "/cart",
   "/profile",

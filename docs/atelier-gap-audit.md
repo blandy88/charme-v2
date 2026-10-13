@@ -35,7 +35,7 @@ Sources: `_recon/legacy-inventory.md`, `_recon/scriptjs.md`, `_recon/product-blo
 | 11 | Cart modal | ✅ /cart | — |
 | 12 | Email verification modal | ✅ /auth | — |
 | 13 | **Admin dashboard modal** | ✅ `/admin` (6 tabs) | — |
-| 14 | **Guest notes modal (unread badge)** | ✅ `/admin` › Notes (+ unread count) | — |
+| 14 | **Guest notes modal (unread badge)** | ✅ `/admin` › Notes (+ unread count) and the account-menu badge | — |
 | 15 | **News composer modal** | ✅ `/admin` › News | — |
 | 16 | **Carte Fidélité modal** | ✅ `/loyalty` (customer) + `/admin` › Loyalty | — |
 | 17 | **Ban user modal** | ✅ `/admin` › Users | — |
@@ -66,8 +66,16 @@ legacy kept it, and the admin-only **Guides** launcher (legacy `#guidesBtn`) sit
 1180px primary row has no room for either (an extra link used to push the nav 63px past the
 viewport for signed-in admins between 1180–1245px).
 
-Still missing: guest-notes badge in the user menu, Fragrances/Profiles jump buttons. (The two
-finder icons the legacy had as separate nav buttons now share one compass button — see §3c.)
+The legacy **Guest Notes · badge** entry is restored: admins get a "Guest notes" entry in the
+account menu carrying the unread count (the legacy `#guestNotesBadge`). The count is only fetched
+when the menu opens, and the entry deep-links to `/admin?tab=notes` (the back-office tab now lives
+in the URL, so the badge and any bookmark land on the right panel).
+
+The legacy **Fragrances / Profiles jump buttons** are not ported verbatim. The "Fragrances" tab is
+what the Atelier search box already is. The "Profiles" tab searched every customer's name, phone
+and email through `GET /api/search/users` + `GET /api/search/loyalty-profiles`; both endpoints are
+only `authenticateToken`, not admin-gated (see §3d), so exposing them in the storefront would leak
+PII. The same records are reachable through the admin console's own search instead.
 
 ## 3. Secondary pages
 
@@ -268,9 +276,11 @@ EN/FR/AR copy including the `{n}` substitution, the guest redirect, and 320–14
 
 **Still not covered:**
 
-* `GET /api/search/loyalty-profiles` — the admin card form links a user from the
-  `usersWithoutCards` list returned by `/api/admin/loyalty` instead, and the customer page has
-  no search box to fill.
+* `GET /api/search/loyalty-profiles` (and its sibling `GET /api/search/users`) — deliberately not
+  surfaced. Both are gated only by `authenticateToken`, so any signed-in customer could page the
+  whole customer list (names, phones, emails, card numbers). The admin card form links a user from
+  the `usersWithoutCards` list returned by `/api/admin/loyalty` instead, and the admin console's own
+  Users/Loyalty search already covers the same records; the storefront keeps no customer directory.
 
 ## 5. Work plan
 
@@ -354,3 +364,29 @@ Done in the guides increment:
     shows for administrators, non-admins get an explanation, guests a sign-in gate. Copy in EN/FR/AR.
     Verified by `probe-guides.cjs` (52 checks incl. 320–1440px overflow with the tour open), with
     `probe-overflow.cjs` and `probe-chrome.cjs` re-run after the nav link set changed.
+
+Done in the final audit increment (exhaustive legacy-vs-rebuild pass):
+
+13. **Guest-notes badge** (legacy `#guestNotesBadge`) — the account menu now carries a "Guest notes"
+    entry for admins with the unread count. The count is fetched only when the menu opens, and the
+    entry deep-links to `/admin?tab=notes`, which required moving the back-office tab into the URL
+    (`Admin.jsx` now reads the tab from `?tab=` and writes it back on every switch; unknown values
+    fall back to Overview). Verified by `probe-guest-notes.cjs` (24 checks: badge count, deep link,
+    tab↔URL sync, direct visit, bogus tab, the zero-unread case, a plain customer seeing nothing and
+    firing no request, 320px overflow).
+14. **i18n gaps** — `t("rvSend")` on the review reply button had no entry in any dictionary, so the
+    button rendered the raw key `rvSend`. Added "Send / Envoyer / أرسل". Six keys left over from the
+    removed homepage pieces (`viewAll`, `featuredTitle`, `featuredSub`, `pdHouseNote`, `pdReactions`,
+    `backToSite`) were dropped from EN/FR/AR. Found by a key-usage audit against the store; the audit
+    now reports zero missing keys across `t()`, `at()` and the discovery dictionary.
+15. **Dead stage-1 code removed** — the migration's first stage still shipped:
+    - `frontend/src/faithful/FaithfulSite.jsx` and the hidden `/app/faithful` route (which fetched
+      the legacy document at run time) plus its `"/faithful"` entry in `RouteTransition`'s ORDER;
+    - the ~4.2 MB `public/data/legacy-sections.json` and `public/data/document-shell.json` those
+      only served;
+    - `frontend/src/App.jsx`, `frontend/src/components/*` (FragranceCard / FilterBar /
+      DetailDrawer), `frontend/src/lib/palette.js`, `frontend/src/index.css`, the empty
+      `frontend/src/pages/`, and the unused `Placeholder` component in `Shell.jsx` — an earlier
+      catalogue UI with no importer in the app, scripts, docs or tests.
+    `frontend/src/legacy/*` is kept: the parity scripts (`npm run check:legacy`) still consume it.
+    Rebuilt with `npm run build:app`; the full probe suite is green.
