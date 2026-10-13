@@ -210,6 +210,7 @@ export default function Profile() {
             className="btn btn-ghost pressable"
             onClick={() => fileRef.current && fileRef.current.click()}
             disabled={busy}
+            data-guide="photo"
           >
             {t("profilePhoto")}
           </button>
@@ -255,7 +256,7 @@ export default function Profile() {
             <button type="button" role="tab" aria-selected={pane === "profile"} onClick={() => setPane("profile")}>
               {t("profileTabProfile")}
             </button>
-            <button type="button" role="tab" aria-selected={pane === "settings"} onClick={() => setPane("settings")}>
+            <button type="button" role="tab" aria-selected={pane === "settings"} onClick={() => setPane("settings")} data-guide="settings">
               {t("settings")}
             </button>
           </div>

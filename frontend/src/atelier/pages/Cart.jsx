@@ -72,7 +72,7 @@ export default function Cart() {
   }
 
   return (
-    <main className="wrap acct">
+    <main className="wrap acct" data-guide="cart">
       <header className="acct-head">
         <p className="eyebrow">Parfumerie Charme</p>
         <h1>{t("cart")}</h1>

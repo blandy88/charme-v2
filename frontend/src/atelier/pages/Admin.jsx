@@ -600,8 +600,18 @@ export default function Admin() {
     ["notes", at("tabNotes")],
   ];
 
+  /* data-guide hooks for the onboarding tours (see pages/guidesData.js).
+     The back-office root itself carries `data-guide="admin"`. */
+  const TAB_GUIDE = {
+    users: "admin-users",
+    loyalty: "loyalty-tab",
+    news: "news-tab",
+    hours: "hours-tab",
+    notes: "notes-tab",
+  };
+
   return (
-    <main className="wrap section admin-page">
+    <main className="wrap section admin-page" data-guide="admin">
       <header className="admin-head">
         <p className="eyebrow">Charme</p>
         <h1>{at("title")}</h1>
@@ -612,6 +622,7 @@ export default function Admin() {
           <button
             key={id}
             type="button"
+            data-guide={TAB_GUIDE[id]}
             role="tab"
             aria-selected={tab === id}
             className={`admin-tab pressable${tab === id ? " on" : ""}`}

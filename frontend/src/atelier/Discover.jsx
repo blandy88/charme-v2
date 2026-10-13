@@ -381,6 +381,7 @@ export default function Discover({ initialTab = "profiler", onClose }) {
             type="button"
             role="tab"
             aria-selected={tab === "profiler"}
+            data-guide="profiler"
             className={`dp-tab pressable${tab === "profiler" ? " on" : ""}`}
             onClick={() => setTab("profiler")}
           >
@@ -391,6 +392,7 @@ export default function Discover({ initialTab = "profiler", onClose }) {
             type="button"
             role="tab"
             aria-selected={tab === "ingredients"}
+            data-guide="ingredients"
             className={`dp-tab pressable${tab === "ingredients" ? " on" : ""}`}
             onClick={() => setTab("ingredients")}
           >

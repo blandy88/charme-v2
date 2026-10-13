@@ -1,0 +1,299 @@
+/* Journeys & interactive guides — the index and the tour runner.
+ * The index is a card grid; the runner is a scrim, a spotlight ring on the
+ * live element, and one tooltip parked beside it.
+ */
+
+.gp-wrap {
+  --gp-range: 12rem;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.gp-title {
+  font-size: var(--step-3);
+}
+
+.gp-lede {
+  color: var(--text-2);
+  max-inline-size: 56ch;
+  text-wrap: pretty;
+  margin-bottom: var(--space-xs);
+}
+
+/* ---------- empty / gated state ---------- */
+
+.gp-empty {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-m);
+  max-inline-size: 46rem;
+}
+
+.gp-empty h2 {
+  font-size: var(--step-2);
+}
+
+.gp-empty p {
+  color: var(--text-2);
+  max-inline-size: 46ch;
+}
+
+.gp-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gp-empty-actions a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 1.05rem;
+  text-decoration: none;
+  font-size: var(--step-0);
+  cursor: pointer;
+}
+
+/* ---------- tabs ---------- */
+
+.gp-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  align-self: flex-start;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+}
+
+.gp-tab {
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.32rem 0.85rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.gp-tab.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* ---------- the card grid ---------- */
+
+.gp-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-s);
+  margin-top: var(--space-2xs);
+}
+
+.gp-card {
+  display: grid;
+  gap: 0.4rem;
+  padding: var(--space-s);
+  block-size: 100%;
+  align-content: start;
+  animation: gp-card-in var(--dur-slow) var(--ease-enter) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger-step));
+}
+
+@keyframes gp-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.gp-card-icon {
+  display: grid;
+  place-items: center;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline);
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+
+.gp-card.done .gp-card-icon {
+  background: var(--accent-quiet);
+  border-color: var(--accent);
+}
+
+.gp-card-title {
+  font-size: var(--step-1);
+}
+
+.gp-card-desc {
+  color: var(--text-2);
+  font-size: var(--step--1);
+  text-wrap: pretty;
+}
+
+.gp-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+  margin-top: var(--space-2xs);
+  padding-top: var(--space-2xs);
+  border-top: 1px solid var(--hairline);
+}
+
+.gp-card-steps {
+  font-size: var(--step--1);
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.gp-card-foot button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  font-size: var(--step--1);
+  cursor: pointer;
+}
+
+/* ---------- the tour runner ---------- */
+
+.gp {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+}
+
+.gp-scrim {
+  position: absolute;
+  inset: 0;
+  background: oklch(0% 0 0 / 0.6);
+  backdrop-filter: blur(2px);
+  animation: gp-fade var(--dur-fast) var(--ease-out) both;
+}
+
+@keyframes gp-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.gp-spot {
+  position: fixed;
+  z-index: 96;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--accent);
+  box-shadow:
+    0 0 0 2px oklch(from var(--accent) l c h / 0.35),
+    0 0 0 9999px oklch(0% 0 0 / 0);
+  pointer-events: none;
+  animation: gp-spot-in var(--dur-base) var(--ease-spring-snappy) both;
+}
+
+@keyframes gp-spot-in {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+}
+
+.gp-tip {
+  position: fixed;
+  z-index: 97;
+  display: grid;
+  gap: var(--space-2xs);
+  padding: var(--space-s);
+  max-inline-size: min(20rem, calc(100vw - 1.5rem));
+  animation: gp-tip-in var(--dur-base) var(--ease-spring-snappy) both;
+}
+
+@keyframes gp-tip-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.gp-tip-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+}
+
+.gp-count {
+  flex: none;
+  font-size: var(--step--1);
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.gp-step-title {
+  font-size: var(--step-1);
+}
+
+.gp-step-desc,
+.gp-missing {
+  color: var(--text-2);
+  font-size: var(--step-0);
+  text-wrap: pretty;
+}
+
+.gp-missing {
+  color: var(--warn-text);
+}
+
+.gp-tip-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+  flex-wrap: wrap;
+  margin-top: var(--space-3xs);
+}
+
+.gp-skip {
+  border: 0;
+  background: none;
+  color: var(--text-3);
+  font-size: var(--step--1);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.gp-skip:hover {
+  color: var(--accent);
+}
+
+.gp-nav {
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.gp-nav button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 0.8rem;
+  font-size: var(--step--1);
+  cursor: pointer;
+}
+
+.gp-nav button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* A tooltip parked at the bottom of the viewport must not run off it. */
+@media (max-width: 640px) {
+  .gp-tip {
+    max-inline-size: calc(100vw - 1.5rem);
+  }
+}

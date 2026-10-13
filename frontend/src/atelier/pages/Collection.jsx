@@ -171,7 +171,7 @@ export default function Collection() {
         </p>
       </header>
 
-      <div className="coll-tools">
+      <div className="coll-tools" data-guide="filters">
         <label className="coll-search">
           <span className="sr-only">{t("collSearch")}</span>
           <input
@@ -258,8 +258,8 @@ export default function Collection() {
         </div>
       ) : view === "grid" ? (
         <ul className="coll-grid">
-          {paged.map((p) => (
-            <li key={p.id} className="shelf-wrap">
+          {paged.map((p, i) => (
+            <li key={p.id} className="shelf-wrap" data-guide={i === 0 ? "card" : undefined}>
               <Link to={`/collection/${encodeURIComponent(p.id)}`} className="shelf pressable">
                 <div className="shelf-media">
                   {p.image ? (
@@ -336,7 +336,7 @@ export default function Collection() {
       )}
 
       {shown.length > 0 && pages > 1 ? (
-        <nav className="coll-pager" aria-label={t("collPagination")}>
+        <nav className="coll-pager" data-guide="pager" aria-label={t("collPagination")}>
           <button
             type="button"
             className="pager-step pressable"

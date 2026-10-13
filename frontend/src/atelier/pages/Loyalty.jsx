@@ -83,12 +83,12 @@ export default function Loyalty() {
   };
 
   return (
-    <main className="wrap section ly">
+    <main className="wrap section ly" data-guide="loyalty">
       <p className="eyebrow">{t("loyalty")}</p>
       <h1 className="ly-title">{t("lyTitle")}</h1>
       <p className="ly-lede">{t("lyLede")}</p>
 
-      <section className="ly-card panel" aria-label={t("lyBalance")}>
+      <section className="ly-card panel" aria-label={t("lyBalance")} data-guide="loyalty-card">
         <div className="ly-card-top">
           <p className="eyebrow">{t("lyCardNumber")}</p>
           <p className="ly-number">{card.cardNumber || "—"}</p>
@@ -123,10 +123,10 @@ export default function Loyalty() {
       ) : null}
 
       <div className="ly-grid">
-        <section className="ly-block panel">
+        <section className="ly-block panel" data-guide="loyalty-history">
           <h2 className="ly-h2">{t("lyHistory")}</h2>
           {purchases.length ? (
-            <ul className="ly-rows">
+            <ul className="ly-rows" data-guide="loyalty-purchase">
               {purchases.map((p) => (
                 <li key={p.id} className="ly-row">
                   <span className="ly-mark" aria-hidden="true">{initials(p.perfume_name)}</span>

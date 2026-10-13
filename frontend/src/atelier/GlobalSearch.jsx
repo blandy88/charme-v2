@@ -101,7 +101,7 @@ export default function GlobalSearch() {
         <Search size={15} aria-hidden="true" />
       </button>
 
-      <form className="gs-field" role="search" onSubmit={go}>
+      <form className="gs-field" data-guide="search" role="search" onSubmit={go}>
         <Search size={15} aria-hidden="true" />
         <input
           ref={inputRef}

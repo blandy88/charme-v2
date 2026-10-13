@@ -58,12 +58,13 @@ badge, Cart icon + badge, **Scent Profiler icon**, Search-by-Ingredients button,
 input, language selector (EN/FR/AR), theme toggle, admin badge, user menu (Profile / Favorites /
 Cart / Settings / **Guest Notes · badge** / **Admin dashboard** / News admin / Logout).
 
-Atelier has: wordmark, Home / Collection / Guides / Contact / Loyalty (signed in), search
+Atelier has: wordmark, Home / Collection / Contact / Loyalty (signed in), search
 (+ AI finder tab), **discovery button** (compass — Scent Profiler + Ingredient Finder), lang
 select, theme, news link + unread badge, favourites, cart, account menu.
 The **Admin** entry now lives in the account menu (`Administration & outils`), which is where the
-legacy kept it and which keeps an extra admin-only link out of the 1180px primary row (that link
-used to push the nav 63px past the viewport for signed-in admins between 1180–1245px).
+legacy kept it, and the admin-only **Guides** launcher (legacy `#guidesBtn`) sits beside it — the
+1180px primary row has no room for either (an extra link used to push the nav 63px past the
+viewport for signed-in admins between 1180–1245px).
 
 Still missing: guest-notes badge in the user menu, Fragrances/Profiles jump buttons. (The two
 finder icons the legacy had as separate nav buttons now share one compass button — see §3c.)
@@ -73,7 +74,7 @@ finder icons the legacy had as separate nav buttons now share one compass button
 | Route | Legacy reality | Atelier |
 | --- | --- | --- |
 | `/` | Homepage = chrome + 185 product sections + grid view | ✅ (fragrance list to be removed) |
-| `/guides` | **Admin-only** onboarding tour (`public/js/guides.js`, `GUIDES`, 3 languages) | ❌ Placeholder |
+| `/guides` | **Admin-only** onboarding tour (`public/js/guides.js`, `GUIDES`, 3 languages) | ✅ `/guides` (§3g) |
 | `/contact` | No page — "Contact" nav was `href="#"`; contact lived in footer + hero note form | ✅ `/contact` (§3e) |
 | `/loyalty` | Modal, admin-driven "5 points = 1 parfum offert" (customer view of own card) | ✅ `/loyalty` |
 | `/news` | Modal feed, admin-published | ✅ `/news` |
@@ -180,6 +181,51 @@ Verified by `probe-avatar.cjs` (33 checks): nothing uploads until confirm, the m
 actually leaves is a square `image/jpeg` named `avatar.jpg`, zoom/rotate/drag/reset all move the
 picture and stay clamped to the stage, cancel uploads nothing, and 320–1440px overflow.
 
+## 3g. Journeys & interactive guides (admin tour)
+
+`frontend/src/atelier/pages/Guides.jsx` + `guides.css`, with the data in
+`frontend/src/atelier/lib/guidesData.js`, on `/app/guides`.
+
+The legacy kept its tour engine (`public/js/guides.js`, 2,351 lines) behind an admin-only launcher
+(`#guidesBtn`), and this port keeps that shape: the launcher sits in the account menu's admin block
+(`Administration & outils`) rather than the primary nav — the nav has no room left before it
+overflows at ~1180px, the same reason the admin link lives there — a guest gets a sign-in gate, and
+a signed-in non-admin gets a plain explanation with somewhere to go. Ported behaviours:
+
+* **The index** — a filterable grid of guides (icon, title, description, step count, start/replay
+  button) under **five category tabs**: All, Discovery, Shop, Account, Back office.
+* **The runner** — a spotlight over the live target element with a padded border, a tooltip parked
+  beside it (`place: top|bottom|left|right`, each edge-clamped to the viewport), a step counter,
+  Back / Next / Finish / Skip, and a completion state that turns the card's button into **Replay**.
+* **The stepping** — steps are resolved against the DOM at display time, not at mount: a step whose
+  target is absent is skipped, and a step marked `opt: true` is skipped silently while a mandatory
+  one is shown with an "isn't on screen right now — open its panel and it will be waiting for you"
+  note instead of a spotlight (the legacy's missing-target branch).
+* **Keyboard** — `→` / `←` step, `Escape` closes; the page underneath is pinned (`overflow: hidden`).
+
+Steps target **`data-guide` hooks on the Atelier's own chrome** rather than the legacy's selectors
+(`.nav-link`, `#themeToggle`, `#aiFinderIcon`), since those do not exist here. Hooks currently
+present: `nav-links`, `account`, `discover`, `profiler`, `ingredients`, `theme`, `lang`, `search`,
+`news`, `favorites`, `cart`, `collection`'s `filters` / `card` / `pager`, the product's
+`pdp-sections` and `reviews`, the profile's `photo` / `settings`, the loyalty card's `loyalty` /
+`loyalty-card` / `loyalty-history` / `loyalty-purchase`, and the back office's `admin` /
+`admin-users` / `loyalty-tab` / `news-tab` / `hours-tab` / `notes-tab`. Steps pointing at hooks the
+current surface does not have degrade gracefully through the skip/announce branch above, so the
+tour stays on the rails either way.
+
+**Consolidation vs. the legacy.** The legacy shipped 16 guides / 91 steps; this port has **15 guides
+/ 33 steps**. The reduction is deliberate consolidation, not omission: the legacy's separate
+"browsing" and "profiler" guides folded into the Collection and Ingredient-Finder steps, and the
+standalone "reviews" guide folded into the product guide, since the Atelier already gathers those
+surfaces on the same route. Every legacy topic is still covered. Copy is EN/FR/AR.
+
+Verified by `probe-guides.cjs` (52 checks): the index and its five tabs, tab filtering, the tour
+opening with a real spotlight and an in-viewport tooltip, Next/Back/keyboard stepping, the counter
+reporting the guide's own step count, Finish marking the card replayable, Skip and Escape closing,
+the missing-element note, the non-admin gate and the guest sign-in gate, the admin-only account-menu
+entry, EN/FR/AR copy, and six widths from 320 to 1440px with no horizontal overflow (including the
+tour running at 320px).
+
 ## 4. Backend API surface (48) — usage in Atelier
 
 Covered: auth (login, register, verify-email, resend-verification), profile GET/PUT, settings
@@ -265,10 +311,6 @@ Done in the discovery increment:
      both surfaces; `lib/discoverI18n.js` holds EN/FR/AR copy with an English fallback.
    - Verified by `probe-discover.cjs` (60 checks incl. 320–1920px overflow).
 
-Still open (recorded, not dropped): avatar crop/zoom editor, the admin-only Guides tour
-(`/guides`), and a contact page. Each maps 1:1 to a legacy block above and can reuse the
-endpoints listed in §4.
-
 Done in the loyalty increment:
 
 9. **Carte Fidélité (customer)** — `pages/Loyalty.jsx` (+ `loyalty.css`) on `/app/loyalty`, behind
@@ -282,9 +324,6 @@ Done in the loyalty increment:
    the discovery button added had pushed the tools row 6px past the viewport — the band that
    previously overflowed for signed-in admins. The field is the one nav item with real slack.
    Verified by `probe-loyalty.cjs` (48 checks) with the overflow suite re-run after.
-
-Still open (recorded, not dropped): avatar crop/zoom editor and the admin-only Guides tour
-(`/guides`). Each maps 1:1 to a legacy block above and can reuse the endpoints listed in §4.
 
 Done in the contact increment:
 
@@ -304,4 +343,14 @@ Done in the avatar increment:
     centre-crop has nothing left to decide. Nothing is uploaded until you confirm. Verified by
     `probe-avatar.cjs` (33 checks incl. the actual multipart body).
 
-Still open (recorded, not dropped): the admin-only Guides tour (`/guides`).
+Done in the guides increment:
+
+12. **Journeys & interactive guides** — `pages/Guides.jsx` (+ `guides.css`) and
+    `lib/guidesData.js` on `/app/guides` (see §3g), replacing the placeholder. The legacy tour
+    engine ported to the Atelier's own `data-guide` chrome: a five-tab index over 15 guides, a
+    spotlight runner with a parked tooltip, Back/Next/Finish/Skip and keyboard stepping, silent
+    skipping of `opt` steps and an announced note for a mandatory step whose target is off-screen,
+    and a completion/Replay state. Admin-only, matching the legacy launcher: the account-menu entry
+    shows for administrators, non-admins get an explanation, guests a sign-in gate. Copy in EN/FR/AR.
+    Verified by `probe-guides.cjs` (52 checks incl. 320–1440px overflow with the tour open), with
+    `probe-overflow.cjs` and `probe-chrome.cjs` re-run after the nav link set changed.

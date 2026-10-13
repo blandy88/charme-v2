@@ -536,7 +536,7 @@ export default function Reviews({ product }) {
   const remaining = rows ? rows.length - shown : 0;
 
   return (
-    <section className="pdp-block rv" id="reviews">
+    <section className="pdp-block rv" id="reviews" data-guide="reviews">
       <div className="rv-head">
         <h2 className="pdp-h2">{t("rvTitle")}</h2>
         {stats ? (

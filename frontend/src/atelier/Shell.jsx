@@ -32,6 +32,7 @@ const loadAuth = () => import("./pages/Auth.jsx");
 const loadCart = () => import("./pages/Cart.jsx");
 const loadProfile = () => import("./pages/Profile.jsx");
 const loadLoyalty = () => import("./pages/Loyalty.jsx");
+const loadGuides = () => import("./pages/Guides.jsx");
 const loadContact = () => import("./pages/Contact.jsx");
 const loadNews = () => import("./pages/News.jsx");
 const loadAdmin = () => import("./pages/Admin.jsx");
@@ -44,6 +45,7 @@ const SPLIT_ROUTES = {
   "/cart": loadCart,
   "/profile": loadProfile,
   "/loyalty": loadLoyalty,
+  "/guides": loadGuides,
   "/contact": loadContact,
   "/news": loadNews,
   "/admin": loadAdmin,
@@ -94,6 +96,7 @@ const Auth = routed(loadAuth);
 const Cart = routed(loadCart);
 const Profile = routed(loadProfile);
 const Loyalty = routed(loadLoyalty);
+const Guides = routed(loadGuides);
 const Contact = routed(loadContact);
 const News = routed(loadNews);
 const Admin = routed(loadAdmin);
@@ -118,6 +121,7 @@ const warmFavorites = warm(loadFavorites);
 const warmCart = warm(loadCart);
 const warmProfile = warm(loadProfile);
 const warmLoyalty = warm(loadLoyalty);
+const warmGuides = warm(loadGuides);
 const warmContact = warm(loadContact);
 const warmNews = warm(loadNews);
 const warmAdmin = warm(loadAdmin);
@@ -150,10 +154,9 @@ function Nav({ onDiscover }) {
     <header className="nav">
       <div className="wrap nav-row">
         <Link to="/" className="wordmark">Charme</Link>
-        <nav className="nav-links" aria-label="Primary">
+        <nav className="nav-links" data-guide="nav-links" aria-label="Primary">
           <NavLink to="/" end className={link}>{t("home")}</NavLink>
           <NavLink to="/collection" className={link} onMouseEnter={warmCatalogue} onPointerDown={warmCatalogue} onFocus={warmCatalogue}>{t("collection")}</NavLink>
-          <NavLink to="/guides" className={link}>{t("guides")}</NavLink>
           <NavLink to="/contact" className={link} onMouseEnter={warmContact} onPointerDown={warmContact} onFocus={warmContact}>{t("contact")}</NavLink>
           {user ? <NavLink to="/loyalty" className={link} onMouseEnter={warmLoyalty} onPointerDown={warmLoyalty} onFocus={warmLoyalty}>{t("loyalty")}</NavLink> : null}
         </nav>
@@ -165,6 +168,7 @@ function Nav({ onDiscover }) {
             aria-label={t("discover")}
             title={t("discover")}
             className="tool-btn pressable"
+            data-guide="discover"
           >
             <Compass size={15} />
           </button>
@@ -173,16 +177,18 @@ function Nav({ onDiscover }) {
             onChange={(e) => setLang(e.target.value)}
             aria-label="Language"
             className="lang-select"
+            data-guide="lang"
           >
             <option value="fr">FR</option>
             <option value="en">EN</option>
             <option value="ar">AR</option>
           </select>
-          <button type="button" onClick={toggle} aria-label="Toggle theme" className="tool-btn pressable">
+          <button type="button" data-guide="theme" onClick={toggle} aria-label="Toggle theme" className="tool-btn pressable">
             {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
           </button>
           <Link
             to="/news"
+            data-guide="news"
             aria-label={t("news")}
             className="tool-btn pressable"
             onMouseEnter={warmNews}
@@ -193,6 +199,7 @@ function Nav({ onDiscover }) {
           </Link>
           <Link
             to="/favorites"
+            data-guide="favorites"
             aria-label={t("favorites")}
             className="tool-btn pressable"
             onMouseEnter={warmFavorites}
@@ -203,6 +210,7 @@ function Nav({ onDiscover }) {
           </Link>
           <Link
             to="/cart"
+            data-guide="cart"
             aria-label={t("cart")}
             className="tool-btn pressable"
             onMouseEnter={warmCart}
@@ -212,7 +220,7 @@ function Nav({ onDiscover }) {
             <ShoppingBag size={15} />{count > 0 ? <span className="count">{count}</span> : null}
           </Link>
           {user ? (
-            <div className="account-menu">
+            <div className="account-menu" data-guide="account">
               <button
                 type="button"
                 onClick={() => setMenu((m) => !m)}
@@ -241,6 +249,16 @@ function Nav({ onDiscover }) {
                         onFocus={warmAdmin}
                       >
                         {t("admin")}
+                      </Link>
+                      <Link
+                        to="/guides"
+                        className="admin-entry"
+                        onClick={() => setMenu(false)}
+                        onMouseEnter={warmGuides}
+                        onPointerDown={warmGuides}
+                        onFocus={warmGuides}
+                      >
+                        {t("guides")}
                       </Link>
                     </>
                   ) : null}
@@ -330,7 +348,7 @@ export default function Shell() {
                 <Route path="/cart" element={deferred(<Cart />)} />
                 <Route path="/profile" element={deferred(<Profile />)} />
                 <Route path="/favorites" element={deferred(<Favorites />)} />
-                <Route path="/guides" element={<Placeholder title={t("guides")} />} />
+                <Route path="/guides" element={deferred(<Guides />)} />
                 <Route path="/contact" element={deferred(<Contact />)} />
                 <Route path="/news" element={deferred(<News />)} />
                 <Route path="/loyalty" element={deferred(<Loyalty />)} />

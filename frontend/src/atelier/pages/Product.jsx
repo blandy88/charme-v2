@@ -154,7 +154,7 @@ export default function Product() {
         <span>{product.name}</span>
       </nav>
 
-      <div className="pdp-top">
+      <div className="pdp-top" data-guide="pdp-sections">
         <div className="pdp-media">
           {product.image ? (
             <img
