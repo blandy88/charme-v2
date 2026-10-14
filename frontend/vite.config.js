@@ -94,6 +94,23 @@ function catalogue() {
         );
       }
 
+      // --- curated artwork overrides -----------------------------------
+      // A hand-verified map id -> local file for references whose artwork had
+      // to be pinned by hand: re-sourced photographs, or files that the fuzzy
+      // stem matcher below would otherwise pair with the wrong bottle. Entries
+      // pointing at a file that no longer exists are ignored, so the map stays
+      // safe to keep around.
+      const overrides = (() => {
+        const file = path.resolve(repoRoot, "public/data/product-images.json");
+        const out = new Map();
+        if (!fs.existsSync(file)) return out;
+        for (const [id, rel] of Object.entries(JSON.parse(fs.readFileSync(file, "utf8")))) {
+          const clean = String(rel).replace(/^\//, "");
+          if (fs.existsSync(path.join(repoRoot, "public", clean))) out.set(id, `/${clean}`);
+        }
+        return out;
+      })();
+
       // --- local artwork, indexed once ---------------------------------
       const byStem = new Map();
       if (fs.existsSync(repoRoot)) {
@@ -142,16 +159,24 @@ function catalogue() {
 
         let image = null;
         let imageKind = null;
-        for (const v of variants(f)) {
-          if (byStem.has(v)) {
-            image = `/${byStem.get(v)}`;
-            imageKind = "local";
-            break;
+        // A pinned override wins outright: it is the curated, re-sourced file
+        // for this exact reference, so skip the fuzzy filename search.
+        const pinned = overrides.get(f.id || f.slug);
+        if (pinned) {
+          image = pinned;
+          imageKind = "local";
+        } else {
+          for (const v of variants(f)) {
+            if (byStem.has(v)) {
+              image = `/${byStem.get(v)}`;
+              imageKind = "local";
+              break;
+            }
           }
-        }
-        if (!image && home && home.image && /^https?:/.test(home.image)) {
-          image = home.image;
-          imageKind = "remote";
+          if (!image && home && home.image && /^https?:/.test(home.image)) {
+            image = home.image;
+            imageKind = "remote";
+          }
         }
         if (imageKind === "local") local++;
         else if (imageKind === "remote") remote++;
