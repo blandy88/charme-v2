@@ -5,6 +5,7 @@ node_modules/
 .env
 .env.local
 .env.*.local
+.jwt-secret
 
 # Logs
 npm-debug.log*
@@ -23,6 +24,7 @@ server.err
 .next/
 dist/
 build/
+public/app/
 
 # IDE/editor
 .vscode/

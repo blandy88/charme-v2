@@ -33,14 +33,31 @@ const slugify = (s) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-// index the images that actually exist at the site root
 const IMAGE_EXT = [".png", ".jpg", ".jpeg", ".webp", ".avif", ".svg"];
 const byStem = new Map();
-for (const f of fs.readdirSync(path.join(ROOT, "public"))) {
-  const ext = path.extname(f).toLowerCase();
-  if (!IMAGE_EXT.includes(ext)) continue;
-  byStem.set(path.basename(f, ext).toLowerCase(), f);
+
+/* Recursively walk public/ so images stored in subdirectories (public/images/,
+   public/media/, public/media/guides/ …) are discovered by stem, not just the
+   site root. */
+function walkImages(dir) {
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch (e) {
+    return;
+  }
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkImages(full);
+    } else if (entry.isFile()) {
+      const ext = path.extname(entry.name).toLowerCase();
+      if (!IMAGE_EXT.includes(ext)) continue;
+      byStem.set(path.basename(entry.name, ext).toLowerCase(), path.relative(ROOT, full));
+    }
+  }
 }
+walkImages(path.join(ROOT, "public"));
 
 // curated ids -> "/file.ext" (authoritative, see the header comment)
 let PINS = {};
