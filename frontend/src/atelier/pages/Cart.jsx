@@ -57,7 +57,7 @@ export default function Cart() {
   if (!lines.length) {
     return (
       <main className="wrap acct">
-        <header className="acct-head">
+        <header className="acct-head" data-guide="cart-head">
           <p className="eyebrow">Parfumerie Charme</p>
           <h1>{t("cart")}</h1>
         </header>
@@ -73,7 +73,7 @@ export default function Cart() {
 
   return (
     <main className="wrap acct" data-guide="cart">
-      <header className="acct-head">
+      <header className="acct-head" data-guide="cart-head">
         <p className="eyebrow">Parfumerie Charme</p>
         <h1>{t("cart")}</h1>
         <p className="acct-sub">
@@ -82,7 +82,7 @@ export default function Cart() {
       </header>
 
       <div className="cart-layout">
-        <ul className="cart-lines">
+        <ul className="cart-lines" data-guide="cart-items">
           {lines.map((l) => {
             const key = lineKey(l);
             const qty = Number(l.qty) || 1;
@@ -161,9 +161,9 @@ export default function Cart() {
           </div>
 
           {state === "sent" ? (
-            <p className="msg ok" style={{ marginTop: "var(--space-xs)" }}>{t("cartOrderSent")}</p>
+            <p className="msg ok" data-guide="cart-handoff-done" style={{ marginTop: "var(--space-xs)" }}>{t("cartOrderSent")}</p>
           ) : checkout ? (
-            <form onSubmit={send} style={{ marginTop: "var(--space-xs)" }}>
+            <form onSubmit={send} data-guide="cart-handoff-note" style={{ marginTop: "var(--space-xs)" }}>
               <p className="fld-hint" style={{ marginBottom: "0.6rem" }}>{t("cartOrderBody")}</p>
               <div className="fld-stack">
                 <div className="fld">
@@ -199,7 +199,7 @@ export default function Cart() {
                 </div>
               </div>
               {state === "failed" ? <p className="msg error" style={{ marginTop: "0.6rem" }}>{t("noteFail")}</p> : null}
-              <button type="submit" className="btn btn-accent pressable" disabled={state === "sending"}>
+              <button type="submit" className="btn btn-accent pressable" disabled={state === "sending"} data-guide="cart-send">
                 {state === "sending" ? t("noteSending") : t("cartOrderSend")}
               </button>
               <button type="button" className="btn btn-ghost pressable" onClick={() => setCheckout(false)}>

@@ -62,7 +62,7 @@ function NoteForm() {
   }
 
   return (
-    <form className="ct-note card" onSubmit={submit}>
+    <form className="ct-note card" onSubmit={submit} data-guide="contact-form">
       <p className="eyebrow">
         <MessageSquare size={13} aria-hidden="true" /> {t("noteEyebrow")}
       </p>
@@ -109,7 +109,7 @@ function Hours() {
   const rows = (config && Array.isArray(config.schedule) ? config.schedule : []).slice(0, 7);
 
   return (
-    <div className="ct-hours card">
+    <div className="ct-hours card" data-guide="contact-hours">
       <p className="eyebrow">
         <Clock size={13} aria-hidden="true" /> {t("hoursLabel")}
       </p>
@@ -182,7 +182,7 @@ function Details() {
 export default function Contact() {
   const { t } = useI18n();
   return (
-    <main className="wrap section ct">
+    <main className="wrap section ct" data-guide="contact-page">
       <p className="eyebrow">{t("contact")}</p>
       <h1 className="ct-title">{t("contactTitle")}</h1>
       <p className="ct-lede">{t("contactLede")}</p>

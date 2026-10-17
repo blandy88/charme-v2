@@ -160,12 +160,13 @@ export default function Auth() {
 
         <section className="acct-panel">
           {mode !== "verify" ? (
-            <div className="seg" role="tablist" aria-label={t("authTabLabel")}>
+            <div className="seg" role="tablist" aria-label={t("authTabLabel")} data-guide="auth-tabs">
               <button
                 type="button"
                 role="tab"
                 aria-selected={mode === "signin"}
                 onClick={() => switchMode("signin")}
+                data-guide="auth-tab-signin"
               >
                 {t("authTabSignIn")}
               </button>
@@ -174,6 +175,7 @@ export default function Auth() {
                 role="tab"
                 aria-selected={mode === "signup"}
                 onClick={() => switchMode("signup")}
+                data-guide="auth-tab-signup"
               >
                 {t("authTabSignUp")}
               </button>
@@ -197,6 +199,7 @@ export default function Auth() {
                   name="email"
                   autoComplete="email"
                   required
+                  data-guide="auth-email"
                   value={form.email}
                   onChange={set("email")}
                 />
@@ -212,6 +215,7 @@ export default function Auth() {
                     name="password"
                     autoComplete="current-password"
                     required
+                    data-guide="auth-password"
                     value={form.password}
                     onChange={set("password")}
                   />
@@ -226,15 +230,25 @@ export default function Auth() {
                   <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
                   <span>{t("authRemember")}</span>
                 </label>
-                <button type="button" className="forgot" onClick={() => setForgot((v) => !v)}>
+                <button
+                  type="button"
+                  className="forgot"
+                  data-guide="auth-forgot"
+                  onClick={() => setForgot((v) => !v)}
+                >
                   {t("authForgot")}
                 </button>
               </div>
 
-              {forgot ? <p className="msg">{t("authForgotNote")}</p> : null}
+              {forgot ? <p className="msg" data-guide="auth-forgot-note">{t("authForgotNote")}</p> : null}
 
               <div className="acct-actions">
-                <button type="submit" className="btn btn-accent pressable" disabled={busy}>
+                <button
+                  type="submit"
+                  className="btn btn-accent pressable"
+                  disabled={busy}
+                  data-guide="auth-submit"
+                >
                   {busy ? t("authWorking") : t("authSignInCta")}
                 </button>
                 <span className="spacer" />
@@ -287,6 +301,7 @@ export default function Auth() {
                   name="email"
                   autoComplete="email"
                   required
+                  data-guide="auth-signup-email"
                   value={form.email}
                   onChange={set("email")}
                 />
@@ -303,6 +318,7 @@ export default function Auth() {
                     autoComplete="new-password"
                     required
                     minLength={8}
+                    data-guide="auth-signup-password"
                     value={form.password}
                     onChange={set("password")}
                   />
@@ -314,7 +330,12 @@ export default function Auth() {
               </div>
 
               <div className="acct-actions">
-                <button type="submit" className="btn btn-accent pressable" disabled={busy}>
+                <button
+                  type="submit"
+                  className="btn btn-accent pressable"
+                  disabled={busy}
+                  data-guide="auth-signup-submit"
+                >
                   {busy ? t("authWorking") : t("authSignUpCta")}
                 </button>
                 <span className="spacer" />
@@ -333,7 +354,7 @@ export default function Auth() {
               {notice ? <p className="msg ok">{notice}</p> : null}
               {error ? <p className="msg error" role="alert">{error}</p> : null}
 
-              <div className="fld">
+              <div className="fld" data-guide="auth-code">
                 <label htmlFor="au-code">{t("authCode")}</label>
                 <input
                   id="au-code"
@@ -342,16 +363,22 @@ export default function Auth() {
                   autoComplete="one-time-code"
                   maxLength={6}
                   required
+                  data-guide="auth-code-input"
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                 />
               </div>
 
               <div className="acct-actions">
-                <button type="submit" className="btn btn-accent pressable" disabled={busy || code.length < 6}>
+                <button
+                  type="submit"
+                  className="btn btn-accent pressable"
+                  disabled={busy || code.length < 6}
+                  data-guide="auth-verify-submit"
+                >
                   {busy ? t("authWorking") : t("authVerifyCta")}
                 </button>
-                <button type="button" className="linkish" onClick={resend}>
+                <button type="button" className="linkish" onClick={resend} data-guide="auth-resend">
                   {t("authResend")}
                 </button>
               </div>
