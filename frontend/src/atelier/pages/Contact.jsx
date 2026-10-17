@@ -20,13 +20,19 @@ const DAY_KEYS = ["daySunday", "dayMonday", "dayTuesday", "dayWednesday", "dayTh
 const DEFAULT_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 /* Hours arrive as numbers (9, 9.5, 18.75) or "HH:MM" strings — the admin
-   console accepts both, so the formatter has to as well. */
+   console accepts both, so the formatter has to as well. The minute rounding
+   wraps too: rounding the total first means 18.999 becomes 19:00 rather than
+   the impossible "19:60" the customer would otherwise be shown. */
 function clock(value) {
   if (value === null || value === undefined || value === "") return null;
-  const total = typeof value === "number" ? value * 60 : Math.round(Number(String(value).split(":")[0]) * 60) + (Number(String(value).split(":")[1]) || 0);
+  const total =
+    typeof value === "number"
+      ? Math.round(value * 60)
+      : Math.round(Number(String(value).split(":")[0]) * 60) +
+        (Number(String(value).split(":")[1]) || 0);
   if (!Number.isFinite(total)) return null;
   const h = Math.floor(total / 60) % 24;
-  const m = Math.round(total % 60);
+  const m = total % 60;
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 

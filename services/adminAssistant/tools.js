@@ -34,12 +34,71 @@ const WRITE_KEYWORD =
   /\b(insert|update|delete|drop|alter|create|truncate|grant|revoke|copy|vacuum|analyze|attach|detach|pragma|call|execute|merge|reindex|cluster|refresh|notify|listen|unlisten|prepare|deallocate|begin|commit|rollback|savepoint|replace|into)\b/i;
 
 /*
+ * Functions that read fine but change the *session* rather than the data.
+ *
+ * `default_transaction_read_only` is a GUC, and SQL can set it for the whole
+ * connection: `select set_config('default_transaction_read_only','off',false)`
+ * was observed succeeding on the assistant's read-only connection. db.readOnly()
+ * re-asserts the flag before every query, so the damage does not persist - but
+ * a query that can reconfigure the guard has no place in a shop report, so the
+ * whole family is refused rather than relying on the reset. `lo_import` reads
+ * a server-side file and `pg_terminate_backend` kills other people's queries;
+ * neither is something the assistant has any business doing.
+ */
+const SESSION_MUTATOR =
+  /\b(set_config|pg_reload_conf|pg_terminate_backend|pg_cancel_backend|lo_import|lo_export|dblink|pg_read_file|pg_ls_dir|copy_to|pg_backup_start)\s*\(/i;
+
+/*
  * Mask single-quoted string literals before the statement guards look at the
  * SQL. Without this, a perfectly good read is refused because a product is
  * called "Into the Night" or a promotion reads "Promo; buy one get one", and
  * - worse - a would-be attacker could hide a keyword inside a literal. The
  * mask keeps the quotes so a statement-break detector still sees real ones.
+ *
+ * Comments are removed FIRST, and that ordering is the security property, not
+ * a formatting preference. Masking quotes on the raw text let an attacker pair
+ * two apostrophes that were never in the same literal: one parked in a `--`
+ * comment and one later in the statement. The regex then treated everything
+ * between them as one big string literal and blanked it, so the guards read a
+ * copy with no semicolon, no write keyword and a leading SELECT - while the
+ * string actually handed to the database still carried the payload. Verified
+ * working exploit:
+ *
+ *   select 1) as a -- '
+ *   ; create temp table p(y int)
+ *   ; insert into p values (42)
+ *   ; -- '
+ *
+ * Once comments are gone there is nowhere left to hide a quote, so the masked
+ * copy and the executed string agree on where the literals are. `run()` also
+ * executes through db.readOnly(), which pins
+ * `default_transaction_read_only=on` on the connection - the filter is a
+ * usability guard, the database is the boundary.
  */
+function stripSqlComments(sql) {
+  let out = "";
+  let i = 0;
+  const s = String(sql);
+  while (i < s.length) {
+    if (s[i] === "-" && s[i + 1] === "-") {
+      while (i < s.length && s[i] !== "\n") i += 1;
+      continue;
+    }
+    if (s[i] === "/" && s[i + 1] === "*") {
+      i += 2;
+      while (i < s.length && !(s[i] === "*" && s[i + 1] === "/")) i += 1;
+      i += 2;
+      /* A comment separates tokens, so leave a space behind: otherwise an
+         identifier either side of it would be glued into a different one. */
+      out += " ";
+      continue;
+    }
+    out += s[i];
+    i += 1;
+  }
+  return out;
+}
+
 function maskLiterals(sql) {
   return String(sql).replace(/'(?:[^']|'')*'/g, (m) => `'${" ".repeat(m.length - 2)}'`);
 }
@@ -381,7 +440,9 @@ function createTools({ db, catalogue, adminId, lang }) {
         additionalProperties: false,
       },
       async handler(args) {
-        const sql = String(args.sql || "").trim().replace(/;\s*$/, "");
+        /* Comments are dropped before anything else looks at the text: see
+           stripSqlComments() for why the ordering is load-bearing. */
+        const sql = stripSqlComments(String(args.sql || "").trim()).trim().replace(/;\s*$/, "");
         /* The guards read the literal-masked copy, so a keyword or a semicolon
            inside a product name is just text - and the masked copy is also what
            an attacker would have to beat to sneak a write past the checks. */
@@ -398,15 +459,40 @@ function createTools({ db, catalogue, adminId, lang }) {
             error: "That statement contains a write keyword. Use the action tools for changes.",
           };
         }
+        if (SESSION_MUTATOR.test(guarded)) {
+          return {
+            ok: false,
+            error: "That query reconfigures the connection rather than reading data, which this tool cannot do.",
+          };
+        }
         /* Same masked copy: a news headline that merely mentions the column
            name is not a credential leak - a real reference to it still is. */
         if (SECRET_COLUMN.test(guarded)) {
           return { ok: false, error: "Columns holding credentials are not readable." };
         }
         /* Wrapping - rather than appending LIMIT - means a LIMIT buried in a
-           subquery cannot defeat the row cap. */
+           subquery cannot defeat the row cap. The read goes through
+           db.readOnly(), whose connection refuses writes outright, so a guard
+           we failed to anticipate cannot become a write. */
         const params = args.params || [];
-        const rows = await all(db, `SELECT * FROM (${sql}) AS assistant_query LIMIT ${MAX_QUERY_ROWS}`, params);
+        let rows;
+        try {
+          rows = typeof db.readOnly === "function"
+            ? await db.readOnly(`SELECT * FROM (${sql}) AS assistant_query LIMIT ${MAX_QUERY_ROWS}`, params)
+            : await all(db, `SELECT * FROM (${sql}) AS assistant_query LIMIT ${MAX_QUERY_ROWS}`, params);
+        } catch (e) {
+          /* A database error is an answer, not a crash. Left unhandled a
+             statement timeout (57014) or a read-only violation (25006)
+             rejects out of the handler and takes the process with it. */
+          const code = e && e.code;
+          if (code === "57014") {
+            return { ok: false, error: "That query ran too long and was cancelled (10s limit)." };
+          }
+          if (code === "25006") {
+            return { ok: false, error: "That statement tried to modify data, which this tool cannot do." };
+          }
+          return { ok: false, error: `The database rejected that query: ${(e && e.message) || "unknown error"}` };
+        }
         const capped = redactSecrets(rows.slice(0, MAX_QUERY_ROWS));
         let payload = JSON.stringify({ ok: true, rowCount: capped.length, rows: capped });
         if (payload.length > MAX_RESULT_CHARS) {
