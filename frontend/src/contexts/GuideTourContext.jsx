@@ -89,26 +89,35 @@ export function GuideTourProvider({ children }) {
     [navigate, location.pathname],
   );
 
-  const stop = useCallback((id, finished = false) => {
-    if (finished && id) {
-      setDone((prev) => {
-        if (prev.has(id)) return prev;
-        const next = new Set(prev);
-        next.add(id);
-        try {
-          window.localStorage.setItem(DONE_KEY, JSON.stringify([...next]));
-        } catch {
-          /* private mode: the tour still runs, it just forgets it was done */
-        }
-        return next;
-      });
-    }
-    setActive(null);
+  /* Remember that a guide has been seen. Lives here because the video player
+     needs it too, and `done` is read on the Guides page - which a tour that
+     navigates away from would otherwise have left stale. */
+const markDone = useCallback((id) => {
+    if (!id) return;
+    setDone((prev) => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      try {
+        window.localStorage.setItem(DONE_KEY, JSON.stringify([...next]));
+      } catch {
+        /* private mode: the film still plays, it just forgets it was seen */
+      }
+      return next;
+    });
   }, []);
 
+  const stop = useCallback(
+    (id, finished = false) => {
+      if (finished) markDone(id);
+      setActive(null);
+    },
+    [markDone],
+  );
+
   const value = useMemo(
-    () => ({ active, guide, done, start, stop }),
-    [active, guide, done, start, stop],
+    () => ({ active, guide, done, start, stop, markDone }),
+    [active, guide, done, start, stop, markDone],
   );
 
   return (
