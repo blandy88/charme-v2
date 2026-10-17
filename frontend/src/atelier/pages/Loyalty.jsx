@@ -25,8 +25,13 @@ export default function Loyalty() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
 
+  /* Clear the error at the start of every attempt. It used to be set and never
+     cleared, and the `if (error)` branch renders above `if (!data)`, so a
+     single 500 left the customer stuck on "we could not load your card" for
+     the rest of the session with no retry - even after data arrived. */
   const load = useCallback(() => {
-    api("/api/loyalty/me")
+    setError("");
+    return api("/api/loyalty/me")
       .then((d) => setData(d))
       .catch((e) => setError(e.message));
   }, []);

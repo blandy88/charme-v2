@@ -716,8 +716,13 @@ export default function AdminAssistant({ at, onMutated, lang }) {
           decision,
           lang,
         });
-        // Server confirmed: clear the pending action
-        setPending(null);
+        // Clear only the action that was actually answered. This stream is
+        // also how the agent asks for its NEXT approval: after approving a
+        // write it can immediately hit a second one, whose action_required
+        // event has already set `pending` by the time run() resolves. An
+        // unconditional setPending(null) one line later wiped it - the card
+        // flashed and vanished and the second write never happened.
+        setPending((p) => (p && p.id === action.id ? null : p));
         if (decision === "decline") {
           patchLast((m) => ({
             ...m,

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ChevronDown,
@@ -392,11 +392,32 @@ export default function Reviews({ product }) {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState(null);
 
-  const load = () => {
-    api(`/api/reviews/${encodeURIComponent(key)}`, { auth: false })
-      .then((d) => setRows(d && Array.isArray(d.reviews) ? d.reviews : []))
-      .catch(() => setRows([]));
+  /*
+   * Fetch reviews for `slug`, ignoring the result if `slug` is no longer the
+   * one on screen.
+   *
+   * Without the guard this was a straight race: the effect re-runs on every
+   * `key` change, so navigating product A -> B while A's request is in flight
+   * let A's response land last and render A's reviews, average and star
+   * breakdown underneath B's heading. It also wrote state after unmount. The
+   * sibling effect below already guards with an `alive` flag; this one did not.
+   */
+  const load = (slug) => {
+    const wanted = slug;
+    api(`/api/reviews/${encodeURIComponent(slug)}`, { auth: false })
+      .then((d) => {
+        if (wanted !== latest.current) return;
+        setRows(d && Array.isArray(d.reviews) ? d.reviews : []);
+      })
+      .catch(() => {
+        if (wanted !== latest.current) return;
+        setRows([]);
+      });
   };
+
+  /* The slug currently displayed; a response for anything else is stale. */
+  const latest = useRef(key);
+  latest.current = key;
 
   useEffect(() => {
     setRows(null);
@@ -406,7 +427,7 @@ export default function Reviews({ product }) {
     setNotice(null);
     setRating(0);
     setText("");
-    load();
+    load(key);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
