@@ -61,7 +61,14 @@ export default function Cart() {
           <p className="eyebrow">Parfumerie Charme</p>
           <h1>{t("cart")}</h1>
         </header>
-        <div className="empty" style={{ marginTop: "var(--space-l)" }}>
+        <div
+          className="empty"
+          /* Sending clears the basket, so the confirmation lands in this empty
+             state, not in the summary column. The guide hook has to be here or
+             it points at an element that cannot exist once the order is sent. */
+          data-guide={state === "sent" ? "cart-handoff-done" : undefined}
+          style={{ marginTop: "var(--space-l)" }}
+        >
           <ShoppingBag size={40} strokeWidth={1.4} aria-hidden="true" />
           <h2>{state === "sent" ? t("cartOrderSent") : t("cartEmpty")}</h2>
           <p>{state === "sent" ? t("cartOrderSentBody") : t("cartEmptyBody")}</p>
@@ -207,7 +214,7 @@ export default function Cart() {
               </button>
             </form>
           ) : (
-            <button type="button" className="btn btn-accent pressable" onClick={() => setCheckout(true)}>
+            <button type="button" className="btn btn-accent pressable" data-guide="cart-checkout" onClick={() => setCheckout(true)}>
               {t("cartCheckout")}
             </button>
           )}

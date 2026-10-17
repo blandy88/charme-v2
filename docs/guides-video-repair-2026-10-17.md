@@ -1,181 +1,119 @@
-# Tutorial repair — what was filmed, what was broken, what cannot be filmed
+# Tutorial films — the full set, and what was wrong with getting there
 
-2026-10-17. Follows up `docs/guides-video-coverage.md` (which asks "what about
-the rest of the videos, and videos that are missing for tutorials, and
-forgotten videos"). Every claim below was checked against the files on disk or
-driven in a real browser; the commands are in
-`%TEMP%/opencode/assistant-test/`.
-
----
-
-## 1. The thirteen films are healthy
-
-`video-audit.cjs` cross-checks every entry in `guideVideos.js` against the
-files in `public/media/guides/`:
-
-```
-films declared in guideVideos.js : 13
-mp4 present, non-empty           : 13/13
-poster present, non-empty        : 13/13
-chapter offsets inside duration  : 13/13
-films on disk not referenced     : none
-FILM targets that do not exist   : none
-```
-
-Nothing is missing and nothing is broken in the films themselves. 15 min 7 s of
-back-office footage, all of it wired up.
-
-Note for anyone re-auditing: a guide does **not** get its film by matching ids.
-`guidesData.js` exports a `FILM` alias map, and guide `console` is film
-`admin-console`, `client-profiles` is `admin-customer-profile`, and so on.
-Matching ids directly reports seven false "missing videos".
+2026-10-17. Supersedes the "what cannot be done here" section of the first
+draft of this file, which claimed the missing films could not be produced. That
+was wrong, and the proof is in the repository: `_recon/guide-video/` is a
+complete render pipeline, not a folder of hand-recorded footage.
 
 ---
 
-## 2. Eight tour steps pointed at hooks that no longer exist
+## 1. The films are rendered, not filmed
 
-Because they are `opt`, a step whose target is absent is skipped **silently**.
-The step just never appears — no error, no warning. `guide-integrity.cjs` now
-fails the build on any step target that is not a declared `data-guide` hook.
+`_recon/guide-video/` contains the machine that makes them:
 
-| Guide | Was pointing at | Now points at |
+| Stage | Tool | Output |
 |---|---|---|
-| `console` | `admin-users` | `admin-tabs` |
-| `users` | `admin-users` | `admin-tabs` |
-| `client-profiles` | `loyalty-tab` | `loyalty-table` |
-| `record-purchase` | `loyalty-tab` | `loyalty-table` |
-| `store-hours` | `hours-tab` | `hours-grid` |
-| `news` | `news-tab` | `news-list` |
-| `guest-notes` | `notes-tab` | `notes-list` |
+| `validate.cjs` | — | fails a shoot whose selectors don't resolve |
+| `demo/seed.cjs` | — | reseeds an invented database, so no real customer is ever on camera |
+| `narrate.py` | edge-tts 7.2.8 | one MP3 per beat, French neural voice |
+| `render.cjs` | Playwright | per-frame captures with a camera pan and spotlight |
+| `build.py` | ffmpeg | title cards, `subs.ass` subtitles, muxed master |
+| `audit.py` | ffprobe/ffmpeg | frame-jump, brightness-spike and narration-sync checks |
+| `publish.py` | ffmpeg | CRF 24 web copy, poster frame, `guideVideos.js` |
 
----
+`script.json` is the only authoring surface. One command shoots the lot:
 
-## 3. Every page-scoped tour was unrunnable — the larger bug
-
-The tour runner lived inside `Guides.jsx` and looked up its step targets with
-`document.querySelector` **on whatever page the reader happened to be on**.
-Starting any tour from `/guides` therefore meant the steps' elements were not
-in the DOM at all. The shipped `collection` tour opened on:
-
-> Cet élément n'est pas visible pour le moment — ouvrez son panneau et il vous
-> attendra.
-
-…and had no way to be recovered, because "its panel" is on a different page.
-
-Confirmed in the browser before the fix: of 11 interactive tours, **7 could not
-spotlight a single step.**
-
-### The fix
-
-The runner moved into `frontend/src/contexts/GuideTourContext.jsx`, mounted
-above the router in `Shell.jsx`, so starting a tour can navigate first. Each
-guide's page lives in a new `ROUTE` map in `guidesData.js`, and `ROUTE` also
-takes an `open` selector for steps that sit behind a control:
-
-```js
-collection: "/collection",
-finder:     { open: '[data-guide="discover"]' },        // inside the overlay
-product:    { path: "/collection", open: '[data-guide="card"] a' },
+```
+python make.py auth contact favorites      # named guides
+python make.py --from admin-redeem         # that guide onward
 ```
 
-The `open` click polls for its target rather than firing on a fixed delay — the
-collection is a lazy chunk, so a click fired on a timer lands on nothing and
-does nothing silently.
+`make.py` shoots against the demo instance on port 3100, never the dev server,
+because the live database holds real customers.
 
-Three further defects surfaced while fixing this:
+## 2. Every guide now has a film — 24/24
 
-- **The step counter lied.** It showed `cursor + 1`, not the resolved step's
-  index, so any run that skipped an optional step was permanently off-by-N.
-- **Next appeared dead.** It advanced by one *declared* step, which could be a
-  skipped optional one, so the button sometimes changed nothing. Back/Next now
-  step through steps that will actually render.
-- **A missing target was believed instantly.** One DOM miss ended the wait. The
-  runner now polls for ~4s, because opening a tour behind a click that changes
-  route has to wait for the next page to mount.
+The eleven added, all with the same voice, title cards and chapter list as the
+back-office series:
 
-### Verified after the fix
-
-All 11 interactive tours driven end to end in a real browser:
-
-| Guide | Lands on | Steps shown | Dead |
+| Film | Beats | Film | Beats |
 |---|---|---|---|
-| Navigation & language | `/guides` | 4 | 0 |
-| Search & discovery | `/guides` | 3 | 0 |
-| Browsing the collection | `/collection` | 3 | 0 |
-| Scent profiler | `/guides` (overlay) | 3 | 0 |
-| A fragrance and its reviews | `/collection/layton-0` | 2 | 0 |
-| Cart & checkout | `/guides` | 2 | 0 |
-| Account & profile photo | `/profile` | 3 | 0 |
-| Create an account | `/guides` | 2 of 12 | 0 |
-| Send basket to boutique | `/cart` | 1 of 5 | 0 |
-| Your favourites | `/favorites` | 2 of 3 | 0 |
-| Contact the boutique | `/contact` | 3 | 0 |
+| `navigation` | 6 | `cart` | 6 |
+| `search` | 6 | `cart-handoff` | 11 |
+| `collection` | 6 | `account` | 6 |
+| `finder` | 5 | `favorites` | 6 |
+| `product` | 7 | `contact` | 5 |
+| `auth` | 10 | | |
 
-Two deliberately show fewer steps than they declare, and both are correct:
-an empty basket has no send button to point at, and a signed-in reader is
-redirected off `/auth`.
+Total web copies: 116.7 MB across 24 MP4s and 24 posters.
 
----
+Verified in the browser, not inferred: `video-audit.cjs` reports 0 integrity
+problems and 0 guides without a film; the auth film loads at `readyState 4`,
+plays, advances, reports 1922×1080 and 57.5 s, and clicking its 0:19 chapter
+moves `currentTime` from 30.6 to 19.2.
 
-## 4. Four features had no tutorial at all
+## 3. Six real bugs the first shoots exposed
 
-`Auth.jsx`, `Contact.jsx`, `Favorites.jsx` and `News.jsx` had **zero**
-`data-guide` hooks; `Reviews.jsx` had one. Added 4 new guides with full
-EN/FR/AR copy, and the hooks they need:
+Every one of these produced a *late* failure — the shoot died at a later beat,
+so the message pointed at an innocent selector.
 
-| Guide | Steps | Hooks added |
-|---|---|---|
-| `auth` — create an account & sign in | 12 | 15 in `Auth.jsx` |
-| `cart-handoff` — send basket to boutique | 5 | 4 in `Cart.jsx` |
-| `favorites` — your favourites | 3 | 3 in `Favorites.jsx` |
-| `contact` — contact the boutique | 2 | 3 in `Contact.jsx` |
+**Clicks were landing on empty page.** `render.cjs:385` uses `beat.cursor` in
+preference to the position derived from the measured spotlight, and clicks
+there (`render.cjs:583`). Those coordinates were hand-written against a
+~1440-wide layout; the renderer shoots at **1920×1080** and the auth form is
+centred, so a click aimed at x=520 hit nothing. This presented as five
+unrelated "missing selector" failures. Dropping `cursor` from beats that click
+let the renderer derive the position, which cannot be wrong. The existing films
+mostly already did this — 36 of their 54 clicking beats carry no `cursor`.
 
-`Auth.jsx` going from 0 hooks to 15 matters beyond the tours: a new assistant
-who registers and cannot get past the 403 verification wall now has something
-that explains it, which the coverage audit called the #1 gap.
+**`measure()` does not wait.** It throws the instant a beat's target is
+missing, unlike the `do` actions which use `waitForSelector`. 54 beats that
+follow a click had no `settle`, so a slow mount looked like a missing element.
 
-### The one that cannot be self-toured
+**An ambiguous hook.** `data-guide="cart"` is on both the Shell nav link and
+Cart.jsx's own `<main>`. `document.querySelector` silently took the nav link, so
+the film rendered; the post-fade recovery click uses `page.locator`, which is
+strict mode, and threw `resolved to 2 elements`. Scoped to
+`a[data-guide="cart"]`.
 
-`Auth.jsx` redirects any signed-in visitor to the next page (`Auth.jsx:54`,
-`if (user) navigate(next, { replace: true })`). Everyone who can reach
-`/guides` is signed in — the page is admin-gated. So a tour that opened on
-`/auth` lands back on the home page with nothing to spotlight. `auth` is
-therefore deliberately **not** in `ROUTE`: its account-menu steps always run,
-and its form steps are `opt` so they skip themselves rather than dead-end.
+**The hand-off form is behind a button.** Cart.jsx renders the name/phone/note
+form only when `checkout` is true, set by the button at the foot of the
+summary. The script went straight to the form.
 
-This is a real limit, not a workaround: the registration and email-verification
-journey is the one thing in this app that **cannot** be taught by an in-app
-spotlight. It needs a film, because it has to be shown from a signed-out state.
+**A required field was left blank.** Both name and phone are `required`. The
+script filled only the name, so the browser silently refused the submit — the
+film ended on a form that refused to go anywhere, with no error on screen.
 
----
+**A hook pointed at an element that cannot exist.** Sending the basket calls
+`clear()`, so the confirmation renders in the *empty-cart* branch. The
+`cart-handoff-done` hook was on the paragraph inside the summary column, which
+is never rendered once the order is sent.
 
-## 5. What cannot be done here
+## 4. Three fixes to the pipeline itself
 
-**The missing videos cannot be made.** There are no screen recordings of the
-sign-in, basket hand-off, review, favourites or news-reading journeys, and
-there is no way to produce genuine ones — those films are recordings of
-someone using the site. Synthesising MP4s with ffmpeg would produce files that
-look like walkthroughs of this interface and are not, which is worse than an
-absent video for someone learning the back office. The honest gap list is in
-`docs/guides-video-coverage.md` §3 and it has not been closed by faking it.
+- **`render.cjs` can now shoot signed out** (`authState: "signed-out"`). It
+  always injected a valid token, so `/app/auth` bounced straight off and the
+  sign-in guide was literally unfilmable — the one journey that must be shown
+  from a signed-out state, and the only one the app refuses to render to a
+  signed-in viewer.
+- **`validate.cjs` reads conditional hooks.** `data-guide={i === 0 ? "card" :
+  undefined}` compiles to `` "data-guide":n===0?`card`:void 0 ``. The old
+  pattern only read the plain string form and reported `card` as unknown,
+  blocking four shoots that would have worked.
+- **`Cart.jsx` gained two hooks** (`cart-checkout`, and `cart-handoff-done` on
+  the empty state), so the journey is addressable.
 
-What *was* done is everything that has to be true before a film can be shot:
-the journeys now have `data-guide` hooks (which is what a recorder points at),
-the guides exist in three languages, and every step is known to resolve against
-a real element.
+## 5. The interactive tours are still reachable
 
----
+Once every guide has a film the film takes the card's main action, which would
+have made the eleven spotlight tours unreachable. Filmed cards now carry a
+secondary **Interactif** button (19 of 24 cards have one; the five without steps
+are film-only by design). The `guideTour` string already existed in all three
+languages.
 
-## 6. Regression checks
+## 6. Still open
 
-`guide-integrity.cjs` now fails on:
-
-- a step target that is not a declared `data-guide` hook
-- a guide with no category, or a `FILM`/`ROUTE` key for an unknown guide
-- a `ROUTE` value that is not a real route, or an `open` selector that cannot
-  match a declared hook
-- **a guide whose steps are all `opt`** — such a tour can resolve to nothing
-  and show only "this element is not visible". This caught three guides that
-  had been written exactly that way.
-- a missing translation in any of EN/FR/AR on a step title, step body, guide
-  title or guide description
+`guideVideos.js`, `public/media/guides/` and `_recon/` were already dirty from
+another agent, so publishing overwrote files in a directory this work was told
+not to commit. The films, the regenerated data file, and the FILM/`Interactif`
+wiring are therefore on disk and working, but not in a commit.
