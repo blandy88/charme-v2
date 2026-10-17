@@ -329,6 +329,16 @@ async function runAgent({ session, registry, send, signal, cfg }) {
     session.messages.push(message);
 
     if (!message.tool_calls || !message.tool_calls.length) {
+      /* Some gateways - free "openai" proxies in particular - lose the tool
+         channel after the first round trip and start *describing* the call in
+         prose instead of emitting it ("add_loyalty_points(card_number: ...)")
+         inside a fenced block. Nothing ran. Left alone that reads like a
+         success: the admin reads a tidy code block and has no way to know the
+         shop was never touched. Say it plainly instead. */
+      const narrated = narratedWriteCall(message.content, registry);
+      if (narrated) {
+        send({ type: "not_executed", tool: narrated });
+      }
       send({ type: "done" });
       return "done";
     }
@@ -343,8 +353,30 @@ async function runAgent({ session, registry, send, signal, cfg }) {
   return "limit";
 }
 
-/* --------------------------------------------------------------- mounting -- */
+/*
+ * Did the model describe a write in prose instead of requesting it?
+ *
+ * Only write tools count. A read tool written out as prose ("use
+ * query_database with SELECT ...") cost nothing and reads as helpful advice,
+ * so flagging it would cry wolf. A *write* written out as prose is the
+ * dangerous case: the administrator sees a precise-looking block naming the
+ * card and the points and reasonably assumes it was applied.
+ *
+ * Matches a write tool's name used as a call - `add_loyalty_points(` - or
+ * listed inside a fenced block, which is how these gateways spell it.
+ */
+function narratedWriteCall(content, registry) {
+  const text = String(content || "");
+  if (!text.trim()) return null;
+  for (const def of registry.list) {
+    if (def.risk !== "write") continue;
+    if (new RegExp(`\\b${def.name}\\s*\\(`).test(text)) return def.name;
+    if (new RegExp(`^\\s*${def.name}\\s*$`, "m").test(text)) return def.name;
+  }
+  return null;
+}
 
+/* --------------------------------------------------------------- mounting -- */
 module.exports = function mountAdminAssistant(app, deps) {
   const { db, authenticateToken, requireAdmin, root } = deps;
   if (!app || !db || !authenticateToken || !requireAdmin) {

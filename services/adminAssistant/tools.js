@@ -1251,7 +1251,7 @@ function createTools({ db, catalogue, adminId, lang }) {
     tool({
       name: "mark_guest_note_read",
       risk: "write",
-      description: "Mark one guest note as read.",
+      description: "Mark a guest note as read.",
       parameters: {
         type: "object",
         properties: { id: { type: "integer" } },
@@ -1259,8 +1259,9 @@ function createTools({ db, catalogue, adminId, lang }) {
         additionalProperties: false,
       },
       async handler(args) {
-        const { changes } = await run(db, "UPDATE guest_notes SET is_read = 1 WHERE id = ?", [args.id]);
-        if (!changes) return { ok: false, error: "No such note." };
+        const existing = await one(db, "SELECT id FROM guest_notes WHERE id = ?", [args.id]);
+        if (!existing) return { ok: false, error: "No such note." };
+        await run(db, "UPDATE guest_notes SET is_read = 1 WHERE id = ?", [args.id]);
         return { ok: true, id: args.id, is_read: true };
       },
     }),
@@ -1380,6 +1381,24 @@ function createTools({ db, catalogue, adminId, lang }) {
       typeof render === "function"
         ? render(args || {}, { threshold: LOYALTY_REWARD_THRESHOLD })
         : def.name;
+  }
+
+  /* A duplicate name is invisible in review (two blocks read fine) but the
+     provider receives two functions with the same name in one `tools` array,
+     where selection becomes ambiguous and the model often falls back to
+     narrating the action instead of calling it. Fail loudly at build time. */
+  {
+    const seen = new Set();
+    const dupes = new Set();
+    for (const def of tools) {
+      if (seen.has(def.name)) dupes.add(def.name);
+      seen.add(def.name);
+    }
+    if (dupes.size) {
+      throw new Error(
+        `adminAssistant: duplicate tool name(s): ${[...dupes].join(", ")}`,
+      );
+    }
   }
 
   return {

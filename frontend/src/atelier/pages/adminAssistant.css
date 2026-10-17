@@ -1,0 +1,896 @@
+/*
+ * Atelier — Charme Copilot (admin AI assistant dock).
+ *
+ * A floating admin-only assistant dock. Portaled to document.body so it escapes
+ * the admin page's animated stacking context.
+ *
+ * Design language: elevated glass panels, springy motion, tactile buttons,
+ * purposeful color (amber accent on deep charcoal). No flat gradients, no
+ * gratuitous shadows — depth comes from layering, blur, and subtle shadows.
+ */
+
+:root {
+  --copilot-z: 61;
+  --copilot-radius: 1rem;
+  --copilot-shadow: 0 12px 40px oklch(from var(--text-1) l c h / 0.35);
+  --copilot-dur: 0.28s;
+}
+
+/* ------------------------------------------------------------------- launcher */
+
+.copilot-fab {
+  position: fixed;
+  /* The storefront stacks its own fixed buttons at the inline-end edge
+     (.floating-cart at the bottom, .back-to-top one slot above it). The dock
+     button goes above both so it can never sit on top of the cart. */
+  inset-block-end: calc(clamp(0.9rem, 2vw, 1.5rem) + 8rem);
+  inset-inline-end: clamp(0.9rem, 2vw, 1.5rem);
+  z-index: var(--copilot-z);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 3rem;
+  block-size: 3rem;
+  padding: 0;
+  border: 1px solid oklch(from var(--accent) l c h / 0.45);
+  border-radius: var(--radius-pill);
+  background-color: var(--surface-1);
+  background-image: linear-gradient(var(--accent-quiet), var(--accent-quiet));
+  color: var(--accent);
+  box-shadow: var(--shadow-2);
+  cursor: pointer;
+  transition:
+    transform 180ms var(--ease-spring-snappy),
+    background-color 200ms var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+.copilot-fab:hover {
+  background-color: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+  box-shadow: 0 10px 30px oklch(from var(--accent) l c h / 0.35);
+  transform: translateY(-2px);
+}
+
+.copilot-fab:active {
+  transform: translateY(-1px) scale(0.96);
+  box-shadow: var(--shadow-1);
+}
+
+.copilot-fab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Approval waiting: small accent dot. One pending action max, so a dot. */
+.copilot-ping {
+  position: absolute;
+  inset-block-start: 0.25rem;
+  inset-inline-end: 0.25rem;
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  border-radius: var(--radius-pill);
+  background: var(--warn-text);
+  box-shadow: 0 0 0 2px var(--surface-1);
+  animation: copilot-ping-pulse 1.6s var(--ease-spring-gentle) infinite;
+}
+
+@keyframes copilot-ping-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.15); }
+}
+
+@keyframes copilot-dock-open {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes copilot-dock-close {
+  to {
+    opacity: 0;
+    transform: scale(0.92) translateY(8px);
+  }
+}
+
+/* ---------------------------------------------------------------- the panel */
+
+.copilot {
+  position: fixed;
+  inset-block-end: 1.25rem;
+  inset-inline-end: 1.25rem;
+  z-index: var(--copilot-z);
+  display: grid;
+  /* minmax(0, 1fr), not the implicit `auto`: an auto track is sized by the
+     items' *min-content*, and the header's (no-wrap brand + model + icon row)
+     is wider than the panel. That made the column overflow its own box and
+     `overflow: hidden` ate the right edge. Same reason every row below sets
+     min-inline-size: 0 - a grid item defaults to min-width: auto, which
+     refuses to shrink below its content. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  inline-size: min(24rem, calc(100vw - 2.5rem - var(--scrollbar-width, 0)));
+  /* Height follows the conversation up to a ceiling instead of always claiming
+     34rem: a three-line empty state used to leave ~20rem of blank panel. */
+  block-size: auto;
+  max-block-size: min(34rem, calc(100dvh - 2.5rem));
+  box-shadow:
+    0 1px 2px oklch(0% 0 0 / 0.06),
+    0 18px 48px oklch(0% 0 0 / 0.16);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-l);
+  background: var(--surface-1);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  animation: copilot-dock-open 220ms var(--ease-spring-snappy) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copilot {
+    animation: none;
+  }
+}
+
+@media (max-width: 460px) {
+  .copilot {
+    inset-inline: 0.5rem;
+    inset-block-end: 0.5rem;
+    inline-size: auto;
+    /* Same content-driven height as the desktop rule - pinning a fixed height
+       here left an empty half-panel above the composer. */
+    block-size: auto;
+    max-block-size: min(80dvh, 34rem);
+  }
+}
+
+.copilot-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  padding: 0.6rem 0.75rem;
+  border-block-end: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+
+.copilot-brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--accent);
+  font-size: var(--step--1);
+}
+
+.copilot-brand strong {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.copilot-sub {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-3);
+  font-size: 0.7rem;
+  text-align: end;
+}
+
+.copilot-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 0.15rem;
+}
+
+.copilot-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  transition:
+    background 200ms var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.copilot-icon:hover {
+  background: var(--surface-2);
+  border-color: var(--hairline-strong);
+  color: var(--text-1);
+}
+
+.copilot-icon:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- transcript */
+
+.copilot-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-inline-size: 0;
+  min-height: 0;
+  padding: 0.85rem;
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+.copilot-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-inline-size: 100%;
+  animation: copilot-slide-up 240ms var(--ease-out) both;
+}
+
+@keyframes copilot-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.copilot-msg.from-user {
+  align-items: flex-end;
+}
+
+.copilot-msg.from-ai {
+  align-items: flex-start;
+}
+
+.copilot-bubble {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+  color: var(--text-1);
+  overflow-wrap: anywhere;
+}
+
+.copilot-msg.from-user .copilot-bubble {
+  background: var(--accent-quiet);
+  border-color: oklch(from var(--accent) l c h / 0.35);
+  border-start-end-radius: var(--radius-s);
+}
+
+.copilot-msg.from-ai .copilot-bubble {
+  border-start-start-radius: var(--radius-s);
+}
+
+.copilot-bubble > :first-child {
+  margin-block-start: 0;
+}
+
+.copilot-bubble > :last-child {
+  margin-block-end: 0;
+}
+
+.copilot-bubble p {
+  margin-block: 0.35rem;
+}
+
+.copilot-bubble ul {
+  margin-block: 0.35rem;
+  padding-inline-start: 1.1rem;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.copilot-bubble code {
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  background: var(--surface-0);
+  font-size: 0.85em;
+}
+
+.copilot-bubble ul.copilot-ol {
+  list-style: decimal;
+}
+
+/* Typing shimmer while the model is between tool calls. */
+.copilot-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  inline-size: max-content;
+}
+
+.copilot-dot {
+  inline-size: 0.36rem;
+  block-size: 0.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  opacity: 0.35;
+  animation: copilot-pulse 1.15s var(--ease-spring-gentle) infinite;
+}
+
+.copilot-dot:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.copilot-dot:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+@keyframes copilot-pulse {
+  from { opacity: 0.25; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copilot-dot,
+  .copilot-spin,
+  .copilot-step,
+  .copilot-action,
+  .copilot-bubble {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ------------------------------------------------------------- tool activity */
+
+.copilot-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-inline-start: 0.15rem;
+}
+
+.copilot-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-3);
+  font-size: 0.7rem;
+  animation: copilot-step-in 200ms var(--ease-out) both;
+}
+
+@keyframes copilot-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.copilot-step.is-write {
+  color: var(--text-2);
+}
+
+.copilot-step-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 0.95rem;
+  block-size: 0.95rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  color: var(--text-3);
+}
+
+.copilot-step.is-ok .copilot-step-icon {
+  color: var(--ok-text);
+}
+
+.copilot-step.is-error .copilot-step-icon,
+.copilot-step.is-declined .copilot-step-icon {
+  color: var(--warn-text);
+}
+
+.copilot-step.is-write .copilot-step-icon {
+  background: var(--accent-quiet);
+}
+
+.copilot-step-name {
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+.copilot-step-state {
+  color: var(--text-3);
+  opacity: 0.8;
+}
+
+.copilot-step-state::before {
+  content: "·";
+  margin-inline-end: 0.3rem;
+}
+
+.copilot-step-detail {
+  flex-basis: 100%;
+  color: var(--text-3);
+  font-size: 0.68rem;
+}
+
+.copilot-spin {
+  inline-size: 0.7rem;
+  block-size: 0.7rem;
+  border: 1.5px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: var(--radius-pill);
+  animation: copilot-spin 0.8s linear infinite;
+}
+
+@keyframes copilot-spin {
+  to { transform: rotate(1turn); }
+}
+
+/* --------------------------------------------------------- approval + notices */
+
+.copilot-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.7rem;
+  border-radius: var(--radius-m);
+  background: var(--accent-quiet);
+  border: 1px solid oklch(from var(--accent) l c h / 0.45);
+  animation: copilot-action-in 280ms var(--ease-spring-snappy) both;
+}
+
+@keyframes copilot-action-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.copilot-action p {
+  margin: 0;
+}
+
+.copilot-action strong {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.copilot-action-buttons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.copilot-action .btn-accent,
+.copilot-action .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.42rem 0.8rem;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.copilot-action .btn-accent {
+  background-color: var(--accent);
+  color: var(--on-accent);
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+}
+
+.copilot-action .btn-accent:hover {
+  box-shadow: 0 8px 24px oklch(from var(--accent) l c h / 0.28);
+}
+
+.copilot-action .btn-ghost {
+  background-color: transparent;
+  background-image: linear-gradient(var(--accent-quiet), var(--accent-quiet));
+  color: var(--text-1);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-s);
+}
+
+.copilot-action .btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 6px 18px oklch(from var(--accent) l c h / 0.12);
+}
+
+.copilot-setup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+  color: var(--warn-text);
+}
+
+.copilot-setup p {
+  margin: 0;
+  color: var(--text-2);
+}
+
+.copilot-setup strong {
+  color: var(--warn-text);
+}
+
+/* "The model described the change but never requested it - nothing was
+   written." Deliberately loud: it is the one case where the transcript looks
+   like it did something and did not. */
+.copilot-nothing {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid oklch(from var(--warn-text) l c h / 0.45);
+  border-radius: var(--radius-s);
+  background: oklch(from var(--warn-text) l c h / 0.1);
+  color: var(--text-1);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.copilot-nothing > svg {
+  flex: 0 0 auto;
+  margin-block-start: 0.1rem;
+  color: var(--warn-text);
+}
+
+.copilot-nothing code {
+  padding: 0.05rem 0.25rem;
+  border-radius: 4px;
+  background: var(--surface-0);
+  font-size: 0.9em;
+}
+
+.copilot-error {
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid oklch(from var(--warn-text) l c h / 0.4);
+  border-radius: var(--radius-s);
+  background: oklch(from var(--warn-text) l c h / 0.1);
+  color: var(--warn-text);
+  font-size: 0.72rem;
+}
+
+.copilot-muted {
+  margin: 0;
+  color: var(--text-3);
+}
+
+.copilot-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.copilot-intro .copilot-muted {
+  margin-block-end: 0.2rem;
+}
+
+/* Prompt suggestions: quiet rows that read as "try this", not form fields.
+   A filled background here made the empty state look like a settings form. */
+.copilot-intro button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  text-align: start;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  background: transparent;
+  background-image: none;
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--step--1);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.copilot-intro button > svg {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  color: var(--text-3);
+  opacity: 0;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+  transform: translateX(-2px);
+}
+
+.copilot-intro button:hover {
+  background-color: var(--surface-2);
+  color: var(--text-1);
+}
+
+.copilot-intro button:hover > svg {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--accent);
+}
+
+.copilot-intro button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+/* ------------------------------------------------------------- composer */
+
+.copilot-compose {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4rem;
+  min-inline-size: 0;
+  padding: 0.6rem 0.7rem;
+  border-block-start: 1px solid var(--hairline);
+  background: var(--surface-1);
+}
+
+.copilot-input {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  resize: none;
+  max-block-size: 8rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-s);
+  background: var(--surface-0);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--step--1);
+  line-height: 1.4;
+}
+
+.copilot-input::placeholder {
+  color: var(--text-3);
+}
+
+/* The composer takes focus automatically when the dock opens, so its focus
+   ring is on screen more often than not. A hard 2px accent outline shouted
+   over the whole panel; a tinted border plus a soft halo reads as focused
+   without becoming the loudest thing in the dock. */
+.copilot-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-quiet);
+}
+
+.copilot-input:disabled {
+  opacity: 0.55;
+}
+
+.copilot-send {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border-radius: var(--radius-s);
+  cursor: pointer;
+}
+
+.copilot-send:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.copilot-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  padding: 0 0.7rem 0.55rem;
+  background: var(--surface-1);
+}
+
+.copilot-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--text-3);
+  font-size: 0.68rem;
+}
+
+.copilot-hint svg {
+  flex: 0 0 auto;
+  color: var(--ok-text);
+}
+
+/* ------------------------------------------------- pressable hit-area repair */
+
+/*
+ * `.pressable` enlarges its tap target with a `::before` at inset:-0.4rem
+ * (~6.4px on every side) so touch users get a bigger target than the painted
+ * box. That is right for full-bleed buttons on a storefront and wrong inside a
+ * 384px control panel, where the rows are packed tighter than 12.8px:
+ *
+ *   .copilot-actions  gap 0.15rem -> the gear/trash/close boxes overlapped
+ *   .copilot-intro    gap 0.4rem  -> adjacent suggestions collided
+ *   .copilot-keyrow   gap 0.3rem  -> the reveal-key button sat on the field
+ *
+ * A click in the gap then resolved to whichever box was painted last. Keep
+ * the spring transform (the part you can see) and drop the invisible
+ * inflation (the part that collides).
+ */
+.copilot .pressable::before {
+  content: none;
+}
+
+/* ------------------------------------------------------------------ settings */
+
+.copilot-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.75rem 0.7rem 0.35rem;
+}
+
+.copilot-settings-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+}
+
+.copilot-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  color: var(--text-3);
+}
+
+.copilot-field > span {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+}
+
+.copilot-field input,
+.copilot-field select {
+  inline-size: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-s);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font: inherit;
+  font-size: 0.74rem;
+}
+
+.copilot-field input:focus,
+.copilot-field select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.copilot-field small {
+  color: var(--text-3);
+  font-size: 0.62rem;
+  line-height: 1.3;
+}
+
+.copilot-keyrow {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.copilot-keyrow input {
+  flex: 1;
+  min-inline-size: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.copilot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--accent);
+  font-size: 0.62rem;
+  text-decoration: none;
+}
+
+.copilot-link:hover {
+  text-decoration: underline;
+}
+
+.copilot-advanced summary {
+  cursor: pointer;
+  color: var(--text-3);
+  font-size: 0.66rem;
+  padding: 0.15rem 0;
+}
+
+.copilot-advanced[open] summary {
+  color: var(--text-1);
+}
+
+.copilot-settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-block-start: 0.15rem;
+}
+
+.copilot-settings-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.copilot-test,
+.copilot-ok {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--radius-s);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.copilot-test.is-ok,
+.copilot-ok {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.copilot-test.is-bad {
+  background: rgba(220, 38, 38, 0.12);
+}
+
+.copilot-test em,
+.copilot-ok em {
+  font-style: normal;
+  color: var(--text-2);
+}
+
+.copilot-note {
+  color: var(--text-3);
+  font-size: 0.6rem;
+  line-height: 1.4;
+  margin: 0.1rem 0 0;
+}
