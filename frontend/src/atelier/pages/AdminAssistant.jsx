@@ -426,7 +426,7 @@ function SettingsView({ at, data, onSaved, onReset, onClose }) {
           {preset && !preset.needsKey
             ? at("assistantNoKeyNeeded")
             : draft.hasKey
-              ? `${at("assistantApiKeySaved")} (${draft.keyMasked || ""})`
+              ? `${at("assistantApiKeySaved")} (${draft.keyFingerprint || ""})`
               : at("assistantApiKeyRequired")}
         </small>
         {preset && preset.docs ? (

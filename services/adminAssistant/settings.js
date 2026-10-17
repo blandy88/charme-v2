@@ -18,6 +18,8 @@
 "use strict";
 
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 const { presetById, presetForBaseUrl, PRESETS } = require("./providers");
 
 const SETTING_KEY = "assistant_provider";
@@ -32,14 +34,119 @@ const DEFAULTS = {
   maxSteps: 8,
 };
 
-/* ------------------------------------------------------------ encrypt at rest */
+/* --------------------------------------------------------- endpoint hygiene -- */
 
+/*
+ * Presets that are *meant* to run on this machine. Ollama and LM Studio are
+ * local inference servers; blocking loopback for them would break the feature.
+ * They still get the "no credentials to private ranges" half of the check
+ * below, so they still cannot be pointed at the rest of the network.
+ */
+const LOCAL_HOST_PRESETS = new Set(["ollama", "lmstudio"]);
+
+/*
+ * Refuse an endpoint that would make the server fetch its own network.
+ *
+ * `baseUrl` is administrator-supplied and the assistant POSTs to it from the
+ * server, so without this the panel is an SSRF primitive: point it at
+ * http://127.0.0.1:5432 or a cloud metadata address and POST /api/admin/
+ * assistant/test will happily do it - and httpError() puts the first 400
+ * characters of the response body into the error the panel displays, so the
+ * internal answer comes straight back to the browser. Because http:// is
+ * allowed, the stored provider API key would also be sent to that host in
+ * cleartext.
+ *
+ * This checks the literal host only. It is a real block on the obvious
+ * targets (loopback, link-local metadata, RFC1918, bare IPs) and it is not a
+ * DNS-rebinding-proof SSRF defence - that needs resolution-time pinning at the
+ * fetch. Failing closed on the named ranges is still far better than nothing,
+ * and it is enforced at save time so a bad host never reaches a fetch.
+ */
+function checkEndpointHost(baseUrl, preset) {
+  let url;
+  try {
+    url = new URL(baseUrl);
+  } catch {
+    return "The endpoint URL could not be parsed.";
+  }
+  const host = String(url.hostname || "").toLowerCase().replace(/^\[|\]$/g, "");
+  const isLocalPreset = preset && LOCAL_HOST_PRESETS.has(preset.id);
+  const schemeOk = isLocalPreset ? true : url.protocol === "https:";
+
+  if (!schemeOk) {
+    return isLocalPreset
+      ? null
+      : "The endpoint must use https. Only a local provider (Ollama, LM Studio) may use http.";
+  }
+
+  const loopback =
+    host === "localhost" ||
+    host === "ip6-localhost" ||
+    /^127\./.test(host) ||
+    host === "::1" ||
+    /^0\.0\.0\.0$/.test(host);
+  const linkLocal =
+    host === "metadata.google.internal" ||
+    host.endsWith(".internal") ||
+    /^169\.254\./.test(host) ||
+    /^fe80:/.test(host);
+  const privateV4 = /^(10\.|192\.168\.|169\.254\.|127\.)/.test(host);
+  const privateV6 = /^(fc|fd)[0-9a-f]{2}:/.test(host) || /^::ffff:(10\.|192\.168\.|127\.)/.test(host);
+
+  if (!isLocalPreset && (loopback || linkLocal || privateV4 || privateV6)) {
+    return "The endpoint must be a public internet address (loopback, private and metadata addresses are not allowed).";
+  }
+  return null;
+}
+
+/* ------------------------------------------------------------ encrypt at rest */
 let cachedKey = null;
+
+/*
+ * The encryption key is derived from the same secret the server signs sessions
+ * with, resolved in the same order server.js uses: environment first, then the
+ * .jwt-secret file it persists.
+ *
+ * The previous version read only the environment variables and fell back to
+ * the literal "charme-assistant-key". server.js does not behave that way: with
+ * JWT_SECRET unset it loads (or creates) .jwt-secret and signs with that. The
+ * two therefore disagreed - the shop would be running on a real secret while
+ * the assistant encrypted the provider API key under a string published in the
+ * repository, so the ciphertext in store_settings would decrypt with a
+ * three-line script. Matching the resolution removes that whole failure mode.
+ */
+function activeSecret() {
+  const fromEnv = process.env.JWT_SECRET || process.env.SESSION_SECRET;
+  if (fromEnv && fromEnv.length >= 32) return fromEnv;
+  if (fromEnv) {
+    console.warn(
+      "[adminAssistant] JWT_SECRET is set but shorter than 32 characters; " +
+        "it is still used for key derivation so existing keys keep working.",
+    );
+  }
+  try {
+    /* server.js keeps this file next to the project root. */
+    const file = path.join(__dirname, "..", "..", ".jwt-secret");
+    const value = fs.readFileSync(file, "utf8").trim();
+    if (value) return value;
+  } catch {
+    /* no file - fall through to the ephemeral case below */
+  }
+  /* Ephemeral. Keys stored now cannot be read after a restart, which is the
+     correct failure: better an unreadable key than a readable one. The server
+     already logs a warning about the missing persistent secret. */
+  cachedKey = null;
+  const ephemeral = crypto.randomBytes(32).toString("hex");
+  console.warn(
+    "[adminAssistant] No persistent JWT_SECRET found - the stored provider key " +
+      "will not survive a restart. Set JWT_SECRET in the environment.",
+  );
+  return ephemeral;
+}
+
 function encKey() {
   if (cachedKey) return cachedKey;
-  const secret =
-    process.env.JWT_SECRET || process.env.SESSION_SECRET || "charme-assistant-key";
-  cachedKey = crypto.scryptSync(secret, "charme:assistant:keys", 32);
+  cachedKey = crypto.scryptSync(activeSecret(), "charme:assistant:keys", 32);
   return cachedKey;
 }
 
@@ -52,7 +159,11 @@ function encrypt(text) {
 }
 
 /* Returns "" rather than throwing: a key that cannot be read must not stop the
-   assistant from working with the .env fallback. */
+   assistant from working with the .env fallback. The reason is logged, though
+   - a rotated or missing secret used to be completely silent, and surfaced to
+   the administrator as the misleading "not configured yet, add a provider and
+   an API key", which sent them to the panel when the real cause was the
+   server no longer being able to read its own store. */
 function decrypt(payload) {
   try {
     const [iv, tag, body] = String(payload || "")
@@ -66,6 +177,12 @@ function decrypt(payload) {
     decipher.setAuthTag(Buffer.from(tag, "base64"));
     return Buffer.concat([decipher.update(Buffer.from(body, "base64")), decipher.final()]).toString("utf8");
   } catch (e) {
+    console.error(
+      "[adminAssistant] cannot decrypt the stored provider key (" +
+        e.message +
+        "). The JWT_SECRET changed, or the value was written under a different " +
+        "secret - re-enter the key in the assistant settings.",
+    );
     return "";
   }
 }
@@ -171,6 +288,8 @@ function sanitise(body, stored) {
   if (!/^https?:\/\//i.test(next.baseUrl)) {
     return { error: "The endpoint URL must start with http:// or https://." };
   }
+  const hostCheck = checkEndpointHost(next.baseUrl, preset);
+  if (hostCheck) return { error: hostCheck };
 
   if (!next.model) next.model = preset.models && preset.models.length ? preset.models[0] : "";
   if (next.model.length < LIMITS.model.min || next.model.length > LIMITS.model.max) {
@@ -243,7 +362,17 @@ function publicView(cfg) {
     configured: cfg.configured,
     source: cfg.source,
     hasKey: Boolean(cfg.apiKey),
-    keyMasked: cfg.apiKey ? `${cfg.apiKey.slice(0, 4)}${"•".repeat(8)}${cfg.apiKey.slice(-4)}` : "",
+    /*
+     * A fingerprint, not a mask. The old value was the key's first four and
+     * last four characters, which removes eight characters from the keyspace
+     * on every response and is the *whole* value for any short key - and it
+     * travelled through the browser, the panel's state and any screenshot an
+     * administrator took of it. `hasKey` already says whether a key is stored;
+     * this only lets the panel notice when the stored key has been replaced.
+     */
+    keyFingerprint: cfg.apiKey
+      ? crypto.createHash("sha256").update(cfg.apiKey).digest("hex").slice(0, 8)
+      : "",
     rewardThreshold: 5,
   };
 }

@@ -301,12 +301,39 @@ async function currentSchedule(db) {
   };
 }
 
-async function logLoyalty(db, card, pointsChange, type, description) {
-  await run(
-    db,
-    "INSERT INTO loyalty_transactions (card_id, user_id, points_change, type, description) VALUES (?, ?, ?, ?, ?)",
-    [card.id, card.user_id, pointsChange, type, description],
-  );
+async function logLoyalty(db, card, pointsChange, type, description, handle) {
+  const sql =
+    "INSERT INTO loyalty_transactions (card_id, user_id, points_change, type, description) VALUES (?, ?, ?, ?, ?)";
+  if (handle && typeof handle.raw === "function") {
+    await handle.raw(sql, [card.id, card.user_id, pointsChange, type, description]);
+    return;
+  }
+  await run(db, sql, [card.id, card.user_id, pointsChange, type, description]);
+}
+
+/*
+ * Run `fn` inside a real transaction when the driver supports one.
+ *
+ * A points balance and the ledger row explaining it have to land together. If
+ * the balance moves and the insert then fails on a foreign key or a dropped
+ * connection, the customer holds points that the history says they never
+ * earned - and the ledger no longer reconciles with the card.
+ *
+ * `q` is the query handle handed to `fn`: the transaction scope when there is
+ * one, otherwise a thin promise-shaped wrapper over the sqlite-style
+ * callback API so the same call sites work either way.
+ */
+async function inTransaction(db, fn) {
+  if (typeof db.transaction !== "function") {
+    const shim = {
+      all: (sql, params) => all(db, sql, params),
+      get: (sql, params) => one(db, sql, params),
+      run: (sql, params) => run(db, sql, params),
+      raw: (sql, params) => run(db, sql, params),
+    };
+    return fn(shim);
+  }
+  return db.transaction(fn);
 }
 
 async function generateCardNumber(db) {
@@ -972,19 +999,22 @@ function createTools({ db, catalogue, adminId, lang }) {
         if (!Number.isFinite(points) || points < 1 || points > 1000) {
           return { ok: false, error: "Points must be an integer between 1 and 1000." };
         }
-        await run(
-          db,
-          "UPDATE loyalty_cards SET points = points + ?, updated_at = datetime('now') WHERE id = ?",
-          [points, match.id],
-        );
-        await logLoyalty(
-          db,
-          match,
-          points,
-          "earn",
-          String(args.description || t.ledger.pointsAdded(points)).slice(0, 300),
-        );
-        const fresh = await one(db, "SELECT points FROM loyalty_cards WHERE id = ?", [match.id]);
+        /* Balance and ledger move together: see inTransaction(). */
+        const fresh = await inTransaction(db, async (q) => {
+          await q.run(
+            "UPDATE loyalty_cards SET points = points + ?, updated_at = datetime('now') WHERE id = ?",
+            [points, match.id],
+          );
+          await logLoyalty(
+            db,
+            match,
+            points,
+            "earn",
+            String(args.description || t.ledger.pointsAdded(points)).slice(0, 300),
+            q,
+          );
+          return q.get("SELECT points FROM loyalty_cards WHERE id = ?", [match.id]);
+        });
         return {
           ok: true,
           card: cardLabel(match),
@@ -1024,25 +1054,31 @@ function createTools({ db, catalogue, adminId, lang }) {
           return { ok: false, error: "Points must be an integer between 0 and 10000." };
         }
         const delta = target - (match.points || 0);
-        await run(
-          db,
-          "UPDATE loyalty_cards SET points = ?, updated_at = datetime('now') WHERE id = ?",
-          [target, match.id],
-        );
-        /* loyalty_transactions.type is constrained to ('earn', 'redeem') on both
-           engines, so a correction is logged as a signed 'earn' entry - exactly
-           what the admin screen writes for the same change. Logging a made-up
-           'adjust' type would fail the CHECK *after* the points had already
-           moved, leaving the card updated and the ledger silent. */
-        if (delta !== 0) {
-          await logLoyalty(
-            db,
-            match,
-            delta,
-            "earn",
-            String(args.description || t.ledger.pointsAdjust(delta)).slice(0, 300),
+        /* Balance and ledger move together, so a failure cannot leave the card
+           updated with a silent history.
+
+           loyalty_transactions.type is constrained to ('earn','redeem') on both
+           engines, so a correction is still logged as a signed 'earn' entry -
+           that part is a schema constraint, not a workaround. (The old reason
+           for it - that an 'adjust' row would fail its CHECK *after* the
+           points had already moved and leave the ledger silent - is gone now
+           that both statements share a transaction.) */
+        await inTransaction(db, async (q) => {
+          await q.run(
+            "UPDATE loyalty_cards SET points = ?, updated_at = datetime('now') WHERE id = ?",
+            [target, match.id],
           );
-        }
+          if (delta !== 0) {
+            await logLoyalty(
+              db,
+              match,
+              delta,
+              "earn",
+              String(args.description || t.ledger.pointsAdjust(delta)).slice(0, 300),
+              q,
+            );
+          }
+        });
         return { ok: true, card: cardLabel(match), from: match.points || 0, points: target, eligible: target >= LOYALTY_REWARD_THRESHOLD };
       },
     }),
@@ -1072,13 +1108,15 @@ function createTools({ db, catalogue, adminId, lang }) {
             error: `Not enough points (${match.points || 0}/${LOYALTY_REWARD_THRESHOLD} required).`,
           };
         }
-        await run(
-          db,
-          "UPDATE loyalty_cards SET points = points - ?, updated_at = datetime('now') WHERE id = ?",
-          [LOYALTY_REWARD_THRESHOLD, match.id],
-        );
-        await logLoyalty(db, match, -LOYALTY_REWARD_THRESHOLD, "redeem", t.ledger.reward());
-        const fresh = await one(db, "SELECT points FROM loyalty_cards WHERE id = ?", [match.id]);
+        /* Debit and its ledger row together, for the same reason. */
+        const fresh = await inTransaction(db, async (q) => {
+          await q.run(
+            "UPDATE loyalty_cards SET points = points - ?, updated_at = datetime('now') WHERE id = ?",
+            [LOYALTY_REWARD_THRESHOLD, match.id],
+          );
+          await logLoyalty(db, match, -LOYALTY_REWARD_THRESHOLD, "redeem", t.ledger.reward(), q);
+          return q.get("SELECT points FROM loyalty_cards WHERE id = ?", [match.id]);
+        });
         return { ok: true, card: cardLabel(match), points: fresh ? fresh.points : null };
       },
     }),
