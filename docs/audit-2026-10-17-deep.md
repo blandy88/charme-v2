@@ -123,15 +123,82 @@ worth recording so they are not "fixed" later:
   *closed* account popover. The detector did not skip inert elements.
 - `A 0x0` nav links on mobile are the collapsed drawer, hidden by design.
 
+## 8. A claim from an earlier report that did not survive checking
+
+An earlier audit recorded "~290 lines of verbatim-duplicated CSS in
+`chrome.css` (487-776 repeats 7-485)". Measured, that is wrong. `chrome.css` is
+792 lines and the search panel *is* defined twice — `.gs-field` at 19 and 501,
+`.gs-panel` at 69 and 549, `.gs-row` at 233 and 640, `.gs-thumb` at 248 and 673 —
+but the second block is an **override cascade, not a copy**, introduced under a
+comment reading "smoother, friendlier, clearer". The second `.gs-field` declares
+no `display`, `align-items` or `gap`; it depends on the first. `.gs-thumb` grows
+from 2.5rem to 2.6rem and gains `flex: none`. Deleting the earlier block would
+break the layout.
+
+So the duplication was left alone. `tests/dup-css.cjs` (exact matches) and
+`tests/dup-selectors.cjs` (repeated selectors) are in the repo so the next
+claim can be measured rather than repeated.
+
+## 9. Five different price formatters
+
+`catalog.formatPrice` (rounds), `Cart`'s local `money()` (rounds), `Loyalty`'s
+local `money()` (rounds but writes **"DT"** in capitals), and two raw
+`${price} dt` interpolations in `Product`'s size pills and `AdminLoyalty` that
+did not round at all. A stored `259.999` read **"259.999 dt"** in the back
+office and **"260 dt"** in the shop.
+
+`catalog.money()` is now the only one that adds a unit; every call site routes
+through it. `tests/price-check.cjs` checks ten inputs and greps the tree for the
+shapes that used to bypass it.
+
+## 10. Four dialogs claimed `aria-modal` and trapped nothing
+
+`Discover`, the admin `Modal`, `AvatarEditor` and the two `Guides` overlays all
+declared `aria-modal="true"`, which promises a screen reader that the page
+behind is inert. Nothing made that true of the keyboard: focus stayed on the
+button that opened the dialog, and closing left it on `<body>`, so the next Tab
+restarted at the top of the document.
+
+`lib/useDialogFocus.js` moves focus in, keeps Tab and Shift+Tab inside, and
+restores focus on close — but only if focus is still inside, because yanking it
+back after a deliberate move is worse than leaving it. Adopted in all four.
+
+`Discover` was left alone after the first attempt: it already holds a ref on its
+panel and focuses it, so adding a second one would have hijacked that ref.
+
+## 11. News CTA forced a full page load
+
+`resolveHref` rewrites `/contact` to `/app/contact`, then rendered it as
+`<a href>`. Every in-shop news CTA re-downloaded and re-parsed the bundle and
+threw away the router's state. Internal targets now render as `<Link>`;
+external ones stay real links, with `rel="noopener noreferrer"` and
+`target="_blank"` where applicable.
+
+---
+
+## Regression checks
+
+All twelve now live in `tests/` and run with one command:
+
+```
+node tests/run-all.cjs
+```
+
+They were previously stranded in a temp folder and hardcoded an absolute path to
+this checkout, so they only ran on the machine that wrote them; they now derive
+the repo from `__dirname`.
+
+---
+
 ## Still open
 
 Every file these fixes touch was already dirty from another agent — `db.js`,
 `server.js`, `chrome.css`, `tokens.css`, `guides.css`, `Admin.jsx`,
-`AdminLoyalty.jsx`, `Guides.jsx`, `Shell.jsx`, `guidesData.js`,
-`Favorites.jsx`, `public/media/guides/`, `_recon/`. The P0 in particular is
-fixed on disk but **not in git**.
+`AdminLoyalty.jsx`, `Guides.jsx`, `Shell.jsx`, `guidesData.js`, `Favorites.jsx`,
+`Collection.jsx`, `Product.jsx`, `Loyalty.jsx`, `Cart.jsx`, `News.jsx`,
+`public/media/guides/`, `_recon/`. The P0 in particular is fixed on disk but
+**not in git**.
 
-Known and untouched: the ~290 lines of verbatim-duplicated CSS in `chrome.css`
-(487-776 repeats 7-485), News rendering its CTA as `<a href>` so it full-reloads
-instead of routing, four different currency formatters, `role="tab"` pairing in
-`Discover`, and the assistant's admin-tool query bounds.
+Untouched and unverified: the assistant's admin-tool query bounds, `Discover`'s
+own tab pairing, the `--danger` tokens that exist only in `account.css` so the
+admin falls back to a hex literal, and the dead code noted in earlier audits.
