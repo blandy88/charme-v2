@@ -296,6 +296,22 @@
   cursor: not-allowed;
 }
 
+/* Row pager under a long table. The tabs stopped the section-level scroll;
+   this stops the table-level one. */
+.admin-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-block-start: 0.75rem;
+}
+
+.admin-pager-btns {
+  display: flex;
+  gap: 0.4rem;
+}
+
 .admin-progress {
   block-size: 4px;
   margin-block-start: 0.35rem;

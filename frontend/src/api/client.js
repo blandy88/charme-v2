@@ -130,3 +130,14 @@ export async function apiUpload(path, formData) {
 export function resetSessionFlag() {
   expiredHandled = false;
 }
+
+/*
+ * Streaming endpoints (the admin AI assistant) cannot use api(): they need the
+ * raw response body to read Server-Sent Events, and api() always buffers the
+ * response. They still need the same bearer token, so the header is exposed
+ * here rather than re-reading localStorage at the call site.
+ */
+export function authHeader() {
+  const token = getToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}

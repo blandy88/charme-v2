@@ -879,13 +879,18 @@ function createTools({ db, catalogue, adminId, lang }) {
         additionalProperties: false,
       },
       async handler(args) {
-        const target = await one(db, "SELECT id, is_admin, email FROM users WHERE id = ?", [args.user_id]);
+        const target = await one(db, "SELECT id, is_admin, is_banned, email FROM users WHERE id = ?", [args.user_id]);
         if (!target) return { ok: false, error: "User not found." };
         if (Number(target.id) === Number(adminId)) {
           return { ok: false, error: "You cannot ban your own account." };
         }
         if (target.is_admin) {
           return { ok: false, error: "Admin accounts cannot be banned." };
+        }
+        /* Re-banning would overwrite the original reason, timestamp and the
+           administrator who issued it - the audit trail of the first ban. */
+        if (target.is_banned) {
+          return { ok: false, error: "That account is already banned." };
         }
         await run(
           db,
@@ -1053,7 +1058,6 @@ function createTools({ db, catalogue, adminId, lang }) {
         if (!Number.isFinite(target) || target < 0 || target > 10000) {
           return { ok: false, error: "Points must be an integer between 0 and 10000." };
         }
-        const delta = target - (match.points || 0);
         /* Balance and ledger move together, so a failure cannot leave the card
            updated with a silent history.
 
@@ -1062,13 +1066,30 @@ function createTools({ db, catalogue, adminId, lang }) {
            that part is a schema constraint, not a workaround. (The old reason
            for it - that an 'adjust' row would fail its CHECK *after* the
            points had already moved and leave the ledger silent - is gone now
-           that both statements share a transaction.) */
-        await inTransaction(db, async (q) => {
-          await q.run(
-            "UPDATE loyalty_cards SET points = ?, updated_at = datetime('now') WHERE id = ?",
-            [target, match.id],
+           that both statements share a transaction.)
+
+           The delta is read INSIDE the transaction: deriving it from `match`
+           (a read done before the transaction) let two concurrent corrections
+           both log against the same old balance, so points != SUM(ledger). */
+        const result = await inTransaction(db, async (q) => {
+          const lock = db.dialect === "postgres" ? " FOR UPDATE" : "";
+          const current = await q.get(
+            `SELECT points FROM loyalty_cards WHERE id = ?${lock}`,
+            [match.id],
           );
+          const previous = Number(current && current.points) || 0;
+          const delta = target - previous;
           if (delta !== 0) {
+            // Relative write, not an absolute "points = target": SQLite has no
+            // FOR UPDATE lock, so a concurrent edit could otherwise clobber the
+            // balance while the ledger records a stale delta and break
+            // balance == SUM(ledger). points = points + delta is evaluated
+            // against the value committed at execution time, so both the
+            // balance and the ledger row move by the same delta regardless.
+            await q.run(
+              "UPDATE loyalty_cards SET points = points + ?, updated_at = datetime('now') WHERE id = ?",
+              [delta, match.id],
+            );
             await logLoyalty(
               db,
               match,
@@ -1078,8 +1099,10 @@ function createTools({ db, catalogue, adminId, lang }) {
               q,
             );
           }
+          const final = await q.get("SELECT points FROM loyalty_cards WHERE id = ?", [match.id]);
+          return { previous, points: Number(final && final.points) || 0 };
         });
-        return { ok: true, card: cardLabel(match), from: match.points || 0, points: target, eligible: target >= LOYALTY_REWARD_THRESHOLD };
+        return { ok: true, card: cardLabel(match), from: result.previous, points: result.points, eligible: result.points >= LOYALTY_REWARD_THRESHOLD };
       },
     }),
 
@@ -1108,16 +1131,23 @@ function createTools({ db, catalogue, adminId, lang }) {
             error: `Not enough points (${match.points || 0}/${LOYALTY_REWARD_THRESHOLD} required).`,
           };
         }
-        /* Debit and its ledger row together, for the same reason. */
+        /* Debit and its ledger row together, for the same reason. The
+           pre-check above is not a guard against a double submit: the
+           conditional UPDATE re-checks the balance at commit time so two
+           simultaneous calls cannot both hand out a free perfume. */
         const fresh = await inTransaction(db, async (q) => {
-          await q.run(
-            "UPDATE loyalty_cards SET points = points - ?, updated_at = datetime('now') WHERE id = ?",
-            [LOYALTY_REWARD_THRESHOLD, match.id],
+          const upd = await q.run(
+            "UPDATE loyalty_cards SET points = points - ?, updated_at = datetime('now') WHERE id = ? AND points >= ?",
+            [LOYALTY_REWARD_THRESHOLD, match.id, LOYALTY_REWARD_THRESHOLD],
           );
+          if (upd.changes === 0) return null;
           await logLoyalty(db, match, -LOYALTY_REWARD_THRESHOLD, "redeem", t.ledger.reward(), q);
           return q.get("SELECT points FROM loyalty_cards WHERE id = ?", [match.id]);
         });
-        return { ok: true, card: cardLabel(match), points: fresh ? fresh.points : null };
+        if (!fresh) {
+          return { ok: false, error: "Not enough points - the reward may already have been redeemed." };
+        }
+        return { ok: true, card: cardLabel(match), points: fresh.points };
       },
     }),
 

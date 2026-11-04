@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
-import { facets, formatPrice, initials, products as ALL } from "../lib/catalog.js";
+import { facets, initials, money, products as ALL } from "../lib/catalog.js";
 import { getLenis } from "../SmoothScroll.jsx";
 import "./collection.css";
 
@@ -257,7 +257,7 @@ export default function Collection() {
           <button type="button" onClick={clear}>{t("collClear")}</button>
         </div>
       ) : view === "grid" ? (
-        <ul className="coll-grid">
+        <ul className="coll-grid reveal-group">
           {paged.map((p, i) => (
             <li key={p.id} className="shelf-wrap" data-guide={i === 0 ? "card" : undefined}>
               <Link to={`/collection/${encodeURIComponent(p.id)}`} className="shelf pressable">
@@ -289,7 +289,7 @@ export default function Collection() {
                     {p.concentration ? ` · ${p.concentration}` : ""}
                   </p>
                   <p className="shelf-foot">
-                    {p.fromPrice != null ? <span className="shelf-price">{formatPrice(p.fromPrice)} dt</span> : null}
+                    {p.fromPrice != null ? <span className="shelf-price">{money(p.fromPrice)}</span> : null}
                     {p.available ? null : <span className="shelf-out">{t("pdOutOfStock")}</span>}
                   </p>
                 </div>
@@ -327,7 +327,7 @@ export default function Collection() {
                   <td>{p.family}</td>
                   <td>{p.perfumer || "—"}</td>
                   <td className="num">{p.year || "—"}</td>
-                  <td className="num">{p.fromPrice != null ? `${formatPrice(p.fromPrice)} dt` : "—"}</td>
+                  <td className="num">{money(p.fromPrice)}</td>
                 </tr>
               ))}
             </tbody>

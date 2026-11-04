@@ -37,6 +37,23 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.NODE_ENV || "development";
 
+/* Flipped by the loyalty-table migration once loyalty_transactions.purchase_id
+   is confirmed to exist. The ledger writer omits that column until then, so a
+   request that races the migration still records the point (only the optional
+   purchase link is missing) instead of failing with "no such column".
+   "Still records the point" was not good enough: an unlinked row can never be
+   reversed when its purchase is deleted. So admin purchase writes now WAIT for
+   the migration to settle. The timeout keeps a failed/skipped migration from
+   hanging those requests forever - in that case the flag stays false and the
+   legacy no-link behaviour takes over. */
+let loyaltyLedgerHasPurchaseId = false;
+let settleLoyaltyLedgerReady;
+const loyaltyLedgerReady = new Promise((resolve) => {
+  settleLoyaltyLedgerReady = resolve;
+});
+const loyaltyLedgerReadyTimeout = setTimeout(() => settleLoyaltyLedgerReady(), 8000);
+if (typeof loyaltyLedgerReadyTimeout.unref === "function") loyaltyLedgerReadyTimeout.unref();
+
 // Both Vercel and Render terminate TLS at their own edge proxy and forward the
 // request with an `X-Forwarded-For` header. express-rate-limit v7+ inspects
 // that header and, when `trust proxy` is left at its default (false), throws
@@ -553,6 +570,49 @@ console.log("🔄 Checking for required database migrations...");
       });
     };
 
+    /* Existing installations predate loyalty_transactions.purchase_id. The
+       CREATE TABLE above only covers fresh databases, so inspect the real
+       schema and add the column (and its index) when missing. PRAGMA is
+       translated to information_schema by the Postgres driver, so this same
+       check works on both engines. */
+    const ensureLoyaltyTransactionColumns = () => {
+      db.all("PRAGMA table_info(loyalty_transactions)", (err, columns) => {
+        if (err) {
+          console.error("❌ Loyalty ledger schema check failed:", err);
+          settleLoyaltyLedgerReady();
+          return;
+        }
+        const names = {};
+        (columns || []).forEach((col) => {
+          names[col.name] = true;
+        });
+        const indexLedgerPurchases = () => {
+          db.run(
+            "CREATE INDEX IF NOT EXISTS idx_loyalty_transactions_purchase_id ON loyalty_transactions(purchase_id)",
+            (idxErr) => {
+              if (idxErr) console.error("❌ Error creating loyalty purchase index:", idxErr);
+            },
+          );
+          loyaltyLedgerHasPurchaseId = true;
+          settleLoyaltyLedgerReady();
+        };
+        if (names.purchase_id) return indexLedgerPurchases();
+        db.run(
+          "ALTER TABLE loyalty_transactions ADD COLUMN purchase_id INTEGER",
+          (addErr) => {
+            // A second instance starting at the same time may have won the race.
+            if (addErr && !/duplicate column|already exists|column .* of relation/i.test(addErr.message || "")) {
+              console.error("❌ Error adding loyalty_transactions.purchase_id:", addErr);
+              settleLoyaltyLedgerReady();
+              return;
+            }
+            if (!addErr) console.log("✅ Added loyalty_transactions.purchase_id");
+            indexLedgerPurchases();
+          },
+        );
+      });
+    };
+
     const createLoyaltyTables = () => {
       db.run(
         `
@@ -588,18 +648,29 @@ console.log("🔄 Checking for required database migrations...");
                 points_change INTEGER NOT NULL,
                 type TEXT NOT NULL CHECK (type IN ('earn', 'redeem')),
                 description TEXT,
+                /* Links an "Achat" point to the purchase that earned it, so
+                   deleting that purchase can reverse exactly this point. NULL
+                   for manual additions, redemptions and legacy rows. */
+                purchase_id INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (card_id) REFERENCES loyalty_cards (id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         `,
         (createErr) => {
-          if (createErr)
+          if (createErr) {
             console.error(
               "❌ Error creating loyalty_transactions table:",
               createErr,
             );
-          else console.log("✅ Created loyalty_transactions table");
+            // No CREATE TABLE callback means the migration below never runs;
+            // release the writers rather than leaving them parked until the
+            // 8s fallback expires.
+            settleLoyaltyLedgerReady();
+          } else {
+            console.log("✅ Created loyalty_transactions table");
+            ensureLoyaltyTransactionColumns();
+          }
         },
       );
 
@@ -1132,6 +1203,11 @@ const staticMounts = [
   ["/css", path.join(PUBLIC_DIR, "css"), "7d"],
   ["/js", path.join(PUBLIC_DIR, "js"), "7d"],
   ["/assets", path.join(PUBLIC_DIR, "assets"), "7d"],
+  /* The loyalty card template the React card art paints into a canvas. The
+     legacy site never used /media, so this mount was missing and the card
+     silently fell back to its text-only panel on Render and local Express —
+     Vercel and GitHub Pages serve public/** directly, which hid the gap. */
+  ["/media", path.join(PUBLIC_DIR, "media"), "7d"],
   ["/uploads/fragrances", path.join(PUBLIC_DIR, "uploads", "fragrances"), "7d"],
   ["/images/notes", path.join(PUBLIC_DIR, "images", "notes"), "30d"],
   [
@@ -2401,6 +2477,34 @@ const requireAdmin = async (req, res, next) => {
   }
 };
 
+/* Bounded page size for the admin list endpoints.
+ *
+ * These queries had no LIMIT at all, so every row in the table was read into
+ * memory and serialised into one response on each page load. Measured on the
+ * demo data: GET /api/admin/loyalty returned 624 rows / 180 KB, and it grows
+ * with the shop's ledger and its customer list. It is the one endpoint where
+ * the cost is unbounded rather than merely untidy.
+ *
+ * `?limit=` and `?offset=` let a caller page through; the ceiling stops a
+ * caller asking for the whole table in a single request. With neither
+ * parameter the default is deliberately far above today's data, so the
+ * existing admin screens keep seeing everything they see today and lose
+ * nothing on upgrade. */
+const LIST_LIMIT_MAX = 1000;
+const LIST_LIMIT_DEFAULT = 500;
+
+function listLimit(req) {
+  const raw = Number.parseInt(req.query.limit, 10);
+  if (!Number.isFinite(raw) || raw <= 0) return LIST_LIMIT_DEFAULT;
+  return Math.min(raw, LIST_LIMIT_MAX);
+}
+
+function listOffset(req) {
+  const raw = Number.parseInt(req.query.offset, 10);
+  if (!Number.isFinite(raw) || raw <= 0) return 0;
+  return raw;
+}
+
 // FIX ISS-007: Added authenticateToken — user counts should not be public
 app.get("/api/stats/users", authenticateToken, async (req, res) => {
   try {
@@ -2455,7 +2559,9 @@ app.get(
                     created_at, last_login
                 FROM users
                 ORDER BY created_at DESC
+                LIMIT $1 OFFSET $2
             `,
+          [listLimit(req), listOffset(req)],
           (err, rows) => {
             if (err) reject(err);
             else resolve(rows);
@@ -2488,7 +2594,11 @@ app.get(
 
 // Search user profiles endpoint
 // FIX ISS-003: Added authenticateToken to prevent unauthenticated user enumeration
-app.get("/api/search/users", authenticateToken, async (req, res) => {
+// 🔍 SEARCH USERS — admin console only.
+// Same reason as /api/search/loyalty-profiles below: it walks the user table
+// and returns names, emails and phone numbers, so it is an administrator
+// lookup and not something a customer can page through.
+app.get("/api/search/users", authenticateToken, requireAdmin, async (req, res) => {
   try {
     const query = String(req.query.q || "").trim();
     if (query.length < 2 || query.length > 100) {
@@ -2662,6 +2772,17 @@ app.post(
 // 🎁 CARTE FIDÉLITÉ: Loyalty cards admin routes
 const LOYALTY_REWARD_THRESHOLD = 5;
 
+/* Business-rule failure raised from inside a transaction. The transaction
+   rolls back, and the outer handler maps it to the right HTTP status instead
+   of reporting every thrown error as a 500. */
+class LoyaltyHttpError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.name = "LoyaltyHttpError";
+    this.status = status;
+  }
+}
+
 function getLoyaltyCardByUserId(userId) {
   return new Promise((resolve, reject) => {
     db.get(
@@ -2682,68 +2803,186 @@ function getLoyaltyCardById(cardId) {
   });
 }
 
-function cardNumberExists(cardNumber) {
-  return new Promise((resolve, reject) => {
-    db.get(
-      "SELECT 1 AS found FROM loyalty_cards WHERE card_number = ?",
-      [cardNumber],
-      (err, row) => (err ? reject(err) : resolve(!!row)),
-    );
-  });
+/* A tiny read adapter: the same helper works against the shared connection
+   (callback API) and against a transaction scope (promise API). */
+function scopedGet(handle) {
+  if (handle && typeof handle.get === "function") {
+    return (sql, params) => handle.get(sql, params);
+  }
+  return (sql, params) =>
+    new Promise((resolve, reject) => {
+      db.get(sql, params || [], (err, row) => (err ? reject(err) : resolve(row)));
+    });
 }
 
-async function generateCardNumber() {
-  const count = await new Promise((resolve, reject) => {
-    db.get("SELECT COUNT(*) AS total FROM loyalty_cards", (err, row) =>
-      err ? reject(err) : resolve(row ? row.total : 0),
-    );
-  });
-  let sequence = count;
-  let number;
-  do {
+/* High-water mark for issued CH numbers.
+ *
+ * COUNT(*) was the original bug: deleting any card dropped the count below
+ * the highest issued number. MAX(id) fixed most of that but still recycles the
+ * number when the NEWEST card is deleted (live data: MAX(id)=667 while the
+ * sequence is already at 668). Both engines keep a monotonic counter that
+ * survives DELETE, so read that instead.
+ *
+ * The Postgres query goes through pg_sequences rather than selecting from the
+ * sequence relation directly: a missing/differently-named sequence would raise
+ * inside the caller's transaction and abort it ("current transaction is
+ * aborted"), turning a cosmetic fallback into a failed purchase. pg_sequences
+ * simply returns no row. SQLite tolerates a failed SELECT inside a
+ * transaction, and the try/catch covers the "table not created yet" case.
+ */
+async function highestIssuedCardSequence(handle) {
+  const get = scopedGet(handle);
+  try {
+    let row = null;
+    if (db.dialect === "postgres") {
+      row = await get(
+        "SELECT last_value AS n FROM pg_sequences WHERE schemaname = current_schema() AND sequencename = 'loyalty_cards_id_seq'",
+      );
+    } else if (db.dialect === "sqlite") {
+      row = await get("SELECT seq AS n FROM sqlite_sequence WHERE name = 'loyalty_cards'");
+    }
+    const n = Number(row && row.n);
+    if (Number.isFinite(n) && n > 0) return n;
+  } catch {
+    /* Fresh database, or a legacy install whose sequence is named differently. */
+  }
+  const fallback = await get("SELECT COALESCE(MAX(id), 0) AS n FROM loyalty_cards");
+  return Number(fallback && fallback.n) || 0;
+}
+
+async function generateCardNumber(handle) {
+  const get = scopedGet(handle);
+  let sequence = await highestIssuedCardSequence(handle);
+  for (;;) {
     sequence += 1;
-    number = "CH" + String(sequence).padStart(4, "0");
-  } while (await cardNumberExists(number));
-  return number;
+    const number = "CH" + String(sequence).padStart(4, "0");
+    const taken = await get(
+      "SELECT 1 AS found FROM loyalty_cards WHERE card_number = ?",
+      [number],
+    );
+    if (!taken) return number;
+  }
 }
 
-function insertLoyaltyCard({ userId, cardNumber, holderName, holderEmail, holderPhone }) {
+function insertLoyaltyCard({ userId, cardNumber, holderName, holderEmail, holderPhone }, handle) {
+  const sql =
+    "INSERT INTO loyalty_cards (user_id, holder_name, holder_email, holder_phone, card_number) VALUES (?, ?, ?, ?, ?)";
+  const params = [userId, holderName, holderEmail, holderPhone, cardNumber];
+  if (handle && typeof handle.run === "function") {
+    return (async () => {
+      const r = await handle.run(sql, params);
+      return handle.get("SELECT * FROM loyalty_cards WHERE id = ?", [r.lastID]);
+    })();
+  }
   return new Promise((resolve, reject) => {
-    const stmt = db.prepare(
-      "INSERT INTO loyalty_cards (user_id, holder_name, holder_email, holder_phone, card_number) VALUES (?, ?, ?, ?, ?)",
-    );
-    stmt.run(
-      [userId, holderName, holderEmail, holderPhone, cardNumber],
-      function (err) {
-        if (err) return reject(err);
-        getLoyaltyCardById(this.lastID).then(resolve, reject);
-      },
-    );
+    const stmt = db.prepare(sql);
+    stmt.run(params, function (err) {
+      if (err) return reject(err);
+      getLoyaltyCardById(this.lastID).then(resolve, reject);
+    });
     stmt.finalize();
   });
 }
 
-async function ensureLoyaltyCard(userId) {
-  let card = await getLoyaltyCardByUserId(userId);
-  if (!card) {
-    const cardNumber = await generateCardNumber();
-    card = await insertLoyaltyCard({
-      userId,
-      cardNumber,
-      holderName: null,
-      holderEmail: null,
-      holderPhone: null,
-    });
-  }
-  return card;
+/* DISTINCT error classes matter: a UNIQUE collision on the generated card
+   number is safe to retry, but any other database failure must surface. */
+function isCardNumberCollision(err) {
+  return /card_number|loyalty_cards_card_number_key/i.test(String(err && err.message));
+}
+function isUserCardCollision(err) {
+  return /loyalty_cards\.user_id|loyalty_cards_user_id_key|UNIQUE constraint failed: loyalty_cards\.user_id/i.test(
+    String(err && err.message),
+  );
 }
 
-function logLoyaltyTransaction(cardId, userId, pointsChange, type, description) {
-  return new Promise((resolve, reject) => {
-    const stmt = db.prepare(
-      "INSERT INTO loyalty_transactions (card_id, user_id, points_change, type, description) VALUES (?, ?, ?, ?, ?)",
+/* The same walk-in customer was repeatedly re-created as a brand new card
+   whenever an assistant typed their name instead of picking the existing
+   card. Match on phone (the shop's identifier), falling back to an exact
+   name match only for cards that have no phone, so two different people who
+   share a name are not merged or blocked. */
+async function findDuplicateWalkIn({ name, phone }, handle) {
+  const get = scopedGet(handle);
+  const p = String(phone || "").trim();
+  const n = String(name || "").trim();
+  if (p) {
+    const byPhone = await get(
+      `SELECT id, card_number, holder_name, holder_phone FROM loyalty_cards
+       WHERE holder_phone = ? AND user_id IS NULL ORDER BY id LIMIT 1`,
+      [p],
     );
-    stmt.run([cardId, userId, pointsChange, type, description], function (err) {
+    if (byPhone) return byPhone;
+  }
+  if (n) {
+    const byName = await get(
+      `SELECT id, card_number, holder_name, holder_phone FROM loyalty_cards
+       WHERE LOWER(TRIM(holder_name)) = LOWER(?)
+         AND COALESCE(TRIM(holder_phone), '') = ''
+         AND user_id IS NULL ORDER BY id LIMIT 1`,
+      [n],
+    );
+    if (byName) return byName;
+  }
+  return null;
+}
+
+function walkInDuplicateError(dup) {
+  return {
+    error: `Un client avec ces coordonnées possède déjà la carte ${dup.card_number || dup.id} (${(dup.holder_name || "").trim() || "sans nom"}). Sélectionnez cette carte pour enregistrer l'achat.`,
+    existingCardId: dup.id,
+    existingCardNumber: dup.card_number || null,
+  };
+}
+
+async function ensureLoyaltyCard(userId) {
+  const existing = await getLoyaltyCardByUserId(userId);
+  if (existing) return existing;
+  /* A second request can create the same account's card (or claim the same
+     generated CH number) while we are between the read and the insert. Retry
+     those two specific collisions instead of failing the whole request. */
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    try {
+      const cardNumber = await generateCardNumber();
+      return await insertLoyaltyCard({
+        userId,
+        cardNumber,
+        holderName: null,
+        holderEmail: null,
+        holderPhone: null,
+      });
+    } catch (err) {
+      const raced = await getLoyaltyCardByUserId(userId);
+      if (raced) return raced;
+      if (!isCardNumberCollision(err) && !isUserCardCollision(err)) throw err;
+      if (attempt === 4) throw err;
+    }
+  }
+}
+
+/*
+ * Record a movement in the loyalty ledger.
+ *
+ * `handle` exists so the insert can join an in-flight transaction (see
+ * db.transaction). A ledger row and the points balance it explains have to
+ * land together: if the balance moves and the insert then fails, the customer
+ * can redeem points the history says they never earned.
+ */
+function logLoyaltyTransaction(cardId, userId, pointsChange, type, description, handle, purchaseId) {
+  /* purchase_id is optional: it is only set for the point earned by a recorded
+     purchase, which is what lets DELETE /purchases/:id reverse exactly that
+     point. Older databases that have not yet run the migration simply omit it
+     rather than failing the whole write. */
+  const withLink = Boolean(purchaseId) && loyaltyLedgerHasPurchaseId;
+  const sql = withLink
+    ? "INSERT INTO loyalty_transactions (card_id, user_id, points_change, type, description, purchase_id) VALUES (?, ?, ?, ?, ?, ?)"
+    : "INSERT INTO loyalty_transactions (card_id, user_id, points_change, type, description) VALUES (?, ?, ?, ?, ?)";
+  const params = [cardId, userId, pointsChange, type, description];
+  if (withLink) params.push(purchaseId);
+  if (handle && typeof handle.raw === "function") {
+    return handle.raw(sql, params);
+  }
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare(sql);
+    stmt.run(params, function (err) {
       if (err) reject(err);
       else resolve(this.lastID);
     });
@@ -2766,7 +3005,9 @@ app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) 
             FROM loyalty_cards c
             LEFT JOIN users u ON u.id = c.user_id
             ORDER BY c.points DESC, c.id ASC
+            LIMIT $1 OFFSET $2
           `,
+        [listLimit(req), listOffset(req)],
         (err, rows) => (err ? reject(err) : resolve(rows)),
       );
     });
@@ -2778,7 +3019,9 @@ app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) 
             FROM users u
             WHERE u.id NOT IN (SELECT user_id FROM loyalty_cards WHERE user_id IS NOT NULL)
             ORDER BY u.first_name ASC
+            LIMIT $1 OFFSET $2
           `,
+        [listLimit(req), listOffset(req)],
         (err, rows) => (err ? reject(err) : resolve(rows)),
       );
     });
@@ -2839,20 +3082,20 @@ app.post("/api/admin/loyalty/add-points", authenticateToken, requireAdmin, async
     const card = await getLoyaltyCardById(cardId);
     if (!card) return res.status(404).json({ error: "Carte introuvable" });
 
-    const newPoints = (card.points || 0) + pts;
-
-    await new Promise((resolve, reject) => {
-      db.run(
+    // Balance + ledger must move together. If the ledger insert failed after the
+    // balance had moved, the customer could redeem points they never earned.
+    // Read the balance back INSIDE the transaction: a value computed from the
+    // pre-transaction read could be stale when two admins act at once.
+    const newPoints = await db.transaction(async (t) => {
+      const upd = await t.run(
         "UPDATE loyalty_cards SET points = points + ?, updated_at = datetime('now') WHERE id = ?",
         [pts, card.id],
-        function (err) {
-          if (err) reject(err);
-          else resolve();
-        },
       );
+      if (upd.changes === 0) throw new LoyaltyHttpError(404, "Carte introuvable");
+      await logLoyaltyTransaction(card.id, card.user_id, pts, "earn", `Ajout de ${pts} point(s)`, t);
+      const fresh = await t.get("SELECT points FROM loyalty_cards WHERE id = ?", [card.id]);
+      return Number(fresh && fresh.points) || 0;
     });
-
-    await logLoyaltyTransaction(card.id, card.user_id, pts, "earn", `Ajout de ${pts} point(s)`);
 
     res.json({
       success: true,
@@ -2865,6 +3108,9 @@ app.post("/api/admin/loyalty/add-points", authenticateToken, requireAdmin, async
       },
     });
   } catch (error) {
+    if (error instanceof LoyaltyHttpError) {
+      return res.status(error.status).json({ error: error.message });
+    }
     console.error("Add loyalty points error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -2884,32 +3130,45 @@ app.post("/api/admin/loyalty/redeem", authenticateToken, requireAdmin, async (re
       });
     }
 
-    const newPoints = (card.points || 0) - LOYALTY_REWARD_THRESHOLD;
-    await new Promise((resolve, reject) => {
-      db.run(
-        "UPDATE loyalty_cards SET points = ?, updated_at = datetime('now') WHERE id = ?",
-        [newPoints, card.id],
-        function (err) {
-          if (err) reject(err);
-          else resolve();
-        },
+    /* The pre-check above gives a friendly 400, but it is not a guard: two
+       rapid clicks (or two admins) both read the same balance and could each
+       hand out a free perfume for the same 5 points. The conditional UPDATE
+       below re-checks the balance at commit time, so only one can succeed. */
+    const newPoints = await db.transaction(async (t) => {
+      const upd = await t.run(
+        `UPDATE loyalty_cards SET points = points - ?, updated_at = datetime('now')
+         WHERE id = ? AND points >= ?`,
+        [LOYALTY_REWARD_THRESHOLD, card.id, LOYALTY_REWARD_THRESHOLD],
       );
+      if (upd.changes === 0) {
+        throw new LoyaltyHttpError(409, "Solde insuffisant : la récompense a déjà été accordée ou les points ont changé.");
+      }
+      await logLoyaltyTransaction(
+        card.id,
+        card.user_id,
+        -LOYALTY_REWARD_THRESHOLD,
+        "redeem",
+        `Parfum offert (${LOYALTY_REWARD_THRESHOLD} points)`,
+        t,
+      );
+      const fresh = await t.get("SELECT points FROM loyalty_cards WHERE id = ?", [card.id]);
+      return Number(fresh && fresh.points) || 0;
     });
-
-    await logLoyaltyTransaction(
-      card.id,
-      card.user_id,
-      -LOYALTY_REWARD_THRESHOLD,
-      "redeem",
-      `Parfum offert (${LOYALTY_REWARD_THRESHOLD} points)`,
-    );
 
     res.json({
       success: true,
       message: `Parfum offert : récompense accordée (${LOYALTY_REWARD_THRESHOLD} points déduits)`,
-      card: { cardId: card.id, userId: card.user_id, points: newPoints, eligible: false },
+      card: {
+        cardId: card.id,
+        userId: card.user_id,
+        points: newPoints,
+        eligible: newPoints >= LOYALTY_REWARD_THRESHOLD,
+      },
     });
   } catch (error) {
+    if (error instanceof LoyaltyHttpError) {
+      return res.status(error.status).json({ error: error.message });
+    }
     console.error("Redeem loyalty reward error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -2917,61 +3176,69 @@ app.post("/api/admin/loyalty/redeem", authenticateToken, requireAdmin, async (re
 
 app.post("/api/admin/loyalty/create", authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const { userId, name, email, phone } = req.body;
+    const { userId, name, email, phone, allowDuplicate } = req.body;
 
+    const holderName = String(name || "").trim();
+    const holderEmail = String(email || "").trim();
+    const holderPhone = String(phone || "").trim();
+    if (holderName.length > 120 || holderEmail.length > 200 || holderPhone.length > 40) {
+      return res.status(400).json({ error: "Les coordonnées du client sont trop longues" });
+    }
+
+    let linkedUserId = null;
     if (userId) {
       const target = await new Promise((resolve, reject) => {
-        db.get("SELECT id FROM users WHERE id = ?", [userId], (err, row) =>
+        db.get("SELECT id FROM users WHERE id = ?", [Number(userId)], (err, row) =>
           err ? reject(err) : resolve(row),
         );
       });
       if (!target) return res.status(404).json({ error: "User not found" });
 
-      const existing = await getLoyaltyCardByUserId(userId);
+      const existing = await getLoyaltyCardByUserId(Number(userId));
       if (existing) {
-        return res.status(400).json({ error: "Ce client possède déjà une carte" });
+        return res.status(400).json({
+          error: `Ce client possède déjà la carte ${existing.card_number || existing.id}`,
+        });
       }
-
-      const cardNumber = await generateCardNumber();
-      const card = await insertLoyaltyCard({
-        userId,
-        cardNumber,
-        holderName: null,
-        holderEmail: null,
-        holderPhone: null,
-      });
-      return res.json({
-        success: true,
-        message: "Carte fidélité créée",
-        card: {
-          cardId: card.id,
-          userId,
-          cardNumber: card.card_number,
-          points: card.points || 0,
-          eligible: false,
-        },
-      });
+      linkedUserId = Number(userId);
+    } else {
+      if (!holderName) return res.status(400).json({ error: "Le nom est requis" });
+      /* Creating a second card for the same walk-in used to be trivial:
+         retyping their phone produced a brand-new CH number. Point the admin
+         at the existing card instead. */
+      const dup = await findDuplicateWalkIn({ name: holderName, phone: holderPhone });
+      if (dup && !allowDuplicate) return res.status(409).json(walkInDuplicateError(dup));
     }
 
-    const holderName = String(name || "").trim();
-    if (!holderName) {
-      return res.status(400).json({ error: "Le nom est requis" });
+    let card;
+    let retries = 0;
+    for (;;) {
+      try {
+        card = await db.transaction(async (t) => {
+          const cardNumber = await generateCardNumber(t);
+          return insertLoyaltyCard(
+            linkedUserId !== null
+              ? { userId: linkedUserId, cardNumber, holderName: null, holderEmail: null, holderPhone: null }
+              : { userId: null, cardNumber, holderName, holderEmail, holderPhone },
+            t,
+          );
+        });
+        break;
+      } catch (err) {
+        if (isCardNumberCollision(err) && retries++ < 4) continue;
+        if (isUserCardCollision(err)) {
+          return res.status(400).json({ error: "Ce client possède déjà une carte" });
+        }
+        throw err;
+      }
     }
 
-    const cardNumber = await generateCardNumber();
-    const card = await insertLoyaltyCard({
-      userId: null,
-      cardNumber,
-      holderName,
-      holderEmail: String(email || "").trim(),
-      holderPhone: String(phone || "").trim(),
-    });
     res.json({
       success: true,
       message: "Carte fidélité créée",
       card: {
         cardId: card.id,
-        userId: null,
+        userId: linkedUserId,
         cardNumber: card.card_number,
         points: card.points || 0,
         eligible: false,
@@ -2993,26 +3260,19 @@ app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req
 
     const updates = [];
     const params = [];
+    let targetPoints = null;
 
-    // Update points if provided
+    // Update points if provided. The actual write is a *relative* delta
+    // computed inside the transaction (below), never an absolute "points = ?":
+    // an absolute write combined with the delta being read from a possibly
+    // stale row (SQLite has no FOR UPDATE lock) lets two concurrent edits
+    // interleave and break balance == SUM(ledger).
     if (points !== undefined) {
       const pts = Math.floor(Number(points));
       if (!Number.isInteger(pts) || pts < 0 || pts > 10000) {
         return res.status(400).json({ error: "Points must be an integer between 0 and 10000" });
       }
-      const diff = pts - (card.points || 0);
-      updates.push("points = ?");
-      params.push(pts);
-
-      if (diff !== 0) {
-        await logLoyaltyTransaction(
-          card.id,
-          card.user_id,
-          diff,
-          "earn",
-          diff > 0 ? `Modification : +${diff} point(s)` : `Modification : ${diff} point(s)`,
-        );
-      }
+      targetPoints = pts;
     }
 
     // Update holder_name if provided
@@ -3031,6 +3291,9 @@ app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req
     // Update card_number if provided
     if (cardNumber !== undefined) {
       const trimmed = String(cardNumber).trim();
+      if (trimmed.length > 40) {
+        return res.status(400).json({ error: "Le numéro de carte ne peut pas dépasser 40 caractères" });
+      }
       if (trimmed && trimmed !== card.card_number) {
         // Check uniqueness
         const exists = await new Promise((resolve, reject) => {
@@ -3044,8 +3307,13 @@ app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req
           return res.status(400).json({ error: "Ce numéro de carte est déjà utilisé" });
         }
       }
-      updates.push("card_number = ?");
-      params.push(trimmed || null);
+      /* A card must always have a number. An empty value used to overwrite
+         card_number with NULL (breaking the printed card); treat it as "no
+         change" instead so editing other fields cannot erase it. */
+      if (trimmed) {
+        updates.push("card_number = ?");
+        params.push(trimmed);
+      }
     }
 
     // Update holder_phone if provided
@@ -3058,26 +3326,63 @@ app.put("/api/admin/loyalty/update", authenticateToken, requireAdmin, async (req
       params.push(trimmed || null);
     }
 
-    if (updates.length === 0) {
+    if (updates.length === 0 && targetPoints === null) {
       return res.status(400).json({ error: "Aucun champ à modifier" });
     }
 
-    updates.push("updated_at = datetime('now')");
-    params.push(card.id);
-
-    await new Promise((resolve, reject) => {
-      db.run(
-        `UPDATE loyalty_cards SET ${updates.join(", ")} WHERE id = ?`,
-        params,
-        function (err) {
-          if (err) reject(err);
-          else resolve();
-        },
-      );
-    });
+    /* The balance change and the ledger row explaining it commit together or
+       not at all. FOR UPDATE (Postgres only) serialises concurrent edits of
+       the same card; SQLite serialises writers on its own. */
+    try {
+      await db.transaction(async (t) => {
+        let pointsDiff = 0;
+        const extraUpdates = [];
+        const extraParams = [];
+        if (targetPoints !== null) {
+          const lock = db.dialect === "postgres" ? " FOR UPDATE" : "";
+          const fresh = await t.get(`SELECT points FROM loyalty_cards WHERE id = ?${lock}`, [card.id]);
+          if (!fresh) throw new LoyaltyHttpError(404, "Carte introuvable");
+          pointsDiff = targetPoints - (Number(fresh.points) || 0);
+          if (pointsDiff !== 0) {
+            // Relative write: SQL evaluates points + delta against the value
+            // committed at execution time, so a concurrent edit cannot clobber
+            // the balance while the ledger still records a stale delta.
+            extraUpdates.push("points = points + ?");
+            extraParams.push(pointsDiff);
+          }
+        }
+        const allUpdates = [...updates, ...extraUpdates, "updated_at = datetime('now')"];
+        const allParams = [...params, ...extraParams, card.id];
+        await t.run(`UPDATE loyalty_cards SET ${allUpdates.join(", ")} WHERE id = ?`, allParams);
+        if (pointsDiff !== 0) {
+          await logLoyaltyTransaction(
+            card.id,
+            card.user_id,
+            pointsDiff,
+            "earn",
+            pointsDiff > 0
+              ? `Modification : +${pointsDiff} point(s)`
+              : `Modification : ${pointsDiff} point(s)`,
+            t,
+          );
+        }
+      });
+    } catch (err) {
+      if (err instanceof LoyaltyHttpError) {
+        return res.status(err.status).json({ error: err.message });
+      }
+      /* The uniqueness check above is a read outside the transaction. Two
+         admins can still race for the same CH number; the database settles it
+         with a UNIQUE violation, which should be a 400 and not a 500. */
+      if (isCardNumberCollision(err)) {
+        return res.status(400).json({ error: "Ce numéro de carte est déjà utilisé" });
+      }
+      throw err;
+    }
 
     // Re-fetch the updated card
     const updatedCard = await getLoyaltyCardById(cardId);
+    if (!updatedCard) return res.status(404).json({ error: "Carte introuvable" });
 
     res.json({
       success: true,
@@ -3123,10 +3428,10 @@ app.delete("/api/admin/loyalty/delete", authenticateToken, requireAdmin, async (
   }
 });
 
-// 🛍️ CUSTOMER PURCHASES — record a purchase for a loyalty card
-// This is also the only way a card comes into existence: naming a customer who
-// has no card yet issues one, with this purchase as its first point. There is
-// deliberately no other route to a card for an account.
+// 🛍️ CUSTOMER PURCHASES — record a purchase for a loyalty card.
+// A first purchase can also issue the card. Every check runs BEFORE a single
+// row is written (an invalid family/date used to leave an orphan card behind),
+// and card + purchase + point + ledger commit together or not at all.
 app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async (req, res) => {
   try {
     const {
@@ -3143,56 +3448,12 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
       purchaseDate,
       notes,
       awardPoints,
+      allowDuplicate,
     } = req.body;
-    if (!perfumeName || !String(perfumeName).trim()) return res.status(400).json({ error: "Le nom du parfum est requis" });
 
-    let card = cardId ? await getLoyaltyCardById(cardId) : null;
-    if (cardId && !card) return res.status(404).json({ error: "Carte introuvable" });
-
-    /* --- issue the card on its first purchase --------------------------- */
-    let issued = false;
-    if (!card) {
-      if (userId) {
-        const target = await new Promise((resolve, reject) => {
-          db.get("SELECT id FROM users WHERE id = ?", [Number(userId)], (err, row) =>
-            err ? reject(err) : resolve(row),
-          );
-        });
-        if (!target) return res.status(404).json({ error: "User not found" });
-
-        const existing = await getLoyaltyCardByUserId(Number(userId));
-        if (existing) {
-          return res.status(400).json({ error: "Ce client possède déjà une carte" });
-        }
-
-        const cardNumber = await generateCardNumber();
-        card = await insertLoyaltyCard({
-          userId: Number(userId),
-          cardNumber,
-          holderName: null,
-          holderEmail: null,
-          holderPhone: null,
-        });
-        issued = true;
-      } else {
-        // Walk-in with no account: the name on the card is the one typed here.
-        const name = String(holderName || "").trim();
-        if (!name) {
-          return res.status(400).json({ error: "Le nom du client est requis" });
-        }
-        const cardNumber = await generateCardNumber();
-        card = await insertLoyaltyCard({
-          userId: null,
-          cardNumber,
-          holderName: name,
-          holderEmail: String(holderEmail || "").trim(),
-          holderPhone: String(holderPhone || "").trim(),
-        });
-        issued = true;
-      }
-    }
-
-    const trimmedName = String(perfumeName).trim();
+    /* ---------- 1. validate everything before touching the database ---- */
+    const trimmedName = perfumeName ? String(perfumeName).trim() : "";
+    if (!trimmedName) return res.status(400).json({ error: "Le nom du parfum est requis" });
     if (trimmedName.length > 150) return res.status(400).json({ error: "Le nom ne peut pas dépasser 150 caractères" });
 
     const validFamilies = ["Woody", "Floral", "Oriental", "Fresh", "Citrus", "Gourmand", "Aromatic", "Chypre", "Aldehyde", "Fougère", "Other"];
@@ -3207,39 +3468,127 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
       return res.status(400).json({ error: `Audience invalide. Valeurs: ${validAudiences.join(", ")}` });
     }
 
-    const price = purchasePrice !== undefined && purchasePrice !== null ? Number(purchasePrice) : null;
-    if (price !== null && (isNaN(price) || price < 0)) {
+    const price = purchasePrice !== undefined && purchasePrice !== null && purchasePrice !== ""
+      ? Number(purchasePrice)
+      : null;
+    if (price !== null && (!Number.isFinite(price) || price < 0)) {
       return res.status(400).json({ error: "Le prix doit être un nombre positif" });
     }
 
     const date = purchaseDate ? String(purchaseDate).trim() : new Date().toISOString().slice(0, 10);
+    const parsedDate = new Date(`${date}T00:00:00Z`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+        Number.isNaN(parsedDate.getTime()) ||
+        parsedDate.toISOString().slice(0, 10) !== date) {
+      return res.status(400).json({ error: "La date d'achat doit être une date valide au format AAAA-MM-JJ" });
+    }
+
     const trimmedBrand = brand ? String(brand).trim().slice(0, 100) : null;
     const trimmedNotes = notes ? String(notes).trim().slice(0, 500) : null;
+    const walkName = String(holderName || "").trim();
+    const walkEmail = String(holderEmail || "").trim();
+    const walkPhone = String(holderPhone || "").trim();
+    if (walkName.length > 120 || walkEmail.length > 200 || walkPhone.length > 40) {
+      return res.status(400).json({ error: "Les coordonnées du client sont trop longues" });
+    }
 
-    const purchaseId = await new Promise((resolve, reject) => {
-      db.run(
-        `INSERT INTO customer_purchases (card_id, perfume_name, brand, fragrance_family, audience, purchase_price, purchase_date, notes)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [card.id, trimmedName, trimmedBrand, family, aud, price, date, trimmedNotes],
-        function (err) {
-          if (err) reject(err);
-          else resolve(this.lastID);
-        },
-      );
-    });
+    /* Accept the boolean the admin UI sends, plus the string/number forms a
+       hand-written client might send. Default is to award the point. */
+    const award = awardPoints === undefined || awardPoints === null
+      ? true
+      : !(awardPoints === false || awardPoints === "false" || awardPoints === 0 || awardPoints === "0");
 
-    // Award loyalty points on every recorded purchase (card rule:
-    // "5 points = 1 parfum offert"), unless the caller explicitly opts out.
-    const award = awardPoints !== false;
-    if (award) {
-      await new Promise((resolve, reject) => {
-        db.run(
-          "UPDATE loyalty_cards SET points = points + 1, updated_at = datetime('now') WHERE id = ?",
-          [card.id],
-          function (err) { if (err) reject(err); else resolve(); },
-        );
-      });
-      await logLoyaltyTransaction(card.id, card.user_id, 1, "earn", `Achat: ${trimmedName}`);
+    /* ---------- 2. resolve the target card (reads only) ---------------- */
+    let card = cardId ? await getLoyaltyCardById(cardId) : null;
+    if (cardId && !card) return res.status(404).json({ error: "Carte introuvable" });
+
+    let issueMode = null; // "account" | "walkin" when a new card is needed
+    if (!card) {
+      if (userId) {
+        const target = await new Promise((resolve, reject) => {
+          db.get("SELECT id FROM users WHERE id = ?", [Number(userId)], (err, row) =>
+            err ? reject(err) : resolve(row),
+          );
+        });
+        if (!target) return res.status(404).json({ error: "User not found" });
+        const existing = await getLoyaltyCardByUserId(Number(userId));
+        if (existing) {
+          return res.status(400).json({
+            error: `Ce client possède déjà la carte ${existing.card_number || existing.id}. Sélectionnez cette carte pour enregistrer l'achat.`,
+          });
+        }
+        issueMode = "account";
+      } else {
+        if (!walkName) return res.status(400).json({ error: "Le nom du client est requis" });
+        const dup = await findDuplicateWalkIn({ name: walkName, phone: walkPhone });
+        if (dup && !allowDuplicate) return res.status(409).json(walkInDuplicateError(dup));
+        issueMode = "walkin";
+      }
+    }
+
+    /* ---------- 3. one atomic commit ----------------------------------- */
+    // The purchase_id column is added by an async boot migration. Waiting here
+    // means the +1 ledger row always carries the link that DELETE needs to
+    // reverse it; without this, a purchase made during boot could never be
+    // undone correctly.
+    await loyaltyLedgerReady;
+    let resolvedCard = card;
+    let issued = false;
+    let purchaseId;
+    let retries = 0;
+    for (;;) {
+      try {
+        await db.transaction(async (t) => {
+          let active = resolvedCard;
+          let didIssue = false;
+          if (!active) {
+            const cardNumber = await generateCardNumber(t);
+            active = await insertLoyaltyCard(
+              issueMode === "account"
+                ? { userId: Number(userId), cardNumber, holderName: null, holderEmail: null, holderPhone: null }
+                : { userId: null, cardNumber, holderName: walkName, holderEmail: walkEmail, holderPhone: walkPhone },
+              t,
+            );
+            didIssue = true;
+          }
+
+          const r = await t.run(
+            `INSERT INTO customer_purchases (card_id, perfume_name, brand, fragrance_family, audience, purchase_price, purchase_date, notes)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [active.id, trimmedName, trimmedBrand, family, aud, price, date, trimmedNotes],
+          );
+
+          // Card rule: "5 points = 1 parfum offert" — one point per purchase.
+          if (award) {
+            await t.run(
+              "UPDATE loyalty_cards SET points = points + 1, updated_at = datetime('now') WHERE id = ?",
+              [active.id],
+            );
+            // purchase_id lets DELETE /purchases/:id reverse exactly this point.
+            await logLoyaltyTransaction(active.id, active.user_id, 1, "earn", `Achat: ${trimmedName}`, t, r.lastID);
+          }
+
+          resolvedCard = active;
+          issued = didIssue;
+          purchaseId = r.lastID;
+        });
+        break;
+      } catch (err) {
+        /* Two admins can race for the same generated CH number, or for the
+           same account's card. Re-read and retry rather than returning 500. */
+        if (isCardNumberCollision(err) && retries++ < 4) {
+          resolvedCard = null;
+          continue;
+        }
+        if (isUserCardCollision(err) && retries++ < 4) {
+          const existing = await getLoyaltyCardByUserId(Number(userId));
+          if (existing) {
+            resolvedCard = existing;
+            continue;
+          }
+        }
+        throw err;
+      }
     }
 
     res.json({
@@ -3247,12 +3596,12 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
       purchaseId,
       issued,
       card: {
-        cardId: card.id,
-        cardNumber: card.card_number,
-        holderName: card.holder_name || null,
+        cardId: resolvedCard.id,
+        cardNumber: resolvedCard.card_number,
+        holderName: resolvedCard.holder_name || null,
       },
       message: issued
-        ? `Carte ${card.card_number} ouverte — premier achat enregistré`
+        ? `Carte ${resolvedCard.card_number} ouverte — premier achat enregistré`
         : "Achat enregistré",
     });
   } catch (error) {
@@ -3261,27 +3610,74 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
   }
 });
 
-// 🛍️ CUSTOMER PURCHASES — delete a purchase
+// 🛍️ CUSTOMER PURCHASES — delete a purchase AND reverse the point it earned.
+// Deleting used to leave the +1 point and its ledger row behind: the customer
+// kept a point for a purchase that no longer existed. Both now move together.
 app.delete("/api/admin/loyalty/purchases/:id", authenticateToken, requireAdmin, async (req, res) => {
   try {
     const purchaseId = Number(req.params.id);
-    if (!purchaseId) return res.status(400).json({ error: "ID invalide" });
+    if (!Number.isInteger(purchaseId) || purchaseId <= 0) {
+      return res.status(400).json({ error: "ID invalide" });
+    }
 
-    const purchase = await new Promise((resolve, reject) => {
-      db.get("SELECT * FROM customer_purchases WHERE id = ?", [purchaseId], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
+    // Same gate as the create side: never query purchase_id before the boot
+    // migration has had a chance to add it.
+    await loyaltyLedgerReady;
+    let reversed = 0;
+    try {
+      await db.transaction(async (t) => {
+        const purchase = await t.get("SELECT * FROM customer_purchases WHERE id = ?", [purchaseId]);
+        if (!purchase) throw new LoyaltyHttpError(404, "Achat introuvable");
+
+        /* Legacy rows (created before purchase_id existed) have no link, and
+           purchases recorded with awardPoints:false never earned a point. In
+           both cases there is nothing to reverse, so no debit is invented. */
+        const linked = loyaltyLedgerHasPurchaseId
+          ? await t.all(
+              "SELECT id, points_change FROM loyalty_transactions WHERE purchase_id = ? AND card_id = ?",
+              [purchaseId, purchase.card_id],
+            )
+          : [];
+        reversed = linked.reduce((sum, row) => sum + (Number(row.points_change) || 0), 0);
+
+        if (reversed > 0) {
+          const card = await t.get("SELECT points FROM loyalty_cards WHERE id = ?", [purchase.card_id]);
+          const balance = Number(card && card.points) || 0;
+          if (balance < reversed) {
+            /* The point has already been spent on a reward. Reversing it now
+               would drive the balance negative, so refuse with a clear reason
+               instead of silently breaking balance = SUM(ledger). */
+            throw new LoyaltyHttpError(
+              409,
+              `Cet achat a rapporté ${reversed} point(s) déjà utilisé(s) (solde actuel ${balance}). Ajustez le solde avant de supprimer cet achat.`,
+            );
+          }
+          await t.run(
+            "UPDATE loyalty_cards SET points = points - ?, updated_at = datetime('now') WHERE id = ?",
+            [reversed, purchase.card_id],
+          );
+          await t.run(
+            "DELETE FROM loyalty_transactions WHERE purchase_id = ? AND card_id = ?",
+            [purchaseId, purchase.card_id],
+          );
+        }
+
+        await t.run("DELETE FROM customer_purchases WHERE id = ?", [purchaseId]);
       });
-    });
-    if (!purchase) return res.status(404).json({ error: "Achat introuvable" });
+    } catch (err) {
+      if (err instanceof LoyaltyHttpError) {
+        return res.status(err.status).json({ error: err.message });
+      }
+      throw err;
+    }
 
-    await new Promise((resolve, reject) => {
-      db.run("DELETE FROM customer_purchases WHERE id = ?", [purchaseId], function (err) {
-        if (err) reject(err); else resolve();
-      });
+    res.json({
+      success: true,
+      message: reversed > 0
+        ? `Achat supprimé — ${reversed} point(s) retiré(s)`
+        : "Achat supprimé",
+      pointsReversed: reversed,
     });
-
-    res.json({ success: true, message: "Achat supprimé" });
   } catch (error) {
     console.error("Delete purchase error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -3425,25 +3821,28 @@ app.get("/api/loyalty/me", authenticateToken, async (req, res) => {
         })
       : [];
 
-    /* A card only exists for the customer once they have bought something.
-       A stock card with no purchase is not a loyalty card, so the page gets the
-       "make a first purchase" gate rather than an empty balance that would look
-       broken. Cards are issued by POST /api/admin/loyalty/purchases. */
-    if (!card || purchases.length === 0) {
+    const transactions = card
+      ? await new Promise((resolve, reject) => {
+          db.all(
+            "SELECT points_change, type, description, created_at FROM loyalty_transactions WHERE card_id = ? ORDER BY created_at DESC, id DESC",
+            [card.id],
+            (err, rows) => (err ? reject(err) : resolve(rows || [])),
+          );
+        })
+      : [];
+
+    /* A brand-new stock card (no purchase, no points, no history) is not a
+       loyalty card yet, so the page shows the "make a first purchase" gate.
+       But points can legitimately be added by the shop without a recorded
+       purchase. Gating on purchases alone used to hide those balances
+       entirely — the customer saw "no card" despite holding points. */
+    if (!card || (purchases.length === 0 && (card.points || 0) === 0 && transactions.length === 0)) {
       return res.json({
         success: true,
         hasCard: false,
         rewardThreshold: LOYALTY_REWARD_THRESHOLD,
       });
     }
-
-    const transactions = await new Promise((resolve, reject) => {
-      db.all(
-        "SELECT points_change, type, description, created_at FROM loyalty_transactions WHERE card_id = ? ORDER BY created_at DESC, id DESC",
-        [card.id],
-        (err, rows) => (err ? reject(err) : resolve(rows || [])),
-      );
-    });
 
     // Same preference maths as the admin profile: families, then brands, then
     // the suggestions the customer does not own yet.
@@ -3504,7 +3903,16 @@ app.get("/api/loyalty/me", authenticateToken, async (req, res) => {
       rewardThreshold: LOYALTY_REWARD_THRESHOLD,
       card: {
         cardId: card.id,
-        name: (card.holder_name || "").trim() || null,
+        /* A card linked to an account carries no holder_name (the admin form
+           only sets one for walk-in cards), so fall back to the account's own
+           name — otherwise the painted card renders "Nom:" empty. */
+        name:
+          (card.holder_name || "").trim() ||
+          [req.user.dbUser?.first_name, req.user.dbUser?.last_name]
+            .filter(Boolean)
+            .join(" ")
+            .trim() ||
+          null,
         cardNumber: card.card_number || null,
         points: card.points || 0,
         eligible: (card.points || 0) >= LOYALTY_REWARD_THRESHOLD,
@@ -3532,8 +3940,16 @@ app.get("/api/loyalty/me", authenticateToken, async (req, res) => {
   }
 });
 
-// 🔍 SEARCH LOYALTY PROFILES — for navbar search
-app.get("/api/search/loyalty-profiles", authenticateToken, async (req, res) => {
+// 🔍 SEARCH LOYALTY PROFILES — admin console only.
+// requireAdmin, not just authenticateToken: this searches EVERY loyalty card
+// and returns holder name, phone, email, card number, points and purchase
+// count. With only authenticateToken any signed-in customer could page the
+// whole customer base ten rows at a time with a two-character query. The
+// storefront has no customer directory and does not call this; the admin
+// console reads the same records from /api/admin/loyalty, so scoping it to
+// administrators costs nothing. Flagged as P0 in
+// docs/INVESTIGATION-2026-08-30.html and docs/migration-plan-legacy-to-react.md.
+app.get("/api/search/loyalty-profiles", authenticateToken, requireAdmin, async (req, res) => {
   try {
     const query = String(req.query.q || "").trim();
     if (query.length < 2 || query.length > 100) return res.json([]);
@@ -3584,7 +4000,8 @@ app.get("/api/news", async (req, res) => {
   try {
     const news = await new Promise((resolve, reject) => {
       db.all(
-        "SELECT * FROM news WHERE is_active = 1 ORDER BY created_at DESC, id DESC",
+        "SELECT * FROM news WHERE is_active = 1 ORDER BY created_at DESC, id DESC LIMIT $1 OFFSET $2",
+        [listLimit(req), listOffset(req)],
         (err, rows) => {
           if (err) reject(err);
           else resolve(rows);
@@ -3607,7 +4024,8 @@ app.get(
     try {
       const news = await new Promise((resolve, reject) => {
         db.all(
-          "SELECT * FROM news ORDER BY created_at DESC, id DESC",
+          "SELECT * FROM news ORDER BY created_at DESC, id DESC LIMIT $1 OFFSET $2",
+          [listLimit(req), listOffset(req)],
           (err, rows) => {
             if (err) reject(err);
             else resolve(rows);
@@ -3882,7 +4300,8 @@ app.get(
     try {
       const notes = await new Promise((resolve, reject) => {
         db.all(
-          "SELECT * FROM guest_notes ORDER BY created_at DESC, id DESC",
+          "SELECT * FROM guest_notes ORDER BY created_at DESC, id DESC LIMIT $1 OFFSET $2",
+          [listLimit(req), listOffset(req)],
           (err, rows) => {
             if (err) reject(err);
             else resolve(rows);
@@ -3945,15 +4364,31 @@ app.delete(
   },
 );
 
-// Development route to reset rate limits (remove in production)
-if (process.env.NODE_ENV === "development") {
-  app.post("/api/dev/reset-rate-limit", (req, res) => {
+/*
+ * Development-only debug routes.
+ *
+ * Gated on an EXPLICIT opt-in rather than `NODE_ENV === "development"`.
+ * That check looked safe but was the app's own default (server.js sets
+ * NODE_ENV to "development" when it is unset), so on any host that had not
+ * exported NODE_ENV=production these were live. They take no token:
+ * /api/dev/debug-user/:userId returned a name, email and avatar for ANY user
+ * id, /api/dev/debug-favorites/:userId returned that user's favourites, and
+ * POST /api/dev/reset-rate-limit cleared the auth limiter - so anyone who
+ * reached the host could read personal data and then brute-force login.
+ *
+ * `ENABLE_DEV_ROUTES=true` has to be set deliberately, and an admin token is
+ * still required: these inspect the database, they are not a health check.
+ */
+if (process.env.ENABLE_DEV_ROUTES === "true") {
+  const devGuard = [authenticateToken, requireAdmin];
+
+  app.post("/api/dev/reset-rate-limit", devGuard, (req, res) => {
     authLimiter.resetKey(req.ip);
     res.json({ success: true, message: "Rate limit reset for your IP" });
   });
 
   // Debug route to check favorites in database
-  app.get("/api/dev/debug-favorites/:userId", async (req, res) => {
+  app.get("/api/dev/debug-favorites/:userId", devGuard, async (req, res) => {
     try {
       const { userId } = req.params;
       const favorites = await new Promise((resolve, reject) => {
@@ -3980,7 +4415,7 @@ if (process.env.NODE_ENV === "development") {
   });
 
   // Debug route to check user avatar in database
-  app.get("/api/dev/debug-user/:userId", async (req, res) => {
+  app.get("/api/dev/debug-user/:userId", devGuard, async (req, res) => {
     try {
       const { userId } = req.params;
       const user = await new Promise((resolve, reject) => {
@@ -5100,6 +5535,23 @@ app.delete("/api/replies/:replyId", authenticateToken, (req, res) => {
     },
   );
 });
+
+// ─── AI BACK-OFFICE ASSISTANT (admin only) ──────────────────────────────────
+// Mounted from its own module so the agent loop and its tools stay out of this
+// file. It is a real LLM agent: it reads the live database with read-only tools
+// and proposes every write for the signed-in administrator to approve.
+// Configure with AI_BASE_URL / AI_API_KEY / AI_MODEL (see .env.example).
+try {
+  require("./services/adminAssistant")(app, {
+    db,
+    authenticateToken,
+    requireAdmin,
+    root: __dirname,
+  });
+} catch (assistantError) {
+  // A missing optional dependency must never take the storefront down at boot.
+  console.error("Admin assistant unavailable:", assistantError.message);
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

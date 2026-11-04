@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../../api/client.js";
 import { fmtDate } from "./adminKit.jsx";
+import { money } from "../lib/catalog.js";
 
 const FAMILIES = [
   "",
@@ -19,6 +20,11 @@ const FAMILIES = [
 
 const AUDIENCES = ["", "men", "women", "unisex"];
 
+/* Rows per page in the card table and the purchase history. The tabs ended
+   the section-level scroll; this ends the table-level one, which was the
+   "all the cards at once" complaint all along. */
+const PAGE_SIZE = 10;
+
 const audienceLabel = (value, at) =>
   value === "men"
     ? at("audienceMen")
@@ -29,15 +35,18 @@ const audienceLabel = (value, at) =>
         : at("familyNone");
 
 /* A tab bar in the admin house style, shared by the card list and the
-   customer profile so both sections page through instead of scrolling. */
-function Tabs({ at, label, tabs, current, onSelect }) {
+   customer profile so both sections page through instead of scrolling.
+   `hook` prefixes the data-guide attribute of each button, so the guide
+   videos can click a tab by name instead of by its (translated) label. */
+function Tabs({ at, label, tabs, current, onSelect, hook }) {
   return (
-    <nav className="admin-tabs" role="tablist" aria-label={label}>
+    <nav className="admin-tabs" role="tablist" aria-label={label} data-guide={hook ? `${hook}-tabs` : undefined}>
       {tabs.map(([id, text]) => (
         <button
           key={id}
           type="button"
           role="tab"
+          data-guide={hook ? `${hook}-${id}` : undefined}
           aria-selected={current === id}
           className={`admin-tab pressable${current === id ? " on" : ""}`}
           onClick={() => onSelect(id)}
@@ -45,6 +54,30 @@ function Tabs({ at, label, tabs, current, onSelect }) {
           {text}
         </button>
       ))}
+    </nav>
+  );
+}
+
+/* Row pager for long tables. Hidden while everything fits on one page, so
+   small accounts see no extra furniture. */
+function Pager({ at, page, pageCount, count, unit, onPage, hook }) {
+  if (pageCount < 2) return null;
+  return (
+    <nav className="admin-pager" aria-label={at("loyPage")} data-guide={hook}>
+      <span className="admin-muted admin-small">
+        {count} {unit}
+      </span>
+      <span className="admin-muted admin-small">
+        {at("loyPage")} {page} {at("loyOf")} {pageCount}
+      </span>
+      <span className="admin-pager-btns">
+        <button type="button" className="admin-mini pressable" disabled={page <= 1} onClick={() => onPage(page - 1)}>
+          {at("loyPrev")}
+        </button>
+        <button type="button" className="admin-mini pressable" disabled={page >= pageCount} onClick={() => onPage(page + 1)}>
+          {at("loyNext")}
+        </button>
+      </span>
     </nav>
   );
 }
@@ -61,12 +94,17 @@ export function Loyalty({ at }) {
      "new" and "edit" are forms. */
   const [tab, setTab] = useState("cards");
   const [editing, setEditing] = useState(null);
+  const [page, setPage] = useState(1);
 
+  /* Reset the error on every attempt, so a successful refresh does not leave a
+     stale red banner above correct data. */
   const load = useCallback(
-    () =>
-      api("/api/admin/loyalty")
+    () => {
+      setError("");
+      return api("/api/admin/loyalty")
         .then((d) => setData(d))
-        .catch((e) => setError(e.message)),
+        .catch((e) => setError(e.message));
+    },
     [],
   );
 
@@ -84,6 +122,19 @@ export function Loyalty({ at }) {
         .includes(needle),
     );
   }, [cards, q]);
+
+  /* Ten rows per page. "current" clamps, so a narrowed search or a shorter
+     list can never strand the admin on an empty page; the effect folds the
+     state back so the buttons stay honest. */
+  const pageCount = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
+  const current = Math.min(page, pageCount);
+  const pageRows = useMemo(
+    () => shown.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE),
+    [shown, current],
+  );
+  useEffect(() => {
+    if (page !== current) setPage(current);
+  }, [page, current]);
 
   const guard = async (fn) => {
     setError("");
@@ -136,7 +187,7 @@ export function Loyalty({ at }) {
 
   return (
     <div className="admin-block">
-      <Tabs at={at} label={at("tabLoyalty")} tabs={tabs} current={tab} onSelect={setTab} />
+      <Tabs at={at} label={at("tabLoyalty")} tabs={tabs} current={tab} onSelect={setTab} hook="loyalty" />
       {error ? <p className="admin-error">{error}</p> : null}
 
       {tab === "cards" ? (
@@ -145,11 +196,20 @@ export function Loyalty({ at }) {
             <input
               type="search"
               className="field admin-search"
+              data-guide="loyalty-search"
               placeholder={at("search")}
               value={q}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={(e) => {
+                setQ(e.target.value);
+                setPage(1);
+              }}
             />
-            <button type="button" className="btn-accent pressable" onClick={() => { setEditing(null); setTab("new"); }}>
+            <button
+              type="button"
+              className="btn-accent pressable"
+              data-guide="loyalty-new-card"
+              onClick={() => { setEditing(null); setTab("new"); }}
+            >
               {at("loyNew")}
             </button>
           </div>
@@ -160,77 +220,106 @@ export function Loyalty({ at }) {
           ) : cards.length === 0 ? (
             <p className="admin-muted">{at("empty")}</p>
           ) : (
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>{at("colName")}</th>
-                    <th>{at("loyCardNumber")}</th>
-                    <th>{at("colPhone")}</th>
-                    <th className="num">{at("loyPoints")}</th>
-                    <th className="num">{at("loyPurchases")}</th>
-                    <th className="num">{at("loyRewards")}</th>
-                    <th className="num">{at("colActions")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {shown.map((c) => (
-                    <tr key={c.cardId} className={c.eligible ? "is-eligible" : undefined}>
-                      <td>
-                        {c.name || "—"}
-                        {c.isManual ? <span className="admin-tag">{at("loyManual")}</span> : null}
-                        {c.isBanned ? <span className="admin-tag danger">{at("banned")}</span> : null}
-                        <div className="admin-muted admin-small">{c.email || "—"}</div>
-                      </td>
-                      <td>{c.cardNumber || "—"}</td>
-                      <td>{c.phone || "—"}</td>
-                      <td className="num">
-                        <strong>{c.points}</strong>
-                        <div className="admin-progress" aria-hidden="true">
-                          <span style={{ inlineSize: `${c.progress}%` }} />
-                        </div>
-                      </td>
-                      <td className="num">{c.purchaseCount}</td>
-                      <td className="num">{c.rewards}</td>
-                      <td className="num admin-actions">
-                        <button type="button" className="admin-mini pressable" disabled={busy} onClick={() => addPoint(c)}>
-                          {at("loyAddPoint")}
-                        </button>
-                        <button
-                          type="button"
-                          className="admin-mini pressable"
-                          disabled={busy || !c.eligible}
-                          onClick={() => redeem(c)}
-                        >
-                          {at("loyRedeem")}
-                        </button>
-                        <button type="button" className="admin-mini pressable" onClick={() => setProfileId(c.cardId)}>
-                          {at("loyView")}
-                        </button>
-                        <button
-                          type="button"
-                          className="admin-mini pressable"
-                          onClick={() => {
-                            setEditing(c);
-                            setTab("edit");
-                          }}
-                        >
-                          {at("edit")}
-                        </button>
-                        <button
-                          type="button"
-                          className="admin-mini pressable danger"
-                          disabled={busy}
-                          onClick={() => remove(c)}
-                        >
-                          {at("delete")}
-                        </button>
-                      </td>
+            <>
+              <div className="admin-table-wrap" data-guide="loyalty-table">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>{at("colName")}</th>
+                      <th>{at("loyCardNumber")}</th>
+                      <th>{at("colPhone")}</th>
+                      <th className="num">{at("loyPoints")}</th>
+                      <th className="num">{at("loyPurchases")}</th>
+                      <th className="num">{at("loyRewards")}</th>
+                      <th className="num">{at("colActions")}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {pageRows.map((c) => (
+                      <tr
+                        key={c.cardId}
+                        data-guide="loyalty-row"
+                        className={c.eligible ? "is-eligible" : undefined}
+                      >
+                        <td>
+                          {c.name || "—"}
+                          {c.isManual ? <span className="admin-tag">{at("loyManual")}</span> : null}
+                          {c.isBanned ? <span className="admin-tag danger">{at("banned")}</span> : null}
+                          <div className="admin-muted admin-small">{c.email || "—"}</div>
+                        </td>
+                        <td>{c.cardNumber || "—"}</td>
+                        <td>{c.phone || "—"}</td>
+                        <td className="num">
+                          <strong>{c.points}</strong>
+                          <div className="admin-progress" aria-hidden="true">
+                            <span style={{ inlineSize: `${c.progress}%` }} />
+                          </div>
+                        </td>
+                        <td className="num">{c.purchaseCount}</td>
+                        <td className="num">{c.rewards}</td>
+                        <td className="num admin-actions">
+                          <button
+                            type="button"
+                            className="admin-mini pressable"
+                            data-guide="loyalty-add-point"
+                            disabled={busy}
+                            onClick={() => addPoint(c)}
+                          >
+                            {at("loyAddPoint")}
+                          </button>
+                          <button
+                            type="button"
+                            className="admin-mini pressable"
+                            data-guide="loyalty-redeem"
+                            disabled={busy || !c.eligible}
+                            onClick={() => redeem(c)}
+                          >
+                            {at("loyRedeem")}
+                          </button>
+                          <button
+                            type="button"
+                            className="admin-mini pressable"
+                            data-guide="loyalty-view"
+                            onClick={() => setProfileId(c.cardId)}
+                          >
+                            {at("loyView")}
+                          </button>
+                          <button
+                            type="button"
+                            className="admin-mini pressable"
+                            data-guide="loyalty-row-edit"
+                            onClick={() => {
+                              setEditing(c);
+                              setTab("edit");
+                            }}
+                          >
+                            {at("edit")}
+                          </button>
+                          <button
+                            type="button"
+                            className="admin-mini pressable danger"
+                            data-guide="loyalty-row-delete"
+                            disabled={busy}
+                            onClick={() => remove(c)}
+                          >
+                            {at("delete")}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <Pager
+                at={at}
+                page={current}
+                pageCount={pageCount}
+                count={shown.length}
+                unit={at("loyCards")}
+                onPage={setPage}
+                hook="loyalty-pager"
+              />
+            </>
           )}
         </>
       ) : null}
@@ -284,49 +373,87 @@ function NewCardPanel({ at, usersWithoutCards, onCancel, onDone }) {
   });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [duplicate, setDuplicate] = useState(null);
+  /* `busy` is React state: two clicks in the same tick both read `false`, so
+     disabling the button was not enough - it is how card 334 ended up with two
+     identical purchases 19 seconds apart. A ref is synchronous and is the real
+     guard against a double submit. */
+  const inFlight = useRef(false);
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
-  async function submit(e) {
-    e.preventDefault();
-    setError("");
-    if (mode === "link" && !userId) return setError(at("loyPickUser"));
-    if (mode === "manual" && !form.name.trim()) return setError(at("loyName"));
-    if (!form.perfumeName.trim()) return setError(at("rpPerfume"));
+  const purchaseFields = () => ({
+    perfumeName: form.perfumeName,
+    brand: form.brand,
+    fragranceFamily: form.fragranceFamily,
+    audience: form.audience,
+    purchasePrice: form.purchasePrice === "" ? null : Number(form.purchasePrice),
+    purchaseDate: form.purchaseDate,
+    notes: form.notes,
+    awardPoints: form.awardPoints,
+  });
+
+  async function postPurchase(body) {
+    if (inFlight.current) return;
+    inFlight.current = true;
     setBusy(true);
+    setError("");
+    setDuplicate(null);
     try {
-      const purchase = {
-        perfumeName: form.perfumeName,
-        brand: form.brand,
-        fragranceFamily: form.fragranceFamily,
-        audience: form.audience,
-        purchasePrice: form.purchasePrice === "" ? null : Number(form.purchasePrice),
-        purchaseDate: form.purchaseDate,
-        notes: form.notes,
-        awardPoints: form.awardPoints,
-      };
-      const body =
-        mode === "link"
-          ? { userId: Number(userId), ...purchase }
-          : {
-              holderName: form.name,
-              holderEmail: form.email,
-              holderPhone: form.phone,
-              ...purchase,
-            };
       await api("/api/admin/loyalty/purchases", { method: "POST", body });
       onDone();
     } catch (e2) {
       setError(e2.message);
+      /* The server refuses to silently open a second card for an existing
+         walk-in. Offer a one-click recovery instead of making the assistant
+         hunt through the card list to find it. */
+      if (e2.status === 409 && e2.data && e2.data.existingCardId) {
+        setDuplicate({
+          cardId: e2.data.existingCardId,
+          cardNumber: e2.data.existingCardNumber,
+        });
+      }
     } finally {
+      inFlight.current = false;
       setBusy(false);
     }
   }
 
+  async function submit(e) {
+    e.preventDefault();
+    if (inFlight.current) return;
+    if (mode === "link" && !userId) return setError(at("loyPickUser"));
+    if (mode === "manual" && !form.name.trim()) return setError(at("loyName"));
+    if (!form.perfumeName.trim()) return setError(at("rpPerfume"));
+    const purchase = purchaseFields();
+    const body =
+      mode === "link"
+        ? { userId: Number(userId), ...purchase }
+        : {
+            holderName: form.name,
+            holderEmail: form.email,
+            holderPhone: form.phone,
+            ...purchase,
+          };
+    await postPurchase(body);
+  }
+
+  function useExistingCard() {
+    if (!duplicate || inFlight.current) return;
+    postPurchase({ cardId: duplicate.cardId, ...purchaseFields() });
+  }
+
   return (
-    <form className="admin-block" onSubmit={submit}>
+    <form className="admin-block" data-guide="new-card" onSubmit={submit}>
       <p className="admin-muted">{at("loyTabNewIntro")}</p>
       {error ? <p className="admin-error">{error}</p> : null}
+      {duplicate ? (
+        <div className="admin-toolbar">
+          <button type="button" className="admin-mini pressable" onClick={useExistingCard} disabled={busy}>
+            {`Utiliser la carte ${duplicate.cardNumber || duplicate.cardId}`}
+          </button>
+        </div>
+      ) : null}
 
       <section className="card admin-section">
         <h2 className="admin-subhead">{at("loyNew")}</h2>
@@ -334,6 +461,7 @@ function NewCardPanel({ at, usersWithoutCards, onCancel, onDone }) {
           <button
             type="button"
             className={`admin-seg-btn pressable${mode === "manual" ? " on" : ""}`}
+            data-guide="new-card-manual"
             onClick={() => setMode("manual")}
           >
             {at("loyManual")}
@@ -341,6 +469,7 @@ function NewCardPanel({ at, usersWithoutCards, onCancel, onDone }) {
           <button
             type="button"
             className={`admin-seg-btn pressable${mode === "link" ? " on" : ""}`}
+            data-guide="new-card-link"
             onClick={() => setMode("link")}
           >
             {at("loyLink")}
@@ -350,7 +479,12 @@ function NewCardPanel({ at, usersWithoutCards, onCancel, onDone }) {
         {mode === "link" ? (
           <label className="admin-field">
             <span>{at("loyPickUser")}</span>
-            <select className="field" value={userId} onChange={(e) => setUserId(e.target.value)}>
+            <select
+              className="field"
+              data-guide="new-card-user"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+            >
               <option value="">—</option>
               {usersWithoutCards.map((u) => (
                 <option key={u.userId} value={u.userId}>
@@ -360,35 +494,53 @@ function NewCardPanel({ at, usersWithoutCards, onCancel, onDone }) {
             </select>
           </label>
         ) : (
-          <>
+          <div data-guide="new-card-holder">
             <label className="admin-field">
               <span>{at("loyName")}</span>
-              <input className="field" value={form.name} onChange={(e) => set("name", e.target.value)} maxLength={80} />
+              <input
+                className="field"
+                data-guide="new-card-name"
+                value={form.name}
+                onChange={(e) => set("name", e.target.value)}
+                maxLength={80}
+              />
             </label>
             <div className="admin-form-row">
               <label className="admin-field">
                 <span>{at("loyEmail")}</span>
-                <input className="field" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
+                <input
+                  className="field"
+                  type="email"
+                  data-guide="new-card-email"
+                  value={form.email}
+                  onChange={(e) => set("email", e.target.value)}
+                />
               </label>
               <label className="admin-field">
                 <span>{at("colPhone")}</span>
-                <input className="field" value={form.phone} onChange={(e) => set("phone", e.target.value)} maxLength={30} />
+                <input
+                  className="field"
+                  data-guide="new-card-phone"
+                  value={form.phone}
+                  onChange={(e) => set("phone", e.target.value)}
+                  maxLength={30}
+                />
               </label>
             </div>
-          </>
+          </div>
         )}
       </section>
 
-      <section className="card admin-section">
+      <section className="card admin-section" data-guide="new-card-purchase">
         <h2 className="admin-subhead">{at("rpTitle")}</h2>
-        <PurchaseFields at={at} form={form} set={set} />
+        <PurchaseFields at={at} form={form} set={set} hook="new-card" />
       </section>
 
       <div className="admin-form-foot">
-        <button type="button" className="btn-ghost pressable" onClick={onCancel}>
+        <button type="button" className="btn-ghost pressable" data-guide="new-card-cancel" onClick={onCancel}>
           {at("cancel")}
         </button>
-        <button type="submit" className="btn-accent pressable" disabled={busy}>
+        <button type="submit" className="btn-accent pressable" data-guide="new-card-submit" disabled={busy}>
           {at("loyCreate")}
         </button>
       </div>
@@ -433,7 +585,7 @@ function EditCardPanel({ at, card, onCancel, onDone }) {
   }
 
   return (
-    <form className="admin-block" onSubmit={submit}>
+    <form className="admin-block" data-guide="edit-card" onSubmit={submit}>
       <p className="admin-muted">
         {at("loyCardNumber")}: <strong>{card.cardNumber || "—"}</strong>
       </p>
@@ -443,21 +595,39 @@ function EditCardPanel({ at, card, onCancel, onDone }) {
         <h2 className="admin-subhead">{at("loyEditTitle")}</h2>
         <label className="admin-field">
           <span>{at("colName")}</span>
-          <input className="field" value={form.name} onChange={(e) => set("name", e.target.value)} maxLength={80} />
+          <input
+            className="field"
+            data-guide="edit-card-name"
+            value={form.name}
+            onChange={(e) => set("name", e.target.value)}
+            maxLength={80}
+          />
         </label>
         <label className="admin-field">
           <span>{at("loyCardNumber")}</span>
-          <input className="field" value={form.cardNumber} onChange={(e) => set("cardNumber", e.target.value)} />
+          <input
+            className="field"
+            data-guide="edit-card-number"
+            value={form.cardNumber}
+            onChange={(e) => set("cardNumber", e.target.value)}
+          />
         </label>
         <label className="admin-field">
           <span>{at("colPhone")}</span>
-          <input className="field" value={form.phone} onChange={(e) => set("phone", e.target.value)} maxLength={30} />
+          <input
+            className="field"
+            data-guide="edit-card-phone"
+            value={form.phone}
+            onChange={(e) => set("phone", e.target.value)}
+            maxLength={30}
+          />
         </label>
         <label className="admin-field">
           <span>{at("loyPoints")}</span>
           <input
             className="field"
             type="number"
+            data-guide="edit-card-points"
             min="0"
             max="10000"
             value={form.points}
@@ -467,10 +637,10 @@ function EditCardPanel({ at, card, onCancel, onDone }) {
       </section>
 
       <div className="admin-form-foot">
-        <button type="button" className="btn-ghost pressable" onClick={onCancel}>
+        <button type="button" className="btn-ghost pressable" data-guide="edit-card-cancel" onClick={onCancel}>
           {at("cancel")}
         </button>
-        <button type="submit" className="btn-accent pressable" disabled={busy}>
+        <button type="submit" className="btn-accent pressable" data-guide="edit-card-submit" disabled={busy}>
           {at("save")}
         </button>
       </div>
@@ -479,21 +649,42 @@ function EditCardPanel({ at, card, onCancel, onDone }) {
 }
 
 /* ---------------------------------------------------- Shared purchase form */
-function PurchaseFields({ at, form, set }) {
+/* `hook` prefixes the data-guide attributes. The same fields appear in three
+   places (new card, edit card, record a purchase) and the guide videos need to
+   address one of them, not all three. */
+function PurchaseFields({ at, form, set, hook = "purchase" }) {
+  const g = (k) => `${hook}-${k}`;
   return (
     <>
       <label className="admin-field">
         <span>{at("rpPerfume")}</span>
-        <input className="field" value={form.perfumeName} onChange={(e) => set("perfumeName", e.target.value)} maxLength={150} />
+        <input
+          className="field"
+          data-guide={g("perfume")}
+          value={form.perfumeName}
+          onChange={(e) => set("perfumeName", e.target.value)}
+          maxLength={150}
+        />
       </label>
       <div className="admin-form-row">
         <label className="admin-field">
           <span>{at("rpBrand")}</span>
-          <input className="field" value={form.brand} onChange={(e) => set("brand", e.target.value)} maxLength={100} />
+          <input
+            className="field"
+            data-guide={g("brand")}
+            value={form.brand}
+            onChange={(e) => set("brand", e.target.value)}
+            maxLength={100}
+          />
         </label>
         <label className="admin-field">
           <span>{at("rpFamily")}</span>
-          <select className="field" value={form.fragranceFamily} onChange={(e) => set("fragranceFamily", e.target.value)}>
+          <select
+            className="field"
+            data-guide={g("family")}
+            value={form.fragranceFamily}
+            onChange={(e) => set("fragranceFamily", e.target.value)}
+          >
             {FAMILIES.map((f) => (
               <option key={f || "none"} value={f}>
                 {f || "—"}
@@ -505,7 +696,12 @@ function PurchaseFields({ at, form, set }) {
       <div className="admin-form-row">
         <label className="admin-field">
           <span>{at("rpAudience")}</span>
-          <select className="field" value={form.audience} onChange={(e) => set("audience", e.target.value)}>
+          <select
+            className="field"
+            data-guide={g("audience")}
+            value={form.audience}
+            onChange={(e) => set("audience", e.target.value)}
+          >
             {AUDIENCES.map((a) => (
               <option key={a || "none"} value={a}>
                 {a ? audienceLabel(a, at) : "—"}
@@ -518,6 +714,7 @@ function PurchaseFields({ at, form, set }) {
           <input
             className="field"
             type="number"
+            data-guide={g("price")}
             min="0"
             step="0.01"
             value={form.purchasePrice}
@@ -527,14 +724,31 @@ function PurchaseFields({ at, form, set }) {
       </div>
       <label className="admin-field">
         <span>{at("rpDate")}</span>
-        <input className="field" type="date" value={form.purchaseDate} onChange={(e) => set("purchaseDate", e.target.value)} />
+        <input
+          className="field"
+          type="date"
+          data-guide={g("date")}
+          value={form.purchaseDate}
+          onChange={(e) => set("purchaseDate", e.target.value)}
+        />
       </label>
       <label className="admin-field">
         <span>{at("rpNotes")}</span>
-        <input className="field" value={form.notes} onChange={(e) => set("notes", e.target.value)} maxLength={500} />
+        <input
+          className="field"
+          data-guide={g("notes")}
+          value={form.notes}
+          onChange={(e) => set("notes", e.target.value)}
+          maxLength={500}
+        />
       </label>
       <label className="admin-check">
-        <input type="checkbox" checked={form.awardPoints} onChange={(e) => set("awardPoints", e.target.checked)} />
+        <input
+          type="checkbox"
+          data-guide={g("award")}
+          checked={form.awardPoints}
+          onChange={(e) => set("awardPoints", e.target.checked)}
+        />
         <span>{at("rpAward")}</span>
       </label>
     </>
@@ -548,6 +762,7 @@ function CustomerProfile({ at, cardId, onBack }) {
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
   const [tab, setTab] = useState("overview");
+  const [pPage, setPPage] = useState(1);
 
   const load = useCallback(
     () =>
@@ -578,6 +793,16 @@ function CustomerProfile({ at, cardId, onBack }) {
     return `${top.family} · ${top.percentage}%`;
   }, [profile, at]);
 
+  /* A heavy customer's history scrolls as badly as the card list did, so it
+     pages on the same rule. */
+  const purchases = profile ? profile.purchases : [];
+  const pPageCount = Math.max(1, Math.ceil(purchases.length / PAGE_SIZE));
+  const pIndex = Math.min(pPage, pPageCount);
+  const pRows = purchases.slice((pIndex - 1) * PAGE_SIZE, pIndex * PAGE_SIZE);
+  useEffect(() => {
+    if (pPage !== pIndex) setPPage(pIndex);
+  }, [pPage, pIndex]);
+
   const tabs = [
     ["overview", at("cpTabOverview")],
     ["tastes", at("cpTabTastes")],
@@ -586,13 +811,13 @@ function CustomerProfile({ at, cardId, onBack }) {
   ];
 
   return (
-    <div className="admin-block admin-profile">
+    <div className="admin-block admin-profile" data-guide="cp">
       <div className="admin-toolbar">
-        <button type="button" className="admin-mini pressable" onClick={onBack}>
+        <button type="button" className="admin-mini pressable" data-guide="cp-back" onClick={onBack}>
           ← {at("cpBack")}
         </button>
       </div>
-      <Tabs at={at} label={at("cpTitle")} tabs={tabs} current={tab} onSelect={setTab} />
+      <Tabs at={at} label={at("cpTitle")} tabs={tabs} current={tab} onSelect={setTab} hook="cp" />
       {error ? <p className="admin-error">{error}</p> : null}
 
       {!profile ? (
@@ -601,7 +826,7 @@ function CustomerProfile({ at, cardId, onBack }) {
         <>
           {tab === "overview" ? (
             <>
-              <div className="card admin-profile-head">
+              <div className="card admin-profile-head" data-guide="cp-head">
                 <div>
                   <h2>{profile.card.name || "—"}</h2>
                   <p className="admin-muted">
@@ -614,7 +839,7 @@ function CustomerProfile({ at, cardId, onBack }) {
                 </div>
               </div>
 
-              <div className="admin-stats">
+              <div className="admin-stats" data-guide="cp-stats">
                 <div className="admin-stat card">
                   <strong>{profile.stats.totalPurchases}</strong>
                   <span>{at("loyPurchases")}</span>
@@ -633,7 +858,7 @@ function CustomerProfile({ at, cardId, onBack }) {
                 </div>
               </div>
 
-              <section className="card admin-section">
+              <section className="card admin-section" data-guide="cp-personality">
                 <h2 className="admin-subhead">{at("cpPersonality")}</h2>
                 <p className="admin-muted">{personality}</p>
               </section>
@@ -643,7 +868,7 @@ function CustomerProfile({ at, cardId, onBack }) {
           {tab === "tastes" ? (
             <>
               {profile.preferences.length > 0 ? (
-                <section className="card admin-section">
+                <section className="card admin-section" data-guide="cp-preferences">
                   <h2 className="admin-subhead">{at("cpPreferences")}</h2>
                   <ul className="admin-bars">
                     {profile.preferences.map((p) => (
@@ -662,7 +887,7 @@ function CustomerProfile({ at, cardId, onBack }) {
               ) : null}
 
               {profile.topBrands.length > 0 ? (
-                <section className="card admin-section">
+                <section className="card admin-section" data-guide="cp-brands">
                   <h2 className="admin-subhead">{at("cpBrands")}</h2>
                   <ul className="admin-chips">
                     {profile.topBrands.map((b) => (
@@ -675,7 +900,7 @@ function CustomerProfile({ at, cardId, onBack }) {
               ) : null}
 
               {profile.suggestions.length > 0 ? (
-                <section className="card admin-section">
+                <section className="card admin-section" data-guide="cp-suggestions">
                   <h2 className="admin-subhead">{at("cpSuggestions")}</h2>
                   <ul className="admin-suggestions">
                     {profile.suggestions.map((s, i) => (
@@ -697,14 +922,14 @@ function CustomerProfile({ at, cardId, onBack }) {
           ) : null}
 
           {tab === "purchases" ? (
-            <section className="card admin-section">
+            <section className="card admin-section" data-guide="cp-history">
               <h2 className="admin-subhead">{at("cpHistory")}</h2>
               {profile.purchases.length === 0 ? (
                 <p className="admin-muted">{at("cpNoPurchases")}</p>
               ) : (
                 <ul className="admin-purchases">
-                  {profile.purchases.map((p) => (
-                    <li key={p.id} className="admin-purchase">
+                  {pRows.map((p) => (
+                    <li key={p.id} className="admin-purchase" data-guide="cp-purchase">
                       <div>
                         <strong>{p.perfume_name}</strong>
                         <div className="admin-muted admin-small">
@@ -714,10 +939,11 @@ function CustomerProfile({ at, cardId, onBack }) {
                       </div>
                       <div className="admin-purchase-meta">
                         <span>{p.purchase_date || fmtDate(p.created_at)}</span>
-                        <strong>{p.purchase_price == null ? "—" : `${p.purchase_price} dt`}</strong>
+                        <strong>{money(p.purchase_price)}</strong>
                         <button
                           type="button"
                           className="admin-mini pressable danger"
+                          data-guide="cp-delete-purchase"
                           onClick={() => removePurchase(p.id)}
                         >
                           {at("delete")}
@@ -727,6 +953,15 @@ function CustomerProfile({ at, cardId, onBack }) {
                   ))}
                 </ul>
               )}
+              <Pager
+                at={at}
+                page={pIndex}
+                pageCount={pPageCount}
+                count={purchases.length}
+                unit={at("cpTabPurchases")}
+                onPage={setPPage}
+                hook="cp-pager"
+              />
             </section>
           ) : null}
 
@@ -760,15 +995,21 @@ function PurchasePanel({ at, cardId, onDone }) {
   });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const inFlight = useRef(false);
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
   async function submit(e) {
     e.preventDefault();
+    /* Synchronous guard: React state has not re-rendered yet when a second
+       click lands in the same tick, so `busy` alone cannot stop a duplicate
+       purchase (and its duplicate +1 point). */
+    if (inFlight.current) return;
     if (!form.perfumeName.trim()) {
       setError(at("rpPerfume"));
       return;
     }
+    inFlight.current = true;
     setError("");
     setBusy(true);
     try {
@@ -790,19 +1031,20 @@ function PurchasePanel({ at, cardId, onDone }) {
     } catch (e2) {
       setError(e2.message);
     } finally {
+      inFlight.current = false;
       setBusy(false);
     }
   }
 
   return (
-    <form className="admin-block" onSubmit={submit}>
+    <form className="admin-block" data-guide="record-purchase" onSubmit={submit}>
       {error ? <p className="admin-error">{error}</p> : null}
-      <section className="card admin-section">
+      <section className="card admin-section" data-guide="record-purchase-fields">
         <h2 className="admin-subhead">{at("rpTitle")}</h2>
-        <PurchaseFields at={at} form={form} set={set} />
+        <PurchaseFields at={at} form={form} set={set} hook="record-purchase" />
       </section>
       <div className="admin-form-foot">
-        <button type="submit" className="btn-accent pressable" disabled={busy}>
+        <button type="submit" className="btn-accent pressable" data-guide="record-purchase-submit" disabled={busy}>
           {at("rpSave")}
         </button>
       </div>

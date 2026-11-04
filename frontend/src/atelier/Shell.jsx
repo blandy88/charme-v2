@@ -1,10 +1,12 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route } from "react-router-dom";
-import { Compass, Heart, Moon, Newspaper, ShoppingBag, Sun, User } from "lucide-react";
+import { Compass, Heart, Menu, Moon, Newspaper, ShoppingBag, Sun, X } from "lucide-react";
+import { initials } from "./lib/text.js";
 import { api } from "../api/client.js";
 import { AuthProvider, useAuth } from "../contexts/AuthContext.jsx";
 import { CartProvider, useCart } from "../contexts/CartContext.jsx";
 import { FavoritesProvider, useFavorites } from "../contexts/FavoritesContext.jsx";
+import { GuideTourProvider } from "../contexts/GuideTourContext.jsx";
 import { NewsProvider, useNews } from "../contexts/NewsContext.jsx";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext.jsx";
 import { useI18n } from "../contexts/I18nContext.jsx";
@@ -162,6 +164,7 @@ const deferred = (node) => <Suspense fallback={<RouteFallback />}>{node}</Suspen
 function Nav({ onDiscover }) {
   const { user, isAdmin, signOut } = useAuth();
   const [menu, setMenu] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
   const unreadNotes = useUnreadNotes(isAdmin && menu);
   const menuRef = useRef(null);
 
@@ -190,15 +193,33 @@ function Nav({ onDiscover }) {
 
   const link = ({ isActive }) => (isActive ? "active" : undefined);
 
+  const avatarName = user ? (user.first_name || user.name || user.email || "") : "";
+  const avatarUrl =
+    user && user.avatar && user.avatar !== "default.jpg" ? user.avatar : null;
+  const avatarLabel = initials(avatarName) || "?";
+
   return (
     <header className="nav">
       <div className="wrap nav-row">
         <Link to="/" className="wordmark">Charme</Link>
-        <nav className="nav-links" data-guide="nav-links" aria-label="Primary">
-          <NavLink to="/" end className={link}>{t("home")}</NavLink>
-          <NavLink to="/collection" className={link} onMouseEnter={warmCatalogue} onPointerDown={warmCatalogue} onFocus={warmCatalogue}>{t("collection")}</NavLink>
-          <NavLink to="/contact" className={link} onMouseEnter={warmContact} onPointerDown={warmContact} onFocus={warmContact}>{t("contact")}</NavLink>
-          {user ? <NavLink to="/loyalty" className={link} onMouseEnter={warmLoyalty} onPointerDown={warmLoyalty} onFocus={warmLoyalty}>{t("loyalty")}</NavLink> : null}
+        <button
+          type="button"
+          onClick={() => setMobileMenu((m) => !m)}
+          aria-expanded={mobileMenu}
+          aria-label={t("menu")}
+          className="mobile-menu-btn pressable"
+        >
+          {mobileMenu ? <X size={15} /> : <Menu size={15} />}
+        </button>
+        <nav
+          className={`nav-links ${mobileMenu ? "open" : ""}`}
+          data-guide="nav-links"
+          aria-label="Primary"
+        >
+          <NavLink to="/" end className={link} onClick={() => setMobileMenu(false)}>{t("home")}</NavLink>
+          <NavLink to="/collection" className={link} onClick={() => setMobileMenu(false)} onMouseEnter={warmCatalogue} onPointerDown={warmCatalogue} onFocus={warmCatalogue}>{t("collection")}</NavLink>
+          <NavLink to="/contact" className={link} onClick={() => setMobileMenu(false)} onMouseEnter={warmContact} onPointerDown={warmContact} onFocus={warmContact}>{t("contact")}</NavLink>
+          {user ? <NavLink to="/loyalty" data-guide="loyalty-nav" className={link} onClick={() => setMobileMenu(false)} onMouseEnter={warmLoyalty} onPointerDown={warmLoyalty} onFocus={warmLoyalty}>{t("loyalty")}</NavLink> : null}
         </nav>
         <div className="nav-tools">
           <GlobalSearch />
@@ -263,59 +284,71 @@ function Nav({ onDiscover }) {
             <div className="account-menu" data-guide="account" ref={menuRef}>
               <button
                 type="button"
+                data-guide="account-btn"
                 onClick={() => setMenu((m) => !m)}
                 aria-expanded={menu}
                 aria-label={t("profile")}
-                className="tool-btn pressable"
+                className="tool-btn pressable nav-avatar"
                 onMouseEnter={warmProfile}
                 onFocus={warmProfile}
               >
-                <User size={15} />
+                {avatarUrl ? (
+                  <img className="nav-avatar-img" src={avatarUrl} alt="" />
+                ) : (
+                  <span className="nav-avatar-initials" aria-hidden="true">{avatarLabel}</span>
+                )}
+                <span className="nav-avatar-ring" aria-hidden="true" />
               </button>
-              {menu ? (
-                <div className="account-pop panel">
-                  <Link to="/profile" onClick={() => setMenu(false)}>{t("profile")}</Link>
-                  <Link to="/favorites" onClick={() => setMenu(false)}>{t("favorites")}</Link>
-                  <Link to="/cart" onClick={() => setMenu(false)}>{t("cart")}</Link>
-                  {isAdmin ? (
-                    <>
-                      <p className="account-pop-label">{t("adminTools")}</p>
-                      <Link
-                        to="/admin"
-                        className="admin-entry"
-                        onClick={() => setMenu(false)}
-                        onMouseEnter={warmAdmin}
-                        onPointerDown={warmAdmin}
-                        onFocus={warmAdmin}
-                      >
-                        {t("admin")}
-                      </Link>
-                      <Link
-                        to="/admin?tab=notes"
-                        className="admin-entry"
-                        onClick={() => setMenu(false)}
-                        onMouseEnter={warmAdmin}
-                        onPointerDown={warmAdmin}
-                        onFocus={warmAdmin}
-                      >
-                        {t("guestNotes")}
-                        {unreadNotes > 0 ? <span className="admin-badge">{unreadNotes}</span> : null}
-                      </Link>
-                      <Link
-                        to="/guides"
-                        className="admin-entry"
-                        onClick={() => setMenu(false)}
-                        onMouseEnter={warmGuides}
-                        onPointerDown={warmGuides}
-                        onFocus={warmGuides}
-                      >
-                        {t("guides")}
-                      </Link>
-                    </>
-                  ) : null}
-                  <button type="button" onClick={() => { setMenu(false); signOut(); }}>{t("signOut")}</button>
-                </div>
-              ) : null}
+              <div
+                className={`account-pop panel ${menu ? "open" : ""}`}
+                data-guide="account-pop"
+                data-state={menu ? "open" : "closed"}
+                aria-hidden={!menu}
+              >
+                <Link to="/profile" onClick={() => setMenu(false)}>{t("profile")}</Link>
+                <Link to="/favorites" onClick={() => setMenu(false)}>{t("favorites")}</Link>
+                <Link to="/cart" onClick={() => setMenu(false)}>{t("cart")}</Link>
+                {isAdmin ? (
+                  <>
+                    <p className="account-pop-label">{t("adminTools")}</p>
+                    <Link
+                      to="/admin"
+                      data-guide="admin-entry"
+                      className="admin-entry"
+                      onClick={() => setMenu(false)}
+                      onMouseEnter={warmAdmin}
+                      onPointerDown={warmAdmin}
+                      onFocus={warmAdmin}
+                    >
+                      {t("admin")}
+                    </Link>
+                    <Link
+                      to="/admin?tab=notes"
+                      data-guide="notes-entry"
+                      className="admin-entry"
+                      onClick={() => setMenu(false)}
+                      onMouseEnter={warmAdmin}
+                      onPointerDown={warmAdmin}
+                      onFocus={warmAdmin}
+                    >
+                      {t("guestNotes")}
+                      {unreadNotes > 0 ? <span className="admin-badge">{unreadNotes}</span> : null}
+                    </Link>
+                    <Link
+                      to="/guides"
+                      data-guide="guides-entry"
+                      className="admin-entry"
+                      onClick={() => setMenu(false)}
+                      onMouseEnter={warmGuides}
+                      onPointerDown={warmGuides}
+                      onFocus={warmGuides}
+                    >
+                      {t("guides")}
+                    </Link>
+                  </>
+                ) : null}
+                <button type="button" onClick={() => { setMenu(false); signOut(); }}>{t("signOut")}</button>
+              </div>
             </div>
           ) : (
             <Link
@@ -379,6 +412,9 @@ export default function Shell() {
           <FavoritesProvider>
             <CartProvider>
               <NewsProvider>
+              {/* Owns the running tour. It sits above the router so it can
+                  navigate to the page a guide's steps are written against. */}
+              <GuideTourProvider>
               <Nav onDiscover={setDiscover} />
               <RouteTransition preload={preloadRoute}>
                 <Route path="/" element={<Home />} />
@@ -398,6 +434,7 @@ export default function Shell() {
               <Footer />
               <Overlays />
               {discover ? <Discover initialTab={discover} onClose={() => setDiscover(null)} /> : null}
+              </GuideTourProvider>
               </NewsProvider>
             </CartProvider>
           </FavoritesProvider>

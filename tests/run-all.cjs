@@ -22,6 +22,7 @@ const CHECKS = [
   "ssrf-check",
   "verify-fixes",
   "loyalty-atomic",
+  "loyalty-cards-integration",
   "guide-integrity",
   "video-audit",
 ];

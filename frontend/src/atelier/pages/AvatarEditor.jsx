@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Check, Loader2, RotateCw, ZoomIn, ZoomOut } from "lucide-react";
 import { apiUpload } from "../../api/client.js";
 import { useI18n } from "../../contexts/I18nContext.jsx";
+import { useDialogFocus } from "../lib/useDialogFocus.js";
 import "./avatarEditor.css";
 
 /* Photo editor — the legacy's photoEditorModal (crop / zoom / rotate).
@@ -35,6 +36,11 @@ export default function AvatarEditor({ file, onDone, onCancel }) {
   const [error, setError] = useState("");
   const drag = useRef(null);
   const stageRef = useRef(null);
+  /* aria-modal="true" said the page behind this was inert; nothing made that
+     true of the keyboard. Focus stayed on the profile button that opened it,
+     and closing left it on <body>, so the next Tab restarted at the top. */
+  const panelRef = useRef(null);
+  useDialogFocus(panelRef, { initialFocus: ".ae-close" });
 
   /* ---------- the stage's real size ---------- */
   useEffect(() => {
@@ -187,7 +193,7 @@ export default function AvatarEditor({ file, onDone, onCancel }) {
     <div className="ae" role="dialog" aria-modal="true" aria-label={t("avatarEditorTitle")}>
       <button type="button" className="ae-scrim" aria-label={t("cancel")} onClick={onCancel} tabIndex={-1} />
 
-      <div className="ae-panel panel">
+      <div className="ae-panel panel" ref={panelRef}>
         <header className="ae-head">
           <div>
             <p className="eyebrow">{t("profilePhoto")}</p>

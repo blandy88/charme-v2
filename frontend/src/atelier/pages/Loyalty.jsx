@@ -5,6 +5,7 @@ import { api } from "../../api/client.js";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { initials } from "../lib/text.js";
+import { money as moneyFmt } from "../lib/catalog.js";
 import LoyaltyCardArt from "../LoyaltyCardArt.jsx";
 import "./loyalty.css";
 
@@ -115,10 +116,11 @@ export default function Loyalty() {
   const transactions = data.transactions || [];
   const threshold = data.rewardThreshold || 5;
 
-  const money = (value) => {
-    const amount = Math.round(Number(value || 0) * 100) / 100;
-    return `${amount.toFixed(amount % 1 === 0 ? 0 : 2)} DT`;
-  };
+  /* Was a local helper emitting an upper-case "DT" while every other page in
+     the shop wrote "dt" (the value of t("currency")). A loyalty card and the
+     page it is read from showed the same number in two different units. It now
+     shares the one formatter; the `|| 0` is kept because a ledger row with a
+     null amount reads as zero here, not as a dash. */
 
   /* t() is a plain lookup, so the placeholders are filled by hand — the same
      one-line pattern the rest of the app uses. */
@@ -212,7 +214,7 @@ export default function Loyalty() {
                     </span>
                   </span>
                   <span className="ly-row-side">
-                    <span className="ly-price">{money(p.purchase_price)}</span>
+                    <span className="ly-price">{moneyFmt(p.purchase_price || 0)}</span>
                     <span className="ly-date">{p.purchase_date || ""}</span>
                   </span>
                 </li>

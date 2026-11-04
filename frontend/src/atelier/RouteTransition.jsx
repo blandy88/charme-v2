@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { useLocation } from "react-router-dom";
 import { Routes } from "react-router-dom";
 import { getLenis } from "./SmoothScroll.jsx";
+import { armMorph, disarmMorph, runMorph } from "./morph.js";
 
 /*
  * Tab (route) transitions.
@@ -18,6 +20,12 @@ import { getLenis } from "./SmoothScroll.jsx";
  *   1. the outgoing page glides up while it fades and slides away
  *      (a real scroll-up driven by Lenis, not a snap to 0)
  *   2. the incoming page rises into place, section by section
+ *
+ * The one exception is card -> product, which morphs the clicked media into
+ * the PDP hero through the View Transitions API instead. Same-document
+ * transitions are safe for ONE named pair with a shared aspect ratio and
+ * unsafe for a page-height change, and that is exactly the split here. See
+ * morph.js; the arm itself below.
  *
  * prefers-reduced-motion shortens the timings here; it never disables
  * them, because "no animation at all" is what a broken site feels like.
@@ -99,6 +107,44 @@ export default function RouteTransition({ children, preload }) {
       const lenis = getLenis();
       const outMs = prefersReduced() ? OUT_MS_REDUCED : OUT_MS;
 
+      /* Card -> product, and only that. The view transition replaces both
+         beats: the live document is frozen while it runs, so an outgoing
+         glide and an incoming rise would animate a page nobody can see. */
+      let stageEl = null;
+      if (
+        runMorph(
+          () => {
+            /* The scroll reset lives inside the update callback on purpose --
+               the new state is captured the moment this returns, so scrolling
+               here is the difference between a PDP that starts at the top and
+               one that starts wherever the grid happened to be. */
+            if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+            else window.scrollTo(0, 0);
+
+            flushSync(() => {
+              setShown(live);
+              setPhase("in");
+            });
+            delete document.documentElement.dataset.navDir;
+
+            /* AFTER the commit, because `.stage` is keyed on the pathname:
+               flushSync throws the outgoing node away and mounts a new one,
+               so anything written before this lands on an element that is
+               about to be detached. Suppressing the incoming rise
+               (tokens.css, data-morph) is not cosmetic -- the new state is
+               captured on the very next frame, and a page photographed at 0%
+               of its rise would cross-fade in from nothing. */
+            stageEl = document.querySelector(".stage");
+            if (stageEl) stageEl.dataset.morph = "1";
+          },
+          () => {
+            if (stageEl) delete stageEl.dataset.morph;
+          },
+        )
+      ) {
+        return;
+      }
+
       document.documentElement.dataset.navDir = navDirection(from.pathname, live.pathname);
 
       // Glide to the top while the page leaves: a visible scroll-up, not a snap.
@@ -144,6 +190,38 @@ export default function RouteTransition({ children, preload }) {
   }, [live, shown, preload]);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  /* Arm on pointerdown, not click: by the time React's click handler has
+     navigated, the old state would already be captured. Capture phase, so it
+     runs before anything can stopPropagation. Any press that is not on a
+     card's media cancels the arm -- including the favourite button, which
+     sits inside the same card and must not morph the page. Keyboard gets the
+     same treatment on Enter, since a key press never produces a pointerdown. */
+  useEffect(() => {
+    const mediaOf = (el) => {
+      const media = el.closest(".shelf-media, .also-media");
+      if (media) return media;
+      /* The focused node is the link itself, and the media is its child. */
+      const card = el.closest(".shelf, .also a");
+      return card ? card.querySelector(".shelf-media, .also-media") : null;
+    };
+    const onPointerDown = (e) => {
+      const el = e.target instanceof Element ? mediaOf(e.target) : null;
+      if (el) armMorph(el);
+      else disarmMorph();
+    };
+    const onKeyDown = (e) => {
+      if (e.key !== "Enter") return;
+      const el = e.target instanceof Element ? mediaOf(e.target) : null;
+      if (el) armMorph(el);
+    };
+    document.addEventListener("pointerdown", onPointerDown, true);
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown, true);
+      document.removeEventListener("keydown", onKeyDown, true);
+    };
+  }, []);
 
   // Timing exposed for the CSS to read, so both stay in sync.
   const duration = prefersReduced() ? IN_MS / 2 : IN_MS;

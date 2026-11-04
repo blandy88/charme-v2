@@ -6,6 +6,8 @@ import { useI18n } from "../../contexts/I18nContext.jsx";
 import { ADMIN_STR } from "./adminI18n.js";
 import { fmtDate, Modal, Stat } from "./adminKit.jsx";
 import { Loyalty } from "./AdminLoyalty.jsx";
+import AdminAssistant from "./AdminAssistant.jsx";
+import { tablistKeys } from "../lib/tablist.js";
 import "./admin.css";
 
 /* ------------------------------------------------------------------ Overview */
@@ -39,16 +41,16 @@ function Overview({ at }) {
   const unread = notes ? notes.filter((n) => !n.is_read).length : null;
 
   return (
-    <div className="admin-stats">
-      <Stat label={at("statTotalUsers")} value={stats?.totalUsers} />
-      <Stat label={at("statCards")} value={cards ? cards.length : null} />
-      <Stat label={at("statEligible")} value={eligible} />
-      <Stat label={at("statRewardsGiven")} value={rewards} />
-      <Stat label={at("statNews")} value={news ? news.length : null} />
-      <Stat label={at("statUnreadNotes")} value={unread} />
-      <Stat label={at("statAdmins")} value={stats?.adminUsers} />
-      <Stat label={at("statBanned")} value={stats?.bannedUsers} />
-      <Stat label={at("statGmail")} value={stats?.gmailUsers} />
+    <div className="admin-stats" data-guide="admin-stats">
+      <Stat guide="stat-users" label={at("statTotalUsers")} value={stats?.totalUsers} />
+      <Stat guide="stat-cards" label={at("statCards")} value={cards ? cards.length : null} />
+      <Stat guide="stat-eligible" label={at("statEligible")} value={eligible} />
+      <Stat guide="stat-rewards" label={at("statRewardsGiven")} value={rewards} />
+      <Stat guide="stat-news" label={at("statNews")} value={news ? news.length : null} />
+      <Stat guide="stat-notes" label={at("statUnreadNotes")} value={unread} />
+      <Stat guide="stat-admins" label={at("statAdmins")} value={stats?.adminUsers} />
+      <Stat guide="stat-banned" label={at("statBanned")} value={stats?.bannedUsers} />
+      <Stat guide="stat-gmail" label={at("statGmail")} value={stats?.gmailUsers} />
     </div>
   );
 }
@@ -113,6 +115,7 @@ function Users({ at }) {
         <input
           type="search"
           className="field admin-search"
+          data-guide="users-search"
           placeholder={at("search")}
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -124,7 +127,7 @@ function Users({ at }) {
       ) : users.length === 0 ? (
         <p className="admin-muted">{at("empty")}</p>
       ) : (
-        <div className="admin-table-wrap">
+        <div className="admin-table-wrap" data-guide="users-table">
           <table className="admin-table">
             <thead>
               <tr>
@@ -139,7 +142,7 @@ function Users({ at }) {
             </thead>
             <tbody>
               {shown.map((u) => (
-                <tr key={u.id} className={u.isBanned ? "is-banned" : undefined}>
+                <tr key={u.id} data-guide="users-row" className={u.isBanned ? "is-banned" : undefined}>
                   <td>
                     {u.name || "—"}
                     {u.isAdmin ? <span className="admin-tag">{at("statAdmins")}</span> : null}
@@ -155,13 +158,19 @@ function Users({ at }) {
                   </td>
                   <td className="num">
                     {u.isBanned ? (
-                      <button type="button" className="admin-mini pressable" onClick={() => doUnban(u.id)}>
+                      <button
+                        type="button"
+                        className="admin-mini pressable"
+                        data-guide="users-unban"
+                        onClick={() => doUnban(u.id)}
+                      >
                         {at("unban")}
                       </button>
                     ) : (
                       <button
                         type="button"
                         className="admin-mini pressable danger"
+                        data-guide="users-ban"
                         onClick={() => {
                           setBanFor(u);
                           setReason("");
@@ -187,7 +196,12 @@ function Users({ at }) {
               <button type="button" className="btn-ghost pressable" onClick={() => setBanFor(null)}>
                 {at("cancel")}
               </button>
-              <button type="button" className="btn-accent pressable" onClick={() => doBan(banFor.id)}>
+              <button
+                type="button"
+                className="btn-accent pressable"
+                data-guide="users-ban-confirm"
+                onClick={() => doBan(banFor.id)}
+              >
                 {at("confirm")}
               </button>
             </>
@@ -196,7 +210,12 @@ function Users({ at }) {
           <p className="admin-muted">{banFor.name}</p>
           <label className="admin-field">
             <span>{at("banReason")}</span>
-            <input className="field" value={reason} onChange={(e) => setReason(e.target.value)} />
+            <input
+              className="field"
+              data-guide="users-ban-reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
           </label>
         </Modal>
       ) : null}
@@ -260,16 +279,27 @@ function NewsAdmin({ at }) {
 
   return (
     <div className="admin-block admin-news">
-      <form className="card admin-form" onSubmit={publish}>
+      <form className="card admin-form" data-guide="news-form" onSubmit={publish}>
         <h2>{at("newsCompose")}</h2>
         <div className="admin-form-row">
           <label className="admin-field">
             <span>{at("newsBadge")}</span>
-            <input className="field" value={form.badge} onChange={(e) => set("badge", e.target.value)} maxLength={40} />
+            <input
+              className="field"
+              data-guide="news-badge"
+              value={form.badge}
+              onChange={(e) => set("badge", e.target.value)}
+              maxLength={40}
+            />
           </label>
           <label className="admin-field">
             <span>{at("newsIcon")}</span>
-            <select className="field" value={form.icon} onChange={(e) => set("icon", e.target.value)}>
+            <select
+              className="field"
+              data-guide="news-icon"
+              value={form.icon}
+              onChange={(e) => set("icon", e.target.value)}
+            >
               {ICONS.map((i) => (
                 <option key={i || "none"} value={i}>
                   {i || "—"}
@@ -280,25 +310,50 @@ function NewsAdmin({ at }) {
         </div>
         <label className="admin-field">
           <span>{at("newsTitleField")}</span>
-          <input className="field" value={form.title} onChange={(e) => set("title", e.target.value)} maxLength={120} />
+          <input
+            className="field"
+            data-guide="news-title"
+            value={form.title}
+            onChange={(e) => set("title", e.target.value)}
+            maxLength={120}
+          />
         </label>
         <label className="admin-field">
           <span>{at("newsContent")}</span>
-          <textarea className="field" rows={4} value={form.content} onChange={(e) => set("content", e.target.value)} maxLength={1000} />
+          <textarea
+            className="field"
+            data-guide="news-content"
+            rows={4}
+            value={form.content}
+            onChange={(e) => set("content", e.target.value)}
+            maxLength={1000}
+          />
         </label>
         <div className="admin-form-row">
           <label className="admin-field">
             <span>{at("newsCtaLabel")}</span>
-            <input className="field" value={form.cta_label} onChange={(e) => set("cta_label", e.target.value)} maxLength={60} />
+            <input
+              className="field"
+              data-guide="news-cta-label"
+              value={form.cta_label}
+              onChange={(e) => set("cta_label", e.target.value)}
+              maxLength={60}
+            />
           </label>
           <label className="admin-field">
             <span>{at("newsCtaUrl")}</span>
-            <input className="field" value={form.cta_url} onChange={(e) => set("cta_url", e.target.value)} maxLength={500} />
+            <input
+              className="field"
+              data-guide="news-cta-url"
+              value={form.cta_url}
+              onChange={(e) => set("cta_url", e.target.value)}
+              maxLength={500}
+            />
           </label>
         </div>
 
         {preview ? (
-          <div className="admin-preview card">
+          <div className="admin-preview card" data-guide="news-preview">
             {form.icon ? <span className="admin-preview-icon">{form.icon}</span> : null}
             {form.badge ? <span className="admin-preview-badge">{form.badge}</span> : null}
             <strong>{form.title || at("newsTitleField")}</strong>
@@ -308,16 +363,21 @@ function NewsAdmin({ at }) {
         {error ? <p className="admin-error">{error}</p> : null}
 
         <div className="admin-form-actions">
-          <button type="button" className="btn-ghost pressable" onClick={() => setPreview((p) => !p)}>
+          <button
+            type="button"
+            className="btn-ghost pressable"
+            data-guide="news-preview-btn"
+            onClick={() => setPreview((p) => !p)}
+          >
             {at("newsPreview")}
           </button>
-          <button type="submit" className="btn-accent pressable" disabled={busy}>
+          <button type="submit" className="btn-accent pressable" data-guide="news-publish" disabled={busy}>
             {busy ? at("loading") : at("newsPublish")}
           </button>
         </div>
       </form>
 
-      <div className="admin-list">
+      <div className="admin-list" data-guide="news-list">
         <h2 className="admin-subhead">{at("newsList")}</h2>
         {!items ? (
           <p className="admin-muted">{at("loading")}</p>
@@ -326,7 +386,7 @@ function NewsAdmin({ at }) {
         ) : (
           <ul className="admin-cards">
             {items.map((n) => (
-              <li key={n.id} className="card admin-news-item">
+              <li key={n.id} className="card admin-news-item" data-guide="news-item">
                 <div className="admin-news-head">
                   {n.icon ? <span className="admin-preview-icon">{n.icon}</span> : null}
                   <strong>{n.title}</strong>
@@ -336,7 +396,12 @@ function NewsAdmin({ at }) {
                 <p className="admin-muted">{n.content}</p>
                 <div className="admin-news-foot">
                   <span className="admin-muted">{fmtDate(n.created_at)}</span>
-                  <button type="button" className="admin-mini pressable danger" onClick={() => remove(n.id)}>
+                  <button
+                    type="button"
+                    className="admin-mini pressable danger"
+                    data-guide="news-delete"
+                    onClick={() => remove(n.id)}
+                  >
                     {at("delete")}
                   </button>
                 </div>
@@ -351,11 +416,16 @@ function NewsAdmin({ at }) {
 }
 
 /* --------------------------------------------------------------------- Hours */
+/* Hours are stored as fractional numbers (9.5 = 09:30). The minute rounding
+   has to wrap: a stored 18.999 rounds to 60, and "18:60" is not a time - a
+   time input silently discards it and the row then saves as closed. */
 function toTime(v) {
   if (v == null || v === "") return "";
   if (typeof v === "number") {
-    const h = Math.floor(v);
-    const m = Math.round((v - h) * 60);
+    const total = Math.round(v * 60);
+    if (!Number.isFinite(total)) return "";
+    const h = Math.floor(total / 60);
+    const m = total % 60;
     return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
   }
   return String(v);
@@ -417,11 +487,11 @@ function Hours({ at }) {
   }
 
   return (
-    <form className="admin-block admin-hours card" onSubmit={save}>
+    <form className="admin-block admin-hours card" data-guide="hours-form" onSubmit={save}>
       <p className="admin-muted">{at("hoursIntro")}</p>
-      <div className="admin-hours-grid">
+      <div className="admin-hours-grid" data-guide="hours-grid">
         {rows.map((r, i) => (
-          <div key={r.day} className={`admin-hours-row${r.closed ? " closed" : ""}`}>
+          <div key={r.day} className={`admin-hours-row${r.closed ? " closed" : ""}`} data-guide="hours-row">
             <span className="admin-hours-day">{at(`day${i}`)}</span>
             <label className="admin-check">
               <input
@@ -457,17 +527,17 @@ function Hours({ at }) {
       <div className="admin-form-row">
         <label className="admin-field">
           <span>{at("hoursTz")}</span>
-          <input className="field" value={tz} onChange={(e) => setTz(e.target.value)} />
+          <input className="field" data-guide="hours-tz" value={tz} onChange={(e) => setTz(e.target.value)} />
         </label>
         <label className="admin-field">
           <span>{at("hoursNote")}</span>
-          <input className="field" value={note} onChange={(e) => setNote(e.target.value)} />
+          <input className="field" data-guide="hours-note" value={note} onChange={(e) => setNote(e.target.value)} />
         </label>
       </div>
       {error ? <p className="admin-error">{error}</p> : null}
       {status ? <p className="admin-ok">{status}</p> : null}
       <div className="admin-form-actions">
-        <button type="submit" className="btn-accent pressable">
+        <button type="submit" className="btn-accent pressable" data-guide="hours-save">
           {at("hoursSave")}
         </button>
       </div>
@@ -523,9 +593,9 @@ function Notes({ at }) {
       ) : notes.length === 0 ? (
         <p className="admin-muted">{at("empty")}</p>
       ) : (
-        <ul className="admin-notes">
+        <ul className="admin-notes" data-guide="notes-list">
           {notes.map((n) => (
-            <li key={n.id} className={`card admin-note${n.is_read ? "" : " unread"}`}>
+            <li key={n.id} className={`card admin-note${n.is_read ? "" : " unread"}`} data-guide="notes-item">
               <div className="admin-note-head">
                 <strong>{n.author_name || at("notesAnonymous")}</strong>
                 <span className={`admin-pill${n.is_read ? " on" : " off"}`}>
@@ -536,11 +606,21 @@ function Notes({ at }) {
               <p className="admin-note-msg">{n.message}</p>
               <div className="admin-note-foot">
                 {!n.is_read ? (
-                  <button type="button" className="admin-mini pressable" onClick={() => markRead(n.id)}>
+                  <button
+                    type="button"
+                    className="admin-mini pressable"
+                    data-guide="notes-mark-read"
+                    onClick={() => markRead(n.id)}
+                  >
                     {at("notesMarkRead")}
                   </button>
                 ) : null}
-                <button type="button" className="admin-mini pressable danger" onClick={() => remove(n.id)}>
+                <button
+                  type="button"
+                  className="admin-mini pressable danger"
+                  data-guide="notes-delete"
+                  onClick={() => remove(n.id)}
+                >
                   {at("delete")}
                 </button>
               </div>
@@ -575,6 +655,9 @@ export default function Admin() {
     setParams(next, { replace: true });
   };
   const [unread, setUnread] = useState(0);
+  /* Bumped when the assistant changes something, which re-mounts the active
+     panel so the admin sees the same result they would get from a reload. */
+  const [revision, setRevision] = useState(0);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -630,14 +713,18 @@ export default function Admin() {
         <h1>{at("title")}</h1>
       </header>
 
-      <nav className="admin-tabs" role="tablist" aria-label={at("title")}>
+      <nav className="admin-tabs" data-guide="admin-tabs" role="tablist" aria-label={at("title")}>
         {tabs.map(([id, label]) => (
           <button
             key={id}
             type="button"
             data-guide={TAB_GUIDE[id]}
             role="tab"
+            id={`admin-tab-${id}`}
+            aria-controls="admin-tabpanel"
             aria-selected={tab === id}
+            tabIndex={tab === id ? 0 : -1}
+            onKeyDown={tablistKeys(tab, setTab, tabs.map(([tid]) => tid), "admin-tab-")}
             className={`admin-tab pressable${tab === id ? " on" : ""}`}
             onClick={() => setTab(id)}
           >
@@ -647,7 +734,14 @@ export default function Admin() {
         ))}
       </nav>
 
-      <div className="admin-body">
+      {/* Re-keyed on each assistant mutation so the open tab refetches. */}
+      <div
+        className="admin-body"
+        key={revision}
+        role="tabpanel"
+        id="admin-tabpanel"
+        aria-labelledby={`admin-tab-${tab}`}
+      >
         {tab === "overview" ? <Overview at={at} /> : null}
         {tab === "users" ? <Users at={at} /> : null}
         {tab === "loyalty" ? <Loyalty at={at} /> : null}
@@ -655,6 +749,11 @@ export default function Admin() {
         {tab === "hours" ? <Hours at={at} /> : null}
         {tab === "notes" ? <Notes at={at} /> : null}
       </div>
+
+      {/* Charme Copilot — admin-only assistant. It lives on every admin tab
+          (floating dock) and is gated by isAdmin above, so it never renders on
+          the storefront. */}
+      <AdminAssistant at={at} lang={lang} onMutated={() => setRevision((n) => n + 1)} />
     </main>
   );
 }

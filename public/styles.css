@@ -293,7 +293,7 @@ html {
     gap: 4px;
     padding: 3px 8px;
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -324,7 +324,7 @@ html {
 }
 
 .suggestion-availability .availability-badge {
-    font-size: 10px;
+    font-size: 12px;
     padding: 4px 8px;
     border-radius: 4px;
     white-space: nowrap;
@@ -906,7 +906,7 @@ html {
 }
 
 .suggestion-type {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--color-gold);
     background: linear-gradient(
@@ -1105,7 +1105,7 @@ html {
 .profile-badge {
     padding: 2px 6px;
     border-radius: 3px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -1229,11 +1229,11 @@ html {
     }
 
     .suggestion-subtitle {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .suggestion-type {
-        font-size: 10px;
+        font-size: 12px;
         padding: 1px 4px;
     }
 
@@ -1451,7 +1451,7 @@ html {
 .user-profile.admin-user .user-name {
     color: #f5e6b8 !important;
     font-family: "DM Sans", "Inter", sans-serif !important;
-    font-size: 11.5px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.05em !important;
     text-transform: uppercase !important;
@@ -1470,7 +1470,7 @@ html {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     font-weight: 700 !important;
     line-height: 1 !important;
     color: #0a0a0a !important;
@@ -1823,7 +1823,7 @@ html {
 .search-suggestions h3 {
     color: rgba(255, 255, 255, 0.5);
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -1842,7 +1842,7 @@ html {
     padding: 8px 16px;
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.06em;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1966,7 +1966,7 @@ html {
     color: #ff4500;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     margin-bottom: 2px;
@@ -1975,7 +1975,7 @@ html {
 .reddit-subreddit {
     color: rgba(255, 255, 255, 0.4);
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.06em;
 }
 
@@ -2043,7 +2043,7 @@ html {
 .post-time {
     color: rgba(255, 255, 255, 0.3);
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
@@ -2076,7 +2076,7 @@ html {
     gap: 6px;
     color: rgba(255, 255, 255, 0.35);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.04em;
     cursor: pointer;
     transition: color 0.3s ease;
@@ -2135,7 +2135,7 @@ html {
 .search-results-list h3 {
     color: rgba(255, 255, 255, 0.5);
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -2224,7 +2224,7 @@ html {
     color: rgba(255, 255, 255, 0.8);
     padding: 6px 12px;
     border-radius: 2px;
-    font-size: 11px;
+    font-size: 12px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -2337,7 +2337,7 @@ html {
         right: -6px;
         min-width: 14px;
         height: 14px;
-        font-size: 10px;
+        font-size: 12px;
         line-height: 10px;
         padding: 2px 4px;
         border-width: 1.5px;
@@ -2396,7 +2396,7 @@ html {
 
     .note-tag {
         padding: 4px 8px;
-        font-size: 10px;
+        font-size: 12px;
         border-radius: 4px;
     }
 }
@@ -2676,7 +2676,7 @@ html {
 .form-group label {
     color: var(--color-text-secondary);
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     margin-bottom: 8px;
     letter-spacing: 0.15em;
@@ -2711,7 +2711,7 @@ html {
 
 .password-requirements small {
     color: rgba(255, 255, 255, 0.5);
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .form-options {
@@ -2760,7 +2760,7 @@ html {
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
 }
 
@@ -2784,7 +2784,7 @@ html {
     border-radius: 4px;
     cursor: pointer;
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     transition: all var(--transition-normal);
     letter-spacing: 0.16em;
@@ -3133,7 +3133,7 @@ html {
 
 .btn-small {
     padding: 7px 14px;
-    font-size: 11px;
+    font-size: 12px;
     border-radius: 4px;
     border: 1px solid rgba(201, 162, 75, 0.35);
     background: rgba(201, 162, 75, 0.10);
@@ -3410,7 +3410,7 @@ html {
 .nav-link {
     color: rgba(245, 243, 240, 0.58);
     text-decoration: none;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 650;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -3716,7 +3716,7 @@ html {
 /* Arrow indicator for dropdown */
 .current-lang::after {
     content: "▼";
-    font-size: 10px;
+    font-size: 12px;
     margin-left: 6px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     color: rgba(255, 255, 255, 0.6);
@@ -3814,16 +3814,16 @@ html {
     }
 
     .user-name {
-        font-size: 11px;
+        font-size: 12px;
         max-width: 80px;
     }
 
     .user-profile.admin-user .user-name {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .user-profile.admin-user .user-name::after {
-        font-size: 9px;
+        font-size: 12px;
         padding: 1.5px 4px;
     }
 }
@@ -3876,16 +3876,16 @@ html {
     }
 
     .user-name {
-        font-size: 10px;
+        font-size: 12px;
         max-width: 70px;
     }
 
     .user-profile.admin-user .user-name {
-        font-size: 10.5px !important;
+        font-size: 12px !important;
     }
 
     .user-profile.admin-user .user-name::after {
-        font-size: 9px !important;
+        font-size: 12px !important;
         padding: 1px 3.5px !important;
         letter-spacing: 0.3px;
     }
@@ -4040,7 +4040,7 @@ html {
 }
 
 .contact-card__label {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -4219,7 +4219,7 @@ html[data-theme="light"] .contact-card {
 }
 
 .meta-tag {
-    font-size: 9.5px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -4227,12 +4227,12 @@ html[data-theme="light"] .contact-card {
 }
 
 .meta-separator {
-    font-size: 10px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.2);
 }
 
 .meta-status {
-    font-size: 9.5px;
+    font-size: 12px;
     color: var(--text-sub);
     font-weight: 400;
 }
@@ -4320,7 +4320,9 @@ html[data-theme="light"] .contact-card {
     display: inline-flex;
     align-items: center;
     background: #25D366;
-    color: #ffffff;
+    /* White on WhatsApp green measured 1.98:1. The icon is currentColor, so
+       one dark-ink colour fixes symbol + label together (7.5:1). */
+    color: #052e16;
     text-decoration: none;
     border-radius: 100px;
     padding: 8px 15px 8px 13px;
@@ -4500,13 +4502,13 @@ html[data-theme="light"] .beacon-dot {
 }
 
 .note-label {
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--text-primary);
 }
 
 .note-counter {
-    font-size: 10.5px;
+    font-size: 12px;
     color: var(--text-tertiary);
     font-variant-numeric: tabular-nums;
 }
@@ -4550,7 +4552,7 @@ html[data-theme="light"] .beacon-dot {
 }
 
 .note-shortcut {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-tertiary);
 }
 
@@ -4560,7 +4562,7 @@ html[data-theme="light"] .beacon-dot {
     border: 1px solid var(--card-border);
     border-radius: 4px;
     padding: 1px 4px;
-    font-size: 10px;
+    font-size: 12px;
     color: var(--text-secondary);
 }
 
@@ -4744,7 +4746,7 @@ html[data-theme="light"] .receipt-reset:hover {
 }
 
 .hours-clock {
-    font-size: 11.5px;
+    font-size: 12px;
     font-variant-numeric: tabular-nums;
     color: var(--text-tertiary);
 }
@@ -4756,7 +4758,7 @@ html[data-theme="light"] .receipt-reset:hover {
     gap: 6px;
     padding: 4px 9px;
     border-radius: 99px;
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 500;
     transition: all 0.2s ease;
 }
@@ -4815,7 +4817,7 @@ html[data-theme="light"] .receipt-reset:hover {
 }
 
 .today-tag {
-    font-size: 9.5px;
+    font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -4856,7 +4858,7 @@ html[data-theme="light"] .receipt-reset:hover {
     margin-top: 14px;
     padding-top: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-tertiary);
 }
 
@@ -5056,7 +5058,9 @@ html[data-theme="light"] .hero-map {
 
 /* Facebook */
 .hero-social-pill--facebook {
-    background: #1877F2;
+    /* #1877F2 with white measured 4.23:1 - just under AA. #166FE5 is 4.73:1
+       and visually the same brand blue. */
+    background: #166FE5;
     box-shadow: 0 4px 16px rgba(24, 119, 242, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 .hero-social-pill--facebook::before {
@@ -5098,7 +5102,7 @@ html[data-theme="light"] .hero-map {
 }
 .hero-social-pill__label {
     font-family: "Inter", system-ui, sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.04em;
     opacity: 0.75;
@@ -5460,7 +5464,7 @@ html[data-theme="light"] .social-popup__backdrop {
 
 .hero-eyebrow {
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.35em;
     text-transform: uppercase;
@@ -5631,7 +5635,7 @@ html[data-theme="light"] .social-popup__backdrop {
 
 .footer-col h4 {
     font-family: 'DM Sans', 'Inter', sans-serif !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.25em !important;
     text-transform: uppercase !important;
@@ -5664,7 +5668,7 @@ html[data-theme="light"] .social-popup__backdrop {
 
 .footer-bottom span {
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     color: var(--color-text-muted);
     letter-spacing: 0.08em;
@@ -5754,7 +5758,7 @@ html[data-theme="light"] .social-popup__backdrop {
     color: #060606;
     border-radius: 50%;
     padding: 2px 5px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     min-width: 14px;
     height: 14px;
@@ -6193,7 +6197,7 @@ html[data-theme="light"] .social-popup__backdrop {
 
 .brand-location {
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 400;
     color: var(--color-text-muted);
     margin: 0 0 20px 0;
@@ -6328,7 +6332,7 @@ html[data-theme="light"] .social-popup__backdrop {
 }
 
 .price-unit {
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     opacity: 0.7;
@@ -6385,7 +6389,7 @@ html[data-theme="light"] .social-popup__backdrop {
 /* Premium Subtitle - Clean styling */
 .price-subtitle {
     font-family: "Playfair Display", serif;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.5);
     letter-spacing: 2px;
@@ -6417,7 +6421,7 @@ html[data-theme="light"] .social-popup__backdrop {
 
 .quality-title {
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--color-text-secondary);
     margin: 0 0 4px 0;
@@ -6427,7 +6431,7 @@ html[data-theme="light"] .social-popup__backdrop {
 
 .quality-subtitle {
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 400;
     color: var(--color-text-muted);
     letter-spacing: 0.08em;
@@ -6631,7 +6635,7 @@ html[data-theme="light"] .social-popup__backdrop {
 
 .profile-title {
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--color-gold);
     margin: 0 0 4px 0;
@@ -6803,7 +6807,7 @@ html[data-theme="light"] .social-popup__backdrop {
 .meter-scale {
     display: flex;
     justify-content: space-between;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.6);
 }
 
@@ -7577,7 +7581,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .meter-scale {
-        font-size: 0.65rem;
+        font-size: 0.75rem;
     }
 
     .fragrance-notes {
@@ -7626,7 +7630,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .price-subtitle {
-        font-size: 11px;
+        font-size: 12px;
         letter-spacing: 1.5px;
     }
 
@@ -7647,7 +7651,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .quality-subtitle {
-        font-size: 10px;
+        font-size: 12px;
         letter-spacing: 1px;
     }
 
@@ -7666,7 +7670,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .quality-description {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .selection-indicator {
@@ -7741,7 +7745,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .meter-scale {
-        font-size: 0.6rem;
+        font-size: 0.75rem;
     }
 
     .meter-indicator {
@@ -7777,7 +7781,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .note-name {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .perfume-rating {
@@ -7805,7 +7809,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .indicator-label {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .indicator-bar {
@@ -7868,7 +7872,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .brand-location {
-        font-size: 10px;
+        font-size: 12px;
         letter-spacing: 1.5px;
         margin-bottom: 15px;
     }
@@ -7903,7 +7907,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .price-subtitle {
-        font-size: 10px;
+        font-size: 12px;
         letter-spacing: 1px;
     }
 
@@ -7929,7 +7933,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .quality-subtitle {
-        font-size: 9px;
+        font-size: 12px;
         letter-spacing: 0.8px;
     }
 
@@ -7949,7 +7953,7 @@ html[data-theme="light"] .social-popup__backdrop {
     }
 
     .quality-description {
-        font-size: 9px;
+        font-size: 12px;
     }
 
     .selection-indicator {
@@ -8008,16 +8012,16 @@ html[data-theme="light"] .social-popup__backdrop {
 
     .rating-label {
         min-width: 60px;
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .rating-count {
-        font-size: 11px;
+        font-size: 12px;
         min-width: 35px;
     }
 
     .gender-labels {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .gender-dot {
@@ -8027,7 +8031,7 @@ html[data-theme="light"] .social-popup__backdrop {
 
     .price-labels {
         gap: 30px;
-        font-size: 11px;
+        font-size: 12px;
     }
 }
 
@@ -8209,7 +8213,7 @@ html {
 .pegasus-section .scent-profile-subtitle {
     color: #b85450;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-style: normal;
     opacity: 1;
     letter-spacing: 0.08em;
@@ -8248,7 +8252,7 @@ html {
 .pegasus-section .attribute-name {
     color: rgba(255, 255, 255, 0.8);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.06em;
     min-width: 60px;
@@ -8307,7 +8311,7 @@ html {
 .pegasus-section .projection-text {
     color: #b85450;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -8690,7 +8694,7 @@ html {
     color: #b85450;
     font-family: 'DM Sans', sans-serif;
     font-style: normal;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.06em;
     opacity: 0.8;
 }
@@ -8732,7 +8736,7 @@ html {
     padding: 2px 10px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
 }
@@ -8755,7 +8759,7 @@ html {
     border-radius: 0;
     padding: 5px 10px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.04em;
 }
 
@@ -9046,7 +9050,7 @@ html {
 .haltane-section-container .price-subtitle {
     color: #8d6e63 !important;
     font-family: "Playfair Display", serif !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 500 !important;
     letter-spacing: 2px !important;
     text-transform: uppercase !important;
@@ -9517,7 +9521,7 @@ html {
 /* Haltane Premium Subtitle */
 .haltane-price-subtitle {
     font-family: "Playfair Display", serif;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 400;
     color: #c9a86c;
     letter-spacing: 2px;
@@ -9691,7 +9695,7 @@ html {
 
 .haltane-quality-subtitle {
     font-family: "Playfair Display", serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.7);
     letter-spacing: 1.5px;
@@ -9895,7 +9899,7 @@ html {
 
 .haltane-quality-description {
     font-family: "Playfair Display", serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.7);
     letter-spacing: 0.5px;
@@ -10304,7 +10308,7 @@ html {
 
 .haltane-metric-value {
     font-family: "Playfair Display", serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     color: #c9a86c;
     text-shadow: none;
@@ -10363,7 +10367,7 @@ html {
 
 .haltane-description-subtitle {
     font-family: "Playfair Display", serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 300;
     color: #c9a86c;
     letter-spacing: 1px;
@@ -10428,7 +10432,7 @@ html {
 
 .layton-description-subtitle {
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     color: var(--color-gold);
     letter-spacing: 0.15em;
@@ -10496,7 +10500,7 @@ html {
 
 .pegasus-description-subtitle {
     font-family: "Playfair Display", serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 300;
     color: #c9807c;
     letter-spacing: 1px;
@@ -10591,7 +10595,7 @@ html {
 
 .haltane-no-vote {
     color: #8d6e63;
-    font-size: 11px;
+    font-size: 12px;
     font-style: italic;
     margin-left: auto;
     opacity: 0.7;
@@ -10607,7 +10611,7 @@ html {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .haltane-rating-label {
@@ -10663,7 +10667,7 @@ html {
     font-weight: 600;
     min-width: 35px;
     text-align: right;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 /* Haltane Gender Indicators */
@@ -10680,7 +10684,7 @@ html {
 .haltane-gender-labels {
     display: flex;
     justify-content: space-between;
-    font-size: 10px;
+    font-size: 12px;
     color: #8d6e63;
     font-weight: 500;
 }
@@ -11127,7 +11131,7 @@ html {
 
 .pegasus-no-vote {
     color: #757575;
-    font-size: 11px;
+    font-size: 12px;
     font-style: italic;
     margin-left: auto;
     opacity: 0.7;
@@ -11143,7 +11147,7 @@ html {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .pegasus-rating-label {
@@ -11200,7 +11204,7 @@ html {
     font-weight: 600;
     min-width: 30px;
     text-align: right;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .pegasus-rating-indicators {
@@ -12460,7 +12464,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     color: var(--color-success);
     border: 1px solid var(--color-success);
     border-radius: 50%;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     margin-right: 12px;
     flex-shrink: 0;
@@ -12504,7 +12508,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     color: var(--color-error);
     border: 1px solid var(--color-error);
     border-radius: 50%;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     margin-right: 12px;
     flex-shrink: 0;
@@ -12705,7 +12709,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     padding: 10px 16px;
     border-radius: var(--radius-md);
     font-family: 'Inter', 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -12896,7 +12900,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid rgba(255, 215, 0, 0.4);
     border-radius: 4px;
     color: var(--color-gold);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -13283,7 +13287,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .reply-date {
     color: rgba(255, 255, 255, 0.5);
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .reply-content {
@@ -13345,7 +13349,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .reply-action-icon {
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .reply-action-count {
@@ -13353,7 +13357,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .reply-action-text {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
 }
 
@@ -13371,7 +13375,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid rgba(255, 215, 0, 0.3);
     border-radius: 2px;
     color: var(--color-gold);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2px;
@@ -13413,7 +13417,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
+    font-size: 12px;
     z-index: 10;
     filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5))
         drop-shadow(0 0 3px rgba(255, 215, 0, 0.7))
@@ -13843,7 +13847,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 #loyaltyEditModal .form-group label {
     display: block !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 500 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.1em !important;
@@ -13937,18 +13941,18 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .cp-meta { display: flex !important; gap: 0 !important; flex-wrap: wrap !important; font-size: 0.78rem !important; color: rgba(244,236,217,0.45) !important; }
 .cp-meta > span { display: inline-flex !important; align-items: center !important; }
 .cp-meta > span:not(:first-child)::before { content: "·"; margin: 0 9px !important; color: rgba(201,169,78,0.65) !important; }
-.cp-card-num { font-family: var(--font-mono, ui-monospace, monospace) !important; letter-spacing: 1px !important; font-size: 0.74rem !important; color: rgba(201,169,78,0.8) !important; }
+.cp-card-num { font-family: var(--font-mono, ui-monospace, monospace) !important; letter-spacing: 1px !important; font-size: 0.75rem !important; color: rgba(201,169,78,0.8) !important; }
 .cp-points-badge { display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; gap: 2px !important; flex-shrink: 0 !important; min-width: 92px !important; min-height: 74px !important; padding: 12px 16px !important; background: radial-gradient(circle at 50% 30%, rgba(201,169,78,0.14), rgba(201,169,78,0.03) 70%) !important; border-radius: 50% !important; border: 1px solid rgba(201,169,78,0.3) !important; box-shadow: inset 0 0 16px rgba(201,169,78,0.08) !important; }
 .cp-points-badge.eligible { border-color: var(--color-gold, #C9A96E) !important; box-shadow: inset 0 0 20px rgba(201,169,78,0.14), 0 0 22px rgba(201,169,78,0.12) !important; }
 .cp-points-value { font-family: 'Cormorant Garamond', serif !important; font-size: 1.75rem !important; line-height: 1 !important; font-weight: 600 !important; color: var(--color-gold-light, #dfc573) !important; }
-.cp-points-label { font-size: 0.62rem !important; text-transform: uppercase !important; letter-spacing: 1.5px !important; color: rgba(244,236,217,0.4) !important; }
+.cp-points-label { font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 1.5px !important; color: rgba(244,236,217,0.4) !important; }
 
 /* Key figures band */
 .cp-stats { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; margin-bottom: 26px !important; border: 1px solid rgba(201,169,78,0.16) !important; border-radius: 14px !important; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005)) !important; overflow: hidden !important; }
 .cp-stat-card { padding: 18px 10px !important; text-align: center !important; position: relative !important; }
 .cp-stat-card:not(:last-child)::after { content: "" !important; position: absolute !important; right: 0 !important; top: 20% !important; height: 60% !important; width: 1px !important; background: linear-gradient(180deg, transparent, rgba(201,169,78,0.22), transparent) !important; }
 .cp-stat-value { font-family: 'Cormorant Garamond', 'Playfair Display', serif !important; font-size: 1.5rem !important; font-weight: 600 !important; color: #f4ecd9 !important; margin-bottom: 4px !important; min-height: 30px !important; display: flex !important; align-items: center !important; justify-content: center !important; line-height: 1.1 !important; }
-.cp-stat-label { font-size: 0.64rem !important; text-transform: uppercase !important; letter-spacing: 1.6px !important; color: rgba(201,169,78,0.75) !important; font-weight: 500 !important; }
+.cp-stat-label { font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 1.6px !important; color: rgba(201,169,78,0.75) !important; font-weight: 500 !important; }
 
 /* Sections */
 .cp-section { margin-bottom: 28px !important; }
@@ -13969,7 +13973,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .cp-brand-tags { display: flex !important; flex-wrap: wrap !important; gap: 10px !important; }
 .cp-brand-tag { padding: 7px 16px 7px 18px !important; background: linear-gradient(135deg, rgba(201,169,78,0.08), rgba(201,169,78,0.03)) !important; border: 1px solid rgba(201,169,78,0.2) !important; border-radius: 999px !important; font-size: 0.8rem !important; color: #e9dcb8 !important; transition: border-color 0.2s, transform 0.2s !important; }
 .cp-brand-tag:hover { border-color: rgba(201,169,78,0.45) !important; transform: translateY(-1px) !important; }
-.cp-brand-tag small { color: rgba(201,169,78,0.75) !important; margin-left: 5px !important; font-size: 0.72rem !important; }
+.cp-brand-tag small { color: rgba(201,169,78,0.75) !important; margin-left: 5px !important; font-size: 0.75rem !important; }
 
 /* Suggestions & similar cards */
 .cp-suggestion-grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important; gap: 12px !important; }
@@ -14002,21 +14006,21 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .rp-catalog-item:last-child { border-bottom: none !important; }
 .rp-catalog-empty { cursor: default !important; color: rgba(255,255,255,0.45) !important; font-size: 0.82rem !important; }
 .rp-item-name { display: block !important; font-size: 0.9rem !important; font-weight: 600 !important; }
-.rp-item-brand { display: block !important; font-size: 0.72rem !important; color: rgba(255,255,255,0.5) !important; }
+.rp-item-brand { display: block !important; font-size: 0.75rem !important; color: rgba(255,255,255,0.5) !important; }
 .rp-catalog-hint { margin-top: 6px !important; font-size: 0.78rem !important; color: rgba(201,169,110,0.7) !important; line-height: 1.4 !important; }
 .cp-sug-name { font-family: 'Cormorant Garamond', 'Playfair Display', serif !important; font-size: 1.02rem !important; font-weight: 600 !important; color: #f4ecd9 !important; margin-bottom: 3px !important; line-height: 1.25 !important; }
 .cp-sug-brand { font-size: 0.76rem !important; color: rgba(201,169,78,0.8) !important; margin-bottom: 10px !important; letter-spacing: 0.02em !important; }
 .cp-sug-meta { display: flex !important; justify-content: space-between !important; align-items: center !important; gap: 8px !important; flex-wrap: wrap !important; }
-.cp-sug-family { font-size: 0.66rem !important; padding: 3px 8px !important; border-radius: 999px !important; background: rgba(255,255,255,0.05) !important; color: rgba(244,236,217,0.56) !important; text-transform: uppercase !important; letter-spacing: 0.7px !important; }
-.cp-sug-audience { font-size: 0.68rem !important; font-weight: 600 !important; color: var(--color-gold, #C9A96E) !important; letter-spacing: 0.3px !important; }
-.cp-sug-sim-label { font-size: 0.68rem !important; font-weight: 600 !important; color: var(--color-gold-light, #dfc573) !important; letter-spacing: 0.3px !important; font-variant-numeric: tabular-nums !important; }
+.cp-sug-family { font-size: 0.75rem !important; padding: 3px 8px !important; border-radius: 999px !important; background: rgba(255,255,255,0.05) !important; color: rgba(244,236,217,0.56) !important; text-transform: uppercase !important; letter-spacing: 0.7px !important; }
+.cp-sug-audience { font-size: 0.75rem !important; font-weight: 600 !important; color: var(--color-gold, #C9A96E) !important; letter-spacing: 0.3px !important; }
+.cp-sug-sim-label { font-size: 0.75rem !important; font-weight: 600 !important; color: var(--color-gold-light, #dfc573) !important; letter-spacing: 0.3px !important; font-variant-numeric: tabular-nums !important; }
 .cp-sug-sim { height: 3px !important; margin-top: 8px !important; background: rgba(255,255,255,0.06) !important; border-radius: 999px !important; overflow: hidden !important; }
 .cp-sug-sim-fill { height: 100% !important; border-radius: 999px !important; background: linear-gradient(90deg, rgba(201,169,78,0.5), var(--color-gold-light, #dfc573)) !important; box-shadow: 0 0 8px rgba(201,169,78,0.35) !important; }
 
 /* Purchase history table */
 .cp-purchase-table-wrap { overflow-x: auto !important; border: 1px solid rgba(201,169,78,0.14) !important; border-radius: 12px !important; background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.004)) !important; }
 .cp-purchase-table { width: 100% !important; border-collapse: collapse !important; font-size: 0.84rem !important; }
-.cp-purchase-table th { text-align: left !important; padding: 12px 16px !important; font-size: 0.64rem !important; text-transform: uppercase !important; letter-spacing: 1.6px !important; color: rgba(201,169,78,0.7) !important; border-bottom: 1px solid rgba(201,169,78,0.16) !important; font-weight: 600 !important; }
+.cp-purchase-table th { text-align: left !important; padding: 12px 16px !important; font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 1.6px !important; color: rgba(201,169,78,0.7) !important; border-bottom: 1px solid rgba(201,169,78,0.16) !important; font-weight: 600 !important; }
 .cp-purchase-table td { padding: 12px 16px !important; color: rgba(244,236,217,0.72) !important; border-bottom: 1px solid rgba(255,255,255,0.045) !important; }
 .cp-purchase-table tbody tr:last-child td { border-bottom: none !important; }
 .cp-purchase-table tbody tr { transition: background 0.15s !important; }
@@ -14196,7 +14200,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     padding: 14px 28px;
     border-radius: 0;
     font-weight: 500;
-    font-size: 11px;
+    font-size: 12px;
     font-family: 'DM Sans', 'Inter', sans-serif;
     cursor: pointer;
     display: inline-flex;
@@ -14310,7 +14314,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     cursor: pointer;
@@ -14333,7 +14337,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     cursor: pointer;
@@ -14518,7 +14522,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     white-space: nowrap;
     font-weight: 500;
     letter-spacing: 0.18em;
-    font-size: 11px;
+    font-size: 12px;
     text-transform: uppercase;
     color: inherit;
     text-shadow: none;
@@ -14537,7 +14541,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     .favorite-btn {
         min-width: 150px;
         padding: 11px 20px;
-        font-size: 9px;
+        font-size: 12px;
     }
 
     .favorite-btn-middle-container {
@@ -14550,7 +14554,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     .favorite-btn {
         min-width: 130px;
         padding: 10px 16px;
-        font-size: 9px;
+        font-size: 12px;
     }
 }
 
@@ -14803,7 +14807,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .reviews-count {
     color: var(--color-text-muted);
     font-family: 'DM Sans', 'Inter', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     padding: 6px 14px;
     background: rgba(201, 169, 78, 0.04);
     border-radius: 2px;
@@ -14862,7 +14866,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .review-form-subtitle {
     color: var(--color-text-muted);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
@@ -14877,7 +14881,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .rating-label {
     color: rgba(255, 255, 255, 0.6);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -14950,7 +14954,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -15033,7 +15037,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid var(--color-gold);
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -15183,7 +15187,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid rgba(39, 174, 96, 0.4);
     padding: 14px 36px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -15361,7 +15365,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .review-date {
     color: rgba(255, 255, 255, 0.35);
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -15422,7 +15426,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid transparent;
     color: rgba(255, 255, 255, 0.4);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.06em;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -15676,7 +15680,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     padding: 10px 22px;
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -15725,7 +15729,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid rgba(201, 169, 78, 0.25);
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -15946,7 +15950,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     cursor: pointer;
@@ -16006,7 +16010,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .favorite-card-brand {
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.45);
     margin: 0 0 12px 0;
     font-weight: 400;
@@ -16048,7 +16052,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     padding: 4px 10px;
     border-radius: 2px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.06em;
     border: 1px solid rgba(201, 169, 78, 0.2);
@@ -16067,7 +16071,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     cursor: pointer;
@@ -16126,7 +16130,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     padding: 14px 28px;
     border-radius: 0;
     font-weight: 500;
-    font-size: 11px;
+    font-size: 12px;
     font-family: 'DM Sans', 'Inter', sans-serif;
     cursor: pointer;
     display: inline-flex;
@@ -16264,7 +16268,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     color: white;
     border-radius: var(--radius-full);
     padding: 2px 6px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     margin-left: 5px;
     min-width: 18px;
@@ -16382,7 +16386,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .cart-item-brand {
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.4);
@@ -16391,7 +16395,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .cart-item-quality {
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.06em;
     color: rgba(255, 255, 255, 0.35);
 }
@@ -16500,7 +16504,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     cursor: pointer;
@@ -16550,7 +16554,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     color: #060606;
     border-radius: 50%;
     padding: 2px 5px;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 600;
     min-width: 14px;
     height: 14px;
@@ -16809,7 +16813,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .sp-progress-text {
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.4);
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -16889,7 +16893,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     background: transparent;
     color: rgba(255, 255, 255, 0.5);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -17028,7 +17032,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 .sp-result-placeholder small {
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: rgba(201, 169, 78, 0.2);
@@ -17043,7 +17047,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid rgba(201, 169, 78, 0.25);
     border-radius: 2px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--color-gold);
     letter-spacing: 0.04em;
@@ -17065,7 +17069,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .sp-result-brand {
     margin: 0 0 8px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     color: rgba(201, 169, 78, 0.5);
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -17074,7 +17078,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 .sp-result-notes {
     margin: 0;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.4);
     line-height: 1.4;
 }
@@ -17093,7 +17097,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     background: transparent;
     color: var(--color-gold);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -17205,7 +17209,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 50%;
     width: 8px;
     height: 8px;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: bold;
     text-align: center;
     line-height: 8px;
@@ -17253,7 +17257,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     position: absolute;
     top: -2px;
     right: -2px;
-    font-size: 10px;
+    font-size: 12px;
     background: rgba(0, 0, 0, 0.8);
     border-radius: 50%;
     width: 16px;
@@ -17344,7 +17348,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     color: white;
     border-radius: 50%;
     padding: 2px 6px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
     min-width: 16px;
     height: 16px;
@@ -17706,7 +17710,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid rgba(212, 175, 55, 0.4);
     border-radius: 4px;
     color: #d4af37;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
 }
 
@@ -17849,7 +17853,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 4px;
     padding: 4px 8px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: #d4af37;
 }
@@ -17865,7 +17869,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     padding: 2px 6px;
     background: rgba(212, 175, 55, 0.1);
     border-radius: 2px;
-    font-size: 10px;
+    font-size: 12px;
     color: rgba(212, 175, 55, 0.8);
 }
 
@@ -17961,7 +17965,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .user-counter-label {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
@@ -18165,7 +18169,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .user-counter-label-small {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
@@ -18181,7 +18185,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 /* Loading dots for compact counter */
 .loading-dots-small {
     display: inline-block;
-    font-size: 10px;
+    font-size: 12px;
     animation: loading-pulse 1.5s infinite;
     color: rgba(255, 255, 255, 0.6);
 }
@@ -18411,7 +18415,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border-radius: 0;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     cursor: pointer;
@@ -18463,7 +18467,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .news-item-date {
     font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.35);
     white-space: nowrap;
     margin-left: 15px;
@@ -18485,7 +18489,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     background: transparent;
     color: var(--color-gold);
     font-family: 'DM Sans', sans-serif;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 400;
     padding: 3px 8px;
     border-radius: 0;
@@ -18817,7 +18821,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .notification-item-time {
-    font-size: 10px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.5);
     white-space: nowrap;
     font-weight: 500;
@@ -18834,7 +18838,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     display: inline-block;
     background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
     color: white;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     padding: 2px 6px;
     border-radius: 6px;
@@ -18972,7 +18976,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     }
 
     .notification-item-content {
-        font-size: 11px;
+        font-size: 12px;
     }
 }
 
@@ -19002,7 +19006,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .user-counter-label {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.8px;
 }
 
@@ -19056,11 +19060,11 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .user-counter-number-small {
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .user-counter-label-small {
-    font-size: 9px;
+    font-size: 12px;
     letter-spacing: 0.4px;
 }
 
@@ -19124,11 +19128,11 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     }
 
     .user-counter-number-small {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .user-counter-label-small {
-        font-size: 9px;
+        font-size: 12px;
         letter-spacing: 0.3px;
     }
 }
@@ -20321,7 +20325,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 500;
     color: white;
     text-align: center;
@@ -20367,12 +20371,12 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .greenly-scent-profile .segment-label {
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     margin-bottom: 2px;
 }
 
 .greenly-scent-profile .segment-strength {
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     opacity: 0.9;
 }
 
@@ -20508,7 +20512,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 }
 
 .greenly-ingredients .note-intensity {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: #4caf50;
     font-weight: 500;
 }
@@ -20553,7 +20557,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     .greenly-scent-profile .wheel-segment {
         width: 45px;
         height: 45px;
-        font-size: 0.6rem;
+        font-size: 0.75rem;
     }
 
     .greenly-ingredients .notes-grid {
@@ -20576,7 +20580,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     .greenly-scent-profile .wheel-segment {
         width: 35px;
         height: 35px;
-        font-size: 0.5rem;
+        font-size: 0.75rem;
     }
 
     .greenly-ingredients .notes-grid {
@@ -21726,7 +21730,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .result-ingredients h5 {
     color: rgba(255, 255, 255, 0.4) !important;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.09em;
     text-transform: uppercase;
@@ -21757,7 +21761,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     color: rgba(255, 255, 255, 0.72) !important;
     border-radius: 999px;
     padding: 3px 10px;
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 500;
     white-space: nowrap;
 }
@@ -21776,7 +21780,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .ingredient-pill .match-indicator {
     color: #4ade80;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
 }
 
@@ -22240,7 +22244,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     }
 
     .ingredient-pills .ingredient-pill {
-        font-size: 11px;
+        font-size: 12px;
         padding: 3px 8px;
     }
 
@@ -22334,7 +22338,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     }
 
     .ingredient-pills .ingredient-pill {
-        font-size: 10px;
+        font-size: 12px;
         padding: 4px 8px;
         max-width: 120px;
     }
@@ -22368,7 +22372,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
     .result-match-badge {
         padding: 6px 12px;
-        font-size: 10px;
+        font-size: 12px;
     }
 }
 
@@ -22697,7 +22701,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .catalog-page-status {
     color: rgba(201, 169, 78, 0.86);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     text-align: center;
@@ -22816,7 +22820,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .collection-page-status {
     color: rgba(201, 169, 78, 0.86);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     text-align: center;
@@ -23138,7 +23142,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
 
 .database-note-tier > span {
     color: rgba(201, 169, 78, 0.86);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     padding-top: 8px;
@@ -23216,7 +23220,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     border: 1px solid rgba(201, 169, 78, 0.18);
     background: rgba(201, 169, 78, 0.07);
     color: rgba(245, 243, 240, 0.74);
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -23265,7 +23269,7 @@ input[name="pegasus-quality"] + label:hover .quality-badge {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.06);
     color: rgba(245, 243, 240, 0.68);
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .database-note-chip .note-real-image {
@@ -23491,7 +23495,7 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
   color: var(--nav-ink);
   text-decoration: none;
   font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -23554,7 +23558,7 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
   gap: 4px;
   padding: 2px 8px;
   font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.05em;
   color: var(--nav-ink-mute);
@@ -23698,7 +23702,7 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
   height: 8px;
   padding: 0 3px;
   font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 8px;
   text-align: center;
@@ -23713,7 +23717,7 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
   height: 14px;
   min-width: 14px;
   line-height: 10px;
-  font-size: 9.5px;
+  font-size: 12px;
 }
 
 /* AI pulse — much subtler */
@@ -23746,7 +23750,7 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
   border: 1px solid var(--nav-hair-strong);
   border-radius: 999px;
   font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -23786,7 +23790,7 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
 .user-name {
   color: var(--nav-ink-strong);
   font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.02em;
   max-width: 90px;
@@ -23816,10 +23820,10 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
 }
 .current-lang .flag svg { display: block; border-radius: 2px; }
 .lang-code {
-  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+    font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
 }
 
 /* Responsive ------------------------------------------- */
@@ -23835,7 +23839,11 @@ body.top-shell-scrolled .navbar::after { opacity: 1; }
   .language-changer .lang-code { display: none; }
 }
 @media (max-width: 1020px) {
-  .search-tabs { display: none; }
+  /* !important here is deliberate: the final sweep at the end of this file
+     forces .search-tabs visible with display:flex !important (line ~28239).
+     Without it the tabs stay inside the search bar on phones, take ~126px
+     and squeeze #quickSearchInput to a 0px-wide, unusable field. */
+  .search-tabs { display: none !important; }
 }
 @media (max-width: 900px) {
   .user-name { display: none; }
@@ -23998,7 +24006,7 @@ body.fragrance-detail-open {
 
 .fragrance-detail-kicker {
     color: rgba(201, 169, 78, 0.86);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     margin-bottom: 10px;
@@ -24143,7 +24151,7 @@ body.fragrance-detail-open {
 }
 .loyalty-header__title { display: flex; flex-direction: column; gap: 4px; }
 .loyalty-header__eyebrow {
-    font-size: 10.5px !important;
+    font-size: 12px !important;
     letter-spacing: 3.5px !important;
     text-transform: uppercase !important;
     color: rgba(201,169,78,0.75) !important;
@@ -24245,7 +24253,7 @@ body.fragrance-detail-open {
 .loyalty-stat p {
     text-transform: uppercase !important;
     letter-spacing: 2px !important;
-    font-size: 10.5px !important;
+    font-size: 12px !important;
     color: rgba(236,231,220,0.7) !important;
     margin: 0 !important;
 }
@@ -24272,7 +24280,7 @@ body.fragrance-detail-open {
 }
 .loyalty-panel__eyebrow {
     display: block;
-    font-size: 10px !important;
+    font-size: 12px !important;
     letter-spacing: 3px !important;
     text-transform: uppercase !important;
     color: rgba(201,169,78,0.7) !important;
@@ -24287,7 +24295,7 @@ body.fragrance-detail-open {
     letter-spacing: 0.3px !important;
 }
 .loyalty-panel__meta {
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     color: rgba(236,231,220,0.55);
@@ -24297,7 +24305,7 @@ body.fragrance-detail-open {
 .loyalty-field { display: block; margin-bottom: 14px; }
 .loyalty-field__label {
     display: block;
-    font-size: 10px !important;
+    font-size: 12px !important;
     letter-spacing: 2px !important;
     text-transform: uppercase !important;
     color: rgba(201,169,78,0.85) !important;
@@ -24350,7 +24358,7 @@ body.fragrance-detail-open {
     color: var(--color-gold) !important;
     border: 1px solid rgba(201,169,78,0.55) !important;
     border-radius: 3px !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     letter-spacing: 2.5px !important;
     text-transform: uppercase !important;
     font-weight: 600 !important;
@@ -24366,7 +24374,7 @@ body.fragrance-detail-open {
 }
 .loyalty-hint {
     margin: 12px 0 0 !important;
-    font-size: 11px;
+    font-size: 12px;
     color: rgba(236,231,220,0.45);
     font-style: italic;
     line-height: 1.5;
@@ -24390,7 +24398,7 @@ body.fragrance-detail-open {
     background: linear-gradient(180deg, rgba(201,169,78,0.10), rgba(201,169,78,0.04)) !important;
     color: var(--color-gold) !important;
     text-transform: uppercase !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     letter-spacing: 2.5px !important;
     font-weight: 500 !important;
     padding: 14px 16px !important;
@@ -24422,7 +24430,7 @@ body.fragrance-detail-open {
     display: inline-block;
     padding: 2px 8px !important;
     border-radius: 999px !important;
-    font-size: 9.5px !important;
+    font-size: 12px !important;
     letter-spacing: 1.5px !important;
     text-transform: uppercase !important;
     margin-left: 8px;
@@ -24453,7 +24461,7 @@ body.fragrance-detail-open {
 }
 .loyalty-table .btn-small {
     padding: 6px 10px !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     letter-spacing: 1.2px !important;
     text-transform: uppercase !important;
     border-radius: 3px !important;
@@ -24529,7 +24537,7 @@ body.fragrance-detail-open {
     }
     .loyalty-table tbody td::before {
         content: attr(data-label);
-        font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+        font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
         color: rgba(201,169,78,0.7);
     }
     .loyalty-table .user-actions { justify-content: flex-start; }
@@ -24641,7 +24649,7 @@ body.fragrance-detail-open {
     background: rgba(255, 255, 255, 0.08) !important;
     color: rgba(245, 241, 230, 0.7) !important;
     border-radius: 50% !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     line-height: 1;
     cursor: pointer;
     padding: 0 !important;
@@ -24696,7 +24704,7 @@ body.fragrance-detail-open {
 }
 .news-admin-item__badge {
     flex-shrink: 0;
-    font-size: 9px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     padding: 3px 8px;
@@ -24715,7 +24723,7 @@ body.fragrance-detail-open {
 }
 .news-admin-item__date {
     color: rgba(245,241,230,0.45);
-    font-size: 11.5px;
+    font-size: 12px;
     white-space: nowrap;
 }
 .news-admin-item .btn-small {
@@ -24743,7 +24751,7 @@ body.fragrance-detail-open {
 }
 .news-composer-label {
     display: block;
-    font-size: 10px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: rgba(245,241,230,0.55);
@@ -24788,7 +24796,7 @@ body.fragrance-detail-open {
     letter-spacing: 0.1em;
 }
 .news-template-card__desc {
-    font-size: 10.5px;
+    font-size: 12px;
     color: rgba(245,241,230,0.45);
     text-align: center;
 }
@@ -24821,7 +24829,7 @@ body.fragrance-detail-open {
 }
 .news-preview-badge {
     display: inline-block;
-    font-size: 9px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     padding: 3px 9px;
@@ -24844,7 +24852,7 @@ body.fragrance-detail-open {
 }
 .news-preview-cta {
     display: inline-block;
-    font-size: 11px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     padding: 7px 14px;
@@ -24881,7 +24889,7 @@ body.fragrance-detail-open {
 .news-item-cta {
     display: inline-block;
     margin-top: 12px;
-    font-size: 10.5px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     padding: 6px 13px;
@@ -26628,7 +26636,7 @@ body.perfume-grid-mode .perfume-grid-card.entered {
     gap: 4px !important;
     padding: 3px 8px !important;
     border-radius: 4px !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.3px !important;
@@ -26656,7 +26664,7 @@ body.perfume-grid-mode .perfume-grid-card.entered {
     gap: 4px !important;
     padding: 4px 10px !important;
     border-radius: 4px !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.4px !important;
@@ -26739,7 +26747,7 @@ html[data-theme="light"] .fragrantica-btn:focus-visible {
 
 .fragrance-detail-fragrantica .fragrantica-btn {
     padding: 4px 10px !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
 }
 
 /* ── Grid mode Fragrantica chip (icon button on card media) ── */
@@ -26789,7 +26797,7 @@ html[data-theme="light"] .fragrantica-btn:focus-visible {
 }
 
 .perfume-grid-brand {
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
@@ -27192,7 +27200,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 
 .size-title {
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: #444 !important;
     margin: 0 0 4px 0;
@@ -27202,7 +27210,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 
 .size-subtitle {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 400;
     color: #888 !important;
     letter-spacing: 0.12em;
@@ -27270,7 +27278,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 
 .similar-fragrances-subtitle {
     font-family: Arial, Helvetica, sans-serif !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 400 !important;
     color: #999 !important;
     letter-spacing: 0.14em !important;
@@ -27327,11 +27335,16 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     flex-direction: column;
     gap: 2px;
     min-width: 0;
+    /* The card is a column flexbox with align-items:center, so this child was
+       sized to max-content (the nowrap brand line, ~225px) and stuck out of
+       the 174px card on both sides. Constrain it so the brand's
+       text-overflow:ellipsis actually engages. */
+    width: 100%;
 }
 
 .similar-fragrance-brand {
     font-family: Arial, Helvetica, sans-serif !important;
-    font-size: 9px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     color: #c9a94e !important;
     letter-spacing: 0.16em !important;
@@ -27452,7 +27465,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 
 .grid-filter-title {
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.08em !important;
@@ -27465,7 +27478,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 
 .grid-filter-count {
     font-weight: 400 !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     color: var(--color-gold) !important;
 }
 
@@ -27509,7 +27522,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 
 .grid-filter-chip .chip-count {
-    font-size: 10px !important;
+    font-size: 12px !important;
     opacity: 0.7 !important;
 }
 
@@ -27961,7 +27974,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 
 #guestNotesBadge {
     margin-left: 8px;
-    font-size: 11px;
+    font-size: 12px;
     min-width: 18px;
     height: 18px;
     padding: 0 5px;
@@ -28040,7 +28053,9 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
   text-align: center;
   font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   font-weight: 700;
-  font-size: clamp(5px, 2.7cqi, 34px);
+  /* The label scales with the bottle (container query units), but the old
+     5px floor measured 7.7px on a 390px phone - unreadable. 10px floor. */
+  font-size: clamp(12px, 2.7cqi, 34px);
   line-height: 1.1;
   color: #1a1510;
 }
@@ -28055,7 +28070,8 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
   align-items: baseline;
   font-family: "Inter", "DM Sans", system-ui, sans-serif;
   font-weight: 500;
-  font-size: clamp(3px, 1.4cqi, 18px);
+  /* 1.4cqi measured 3.98px at 390px - below any legibility floor. */
+  font-size: clamp(12px, 1.4cqi, 18px);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #2a2520;
@@ -28152,7 +28168,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 
 .nav-link {
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 500 !important;
     letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
@@ -28249,11 +28265,11 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     border: none !important;
     border-radius: 3px !important;
     color: #80808a !important;
-    font-size: 9.5px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.06em !important;
     text-transform: uppercase !important;
-    padding: 2px 7px !important;
+    padding: 3px 9px !important;
     height: auto !important;
     cursor: pointer !important;
     box-shadow: none !important;
@@ -28335,7 +28351,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 
 #quickSearchInput {
-    font-size: 11px !important;
+    font-size: 12px !important;
     color: #f0f0f3 !important;
     letter-spacing: normal !important;
     padding: 0 !important;
@@ -28444,7 +28460,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     min-width: 13px !important;
     height: 13px !important;
     line-height: 13px !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     padding: 0 3px !important;
 }
 
@@ -28493,7 +28509,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     height: 28px !important;
     padding: 0 10px !important;
     gap: 6px !important;
-    font-size: 10.5px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.05em !important;
     border-radius: 4px !important;
@@ -28516,7 +28532,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
     border-radius: 4px !important;
     box-shadow: none !important;
     transform: none !important;
-    font-size: 10.5px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     font-family: 'Inter', 'DM Sans', sans-serif !important;
 }
@@ -28544,7 +28560,7 @@ section.content:not(#b):not(#b) [class*="main-container"]:not(#b):not(#b) [class
 }
 
 .current-lang .lang-code {
-    font-size: 10.5px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: normal !important;
     text-shadow: none !important;
@@ -28760,7 +28776,7 @@ html[data-theme="light"] .lang-option:hover {
 }
 
 #userProfile .user-name {
-    font-size: 11.5px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.03em !important;
     text-transform: uppercase !important;
@@ -28792,7 +28808,7 @@ html[data-theme="light"] .lang-option:hover {
     position: static !important;
     display: inline-flex !important;
     align-items: center !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     font-weight: 700 !important;
     letter-spacing: 0.07em !important;
     line-height: 1 !important;
@@ -28841,7 +28857,7 @@ html[data-theme="light"] .lang-option:hover {
 }
 
 #userDropdown .user-email {
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 400 !important;
     color: #71717a !important;
     white-space: nowrap !important;
@@ -28859,7 +28875,7 @@ html[data-theme="light"] .lang-option:hover {
 }
 
 #userDropdown .menu-section-label {
-    font-size: 9px !important;
+    font-size: 12px !important;
     font-weight: 700 !important;
     letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
@@ -28928,7 +28944,7 @@ html[data-theme="light"] .lang-option:hover {
     grid-column: 3 !important;
     justify-self: end !important;
     margin: 0 !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     padding: 1px 6px !important;
     border-radius: 9999px !important;
@@ -28971,4 +28987,231 @@ html[data-theme="light"] .lang-option:hover {
 
 #userDropdown #logoutBtn:hover svg {
     stroke: #df382b !important;
+}
+
+/* ==========================================================================
+   MOBILE TOUCH TARGETS — measured at 390px, all under the 44px WCAG 2.5.5
+   minimum: .search-tab 15px tall, .theme-toggle 28x28, .charme-nav-trigger
+   30x28, .search-close 35x35, .ingredient-modal-close 36x36, .note-btn 34px,
+   .island-wa-btn 34px, .grid-filter-chip 24px, .grid-filter-search 30px,
+   .perfume-grid-fragrantica 36x36. The icons stay the same size; only the
+   hit area grows, so the visual rhythm of the header and grids is unchanged.
+   ========================================================================== */
+@media (max-width: 767px) {
+    .search-tab {
+        min-block-size: 44px;
+        padding-inline: 16px;
+    }
+
+    .theme-toggle {
+        min-inline-size: 44px;
+        min-block-size: 44px;
+        justify-content: center;
+    }
+
+    .charme-nav-trigger,
+    #loginBtn {
+        min-block-size: 44px !important;
+        padding-inline: 18px !important;
+    }
+
+    .search-close {
+        width: 44px;
+        height: 44px;
+    }
+
+    .ingredient-modal-close {
+        min-inline-size: 44px;
+        min-block-size: 44px;
+    }
+
+    .note-btn,
+    #noteSubmitBtn {
+        min-block-size: 44px;
+        padding-inline: 24px;
+    }
+
+    .island-wa-btn {
+        min-block-size: 44px;
+    }
+
+    .grid-filter-chip {
+        min-block-size: 44px !important;
+        padding-inline: 14px !important;
+    }
+
+    .grid-filter-search {
+        min-block-size: 44px !important;
+        padding-block: 10px !important;
+    }
+
+    .perfume-grid-fragrantica {
+        min-inline-size: 44px;
+        min-block-size: 44px;
+    }
+
+    .show-all-btn {
+        min-block-size: 44px !important;
+    }
+
+    /* The phone-number morph button is intentionally 20px tall inside its
+       card; expanding the box would reflow the card, so the hit area grows
+       invisibly past the visual bounds instead. */
+    .morph-number-btn::after {
+        content: "";
+        position: absolute;
+        inset: -12px -10px;
+    }
+
+    /* Second wave, measured after the first fixes exposed these. */
+    .footer-col a {
+        display: inline-flex;
+        align-items: center;
+        min-block-size: 44px;
+    }
+
+    .social-link {
+        min-inline-size: 44px;
+        min-block-size: 44px;
+    }
+
+    .floating-menu,
+    .floating-search {
+        inline-size: 44px;
+        block-size: 44px;
+    }
+
+    .perfume-mode-btn {
+        min-block-size: 44px !important;
+    }
+
+    .grid-filter-clear {
+        min-block-size: 44px !important;
+    }
+
+    .note-input,
+    #noteContact {
+        min-block-size: 44px;
+    }
+}
+
+/* ---------- Mobile: hide the in-bar search tabs for good ----------
+   The ≤1020px hide near the top of this file lost to the final sweep's
+   `display: flex !important` at line ~28239 (same specificity, later in the
+   cascade). This copy sits at the end of the file, so it wins. Without it
+   the tabs render inside the search bar on phones, take ~126px and leave
+   #quickSearchInput a 0px-wide, unusable field. */
+@media (max-width: 1020px) {
+  .search-tabs {
+    display: none !important;
+  }
+}
+
+/* ---------- ≤768px: the hero's two overlay stacks (note card right, concierge
+   island left) are absolutely centred and COLLIDE once the viewport is too
+   narrow to hold them side by side — measured at 768: the island (590–652) sat
+   under the note card (348–705), and at 390 the entire contact stack (map +
+   island + social pills) was buried, so the phone and WhatsApp buttons were
+   unclickable (elementFromPoint returned the note textarea). Flow the two
+   stacks into one centred column instead: note card above, contact stack below.
+   Margins (not gap) so the layout is identical in perfume-grid mode, where
+   `display: block !important` overrides the flex container. ---------- */
+@media (max-width: 768px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    min-height: 100vh;
+    padding: 24px 16px 28px;
+  }
+  .hero-info-stack,
+  .hero-contact-stack {
+    position: static;
+    inset: auto;
+    transform: none;
+    width: 100%;
+    max-width: 420px;
+    margin: 0;
+  }
+  .hero-info-stack {
+    margin-bottom: 16px;
+  }
+  .hero-info-stack .note-card {
+    max-width: 100%;
+  }
+  .hero-map {
+    height: 170px;
+  }
+}
+
+/* ≤480px: drop the decorative map-face overlay (aria-hidden; the same scene is
+   the hero background) and shrink the map so the whole hero still fits one
+   844px phone screen without clipping anything. (The base rule at ~27402 is
+   `display: flex !important`, so the hide must be !important too.) */
+@media (max-width: 480px) {
+  .hero-map-face-wrap {
+    display: none !important;
+  }
+  .hero-map {
+    height: 150px;
+  }
+}
+
+/* The three search gender toggles are 5px dots (role=button, tabindex=0,
+   aria-pressed) — impossible to hit reliably with a mouse, let alone a finger.
+   WCAG 2.5.8 requires a 24x24px target that does not overlap its neighbours
+   (a 24px circle centred on each target must not touch the next one), so the
+   row pitch is raised to 24px (gap 19px) and each dot gets a transparent
+   24x24 ::after hit lane that exactly tiles the row. Painted size unchanged. */
+.search-gender-indicators {
+  gap: 19px !important;
+}
+.gender-badge {
+  position: relative;
+  cursor: pointer;
+}
+.gender-badge::after {
+  content: "";
+  position: absolute;
+  inset: -9.5px;
+}
+
+/* Search-scope tabs: 9.5px text on a 16px-tall pill was unreadable and
+   unclickable. Text is now 11px with a 22px pill; the ::after lifts the hit
+   area to ~28x28 without changing the painted size. */
+.search-tab {
+  position: relative;
+}
+.search-tab::after {
+  content: "";
+  position: absolute;
+  inset: -3px -2px;
+}
+
+/* Haltane section: between the 760px grid breakpoint and ~1400px the flex row
+   could not shrink. The 340px bottle (flex-shrink:0) plus the notes panel's
+   `min-width:300px; margin-right:80px` pushed #haltane-details past the right
+   edge, where html{overflow-x:hidden} clipped the entire "Notes de tête"
+   panel off-screen (measured at 768 and 1280: right edge 1020/1360 vs vw
+   768/1280). Wrap the notes onto their own line and let the bottle shrink. */
+@media (min-width: 761px) and (max-width: 1400px) {
+  .haltane-section-container {
+    flex-wrap: wrap;
+    row-gap: 32px;
+  }
+  .haltane-image {
+    flex-shrink: 1;
+    width: 300px;
+  }
+  .haltane-fragrance-description {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+  .haltane-fragrance-notes {
+    flex: 1 1 100%;
+    min-width: 0;
+    margin-right: 0;
+  }
 }

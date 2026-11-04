@@ -138,3 +138,25 @@
   line-height: 1.65;
   max-width: 40rem;
 }
+
+/* ---------- Mobile touch targets (WCAG 2.5.5, measured at 390px) ----------
+   The note-form submit ("Envoyer") measured 19px tall and the concierge
+   phone/WhatsApp links 19px - both under the 44px minimum. Hit areas grow;
+   the visual rhythm of the card is unchanged. */
+@media (max-width: 767px) {
+  .note-card button[type="submit"],
+  .note-card .btn-accent {
+    min-block-size: 2.75rem;
+    padding-inline: 1.4rem;
+  }
+
+  .concierge-list li {
+    padding-block: 0.15rem;
+  }
+
+  .concierge-list a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+  }
+}

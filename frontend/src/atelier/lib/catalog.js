@@ -49,10 +49,31 @@ export function related(products, product, limit = 4) {
   return scored.slice(0, limit).map((x) => x.p);
 }
 
+/* Prices.
+ *
+ * Four different formatters were in use: this one, Cart's `money()`, and two
+ * raw `${price} dt` interpolations in AdminLoyalty and the product size pills.
+ * The raw two did not round, so a stored 259.999 rendered as "259.999 dt" in
+ * the back office and "260 dt" in the shop. `formatPrice` is now the only one
+ * that formats, and `money` is the only one that also adds the unit.
+ *
+ * The unit is Tunisian dinar and is written the same way everywhere in the
+ * interface, so it stays here rather than being spelled at each call site. */
+export const CURRENCY = "dt";
+
 export function formatPrice(p) {
   if (p == null) return null;
-  const v = Math.round(p * 100) / 100;
+  const n = Number(p);
+  if (!Number.isFinite(n)) return null;
+  const v = Math.round(n * 100) / 100;
   return Number.isInteger(v) ? String(v) : v.toFixed(2);
+}
+
+/* With the unit, for anywhere a price is shown to a person. "-" for a missing
+   price, which is what the tables already expected. */
+export function money(p) {
+  const v = formatPrice(p);
+  return v == null ? "-" : `${v} ${CURRENCY}`;
 }
 
 /* Initials for the typographic bottle: "Bleu de Chanel" -> "BC". */

@@ -62,6 +62,8 @@
   padding: 0.6rem 0.85rem;
   font: inherit;
   font-size: var(--step-0);
+  /* WCAG 2.5.5: measured 40px tall on a phone. */
+  min-block-size: 2.75rem;
 }
 
 .coll-search input::placeholder {
@@ -395,6 +397,10 @@
 .pdp-crumb a {
   color: var(--text-3);
   text-decoration: none;
+  /* WCAG 2.5.5: breadcrumb links measured 15px tall. Padding grows the hit
+     box to 45px; the equal negative margin keeps the breadcrumb row height. */
+  padding-block: 0.95rem;
+  margin-block: -0.95rem;
 }
 
 .pdp-crumb a:hover {
@@ -998,5 +1004,40 @@
 @media (max-width: 479px) {
   .pager-meta {
     order: 3;
+  }
+}
+
+/* ---------- Mobile touch targets (WCAG 2.5.5, measured at 390px) ----------
+   Card favourite buttons were 32x32 and the pager 36px - under the 44px
+   minimum. */
+@media (max-width: 767px) {
+  .shelf-fav {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+  }
+
+  .pager-step,
+  .pager-num {
+    min-inline-size: 2.75rem;
+    block-size: 2.75rem;
+  }
+}
+
+/* Collection mobile targets: filter selects were 37px, the grid/list toggle
+   31px, the PDP save button 32x32. */
+@media (max-width: 767px) {
+  .coll-selects select {
+    min-block-size: 2.75rem;
+  }
+
+  .coll-view button {
+    min-block-size: 2.75rem;
+    padding-inline: 1rem;
+  }
+
+  .pdp-save,
+  .fav-btn {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
   }
 }

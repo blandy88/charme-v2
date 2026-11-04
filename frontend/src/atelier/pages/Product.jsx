@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Check, ShoppingBag } from "lucide-react";
 import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useCart } from "../../contexts/CartContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
-import { byId, formatPrice, initials, products as ALL, related } from "../lib/catalog.js";
+import { byId, initials, money, products as ALL, related } from "../lib/catalog.js";
+import { morphInFlight, nameMorphTarget, unnameMorphTarget } from "../morph.js";
 import Reviews from "./Reviews.jsx";
 import "./collection.css";
 
@@ -97,6 +98,19 @@ export default function Product() {
   const [size, setSize] = useState(null);
   const [added, setAdded] = useState(false);
 
+  const mediaRef = useRef(null);
+
+  /* If this page arrived by a morph, the hero is the shared element's other
+     half. A layout effect, because the transition captures the new state on
+     the frame after the commit and the name has to be in place by then.
+     Released on unmount so the name is never live on two elements. */
+  useLayoutEffect(() => {
+    const el = mediaRef.current;
+    if (!el || !morphInFlight()) return undefined;
+    nameMorphTarget(el);
+    return () => unnameMorphTarget(el);
+  }, []);
+
   useEffect(() => {
     if (!added) return undefined;
     const timer = setTimeout(() => setAdded(false), 2600);
@@ -155,7 +169,7 @@ export default function Product() {
       </nav>
 
       <div className="pdp-top" data-guide="pdp-sections">
-        <div className="pdp-media">
+        <div className="pdp-media" ref={mediaRef}>
           {product.image ? (
             <img
               src={product.image}
@@ -212,7 +226,7 @@ export default function Product() {
                       >
                         <span className="size-label">{s.size}</span>
                         <span className="size-price">
-                          {typeof s.price === "number" ? `${s.price} dt` : "—"}
+                          {money(typeof s.price === "number" ? s.price : null)}
                         </span>
                       </button>
                     </li>
@@ -220,7 +234,7 @@ export default function Product() {
                 })}
               </ul>
             ) : product.fromPrice != null ? (
-              <p className="pdp-price">{formatPrice(product.fromPrice)} dt</p>
+              <p className="pdp-price">{money(product.fromPrice)}</p>
             ) : null}
 
             <div className="buy-row">
@@ -281,7 +295,7 @@ export default function Product() {
       {also.length ? (
         <section className="pdp-block">
           <h2 className="pdp-h2">{t("pdSameSpirit")}</h2>
-          <ul className="also">
+          <ul className="also reveal-group">
             {also.map((p) => (
               <li key={p.id}>
                 <Link to={`/collection/${encodeURIComponent(p.id)}`} className="pressable">

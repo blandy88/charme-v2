@@ -151,6 +151,18 @@
   white-space: nowrap;
 }
 
+/* Every guide has a film now, and the film takes the card's main action. The
+   spotlight tour is the secondary way in, so it is kept visually subordinate
+   and the foot wraps rather than squeezing three items onto one line. */
+.gp-card-foot {
+  flex-wrap: wrap;
+}
+
+.gp-tour {
+  padding-block: 0.45rem;
+  font-size: var(--step--1);
+}
+
 .gp-card-foot button {
   display: inline-flex;
   align-items: center;
@@ -171,8 +183,15 @@
 .gp-scrim {
   position: absolute;
   inset: 0;
-  background: oklch(0% 0 0 / 0.6);
-  backdrop-filter: blur(2px);
+  /* No dim here. The scrim used to paint a 60%-black wash over the whole
+     viewport while the "hole" in the spotlight was
+     `0 0 0 9999px oklch(0% 0 0 / 0)` - fully transparent, and an outer box
+     shadow never paints inside its own border box either, so nothing punched
+     through: the highlighted element sat behind the wash and the tour never
+     spotlit anything. The dim now belongs to the spotlight (see .gp-spot), and
+     this layer is kept only as the click-to-exit surface. */
+  background: none;
+  backdrop-filter: none;
   animation: gp-fade var(--dur-fast) var(--ease-out) both;
 }
 
@@ -187,9 +206,11 @@
   z-index: 96;
   border-radius: var(--radius-m);
   border: 1px solid var(--accent);
+  /* The second layer is the dim: it paints everything OUTSIDE this box and
+     leaves the interior clear, which is what makes the target readable. */
   box-shadow:
     0 0 0 2px oklch(from var(--accent) l c h / 0.35),
-    0 0 0 9999px oklch(0% 0 0 / 0);
+    0 0 0 9999px oklch(0% 0 0 / 0.6);
   pointer-events: none;
   animation: gp-spot-in var(--dur-base) var(--ease-spring-snappy) both;
 }
@@ -201,6 +222,15 @@
   }
 }
 
+/*
+ * The tour tooltip is a floating card over a dimmed page, so it needs a
+ * surface of its own. It had `background: transparent` and `box-shadow: none`
+ * while inheriting the light theme's dark text colour (oklch(0.24 …)), so it
+ * rendered dark-on-dark and the step it was explaining was unreadable - it just
+ * happened to sit over the scrim, which is why it was not obviously broken.
+ * Same treatment as every other overlay panel in the app (.dp-panel,
+ * .account-pop): surface, hairline, radius, shadow.
+ */
 .gp-tip {
   position: fixed;
   z-index: 97;
@@ -208,6 +238,10 @@
   gap: var(--space-2xs);
   padding: var(--space-s);
   max-inline-size: min(20rem, calc(100vw - 1.5rem));
+  background: var(--surface-1);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-2);
   animation: gp-tip-in var(--dur-base) var(--ease-spring-snappy) both;
 }
 
@@ -295,5 +329,233 @@
 @media (max-width: 640px) {
   .gp-tip {
     max-inline-size: calc(100vw - 1.5rem);
+  }
+}
+
+/* ---------- a filmed tutorial: the card ---------- */
+
+/* The poster fills the card's width and carries the play affordance, so the
+   whole tile is the button — a small "watch" pill in the corner is easy to miss
+   on a phone. */
+.gp-thumb {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  margin-bottom: 0.15rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background: var(--surface-0);
+  cursor: pointer;
+}
+
+.gp-thumb img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.gp-thumb:hover img,
+.gp-thumb:focus-visible img {
+  transform: scale(1.03);
+}
+
+.gp-badge,
+.gp-time {
+  position: absolute;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  background: oklch(0% 0 0 / 0.68);
+  color: oklch(98% 0 0);
+  backdrop-filter: blur(4px);
+}
+
+.gp-badge {
+  inset-block-start: 0.45rem;
+  inset-inline-start: 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.gp-time {
+  inset-block-end: 0.45rem;
+  inset-inline-end: 0.45rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gp-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: oklch(98% 0 0);
+}
+
+.gp-play svg {
+  padding: 0.55rem;
+  inline-size: 2.6rem;
+  block-size: 2.6rem;
+  border-radius: var(--radius-pill);
+  background: oklch(0% 0 0 / 0.55);
+  border: 1px solid oklch(100% 0 0 / 0.35);
+  backdrop-filter: blur(4px);
+  transition: transform var(--dur-base) var(--ease-spring-snappy);
+}
+
+.gp-thumb:hover .gp-play svg,
+.gp-thumb:focus-visible .gp-play svg {
+  transform: scale(1.12);
+}
+
+.gp-foot {
+  margin-top: var(--space-s);
+  font-size: var(--step--1);
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* ---------- a filmed tutorial: the player ---------- */
+
+.gp-overlay {
+  display: grid;
+  place-items: center;
+  padding: var(--space-s);
+  overflow-y: auto;
+}
+
+.gp-player {
+  position: relative;
+  z-index: 97;
+  display: grid;
+  gap: var(--space-2xs);
+  inline-size: min(100%, 62rem);
+  max-block-size: calc(100dvh - 2 * var(--space-s));
+  overflow-y: auto;
+  padding: var(--space-s);
+  animation: gp-tip-in var(--dur-base) var(--ease-spring-snappy) both;
+}
+
+.gp-player-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+}
+
+.gp-player-title {
+  font-size: var(--step-1);
+}
+
+.gp-close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.gp-close:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.gp-video {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-m);
+  background: oklch(0% 0 0);
+}
+
+.gp-player-desc {
+  font-size: var(--step--1);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* ---------- chapters ---------- */
+
+.gp-chapters-wrap {
+  border-top: 1px solid var(--hairline);
+  padding-top: var(--space-2xs);
+}
+
+.gp-chapters-head {
+  font-size: var(--step--1);
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.3rem;
+}
+
+.gp-chapters {
+  list-style: none;
+  display: grid;
+  gap: 0.1rem;
+  margin: 0;
+  padding: 0;
+}
+
+/* The list is the point of a tutorial: someone re-watching one step should be
+   able to find it by name rather than by scrubbing. */
+.gp-chapter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  inline-size: 100%;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  background: none;
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--step--1);
+  text-align: start;
+  cursor: pointer;
+}
+
+.gp-chapter:hover {
+  border-color: var(--hairline);
+  color: var(--text-1);
+}
+
+.gp-chapter.on {
+  background: var(--accent-quiet);
+  border-color: var(--accent);
+  color: var(--text-1);
+}
+
+.gp-chapter-t {
+  flex: none;
+  min-inline-size: 2.7rem;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.gp-chapter.on .gp-chapter-t {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .gp-player {
+    padding: var(--space-2xs);
+  }
+
+  .gp-chapter-l {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

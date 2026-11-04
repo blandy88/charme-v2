@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { FavoriteButton, useFavorites } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
-import { byId, formatPrice, initials } from "../lib/catalog.js";
+import { byId, initials, money } from "../lib/catalog.js";
 import "./account.css";
 
 function Card({ item, product, t, savedLabel, saveLabel }) {
@@ -45,7 +45,7 @@ function Card({ item, product, t, savedLabel, saveLabel }) {
         {brand ? <p>{brand}</p> : null}
         {price != null ? (
           <p className="fav-price">
-            {product ? formatPrice(price) : price} {t("currency")}
+            {money(price)}
           </p>
         ) : null}
 
@@ -89,11 +89,11 @@ export default function Favorites() {
   if (!items.length) {
     return (
       <main className="wrap acct">
-        <header className="acct-head">
+        <header className="acct-head" data-guide="fav-page">
           <p className="eyebrow">Parfumerie Charme</p>
           <h1>{t("favorites")}</h1>
         </header>
-        <div className="empty" style={{ marginTop: "var(--space-l)" }}>
+        <div className="empty" data-guide="fav-empty" style={{ marginTop: "var(--space-l)" }}>
           <Heart size={40} strokeWidth={1.4} aria-hidden="true" />
           <h2>{t("favEmpty")}</h2>
           <p>{t("favEmptyBody")}</p>
@@ -107,7 +107,7 @@ export default function Favorites() {
 
   return (
     <main className="wrap acct">
-      <header className="acct-head">
+      <header className="acct-head" data-guide="fav-page">
         <p className="eyebrow">Parfumerie Charme</p>
         <h1>{t("favorites")}</h1>
         <p className="acct-sub">
@@ -123,9 +123,9 @@ export default function Favorites() {
       </div>
 
       {inCollection.length ? (
-        <section className="fav-group">
+        <section className="fav-group" data-guide="fav-list">
           <h2>{t("favInCollection")}</h2>
-          <div className="fav-grid">
+          <div className="fav-grid reveal-group">
             {inCollection.map(({ item, product }) => (
               <Card
                 key={item.id}
@@ -146,7 +146,7 @@ export default function Favorites() {
           <p className="fld-hint" style={{ marginTop: "0.4rem" }}>
             {t("favFromBoutiqueHint")}
           </p>
-          <div className="fav-grid">
+          <div className="fav-grid reveal-group">
             {elsewhere.map(({ item }) => (
               <Card
                 key={item.id}

@@ -594,3 +594,12 @@
     justify-content: flex-end;
   }
 }
+
+/* Reviews gate link was 15px tall on phones. */
+@media (max-width: 767px) {
+  .rv-gate-link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+  }
+}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AdminLoyalty tabbed-panel verification</title>
+    <link rel="stylesheet" href="/src/atelier/tokens.css" />
+    <link rel="stylesheet" href="/src/atelier/pages/admin.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      import React from "react";
+      import { createRoot } from "react-dom/client";
+      import { Loyalty } from "/src/atelier/pages/AdminLoyalty.jsx";
+      import { ADMIN_STR } from "/src/atelier/pages/adminI18n.js";
+
+      /* Same translator the real Admin shell builds (Admin.jsx L564-567). */
+      const at = (k) => (ADMIN_STR.en && ADMIN_STR.en[k]) || k;
+
+      createRoot(document.getElementById("root")).render(
+        React.createElement("main", { className: "admin-shell" }, React.createElement(Loyalty, { at })),
+      );
+    </script>
+  </body>
+</html>

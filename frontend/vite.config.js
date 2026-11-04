@@ -243,6 +243,9 @@ export default defineConfig({
     port: 5173,
     // The catalogue lives outside frontend/, so dev needs read access up one dir.
     fs: { allow: [repoRoot] },
+    // Serve static assets from repo-root public/ so images (creed-green-irish-tweed.png, etc.)
+    // resolve in dev the same way they do on the production Express server.
+    publicDir: path.resolve(repoRoot, "public"),
     proxy: {
       "/api": "http://localhost:3000",
       "/uploads": "http://localhost:3000",

@@ -3245,10 +3245,22 @@ function updateColors() {
   // Quality Selector + Size Selector Functionality
   function initializeQualitySelectors() {
     document.querySelectorAll(".quality-selector-container").forEach((container) => {
-      const productInfoSection =
-        container.closest(".product-info-section") ||
-        container.closest(".product-info") ||
-        container.closest(".content");
+      /* The product block is the TIGHTEST ancestor that owns a cart button.
+         A section can nest a second product (the Layton section hosts the
+         Haltane cross-sell), so .closest('.content') resolved every quality
+         selector in the section to the FIRST cart button: duplicate radio ids
+         for both products and the outer product's prices on the inner one. */
+      let productInfoSection = null;
+      for (
+        let node = container.parentElement;
+        node && node !== document.body;
+        node = node.parentElement
+      ) {
+        if (node.querySelector && node.querySelector(".add-to-cart-btn[data-product]")) {
+          productInfoSection = node;
+          break;
+        }
+      }
 
       const cartButton = productInfoSection
         ? productInfoSection.querySelector(".add-to-cart-btn[data-product]")

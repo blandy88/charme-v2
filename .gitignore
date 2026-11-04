@@ -20,11 +20,13 @@ server.err
 /database/
 
 # Build caches
+# NOTE: public/app/ is intentionally NOT ignored. The SPA bundle is built once
+# with `npm run build:app` and must be committed, because the Render build step
+# only runs `npm install` and neither Vercel nor GitHub Pages rebuilds it.
 .cache/
 .next/
 dist/
 build/
-public/app/
 
 # IDE/editor
 .vscode/

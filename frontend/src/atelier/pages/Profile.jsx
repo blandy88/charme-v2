@@ -21,6 +21,7 @@ import { useI18n } from "../../contexts/I18nContext.jsx";
 import { api, apiUpload, setToken } from "../../api/client.js";
 import AvatarEditor from "./AvatarEditor.jsx";
 import { initials } from "../lib/text.js";
+import { paneKeys } from "../lib/tablist.js";
 import "./account.css";
 import "./avatarEditor.css";
 
@@ -180,6 +181,32 @@ export default function Profile() {
         <p className="acct-sub">{t("profileSub")}</p>
       </header>
 
+      {/* Membership strip: the numbers that belong to the account, at a glance. */}
+      <div className="membership-strip">
+        <div className="strip-chip">
+          <span className="chip-mark" aria-hidden="true">★</span>
+          <span>
+            <strong>{items.length}</strong>
+            <span>{t("favorites")}</span>
+          </span>
+        </div>
+        {since ? (
+          <div className="strip-chip">
+            <span className="chip-mark" aria-hidden="true">◐</span>
+            <span>
+              <strong>{since}</strong>
+              <span>{t("profileSince")}</span>
+            </span>
+          </div>
+        ) : null}
+        {isAdmin ? (
+          <div className="strip-chip strip-chip-admin">
+            <ShieldCheck size={13} strokeWidth={2} aria-hidden="true" />
+            <span>{t("profileAdmin")}</span>
+          </div>
+        ) : null}
+      </div>
+
       <div className="profile-grid">
         <aside className="avatar-well">
           <span className="avatar-ring">
@@ -194,7 +221,7 @@ export default function Profile() {
                   placeItems: "center",
                   background: "var(--surface-0)",
                   fontFamily: "var(--font-display)",
-                  fontSize: "var(--step-2)",
+                  fontSize: "var(--step-3)",
                   color: "var(--text-2)",
                 }}
               >
@@ -236,33 +263,46 @@ export default function Profile() {
               {t("profileAdmin")}
             </span>
           ) : null}
-
-          <div className="stats-row" style={{ justifyContent: "center", gap: "var(--space-m)" }}>
-            <div>
-              <strong>{items.length}</strong>
-              <span>{t("favorites")}</span>
-            </div>
-            {since ? (
-              <div>
-                <strong>{since}</strong>
-                <span>{t("profileSince")}</span>
-              </div>
-            ) : null}
-          </div>
         </aside>
 
-        <section className="acct-panel" style={{ marginTop: 0 }}>
+        <section className="acct-panel">
           <div className="seg" role="tablist" aria-label={t("profileTitle")}>
-            <button type="button" role="tab" aria-selected={pane === "profile"} onClick={() => setPane("profile")}>
+            <button
+              type="button"
+              role="tab"
+              id="pf-tab-profile"
+              aria-controls={pane === "profile" ? "pf-panel-profile" : undefined}
+              aria-selected={pane === "profile"}
+              tabIndex={pane === "profile" ? 0 : -1}
+              onKeyDown={paneKeys(pane, setPane, ["profile", "settings"], "pf-tab-")}
+              onClick={() => setPane("profile")}
+            >
               {t("profileTabProfile")}
             </button>
-            <button type="button" role="tab" aria-selected={pane === "settings"} onClick={() => setPane("settings")} data-guide="settings">
+            <button
+              type="button"
+              role="tab"
+              id="pf-tab-settings"
+              aria-controls={pane === "settings" ? "pf-panel-settings" : undefined}
+              aria-selected={pane === "settings"}
+              tabIndex={pane === "settings" ? 0 : -1}
+              onKeyDown={paneKeys(pane, setPane, ["profile", "settings"], "pf-tab-")}
+              onClick={() => setPane("settings")}
+              data-guide="settings"
+            >
               {t("settings")}
             </button>
           </div>
 
           {pane === "profile" ? (
-            <form className="auth-form" style={{ marginTop: "var(--space-m)" }} onSubmit={saveProfile}>
+            <form
+              className="auth-form"
+              style={{ marginTop: "var(--space-m)" }}
+              onSubmit={saveProfile}
+              role="tabpanel"
+              id="pf-panel-profile"
+              aria-labelledby="pf-tab-profile"
+            >
               {status.pane === "profile" && status.text ? (
                 <p className={`msg${status.kind === "error" ? " error" : " ok"}`} role="status">
                   {status.text}
@@ -317,7 +357,13 @@ export default function Profile() {
               </div>
             </form>
           ) : (
-            <form style={{ marginTop: "var(--space-m)" }} onSubmit={saveSettings}>
+            <form
+              style={{ marginTop: "var(--space-m)" }}
+              onSubmit={saveSettings}
+              role="tabpanel"
+              id="pf-panel-settings"
+              aria-labelledby="pf-tab-settings"
+            >
               {status.pane === "settings" && status.text ? (
                 <p className={`msg${status.kind === "error" ? " error" : " ok"}`} role="status">
                   {status.text}

@@ -95,7 +95,7 @@
   display: none;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1024px) {
   .gs-field,
   .gs-ai {
     display: none;
@@ -142,6 +142,11 @@
     color: var(--text-3);
     cursor: pointer;
     padding: 0.35rem 0.45rem;
+    /* This is the only way out of the search sheet on a phone, and it measured
+       30x27 - the smallest target on the page, on the control you need most
+       when a search returns nothing useful. */
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
   }
 
   /* Anchored to the sheet's own bottom edge, not to the nav's height. */
@@ -398,10 +403,14 @@
   z-index: 40;
   inset-inline-end: clamp(0.9rem, 2vw, 1.5rem);
   inset-block-end: clamp(0.9rem, 2vw, 1.5rem);
-  inline-size: 3.2rem;
-  block-size: 3.2rem;
+  inline-size: var(--floating-cart-size);
+  block-size: var(--floating-cart-size);
   display: grid;
   place-items: center;
+  /* The cart button's own footprint. Kept as a variable because the page has
+     to reserve the same space at the bottom, and duplicating the numbers in a
+     media query is how they drift apart. */
+  --floating-cart-size: 3.2rem;
   border-radius: var(--radius-pill);
   background: var(--accent);
   color: var(--on-accent);
@@ -481,5 +490,303 @@
 @media (prefers-reduced-motion: reduce) {
   .gs-panel {
     animation-duration: 1ms;
+  }
+}
+
+/* ========================================================================
+   Search panel — smoother, friendlier, clearer.
+   ======================================================================== */
+
+/* The inline field: a soft pill that glows on focus. */
+.gs-field {
+  padding: 0.45rem 0.95rem;
+  border: 1px solid var(--hairline);
+  background: var(--surface-1);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-1);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+}
+
+.gs-field:focus-within {
+  border-color: var(--accent);
+  background: var(--surface-2);
+  box-shadow: 0 0 0 4px oklch(from var(--accent) l c h / 0.16);
+}
+
+.gs-field input {
+  inline-size: clamp(5rem, 12vw, 11rem);
+  font-size: var(--step-0);
+  color: var(--text-1);
+}
+
+.gs-field input::placeholder {
+  color: var(--text-3);
+}
+
+.gs-clear {
+  border: 0;
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  padding: 0.15rem;
+  border-radius: var(--radius-pill);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.gs-clear:hover {
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+/* The dropdown panel: deeper shadow, softer corners. */
+.gs-panel {
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-1);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-2);
+  padding: var(--space-s);
+  backdrop-filter: blur(20px);
+  animation: gs-in var(--dur-base) var(--ease-out) both;
+}
+
+@keyframes gs-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+/* Tabs: pill-selected active state. */
+.gs-tabs {
+  display: inline-flex;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  margin-bottom: var(--space-s);
+}
+
+.gs-tabs button {
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.gs-tabs button.on {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 4px 12px oklch(from var(--accent) l c h / 0.25);
+}
+
+/* Suggestion chips. */
+.gs-suggest .eyebrow {
+  margin-bottom: var(--space-xs);
+  color: var(--text-3);
+}
+
+.gs-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.gs-chip {
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  color: var(--text-2);
+  border-radius: var(--radius-pill);
+  padding: 0.3rem 0.75rem;
+  font-size: var(--step--1);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+  text-decoration: none;
+}
+
+.gs-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--surface-1);
+  transform: translateY(-1px);
+}
+
+/* Result rows. */
+.gs-results {
+  list-style: none;
+  display: grid;
+  gap: 0.2rem;
+  margin-top: var(--space-xs);
+}
+
+.gs-row {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radius-s);
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid transparent;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.gs-row:hover {
+  background: var(--accent-quiet);
+  border-color: oklch(from var(--accent) l c h / 0.3);
+  transform: translateX(4px);
+}
+
+.gs-row:active {
+  transform: translateX(0) scale(0.98);
+}
+
+/* The hover nudge follows the reading direction. translateX is physical, so
+   without this the row slides the wrong way the moment the interface is in
+   Arabic, which reads as a glitch rather than as an affordance. */
+[dir="rtl"] .gs-row:hover {
+  transform: translateX(-4px);
+}
+
+.gs-thumb {
+  inline-size: 2.6rem;
+  block-size: 3.1rem;
+  border-radius: var(--radius-s);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  overflow: clip;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.gs-thumb img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
+.gs-mark {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  color: var(--text-3);
+}
+
+.gs-meta {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  line-height: 1.25;
+}
+
+.gs-meta strong {
+  font-weight: 600;
+  font-size: var(--step-0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-1);
+}
+
+.gs-meta span {
+  color: var(--text-2);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-price {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: var(--step-0);
+  white-space: nowrap;
+}
+
+.gs-all {
+  margin-top: var(--space-xs);
+  inline-size: 100%;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--text-2);
+  border-radius: var(--radius-s);
+  padding: 0.55rem;
+  font-size: var(--step-0);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.gs-all:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--surface-2);
+}
+
+.gs-empty {
+  color: var(--text-2);
+  font-size: var(--step-0);
+  padding: var(--space-m) 0;
+  text-align: center;
+}
+
+/* Narrow-screen sheet: softer, anchored under the nav. */
+@media (max-width: 1024px) {
+  .global-search.open {
+    inset-block-start: 0.5rem;
+    inset-inline: 0.75rem;
+    z-index: 70;
+    gap: 0.2rem;
+    padding: 0.25rem 0.3rem 0.25rem 0.5rem;
+    background: var(--surface-1);
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-2);
+    animation: gs-in var(--dur-base) var(--ease-out) both;
+  }
+
+  .global-search.open .gs-field {
+    border: 0;
+    background: transparent;
+    padding: 0.25rem 0;
+    box-shadow: none;
+  }
+
+  .global-search.open .gs-field:focus-within {
+    box-shadow: none;
+  }
+
+  .gs-close {
+    color: var(--text-2);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .gs-close:hover {
+    color: var(--accent);
   }
 }

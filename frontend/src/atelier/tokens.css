@@ -131,7 +131,21 @@ body {
   color: var(--text-1);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  min-height: 100vh;
+  /* dvh, not vh: on a phone with a collapsing browser chrome, 100vh is taller
+     than the visible viewport, which pushes the last row of a grid under the
+     floating cart and under the address bar. */
+  min-height: 100dvh;
+  /* The cart button is position:fixed, so it does not take part in layout and
+     lands on top of whatever is in the bottom-inline-end corner. Measured at
+     390px on /collection it covered the last card's heart button and the card
+     link beneath it. Reserving its footprint lets the final row scroll clear. */
+  --floating-cart-size: 3.2rem;
+}
+
+@media (max-width: 520px) {
+  body {
+    padding-block-end: calc(var(--floating-cart-size) + clamp(0.9rem, 2vw, 1.5rem));
+  }
 }
 
 h1,
@@ -242,6 +256,15 @@ img {
   animation-name: stage-out-back;
 }
 
+/* A morph navigation (see morph.js): the view transition IS the incoming
+   beat, so the rise must not run. This is not cosmetic -- the new state is
+   captured on the very next frame, and a page photographed at 0% of its rise
+   would cross-fade in from nothing. */
+.stage[data-phase="in"][data-morph] > *,
+.stage[data-phase="in"][data-morph] > main > * {
+  animation: none;
+}
+
 @keyframes stage-out-back {
   to {
     opacity: 0;
@@ -302,9 +325,42 @@ img {
   animation-delay: calc(sibling-index() * var(--stagger-step) * -1);
 }
 
+/*
+ * Shared-element morph: the clicked card's media becomes the product hero.
+ *
+ * This is the one and only use of the View Transitions API here. A full-page
+ * transition was tried and reverted -- between two very different page
+ * heights Chrome scales one document into the other. So nothing but the pair
+ * is asked to change size:
+ *   - morph.js drops `.stage`'s `view-transition-name: page` for the
+ *     duration, which leaves the viewport-sized root group to cross-fade;
+ *   - `.shelf-media`, `.also-media` and `.pdp-media` are all 3/4 boxes, so
+ *     the named pair interpolates position and size with no stretch.
+ */
 @media (prefers-reduced-motion: no-preference) {
-  ::view-transition-group(*) {
+  /* Everything that is not the pair: a short cross-fade, so the morph is the
+     story rather than a second, competing animation. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: calc(var(--dur-morph) * 0.55);
+    animation-timing-function: var(--ease-out);
+  }
+
+  /* The pair: one group, growing from the card to the hero. */
+  ::view-transition-group(bottle-morph) {
     animation-duration: var(--dur-morph);
+    animation-timing-function: var(--ease-enter);
+  }
+
+  /* Within the pair the two snapshots are a genuine cross-fade: same window,
+     same easing, so their opacities always sum to 1. Measured alternatives
+     (old finishing early, or new delayed) leave the bottle at ~45% brightness
+     mid-flight, and one of them blinked it out entirely for ~80ms. The box
+     growing is the effect; the images underneath just have to not dip. */
+  ::view-transition-old(bottle-morph),
+  ::view-transition-new(bottle-morph) {
+    animation-duration: var(--dur-morph);
+    animation-timing-function: var(--ease-in-out);
   }
 }
 
@@ -452,5 +508,22 @@ select.field option {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+}
+
+/* ---------- Mobile touch targets (WCAG 2.5.5, measured at 390px) ----------
+   The shared .pressable CTA measured 35-43px tall across pages (one pixel
+   short at 43), form inputs 39-40px. All grown to the 44px minimum. */
+@media (max-width: 767px) {
+  a.pressable,
+  button.pressable {
+    min-block-size: 2.75rem;
+  }
+
+  input.field,
+  .field input,
+  .note-field input,
+  .note-field textarea {
+    min-block-size: 2.75rem;
   }
 }

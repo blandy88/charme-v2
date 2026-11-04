@@ -68,6 +68,8 @@
   padding: 0.55rem 0.7rem;
   resize: vertical;
   inline-size: 100%;
+  /* WCAG 2.5.5: measured 39px tall on a phone. */
+  min-block-size: 2.75rem;
 }
 
 .ct-field input:focus,
@@ -244,5 +246,16 @@
 @media (max-width: 900px) {
   .ct-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Contact mobile targets: the phone/WhatsApp links were 19px and the footer
+   link 16px. */
+@media (max-width: 767px) {
+  .ct-list a,
+  .ct-foot-link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
   }
 }

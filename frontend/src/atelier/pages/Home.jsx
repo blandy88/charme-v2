@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../../contexts/I18nContext.jsx";
-import { useTheme } from "../../contexts/ThemeContext.jsx";
+import catalogue from "virtual:catalogue";
 import "./home.css";
 
 const OSM_EMBED =
@@ -125,20 +125,12 @@ function Concierge() {
 
 export default function Home() {
   const { t } = useI18n();
-  const { theme } = useTheme();
   const sections = useSections();
   const houses = sections ? new Set(sections.map((s) => s.brand).filter(Boolean)).size : null;
 
   return (
     <main>
       <section className="hero">
-        <div className="hero-bg" aria-hidden="true">
-          <img
-            src={theme === "light" ? "/hero-bg.jpg" : "/hero-bg-night.jpg"}
-            alt=""
-            fetchPriority="high"
-          />
-        </div>
         <div className="wrap hero-grid">
           <div>
             <p className="eyebrow">{t("heroEyebrow")}</p>
@@ -169,8 +161,8 @@ export default function Home() {
           </div>
           <figure className="hero-visual">
             <img
-              src={theme === "light" ? "/hero-bg.jpg" : "/hero-bg-night.jpg"}
-              alt="Parfumerie Charme"
+              src={catalogue[0]?.image?.replace(/^\//, '') || 'creed-green-irish-tweed.png'}
+              alt={t("heroCaption")}
               loading="eager"
               decoding="async"
             />

@@ -43,26 +43,137 @@
   gap: var(--space-m);
 }
 
-/* Links join the row only once there is room for them *and* the full tool
-   row (search + buttons); below this they would push the page wider. */
-@media (min-width: 1180px) {
+/* The primary nav joins the row at the tablet breakpoint instead of hiding
+   entirely below 1180px, so Home / Collection / Contact stay reachable.
+   Below it, the links collapse into the mobile drawer toggled by the
+   hamburger button. */
+@media (min-width: 768px) {
   .nav-links {
     display: flex;
   }
 }
 
 .nav-links a {
+  position: relative;
   font-size: var(--step--1);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-3);
   text-decoration: none;
-  transition: color var(--dur-fast) var(--ease-out);
+  transition:
+    color var(--dur-fast) var(--ease-out);
 }
 
-.nav-links a:hover,
+.nav-links a:hover {
+  color: var(--accent);
+}
+
 .nav-links a.active {
   color: var(--accent);
+}
+
+/* Clear active-state indicator: a thin warm accent underline under the
+   current tab (rtl-safe via inline axis). */
+.nav-links a.active::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -0.25rem;
+  block-size: 1.5px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+/* Mobile menu toggle — shown only below the tablet breakpoint.
+   `display: none` here is the only base declaration on purpose: an earlier
+   version also carried `display: inline-flex` further down the same rule, so
+   the later declaration won and the button rendered at EVERY width — a live
+   control above 767px that opened a drawer whose own styles live inside the
+   max-width: 767px query below, i.e. it did nothing. The media query is now
+   the single place that shows it. */
+.mobile-menu-btn {
+  display: none;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--text-2);
+  border-radius: var(--radius-s);
+  padding: 0.4rem 0.55rem;
+  font-size: var(--step--1);
+  cursor: pointer;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu-btn:hover {
+  background: var(--surface-2);
+  color: var(--accent);
+  border-color: var(--hairline-strong);
+}
+
+@media (max-width: 767px) {
+  .mobile-menu-btn {
+    display: inline-flex;
+    /* Touch targets. Measured at 390px: the hamburger was 35x30, every
+       .tool-btn 36x30, the search close 30x27 - all under the 44px WCAG 2.5.5
+       minimum and barely over the 32px floor. The icon stays the same size;
+       only the hit area grows, so the visual rhythm of the header does not
+       change. */
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+  }
+
+  .tool-btn {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    justify-content: center;
+  }
+
+  .wordmark {
+    min-block-size: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* The inline nav-links collapse into a vertical drawer below the nav row,
+     overlaid on top of the page so it never forces horizontal overflow. */
+  .nav-links {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--hairline);
+    padding: var(--space-s);
+    flex-direction: column;
+    gap: 0;
+    z-index: 45;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 0.55rem var(--space-s);
+    border-radius: var(--radius-m);
+    color: var(--text-2);
+    text-decoration: none;
+  }
+
+  .nav-links a:hover {
+    background: var(--surface-2);
+    color: var(--accent);
+  }
+
+  .nav-links a.active {
+    background: var(--accent-quiet);
+    color: var(--accent);
+  }
+
+  .nav-links a.active::after {
+    display: none;
+  }
 }
 
 .nav-tools {
@@ -88,6 +199,7 @@
 }
 
 .tool-btn:hover {
+  background: var(--surface-2);
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -131,18 +243,36 @@
   position: relative;
 }
 
+/* The account dropdown: smooth scale + fade in and out instead of an instant
+   appear/disappear. Always in the DOM; `data-state="closed"` hides it. */
 .account-pop {
   position: absolute;
   top: calc(100% + 0.5rem);
   inset-inline-end: 0;
-  min-width: 12rem;
+  min-width: 13rem;
+  max-width: 20rem;
   background: var(--surface-1);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-m);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-l);
   box-shadow: var(--shadow-2);
-  padding: 0.4rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
+  transform-origin: inset-inline-end top;
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity var(--dur-base) var(--ease-spring-snappy),
+    transform var(--dur-base) var(--ease-spring-snappy);
+}
+
+.account-pop[data-state="closed"] {
+  opacity: 0;
+  transform: scale(0.92) translateY(6px);
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .account-pop a,
@@ -152,10 +282,13 @@
   border: 0;
   color: var(--text-2);
   font-size: var(--step-0);
-  padding: 0.55rem 0.7rem;
+  padding: 0.6rem 0.8rem;
   border-radius: var(--radius-s);
   text-decoration: none;
   cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
 }
 
 .account-pop a:hover,
@@ -186,7 +319,7 @@
   font-weight: 600;
 }
 
-/* Unread guest-note count (the legacy #guestNotesBadge, admin-only). */
+/* Unread guest-note count (admin-only). */
 .account-pop .admin-badge {
   background: var(--accent);
   color: var(--on-accent);
@@ -197,47 +330,110 @@
   line-height: 1.4;
 }
 
+.nav-avatar {
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+}
+
+.nav-avatar-img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.nav-avatar-initials {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step--1);
+  color: var(--text-1);
+  line-height: 1;
+}
+
+.nav-avatar-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  border: 1px solid oklch(from var(--accent) l c h / 0.35);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.85);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.nav-avatar[aria-expanded="true"] .nav-avatar-ring {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav-avatar[aria-expanded="true"] {
+  box-shadow: 0 0 0 3px oklch(from var(--accent) l c h / 0.25);
+}
+
+/* Count badges pop when they change. */
+.count {
+  position: absolute;
+  top: -0.5rem;
+  inset-inline-end: -0.5rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius-pill);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0 0.35rem;
+  line-height: 1.3;
+  animation: count-in var(--dur-base) var(--ease-spring-snappy) both;
+}
+
+@keyframes count-in {
+  from {
+    transform: scale(0.55);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 /* ---------- Hero ---------- */
+/* The hero background image (.hero-bg + masked img) is removed entirely:
+   no gradients-as-decoration, no glow blobs, no dark overlay. The surface
+   is the dark theme itself, and the hero is typography-first. */
 .hero {
   position: relative;
   overflow: clip;
   border-bottom: 1px solid var(--hairline);
 }
 
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(120% 100% at 50% -10%, oklch(from var(--accent) l c h / 0.12), transparent 50%),
-    var(--surface-0);
-}
-
-.hero-bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.5;
-  mask-image: linear-gradient(to bottom, black 55%, transparent 98%);
-}
-
 .hero-grid {
   position: relative;
   display: grid;
   gap: var(--space-l);
-  padding-block: clamp(3rem, 8vw, 6rem);
+  padding-block: clamp(3rem, 7vw, 5rem);
 }
 
 @media (min-width: 1000px) {
   .hero-grid {
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1fr 0.85fr;
     align-items: center;
+    gap: var(--space-xl);
   }
 }
 
 .hero-title {
-  font-size: var(--step-5);
-  line-height: 1.02;
-  letter-spacing: -0.01em;
+  font-size: var(--step-4);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 .hero-title .accent {
@@ -248,8 +444,8 @@
 .hero-sub {
   margin-top: var(--space-s);
   color: var(--text-2);
-  font-size: var(--step-1);
-  max-width: 34rem;
+  font-size: var(--step-0);
+  max-width: 44ch;
   line-height: 1.6;
 }
 
@@ -268,53 +464,64 @@
   display: inline-block;
 }
 
+/* Muted, secondary stats — smaller and breathier than before. */
 .hero-stats {
   margin-top: var(--space-l);
   display: flex;
   gap: var(--space-l);
+  flex-wrap: wrap;
 }
 
 .hero-stats div strong {
   display: block;
   font-family: var(--font-display);
-  font-size: var(--step-2);
+  font-size: var(--step-1);
   color: var(--text-1);
 }
 
 .hero-stats div span {
   font-size: var(--step--1);
   color: var(--text-3);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
+/* Cleanly framed product image: thin border + subtle panel, no gradient
+   mask, no dark overlay, no rounded shadow blob. */
 .hero-visual {
+  margin: 0;
   position: relative;
-  border-radius: var(--radius-l);
+  border-radius: var(--radius-m);
   overflow: clip;
   border: 1px solid var(--hairline);
-  box-shadow: var(--shadow-2);
+  background: var(--surface-1);
 }
 
 .hero-visual img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
 }
 
 .hero-visual figcaption {
   position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  padding: var(--space-s) var(--space-m);
-  background: linear-gradient(transparent, oklch(0% 0 0 / 0.65));
-  color: oklch(96% 0.008 var(--brand-hue));
+  inset-inline-start: var(--space-s);
+  inset-inline-end: var(--space-s);
+  bottom: var(--space-s);
+  background: oklch(from var(--surface-1) l c h / 0.7);
+  color: var(--text-3);
   font-size: var(--step--1);
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  text-align: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--hairline);
+  border-bottom-color: transparent;
 }
 
+/* Muted channel chips (kept for reuse; not currently rendered in the hero). */
 .hero-channels {
   position: relative;
   display: flex;
@@ -427,4 +634,29 @@
 
 .notice.error {
   border-color: oklch(60% 0.15 20);
+}
+
+/* ---------- Mobile touch targets (WCAG 2.5.5, measured at 390px) ----------
+   The language select and the sign-in button were 31px tall, and every
+   footer link 15-19px. */
+@media (max-width: 767px) {
+  .lang-select,
+  .signin-btn {
+    min-block-size: 2.75rem;
+  }
+
+  .signin-btn {
+    padding-inline: 1.1rem;
+  }
+
+  .footer-grid nav a,
+  .footer-grid a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+  }
+
+  .footer-grid nav ul {
+    gap: 0;
+  }
 }

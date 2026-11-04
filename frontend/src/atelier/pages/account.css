@@ -173,8 +173,8 @@
 
 .check input {
   appearance: none;
-  inline-size: 1.05rem;
-  block-size: 1.05rem;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
   flex: none;
   border: 1px solid var(--hairline-strong);
   border-radius: 0.3rem;
@@ -182,15 +182,27 @@
   display: grid;
   place-items: center;
   cursor: pointer;
+  position: relative;
+  /* The row height must not change: pull back the 0.45rem of growth. */
+  margin-block: -0.225rem;
   transition:
     background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
 
+/* WCAG 2.5.5: the painted box is 24px (AA per 2.5.8) and the wrapping label is
+   clickable, but the input itself still measured 17px — this transparent
+   ::before lifts the bare-box hit area to 44px. */
+.check input::before {
+  content: "";
+  position: absolute;
+  inset: -0.625rem;
+}
+
 .check input::after {
   content: "";
-  inline-size: 0.5rem;
-  block-size: 0.5rem;
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
   border-radius: 0.15rem;
   background: var(--on-accent);
   transform: scale(0);
@@ -907,5 +919,104 @@
 @media (prefers-reduced-motion: reduce) {
   .cart-line {
     animation-duration: 1ms;
+  }
+}
+
+/* ========================================================================
+   Profile page — enhanced membership surface.
+   ======================================================================== */
+
+.membership-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  margin-top: var(--space-s);
+  margin-bottom: var(--space-l);
+}
+
+.strip-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: var(--step--1);
+}
+
+.strip-chip .chip-mark {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  color: var(--accent);
+}
+
+.strip-chip strong {
+  color: var(--text-1);
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+}
+
+.strip-chip-admin {
+  border-color: oklch(from var(--accent) l c h / 0.4);
+  background: var(--accent-quiet);
+  color: var(--text-1);
+}
+
+/* Bigger avatar ring on the profile page. */
+.avatar-ring {
+  inline-size: 11rem;
+  block-size: 11rem;
+}
+
+.avatar-well {
+  gap: var(--space-s);
+  padding: var(--space-l);
+}
+
+.avatar-well .btn {
+  inline-size: 100%;
+  justify-content: center;
+}
+
+/* Status message: gentle slide + fade. */
+.msg {
+  animation: msg-in var(--dur-base) var(--ease-spring-snappy) both;
+}
+
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* Segmented control: active tab lifts with a glow. */
+.seg button[aria-selected="true"] {
+  box-shadow: 0 4px 14px oklch(from var(--accent) l c h / 0.3);
+}
+
+
+/* ---------- Auth mobile targets (measured at 390px) ----------
+   The reveal-password button was 25px tall, the forgot / switch links 23px,
+   and the back-to-shop link 15px - all under the 44px WCAG 2.5.5 minimum. */
+@media (max-width: 767px) {
+  .affix button {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+  }
+
+  .forgot,
+  .linkish {
+    min-block-size: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .fld-hint a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
   }
 }

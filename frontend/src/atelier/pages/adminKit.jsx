@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useDialogFocus } from "../lib/useDialogFocus.js";
 
 /* Shared admin primitives. Kept out of Admin.jsx so AdminLoyalty.jsx can use
    them without importing from the module that imports it. */
@@ -13,6 +14,8 @@ export function fmtDate(value) {
 }
 
 export function Modal({ title, onClose, children, footer }) {
+  const card = useRef(null);
+  useDialogFocus(card, { initialFocus: ".admin-x" });
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -24,7 +27,7 @@ export function Modal({ title, onClose, children, footer }) {
   return (
     <div className="admin-modal" role="dialog" aria-modal="true" aria-label={title}>
       <button type="button" className="admin-scrim" aria-label="Close" onClick={onClose} />
-      <div className="admin-modal-card panel">
+      <div className="admin-modal-card panel" ref={card}>
         <header className="admin-modal-head">
           <h2>{title}</h2>
           <button type="button" className="admin-x pressable" onClick={onClose} aria-label="Close">
@@ -38,9 +41,9 @@ export function Modal({ title, onClose, children, footer }) {
   );
 }
 
-export function Stat({ label, value }) {
+export function Stat({ label, value, guide }) {
   return (
-    <div className="admin-stat card">
+    <div className="admin-stat card" data-guide={guide}>
       <strong>{value == null ? "—" : value}</strong>
       <span>{label}</span>
     </div>

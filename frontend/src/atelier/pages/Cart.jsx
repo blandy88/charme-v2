@@ -15,9 +15,8 @@ import { lineKey, useCart } from "../../contexts/CartContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { api } from "../../api/client.js";
 import { initials } from "../lib/text.js";
+import { money } from "../lib/catalog.js";
 import "./account.css";
-
-const money = (n) => `${Math.round(n * 100) / 100} dt`;
 
 export default function Cart() {
   const { t } = useI18n();
