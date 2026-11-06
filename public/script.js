@@ -23009,6 +23009,13 @@ window.testClickOnElement = function() {
   }
 
   function enhance(id) {
+    // FIX (2026-11-06): the bottle-render overlay replaced each product photo
+    // with a generic template bottle plus a text sticker (house + name +
+    // gender "HOMME/FEMME"). That sticker overlapped the bottle's own label and
+    // read as garbled/duplicated text, while the real photo stayed hidden until
+    // hover. We now keep the real product image (clean PNG, or the SVG fallback
+    // for references without one) and render no overlay.
+    return;
     var section = document.getElementById(id);
     if (!section || section.dataset.bottleRendered) return;
     var product = PRODUCTS[id];
