@@ -82,6 +82,193 @@ function Pager({ at, page, pageCount, count, unit, onPage, hook }) {
   );
 }
 
+/* Date AND time. `fmtDate` only prints the day, which is not enough here: two
+   movements on the same afternoon must be distinguishable, because that is how
+   a double-click shows up.
+   Postgres returns "2026-11-06 17:55:39.602046+00" and SQLite returns
+   "2026-11-06 17:55:39", so the offset is normalised before parsing. */
+function fmtDateTime(value) {
+  if (!value) return "—";
+  const raw = String(value).trim();
+  let iso = raw.replace(" ", "T");
+  iso = iso.replace(/([+-]\d{2})$/, "$1:00");
+  if (!/[zZ]$|[+-]\d{2}:?\d{2}$/.test(iso)) iso += "Z";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return raw;
+  return d.toLocaleString(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+const HISTORY_PAGE_SIZE = 25;
+/* A dense log, so the page cap is generous. If the account ever exceeds it the
+   UI says so out loud rather than pretending the list is complete. */
+const HISTORY_MAX_PAGES = 20;
+
+/* Every point movement on every card, newest first.
+   INCIDENT 2026-11-06: a disputed balance used to be a number on a badge with
+   no way to explain it, and the assistant had to open profiles one by one. */
+function PointsHistory({ at }) {
+  const [movements, setMovements] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const PAGE = 1000;
+        const all = [];
+        let reported = 0;
+        let offset = 0;
+        for (let i = 0; i < HISTORY_MAX_PAGES; i += 1) {
+          const d = await api(`/api/admin/loyalty/history?limit=${PAGE}&offset=${offset}`);
+          reported = Number(d.totalMovements) || 0;
+          const batch = d.movements || [];
+          all.push(...batch);
+          if (!d.hasMore || batch.length === 0) break;
+          offset = Number(d.nextOffset) || offset + batch.length;
+        }
+        if (cancelled) return;
+        setMovements(all);
+        setTotal(reported);
+        setLoading(false);
+      } catch (e) {
+        if (!cancelled) {
+          setError(e.message);
+          setLoading(false);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const shown = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    if (!needle) return movements;
+    return movements.filter((m) =>
+      `${m.name || ""} ${m.cardNumber || ""} ${m.phone || ""} ${m.description || ""}`
+        .toLowerCase()
+        .includes(needle),
+    );
+  }, [movements, q]);
+
+  const pageCount = Math.max(1, Math.ceil(shown.length / HISTORY_PAGE_SIZE));
+  const current = Math.min(page, pageCount);
+  const pageRows = useMemo(
+    () => shown.slice((current - 1) * HISTORY_PAGE_SIZE, current * HISTORY_PAGE_SIZE),
+    [shown, current],
+  );
+  useEffect(() => {
+    if (page !== current) setPage(current);
+  }, [page, current]);
+
+  const shownTotal = shown.reduce((sum, m) => sum + (Number(m.pointsChange) || 0), 0);
+
+  if (loading) return <p className="admin-muted">{at("loading")}</p>;
+  if (error) return <p className="admin-error">{error}</p>;
+
+  return (
+    <>
+      <div className="admin-toolbar">
+        <input
+          type="search"
+          className="field admin-search"
+          data-guide="loyalty-history-search"
+          placeholder={at("search")}
+          value={q}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setPage(1);
+          }}
+        />
+      </div>
+      <p className="admin-muted">{at("loyHistoryIntro")}</p>
+      {movements.length < total ? (
+        <p className="admin-muted admin-small">{at("loyHistoryCapped")}</p>
+      ) : null}
+
+      {shown.length === 0 ? (
+        <p className="admin-muted">{at("loyHistoryEmpty")}</p>
+      ) : (
+        <>
+          <div className="admin-table-wrap" data-guide="loyalty-history-table">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>{at("loyColDate")}</th>
+                  <th>{at("loyColClient")}</th>
+                  <th>{at("loyColMovement")}</th>
+                  <th className="num">{at("loyColPoints")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pageRows.map((m) => (
+                  <tr key={m.id} data-guide="loyalty-history-row">
+                    <td style={{ whiteSpace: "nowrap" }}>{fmtDateTime(m.createdAt)}</td>
+                    <td>
+                      {m.name || "—"}
+                      <div className="admin-muted admin-small">
+                        {m.cardNumber || "—"}
+                        {m.phone ? ` · ${m.phone}` : ""}
+                      </div>
+                    </td>
+                    <td>
+                      {m.description || (m.type === "redeem" ? at("loyRedeem") : "—")}
+                      {m.purchaseId ? (
+                        <div className="admin-muted admin-small">#{m.purchaseId}</div>
+                      ) : null}
+                    </td>
+                    <td className="num">
+                      <strong style={{ color: m.pointsChange >= 0 ? undefined : "var(--danger, #e39a92)" }}>
+                        {m.pointsChange > 0 ? "+" : ""}
+                        {m.pointsChange}
+                      </strong>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pager
+            at={at}
+            page={current}
+            pageCount={pageCount}
+            count={shown.length}
+            unit={at("loyHistoryUnit")}
+            onPage={setPage}
+            hook="loyalty-history-pager"
+          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: 10,
+              fontSize: 13,
+              fontWeight: 600,
+            }}
+          >
+            <span>{at("loyHistoryNet")}</span>
+            <span>
+              {shownTotal > 0 ? "+" : ""}
+              {shownTotal}
+            </span>
+          </div>
+        </>
+      )}
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ Loyalty */
 export function Loyalty({ at }) {
   const [data, setData] = useState(null);
@@ -191,6 +378,7 @@ export function Loyalty({ at }) {
 
   const tabs = [
     ["cards", at("loyTabCards")],
+    ["history", at("loyTabHistory")],
     ["new", at("loyNew")],
   ];
   if (tab === "edit" && editing) {
@@ -335,6 +523,8 @@ export function Loyalty({ at }) {
           )}
         </>
       ) : null}
+
+      {tab === "history" ? <PointsHistory at={at} /> : null}
 
       {tab === "new" ? (
         <NewCardPanel

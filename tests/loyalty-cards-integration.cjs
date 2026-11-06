@@ -499,6 +499,49 @@ const customerToken = () => jwt.sign({ userId: 2, email: "it-customer@example.te
     `rows=${profile.data && profile.data.transactions && profile.data.transactions.length}`,
   );
 
+  /* --------------------------------------------------- global points history */
+  /* The admin needs to answer "where did these points come from?" for any
+     client without opening 642 profiles. This endpoint lists every movement
+     with its date; it must never silently truncate (the 500-card bug in
+     another guise), so it reports the true total independently of the page. */
+  console.log("\n[global points history]");
+  const ledgerTotal = await qGet("SELECT COUNT(*) AS n FROM loyalty_transactions");
+  const hist = await get("/api/admin/loyalty/history?limit=1000");
+  check("history endpoint responds", hist.status === 200, `status=${hist.status} ${JSON.stringify(hist.data).slice(0, 200)}`);
+  check(
+    "history reports the true movement count",
+    Number(hist.data.totalMovements) === Number(ledgerTotal.n),
+    `reported=${hist.data.totalMovements} table=${ledgerTotal.n}`,
+  );
+  check(
+    "every movement carries a date and a client",
+    Array.isArray(hist.data.movements) &&
+      hist.data.movements.length > 0 &&
+      hist.data.movements.every((m) => m.createdAt && (m.name || m.cardNumber)),
+    `rows=${hist.data.movements && hist.data.movements.length}`,
+  );
+  check(
+    "history points sum equals the ledger sum",
+    Number(hist.data.totalPoints) === Number((await qGet("SELECT COALESCE(SUM(points_change),0) AS s FROM loyalty_transactions")).s),
+    `reported=${hist.data.totalPoints}`,
+  );
+  const histPage = await get("/api/admin/loyalty/history?limit=1&offset=0");
+  check(
+    "history paginates without hiding the total",
+    histPage.status === 200 && histPage.data.movements.length === 1 && histPage.data.hasMore === true,
+    `rows=${histPage.data.movements && histPage.data.movements.length} hasMore=${histPage.data.hasMore} total=${histPage.data.totalMovements}`,
+  );
+  const histSearch = await get("/api/admin/loyalty/history?q=idempotent");
+  check(
+    "history search filters by client name",
+    histSearch.status === 200 &&
+      histSearch.data.movements.length > 0 &&
+      histSearch.data.movements.every((m) => /idempotent/i.test(m.name || "")),
+    `rows=${histSearch.data.movements && histSearch.data.movements.length}`,
+  );
+  const histDenied = await req("GET", "/api/admin/loyalty/history", undefined, C);
+  check("history is admin-only", histDenied.status === 401 || histDenied.status === 403, `status=${histDenied.status}`);
+
   /* ------------------------------------------------------------ global check */
   console.log("\n[global invariant]");
   const violations = await qAll(`

@@ -3169,6 +3169,99 @@ app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) 
   }
 });
 
+/* ---------------------------------------------------------- Points history
+   INCIDENT 2026-11-06: a disputed balance used to be a number on a badge with
+   no way to explain it. The admin can now list every movement across every
+   card with its date, instead of opening 642 profiles one at a time.
+
+   Read-only. Paginated on the same contract as the card list, and the totals
+   are computed independently of the page so the UI can never report "898
+   movements" while showing 200 — the silent-truncation bug in another guise.
+
+   NOTE ON PLACEHOLDERS: db.js rewrites `$n` to `?` for SQLite by replacing
+   EVERY occurrence in textual order, and SQLite then binds positionally. So
+   the numbers must follow the order the placeholders appear in the SQL — and
+   the WHERE clause comes BEFORE the LIMIT. Numbering the LIKEs $1..$4 and
+   pushing LIMIT/OFFSET to $5/$6 keeps both engines in agreement. Reusing a
+   number would also bind twice. */
+app.get("/api/admin/loyalty/history", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const limit = listLimit(req);
+    const offset = listOffset(req);
+    const needle = String(req.query.q || "").trim().toLowerCase();
+    const like = needle ? `%${needle}%` : null;
+
+    const listWhere = needle
+      ? `WHERE lower(COALESCE(c.holder_name, '')) LIKE $1
+            OR lower(COALESCE(c.card_number, '')) LIKE $2
+            OR lower(COALESCE(c.holder_phone, '')) LIKE $3
+            OR lower(COALESCE(t.description, '')) LIKE $4`
+      : "";
+    const countWhere = listWhere;
+    const listLimitClause = needle ? "LIMIT $5 OFFSET $6" : "LIMIT $1 OFFSET $2";
+
+    const listParams = needle ? [like, like, like, like, limit, offset] : [limit, offset];
+    const countParams = needle ? [like, like, like, like] : [];
+
+    const rows = await new Promise((resolve, reject) => {
+      db.all(
+        `
+            SELECT t.id, t.card_id, t.points_change, t.type, t.description,
+                   t.purchase_id, t.created_at,
+                   c.card_number, c.holder_name, c.holder_phone
+              FROM loyalty_transactions t
+              JOIN loyalty_cards c ON c.id = t.card_id
+              ${listWhere}
+             ORDER BY t.created_at DESC, t.id DESC
+             ${listLimitClause}
+          `,
+        listParams,
+        (err, r) => (err ? reject(err) : resolve(r || [])),
+      );
+    });
+
+    const totals = await new Promise((resolve, reject) => {
+      db.get(
+        `
+            SELECT COUNT(*) AS movements,
+                   COALESCE(SUM(t.points_change), 0) AS points
+              FROM loyalty_transactions t
+              JOIN loyalty_cards c ON c.id = t.card_id
+              ${countWhere}
+          `,
+        countParams,
+        (err, row) => (err ? reject(err) : resolve(row || {})),
+      );
+    });
+
+    const totalMovements = Number(totals.movements) || 0;
+
+    res.json({
+      success: true,
+      totalMovements,
+      totalPoints: Number(totals.points) || 0,
+      returned: rows.length,
+      hasMore: offset + rows.length < totalMovements,
+      nextOffset: offset + rows.length,
+      movements: rows.map((r) => ({
+        id: r.id,
+        cardId: r.card_id,
+        cardNumber: r.card_number || null,
+        name: (r.holder_name || "").trim() || null,
+        phone: (r.holder_phone || "").trim() || null,
+        pointsChange: Number(r.points_change) || 0,
+        type: r.type,
+        description: r.description || null,
+        purchaseId: r.purchase_id || null,
+        createdAt: r.created_at,
+      })),
+    });
+  } catch (error) {
+    console.error("Admin loyalty history error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.post("/api/admin/loyalty/add-points", authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { cardId, points } = req.body;

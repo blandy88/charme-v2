@@ -55,6 +55,18 @@ export const ADMIN_STR = {
 
     loyIntro: "5 points = 1 free fragrance.",
     loyTabCards: "All cards",
+    loyTabHistory: "Points history",
+    loyHistoryIntro:
+      "Every point movement on every card, newest first. This is where a disputed balance is explained.",
+    loyColDate: "Date",
+    loyColClient: "Client",
+    loyColMovement: "Movement",
+    loyColPoints: "Points",
+    loyHistoryUnit: "movements",
+    loyHistoryNet: "Net points",
+    loyHistoryEmpty: "No movement recorded.",
+    loyHistoryCapped:
+      "Only the first movements were loaded — narrow the search to see the rest.",
     loyTabNewIntro:
       "A card opens with its first purchase — fill in the customer, then the fragrance that stamps the first point.",
     loyCards: "cards",
@@ -274,6 +286,18 @@ export const ADMIN_STR = {
 
     loyIntro: "5 points = 1 parfum offert.",
     loyTabCards: "Toutes les cartes",
+    loyTabHistory: "Historique des points",
+    loyHistoryIntro:
+      "Chaque mouvement de points sur chaque carte, du plus récent au plus ancien. C'est ici qu'un solde contesté s'explique.",
+    loyColDate: "Date",
+    loyColClient: "Client",
+    loyColMovement: "Mouvement",
+    loyColPoints: "Points",
+    loyHistoryUnit: "mouvements",
+    loyHistoryNet: "Total des points",
+    loyHistoryEmpty: "Aucun mouvement enregistré.",
+    loyHistoryCapped:
+      "Seuls les premiers mouvements ont été chargés — affinez la recherche pour voir le reste.",
     loyTabNewIntro:
       "Une carte s'ouvre avec son premier achat — renseignez le client, puis le parfum qui marque le premier point.",
     loyCards: "cartes",
@@ -493,6 +517,18 @@ export const ADMIN_STR = {
 
     loyIntro: "5 نقاط = عطر مجاني.",
     loyTabCards: "كل البطاقات",
+    loyTabHistory: "سجل النقاط",
+    loyHistoryIntro:
+      "كل حركة نقاط على كل بطاقة، من الأحدث إلى الأقدم. هنا يُشرح أي رصيد محل نزاع.",
+    loyColDate: "التاريخ",
+    loyColClient: "العميل",
+    loyColMovement: "الحركة",
+    loyColPoints: "النقاط",
+    loyHistoryUnit: "حركة",
+    loyHistoryNet: "مجموع النقاط",
+    loyHistoryEmpty: "لا توجد حركة مسجلة.",
+    loyHistoryCapped:
+      "تم تحميل أول الحركات فقط — ضيّق البحث لرؤية الباقي.",
     loyTabNewIntro:
       "تُفتح البطاقة بأول عملية شراء — أدخل بيانات العميل، ثم العطر الذي يمنح النقطة الأولى.",
     loyCards: "بطاقات",
