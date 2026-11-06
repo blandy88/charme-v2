@@ -5,6 +5,8 @@
  * trace in the database. Legitimate reads must still work - a validator that
  * rejects everything is not a fix.
  */
+// @db-scope: production-readonly — runs the admin-assistant SQL guard against the real schema; issues SELECTs only
+
 "use strict";
 
 const path = require("path");

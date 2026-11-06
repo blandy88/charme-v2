@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @db-scope: isolated — forces DATABASE_URL="" and a throwaway SQLite file in %TEMP%
 /*
  * HTTP-level integration test for the loyalty cards / purchases subsystem.
  *
@@ -131,16 +132,91 @@ async function boot() {
   child.stdout.on("data", (d) => (childLog += d.toString()));
   child.stderr.on("data", (d) => (childLog += d.toString()));
 
-  for (let i = 0; i < 80; i += 1) {
-    if (child.exitCode !== null) throw new Error(`server exited early:\n${childLog.slice(-2000)}`);
+  await waitForReady();
+}
+
+/* READINESS, NOT LIVENESS.
+ *
+ * server.js reaches `app.listen()` while its boot migrations are still queued
+ * on the sqlite3 connection, so the port opens BEFORE the tables exist. On this
+ * machine the measured gap is:
+ *
+ *     app.listen accepts requests ......... 1800 ms
+ *     loyalty_cards / customer_purchases .. 1816-1820 ms
+ *     their indexes ....................... 1931-1933 ms
+ *
+ * `GET /` therefore answers ~16 ms before `loyalty_cards` exists, and the old
+ * probe returned on that. Any test write landing in the hole got a 500, which
+ * cascaded into "delete reverses the point" / "balance back to 0" failures --
+ * roughly 1 run in 5, load-dependent. Waiting on the port only proves the
+ * process is ALIVE; it says nothing about whether the database is READY.
+ *
+ * So poll the schema the test actually needs. It is read from this process's
+ * own connection to the same file (WAL, so committed child writes are visible).
+ * Each condition below maps to a specific request the test makes later.
+ */
+async function waitForReady() {
+  const DEADLINE = Date.now() + 20000;
+  let missing = ["(not polled yet)"];
+
+  while (Date.now() < DEADLINE) {
+    if (child.exitCode !== null) {
+      throw new Error(`server exited early (code ${child.exitCode}):\n${childLog.slice(-2000)}`);
+    }
+
+    missing = [];
+
+    // 1. The port is actually accepting connections.
     try {
       await fetch(BASE + "/", { signal: AbortSignal.timeout(1000) });
-      return;
     } catch {
-      await wait(150);
+      missing.push("port not accepting connections");
     }
+
+    // 2. Tables the create / purchase / delete requests read and write.
+    if (!missing.length) {
+      const tables = await qAll("SELECT name FROM sqlite_master WHERE type = 'table'");
+      const have = new Set(tables.map((r) => r.name));
+      for (const t of ["loyalty_cards", "loyalty_transactions", "customer_purchases"]) {
+        if (!have.has(t)) missing.push(`table ${t}`);
+      }
+    }
+
+    // 3. The column that makes purchase deletion reverse a point at all.
+    //    Added by ensureLoyaltyTransactionColumns(), which is the same work
+    //    `loyaltyLedgerReady` gates the routes on.
+    if (!missing.length) {
+      const cols = await qAll("PRAGMA table_info(loyalty_transactions)");
+      if (!cols.some((c) => c.name === "purchase_id")) missing.push("loyalty_transactions.purchase_id");
+    }
+
+    // 4. The indexes the delete path scans. createIndexWhenReady() retries, so
+    //    a request that lands between CREATE TABLE and CREATE INDEX can still
+    //    be correct -- but on a loaded machine it can also be slow enough to
+    //    trip a client timeout, so wait for the quiet point.
+    if (!missing.length) {
+      const want = [
+        "idx_loyalty_transactions_card_id",
+        "idx_loyalty_transactions_purchase_id",
+        "idx_customer_purchases_card_id",
+      ];
+      const got = await qAll(
+        `SELECT name FROM sqlite_master WHERE type = 'index' AND name IN (${want.map(() => "?").join(",")})`,
+        want,
+      );
+      const have = new Set(got.map((r) => r.name));
+      for (const i of want) if (!have.has(i)) missing.push(`index ${i}`);
+    }
+
+    if (!missing.length) return;
+
+    await wait(50);
   }
-  throw new Error(`server never became ready:\n${childLog.slice(-2000)}`);
+
+  throw new Error(
+    `server never became ready; still missing: ${missing.join(", ")}\n` +
+      `--- server log (tail) ---\n${childLog.slice(-2000)}`,
+  );
 }
 
 const adminToken = () => jwt.sign({ userId: 1, email: "it-admin@example.test" }, SECRET, { expiresIn: "1h" });
@@ -440,6 +516,11 @@ const customerToken = () => jwt.sign({ userId: 2, email: "it-customer@example.te
   check("no orphan purchases", orphans.length === 0, `orphans=${orphans.length}`);
 
   console.log(`\n${failures ? failures + " FAILURE(S)" : "all checks passed"}`);
+  /* A failing assertion usually means the server threw. Its stack is the only
+   * thing that explains why, so surface it instead of leaving a bare 500. */
+  if (failures && childLog) {
+    console.log("\n--- server log (tail) ---\n" + childLog.slice(-4000));
+  }
 })()
   .catch((e) => {
     failures += 1;

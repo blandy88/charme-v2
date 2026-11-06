@@ -9,6 +9,8 @@
  *
  * Run from the repo root:  node <this file>
  */
+// @db-scope: no-database — imports the admin-assistant tools but passes db: null, so it never opens a connection
+
 "use strict";
 
 const path = require("path");

@@ -72,6 +72,68 @@ if (process.env.VERCEL) {
   });
 }
 
+/* STANDING INTEGRITY ASSERTION — incident 2026-11-06.
+ *
+ * The defect that ran for three weeks was not wrong arithmetic: it was that
+ * `balance == SUM(ledger)` was never checked anywhere, so a balance that no row
+ * could explain was invisible until a customer noticed. Fixing the one bug does
+ * not fix that; the next silent drift would be just as invisible.
+ *
+ * So the invariant is asserted once on every boot, in SQL, where application
+ * code cannot influence the answer. Read-only, additive and non-blocking: a
+ * failure is reported loudly and the server keeps serving. Nothing here can
+ * make the site unavailable — but it can make a violation impossible to miss.
+ */
+function assertLoyaltyInvariant(context) {
+  const sql = `
+    SELECT c.id, c.card_number, c.points,
+           COALESCE(SUM(t.points_change), 0) AS ledger
+      FROM loyalty_cards c
+      LEFT JOIN loyalty_transactions t ON t.card_id = c.id
+     GROUP BY c.id, c.card_number, c.points
+    HAVING c.points <> COALESCE(SUM(t.points_change), 0)`;
+
+  try {
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        console.warn(
+          `⚠️  Loyalty integrity check could not run (${context}): ${err.message}`,
+        );
+        return;
+      }
+      if (!rows || rows.length === 0) {
+        console.log(
+          `✅ Loyalty integrity OK (${context}): every balance equals its ledger`,
+        );
+        return;
+      }
+      console.error(
+        `\n🚨 LOYALTY INTEGRITY VIOLATION (${context}) — ` +
+          `${rows.length} card(s) hold a balance their ledger cannot explain.`,
+      );
+      rows.slice(0, 25).forEach((r) => {
+        const gap = Number(r.points) - Number(r.ledger);
+        console.error(
+          `   ${r.card_number}: balance ${r.points}, ledger ${r.ledger}, gap ${gap > 0 ? "+" : ""}${gap}`,
+        );
+      });
+      if (rows.length > 25) console.error(`   … and ${rows.length - 25} more`);
+      console.error(
+        "   Investigate with: node scripts/check-loyalty-integrity.cjs\n",
+      );
+    });
+  } catch (e) {
+    console.warn(
+      `⚠️  Loyalty integrity check could not run (${context}): ${e && e.message}`,
+    );
+  }
+}
+
+// Runs once the ledger migration has settled, which is also the point at which
+// both loyalty tables are guaranteed to exist. The 8s fallback above means this
+// always fires even if a migration silently failed.
+loyaltyLedgerReady.then(() => assertLoyaltyInvariant("boot"));
+
 // Both Vercel and Render terminate TLS at their own edge proxy and forward the
 // request with an `X-Forwarded-For` header. express-rate-limit v7+ inspects
 // that header and, when `trust proxy` is left at its default (false), throws

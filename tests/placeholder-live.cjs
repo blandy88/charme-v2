@@ -9,6 +9,8 @@
  *
  * Creates and drops its own probe table. Nothing else is touched.
  */
+// @db-scope: production-write — proves the real schema accepts the placeholder constraint; creates and drops only its own probe table
+
 "use strict";
 const path = require("path");
 process.chdir(path.resolve(__dirname, ".."));

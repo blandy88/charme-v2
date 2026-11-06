@@ -7,6 +7,8 @@
  * path is broken the table will not survive, and if the ROLLBACK path is
  * broken the row will.
  */
+// @db-scope: production-write — PostgreSQL transaction semantics cannot be proven on SQLite; creates and drops only its own probe table
+
 "use strict";
 
 const path = require("path");

@@ -14,6 +14,8 @@
  * The function is lifted out of db.js and run on its own - no database, no
  * connection, no side effects.
  */
+// @db-scope: no-database — reads db.js as text and runs the lifted function in memory; opens no connection
+
 "use strict";
 const fs = require("fs");
 const path = require("path");

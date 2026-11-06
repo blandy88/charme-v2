@@ -14,6 +14,17 @@ const BASE = "http://localhost:3000";
 const EMAIL = `probe-nonadmin-${Date.now()}@example.test`;
 const PASS = "Pr0be!pass123";
 
+/* Admin credentials are NOT stored in this file. They were, and that put a real
+ * password into the git history. Supply them through the environment instead:
+ *
+ *   CHARME_ADMIN_EMAIL=... CHARME_ADMIN_PASSWORD=... node tests/authz-check.cjs
+ *
+ * Without them the test skips rather than failing, so a normal `run-all` on a
+ * machine with no server and no credentials stays green.
+ */
+const ADMIN_EMAIL = process.env.CHARME_ADMIN_EMAIL || "";
+const ADMIN_PASSWORD = process.env.CHARME_ADMIN_PASSWORD || "";
+
 let failures = 0;
 const ok = (l) => console.log("  PASS  " + l);
 const bad = (l, e) => { failures++; console.log("  FAIL  " + l + (e ? " -> " + e : "")); };
@@ -30,12 +41,26 @@ const call = async (path, token) => {
 const ROUTES = ["/api/search/loyalty-profiles?q=ch", "/api/search/users?q=ch"];
 
 (async () => {
+  /* The test needs a running server and an administrator account. Say so and
+   * leave, instead of throwing ECONNREFUSED into the suite. */
+  try {
+    const ping = await fetch(BASE + "/api/news", { signal: AbortSignal.timeout(3000) });
+    if (!ping.ok) throw new Error("status " + ping.status);
+  } catch {
+    console.log("  SKIP  no server on " + BASE + " — start it, then re-run this test");
+    process.exit(0);
+  }
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    console.log("  SKIP  set CHARME_ADMIN_EMAIL and CHARME_ADMIN_PASSWORD to run this test");
+    process.exit(0);
+  }
+
   // admin
   const admin = await call("/api/auth/login", null).catch(() => null);
   const adminLogin = await fetch(BASE + "/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: "cherifmed1200@gmail.com", password: "medmedmed88" }),
+    body: JSON.stringify({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD }),
   }).then((r) => r.json());
 
   // non-admin customer

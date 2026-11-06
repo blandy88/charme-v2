@@ -29,6 +29,55 @@ async function main() {
   });
   await pg.connect();
 
+  /* ------------------------------------------------------------------ *
+   * HARD STOP.
+   *
+   * Everything below TRUNCATEs the target database before importing. Run
+   * against the wrong DATABASE_URL it destroys the audit trail with no way
+   * back - which is exactly how the August 2026 loyalty history was lost.
+   *
+   * So it refuses to run unless the operator names the flag, and it shows
+   * what is about to be destroyed first. A backup is not optional.
+   * ------------------------------------------------------------------ */
+  if (!process.argv.includes("--i-understand-this-wipes-the-database")) {
+    let host = "(could not parse DATABASE_URL)";
+    try {
+      host = new URL(process.env.DATABASE_URL).host;
+    } catch {
+      /* leave the placeholder */
+    }
+    let current = [];
+    try {
+      const r = await pg.query(`
+        SELECT 'loyalty_cards' AS t, COUNT(*)::int AS n FROM loyalty_cards
+        UNION ALL SELECT 'loyalty_transactions', COUNT(*)::int FROM loyalty_transactions
+        UNION ALL SELECT 'users', COUNT(*)::int FROM users
+        UNION ALL SELECT 'customer_purchases', COUNT(*)::int FROM customer_purchases`);
+      current = r.rows;
+    } catch {
+      /* the tables may not exist yet; the warning still stands */
+    }
+    console.error("");
+    console.error("REFUSING TO RUN — this script destroys data.");
+    console.error("");
+    console.error("  target database : " + host);
+    console.error("  it will TRUNCATE: loyalty_transactions, loyalty_cards, users,");
+    console.error("                     customer_purchases, news, products, reviews, …");
+    if (current.length) {
+      console.error("");
+      console.error("  rows that would be destroyed right now:");
+      for (const row of current) console.error("    " + String(row.t).padEnd(22) + row.n);
+    }
+    console.error("");
+    console.error("  The August 2026 loyalty ledger was lost exactly this way.");
+    console.error("  Take a backup first, then re-run with:");
+    console.error("");
+    console.error("    node scripts/migrate-local-to-pg.cjs --i-understand-this-wipes-the-database");
+    console.error("");
+    await pg.end();
+    process.exit(1);
+  }
+
   console.log("Truncating existing Postgres tables...");
   await pg.query("TRUNCATE TABLE reply_likes, review_replies, review_likes, reviews, user_sessions, user_favorites, user_settings, loyalty_transactions, loyalty_cards, news, products, users CASCADE");
 
