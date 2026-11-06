@@ -10775,9 +10775,37 @@ let currentUsers = [];
 let currentBanUserId = null;
 let loyaltyCards = [];
 let loyaltyTotalRewards = 0;
+let loyaltyTotalCards = 0;
 let loyaltyUsersWithoutCards = [];
 let loyaltySearchQuery = "";
+let loyaltyStale = false;
+let loyaltyReloadQueued = false;
 const LOYALTY_REWARD_THRESHOLD = 5;
+const LOYALTY_PAGE_SIZE = 1000;
+
+/* INCIDENT 2026-11-06 — synchronous in-flight lock.
+   A slow serverless write used to leave every loyalty button live, so a
+   second click really did send a second request (and a second point).
+   Unlike an `await`-based flag this closes the window between two clicks in
+   the same tick. Keys are per action so unrelated cards stay usable. */
+const loyaltyInFlight = new Set();
+function loyaltyGuard(key) {
+  if (loyaltyInFlight.has(key)) return null;
+  loyaltyInFlight.add(key);
+  return () => loyaltyInFlight.delete(key);
+}
+
+/* Visual feedback matters as much as the lock: without a disabled/greyed
+   button staff assume the first click did nothing and click again. */
+function loyaltyRun(button, task) {
+  const wasDisabled = button ? button.disabled : false;
+  if (button) button.disabled = true;
+  return Promise.resolve()
+    .then(task)
+    .finally(() => {
+      if (button) button.disabled = wasDisabled;
+    });
+}
 
 // 📰 NEWS & NOTIFICATIONS — admin composer + management
 const NEWS_TEMPLATES = {
@@ -11207,7 +11235,7 @@ async function openAdminDashboard() {
   await loadUsersData();
 
   // Load loyalty cards data
-  await loadLoyaltyData();
+  await loadLoyaltyData(true);
 
   // Load news & notifications
   await loadAdminNews();
@@ -11555,47 +11583,104 @@ function renderLoyaltyModalState(msg, opts = {}) {
   tbody.appendChild(row);
 }
 
+/* INCIDENT 2026-11-06: a failed/slow refresh used to leave the previously
+   loaded table on screen with NO indication that it was out of date. Staff
+   quoted stale balances to customers. Make staleness impossible to miss. */
+function showLoyaltyStaleBanner(show) {
+  let banner = document.getElementById("loyaltyStaleBanner");
+  if (!show) {
+    if (banner) banner.remove();
+    return;
+  }
+  if (banner) return;
+  const wrap = document.querySelector(".loyalty-table-wrap");
+  if (!wrap || !wrap.parentElement) return;
+  banner = document.createElement("div");
+  banner.id = "loyaltyStaleBanner";
+  banner.setAttribute("role", "status");
+  banner.style.cssText =
+    "display:flex;align-items:center;justify-content:space-between;gap:12px;" +
+    "margin:12px 0;padding:10px 14px;border:1px solid #c9a94e;border-radius:8px;" +
+    "background:rgba(201,169,78,.12);color:#f3e6bd;font-size:13px;";
+  const text = document.createElement("span");
+  text.textContent =
+    "⚠ Données potentiellement obsolètes — les points affichés peuvent ne pas être à jour.";
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "btn-small";
+  btn.textContent = "Actualiser";
+  btn.addEventListener("click", () => loadLoyaltyData(true));
+  banner.append(text, btn);
+  wrap.parentElement.insertBefore(banner, wrap);
+}
+
 async function loadLoyaltyData(force = false) {
-  if (loyaltyLoading) return loyaltyLoadPromise;
+  /* A forced refresh (after a write) must never be swallowed by a load that
+     is already in flight: queue it and run it once the current one settles. */
+  if (loyaltyLoading) {
+    if (force) loyaltyReloadQueued = true;
+    return loyaltyLoadPromise;
+  }
   loyaltyLoading = true;
   if (!force && loyaltyCards.length === 0) {
     renderLoyaltyModalState("Chargement des cartes…", { spinner: true });
   }
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 10000);
-
   loyaltyLoadPromise = (async () => {
     try {
       const token =
         localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
-      const response = await fetch("/api/admin/loyalty", {
-        headers: { Authorization: `Bearer ${token}` },
-        signal: controller.signal,
-      });
-      if (response.status === 401 || response.status === 403) {
-        window.handleSessionExpired("charging loyalty cards");
-        return;
-      }
-      const data = await response.json();
+      const all = [];
+      let total = 0;
+      let totalRewards = 0;
+      let withoutCards = [];
+      let offset = 0;
 
-      if (data.success) {
-        loyaltyCards = data.cards || [];
-        loyaltyTotalRewards = data.totalRewards || 0;
-        loyaltyUsersWithoutCards = data.usersWithoutCards || [];
-        loyaltyLoadError = false;
-        renderLoyaltyTable();
-        renderLoyaltyModalTable();
-        updateLoyaltyModalStats();
-      } else {
-        loyaltyLoadError = true;
-        if (loyaltyCards.length === 0) {
-          renderLoyaltyModalState("Impossible de charger les cartes.", {
-            retry: true,
-          });
+      /* The server caps a single page. Walk every page so no customer card
+         - and none of its points - is ever silently missing from this
+         screen again (142 cards were hidden on 2026-11-04). */
+      for (let page = 0; page < 20; page += 1) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 30000);
+        let response;
+        try {
+          response = await fetch(
+            `/api/admin/loyalty?limit=${LOYALTY_PAGE_SIZE}&offset=${offset}`,
+            { headers: { Authorization: `Bearer ${token}` }, signal: controller.signal },
+          );
+        } finally {
+          clearTimeout(timer);
         }
-        showNotification("Failed to load loyalty cards", "error");
+        if (response.status === 401 || response.status === 403) {
+          window.handleSessionExpired("charging loyalty cards");
+          return;
+        }
+        const data = await response.json();
+        if (!data.success) throw new Error(data.error || "Loyalty load failed");
+
+        const batch = data.cards || [];
+        all.push(...batch);
+        total = Number(data.totalCards) || all.length;
+        totalRewards = Number(data.totalRewards) || 0;
+        if (page === 0) withoutCards = data.usersWithoutCards || [];
+        const more =
+          data.hasMore === undefined
+            ? batch.length >= LOYALTY_PAGE_SIZE
+            : Boolean(data.hasMore);
+        if (!more || batch.length === 0) break;
+        offset = Number(data.nextOffset) || offset + batch.length;
       }
+
+      loyaltyCards = all;
+      loyaltyTotalCards = total || all.length;
+      loyaltyTotalRewards = totalRewards;
+      loyaltyUsersWithoutCards = withoutCards;
+      loyaltyLoadError = false;
+      loyaltyStale = false;
+      showLoyaltyStaleBanner(false);
+      renderLoyaltyTable();
+      renderLoyaltyModalTable();
+      updateLoyaltyModalStats();
     } catch (error) {
       console.error("Error loading loyalty cards:", error);
       loyaltyLoadError = true;
@@ -11603,12 +11688,19 @@ async function loadLoyaltyData(force = false) {
         renderLoyaltyModalState("Impossible de charger les cartes.", {
           retry: true,
         });
+      } else {
+        /* Never present stale balances as if they were fresh. */
+        loyaltyStale = true;
+        showLoyaltyStaleBanner(true);
       }
-      showNotification("Error loading loyalty cards", "error");
+      showNotification("Impossible d'actualiser les cartes — données potentiellement obsolètes", "error");
     } finally {
-      clearTimeout(timer);
       loyaltyLoading = false;
       loyaltyLoadPromise = null;
+      if (loyaltyReloadQueued) {
+        loyaltyReloadQueued = false;
+        setTimeout(() => loadLoyaltyData(true), 0);
+      }
     }
   })();
 
@@ -11679,16 +11771,26 @@ function renderLoyaltyTable() {
     addOneBtn.className = "btn-small btn-loyalty-add";
     addOneBtn.textContent = "+1";
     addOneBtn.title = "Ajouter 1 point";
-    addOneBtn.addEventListener("click", () => addLoyaltyPoints(card.cardId, 1));
+    addOneBtn.addEventListener("click", (e) => {
+      const btn = e.currentTarget;
+      btn.disabled = true;
+      Promise.resolve(addLoyaltyPoints(card.cardId, 1)).finally(() => {
+        btn.disabled = false;
+      });
+    });
     actions.appendChild(addOneBtn);
 
     const addBtn = document.createElement("button");
     addBtn.className = "btn-small btn-loyalty-add";
     addBtn.textContent = "+ Points";
     addBtn.title = "Ajouter plusieurs points";
-    addBtn.addEventListener("click", () =>
-      promptAddLoyaltyPoints(card.cardId, card.name),
-    );
+    addBtn.addEventListener("click", (e) => {
+      const btn = e.currentTarget;
+      btn.disabled = true;
+      Promise.resolve(promptAddLoyaltyPoints(card.cardId, card.name)).finally(() => {
+        btn.disabled = false;
+      });
+    });
     actions.appendChild(addBtn);
 
     const redeemBtn = document.createElement("button");
@@ -11697,9 +11799,13 @@ function renderLoyaltyTable() {
     redeemBtn.title = `Offrir un parfum (${LOYALTY_REWARD_THRESHOLD} points)`;
     redeemBtn.disabled = !card.eligible;
     if (card.eligible) {
-      redeemBtn.addEventListener("click", () =>
-        redeemLoyaltyReward(card.cardId, card.name),
-      );
+      redeemBtn.addEventListener("click", (e) => {
+        const btn = e.currentTarget;
+        btn.disabled = true;
+        Promise.resolve(redeemLoyaltyReward(card.cardId, card.name)).finally(() => {
+          btn.disabled = false;
+        });
+      });
     }
     actions.appendChild(redeemBtn);
 
@@ -11721,7 +11827,7 @@ function promptAddLoyaltyPoints(cardId, name) {
     showNotification("Veuillez entrer un nombre de points valide", "error");
     return;
   }
-  addLoyaltyPoints(cardId, pts, true);
+  return addLoyaltyPoints(cardId, pts, true);
 }
 
 async function addLoyaltyPoints(cardId, points, skipConfirm = false) {
@@ -11737,6 +11843,8 @@ async function addLoyaltyPoints(cardId, points, skipConfirm = false) {
     }
   }
 
+  const releaseGuard = loyaltyGuard(`add:${cardId}`);
+  if (!releaseGuard) return;
   try {
     const token =
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
@@ -11756,13 +11864,15 @@ async function addLoyaltyPoints(cardId, points, skipConfirm = false) {
 
     if (data.success) {
       showNotification(data.message, "success");
-      await loadLoyaltyData();
+      await loadLoyaltyData(true);
     } else {
       showNotification(data.error || "Failed to add points", "error");
     }
   } catch (error) {
     console.error("Error adding loyalty points:", error);
     showNotification("Error adding loyalty points", "error");
+  } finally {
+    releaseGuard();
   }
 }
 
@@ -11774,6 +11884,8 @@ async function redeemLoyaltyReward(cardId, name) {
   ) {
     return;
   }
+  const releaseGuard = loyaltyGuard(`redeem:${cardId}`);
+  if (!releaseGuard) return;
   try {
     const token =
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
@@ -11793,13 +11905,15 @@ async function redeemLoyaltyReward(cardId, name) {
 
     if (data.success) {
       showNotification(data.message, "success");
-      await loadLoyaltyData();
+      await loadLoyaltyData(true);
     } else {
       showNotification(data.error || "Failed to redeem reward", "error");
     }
   } catch (error) {
     console.error("Error redeeming loyalty reward:", error);
     showNotification("Error redeeming loyalty reward", "error");
+  } finally {
+    releaseGuard();
   }
 }
 
@@ -11905,7 +12019,7 @@ async function openLoyaltyModal() {
   if (searchClear) searchClear.style.display = "none";
   loyaltySearchQuery = "";
 
-  await loadLoyaltyData();
+  await loadLoyaltyData(true);
 }
 
 function renderLoyaltyModalTable() {
@@ -12035,15 +12149,19 @@ function renderLoyaltyModalTable() {
     addOneBtn.className = "btn-small btn-loyalty-add";
     addOneBtn.textContent = "+1";
     addOneBtn.title = "Ajouter 1 point";
-    addOneBtn.addEventListener("click", () => addLoyaltyPoints(card.cardId, 1));
+    addOneBtn.addEventListener("click", (e) =>
+      loyaltyRun(e.currentTarget, () => addLoyaltyPoints(card.cardId, 1)),
+    );
     actions.appendChild(addOneBtn);
 
     const modifyBtn = document.createElement("button");
     modifyBtn.className = "btn-small btn-loyalty-modify";
     modifyBtn.textContent = "Modifier";
     modifyBtn.title = "Modifier le nombre de points";
-    modifyBtn.addEventListener("click", () =>
-      updateLoyaltyPoints(card.cardId, card.name),
+    modifyBtn.addEventListener("click", (e) =>
+      loyaltyRun(e.currentTarget, () =>
+        updateLoyaltyPoints(card.cardId, card.name),
+      ),
     );
     actions.appendChild(modifyBtn);
 
@@ -12053,8 +12171,10 @@ function renderLoyaltyModalTable() {
     redeemBtn.title = `Offrir un parfum (${LOYALTY_REWARD_THRESHOLD} points)`;
     redeemBtn.disabled = !card.eligible;
     if (card.eligible) {
-      redeemBtn.addEventListener("click", () =>
-        redeemLoyaltyReward(card.cardId, card.name),
+      redeemBtn.addEventListener("click", (e) =>
+        loyaltyRun(e.currentTarget, () =>
+          redeemLoyaltyReward(card.cardId, card.name),
+        ),
       );
     }
     actions.appendChild(redeemBtn);
@@ -12063,8 +12183,10 @@ function renderLoyaltyModalTable() {
     deleteBtn.className = "btn-small btn-loyalty-delete";
     deleteBtn.textContent = "Supprimer";
     deleteBtn.title = "Supprimer la carte";
-    deleteBtn.addEventListener("click", () =>
-      deleteLoyaltyCard(card.cardId, card.name),
+    deleteBtn.addEventListener("click", (e) =>
+      loyaltyRun(e.currentTarget, () =>
+        deleteLoyaltyCard(card.cardId, card.name),
+      ),
     );
     actions.appendChild(deleteBtn);
 
@@ -12089,13 +12211,19 @@ function renderLoyaltyModalTable() {
 }
 
 function updateLoyaltyModalStats() {
-  const totalCards = loyaltyCards.filter((card) => card.cardId).length;
+  /* Use the server's authoritative count, not the length of the page we
+     happened to receive. Before 2026-11-06 this showed 500 when 642 cards
+     existed, which is how the truncation went unnoticed for two days. */
+  const totalCards = loyaltyTotalCards || loyaltyCards.filter((c) => c.cardId).length;
   const eligible = loyaltyCards.filter((card) => card.cardId && card.eligible).length;
 
   const totalEl = document.getElementById("loyaltyTotalCards");
   const eligibleEl = document.getElementById("loyaltyEligibleCards");
   const rewardsEl = document.getElementById("loyaltyRewardsGiven");
-  if (totalEl) totalEl.textContent = totalCards;
+  if (totalEl) {
+    totalEl.textContent = totalCards;
+    totalEl.title = loyaltyStale ? "Données potentiellement obsolètes — actualisez" : "";
+  }
   if (eligibleEl) eligibleEl.textContent = eligible;
   if (rewardsEl) rewardsEl.textContent = loyaltyTotalRewards;
 }
@@ -12115,6 +12243,8 @@ async function createManualLoyaltyCard() {
     return;
   }
 
+  const releaseGuard = loyaltyGuard(`create:${name}:${phone}`);
+  if (!releaseGuard) return;
   try {
     const token =
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
@@ -12137,17 +12267,33 @@ async function createManualLoyaltyCard() {
       if (nameInput) nameInput.value = "";
       if (phoneInput) phoneInput.value = "";
       if (emailInput) emailInput.value = "";
-      await loadLoyaltyData();
+      await loadLoyaltyData(true);
+    } else if (response.status === 409 && data.existingCardNumber) {
+      /* A duplicate card splits one customer's points across two cards -
+         the most common cause of "mes points ont disparu". */
+      showNotification(
+        `Ce client possède déjà la carte ${data.existingCardNumber}. Utilisez cette carte au lieu d'en créer une nouvelle.`,
+        "error",
+      );
     } else {
       showNotification(data.error || "Failed to create card", "error");
     }
   } catch (error) {
     console.error("Error creating manual loyalty card:", error);
     showNotification("Error creating loyalty card", "error");
+  } finally {
+    releaseGuard();
   }
 }
 
 async function updateLoyaltyPoints(cardId, name) {
+  /* INCIDENT 2026-11-06: the edit form pre-filled `points` from the in-memory
+     table and ALWAYS sent it back on save. Correcting a phone number on a
+     tab that had been open for an hour therefore rewrote the balance to an
+     hour-old value and silently deleted newly earned points.
+     Refresh first, and only send `points` if the assistant actually changed
+     the field (saveLoyaltyEdit compares against dataset.original). */
+  await loadLoyaltyData(true);
   const card = loyaltyCards.find((c) => c.cardId === cardId);
   if (!card) return;
 
@@ -12161,7 +12307,9 @@ async function updateLoyaltyPoints(cardId, name) {
   nameInput.value = card.name || "";
   cardNumberInput.value = card.cardNumber || "";
   phoneInput.value = card.phone || "";
-  pointsInput.value = card.points ?? 0;
+  const freshPoints = String(card.points ?? 0);
+  pointsInput.value = freshPoints;
+  pointsInput.dataset.original = freshPoints;
 
   const modal = document.getElementById("loyaltyEditModal");
   modal.classList.remove("hidden");
@@ -12198,16 +12346,25 @@ async function saveLoyaltyEdit() {
     return;
   }
 
+  const releaseGuard = loyaltyGuard(`edit:${cardId}`);
+  if (!releaseGuard) return;
   try {
     const token =
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const pointsField = document.getElementById("loyaltyEditPoints");
+    /* Never echo a stale balance back to the server. Only a deliberate edit
+       of this field may move points; every other change leaves them alone. */
+    const body = { cardId, name, cardNumber: cardNumber || undefined, phone };
+    if (String(pts) !== String(pointsField.dataset.original ?? pointsStr)) {
+      body.points = pts;
+    }
     const response = await fetch("/api/admin/loyalty/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ cardId, name, cardNumber: cardNumber || undefined, phone: phone || undefined, points: pts }),
+      body: JSON.stringify(body),
     });
     if (response.status === 401 || response.status === 403) {
       window.handleSessionExpired("editing a loyalty card");
@@ -12218,13 +12375,15 @@ async function saveLoyaltyEdit() {
     if (data.success) {
       showNotification(data.message || "Carte mise à jour", "success");
       closeLoyaltyEditModal();
-      await loadLoyaltyData();
+      await loadLoyaltyData(true);
     } else {
       showNotification(data.error || "Erreur lors de la mise à jour", "error");
     }
   } catch (error) {
     console.error("Error updating loyalty card:", error);
     showNotification("Erreur lors de la mise à jour", "error");
+  } finally {
+    releaseGuard();
   }
 }
 
@@ -12241,6 +12400,8 @@ async function deleteLoyaltyCard(cardId, name) {
     return;
   }
 
+  const releaseGuard = loyaltyGuard(`delete:${cardId}`);
+  if (!releaseGuard) return;
   try {
     const token =
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
@@ -12256,13 +12417,15 @@ async function deleteLoyaltyCard(cardId, name) {
 
     if (data.success) {
       showNotification(data.message, "success");
-      await loadLoyaltyData();
+      await loadLoyaltyData(true);
     } else {
       showNotification(data.error || "Failed to delete card", "error");
     }
   } catch (error) {
     console.error("Error deleting loyalty card:", error);
     showNotification("Error deleting loyalty card", "error");
+  } finally {
+    releaseGuard();
   }
 }
 
@@ -12325,6 +12488,7 @@ async function loadCustomerProfile(cardId) {
     const hasSimilar = similarGrid && similarGrid.childElementCount > 0;
     renderProfileSuggestions(data.suggestions, { fallbackOnly: hasSimilar });
     renderProfilePurchases(data.purchases, cardId);
+    renderProfilePointsHistory(data.transactions);
 
     loading.style.display = "none";
     content.style.display = "block";
@@ -12353,6 +12517,53 @@ function renderProfileHeader(card) {
       <span class="cp-points-label">points</span>
     </div>
   `;
+}
+
+/* INCIDENT 2026-11-06: a disputed balance was previously just a number on a
+   badge. Show every movement so the assistant can explain exactly where the
+   points came from (including the August opening-balance rows). */
+function renderProfilePointsHistory(transactions) {
+  const content = document.getElementById("customerProfileContent");
+  if (!content) return;
+  let section = document.getElementById("cpPointsHistory");
+  if (!section) {
+    section = document.createElement("section");
+    section.id = "cpPointsHistory";
+    section.style.marginTop = "22px";
+    content.appendChild(section);
+  }
+  const rows = Array.isArray(transactions) ? transactions : [];
+  const esc =
+    window.escapeHTML ||
+    ((value) =>
+      String(value == null ? "" : value).replace(/[&<>"']/g, (ch) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]),
+      ));
+  const total = rows.reduce((sum, row) => sum + (Number(row.points_change) || 0), 0);
+  const body = rows.length
+    ? rows
+        .map((row) => {
+          const value = Number(row.points_change) || 0;
+          const when = String(row.created_at || "").replace("T", " ").slice(0, 16);
+          const label = row.description || (row.type === "redeem" ? "Récompense" : "Ajustement");
+          return `<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;">
+            <span style="opacity:.65;white-space:nowrap;">${esc(when)}</span>
+            <span style="flex:1;">${esc(label)}</span>
+            <strong style="color:${value >= 0 ? "#8fd19a" : "#e39a92"};">${value > 0 ? "+" : ""}${value}</strong>
+          </div>`;
+        })
+        .join("")
+    : '<p style="opacity:.6;font-size:13px;">Aucun mouvement enregistré.</p>';
+  section.innerHTML = `
+    <h4 style="margin:0 0 10px;font-size:15px;">Historique des points</h4>
+    <div style="max-height:260px;overflow:auto;padding-right:4px;">${body}</div>
+    <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:13px;font-weight:600;">
+      <span>Total des mouvements</span><span>${total > 0 ? "+" : ""}${total} pt(s)</span>
+    </div>
+    <p style="opacity:.55;font-size:11px;margin-top:6px;">
+      Les lignes « Réconciliation : solde initial » correspondent aux points
+      acquis avant la mise en place de l'historique (août 2026).
+    </p>`;
 }
 
 function renderProfileStats(stats) {
@@ -12722,7 +12933,7 @@ function renderProfilePurchases(purchases, cardId) {
         if (data.success) {
           showNotification("Achat supprimé", "success");
           loadCustomerProfile(cardId);
-          loadLoyaltyData();
+          loadLoyaltyData(true);
         } else {
           showNotification(data.error || "Erreur", "error");
         }
@@ -12865,6 +13076,14 @@ async function saveRecordPurchase() {
     return;
   }
 
+  const releaseGuard = loyaltyGuard(`purchase:${cardId}:${perfumeName}`);
+  if (!releaseGuard) return;
+  const saveBtn = document.getElementById("rpSaveBtn");
+  const saveLabel = saveBtn ? saveBtn.textContent : "";
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Enregistrement…";
+  }
   try {
     const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
     const body = { cardId, perfumeName, brand: brand || undefined, fragranceFamily: fragranceFamily || undefined, audience: audience || undefined, notes: notes || undefined };
@@ -12886,13 +13105,19 @@ async function saveRecordPurchase() {
       showNotification(data.message || "Achat enregistré", "success");
       closeRecordPurchaseModal();
       loadCustomerProfile(cardId);
-      loadLoyaltyData();
+      loadLoyaltyData(true);
     } else {
       showNotification(data.error || "Erreur", "error");
     }
   } catch (err) {
     console.error("Error recording purchase:", err);
     showNotification("Erreur lors de l'enregistrement", "error");
+  } finally {
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.textContent = saveLabel;
+    }
+    releaseGuard();
   }
 }
 

@@ -97,16 +97,28 @@ export function Loyalty({ at }) {
   const [page, setPage] = useState(1);
 
   /* Reset the error on every attempt, so a successful refresh does not leave a
-     stale red banner above correct data. */
-  const load = useCallback(
-    () => {
-      setError("");
-      return api("/api/admin/loyalty")
-        .then((d) => setData(d))
-        .catch((e) => setError(e.message));
-    },
-    [],
-  );
+     stale red banner above correct data.
+     INCIDENT 2026-11-06: the server caps one page at 1000 cards. Fetch every
+     page instead of silently showing only the first one - a hidden card is a
+     customer whose points appear to have vanished. */
+  const load = useCallback(() => {
+    setError("");
+    const PAGE = 1000;
+    return (async () => {
+      const all = [];
+      let last = null;
+      let offset = 0;
+      for (let i = 0; i < 20; i += 1) {
+        const d = await api(`/api/admin/loyalty?limit=${PAGE}&offset=${offset}`);
+        last = d;
+        const batch = d.cards || [];
+        all.push(...batch);
+        if (!d.hasMore || batch.length === 0) break;
+        offset = Number(d.nextOffset) || offset + batch.length;
+      }
+      setData({ ...(last || {}), cards: all });
+    })().catch((e) => setError(e.message));
+  }, []);
 
   useEffect(() => {
     load();

@@ -346,6 +346,83 @@ const customerToken = () => jwt.sign({ userId: 2, email: "it-customer@example.te
     `deleted=${top.card_number} new=${freshNum} (${JSON.stringify(fresh.data)})`,
   );
 
+  /* ------------------------------------- INCIDENT 2026-11-06 regressions */
+  console.log("\n[admin list must never hide cards again]");
+  /* The 2026-11-04 default of 500 hid 142 real cards (79 with points).
+     Seed past that boundary and prove a caller with no ?limit sees all of
+     them, plus authoritative totals for the UI stats. */
+  const seedCount = await cardCount();
+  for (let i = 0; i < 520; i += 1) {
+    await qRun(
+      "INSERT INTO loyalty_cards (user_id, card_number, points, holder_name, holder_phone, created_at) VALUES (NULL, ?, 0, ?, '', datetime('now'))",
+      [`IT9${String(i).padStart(4, "0")}`, `Bulk ${i}`],
+    );
+  }
+  const seededTotal = await cardCount();
+  check("seeded past the old 500-card cap", seededTotal > 500, `count=${seededTotal}`);
+
+  const fullList = await get("/api/admin/loyalty");
+  check(
+    "default list returns every card",
+    fullList.status === 200 && fullList.data.cards.length === seededTotal,
+    `returned=${fullList.data && fullList.data.cards && fullList.data.cards.length} expected=${seededTotal}`,
+  );
+  check(
+    "response carries authoritative totalCards",
+    fullList.data.totalCards === seededTotal && fullList.data.hasMore === false,
+    JSON.stringify({ totalCards: fullList.data.totalCards, hasMore: fullList.data.hasMore }),
+  );
+  const onePage = await get("/api/admin/loyalty?limit=5&offset=0");
+  check(
+    "paged response reports hasMore / nextOffset",
+    onePage.data.returnedCards === 5 &&
+      onePage.data.totalCards === seededTotal &&
+      onePage.data.hasMore === true &&
+      onePage.data.nextOffset === 5,
+    JSON.stringify(onePage.data && {
+      returnedCards: onePage.data.returnedCards,
+      totalCards: onePage.data.totalCards,
+      hasMore: onePage.data.hasMore,
+      nextOffset: onePage.data.nextOffset,
+    }),
+  );
+
+  console.log("\n[double-click must not create a second purchase or point]");
+  const idCard = await post("/api/admin/loyalty/create", { name: "IT Idempotent", phone: "10000123" });
+  const idId = idCard.data && idCard.data.card && idCard.data.card.cardId;
+  const sameBody = { cardId: idId, perfumeName: "IT Repeat", purchasePrice: 10 };
+  const firstSave = await post("/api/admin/loyalty/purchases", sameBody);
+  const secondSave = await post("/api/admin/loyalty/purchases", sameBody);
+  check("first purchase recorded", firstSave.status === 200, `status=${firstSave.status}`);
+  check(
+    "identical rapid resubmission is idempotent",
+    secondSave.status === 200 &&
+      secondSave.data.duplicate === true &&
+      secondSave.data.purchaseId === firstSave.data.purchaseId,
+    JSON.stringify(secondSave.data),
+  );
+  const idPurchases = await qAll("SELECT id FROM customer_purchases WHERE card_id = ?", [idId]);
+  check("only one purchase row exists", idPurchases.length === 1, `rows=${idPurchases.length}`);
+  check("balance is 1, not 2", (await balance(idId)) === 1, `balance=${await balance(idId)}`);
+  await invariant(idId, "invariant after idempotent resubmission");
+
+  const deliberate = await post("/api/admin/loyalty/purchases", { ...sameBody, allowDuplicate: true });
+  check(
+    "allowDuplicate still records a genuine repeat",
+    deliberate.status === 200 && (await balance(idId)) === 2,
+    `status=${deliberate.status} balance=${await balance(idId)}`,
+  );
+
+  console.log("\n[admin profile exposes point history]");
+  const profile = await get(`/api/admin/loyalty/profiles/${idId}`);
+  check(
+    "profile returns ledger movements",
+    profile.status === 200 &&
+      Array.isArray(profile.data.transactions) &&
+      profile.data.transactions.length === 2,
+    `rows=${profile.data && profile.data.transactions && profile.data.transactions.length}`,
+  );
+
   /* ------------------------------------------------------------ global check */
   console.log("\n[global invariant]");
   const violations = await qAll(`

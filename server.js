@@ -54,6 +54,24 @@ const loyaltyLedgerReady = new Promise((resolve) => {
 const loyaltyLedgerReadyTimeout = setTimeout(() => settleLoyaltyLedgerReady(), 8000);
 if (typeof loyaltyLedgerReadyTimeout.unref === "function") loyaltyLedgerReadyTimeout.unref();
 
+/* INCIDENT 2026-11-06: the boot-migration block below is gated on
+   RUN_BOOT_MIGRATIONS (!process.env.VERCEL), so on Vercel NONE of its
+   settleLoyaltyLedgerReady() calls ever run. The only escape hatch was this
+   8-second timer, which meant every cold-start POST/DELETE purchase waited
+   8s with no feedback. Staff assumed the "Enregistrer" click had failed and
+   clicked again, creating a second purchase and a second point.
+   On serverless, detect the optional column with one cheap query instead
+   (cached for the life of the instance) and let writes proceed immediately. */
+if (process.env.VERCEL) {
+  clearTimeout(loyaltyLedgerReadyTimeout);
+  db.all("PRAGMA table_info(loyalty_transactions)", (err, columns) => {
+    if (!err && (columns || []).some((col) => col.name === "purchase_id")) {
+      loyaltyLedgerHasPurchaseId = true;
+    }
+    settleLoyaltyLedgerReady();
+  });
+}
+
 // Both Vercel and Render terminate TLS at their own edge proxy and forward the
 // request with an `X-Forwarded-For` header. express-rate-limit v7+ inspects
 // that header and, when `trust proxy` is left at its default (false), throws
@@ -2486,12 +2504,17 @@ const requireAdmin = async (req, res, next) => {
  * the cost is unbounded rather than merely untidy.
  *
  * `?limit=` and `?offset=` let a caller page through; the ceiling stops a
- * caller asking for the whole table in a single request. With neither
- * parameter the default is deliberately far above today's data, so the
- * existing admin screens keep seeing everything they see today and lose
- * nothing on upgrade. */
+ * caller asking for the whole table in a single request.
+ *
+ * INCIDENT 2026-11-06: the original default of 500 was introduced together
+ * with this paging in 259295a on the assumption that live data was below 500
+ * cards. It was not - the shop had 642. The legacy admin screen (which sent
+ * no ?limit) silently lost 142 cards, 79 of them holding points, and the shop
+ * started telling customers their points had disappeared. The default is now
+ * the full page size, and the response carries totalCards / hasMore so a
+ * client can prove it has loaded everything instead of guessing. */
 const LIST_LIMIT_MAX = 1000;
-const LIST_LIMIT_DEFAULT = 500;
+const LIST_LIMIT_DEFAULT = 1000;
 
 function listLimit(req) {
   const raw = Number.parseInt(req.query.limit, 10);
@@ -2992,6 +3015,8 @@ function logLoyaltyTransaction(cardId, userId, pointsChange, type, description, 
 
 app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) => {
   try {
+    const limit = listLimit(req);
+    const offset = listOffset(req);
     const rows = await new Promise((resolve, reject) => {
       db.all(
         `
@@ -3007,8 +3032,17 @@ app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) 
             ORDER BY c.points DESC, c.id ASC
             LIMIT $1 OFFSET $2
           `,
-        [listLimit(req), listOffset(req)],
+        [limit, offset],
         (err, rows) => (err ? reject(err) : resolve(rows)),
+      );
+    });
+
+    /* The admin UI must never again report "500 cards" when the table holds
+       642. This count is independent of the page the caller asked for. */
+    const cardCount = await new Promise((resolve, reject) => {
+      db.get(
+        "SELECT COUNT(*) AS total FROM loyalty_cards",
+        (err, row) => (err ? reject(err) : resolve(row ? Number(row.total) : 0)),
       );
     });
 
@@ -3021,7 +3055,7 @@ app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) 
             ORDER BY u.first_name ASC
             LIMIT $1 OFFSET $2
           `,
-        [listLimit(req), listOffset(req)],
+        [limit, offset],
         (err, rows) => (err ? reject(err) : resolve(rows)),
       );
     });
@@ -3037,6 +3071,10 @@ app.get("/api/admin/loyalty", authenticateToken, requireAdmin, async (req, res) 
       success: true,
       rewardThreshold: LOYALTY_REWARD_THRESHOLD,
       totalRewards,
+      totalCards: cardCount,
+      returnedCards: rows.length,
+      hasMore: offset + rows.length < cardCount,
+      nextOffset: offset + rows.length,
       usersWithoutCards: usersWithoutCards.map((u) => ({
         userId: u.id,
         name: `${u.first_name} ${u.last_name}`.trim(),
@@ -3535,6 +3573,7 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
     let resolvedCard = card;
     let issued = false;
     let purchaseId;
+    let duplicateOf = null;
     let retries = 0;
     for (;;) {
       try {
@@ -3550,6 +3589,38 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
               t,
             );
             didIssue = true;
+          }
+
+          /* INCIDENT 2026-11-06: with a slow save, staff clicked
+             "Enregistrer" twice and the second click inserted a SECOND
+             purchase and a SECOND point. Treat an identical resubmission
+             within 5s as the same purchase. allowDuplicate=true is the
+             deliberate escape hatch for two truly identical items. */
+          if (active && !didIssue && !allowDuplicate) {
+            const prev = await t.get(
+              `SELECT id, perfume_name, brand, purchase_price, purchase_date, created_at
+               FROM customer_purchases WHERE card_id = ? ORDER BY id DESC LIMIT 1`,
+              [active.id],
+            );
+            if (prev) {
+              const sameItem =
+                String(prev.perfume_name || "").trim() === trimmedName &&
+                String(prev.brand || "") === String(trimmedBrand || "") &&
+                String(prev.purchase_date || "") === date &&
+                (prev.purchase_price == null
+                  ? price === null
+                  : Number(prev.purchase_price) === price);
+              const stamp =
+                prev.created_at instanceof Date
+                  ? prev.created_at
+                  : new Date(String(prev.created_at || "").replace(" ", "T") + "Z");
+              const age = Date.now() - stamp.getTime();
+              if (sameItem && Number.isFinite(age) && age >= 0 && age < 5000) {
+                duplicateOf = prev.id;
+                resolvedCard = active;
+                return;
+              }
+            }
           }
 
           const r = await t.run(
@@ -3589,6 +3660,21 @@ app.post("/api/admin/loyalty/purchases", authenticateToken, requireAdmin, async 
         }
         throw err;
       }
+    }
+
+    if (duplicateOf) {
+      return res.json({
+        success: true,
+        duplicate: true,
+        purchaseId: duplicateOf,
+        issued: false,
+        card: {
+          cardId: resolvedCard.id,
+          cardNumber: resolvedCard.card_number,
+          holderName: resolvedCard.holder_name || null,
+        },
+        message: "Achat déjà enregistré (double validation ignorée)",
+      });
     }
 
     res.json({
@@ -3772,6 +3858,19 @@ app.get("/api/admin/loyalty/profiles/:cardId", authenticateToken, requireAdmin, 
       );
     });
 
+    /* INCIDENT 2026-11-06: the admin profile showed a bare number with no way
+       to explain it. When a customer disputes their balance the assistant
+       needs the movements, not just the total. Read-only, newest first. */
+    const transactions = await new Promise((resolve, reject) => {
+      db.all(
+        `SELECT id, points_change, type, description, created_at
+         FROM loyalty_transactions WHERE card_id = ?
+         ORDER BY created_at DESC, id DESC LIMIT 200`,
+        [card.id],
+        (err, list) => (err ? reject(err) : resolve(list || [])),
+      );
+    });
+
     res.json({
       card: {
         cardId: card.id,
@@ -3785,6 +3884,7 @@ app.get("/api/admin/loyalty/profiles/:cardId", authenticateToken, requireAdmin, 
         createdAt: card.created_at,
       },
       purchases,
+      transactions,
       preferences,
       audienceBreakdown: audienceCount,
       topBrands,
