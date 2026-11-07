@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Gift, Loader2, Sparkles, Stamp, Trophy } from "lucide-react";
 import { api } from "../../api/client.js";
@@ -6,6 +6,7 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { initials } from "../lib/text.js";
 import { money as moneyFmt } from "../lib/catalog.js";
+import { fmtDateTime, useLiveRefresh } from "./adminKit.jsx";
 import LoyaltyCardArt from "../LoyaltyCardArt.jsx";
 import "./loyalty.css";
 
@@ -25,6 +26,17 @@ export default function Loyalty() {
   const { user, ready } = useAuth();
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
+  const [stale, setStale] = useState(false);
+  const [lastSync, setLastSync] = useState(null);
+  const alive = useRef(true);
+  /* StrictMode re-arms: dev mounts -> cleans up -> mounts again, so a
+     cleanup-only effect leaves `alive` permanently false and every load()
+     then short-circuits, pinning the page on the spinner. Re-assert true on
+     every mount. */
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; };
+  }, []);
 
   /* Clear the error at the start of every attempt. It used to be set and never
      cleared, and the `if (error)` branch renders above `if (!data)`, so a
@@ -33,8 +45,20 @@ export default function Loyalty() {
   const load = useCallback(() => {
     setError("");
     return api("/api/loyalty/me")
-      .then((d) => setData(d))
-      .catch((e) => setError(e.message));
+      .then((d) => {
+        if (!alive.current) return;
+        setData(d);
+        setStale(false);
+        setLastSync(new Date());
+      })
+      .catch((e) => {
+        if (!alive.current) return;
+        setError(e.message);
+        /* Keep the last good card on screen but say out loud that it may be
+           out of date. A silent stale balance is the exact failure the legacy
+           root's stale banner was added for. */
+        setStale(true);
+      });
   }, []);
 
   /* Wait for the session to settle, and never call for a visitor with no
@@ -45,6 +69,12 @@ export default function Loyalty() {
     if (!ready || !user) return;
     load();
   }, [ready, user, load]);
+
+  /* PARITY 2026-11-07 — "synchronous". The card used to load exactly once per
+     mount, so a point added at the register stayed invisible until a full
+     reload. Poll, re-read when the tab becomes visible and on window focus;
+     the shared hook guards against overlapping loads. */
+  useLiveRefresh(load, { active: ready && !!user, intervalMs: 30000 });
 
   if (!ready) {
     return (
@@ -71,7 +101,9 @@ export default function Loyalty() {
     );
   }
 
-  if (error) {
+  /* A failed *refresh* must not blank a card that is already on screen. Only
+     the very first load, with no data at all, gets the full error page. */
+  if (error && !data) {
     return (
       <main className="wrap section">
         <div className="notice">{t("lyLoadError")}</div>
@@ -144,6 +176,33 @@ export default function Loyalty() {
       <h1 className="ly-title">{t("lyTitle")}</h1>
       <p className="ly-lede">{t("lyLede")}</p>
 
+      <div className="ly-sync" data-guide="loyalty-sync">
+        <button
+          type="button"
+          className="ly-refresh pressable"
+          data-guide="loyalty-refresh"
+          onClick={load}
+        >
+          {t("lyRefresh")}
+        </button>
+        {lastSync ? (
+          <span>
+            {t("lySyncedAt").replace(
+              "{time}",
+              lastSync.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }),
+            )}
+          </span>
+        ) : null}
+      </div>
+      {stale ? (
+        <div className="ly-stale" role="status" data-guide="loyalty-stale">
+          <span>{t("lyStale")}</span>
+          <button type="button" className="ly-refresh pressable" onClick={load}>
+            {t("lyRetry")}
+          </button>
+        </div>
+      ) : null}
+
       <div className="ly-card-row">
         <section className="ly-card panel" aria-label={t("lyBalance")} data-guide="loyalty-card">
           <div className="ly-card-top">
@@ -215,7 +274,9 @@ export default function Loyalty() {
                   </span>
                   <span className="ly-row-side">
                     <span className="ly-price">{moneyFmt(p.purchase_price || 0)}</span>
-                    <span className="ly-date">{p.purchase_date || ""}</span>
+                    <span className="ly-date">
+                      {p.purchase_date || (p.created_at ? fmtDateTime(p.created_at) : "")}
+                    </span>
                   </span>
                 </li>
               ))}
@@ -234,10 +295,11 @@ export default function Loyalty() {
                       {tx.points_change > 0 ? `+${tx.points_change}` : tx.points_change}
                     </span>
                     <span className="ly-move-desc">{tx.description}</span>
-                    <span className="ly-move-when">{tx.created_at?.slice(0, 10)}</span>
+                    <span className="ly-move-when">{fmtDateTime(tx.created_at)}</span>
                   </li>
                 ))}
               </ul>
+              <p className="ly-empty-note">{t("lyMovesNote")}</p>
             </>
           ) : null}
         </section>

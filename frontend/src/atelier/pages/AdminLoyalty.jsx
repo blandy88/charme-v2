@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../../api/client.js";
-import { fmtDate } from "./adminKit.jsx";
+import { fmtDate, fmtDateTime, useLiveRefresh } from "./adminKit.jsx";
 import { money } from "../lib/catalog.js";
 
 const FAMILIES = [
@@ -82,26 +82,23 @@ function Pager({ at, page, pageCount, count, unit, onPage, hook }) {
   );
 }
 
-/* Date AND time. `fmtDate` only prints the day, which is not enough here: two
-   movements on the same afternoon must be distinguishable, because that is how
-   a double-click shows up.
-   Postgres returns "2026-11-06 17:55:39.602046+00" and SQLite returns
-   "2026-11-06 17:55:39", so the offset is normalised before parsing. */
-function fmtDateTime(value) {
-  if (!value) return "—";
-  const raw = String(value).trim();
-  let iso = raw.replace(" ", "T");
-  iso = iso.replace(/([+-]\d{2})$/, "$1:00");
-  if (!/[zZ]$|[+-]\d{2}:?\d{2}$/.test(iso)) iso += "Z";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return raw;
-  return d.toLocaleString(undefined, {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+/* PARITY 2026-11-07: the legacy root shows #loyaltyStaleBanner whenever a
+   refresh fails while old data is still on screen. Without it staff quote
+   stale balances to customers. Same unmissable signal in the React admin. */
+function StaleBanner({ at, onRefresh, hook = "loyalty-stale" }) {
+  return (
+    <div className="admin-stale" role="status" data-guide={hook}>
+      <span>{at("loyStale")}</span>
+      <button
+        type="button"
+        className="admin-mini pressable"
+        data-guide="loyalty-refresh"
+        onClick={onRefresh}
+      >
+        {at("loyRefresh")}
+      </button>
+    </div>
+  );
 }
 
 const HISTORY_PAGE_SIZE = 25;
@@ -115,42 +112,58 @@ const HISTORY_MAX_PAGES = 20;
 function PointsHistory({ at }) {
   const [movements, setMovements] = useState([]);
   const [total, setTotal] = useState(0);
+  const [totalPoints, setTotalPoints] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [stale, setStale] = useState(false);
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
+  const alive = useRef(true);
+  /* StrictMode re-arms on remount; a cleanup-only effect strands it false. */
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; };
+  }, []);
+
+  /* The server computes totalMovements AND totalPoints over the WHOLE ledger,
+     independently of the page. Using them (rather than summing the rows we
+     happened to load) means a page cap or a search can never silently turn
+     "net points" into a partial figure. */
+  const load = useCallback(async () => {
+    setError("");
+    try {
+      const PAGE = 1000;
+      const all = [];
+      let reported = 0;
+      let net = 0;
+      let offset = 0;
+      for (let i = 0; i < HISTORY_MAX_PAGES; i += 1) {
+        const d = await api(`/api/admin/loyalty/history?limit=${PAGE}&offset=${offset}`);
+        reported = Number(d.totalMovements) || 0;
+        net = Number(d.totalPoints) || 0;
+        const batch = d.movements || [];
+        all.push(...batch);
+        if (!d.hasMore || batch.length === 0) break;
+        offset = Number(d.nextOffset) || offset + batch.length;
+      }
+      if (!alive.current) return;
+      setMovements(all);
+      setTotal(reported);
+      setTotalPoints(net);
+      setStale(false);
+    } catch (e) {
+      if (!alive.current) return;
+      setError(e.message);
+      setStale(true);
+    } finally {
+      if (alive.current) setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const PAGE = 1000;
-        const all = [];
-        let reported = 0;
-        let offset = 0;
-        for (let i = 0; i < HISTORY_MAX_PAGES; i += 1) {
-          const d = await api(`/api/admin/loyalty/history?limit=${PAGE}&offset=${offset}`);
-          reported = Number(d.totalMovements) || 0;
-          const batch = d.movements || [];
-          all.push(...batch);
-          if (!d.hasMore || batch.length === 0) break;
-          offset = Number(d.nextOffset) || offset + batch.length;
-        }
-        if (cancelled) return;
-        setMovements(all);
-        setTotal(reported);
-        setLoading(false);
-      } catch (e) {
-        if (!cancelled) {
-          setError(e.message);
-          setLoading(false);
-        }
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    load();
+  }, [load]);
+  useLiveRefresh(load, { intervalMs: 60000 });
 
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -174,11 +187,13 @@ function PointsHistory({ at }) {
 
   const shownTotal = shown.reduce((sum, m) => sum + (Number(m.pointsChange) || 0), 0);
 
-  if (loading) return <p className="admin-muted">{at("loading")}</p>;
-  if (error) return <p className="admin-error">{error}</p>;
+  if (loading && movements.length === 0) return <p className="admin-muted">{at("loading")}</p>;
+  if (error && movements.length === 0) return <p className="admin-error">{error}</p>;
 
   return (
     <>
+      {error ? <p className="admin-error">{error}</p> : null}
+      {stale ? <StaleBanner at={at} onRefresh={load} hook="loyalty-history-stale" /> : null}
       <div className="admin-toolbar">
         <input
           type="search"
@@ -191,6 +206,14 @@ function PointsHistory({ at }) {
             setPage(1);
           }}
         />
+        <button
+          type="button"
+          className="admin-mini pressable"
+          data-guide="loyalty-history-refresh"
+          onClick={load}
+        >
+          {at("loyRefresh")}
+        </button>
       </div>
       <p className="admin-muted">{at("loyHistoryIntro")}</p>
       {movements.length < total ? (
@@ -259,10 +282,15 @@ function PointsHistory({ at }) {
           >
             <span>{at("loyHistoryNet")}</span>
             <span>
-              {shownTotal > 0 ? "+" : ""}
-              {shownTotal}
+              {totalPoints > 0 ? "+" : ""}
+              {totalPoints}
             </span>
           </div>
+          {q.trim() ? (
+            <p className="admin-muted admin-small" style={{ marginTop: 4 }}>
+              {at("loyHistoryNetShown")}: {shownTotal > 0 ? "+" : ""}{shownTotal}
+            </p>
+          ) : null}
         </>
       )}
     </>
@@ -273,6 +301,7 @@ function PointsHistory({ at }) {
 export function Loyalty({ at }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
+  const [stale, setStale] = useState(false);
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState(false);
   const [profileId, setProfileId] = useState(null);
@@ -282,6 +311,16 @@ export function Loyalty({ at }) {
   const [tab, setTab] = useState("cards");
   const [editing, setEditing] = useState(null);
   const [page, setPage] = useState(1);
+  /* PARITY 2026-11-07: the same Set-based synchronous guard the legacy root
+     uses (`loyaltyGuard`). `busy` is React state, so two clicks in the same
+     tick both read false. Every mutation takes its own in-flight key. */
+  const inFlight = useRef(new Set());
+  const alive = useRef(true);
+  /* StrictMode re-arms on remount; a cleanup-only effect strands it false. */
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; };
+  }, []);
 
   /* Reset the error on every attempt, so a successful refresh does not leave a
      stale red banner above correct data.
@@ -303,13 +342,21 @@ export function Loyalty({ at }) {
         if (!d.hasMore || batch.length === 0) break;
         offset = Number(d.nextOffset) || offset + batch.length;
       }
+      if (!alive.current) return;
       setData({ ...(last || {}), cards: all });
-    })().catch((e) => setError(e.message));
+      setStale(false);
+    })().catch((e) => {
+      if (!alive.current) return;
+      setError(e.message);
+      setStale(true);
+    });
   }, []);
 
   useEffect(() => {
     load();
   }, [load]);
+  /* Live sync: a point stamped at the register appears without a reload. */
+  useLiveRefresh(load, { intervalMs: 30000 });
 
   const cards = data?.cards || [];
   const shown = useMemo(() => {
@@ -335,7 +382,9 @@ export function Loyalty({ at }) {
     if (page !== current) setPage(current);
   }, [page, current]);
 
-  const guard = async (fn) => {
+  const guard = async (key, fn) => {
+    if (inFlight.current.has(key)) return;
+    inFlight.current.add(key);
     setError("");
     setBusy(true);
     try {
@@ -343,24 +392,30 @@ export function Loyalty({ at }) {
       await load();
     } catch (e) {
       setError(e.message);
+      setStale(true);
     } finally {
+      inFlight.current.delete(key);
       setBusy(false);
     }
   };
 
   const addPoint = (card) =>
-    guard(() =>
+    guard(`add:${card.cardId}`, () =>
       api("/api/admin/loyalty/add-points", { method: "POST", body: { cardId: card.cardId, points: 1 } }),
     );
 
   const redeem = (card) => {
     if (!window.confirm(at("loyRedeemConfirm"))) return;
-    guard(() => api("/api/admin/loyalty/redeem", { method: "POST", body: { cardId: card.cardId } }));
+    guard(`redeem:${card.cardId}`, () =>
+      api("/api/admin/loyalty/redeem", { method: "POST", body: { cardId: card.cardId } }),
+    );
   };
 
   const remove = (card) => {
     if (!window.confirm(at("loyDeleteConfirm"))) return;
-    guard(() => api(`/api/admin/loyalty/delete?cardId=${card.cardId}`, { method: "DELETE" }));
+    guard(`delete:${card.cardId}`, () =>
+      api(`/api/admin/loyalty/delete?cardId=${card.cardId}`, { method: "DELETE" }),
+    );
   };
 
   if (profileId != null) {
@@ -389,6 +444,7 @@ export function Loyalty({ at }) {
     <div className="admin-block">
       <Tabs at={at} label={at("tabLoyalty")} tabs={tabs} current={tab} onSelect={setTab} hook="loyalty" />
       {error ? <p className="admin-error">{error}</p> : null}
+      {stale ? <StaleBanner at={at} onRefresh={load} /> : null}
 
       {tab === "cards" ? (
         <>
@@ -404,6 +460,14 @@ export function Loyalty({ at }) {
                 setPage(1);
               }}
             />
+            <button
+              type="button"
+              className="admin-mini pressable"
+              data-guide="loyalty-refresh-cards"
+              onClick={load}
+            >
+              {at("loyRefresh")}
+            </button>
             <button
               type="button"
               className="btn-accent pressable"
@@ -652,7 +716,7 @@ function NewCardPanel({ at, usersWithoutCards, onCancel, onDone }) {
       {duplicate ? (
         <div className="admin-toolbar">
           <button type="button" className="admin-mini pressable" onClick={useExistingCard} disabled={busy}>
-            {`Utiliser la carte ${duplicate.cardNumber || duplicate.cardId}`}
+            {at("loyUseExisting")} {duplicate.cardNumber || duplicate.cardId}
           </button>
         </div>
       ) : null}
@@ -758,33 +822,104 @@ function EditCardPanel({ at, card, onCancel, onDone }) {
     phone: card.phone || "",
     points: String(card.points ?? 0),
   });
+  /* The balance this form was seeded with. A save only moves points if the
+     assistant deliberately changed the field. */
+  const [originalPoints, setOriginalPoints] = useState(String(card.points ?? 0));
+  const [livePoints, setLivePoints] = useState(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [ready, setReady] = useState(false);
+  const inFlight = useRef(false);
+  const alive = useRef(true);
+  /* StrictMode re-arms on remount; a cleanup-only effect strands it false. */
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; };
+  }, []);
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
+  /* PARITY 2026-11-07 with the legacy root's updateLoyaltyPoints(): that form
+     pre-filled `points` from the in-memory table and ALWAYS sent it back, so
+     correcting a phone number on a tab open for an hour rewrote the balance to
+     an hour-old value and silently deleted newly earned points. Read the card
+     fresh before showing anything, and keep a live read running while the
+     form is open so a point stamped at the register is not invisible. */
+  const fetchCard = useCallback(
+    () => api(`/api/admin/loyalty/profiles/${card.cardId}`).then((d) => d.card || {}),
+    [card.cardId],
+  );
+
+  const seed = useCallback(async () => {
+    try {
+      const fresh = await fetchCard();
+      if (!alive.current) return;
+      const pts = String(fresh.points ?? card.points ?? 0);
+      setForm({
+        name: fresh.name || card.name || "",
+        cardNumber: fresh.cardNumber || card.cardNumber || "",
+        phone: fresh.phone || card.phone || "",
+        points: pts,
+      });
+      setOriginalPoints(pts);
+      setLivePoints(pts);
+      setError("");
+    } catch (e) {
+      if (alive.current) setError(e.message);
+    } finally {
+      if (alive.current) setReady(true);
+    }
+  }, [fetchCard, card]);
+
+  useEffect(() => {
+    seed();
+  }, [seed]);
+
+  const poll = useCallback(async () => {
+    try {
+      const fresh = await fetchCard();
+      if (alive.current) setLivePoints(String(fresh.points ?? 0));
+    } catch {
+      if (alive.current) setError(at("loyStaleShort"));
+    }
+  }, [fetchCard, at]);
+  useLiveRefresh(poll, { intervalMs: 30000, active: ready });
+
+  const changed = String(form.points) !== String(originalPoints);
+  const drifted = livePoints != null && String(livePoints) !== String(originalPoints);
+
   async function submit(e) {
     e.preventDefault();
+    if (inFlight.current) return;
+    const pts = Number.parseInt(form.points, 10);
+    if (!Number.isInteger(pts) || pts < 0 || pts > 10000) {
+      setError(at("loyPointsInvalid"));
+      return;
+    }
+    inFlight.current = true;
     setError("");
     setBusy(true);
     try {
-      await api("/api/admin/loyalty/update", {
-        method: "PUT",
-        body: {
-          cardId: card.cardId,
-          name: form.name,
-          cardNumber: form.cardNumber,
-          phone: form.phone,
-          points: Number(form.points),
-        },
-      });
+      /* Never echo a stale balance back to the server. Only a deliberate edit
+         of this field may move points; every other change leaves them alone. */
+      const body = {
+        cardId: card.cardId,
+        name: form.name,
+        cardNumber: form.cardNumber,
+        phone: form.phone,
+      };
+      if (changed) body.points = pts;
+      await api("/api/admin/loyalty/update", { method: "PUT", body });
       onDone();
     } catch (e2) {
       setError(e2.message);
     } finally {
+      inFlight.current = false;
       setBusy(false);
     }
   }
+
+  if (!ready) return <p className="admin-muted">{at("loading")}</p>;
 
   return (
     <form className="admin-block" data-guide="edit-card" onSubmit={submit}>
@@ -792,6 +927,20 @@ function EditCardPanel({ at, card, onCancel, onDone }) {
         {at("loyCardNumber")}: <strong>{card.cardNumber || "—"}</strong>
       </p>
       {error ? <p className="admin-error">{error}</p> : null}
+      <div className="admin-toolbar">
+        <span className="admin-muted admin-small">
+          {at("loyLiveBalance")}: <strong>{livePoints ?? "—"}</strong>
+        </span>
+        {drifted ? <span className="admin-error admin-small">{at("loyPointsChanged")}</span> : null}
+        <button
+          type="button"
+          className="admin-mini pressable"
+          data-guide="edit-card-refresh"
+          onClick={seed}
+        >
+          {at("loyReloadCard")}
+        </button>
+      </div>
 
       <section className="card admin-section">
         <h2 className="admin-subhead">{at("loyEditTitle")}</h2>
@@ -963,28 +1112,52 @@ function PurchaseFields({ at, form, set, hook = "purchase" }) {
 function CustomerProfile({ at, cardId, onBack }) {
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
+  const [stale, setStale] = useState(false);
   const [tab, setTab] = useState("overview");
   const [pPage, setPPage] = useState(1);
+  const inFlight = useRef(new Set());
+  const alive = useRef(true);
+  /* StrictMode re-arms on remount; a cleanup-only effect strands it false. */
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; };
+  }, []);
 
   const load = useCallback(
     () =>
       api(`/api/admin/loyalty/profiles/${cardId}`)
-        .then(setProfile)
-        .catch((e) => setError(e.message)),
+        .then((d) => {
+          if (!alive.current) return;
+          setProfile(d);
+          setError("");
+          setStale(false);
+        })
+        .catch((e) => {
+          if (!alive.current) return;
+          setError(e.message);
+          setStale(true);
+        }),
     [cardId],
   );
 
   useEffect(() => {
     load();
   }, [load]);
+  useLiveRefresh(load, { intervalMs: 30000 });
 
   async function removePurchase(id) {
     if (!window.confirm(at("cpDeletePurchase"))) return;
+    const key = `purchase:${id}`;
+    if (inFlight.current.has(key)) return;
+    inFlight.current.add(key);
     try {
       await api(`/api/admin/loyalty/purchases/${id}`, { method: "DELETE" });
       await load();
     } catch (e) {
       setError(e.message);
+      setStale(true);
+    } finally {
+      inFlight.current.delete(key);
     }
   }
 
@@ -998,6 +1171,11 @@ function CustomerProfile({ at, cardId, onBack }) {
   /* A heavy customer's history scrolls as badly as the card list did, so it
      pages on the same rule. */
   const purchases = profile ? profile.purchases : [];
+  const profileTransactions = profile ? profile.transactions || [] : [];
+  const pointTotal = profileTransactions.reduce(
+    (sum, tx) => sum + (Number(tx.points_change) || 0),
+    0,
+  );
   const pPageCount = Math.max(1, Math.ceil(purchases.length / PAGE_SIZE));
   const pIndex = Math.min(pPage, pPageCount);
   const pRows = purchases.slice((pIndex - 1) * PAGE_SIZE, pIndex * PAGE_SIZE);
@@ -1009,6 +1187,7 @@ function CustomerProfile({ at, cardId, onBack }) {
     ["overview", at("cpTabOverview")],
     ["tastes", at("cpTabTastes")],
     ["purchases", at("cpTabPurchases")],
+    ["points", at("cpTabPoints")],
     ["record", at("rpTitle")],
   ];
 
@@ -1018,9 +1197,13 @@ function CustomerProfile({ at, cardId, onBack }) {
         <button type="button" className="admin-mini pressable" data-guide="cp-back" onClick={onBack}>
           ← {at("cpBack")}
         </button>
+        <button type="button" className="admin-mini pressable" data-guide="cp-refresh" onClick={load}>
+          {at("loyRefresh")}
+        </button>
       </div>
       <Tabs at={at} label={at("cpTitle")} tabs={tabs} current={tab} onSelect={setTab} hook="cp" />
       {error ? <p className="admin-error">{error}</p> : null}
+      {stale ? <StaleBanner at={at} onRefresh={load} hook="cp-stale" /> : null}
 
       {!profile ? (
         <p className="admin-muted">{at("loading")}</p>
@@ -1164,6 +1347,66 @@ function CustomerProfile({ at, cardId, onBack }) {
                 onPage={setPPage}
                 hook="cp-pager"
               />
+            </section>
+          ) : null}
+
+          {/* PARITY 2026-11-07: the legacy admin profile renders every point
+              movement (renderProfilePointsHistory). The server already returns
+              `transactions`; this tab was the missing consumer. A disputed
+              balance is explainable here, without opening the global log. */}
+          {tab === "points" ? (
+            <section className="card admin-section" data-guide="cp-points-history">
+              <h2 className="admin-subhead">{at("cpTabPoints")}</h2>
+              <p className="admin-muted">{at("loyHistoryIntro")}</p>
+              {profileTransactions.length === 0 ? (
+                <p className="admin-muted">{at("loyHistoryEmpty")}</p>
+              ) : (
+                <>
+                  <ul className="admin-purchases">
+                    {profileTransactions.map((tx) => (
+                      <li key={tx.id} className="admin-purchase" data-guide="cp-point-row">
+                        <div>
+                          <strong>
+                            {tx.description || (tx.type === "redeem" ? at("loyRedeem") : "—")}
+                          </strong>
+                          <div className="admin-muted admin-small">{fmtDateTime(tx.created_at)}</div>
+                        </div>
+                        <div className="admin-purchase-meta">
+                          <strong
+                            style={{
+                              color:
+                                (Number(tx.points_change) || 0) < 0
+                                  ? "var(--danger, #e39a92)"
+                                  : undefined,
+                            }}
+                          >
+                            {(Number(tx.points_change) || 0) > 0 ? "+" : ""}
+                            {tx.points_change}
+                          </strong>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginTop: 10,
+                      fontSize: 13,
+                      fontWeight: 600,
+                    }}
+                  >
+                    <span>{at("loyHistoryNet")}</span>
+                    <span>
+                      {pointTotal > 0 ? "+" : ""}
+                      {pointTotal}
+                    </span>
+                  </div>
+                  <p className="admin-muted admin-small" style={{ marginTop: 8 }}>
+                    {at("cpPointsNote")}
+                  </p>
+                </>
+              )}
             </section>
           ) : null}
 

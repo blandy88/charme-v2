@@ -93,6 +93,19 @@ export const ADMIN_STR = {
     loyEligible: "Reward ready",
     loyRedeemConfirm: "Give a free fragrance to this customer?",
     loyDeleted: "Card deleted.",
+    loyStale:
+      "⚠ Loyalty data may be out of date — the figures shown may not be current.",
+    loyStaleShort: "Could not refresh the live balance.",
+    loyRefresh: "Refresh",
+    loyReloadCard: "Reload card",
+    loyLiveBalance: "Live balance",
+    loyPointsChanged: "The balance changed on the server — reload before saving.",
+    loyPointsInvalid: "Points must be a whole number between 0 and 10000.",
+    loyUseExisting: "Use card",
+    loyHistoryNetShown: "Of the rows shown",
+    cpTabPoints: "Points history",
+    cpPointsNote:
+      "Rows labelled “Opening balance reconciliation” are points earned before the point-by-point history existed (August 2026).",
     hidden: "Hidden",
 
     cpTitle: "Customer profile",
@@ -324,6 +337,19 @@ export const ADMIN_STR = {
     loyEligible: "Récompense prête",
     loyRedeemConfirm: "Offrir un parfum à ce client ?",
     loyDeleted: "Carte supprimée.",
+    loyStale:
+      "⚠ Données potentiellement obsolètes — les points affichés peuvent ne pas être à jour.",
+    loyStaleShort: "Impossible d'actualiser le solde en direct.",
+    loyRefresh: "Actualiser",
+    loyReloadCard: "Recharger la carte",
+    loyLiveBalance: "Solde en direct",
+    loyPointsChanged: "Le solde a changé sur le serveur — rechargez avant d'enregistrer.",
+    loyPointsInvalid: "Les points doivent être un entier entre 0 et 10 000.",
+    loyUseExisting: "Utiliser la carte",
+    loyHistoryNetShown: "Sur les lignes affichées",
+    cpTabPoints: "Historique des points",
+    cpPointsNote:
+      "Les lignes « Réconciliation : solde initial » correspondent aux points acquis avant la mise en place de l'historique (août 2026).",
     hidden: "Masquée",
 
     cpTitle: "Profil client",
@@ -555,6 +581,19 @@ export const ADMIN_STR = {
     loyEligible: "المكافأة جاهزة",
     loyRedeemConfirm: "منح عطر مجاني لهذا العميل؟",
     loyDeleted: "تم حذف البطاقة.",
+    loyStale:
+      "⚠ قد تكون البيانات قديمة — الأرقام المعروضة قد لا تكون محدّثة.",
+    loyStaleShort: "تعذّر تحديث الرصيد المباشر.",
+    loyRefresh: "تحديث",
+    loyReloadCard: "إعادة تحميل البطاقة",
+    loyLiveBalance: "الرصيد المباشر",
+    loyPointsChanged: "تغيّر الرصيد على الخادم — أعد التحميل قبل الحفظ.",
+    loyPointsInvalid: "يجب أن تكون النقاط عددًا صحيحًا بين 0 و10000.",
+    loyUseExisting: "استخدام البطاقة",
+    loyHistoryNetShown: "من الصفوف المعروضة",
+    cpTabPoints: "سجل النقاط",
+    cpPointsNote:
+      "الصفوف المسماة «تسوية الرصيد الافتتاحي» هي نقاط جُمعت قبل تطبيق السجل التفصيلي (أغسطس 2026).",
     hidden: "مخفي",
 
     cpTitle: "ملف العميل",

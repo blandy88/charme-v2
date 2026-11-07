@@ -10,7 +10,7 @@
   <body>
     <div id="root"></div>
     <script type="module">
-      import React from "react";
+      import React, { StrictMode } from "react";
       import { createRoot } from "react-dom/client";
       import { Loyalty } from "/src/atelier/pages/AdminLoyalty.jsx";
       import { ADMIN_STR } from "/src/atelier/pages/adminI18n.js";
@@ -18,8 +18,15 @@
       /* Same translator the real Admin shell builds (Admin.jsx L564-567). */
       const at = (k) => (ADMIN_STR.en && ADMIN_STR.en[k]) || k;
 
+      /* The real /app shell mounts under StrictMode (src/main.jsx). Keep this
+         harness identical: a cleanup-only `alive` effect passes here without
+         it but pins every panel on its loading state in production. */
       createRoot(document.getElementById("root")).render(
-        React.createElement("main", { className: "admin-shell" }, React.createElement(Loyalty, { at })),
+        React.createElement(
+          StrictMode,
+          null,
+          React.createElement("main", { className: "admin-shell" }, React.createElement(Loyalty, { at })),
+        ),
       );
     </script>
   </body>

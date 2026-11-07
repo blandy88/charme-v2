@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useDialogFocus } from "../lib/useDialogFocus.js";
 
-/* Shared admin primitives. Kept out of Admin.jsx so AdminLoyalty.jsx can use
-   them without importing from the module that imports it. */
+/* Shared primitives for the admin console and the loyalty surfaces. Kept out
+   of Admin.jsx so AdminLoyalty.jsx can use them without a circular import. */
 
 /* The server returns SQLite timestamps ("YYYY-MM-DD HH:MM:SS", UTC). */
 export function fmtDate(value) {
@@ -11,6 +11,72 @@ export function fmtDate(value) {
   const iso = s.includes("T") ? s : `${s.replace(" ", "T")}Z`;
   const d = new Date(iso);
   return Number.isNaN(d.getTime()) ? s : d.toLocaleDateString();
+}
+
+/* Date AND time. A date alone hides two movements on the same afternoon —
+   which is exactly how an accidental double-click shows up. Postgres returns
+   "2026-11-06 17:55:39.602046+00" and SQLite "2026-11-06 17:55:39", so the
+   short offset is normalised before parsing. ONE formatter for the admin
+   table, the customer card and the profile history: the same ledger row must
+   not read three different ways in three places. */
+export function fmtDateTime(value) {
+  if (!value) return "—";
+  const raw = String(value).trim();
+  let iso = raw.replace(" ", "T");
+  iso = iso.replace(/([+-]\d{2})$/, "$1:00");
+  if (!/[zZ]$|[+-]\d{2}:?\d{2}$/.test(iso)) iso += "Z";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return raw;
+  return d.toLocaleString(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+/* PARITY 2026-11-07 — "synchronous". A long-lived tab used to fetch its
+   loyalty data once on mount and never again, so a point stamped at the
+   register stayed invisible until a full reload. Every loyalty surface now
+   refreshes on the same schedule: poll, tab becoming visible, window focus.
+   The ref is synchronous, so two triggers landing in the same tick cannot
+   start overlapping loads; hidden tabs are skipped entirely. */
+export function useLiveRefresh(load, { intervalMs = 30000, active = true } = {}) {
+  const loadRef = useRef(load);
+  loadRef.current = load;
+  const inFlight = useRef(false);
+
+  const refresh = useCallback(() => {
+    if (inFlight.current) return Promise.resolve();
+    inFlight.current = true;
+    return Promise.resolve()
+      .then(() => loadRef.current())
+      .catch(() => {})
+      .finally(() => {
+        inFlight.current = false;
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!active) return undefined;
+    const onVisible = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    const onFocus = () => refresh();
+    const timer = window.setInterval(() => {
+      if (document.visibilityState !== "hidden") refresh();
+    }, intervalMs);
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onFocus);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, [active, intervalMs, refresh]);
+
+  return refresh;
 }
 
 export function Modal({ title, onClose, children, footer }) {

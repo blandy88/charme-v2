@@ -13,7 +13,7 @@ import "./admin.css";
 /* ------------------------------------------------------------------ Overview */
 function Overview({ at }) {
   const [stats, setStats] = useState(null);
-  const [cards, setCards] = useState(null);
+  const [loyalty, setLoyalty] = useState(null);
   const [news, setNews] = useState(null);
   const [notes, setNotes] = useState(null);
 
@@ -21,13 +21,17 @@ function Overview({ at }) {
     let alive = true;
     Promise.allSettled([
       api("/api/stats/users"),
-      api("/api/admin/loyalty"),
+      api("/api/admin/loyalty?limit=1000&offset=0"),
       api("/api/admin/news"),
       api("/api/admin/notes"),
     ]).then(([s, l, n, g]) => {
       if (!alive) return;
       if (s.status === "fulfilled") setStats(s.value.stats || {});
-      if (l.status === "fulfilled") setCards(l.value.cards || []);
+      /* PARITY 2026-11-07: the server already computes totalCards and
+         totalRewards over the whole ledger. Counting the rows of one page
+         under-reported as soon as there were more than 1000 cards - the same
+         truncation bug the loyalty panel was fixed for. */
+      if (l.status === "fulfilled") setLoyalty(l.value || {});
       if (n.status === "fulfilled") setNews(n.value.news || []);
       if (g.status === "fulfilled") setNotes(g.value.notes || []);
     });
@@ -36,14 +40,16 @@ function Overview({ at }) {
     };
   }, []);
 
+  const cards = loyalty ? loyalty.cards || [] : null;
   const eligible = cards ? cards.filter((c) => c.eligible).length : null;
-  const rewards = cards ? cards.reduce((sum, c) => sum + (c.rewards || 0), 0) : null;
+  const totalCards = loyalty ? Number(loyalty.totalCards) || cards.length : null;
+  const rewards = loyalty ? Number(loyalty.totalRewards) || 0 : null;
   const unread = notes ? notes.filter((n) => !n.is_read).length : null;
 
   return (
     <div className="admin-stats" data-guide="admin-stats">
       <Stat guide="stat-users" label={at("statTotalUsers")} value={stats?.totalUsers} />
-      <Stat guide="stat-cards" label={at("statCards")} value={cards ? cards.length : null} />
+      <Stat guide="stat-cards" label={at("statCards")} value={totalCards} />
       <Stat guide="stat-eligible" label={at("statEligible")} value={eligible} />
       <Stat guide="stat-rewards" label={at("statRewardsGiven")} value={rewards} />
       <Stat guide="stat-news" label={at("statNews")} value={news ? news.length : null} />
