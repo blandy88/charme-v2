@@ -150,20 +150,20 @@ function Users({ at }) {
             <tbody>
               {shown.map((u) => (
                 <tr key={u.id} data-guide="users-row" className={u.isBanned ? "is-banned" : undefined}>
-                  <td>
+                  <td data-label={at("colName")}>
                     {u.name || "—"}
                     {u.isAdmin ? <span className="admin-tag">{at("statAdmins")}</span> : null}
                   </td>
-                  <td>{u.email}</td>
-                  <td>{u.phone || "—"}</td>
-                  <td>{fmtDate(u.createdAt)}</td>
-                  <td>{fmtDate(u.lastLogin)}</td>
-                  <td>
+                  <td data-label={at("colEmail")}>{u.email}</td>
+                  <td data-label={at("colPhone")}>{u.phone || "—"}</td>
+                  <td data-label={at("colSince")}>{fmtDate(u.createdAt)}</td>
+                  <td data-label={at("colLogin")}>{fmtDate(u.lastLogin)}</td>
+                  <td data-label={at("colStatus")}>
                     <span className={`admin-pill${u.isBanned ? " off" : " on"}`}>
                       {u.isBanned ? at("banned") : at("active")}
                     </span>
                   </td>
-                  <td className="num">
+                  <td data-label={at("colActions")} className="num">
                     {u.isBanned ? (
                       <button
                         type="button"

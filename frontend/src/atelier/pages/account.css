@@ -6,23 +6,9 @@
  * rather than a dialog — so they inherit the Atelier tokens instead of the
  * legacy 3.7MB stylesheet.
  *
- * Everything here is token-driven; the only literal colours are the two
- * semantic state hues (danger / success), which have no token of their own.
+ * Everything here is token-driven; the semantic state hues (danger /
+ * success) live in tokens.css so every surface shares them.
  */
-
-:root {
-  --danger: oklch(62% 0.19 25);
-  --danger-quiet: oklch(62% 0.19 25 / 0.12);
-  --success: oklch(70% 0.15 150);
-  --success-quiet: oklch(70% 0.15 150 / 0.14);
-}
-
-[data-theme="light"] {
-  --danger: oklch(50% 0.19 25);
-  --danger-quiet: oklch(50% 0.19 25 / 0.1);
-  --success: oklch(45% 0.13 150);
-  --success-quiet: oklch(45% 0.13 150 / 0.12);
-}
 
 /* ---------- Page frame ---------- */
 

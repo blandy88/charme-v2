@@ -29,6 +29,10 @@
      theme; both clear AA as small text on their own surface. */
   --ok-text: oklch(76% 0.13 150);
   --warn-text: oklch(74% 0.13 32);
+  --danger: oklch(62% 0.19 25);
+  --danger-quiet: oklch(62% 0.19 25 / 0.12);
+  --success: oklch(70% 0.15 150);
+  --success-quiet: oklch(70% 0.15 150 / 0.14);
 
   --font-display: "Fraunces", "Playfair Display", ui-serif, Georgia, serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -103,6 +107,10 @@
 
   --ok-text: oklch(45% 0.11 150);
   --warn-text: oklch(48% 0.14 32);
+  --danger: oklch(50% 0.19 25);
+  --danger-quiet: oklch(50% 0.19 25 / 0.1);
+  --success: oklch(45% 0.13 150);
+  --success-quiet: oklch(45% 0.13 150 / 0.12);
 
   --shadow-1: 0 1px 2px oklch(0% 0 0 / 0.08);
   --shadow-2: 0 12px 32px oklch(0% 0 0 / 0.12);
@@ -455,7 +463,18 @@ img {
   padding: 0.6rem 0.8rem;
   font: inherit;
   font-size: var(--step-0);
+  line-height: 1.45;
   width: 100%;
+  min-inline-size: 0;
+}
+
+select.field {
+  min-block-size: 2.75rem;
+}
+
+textarea.field {
+  min-block-size: 4rem;
+  resize: vertical;
 }
 
 .field::placeholder {

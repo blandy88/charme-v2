@@ -11,6 +11,19 @@
   max-inline-size: 16rem;
 }
 
+@media (max-width: 760px) {
+  .perf-toolbar,
+  .perf-toolbar .admin-search {
+    inline-size: 100%;
+  }
+
+  .perf-toolbar .admin-search {
+    max-inline-size: none;
+    flex: 1 1 auto;
+    min-block-size: 2.75rem;
+  }
+}
+
 .perf-bulk {
   display: flex;
   flex-wrap: wrap;
@@ -32,7 +45,6 @@
   border-radius: var(--radius-s);
   background: var(--surface-2, rgba(255, 255, 255, 0.35));
 }
-
 .perf-table .perf-thumb img {
   inline-size: 100%;
   block-size: 100%;
@@ -47,6 +59,34 @@
 
 .perf-table .perf-actions {
   white-space: nowrap;
+}
+
+/* The Actions column carries four nowrap minis (~315px at desktop) — let it
+   wrap to two rows on wide-but-not-desktop screens too, so the table keeps
+   its column widths. */
+@media (max-width: 1400px) and (min-width: 1101px) {
+  .admin-table td.perf-actions,
+  .admin-table td.admin-actions {
+    white-space: normal;
+  }
+
+  .admin-table td.perf-actions .admin-mini,
+  .admin-table td.admin-actions .admin-mini {
+    margin-block-end: 0.2rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .perf-table .perf-actions {
+    white-space: normal;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .perf-table .perf-actions .admin-mini {
+    margin-inline-start: 0;
+  }
 }
 
 .perf-table .perf-actions .admin-mini {
@@ -102,6 +142,17 @@
   align-items: center;
 }
 
+@media (max-width: 480px) {
+  .perf-size-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .perf-size-row .admin-mini {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
 .perf-form-side {
   display: grid;
   gap: 0.75rem;
@@ -125,10 +176,26 @@
 
 .perf-drop input[type="file"] {
   max-inline-size: 100%;
+  font-size: var(--step--1);
+  color: var(--text-2);
+}
+
+.perf-drop input[type="file"]::file-selector-button {
+  margin-inline-end: 0.6rem;
+  padding: 0.45rem 0.85rem;
+  min-block-size: 2.5rem;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-s);
+  background: var(--surface-1);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--step--1);
+  cursor: pointer;
 }
 
 .perf-image-hint {
-  font-size: var(--step--2);
+  font-size: 0.75rem;
+  line-height: 1.45;
 }
 
 .perf-preview {

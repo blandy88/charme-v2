@@ -237,22 +237,22 @@ function PointsHistory({ at }) {
               <tbody>
                 {pageRows.map((m) => (
                   <tr key={m.id} data-guide="loyalty-history-row">
-                    <td style={{ whiteSpace: "nowrap" }}>{fmtDateTime(m.createdAt)}</td>
-                    <td>
+                    <td data-label={at("loyColDate")} style={{ whiteSpace: "nowrap" }}>{fmtDateTime(m.createdAt)}</td>
+                    <td data-label={at("loyColClient")}>
                       {m.name || "—"}
                       <div className="admin-muted admin-small">
                         {m.cardNumber || "—"}
                         {m.phone ? ` · ${m.phone}` : ""}
                       </div>
                     </td>
-                    <td>
+                    <td data-label={at("loyColMovement")}>
                       {m.description || (m.type === "redeem" ? at("loyRedeem") : "—")}
                       {m.purchaseId ? (
                         <div className="admin-muted admin-small">#{m.purchaseId}</div>
                       ) : null}
                     </td>
-                    <td className="num">
-                      <strong style={{ color: m.pointsChange >= 0 ? undefined : "var(--danger, #e39a92)" }}>
+                    <td data-label={at("loyColPoints")} className="num">
+                      <strong style={{ color: m.pointsChange >= 0 ? undefined : "var(--danger)" }}>
                         {m.pointsChange > 0 ? "+" : ""}
                         {m.pointsChange}
                       </strong>
@@ -505,23 +505,23 @@ export function Loyalty({ at }) {
                         data-guide="loyalty-row"
                         className={c.eligible ? "is-eligible" : undefined}
                       >
-                        <td>
+                        <td data-label={at("colName")}>
                           {c.name || "—"}
                           {c.isManual ? <span className="admin-tag">{at("loyManual")}</span> : null}
                           {c.isBanned ? <span className="admin-tag danger">{at("banned")}</span> : null}
                           <div className="admin-muted admin-small">{c.email || "—"}</div>
                         </td>
-                        <td>{c.cardNumber || "—"}</td>
-                        <td>{c.phone || "—"}</td>
-                        <td className="num">
+                        <td data-label={at("loyCardNumber")}>{c.cardNumber || "—"}</td>
+                        <td data-label={at("colPhone")}>{c.phone || "—"}</td>
+                        <td data-label={at("loyPoints")} className="num">
                           <strong>{c.points}</strong>
                           <div className="admin-progress" aria-hidden="true">
                             <span style={{ inlineSize: `${c.progress}%` }} />
                           </div>
                         </td>
-                        <td className="num">{c.purchaseCount}</td>
-                        <td className="num">{c.rewards}</td>
-                        <td className="num admin-actions">
+                        <td data-label={at("loyPurchases")} className="num">{c.purchaseCount}</td>
+                        <td data-label={at("loyRewards")} className="num">{c.rewards}</td>
+                        <td data-label={at("colActions")} className="num admin-actions">
                           <button
                             type="button"
                             className="admin-mini pressable"

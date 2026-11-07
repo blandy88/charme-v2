@@ -394,7 +394,7 @@ export function Perfumes({ at }) {
                 const row = rowById.get(String(p.id));
                 return (
                   <tr key={p.id} data-guide="perfumes-row" className={p.available ? undefined : "perf-row-out"}>
-                    <td>
+                    <td data-label={at("perfSelect")}>
                       <input
                         type="checkbox"
                         checked={selected.includes(String(p.id))}
@@ -403,7 +403,7 @@ export function Perfumes({ at }) {
                         data-guide="perfumes-select"
                       />
                     </td>
-                    <td>
+                    <td data-label={at("perfColImage")}>
                       <span className="perf-thumb">
                         {p.image ? (
                           <img src={p.image} alt="" loading="lazy" />
@@ -414,21 +414,21 @@ export function Perfumes({ at }) {
                         )}
                       </span>
                     </td>
-                    <td>
+                    <td data-label={at("perfColName")}>
                       <strong>{p.name}</strong>
                       <span className="admin-muted"> {p.brand}</span>
                     </td>
-                    <td>
+                    <td data-label={at("perfColSource")}>
                       <span className="admin-pill">{at(sourceOf(p) === "created" ? "perfSourceCreated" : sourceOf(p) === "override" ? "perfSourceOverride" : "perfSourceStatic")}</span>
                     </td>
-                    <td className="num">{p.fromPrice != null ? money(p.fromPrice) : "—"}</td>
-                    <td>
+                    <td data-label={at("perfColPrice")} className="num">{p.fromPrice != null ? money(p.fromPrice) : "—"}</td>
+                    <td data-label={at("perfColStock")}>
                       <span className={`admin-pill${p.available ? " on" : " off"}`}>
                         {p.available ? at("perfInStock") : at("perfOutOfStock")}
                       </span>
                     </td>
-                    <td className="admin-muted">{row?.updatedAt ? fmtDateTime(row.updatedAt) : "—"}</td>
-                    <td className="num perf-actions">
+                    <td data-label={at("perfColUpdated")} className="admin-muted">{row?.updatedAt ? fmtDateTime(row.updatedAt) : "—"}</td>
+                    <td data-label={at("colActions")} className="num perf-actions">
                       <button
                         type="button"
                         className="admin-mini pressable"
@@ -507,14 +507,14 @@ export function Perfumes({ at }) {
               <tbody>
                 {deletedRows.map((r) => (
                   <tr key={r.id} data-guide="perfumes-deleted-row">
-                    <td>
+                    <td data-label={at("colName")}>
                       <strong>{r.name || r.id}</strong>
                     </td>
-                    <td>
+                    <td data-label={at("perfColSource")}>
                       <span className="admin-pill">{at(r.kind === "created" ? "perfSourceCreated" : "perfSourceOverride")}</span>
                     </td>
-                    <td className="admin-muted">{r.updatedAt ? fmtDateTime(r.updatedAt) : "—"}</td>
-                    <td className="num perf-actions">
+                    <td data-label={at("perfColUpdated")} className="admin-muted">{r.updatedAt ? fmtDateTime(r.updatedAt) : "—"}</td>
+                    <td data-label={at("colActions")} className="num perf-actions">
                       <button
                         type="button"
                         className="admin-mini pressable"
