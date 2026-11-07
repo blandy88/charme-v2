@@ -20,6 +20,10 @@
   font-size: var(--step-4);
   line-height: 1.05;
   margin-top: 0.35rem;
+  /* The heading echoes the search query ("“…”"), which is arbitrary user
+     text. One 120-character token used to push the document to 2000px on a
+     320px phone. Break it instead of widening the page. */
+  overflow-wrap: anywhere;
 }
 
 .coll-sub {
@@ -216,6 +220,10 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-3);
+  /* Brands are free text since the admin can add any house name. Without a
+     break opportunity a 108-character brand pushes past the card edge and
+     widens the 320px grid; wrap instead of clipping the house's name. */
+  overflow-wrap: anywhere;
 }
 
 .shelf-body h3 {

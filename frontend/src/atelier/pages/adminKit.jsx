@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useDialogFocus } from "../lib/useDialogFocus.js";
 
 /* Shared primitives for the admin console and the loyalty surfaces. Kept out
@@ -13,6 +14,25 @@ export function fmtDate(value) {
   return Number.isNaN(d.getTime()) ? s : d.toLocaleDateString();
 }
 
+/* Parse every timestamp the two databases can return.
+ *   SQLite  "2026-11-06 17:55:39"
+ *   Postgres "2026-11-06 17:55:39.602046+00"
+ *   overlay  "2026-11-07T12:34:56.789Z.00001"  <- services/perfumeAdmin.js
+ *            appends a monotonic sequence after the Z so two writes in the
+ *            same millisecond still sort. Date.parse() rejects that suffix, so
+ *            the admin table used to print the raw stamp and the "Recently
+ *            changed" sort compared NaN === NaN. Strip it first. */
+export function parseDateTime(value) {
+  if (!value) return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+  let iso = raw.replace(/([zZ])\.\d+$/, "$1").replace(" ", "T");
+  iso = iso.replace(/([+-]\d{2})$/, "$1:00");
+  if (!/[zZ]$|[+-]\d{2}:?\d{2}$/.test(iso)) iso += "Z";
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
 /* Date AND time. A date alone hides two movements on the same afternoon —
    which is exactly how an accidental double-click shows up. Postgres returns
    "2026-11-06 17:55:39.602046+00" and SQLite "2026-11-06 17:55:39", so the
@@ -21,12 +41,8 @@ export function fmtDate(value) {
    not read three different ways in three places. */
 export function fmtDateTime(value) {
   if (!value) return "—";
-  const raw = String(value).trim();
-  let iso = raw.replace(" ", "T");
-  iso = iso.replace(/([+-]\d{2})$/, "$1:00");
-  if (!/[zZ]$|[+-]\d{2}:?\d{2}$/.test(iso)) iso += "Z";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return raw;
+  const d = parseDateTime(value);
+  if (!d) return String(value);
   return d.toLocaleString(undefined, {
     year: "numeric",
     month: "2-digit",
@@ -90,7 +106,14 @@ export function Modal({ title, onClose, children, footer }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  return (
+  /* Portalled to <body> on purpose. `position: fixed` is only viewport-relative
+     while no ancestor establishes a containing block. The admin page sits
+     inside `.stage > main > *`, which carries the `page-rise` animation with
+     `animation-fill-mode: both`; that leaves an identity transform on the
+     wrapper, so a fixed dialog was positioned inside the 1160px-tall page and
+     its footer landed below the fold on every phone. A portal is the only fix
+     that does not depend on the transition's current phase. */
+  return createPortal(
     <div className="admin-modal" role="dialog" aria-modal="true" aria-label={title}>
       <button type="button" className="admin-scrim" aria-label="Close" onClick={onClose} />
       <div className="admin-modal-card panel" ref={card}>
@@ -103,7 +126,8 @@ export function Modal({ title, onClose, children, footer }) {
         <div className="admin-modal-body">{children}</div>
         {footer ? <footer className="admin-modal-foot">{footer}</footer> : null}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api, apiUpload, apiUrl } from "../../api/client.js";
-import { fmtDateTime, Modal, useLiveRefresh } from "./adminKit.jsx";
+import { fmtDateTime, Modal, parseDateTime, useLiveRefresh } from "./adminKit.jsx";
 import { money } from "../lib/catalog.js";
 import { catalogueChanged, useCatalogue } from "../lib/catalogStore.js";
 import "./collection.css";
@@ -160,8 +160,8 @@ export function Perfumes({ at }) {
     await load();
   }, [load]);
 
-  const guard = async (key, fn) => {
-    if (inFlight.current.has(key)) return;
+  const guard = async (key, fn, { surface = true } = {}) => {
+    if (inFlight.current.has(key)) return null;
     inFlight.current.add(key);
     setError("");
     setNotice("");
@@ -169,9 +169,13 @@ export function Perfumes({ at }) {
     try {
       await fn();
       await sync();
+      return null;
     } catch (e) {
-      setError(errorMessage(e));
-      setStale(true);
+      if (surface) {
+        setError(errorMessage(e));
+        setStale(true);
+      }
+      return e;
     } finally {
       inFlight.current.delete(key);
       setBusy(false);
@@ -254,8 +258,8 @@ export function Perfumes({ at }) {
         if (sort === "price-asc") return (a.fromPrice ?? Infinity) - (b.fromPrice ?? Infinity);
         if (sort === "price-desc") return (b.fromPrice ?? Infinity) - (a.fromPrice ?? Infinity);
         if (sort === "updated") {
-          const tb = Date.parse(rowById.get(String(b.id))?.updatedAt || "") || 0;
-          const ta = Date.parse(rowById.get(String(a.id))?.updatedAt || "") || 0;
+          const tb = parseDateTime(rowById.get(String(b.id))?.updatedAt)?.getTime() || 0;
+          const ta = parseDateTime(rowById.get(String(a.id))?.updatedAt)?.getTime() || 0;
           return tb - ta;
         }
         return a.name.localeCompare(b.name);
@@ -275,6 +279,12 @@ export function Perfumes({ at }) {
 
   useEffect(() => setPage(1), [q, status, source, sort]);
 
+  /* Selection is a promise about what a bulk action will touch. A filter
+     change hides rows, so silently keeping them selected would let "select
+     one, filter, press Hors stock" change a perfume the admin can no longer
+     see. Pagination keeps the selection; filtering does not. */
+  useEffect(() => setSelected([]), [q, status, source, sort]);
+
   const toggleSelect = (id) =>
     setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
@@ -289,8 +299,16 @@ export function Perfumes({ at }) {
   return (
     <div className="admin-block perfumes">
       <p className="admin-muted">{at("perfIntro")}</p>
-      {error ? <p className="admin-error">{error}</p> : null}
-      {notice ? <p className="admin-ok">{notice}</p> : null}
+      {error ? (
+        <p className="admin-error" role="alert">
+          {error}
+        </p>
+      ) : null}
+      {notice ? (
+        <p className="admin-ok" role="status">
+          {notice}
+        </p>
+      ) : null}
       {stale ? (
         <div className="admin-stale" role="status" data-guide="perfumes-stale">
           <span>{at("perfStale")}</span>
@@ -309,6 +327,7 @@ export function Perfumes({ at }) {
           className="field admin-search"
           data-guide="perfumes-search"
           placeholder={at("search")}
+          aria-label={at("search")}
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />
@@ -333,7 +352,7 @@ export function Perfumes({ at }) {
       </div>
 
       {selected.length > 0 ? (
-        <div className="perf-bulk" data-guide="perfumes-bulk">
+        <div className="perf-bulk" data-guide="perfumes-bulk" role="status">
           <span className="admin-muted">
             {selected.length} {at("perfSelected")}
           </span>
@@ -358,16 +377,16 @@ export function Perfumes({ at }) {
           <table className="admin-table perf-table">
             <thead>
               <tr>
-                <th>
+                <th scope="col">
                   <input type="checkbox" checked={allOnPage} onChange={togglePage} aria-label={at("perfSelectAll")} data-guide="perfumes-select-all" />
                 </th>
-                <th>{at("perfColImage")}</th>
-                <th>{at("perfColName")}</th>
-                <th>{at("perfColSource")}</th>
-                <th className="num">{at("perfColPrice")}</th>
-                <th>{at("perfColStock")}</th>
-                <th>{at("perfColUpdated")}</th>
-                <th className="num">{at("colActions")}</th>
+                <th scope="col">{at("perfColImage")}</th>
+                <th scope="col">{at("perfColName")}</th>
+                <th scope="col">{at("perfColSource")}</th>
+                <th scope="col" className="num">{at("perfColPrice")}</th>
+                <th scope="col">{at("perfColStock")}</th>
+                <th scope="col">{at("perfColUpdated")}</th>
+                <th scope="col" className="num">{at("colActions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -479,10 +498,10 @@ export function Perfumes({ at }) {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>{at("colName")}</th>
-                  <th>{at("perfColSource")}</th>
-                  <th>{at("perfColUpdated")}</th>
-                  <th className="num">{at("colActions")}</th>
+                  <th scope="col">{at("colName")}</th>
+                  <th scope="col">{at("perfColSource")}</th>
+                  <th scope="col">{at("perfColUpdated")}</th>
+                  <th scope="col" className="num">{at("colActions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -556,8 +575,12 @@ function PerfumeDialog({ at, dialog, onClose, onDone, guard }) {
   });
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState("");
+  const [formError, setFormError] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const [busy, setBusy] = useState(false);
+  /* The dialog owns its own synchronous guard: the parent's Set is keyed for
+     row actions and lives in the parent scope, not here. */
+  const inFlight = useRef(new Set());
 
   const currentImage = isEdit || isDuplicate ? record?.image || (record?.imagePath ? apiUrl(record.imagePath) : "") : "";
 
@@ -578,25 +601,30 @@ function PerfumeDialog({ at, dialog, onClose, onDone, guard }) {
   const addSizeRow = () => setForm((f) => ({ ...f, sizes: [...f.sizes, { size: "", price: "" }] }));
   const dropSizeRow = (i) => setForm((f) => ({ ...f, sizes: f.sizes.filter((_, idx) => idx !== i) }));
 
-  const pickFile = (candidate) => {
+  const pickFile = async (candidate) => {
     setFileError("");
+    setFormError("");
     if (!candidate) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const bytes = new Uint8Array(reader.result);
-      if (!readMagic(candidate, bytes)) {
+    /* Check the cap before reading anything: a 200 MB video does not need to
+       travel through ArrayBuffer only to be refused. The signature needs just
+       the first eight bytes, not the whole file. */
+    if (candidate.size > 5 * 1024 * 1024) {
+      setFile(null);
+      setFileError(at("perfImageTooBig"));
+      return;
+    }
+    try {
+      const head = new Uint8Array(await candidate.slice(0, 8).arrayBuffer());
+      if (!readMagic(candidate, head)) {
         setFile(null);
         setFileError(at("perfImageNotPng"));
         return;
       }
-      if (candidate.size > 5 * 1024 * 1024) {
-        setFile(null);
-        setFileError(at("perfImageTooBig"));
-        return;
-      }
       setFile(candidate);
-    };
-    reader.readAsArrayBuffer(candidate);
+    } catch {
+      setFile(null);
+      setFileError(at("perfImageNotPng"));
+    }
   };
 
   const previewPrice = useMemo(() => {
@@ -604,36 +632,59 @@ function PerfumeDialog({ at, dialog, onClose, onDone, guard }) {
     return nums.length ? Math.min(...nums) : null;
   }, [form.sizes]);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    setFormError("");
+    const usableSizes = form.sizes.filter((s) => String(s.size).trim() && String(s.price).trim() !== "");
+    if (!usableSizes.length) {
+      setFormError(at("perfSizesRequired"));
+      return;
+    }
+    /* The server requires a PNG for a new perfume. Checking here keeps the
+       refusal next to the drop zone instead of behind the modal. */
+    if (!isEdit && !isDuplicate && !file) {
+      setFileError(at("perfImageRequired"));
+      return;
+    }
     const target = isDuplicate ? `/api/admin/perfumes/${encodeURIComponent(record.id)}/duplicate` : isEdit ? `/api/admin/perfumes/${encodeURIComponent(record.id)}` : "/api/admin/perfumes";
-    const key = `${dialog.kind}:${isEdit || isDuplicate ? record.id : "new"}`;
-    guard(`dialog:${key}`, async () => {
-      const fd = new FormData();
-      fd.append("name", form.name);
-      fd.append("brand", form.brand);
-      fd.append("family", form.family);
-      fd.append("concentration", form.concentration);
-      fd.append("perfumer", form.perfumer);
-      if (form.year) fd.append("year", form.year);
-      fd.append("description", form.description);
-      fd.append("ingredients", JSON.stringify(parseIngredients(form.ingredientsText)));
-      fd.append(
-        "sizes",
-        JSON.stringify(
-          form.sizes
-            .filter((s) => String(s.size).trim() && String(s.price).trim() !== "")
-            .map((s) => ({ size: s.size, price: s.price })),
-        ),
+    const key = `dialog:${dialog.kind}:${isEdit || isDuplicate ? record.id : "new"}`;
+    /* `inFlight` is synchronous and must be claimed here, not only checked.
+       Without the add(), a second click in the same tick still reached the
+       parent guard, which returned null because the first click had already
+       claimed the key; the second submit's finally then cleared `busy` and
+       re-enabled Save while the real upload was still running. */
+    if (inFlight.current.has(key)) return;
+    inFlight.current.add(key);
+    setBusy(true);
+    try {
+      const err = await guard(
+        key,
+        async () => {
+          const fd = new FormData();
+          fd.append("name", form.name);
+          fd.append("brand", form.brand);
+          fd.append("family", form.family);
+          fd.append("concentration", form.concentration);
+          fd.append("perfumer", form.perfumer);
+          if (form.year) fd.append("year", form.year);
+          fd.append("description", form.description);
+          fd.append("ingredients", JSON.stringify(parseIngredients(form.ingredientsText)));
+          fd.append("sizes", JSON.stringify(usableSizes.map((s) => ({ size: s.size, price: s.price }))));
+          fd.append("available", form.available ? "1" : "0");
+          if (file) fd.append("image", file);
+          const method = isDuplicate ? "POST" : isEdit ? "PUT" : "POST";
+          // onDone closes the dialog only after the server confirms, so an
+          // error keeps the form (and the chosen PNG) intact.
+          await apiUpload(target, fd, { method });
+          onDone(at(isDuplicate ? "perfDuplicated" : isEdit ? "saved" : "perfCreated"));
+        },
+        { surface: false },
       );
-      fd.append("available", form.available ? "1" : "0");
-      if (file) fd.append("image", file);
-      const method = isDuplicate ? "POST" : isEdit ? "PUT" : "POST";
-      // The upload guard above blocks the double submit; onDone closes the
-      // dialog only after the server confirms, so an error keeps the form.
-      await apiUpload(target, fd, { method });
-      onDone(at(isDuplicate ? "perfDuplicated" : isEdit ? "saved" : "perfCreated"));
-    });
+      if (err) setFormError(errorMessage(err));
+    } finally {
+      inFlight.current.delete(key);
+      setBusy(false);
+    }
   };
 
   const title = isDuplicate ? at("perfDuplicateTitle") : isEdit ? at("perfEditTitle") : at("perfAddTitle");
@@ -653,7 +704,12 @@ function PerfumeDialog({ at, dialog, onClose, onDone, guard }) {
         </>
       }
     >
-      <form id="perfume-form" data-guide="perfume-form" onSubmit={submit}>
+      <form id="perfume-form" data-guide="perfume-form" onSubmit={submit} aria-busy={busy ? "true" : undefined}>
+        {formError ? (
+          <p className="admin-error" role="alert">
+            {formError}
+          </p>
+        ) : null}
         <div className="perf-form-grid">
           <div className="perf-form-fields">
             <div className="admin-form-row">
@@ -737,10 +793,22 @@ function PerfumeDialog({ at, dialog, onClose, onDone, guard }) {
                 type="file"
                 accept="image/png"
                 data-guide="perfume-image"
-                onChange={(e) => pickFile(e.target.files && e.target.files[0])}
+                aria-label={at("perfChooseImage")}
+                onChange={(e) => {
+                  const candidate = e.target.files && e.target.files[0];
+                  /* Reset the input so choosing the same file again after an
+                     error still fires change. The File object is kept in
+                     state, so the preview and the upload are unaffected. */
+                  e.target.value = "";
+                  pickFile(candidate);
+                }}
               />
               <p className="admin-muted perf-image-hint">{at("perfImageHint")}</p>
-              {fileError ? <p className="admin-error">{fileError}</p> : null}
+              {fileError ? (
+                <p className="admin-error" role="alert">
+                  {fileError}
+                </p>
+              ) : null}
               {currentImage && !previewUrl ? (
                 <p className="admin-muted">{at("perfCurrentImage")}</p>
               ) : null}
