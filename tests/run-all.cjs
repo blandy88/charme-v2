@@ -34,6 +34,8 @@ const CHECKS = [
   "verify-fixes",
   "loyalty-atomic",
   "loyalty-cards-integration",
+  "perfume-admin-static", // pure PNG + field validation, no server
+  "perfume-admin", // isolated HTTP integration suite
   "guide-integrity",
   "video-audit",
 ];

@@ -17,7 +17,7 @@ import {
   Wrench,
   X,
 } from "lucide-react";
-import { api, authHeader } from "../../api/client.js";
+import { api, apiUrl, authHeader } from "../../api/client.js";
 import "./adminAssistant.css";
 
 /*
@@ -192,7 +192,7 @@ function Bubble({ message, at }) {
 
 /* Small SSE reader: fetch + ReadableStream, one JSON object per `data:` frame. */
 async function streamEvents(url, body, onEvent) {
-  const res = await fetch(url, {
+  const res = await fetch(apiUrl(url), {
     method: "POST",
     headers: { "Content-Type": "application/json", ...authHeader() },
     body: JSON.stringify(body),

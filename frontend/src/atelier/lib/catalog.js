@@ -10,8 +10,13 @@
  */
 
 import CATALOG from "virtual:catalogue";
+import { getCatalogue, seedCatalogue } from "./catalogStore.js";
 
-export const products = CATALOG;
+/* Stable array. The admin overlay is merged into THIS SAME reference (see
+   catalogStore.js), so a module that imported `products as ALL` before the
+   first sync still reads live data. React consumers should use
+   `useCatalogue()` so a late overlay also triggers a re-render. */
+export const products = seedCatalogue(CATALOG);
 
 export function facets(products) {
   const count = (arr) => {
@@ -80,5 +85,5 @@ export function money(p) {
 export { initials } from "./text.js";
 
 export function byId(id) {
-  return products.find((p) => String(p.id) === String(id)) || null;
+  return getCatalogue().find((p) => String(p.id) === String(id)) || null;
 }

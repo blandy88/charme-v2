@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AdminPerfumes verification</title>
+    <link rel="stylesheet" href="/src/atelier/tokens.css" />
+    <link rel="stylesheet" href="/src/atelier/pages/admin.css" />
+    <link rel="stylesheet" href="/src/atelier/pages/collection.css" />
+    <link rel="stylesheet" href="/src/atelier/pages/admin-perfumes.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      import React, { StrictMode } from "react";
+      import { createRoot } from "react-dom/client";
+      import { Perfumes } from "/src/atelier/pages/AdminPerfumes.jsx";
+      import { ADMIN_STR } from "/src/atelier/pages/adminI18n.js";
+      /* Seed the static catalogue (752 rows) before mounting, mirroring
+         catalog.js — the store needs the base to merge the overlay. */
+      const { products } = await import("/src/atelier/lib/catalog.js");
+      const { applyOverlay } = await import("/src/atelier/lib/catalogStore.js");
+      const CREATED = {
+        id: "created-one",
+        slug: "created-one",
+        name: "Created One",
+        brand: "Harness House",
+        family: "Woody",
+        description: "",
+        ingredients: ["Cedar"],
+        year: null,
+        perfumer: "",
+        concentration: "EDP",
+        sizes: [{ size: "Standard", price: 120 }],
+        fromPrice: 120,
+        available: true,
+        image: "data:image/gif;base64,R0lGODlhAQABAAAAADs=",
+        imageKind: "local",
+        imagePath: null,
+        brandLocation: "",
+        metrics: [], tiers: [], qualities: [], indicators: [], categories: [],
+        source: "admin",
+        createdAt: "2026-11-07T10:00:00.000Z",
+        updatedAt: "2026-11-07T10:00:00.000Z",
+      };
+      applyOverlay({ success: true, revision: "seed", created: [CREATED], updated: [], deleted: [] });
+
+      const lang = new URLSearchParams(location.search).get("lang") || "en";
+      const at = (k) => (ADMIN_STR[lang] && ADMIN_STR[lang][k]) || ADMIN_STR.en[k] || k;
+
+      createRoot(document.getElementById("root")).render(
+        React.createElement(
+          StrictMode,
+          null,
+          React.createElement("main", { className: "admin-page wrap" }, React.createElement(Perfumes, { at })),
+        ),
+      );
+    </script>
+  </body>
+</html>

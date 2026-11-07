@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../../contexts/I18nContext.jsx";
+import { apiUrl } from "../../api/client.js";
 import catalogue from "virtual:catalogue";
 import "./home.css";
 
@@ -44,7 +45,7 @@ function NoteForm() {
     if (!message.trim() || state === "sending") return;
     setState("sending");
     try {
-      const r = await fetch("/api/notes", {
+      const r = await fetch(apiUrl("/api/notes"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ authorName: name, message }),

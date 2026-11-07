@@ -4,6 +4,7 @@ import { Search, Sparkles, X } from "lucide-react";
 import { useI18n } from "../contexts/I18nContext.jsx";
 import { initials } from "./lib/text.js";
 import { loadCatalogue } from "./lib/lazyCatalog.js";
+import { useCatalogue } from "./lib/catalogStore.js";
 import { searchCatalogue, topBrands } from "./lib/search.js";
 
 /*
@@ -21,14 +22,6 @@ import { searchCatalogue, topBrands } from "./lib/search.js";
  * suggestion chips only.
  */
 
-let CATALOGUE = null;
-function ensureCatalogue(setCatalogue) {
-  loadCatalogue().then((c) => {
-    CATALOGUE = c;
-    setCatalogue(c);
-  }).catch(() => {});
-}
-
 export default function GlobalSearch() {
   const { t } = useI18n();
   const navigate = useNavigate();
@@ -37,12 +30,17 @@ export default function GlobalSearch() {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState("search");
   const [query, setQuery] = useState("");
-  const [catalogue, setCatalogue] = useState(CATALOGUE);
+  const [ready, setReady] = useState(false);
+  /* The 550 KB chunk stays lazy (loaded on first open), but the value comes
+     from the live store so an admin's new perfume is searchable immediately. */
+  const snapshot = useCatalogue();
+  const catalogue = ready ? snapshot : null;
   const deferred = useDeferredValue(query);
 
   const ensure = useCallback(() => {
-    if (!CATALOGUE) ensureCatalogue(setCatalogue);
-  }, []);
+    if (ready) return;
+    loadCatalogue().then(() => setReady(true), () => setReady(true));
+  }, [ready]);
 
   useEffect(() => {
     if (!open) return undefined;

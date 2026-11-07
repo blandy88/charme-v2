@@ -15,6 +15,7 @@ import { Heart } from "lucide-react";
 import { FavoriteButton, useFavorites } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import { byId, initials, money } from "../lib/catalog.js";
+import { useCatalogue } from "../lib/catalogStore.js";
 import "./account.css";
 
 function Card({ item, product, t, savedLabel, saveLabel }) {
@@ -75,16 +76,18 @@ function Card({ item, product, t, savedLabel, saveLabel }) {
 export default function Favorites() {
   const { t } = useI18n();
   const { items, ready, clear } = useFavorites();
+  const catalogue = useCatalogue();
 
   const { inCollection, elsewhere } = useMemo(() => {
+    const index = new Map(catalogue.map((p) => [String(p.id), p]));
     const a = [];
     const b = [];
     for (const it of items) {
-      const p = byId(it.id);
+      const p = index.get(String(it.id)) || byId(it.id);
       (p ? a : b).push({ item: it, product: p });
     }
     return { inCollection: a, elsewhere: b };
-  }, [items]);
+  }, [items, catalogue]);
 
   if (!items.length) {
     return (

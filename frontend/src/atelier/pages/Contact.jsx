@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Clock, MapPin, MessageSquare, Phone } from "lucide-react";
-import { api } from "../../api/client.js";
+import { api, apiUrl } from "../../api/client.js";
 import { useI18n } from "../../contexts/I18nContext.jsx";
 import "./contact.css";
 
@@ -47,7 +47,7 @@ function NoteForm() {
     if (!message.trim() || state === "sending") return;
     setState("sending");
     try {
-      const r = await fetch("/api/notes", {
+      const r = await fetch(apiUrl("/api/notes"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ authorName: name, message }),

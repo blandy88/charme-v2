@@ -4,7 +4,8 @@ import { Check, ShoppingBag } from "lucide-react";
 import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useCart } from "../../contexts/CartContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
-import { byId, initials, money, products as ALL, related } from "../lib/catalog.js";
+import { byId, initials, money, related } from "../lib/catalog.js";
+import { useCatalogue } from "../lib/catalogStore.js";
 import { morphInFlight, nameMorphTarget, unnameMorphTarget } from "../morph.js";
 import Reviews from "./Reviews.jsx";
 import "./collection.css";
@@ -89,8 +90,9 @@ export default function Product() {
   const { id } = useParams();
   const { t } = useI18n();
 
-  const product = useMemo(() => byId(id), [id]);
-  const also = useMemo(() => (product ? related(ALL, product, 4) : []), [product]);
+  const ALL = useCatalogue();
+  const product = useMemo(() => byId(id), [id, ALL]);
+  const also = useMemo(() => (product ? related(ALL, product, 4) : []), [ALL, product]);
 
   /* Declared before the not-found return so the hook order is stable: a
      reference page is mounted for a missing id too. */

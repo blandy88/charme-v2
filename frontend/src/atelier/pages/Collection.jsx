@@ -3,7 +3,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FavoriteButton } from "../../contexts/FavoritesContext.jsx";
 import { useI18n } from "../../contexts/I18nContext.jsx";
-import { facets, initials, money, products as ALL } from "../lib/catalog.js";
+import { facets, initials, money } from "../lib/catalog.js";
+import { useCatalogue } from "../lib/catalogStore.js";
 import { getLenis } from "../SmoothScroll.jsx";
 import "./collection.css";
 
@@ -49,6 +50,9 @@ function pageList(current, pages) {
 
 export default function Collection() {
   const { t } = useI18n();
+  /* Live merged catalogue: an admin adding a perfume or flipping its stock
+     re-renders this grid without a reload or a rebuild. */
+  const ALL = useCatalogue();
   const [params, setParams] = useSearchParams();
   const [view, setView] = useState("grid");
 
@@ -99,7 +103,7 @@ export default function Collection() {
   const { brand, family, conc, perfumer, avail, sort } = filters;
   const urlQ = filters.q;
 
-  const f = useMemo(() => facets(ALL), []);
+  const f = useMemo(() => facets(ALL), [ALL]);
 
   const shown = useMemo(() => {
     const words = deferredQ.trim().toLowerCase().split(/\s+/).filter(Boolean);
@@ -123,7 +127,7 @@ export default function Collection() {
     else if (sort === "price-desc") out.sort((a, b) => PRICE(b) - PRICE(a));
     else if (sort === "year-desc") out.sort((a, b) => (b.year || 0) - (a.year || 0));
     return out;
-  }, [deferredQ, brand, family, conc, perfumer, avail, sort]);
+  }, [ALL, deferredQ, brand, family, conc, perfumer, avail, sort]);
 
   /* Pagination is read straight from the URL so a shared link lands on the
      same page. Filter changes rewrite the query without `page`, which is how a

@@ -150,6 +150,17 @@ if (process.env.VERCEL || process.env.RENDER) {
 // explicitly ignores express.static(). Keeping the same layout on Render means
 // one codebase behaves identically on both hosts.
 const PUBLIC_DIR = path.join(__dirname, "public");
+
+/* Perfume administration. The catalogue itself is baked into the SPA at build
+   time, so the admin's additions live in the database as an overlay that the
+   SPA merges on boot. See services/perfumeAdmin.js for the storage rationale. */
+const perfumeAdmin = require("./services/perfumeAdmin");
+perfumeAdmin.init({
+  db,
+  sharp,
+  staticCataloguePath: path.join(PUBLIC_DIR, "data", "fragrances.json"),
+});
+
 /*
  * SERVE_REACT=1 makes "/" serve the document emitted by the React build pipeline
  * (scripts/build-legacy-page.mjs) instead of public/index.html, and tags the response
@@ -460,6 +471,12 @@ console.log(
 const RUN_BOOT_MIGRATIONS = !process.env.VERCEL;
 if (RUN_BOOT_MIGRATIONS) {
 console.log("🔄 Checking for required database migrations...");
+
+// Long-lived hosts can provision the perfume-admin table at boot. Vercel skips
+// this block entirely, so every route also awaits the memoised lazy CREATE.
+perfumeAdmin.ensureTable().catch((err) =>
+  console.warn("⚠️  perfume_admin table not ready at boot:", err.message || err),
+);
 
     // Check existing table structure
     db.all("PRAGMA table_info(reviews)", (err, columns) => {
@@ -966,7 +983,10 @@ const helmetOptions =
             scriptSrcAttr: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            imgSrc: ["'self'", "data:", "blob:", "https://fimgs.net"],
+            // Admin-uploaded perfume PNGs are served from the Render backend.
+            // Static hosts (GH Pages / a custom domain) load them cross-origin,
+            // so the same origin already allowed for connect-src is needed here.
+            imgSrc: ["'self'", "data:", "blob:", "https://fimgs.net", "https://parfumerie-charme.onrender.com"],
             mediaSrc: ["'self'"],
             // 'self' covers same-origin /api calls on Render and Vercel. The
             // Render origin is listed so static hosts that legitimately call
@@ -5359,6 +5379,203 @@ app.get("/api/reviews/likes/:fragrance", authenticateToken, (req, res) => {
     },
   );
 });
+
+/* =========================================================================
+ * Perfume administration
+ *
+ * The /app catalogue is baked into the committed SPA bundle at build time, so
+ * admin changes are stored as an overlay in the database (services/perfumeAdmin.js)
+ * and merged client-side on boot. Uploaded transparent PNGs live in the same
+ * table as base64 TEXT: no host in this deployment has a durable writable
+ * filesystem, but Neon Postgres is durable on all of them.
+ *
+ * These routes are registered before app.get("/") and before any SPA fallback.
+ * ========================================================================= */
+
+const perfumeWriteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  // An admin adding a whole collection needs far more than the avatar's 10.
+  max: 240,
+  message: { error: "Too many catalogue changes. Please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: clientKey,
+});
+
+/* multer throws MulterError on an oversize/invalid part; without this wrapper
+   Express' generic error handler turns a user mistake into a 500. */
+function perfumeImageUpload(req, res, next) {
+  upload.single("image")(req, res, (err) => {
+    if (!err) return next();
+    const message =
+      err.code === "LIMIT_FILE_SIZE"
+        ? "The PNG must be 5 MB or smaller."
+        : err.message || "Invalid image upload.";
+    return res.status(400).json({ error: message });
+  });
+}
+
+function perfumeReply(res, result, payload) {
+  if (result.status >= 400) {
+    return res.status(result.status).json({ error: result.error });
+  }
+  return res.status(result.status).json({ success: true, ...(payload || {}) });
+}
+
+function perfumeFail(res, label, err) {
+  console.error(label, err);
+  return res.status(500).json({ error: "Internal server error" });
+}
+
+/* Public: the overlay is safe to cache-bust but must never be cached, or a
+   stock change would take an hour to reach customers. */
+app.get("/api/catalog/overlay", async (req, res) => {
+  try {
+    res.set("Cache-Control", "no-store, max-age=0");
+    return res.json(await perfumeAdmin.overlay());
+  } catch (err) {
+    return perfumeFail(res, "catalog overlay error:", err);
+  }
+});
+
+/* Public: one uploaded transparent PNG. Immutable because image_rev is the
+   content hash and changes whenever the admin replaces the picture. */
+app.get("/api/perfume-images/:id", async (req, res) => {
+  try {
+    const image = await perfumeAdmin.imageFor(req.params.id);
+    if (!image) return res.status(404).json({ error: "Image not found" });
+    const etag = `"${image.rev}"`;
+    res.set({
+      "Content-Type": "image/png",
+      "Content-Length": String(image.buffer.length),
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "public, max-age=31536000, immutable",
+      ETag: etag,
+    });
+    if (req.headers["if-none-match"] === etag) return res.status(304).end();
+    return res.send(image.buffer);
+  } catch (err) {
+    return perfumeFail(res, "perfume image error:", err);
+  }
+});
+
+const perfumeAdminGuard = [authenticateToken, requireAdmin];
+
+/* Admin-only inventory, including soft-deleted rows so they can be restored.
+   No image bytes are returned here. */
+app.get("/api/admin/perfumes", ...perfumeAdminGuard, async (req, res) => {
+  try {
+    return res.json({ success: true, rows: await perfumeAdmin.list() });
+  } catch (err) {
+    return perfumeFail(res, "perfume list error:", err);
+  }
+});
+
+/* /bulk must be declared before any /:id route. */
+app.post(
+  "/api/admin/perfumes/bulk",
+  ...perfumeAdminGuard,
+  perfumeWriteLimiter,
+  async (req, res) => {
+    try {
+      const result = await perfumeAdmin.bulk(req.body || {});
+      return perfumeReply(res, result, { changed: result.changed });
+    } catch (err) {
+      return perfumeFail(res, "perfume bulk error:", err);
+    }
+  },
+);
+
+app.post(
+  "/api/admin/perfumes",
+  ...perfumeAdminGuard,
+  perfumeWriteLimiter,
+  perfumeImageUpload,
+  async (req, res) => {
+    try {
+      const result = await perfumeAdmin.create(req.body || {}, req.file);
+      return perfumeReply(res, result, { product: result.product });
+    } catch (err) {
+      return perfumeFail(res, "perfume create error:", err);
+    }
+  },
+);
+
+app.put(
+  "/api/admin/perfumes/:id",
+  ...perfumeAdminGuard,
+  perfumeWriteLimiter,
+  perfumeImageUpload,
+  async (req, res) => {
+    try {
+      const result = await perfumeAdmin.patch(req.params.id, req.body || {}, req.file);
+      return perfumeReply(res, result, { product: result.product });
+    } catch (err) {
+      return perfumeFail(res, "perfume update error:", err);
+    }
+  },
+);
+
+app.patch(
+  "/api/admin/perfumes/:id",
+  ...perfumeAdminGuard,
+  perfumeWriteLimiter,
+  async (req, res) => {
+    try {
+      const result = await perfumeAdmin.patch(req.params.id, req.body || {}, null);
+      return perfumeReply(res, result, { product: result.product });
+    } catch (err) {
+      return perfumeFail(res, "perfume patch error:", err);
+    }
+  },
+);
+
+app.delete(
+  "/api/admin/perfumes/:id",
+  ...perfumeAdminGuard,
+  perfumeWriteLimiter,
+  async (req, res) => {
+    try {
+      const purge = req.query.purge === "1" || req.query.purge === "true";
+      const result = await perfumeAdmin.remove(req.params.id, { purge });
+      return perfumeReply(res, result, {
+        removed: result.removed,
+        permanent: result.permanent,
+      });
+    } catch (err) {
+      return perfumeFail(res, "perfume delete error:", err);
+    }
+  },
+);
+
+app.post(
+  "/api/admin/perfumes/:id/restore",
+  ...perfumeAdminGuard,
+  perfumeWriteLimiter,
+  async (req, res) => {
+    try {
+      const result = await perfumeAdmin.restore(req.params.id);
+      return perfumeReply(res, result, { restored: result.restored });
+    } catch (err) {
+      return perfumeFail(res, "perfume restore error:", err);
+    }
+  },
+);
+
+app.post(
+  "/api/admin/perfumes/:id/duplicate",
+  ...perfumeAdminGuard,
+  perfumeWriteLimiter,
+  perfumeImageUpload,
+  async (req, res) => {
+    try {
+      const result = await perfumeAdmin.duplicate(req.params.id, req.body || {}, req.file);
+      return perfumeReply(res, result, { product: result.product });
+    } catch (err) {
+      return perfumeFail(res, "perfume duplicate error:", err);
+    }
+  },
+);
 
 /*
  * Main page. Default behaviour is unchanged.

@@ -7,6 +7,37 @@
 
 const TOKEN_KEY = "charme-token";
 
+/*
+ * API origin shim.
+ *
+ * The legacy root site patches window.fetch with CHARME_API_ORIGIN so that the
+ * custom domain (GitHub Pages, pure static, no /api route) talks to the Render
+ * backend. /app does NOT load public/script.js, so it never got that patch:
+ * on charmeperfume.me every relative /api/... call 404s. Render and Vercel
+ * both serve /api themselves, and localhost has the Express dev server, so
+ * only "other" hosts are redirected. CORS on the backend already allows this
+ * origin with credentials.
+ */
+export const API_ORIGIN = (() => {
+  if (typeof window === "undefined") return "";
+  const host = window.location.hostname.toLowerCase();
+  const sameOrigin =
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host === "0.0.0.0" ||
+    host === "::1" ||
+    host.endsWith(".onrender.com") ||
+    host.endsWith(".vercel.app") ||
+    host.endsWith(".localhost");
+  return sameOrigin ? "" : "https://parfumerie-charme.onrender.com";
+})();
+
+export function apiUrl(path) {
+  const p = String(path || "");
+  if (!API_ORIGIN || /^(?:https?:)?\/\//i.test(p) || !p.startsWith("/")) return p;
+  return API_ORIGIN + p;
+}
+
 let expiredHandled = false;
 
 /*
@@ -62,7 +93,7 @@ export async function api(path, { method = "GET", body, auth = true } = {}) {
     const token = getToken();
     if (token) headers.Authorization = `Bearer ${token}`;
   }
-  const res = await fetch(path, {
+  const res = await fetch(apiUrl(path), {
     method,
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -91,16 +122,18 @@ export async function api(path, { method = "GET", body, auth = true } = {}) {
 }
 
 /*
- * Multipart variant, for the one endpoint that takes a file: avatar upload.
- * `api()` always sends JSON, so it cannot be reused here — there is no way to
- * make fetch set the multipart boundary itself if we pre-set Content-Type.
+ * Multipart variant, for endpoints that take a file: avatar upload and the
+ * perfume admin's transparent PNG. `api()` always sends JSON, so it cannot be
+ * reused here — there is no way to make fetch set the multipart boundary
+ * itself if we pre-set Content-Type. `method` exists because editing a perfume
+ * with a replacement image is a PUT, not a POST.
  */
-export async function apiUpload(path, formData) {
+export async function apiUpload(path, formData, { method = "POST" } = {}) {
   const headers = {};
   const token = getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(path, {
-    method: "POST",
+  const res = await fetch(apiUrl(path), {
+    method,
     headers,
     body: formData,
     credentials: "same-origin",

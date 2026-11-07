@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Loader2, RotateCcw, Search, Sparkles, X } from "lucid
 import { useI18n } from "../contexts/I18nContext.jsx";
 import { initials } from "./lib/text.js";
 import { loadCatalogue } from "./lib/lazyCatalog.js";
+import { useCatalogue } from "./lib/catalogStore.js";
 import { discoverDict } from "./lib/discoverI18n.js";
 import "./discover.css";
 
@@ -199,14 +200,16 @@ export default function Discover({ initialTab = "profiler", onClose }) {
 
   const panelRef = useRef(null);
   const [tab, setTab] = useState(initialTab);
-  const [catalogue, setCatalogue] = useState(null);
+  const [ready, setReady] = useState(false);
+  const snapshot = useCatalogue();
+  const catalogue = ready ? snapshot : null;
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let alive = true;
     loadCatalogue()
-      .then((c) => {
-        if (alive) setCatalogue(c);
+      .then(() => {
+        if (alive) setReady(true);
       })
       .catch(() => {
         if (alive) setFailed(true);

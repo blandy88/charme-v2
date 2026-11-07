@@ -6,6 +6,7 @@ import { useI18n } from "../../contexts/I18nContext.jsx";
 import { ADMIN_STR } from "./adminI18n.js";
 import { fmtDate, Modal, Stat } from "./adminKit.jsx";
 import { Loyalty } from "./AdminLoyalty.jsx";
+import { Perfumes } from "./AdminPerfumes.jsx";
 import AdminAssistant from "./AdminAssistant.jsx";
 import { tablistKeys } from "../lib/tablist.js";
 import "./admin.css";
@@ -642,7 +643,7 @@ function Notes({ at }) {
 
 /* Tab ids in display order. The active tab lives in the URL (?tab=notes) so the
    user menu's "Guest notes" entry — and any bookmark — can deep-link to it. */
-const TAB_IDS = ["overview", "users", "loyalty", "news", "hours", "notes"];
+const TAB_IDS = ["overview", "users", "loyalty", "perfumes", "news", "hours", "notes"];
 
 export default function Admin() {
   const { isAdmin, ready } = useAuth();
@@ -697,6 +698,7 @@ export default function Admin() {
     ["overview", at("tabOverview")],
     ["users", at("tabUsers")],
     ["loyalty", at("tabLoyalty")],
+    ["perfumes", at("tabPerfumes")],
     ["news", at("tabNews")],
     ["hours", at("tabHours")],
     ["notes", at("tabNotes")],
@@ -707,6 +709,7 @@ export default function Admin() {
   const TAB_GUIDE = {
     users: "admin-users",
     loyalty: "loyalty-tab",
+    perfumes: "perfumes-tab",
     news: "news-tab",
     hours: "hours-tab",
     notes: "notes-tab",
@@ -751,6 +754,7 @@ export default function Admin() {
         {tab === "overview" ? <Overview at={at} /> : null}
         {tab === "users" ? <Users at={at} /> : null}
         {tab === "loyalty" ? <Loyalty at={at} /> : null}
+        {tab === "perfumes" ? <Perfumes at={at} /> : null}
         {tab === "news" ? <NewsAdmin at={at} /> : null}
         {tab === "hours" ? <Hours at={at} /> : null}
         {tab === "notes" ? <Notes at={at} /> : null}
