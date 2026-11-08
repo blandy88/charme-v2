@@ -289,6 +289,13 @@ export function Perfumes({ at }) {
     setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   const allOnPage = pageRows.length > 0 && pageRows.every((p) => selected.includes(String(p.id)));
+  const someOnPage = pageRows.length > 0 && pageRows.some((p) => selected.includes(String(p.id)));
+  /* Native checkboxes only expose the indeterminate dash through a property,
+     never an attribute, so wire it from the ref after every render. */
+  const allCheckboxRef = useRef(null);
+  useEffect(() => {
+    if (allCheckboxRef.current) allCheckboxRef.current.indeterminate = someOnPage && !allOnPage;
+  }, [someOnPage, allOnPage]);
   const togglePage = () => {
     setSelected((prev) => {
       const ids = pageRows.map((p) => String(p.id));
@@ -378,7 +385,7 @@ export function Perfumes({ at }) {
             <thead>
               <tr>
                 <th scope="col">
-                  <input type="checkbox" checked={allOnPage} onChange={togglePage} aria-label={at("perfSelectAll")} data-guide="perfumes-select-all" />
+                  <input ref={allCheckboxRef} type="checkbox" checked={allOnPage} onChange={togglePage} aria-label={at("perfSelectAll")} data-guide="perfumes-select-all" />
                 </th>
                 <th scope="col">{at("perfColImage")}</th>
                 <th scope="col">{at("perfColName")}</th>
