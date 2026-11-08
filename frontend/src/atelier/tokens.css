@@ -429,6 +429,16 @@ img {
 }
 
 .btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  min-block-size: 2.5rem;
+  font: inherit;
+  font-size: var(--step--1);
+  text-align: center;
+  text-decoration: none;
   background-color: var(--accent);
   background-image: linear-gradient(oklch(100% 0 0 / 0.22), oklch(100% 0 0 / 0.22));
   color: var(--on-accent);
@@ -437,16 +447,36 @@ img {
   font-weight: 600;
 }
 
+.btn-accent[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .btn-accent:hover {
   box-shadow: 0 8px 24px oklch(from var(--accent) l c h / 0.28);
 }
 
 .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  min-block-size: 2.5rem;
+  font: inherit;
+  font-size: var(--step--1);
+  text-align: center;
+  text-decoration: none;
   background-color: transparent;
   background-image: linear-gradient(var(--accent-quiet), var(--accent-quiet));
   color: var(--text-1);
   border: 1px solid var(--hairline-strong);
   border-radius: var(--radius-s);
+}
+
+.btn-ghost[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .btn-ghost:hover {

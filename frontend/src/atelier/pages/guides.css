@@ -66,6 +66,9 @@
 }
 
 .gp-tab {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem;
   border: 0;
   background: none;
   color: var(--text-2);

@@ -98,6 +98,9 @@
 }
 
 .concierge-list a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.5rem;
   color: var(--accent);
 }
 

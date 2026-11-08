@@ -26,10 +26,10 @@
 }
 
 /* The admin surface is not account.css, so the shared button classes need a
-   base box here. Modal buttons are portalled to <body> (a page transform
-   makes position: fixed page-relative otherwise), so they are not descendants
-   of .admin-page — match .admin-modal too or dialog buttons render at
-   19px tall with no padding. */
+   base box here too (the token layer only paints them; layout lives in
+   tokens.css, this keeps the portalled-dialog rules explicit for future
+   readers). Modal buttons are portalled to <body>, so they are not
+   descendants of .admin-page — match .admin-modal too. */
 .admin-page .btn-accent,
 .admin-page .btn-ghost,
 .admin-modal .btn-accent,
