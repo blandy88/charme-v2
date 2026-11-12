@@ -175,13 +175,16 @@
   margin: var(--space-m) 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  /* 15rem fitted five cards across a 1920 screen and left the text column
+     140px wide, so every house name ran under the heart and every family
+     wrapped. Four wider cards read as a boutique shelf instead of a table. */
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
   gap: var(--space-s);
 }
 
 .shelf {
   display: grid;
-  grid-template-columns: 5.5rem 1fr;
+  grid-template-columns: 6.25rem 1fr;
   gap: var(--space-2xs);
   align-items: center;
   background: var(--surface-1);
@@ -217,9 +220,14 @@
 
 .shelf-brand {
   font-size: 0.75rem;
+  line-height: 1.35;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-3);
+  /* The favourite control sits in the card's top-right corner, above the text
+     column. Without this gutter it covered the end of the house name
+     ("PARFUMS DE MA" on every card). */
+  padding-inline-end: 1.9rem;
   /* Brands are free text since the admin can add any house name. Without a
      break opportunity a 108-character brand pushes past the card edge and
      widens the 320px grid; wrap instead of clipping the house's name. */
@@ -239,11 +247,17 @@
   font-size: var(--step--1);
   color: var(--text-3);
   margin-top: 0.15rem;
+  /* One line, ellipsised. Wrapping "Woody Aromatic · EDP" onto a second line
+     made every other card taller and the shelf looked ragged. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .shelf-foot {
   margin-top: 0.35rem;
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.4rem;
 }
@@ -253,11 +267,13 @@
   color: var(--accent);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .shelf-out {
   font-size: 0.75rem;
   color: var(--text-3);
+  white-space: nowrap;
 }
 
 /* the typographic bottle */

@@ -171,7 +171,6 @@ export default function Collection() {
         <h1>{title}</h1>
         <p className="coll-sub">
           <strong>{shown.length}</strong> {t("collOf")} {ALL.length} {t("collReferences")}
-          {active > 0 && !urlQ ? ` · ${active} ${active > 1 ? t("collFilters") : t("collFilter")} ${t("collActive")}` : null}
         </p>
       </header>
 

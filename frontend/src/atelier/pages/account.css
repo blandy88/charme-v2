@@ -944,6 +944,14 @@
   font-size: var(--step-0);
 }
 
+/* The count and its label are two inline elements inside one span, so they
+   rendered as "3Favoris". Space them, and keep the baseline shared. */
+.strip-chip > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
 .strip-chip-admin {
   border-color: oklch(from var(--accent) l c h / 0.4);
   background: var(--accent-quiet);

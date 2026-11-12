@@ -1,0 +1,460 @@
+{
+  "_comment": "The client trailer. Two segments because the theme and the signed-in account cannot change mid-film without a reload: trailer-shop (light, Léa) and trailer-admin (night, the owner). Shot against the isolated demo instance in demo/. Run: node render.cjs trailer-shop trailer.json --check, then without --check. Duration is driven by the narration, so the lines are the cut.",
+  "_fields": {
+    "frameFrom": "selectors that decide the camera only - a push-in with no dimming, for a trailer rather than a tutorial",
+    "spotFrom": "selectors to cut a spotlight around; also sets the camera",
+    "scrim": "0..1 strength of the spotlight scrim (1 = tutorial default)",
+    "pad": "air around the framing box (0.2 = 20%)",
+    "zmax": "hard ceiling on the push-in",
+    "minFrame": "[w,h] floor on the framing box, for tiny targets like a button",
+    "cursor": "park the pointer somewhere deliberate on a wide establishing shot",
+    "do": "actions run before the beat is measured",
+    "clickAtEnd": "seconds before the beat ends when the click lands",
+    "clickOn": "click this element while the spotlight stays on spotFrom",
+    "pageFadeIn/pageFadeOut": "dip to black for a route or modal change",
+    "typeInto/typeText/typeDur": "type into a field, visibly, on the frame clock",
+    "hold": "extra seconds of silence after the line, to let a shot breathe"
+  },
+  "cards": {
+    "intro": {
+      "eyebrow": "Parfumerie de niche",
+      "title": "Charme",
+      "sub": "Kélibia · Tunisie",
+      "size": 232,
+      "seconds": 3.2
+    },
+    "chapter": {
+      "eyebrow": "Côté coulisses",
+      "title": "Le back-office",
+      "sub": "Clients, stock, fidélité — tout au même endroit.",
+      "size": 148,
+      "seconds": 3.0
+    },
+    "outro": {
+      "eyebrow": "Parfumerie de niche · Kélibia",
+      "title": "Charme",
+      "sub": "Venez nous voir. En boutique, ou en ligne.",
+      "url": "parfumerie-charme.com",
+      "size": 196,
+      "seconds": 5.0
+    }
+  },
+  "guides": {
+    "trailer-shop": {
+      "title": "Charme — la boutique",
+      "voice": "fr-FR-VivienneMultilingualNeural",
+      "rate": "-3%",
+      "url": "/app",
+      "ready": "[data-guide=\"account-btn\"]",
+      "authEmail": "lea.moreau@exemple.fr",
+      "storage": { "charme-theme": "light", "charme-lang": "fr" },
+      "storageOnce": {
+        "charme-cart": "[{\"id\":\"haltane-1\",\"name\":\"Haltane\",\"brand\":\"Parfums de Marly\",\"image\":\"/haltane.png\",\"price\":259.99,\"quality\":\"EDP\",\"size\":\"75ml\",\"qty\":1},{\"id\":\"carlisle-7\",\"name\":\"Carlisle\",\"brand\":\"Parfums de Marly\",\"image\":\"/carlisle.webp\",\"price\":259.99,\"quality\":\"EDP\",\"size\":\"75ml\",\"qty\":1}]"
+      },
+      "beats": [
+        {
+          "id": "ouverture",
+          "fr": "Charme, parfumerie de niche à Kélibia.",
+          "cursor": [1280, 900],
+          "hold": 0.9
+        },
+        {
+          "id": "promesse",
+          "fr": "Des parfums rares, choisis un par un.",
+          "frameFrom": [".hero-title", ".hero-stats"],
+          "pad": 0.32,
+          "zmax": 1.6,
+          "cursor": [1640, 980]
+        },
+        {
+          "id": "mot",
+          "fr": "Un mot, et la boutique vous répond.",
+          "frameFrom": [".note-card"],
+          "pad": 0.34,
+          "zmax": 1.7,
+          "cursor": [1240, 1430],
+          "pageFadeOut": 0.45
+        },
+        {
+          "id": "collection",
+          "fr": "Sept cent cinquante-deux références. Cent quatre-vingt-dix-huit en stock.",
+          "pageFadeIn": 0.5,
+          "cursor": [1660, 1010],
+          "do": [
+            { "action": "goto", "url": "/app/collection?avail=in" },
+            { "action": "waitFor", "selector": "[data-guide=\"card\"]" }
+          ]
+        },
+        {
+          "id": "filtres",
+          "fr": "Par maison, par famille, par note.",
+          "spotFrom": [".coll-tools"],
+          "spotPad": 10,
+          "scrim": 0.4,
+          "cursor": [1660, 1010]
+        },
+        {
+          "id": "recherche",
+          "fr": "Ou d'un seul mot : « oud ».",
+          "spotFrom": [".coll-search"],
+          "spotPad": 8,
+          "zmax": 1.8,
+          "minFrame": [1100, 620],
+          "typeInto": ".coll-search input",
+          "typeText": "oud",
+          "typeDur": 1.1,
+          "hold": 1.1,
+          "pageFadeOut": 0.45
+        },
+        {
+          "id": "profiler-tabs",
+          "fr": "Le profil, ou les notes.",
+          "pageFadeIn": 0.45,
+          "clickOn": "[data-guide=\"ingredients\"]",
+          "clickAtEnd": 0.35,
+          "do": [
+            { "action": "click", "selector": "button[data-guide=\"discover\"]" },
+            { "action": "waitFor", "selector": ".dp-panel" },
+            { "action": "wait", "ms": 700, "settle": 0 }
+          ]
+        },
+        {
+          "id": "profiler-note",
+          "fr": "Tapez une note. Oud, vanille, bergamote.",
+          "frameFrom": [".dp-search input"],
+          "typeInto": ".dp-search input",
+          "typeText": "oud",
+          "typeDur": 1.0,
+          "hold": 1.2
+        },
+        {
+          "id": "profiler-resultat",
+          "fr": "Vingt-quatre flacons la contiennent.",
+          "spotFrom": [".dp-panel"],
+          "spotPad": 0,
+          "scrim": 0.5,
+          "hold": 1.0,
+          "pageFadeOut": 0.45,
+          "do": [{ "action": "click", "selector": ".dp-chip-grid .dp-chip" }]
+        },
+        {
+          "id": "pdp",
+          "fr": "Layton. Boisé, aromatique, addictif.",
+          "pageFadeIn": 0.5,
+          "cursor": [1660, 1010],
+          "do": [
+            { "action": "goto", "url": "/app/collection/layton-0" },
+            { "action": "waitFor", "selector": ".buy-btn" }
+          ]
+        },
+        {
+          "id": "favori",
+          "fr": "Le cœur garde ce qui vous plaît.",
+          "spotFrom": [".pdp-save"],
+          "spotPad": 14,
+          "zmax": 2.2,
+          "minFrame": [760, 430],
+          "clickAtEnd": 0.4,
+          "hold": 0.4
+        },
+        {
+          "id": "achat",
+          "fr": "Deux contenances.",
+          "spotFrom": [".sizes"],
+          "spotPad": 12,
+          "scrim": 0.35,
+          "zmax": 1.9,
+          "minFrame": [980, 520],
+          "cursor": [1150, 740]
+        },
+        {
+          "id": "ajout",
+          "fr": "Un clic, et il est au panier.",
+          "spotFrom": [".buy-btn"],
+          "spotPad": 10,
+          "zmax": 1.9,
+          "minFrame": [980, 520],
+          "clickAtEnd": 0.35,
+          "hold": 0.6
+        },
+        {
+          "id": "avis",
+          "fr": "Trois avis signés, une moyenne de 4,7.",
+          "spotFrom": ["[data-guide=\"reviews\"]"],
+          "spotPad": 12,
+          "scrim": 0.4,
+          "pageFadeOut": 0.45
+        },
+        {
+          "id": "favoris",
+          "fr": "On le retrouve à chaque visite.",
+          "pageFadeIn": 0.45,
+          "frameFrom": [".fav-grid"],
+          "pad": 0.22,
+          "pageFadeOut": 0.45,
+          "do": [
+            { "action": "goto", "url": "/app/favorites" },
+            { "action": "waitFor", "selector": "[data-guide=\"fav-list\"]" }
+          ]
+        },
+        {
+          "id": "panier",
+          "fr": "Le panier, sans compte à créer.",
+          "pageFadeIn": 0.45,
+          "frameFrom": [".cart-layout"],
+          "pad": 0.2,
+          "cursor": [1660, 1010],
+          "pageFadeOut": 0.45,
+          "do": [
+            { "action": "goto", "url": "/app/cart" },
+            { "action": "waitFor", "selector": "[data-guide=\"cart-checkout\"]" }
+          ]
+        },
+        {
+          "id": "commande",
+          "fr": "La commande part à la boutique.",
+          "spotFrom": [".cart-sum"],
+          "spotPad": 0,
+          "scrim": 0.5,
+          "zmax": 1.6,
+          "minFrame": [1250, 700],
+          "clickOn": "[data-guide=\"cart-checkout\"]",
+          "clickAtEnd": 0.4,
+          "hold": 0.5
+        },
+        {
+          "id": "coordonnees",
+          "fr": "Votre nom.",
+          "spotFrom": ["#co-name"],
+          "spotPad": 10,
+          "zmax": 1.6,
+          "minFrame": [1050, 600],
+          "typeInto": "#co-name",
+          "typeText": "Sandra",
+          "typeDur": 1.2,
+          "hold": 0.5,
+          "do": [{ "action": "waitFor", "selector": "#co-name" }]
+        },
+        {
+          "id": "telephone",
+          "fr": "Et votre numéro.",
+          "spotFrom": ["#co-phone"],
+          "spotPad": 10,
+          "zmax": 1.6,
+          "minFrame": [1050, 600],
+          "typeInto": "#co-phone",
+          "typeText": "54 786 930",
+          "typeDur": 1.1,
+          "hold": 0.5
+        },
+        {
+          "id": "envoi",
+          "fr": "Le message arrive sur WhatsApp.",
+          "spotFrom": ["[data-guide=\"cart-send\"]"],
+          "spotPad": 12,
+          "scrim": 0.55,
+          "zmax": 1.8,
+          "minFrame": [900, 500],
+          "clickAtEnd": 0.4,
+          "hold": 0.5
+        },
+        {
+          "id": "confirmation",
+          "fr": "Confirmé. La boutique s'occupe du reste.",
+          "spotFrom": ["[data-guide=\"cart-handoff-done\"]"],
+          "spotPad": 14,
+          "scrim": 0.35,
+          "cursor": [1660, 1010],
+          "hold": 0.8,
+          "pageFadeOut": 0.45,
+          "do": [{ "action": "waitFor", "selector": "[data-guide=\"cart-handoff-done\"]" }]
+        },
+        {
+          "id": "fidelite",
+          "fr": "Chaque client a sa carte, dessinée pour lui.",
+          "pageFadeIn": 0.45,
+          "frameFrom": ["[data-guide=\"loyalty-card\"]"],
+          "pad": 0.26,
+          "zmax": 1.5,
+          "do": [
+            { "action": "goto", "url": "/app/loyalty" },
+            { "action": "waitFor", "selector": "canvas.ly-art-canvas" }
+          ]
+        },
+        {
+          "id": "points",
+          "fr": "Points, achats, historique.",
+          "spotFrom": ["[data-guide=\"loyalty-history\"]"],
+          "spotPad": 12,
+          "zmax": 1.1,
+          "scrim": 0.4,
+          "cursor": [1740, 990],
+          "pageFadeOut": 0.45
+        },
+        {
+          "id": "profil",
+          "fr": "Photo, préférences, langue.",
+          "pageFadeIn": 0.45,
+          "frameFrom": [".profile-grid"],
+          "pad": 0.22,
+          "pageFadeOut": 0.45,
+          "do": [
+            { "action": "goto", "url": "/app/profile" },
+            { "action": "waitFor", "selector": "[data-guide=\"photo\"]" }
+          ]
+        },
+        {
+          "id": "contact",
+          "fr": "Horaires, adresse, contact.",
+          "pageFadeIn": 0.45,
+          "frameFrom": ["[data-guide=\"contact-hours\"]", "[data-guide=\"contact-form\"]"],
+          "pad": 0.24,
+          "zmax": 1.5,
+          "pageFadeOut": 0.45,
+          "do": [
+            { "action": "goto", "url": "/app/contact" },
+            { "action": "waitFor", "selector": "[data-guide=\"contact-form\"]" }
+          ]
+        },
+        {
+          "id": "actualites",
+          "fr": "Et les nouveautés, en direct.",
+          "pageFadeIn": 0.45,
+          "frameFrom": [".news-feed"],
+          "pad": 0.22,
+          "hold": 0.6,
+          "do": [
+            { "action": "goto", "url": "/app/news" },
+            { "action": "waitFor", "selector": ".news-card" }
+          ]
+        }
+      ]
+    },
+    "trailer-admin": {
+      "title": "Charme — les coulisses",
+      "voice": "fr-FR-VivienneMultilingualNeural",
+      "rate": "-3%",
+      "url": "/app/admin",
+      "ready": "[data-guide=\"admin-stats\"]",
+      "authEmail": "cherifmed1200@gmail.com",
+      "storage": { "charme-theme": "night", "charme-lang": "fr" },
+      "beats": [
+        {
+          "id": "console",
+          "fr": "Côté coulisses : la console d'administration.",
+          "frameFrom": [".admin-head", "[data-guide=\"admin-tabs\"]", "[data-guide=\"admin-stats\"]"],
+          "pad": 0.02,
+          "zmax": 1.4,
+          "cursor": [1660, 1010],
+          "hold": 0.6
+        },
+        {
+          "id": "chiffres",
+          "fr": "Clients, commandes, chiffre d'affaires.",
+          "spotFrom": ["[data-guide=\"admin-stats\"]"],
+          "spotPad": 12,
+          "scrim": 0.5,
+          "pad": 0.05,
+          "zmax": 1.35
+        },
+        {
+          "id": "stock",
+          "fr": "Le stock, référence par référence.",
+          "spotFrom": ["[data-guide=\"perfumes-tab\"]"],
+          "spotPad": 10,
+          "zmax": 2.2,
+          "minFrame": [700, 400],
+          "clickAtEnd": 0.35,
+          "hold": 0.4,
+          "pageFadeOut": 0.4
+        },
+        {
+          "id": "table",
+          "fr": "Prix, contenance, stock : tout se corrige.",
+          "spotFrom": ["[data-guide=\"perfumes-table\"]"],
+          "spotPad": 10,
+          "scrim": 0.45,
+          "pageFadeIn": 0.4,
+          "do": [{ "action": "waitFor", "selector": "[data-guide=\"perfumes-table\"]" }]
+        },
+        {
+          "id": "ouvrir",
+          "fr": "Ouvrez une fiche.",
+          "spotFrom": ["[data-guide=\"perfumes-edit\"]"],
+          "spotPad": 12,
+          "zmax": 2.2,
+          "minFrame": [820, 460],
+          "clickAtEnd": 0.35,
+          "pageFadeOut": 0.45,
+          "hold": 0.4
+        },
+        {
+          "id": "fiche",
+          "fr": "Modifiez, enregistrez. C'est en ligne.",
+          "spotFrom": [".admin-modal-card"],
+          "spotPad": 14,
+          "scrim": 0.55,
+          "pageFadeIn": 0.45,
+          "clickOn": ".admin-x",
+          "clickAtEnd": 0.3,
+          "pageFadeOut": 0.45,
+          "hold": 0.4
+        },
+        {
+          "id": "cartes",
+          "fr": "Cartes, points, historique des clients.",
+          "pageFadeIn": 0.45,
+          "spotFrom": ["[data-guide=\"loyalty-table\"]"],
+          "spotPad": 10,
+          "scrim": 0.45,
+          "pageFadeOut": 0.4,
+          "do": [
+            { "action": "click", "selector": "[data-guide=\"loyalty-tab\"]" },
+            { "action": "waitFor", "selector": "[data-guide=\"loyalty-table\"]" }
+          ]
+        },
+        {
+          "id": "nouveaute",
+          "fr": "Publier une nouveauté prend une minute.",
+          "pageFadeIn": 0.45,
+          "spotFrom": [".admin-news"],
+          "spotPad": 0,
+          "scrim": 0.45,
+          "pad": 0.02,
+          "zmax": 1.45,
+          "pageFadeOut": 0.4,
+          "do": [
+            { "action": "click", "selector": "[data-guide=\"news-tab\"]" },
+            { "action": "waitFor", "selector": "[data-guide=\"news-form\"]" }
+          ]
+        },
+        {
+          "id": "messages",
+          "fr": "Et chaque message du site arrive ici.",
+          "pageFadeIn": 0.45,
+          "spotFrom": ["[data-guide=\"notes-list\"]"],
+          "spotPad": 12,
+          "scrim": 0.45,
+          "hold": 0.9,
+          "pageFadeOut": 0.45,
+          "do": [
+            { "action": "click", "selector": "[data-guide=\"notes-tab\"]" },
+            { "action": "waitFor", "selector": "[data-guide=\"notes-list\"]" }
+          ]
+        },
+        {
+          "id": "guides",
+          "fr": "Et des guides vidéo pour toute l'équipe.",
+          "pageFadeIn": 0.45,
+          "frameFrom": [".gp-title", ".gp-lede", ".gp-tabs", ".gp-grid > li:nth-child(5)"],
+          "pad": 0.12,
+          "hold": 0.8,
+          "do": [
+            { "action": "goto", "url": "/app/guides" },
+            { "action": "waitFor", "selector": ".gp-card" }
+          ]
+        }
+      ]
+    }
+  }
+}

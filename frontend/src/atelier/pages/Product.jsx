@@ -160,7 +160,17 @@ export default function Product() {
     [t("factOrigin"), product.brandLocation],
   ].filter(([, v]) => v);
 
-  const hasProfile = product.tiers.length || product.metrics.length || product.qualities.length;
+  /* The scraped profile repeats each concentration: a described row plus a
+     bare duplicate. Listing all four printed "Top Quality / Identical
+     Quality" twice. Keep one row per name, preferring the described one. */
+  const qualities = [];
+  for (const q of product.qualities) {
+    const seen = qualities.find((x) => x.name === q.name);
+    if (!seen) qualities.push(q);
+    else if (!seen.description && q.description) qualities[qualities.indexOf(seen)] = q;
+  }
+
+  const hasProfile = product.tiers.length || product.metrics.length || qualities.length;
 
   return (
     <main className="wrap pdp">
@@ -276,11 +286,11 @@ export default function Product() {
         <>
           <Trail tiers={product.tiers} t={t} />
           <Strengths metrics={product.metrics} t={t} />
-          {product.qualities.length ? (
+          {qualities.length ? (
             <section className="pdp-block">
               <h2 className="pdp-h2">{t("pdConcentrations")}</h2>
               <ul className="qualities">
-                {product.qualities.map((q) => (
+                {qualities.map((q) => (
                   <li key={q.name}>
                     <strong>{q.name}</strong>
                     {q.description ? <span>{q.description}</span> : null}
